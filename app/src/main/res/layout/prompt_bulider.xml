@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bottom_sheat"
+    android:paddingBottom="@dimen/_10sdp"
+    >
+<!--    android:background="@drawable/bottom_sheat"-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textStyle="bold"
+        android:fontFamily="@font/raleway_medium"
+        android:textColor="@color/white"
+        android:text="Prompt Builder"
+        android:textSize="20sp"
+        />
+    <RelativeLayout
+        android:id="@+id/closeButton"
+        android:layout_width="@dimen/_30sdp"
+        android:layout_height="@dimen/_30sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:layout_marginEnd="@dimen/_9sdp"
+        >
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/cross"
+            />
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/relativeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingVertical="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/closeButton"
+        >
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/styleLayout"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            >-->
+<!--            <TextView-->
+<!--                android:id="@+id/title1"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentStart="true"-->
+<!--                android:text="Choose Style"-->
+<!--                android:layout_marginStart="@dimen/_10sdp"-->
+<!--                android:textSize="17sp"-->
+<!--                android:textColor="@color/white"-->
+<!--                />-->
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:id="@+id/styleRecyclerView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="@dimen/_65sdp"-->
+<!--                android:layout_below="@+id/title1"-->
+<!--                android:paddingHorizontal="@dimen/_7sdp"-->
+<!--                android:layout_marginTop="@dimen/_5sdp"-->
+<!--                />-->
+
+<!--        </RelativeLayout>-->
+        <View
+            android:id="@+id/dividerr2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/promptLayout"
+            android:background="@color/gray"
+            />
+        <RelativeLayout
+            android:id="@+id/promptLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/dividerr2">
+            <TextView
+                android:id="@+id/titleOfPromptsCat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:text="select prompt"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:fontFamily="@font/raleway_medium"
+                android:layout_marginTop="@dimen/_15sdp" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/promptsRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_300sdp"
+                android:layout_below="@+id/titleOfPromptsCat"
+                android:paddingHorizontal="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                />
+        </RelativeLayout>
+        <View
+            android:id="@+id/dividerr3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@+id/promptLayout"
+            android:background="@color/gray"
+            />
+        <Button
+            android:id="@+id/applButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/dividerr3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:paddingHorizontal="@dimen/_40sdp"
+            android:text="Apply"
+            android:textSize="@dimen/_16sdp"
+            android:textStyle="bold"
+            android:fontFamily="@font/raleway_medium"
+            android:textAllCaps="false"
+            android:gravity="center"
+            android:textColor="@color/mywhite"
+            android:background="@drawable/select_bg"
+            />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

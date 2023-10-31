@@ -1,0 +1,40 @@
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG
+
+class Parameters {
+    companion object {
+        val canvasPos = 0
+        val varendpoint = "v4/dreambooth"
+        val enhance_prompt = "no"
+        val exact_Nprompt = ""
+        val guess_mode = "no"
+        val guidance_scale = 7.0
+        val height = "1456"
+        val instance_prompt = ""
+        val key = "cBAKGvs2IWAC4XztfETeUPMbKiZvHIBrzmul6VhSpAyzxxtz1oJWxni9vqBG"
+        var model_id = "sdxl"
+        var model_name = "SDXL"
+        val multi_lingual = "yes"
+        val negative_prompt = "(((nudity))),(((nsfw))),(((nude))),(((upskirt))),(((bra))),(((nude))),(((latex))),(((boobs)))," +
+                "(((panty))),(((ass))),painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, " +
+                "deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, " +
+                "double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, " +
+                "distorted face, extra legs, anime, dual, multiple,  "
+        val num_inference_steps = "21"
+        val panorama = "no"
+        val prompt = "one girl, Brown hair, Brown eyes, slim weight scarlett person holding a positive pregnancy"
+        val promptsBuilder = ""
+        val safety_checker = "yes"
+        val samples = "4"
+        val scheduler = "UniPCMultistepScheduler"
+        val self_attention = "yes"
+        val steps = "21"
+        val strength = 1.0
+        val token =
+            "cB5jyQ5YTOm44wannZLfd-:APA91bEUYMl9IYAg0Xi5gVBzn9Mdji_mdMppIFTaheCQ2NhDaLMD8iTF_Gduwfz7BckTJGR-BhMTTZA9sAwkMl7OwobWoKGiFU0DC-wkJJdk4HpNutWd_c3KFrZLeIvgJL0JTZ11KjW0"
+        val type = "a"
+        val upscale = "no"
+        val webhook = "https://edecator.com/aiApp/webhook.php"
+        val width = "840"
+    }
+
+}

@@ -1,0 +1,33 @@
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models
+
+data class Meta(
+    var prompt : String? = null,
+    var model_id: String? = null,
+    var negative_prompt: String? = null,
+    var scheduler: String? = null,
+    var safety_checker: String? = null,
+    var W: Int? = null,
+    var H: Int? = null,
+    var guidance_scale: Int? = null,
+    var seed: Long? = null,
+    var steps: Int? = null,
+    var n_samples: Int? = null,
+    var full_url: String? = null,
+    var instant_response: String? = null,
+    var tomesd: String? = null,
+    var upscale: String? = null,
+    var multi_lingual: String? = null,
+    var panorama: String? = null,
+    var self_attention: String? = null,
+    var use_karras_sigmas: String? = null,
+    var algorithm_type: String? = null,
+    var safety_checker_type: String? = null,
+    var embeddings: String? = null,
+    var vae: String? = null,
+    var lora: String? = null,
+    var lora_strength: Int? = null,
+    var clip_skip: Int? = null,
+    var temp: String? = null,
+    var base64: String? = null,
+    var file_prefix: String? = null
+)

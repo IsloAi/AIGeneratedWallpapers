@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/slider_bg"
+    >
+<androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardBackgroundColor="@color/background"
+    android:elevation="@dimen/_15sdp"
+    android:layout_margin="@dimen/_1sdp"
+    app:cardCornerRadius="@dimen/_20sdp"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/imageSlide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/item_text_bg"
+            >
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Other Categories"
+                android:textColor="@color/white"
+                android:fontFamily="@font/raleway_medium"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"
+                android:paddingVertical="@dimen/_6sdp"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</androidx.cardview.widget.CardView>
+
+</RelativeLayout>

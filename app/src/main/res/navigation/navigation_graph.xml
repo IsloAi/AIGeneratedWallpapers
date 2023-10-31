@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/splashFragment">
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash"
+        >
+        <action
+            android:id="@+id/action_splashFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.hdwallpaper.Fragments.MainFragment"
+        android:label="fragment_main"
+        tools:layout="@layout/fragment_main" >
+        <action
+            android:id="@+id/action_mainFragment_to_wallpaperViewFragment"
+            app:destination="@id/wallpaperViewFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down"
+            />
+        <action
+            android:id="@+id/action_mainFragment_to_listViewFragment"
+            app:destination="@id/listViewFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_mainFragment_to_premiumPlanFragment"
+            app:destination="@id/premiumPlanFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_feedbackFragment"
+            app:destination="@id/feedbackFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_myViewCreationFragment"
+            app:destination="@id/myViewCreationFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_creationSliderViewFragment"
+            app:destination="@id/creationSliderViewFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_favouriteSliderViewFragment"
+            app:destination="@id/favouriteSliderViewFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/wallpaperViewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment"
+        android:label="fragment_wallpaper_view"
+        tools:layout="@layout/fragment_wallpaper_view" >
+        <action
+            android:id="@+id/action_wallpaperViewFragment_to_premiumPlanFragment"
+            app:destination="@id/premiumPlanFragment" />
+        <action
+            android:id="@+id/action_wallpaperViewFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/listViewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment"
+        android:label="fragment_list_view"
+        tools:layout="@layout/fragment_list_view" >
+        <action
+            android:id="@+id/action_listViewFragment_to_wallpaperViewFragment"
+            app:destination="@id/wallpaperViewFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down" />
+        <action
+            android:id="@+id/action_listViewFragment_to_premiumPlanFragment"
+            app:destination="@id/premiumPlanFragment" />
+        <action
+            android:id="@+id/action_listViewFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/premiumPlanFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PremiumPlanFragment"
+        android:label="fragment_premium_plan"
+        tools:layout="@layout/fragment_premium_plan" >
+        <action
+            android:id="@+id/action_premiumPlanFragment_to_signInFragment"
+            app:destination="@id/signInFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.FeedbackFragment"
+        android:label="fragment_feedback"
+        tools:layout="@layout/fragment_feedback" />
+    <fragment
+        android:id="@+id/myViewCreationFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.MyCreationViewFragment"
+        android:label="fragment_my_creation_view"
+        tools:layout="@layout/fragment_my_creation_view"
+        >
+        <action
+            android:id="@+id/action_myViewCreationFragment_to_creationSliderViewFragment"
+            app:destination="@id/creationSliderViewFragment" />
+    </fragment>
+
+    <fragment android:id="@+id/creationSliderViewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.CreationSliderViewFragment"
+       android:label="fragment_creation_view_slider"
+        tools:layout="@layout/fragment_creation_slider_view"
+        />
+    <fragment android:id="@+id/favouriteSliderViewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.FavouriteSliderViewFragment"
+        android:label="fragment_favourite_view_slider"
+        tools:layout="@layout/fragment_creation_slider_view"
+        />
+    <fragment android:id="@+id/signInFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SignInFragment"
+        android:label="fragment_sign_in"
+        tools:layout="@layout/fragment_sign_in"
+        >
+        <action
+            android:id="@+id/action_signInFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
+    </fragment>
+    <fragment android:id="@+id/signUpFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up"
+        />
+
+</navigation>

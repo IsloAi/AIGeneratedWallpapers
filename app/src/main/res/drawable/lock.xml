@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Circular black background -->
+    <item>
+            <shape android:shape="rectangle">
+            <solid android:color="#8F000000"/>
+            <corners android:radius="@dimen/_10sdp"/>
+        </shape>
+    </item>
+    <!-- Original vector icon -->
+    <item android:drawable="@drawable/lock_icon_22"
+        android:left="5dp"
+        android:top="5dp"
+        android:right="5dp"
+        android:bottom="5dp"
+        />
+
+</layer-list>

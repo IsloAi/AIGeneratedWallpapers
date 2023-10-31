@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/_138sdp"
+    android:layout_height="@dimen/_220sdp"
+    android:layout_marginTop="@dimen/_8sdp"
+    android:layout_marginStart="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_2sdp"
+    android:elevation="@dimen/_10sdp"
+    app:cardBackgroundColor="@color/button_bg"
+    app:cardCornerRadius="@dimen/_10sdp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="1dp"
+        android:background="@drawable/bg"
+        >
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardBackgroundColor="@color/card"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/wallpaper"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    />
+                <ImageView
+                    android:id="@+id/lockButton"
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="@dimen/_6sdp"
+                    android:src="@drawable/lock"
+                    />
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHeight_percent=".15"
+                    android:background="@drawable/liste_text_bg"
+
+                    >
+                    <ImageView
+                        android:id="@+id/setFavouriteButton"
+                        android:layout_width="@dimen/_25sdp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:padding="@dimen/_5sdp"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:src="@drawable/heart_unsel"
+                        />
+                    <TextView
+                        android:id="@+id/likesTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:text="50"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/setFavouriteButton"
+                        android:textColor="@color/gems_color"
+                        android:fontFamily="@font/raleway_medium"
+                        />
+
+                    <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/diamondIcon"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginEnd="@dimen/_3sdp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/ttttt"
+
+                        />
+                    <TextView
+                        android:id="@+id/gemsTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/diamondIcon"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:text="20"
+                        android:textColor="@color/gems_color"
+                        android:fontFamily="@font/raleway_medium"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true"
+                    />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "322744764707",
+    "project_id": "ai-wallpapers-a53f2",
+    "storage_bucket": "ai-wallpapers-a53f2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:322744764707:android:a9a57425bfbf0e1846e496",
+        "android_client_info": {
+          "package_name": "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "322744764707-iedmpbpd9gf848nv8bussapjua8t9gc1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkGtIzLCvBZg9FHrMw_DVqblkNBOc2AFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "322744764707-iedmpbpd9gf848nv8bussapjua8t9gc1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

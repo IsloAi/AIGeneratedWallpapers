@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardBackgroundColor="@color/button_bg"
+    android:layout_margin="@dimen/_10sdp">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_1sdp">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="@dimen/_10sdp">
+            <RelativeLayout
+                android:id="@+id/ad_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/_130sdp"
+                android:translationZ="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:elevation="@dimen/_5sdp">
+<!--                <com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.nativeAd.TemplateView-->
+<!--                    android:id="@+id/nativeAdView"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:visibility="visible"-->
+<!--                    app:gnt_template_type="@layout/gnt_medium_template_view" />-->
+                <TextView
+                    android:id="@+id/adText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="ad_will_display_hare" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>
