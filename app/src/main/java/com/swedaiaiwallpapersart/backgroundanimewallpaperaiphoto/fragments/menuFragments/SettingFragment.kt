@@ -12,15 +12,10 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetailsParams
 import com.android.installreferrer.api.InstallReferrerClient
 import com.android.installreferrer.api.InstallReferrerStateListener
 import com.android.installreferrer.api.ReferrerDetails
-import com.google.firebase.auth.FirebaseAuth
+import com.bumptech.glide.Glide
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -29,10 +24,10 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.iosParameters
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSettingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 
 class SettingFragment : Fragment() {
    private var _binding: FragmentSettingBinding?=null
@@ -50,6 +45,11 @@ class SettingFragment : Fragment() {
           binding.premiumCardButton.setOnClickListener {
               requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_premiumPlanFragment)
           }
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animation)
         binding.rateUsButton.setOnClickListener {feedback()}
         binding.customerSupportButton.setOnClickListener {requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_feedbackFragment)}
         binding.shareAppButton.setOnClickListener {
@@ -63,13 +63,6 @@ class SettingFragment : Fragment() {
         binding.privacyPolicyButton.setOnClickListener { openLink("https://swedebras.blogspot.com/2023/09/privacy-policy.html") }
         binding.moreAppButton.setOnClickListener { openLink("https://play.google.com/store/apps/developer?id=Swed+AI")  }
         binding.logOutButton.setOnClickListener {
-            val auth = FirebaseAuth.getInstance()
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
-                auth.signOut()
-                Toast.makeText(requireContext(), "Successfully logout", Toast.LENGTH_SHORT).show()
-
-                }
             }
         }
 

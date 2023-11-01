@@ -15,4 +15,8 @@ interface GetResponseIGDao {
 
     @Query("SELECT * FROM get_response_ig")
     fun getAllGetResponseIG(): LiveData<List<GetResponseIGEntity>>
+
+
+    @Query("DELETE FROM get_response_ig")
+    fun deleteAllCreations()
 }

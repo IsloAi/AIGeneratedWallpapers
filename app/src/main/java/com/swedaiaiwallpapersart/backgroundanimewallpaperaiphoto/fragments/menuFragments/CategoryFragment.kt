@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.hdwallpaper.Fragments.MainFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -18,12 +20,15 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Stri
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 
 class CategoryFragment : Fragment() {
    private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
-    private lateinit var myCatNameViewModel: MyCatNameViewModel
+    val myCatNameViewModel: MyCatNameViewModel by viewModels()
     private lateinit var myActivity : MainActivity
+
+    val catlist = ArrayList<CatNameResponse>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)
@@ -35,20 +40,27 @@ class CategoryFragment : Fragment() {
         binding.progressBar.visibility = VISIBLE
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
+        binding.progressBar.visibility = View.GONE
         binding.recyclerviewAll.layoutManager = LinearLayoutManager(requireContext())
-        myCatNameViewModel = ViewModelProvider(this)[MyCatNameViewModel::class.java]
-        myCatNameViewModel.getWallpapers().observe(viewLifecycleOwner) { wallpapersList ->
-            wallpapersList?.let { list ->
-                Log.d("arrayListError", "onCustomCreateView: $list")
-                val adapter = ApiCategoriesNameAdapter(list,object : StringCallback {
-                    override fun getStringCall(string: String) {
-                        setFragment(string)
-                    }
-                })
-                binding.recyclerviewAll.adapter = adapter
+        val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
+            override fun getStringCall(string: String) {
+                setFragment(string)
             }
+        })
+        binding.recyclerviewAll.adapter = adapter
+
+        myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
+            Log.e("TAG", "onCustomCreateView: no data exists" )
+           if (wallpapersList?.size!! > 0){
+               Log.e("TAG", "onCustomCreateView: data exists" )
+               adapter.updateData(newData = wallpapersList)
+           }
         }
-        myCatNameViewModel.fetchWallpapers(binding.progressBar)
     }
     private fun setFragment(name:String){
         Bundle().apply {

@@ -47,8 +47,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-auth:22.1.2'
-    implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'
     implementation 'com.google.firebase:firebase-crashlytics:18.4.3'
     implementation 'com.google.firebase:firebase-analytics:21.3.0'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
@@ -87,6 +85,8 @@ dependencies {
     //viewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.7.4"
@@ -110,7 +110,6 @@ dependencies {
 
     //firebase for google login
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
-    implementation 'com.google.android.gms:play-services-auth:20.7.0'
     // Dependency for Firebase Dynamic Links
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:21.1.0'
     // Official Firebase documentation suggests adding this dependency as well.
@@ -124,6 +123,12 @@ dependencies {
 
     // swape layout
     implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Activity KTX for viewModels()
+    implementation ("androidx.activity:activity-ktx:1.7.2")
+
+    //ads
+    implementation 'com.google.android.gms:play-services-ads:22.3.0'
 
 
 

@@ -85,7 +85,8 @@
         <RelativeLayout
             android:id="@+id/promptLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.85"
             app:layout_constraintTop_toBottomOf="@+id/dividerr2">
             <TextView
                 android:id="@+id/titleOfPromptsCat"

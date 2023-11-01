@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -21,21 +22,19 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.firebase.auth.FirebaseAuth
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRow2Binding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -59,15 +58,15 @@ class ApiCategoriesListAdapter(
         private val VIEW_TYPE_CONTAINER2 = 1
        private val myDialogs = MyDialogs()
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: CatResponse) {
+        fun bind(model: CatResponse,holder: ViewHolder) {
             setAllData(model,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-            ,binding.lockButton,binding.diamondIcon,binding.wallpaper)
+            ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder)
         }
     }
     inner class ViewHolderContainer2(private val binding: WallpaperRow2Binding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: CatResponse) {
+        fun bind(model: CatResponse,holder: ViewHolder) {
             setAllData(model,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-                ,binding.lockButton,binding.diamondIcon,binding.wallpaper) }
+                ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder) }
     }
     override fun getItemCount() = arrayList.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -91,11 +90,11 @@ class ApiCategoriesListAdapter(
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
                 val viewHolderContainer1 = holder as ViewHolderContainer1
-                viewHolderContainer1.bind(model)
+                viewHolderContainer1.bind(model,holder)
             }
             VIEW_TYPE_CONTAINER2 -> {
                 val viewHolderContainer2 = holder as ViewHolderContainer2
-                viewHolderContainer2.bind(model)
+                viewHolderContainer2.bind(model,holder)
             }
         }
     }
@@ -105,7 +104,7 @@ class ApiCategoriesListAdapter(
     }
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, gemsView:TextView, likes:TextView, favouriteButton: ImageView
-                           , lockButton:ImageView, diamondIcon:LottieAnimationView, wallpaperMainImage:ImageView){
+                           , lockButton:ImageView, diamondIcon:ImageView, wallpaperMainImage:ImageView,holder: ViewHolder){
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
         gemsView.text = model.gems.toString()
@@ -115,6 +114,11 @@ class ApiCategoriesListAdapter(
         }else{
             favouriteButton.setImageResource(R.drawable.heart_unsel)
         }
+
+        Glide.with(holder.itemView.context)
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(diamondIcon)
         if(model.gems==0 || model.unlockimges==true){
            lockButton.visibility = GONE
            diamondIcon.visibility = GONE
@@ -149,25 +153,17 @@ class ApiCategoriesListAdapter(
                     positionCallback.getPosition(position)
 
                 }else{
-                   val auth = FirebaseAuth.getInstance()
-                    val currentUser = auth.currentUser
-                    if (currentUser != null) {
                         if(whichClicked==1){
                             myDialogs.getWallpaperPopup(context!!,model,navController,actionId,gemsTextUpdate,lockButton,diamondIcon,gemsView,myViewModel!!)
                         }else{
                             myDialogs.getWallpaperPopup(context!!,model,navController,actionId,gemsTextUpdate,lockButton,diamondIcon,gemsView)
                         }
-                    }else{
-                        getLoginDetails.loginDetails()
-                    }
+
                 }
             }
         }
         favouriteButton.setOnClickListener{
-            val auth = FirebaseAuth.getInstance()
-            val currentUser = auth.currentUser
             favouriteButton.isEnabled = false
-            if(currentUser != null){
                 if(arrayList[position].liked==true){
                     arrayList[position].liked = false
                     favouriteButton.setImageResource(R.drawable.heart_unsel)
@@ -178,10 +174,7 @@ class ApiCategoriesListAdapter(
                     likes.text = (arrayList[position].likes!!+1).toString()
                 }
                 addFavourite(context!!,model,favouriteButton,likes)
-            }else{
-                getLoginDetails.loginDetails()
-                favouriteButton.isEnabled = true
-            }
+
         }
     }
     @SuppressLint("SuspiciousIndentation")

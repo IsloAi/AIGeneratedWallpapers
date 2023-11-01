@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils
 import android.util.Log
 import android.view.View.GONE
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.airbnb.lottie.LottieAnimationView
@@ -13,10 +14,8 @@ import retrofit2.Response
 
 class MyCatNameViewModel: ViewModel()  {
 
-    private val wallpaperData = MutableLiveData<ArrayList<CatNameResponse>?>()
-    fun getWallpapers(): MutableLiveData<ArrayList<CatNameResponse>?> {
-        return wallpaperData
-    }
+    private var _wallpaperData = MutableLiveData<List<CatNameResponse>>()
+    val wallpaper:LiveData<List<CatNameResponse>> = _wallpaperData
     fun fetchWallpapers(progressBar: LottieAnimationView) {
         val retrofit = RetrofitInstance.getInstance()
         val service = retrofit.create(CatResponseInterface::class.java)
@@ -24,20 +23,21 @@ class MyCatNameViewModel: ViewModel()  {
         call.enqueue(object : Callback<ArrayList<CatNameResponse>> {
             override fun onResponse(call: Call<ArrayList<CatNameResponse>>, response: Response<ArrayList<CatNameResponse>>) {
                 if (response.isSuccessful) {
-                    progressBar.visibility= GONE
+                        progressBar.visibility= GONE
                     val catNameResponses: ArrayList<CatNameResponse>? = response.body()
                     if (catNameResponses != null) {
-                      getWallpapers().value = catNameResponses
+                        Log.e("TAG", "onResponse: "+catNameResponses )
+                      _wallpaperData.value = catNameResponses!!
                     }
                 } else {
                     // Handle error case
-                    Log.d("responseOk", "onResponse: response not Empty ")
+                    Log.e("responseOk", "onResponse: response not Empty ")
                 }
             }
 
             override fun onFailure(call: Call<ArrayList<CatNameResponse>>, t: Throwable) {
                 // Handle failure case
-                Log.d("responseOk", "onResponse: response onFailure ")
+                Log.e("responseOk", "onResponse: response onFailure ")
             }
 
         })

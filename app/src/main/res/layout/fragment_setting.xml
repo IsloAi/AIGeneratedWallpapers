@@ -47,7 +47,7 @@
                android:id="@+id/premiumCardButton"
                android:layout_width="0dp"
                android:layout_height="0dp"
-               android:background="@drawable/yellow_frame"
+               android:background="@drawable/settings_header_image"
               app:layout_constraintStart_toStartOf="parent"
                app:layout_constraintEnd_toEndOf="parent"
                app:layout_constraintTop_toTopOf="parent"
@@ -70,17 +70,13 @@
                    android:layout_toStartOf="@+id/animation"
                    android:text="Unlock a universe of HD visuals with our exclusive premium membership."
                    />
-               <com.airbnb.lottie.LottieAnimationView
+               <ImageView
                    android:id="@+id/animation"
                    android:layout_width="@dimen/_70sdp"
                    android:layout_height="@dimen/_70sdp"
                    android:layout_alignParentEnd="true"
                    android:layout_centerVertical="true"
                    android:layout_marginEnd="@dimen/_10sdp"
-                   app:lottie_autoPlay="true"
-                   app:lottie_loop="true"
-                   android:scaleType="centerCrop"
-                   app:lottie_rawRes="@raw/dddd"
                    />
            </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -265,6 +261,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     android:layout_marginTop="@dimen/_10sdp"
                     android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"

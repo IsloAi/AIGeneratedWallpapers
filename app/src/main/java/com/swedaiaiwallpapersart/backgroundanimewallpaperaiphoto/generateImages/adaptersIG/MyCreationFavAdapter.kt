@@ -104,7 +104,7 @@ class MyCreationFavAdapter(
         wallpaper: ImageView,
         loading: LottieAnimationView,
         gemsTextView: TextView,
-        diamondIcon: LottieAnimationView,
+        diamondIcon: ImageView,
         likesTextView: TextView,
         favouriteButton: ImageView,
         lockButton: ImageView

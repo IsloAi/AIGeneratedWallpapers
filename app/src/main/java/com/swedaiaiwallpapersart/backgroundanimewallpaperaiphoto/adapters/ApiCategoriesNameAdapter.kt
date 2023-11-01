@@ -76,4 +76,11 @@ class ApiCategoriesNameAdapter(
             }
         }
     }
+
+    fun updateData(newData:List<CatNameResponse>){
+        arrayList.clear()
+        arrayList.addAll(newData)
+        notifyDataSetChanged()
+
+    }
 }

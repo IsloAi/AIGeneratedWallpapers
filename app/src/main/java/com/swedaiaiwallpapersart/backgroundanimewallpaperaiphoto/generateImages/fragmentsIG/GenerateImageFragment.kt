@@ -25,11 +25,7 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -61,8 +57,8 @@ class GenerateImageFragment : Fragment() {
     private var myContext :Context? = null
     private var  dialog: Dialog? = null
     private var  dialog2: Dialog? = null
-    private lateinit var auth: FirebaseAuth
-    private val googleLogin = GoogleLogin()
+//    private lateinit var auth: FirebaseAuth
+//    private val googleLogin = GoogleLogin()
     private lateinit var myActivity : MainActivity
     private val myDialogs = MyDialogs()
     private var existGems:Int? = null
@@ -82,6 +78,13 @@ class GenerateImageFragment : Fragment() {
         myContext = context
     }
     private fun customOnCreateCalling() {
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
+
+
         val roomDatabase = AppDatabase.getInstance(requireContext())
         myActivity = activity as MainActivity
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
@@ -196,9 +199,6 @@ class GenerateImageFragment : Fragment() {
     }
     private fun otherWorking() {
         binding.generateButton.setOnClickListener {
-            val auth = FirebaseAuth.getInstance()
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
                 if(existGems!! >=10){
                     val getPrompt = binding.edtPrompt.text
                     if(getPrompt.isNotEmpty()){
@@ -210,9 +210,12 @@ class GenerateImageFragment : Fragment() {
                 }else{
                     Toast.makeText(requireContext(), "you have no gems to generate this", Toast.LENGTH_SHORT).show()
                 }
-            }else{
-                findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
-            }
+
+        }
+
+
+        binding.seeAllCreations.setOnClickListener {
+            findNavController().navigate(R.id.viewAllCreations)
         }
     }
     private fun getUserIdDialog() {
@@ -234,46 +237,46 @@ class GenerateImageFragment : Fragment() {
         dialog?.show()
     }
     private fun login() {
-        auth = FirebaseAuth.getInstance()
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-        val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, HomeFragment.RC_SIGN_IN)
+//        auth = FirebaseAuth.getInstance()
+//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//            .requestIdToken(getString(R.string.default_web_client_id))
+//            .requestEmail()
+//            .build()
+//        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
+//        val signInIntent = googleSignInClient.signInIntent
+//        startActivityForResult(signInIntent, HomeFragment.RC_SIGN_IN)
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == HomeFragment.RC_SIGN_IN) {
             dialog2?.dismiss()
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Toast.makeText(requireContext(), "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
+//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+//            try {
+//                val account = task.getResult(ApiException::class.java)
+//                firebaseAuthWithGoogle(account.idToken!!)
+//            } catch (e: ApiException) {
+//                Toast.makeText(requireContext(), "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(requireActivity()){ task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(requireContext(), "Successfully login", Toast.LENGTH_SHORT).show()
-                    val user = auth.currentUser
-                    val  name = user?.displayName
-                    val  email = user?.email
-                    val  image = user?.photoUrl
-                    if(email != null){
-                        googleLogin.fetchGems(requireContext(),email,dialog,binding.gemsText)
-                    }
-                } else {
-                    Toast.makeText(requireContext(), "Authentication failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
+//    private fun firebaseAuthWithGoogle(idToken: String) {
+//        val credential = GoogleAuthProvider.getCredential(idToken, null)
+//        auth.signInWithCredential(credential)
+//            .addOnCompleteListener(requireActivity()){ task ->
+//                if (task.isSuccessful) {
+//                    Toast.makeText(requireContext(), "Successfully login", Toast.LENGTH_SHORT).show()
+//                    val user = auth.currentUser
+//                    val  name = user?.displayName
+//                    val  email = user?.email
+//                    val  image = user?.photoUrl
+//                    if(email != null){
+//                        googleLogin.fetchGems(requireContext(),email,dialog,binding.gemsText)
+//                    }
+//                } else {
+//                    Toast.makeText(requireContext(), "Authentication failed", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//    }
 
 
 }

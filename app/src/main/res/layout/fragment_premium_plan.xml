@@ -85,7 +85,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/animationView"
                 android:layout_width="@dimen/_80sdp"
                 android:layout_height="@dimen/_80sdp"
@@ -94,10 +94,6 @@
                 android:layout_marginEnd="@dimen/_30sdp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:scaleType="centerCrop"
-                app:lottie_rawRes="@raw/dddd"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
                 />
 
             <TextView

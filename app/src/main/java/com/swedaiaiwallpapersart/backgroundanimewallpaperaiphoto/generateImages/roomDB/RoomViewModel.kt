@@ -19,6 +19,13 @@ class RoomViewModel(private val database: AppDatabase, id: Int) : ViewModel() {
         }
     }
 
+
+    fun deleteAll(){
+        viewModelScope.launch {
+            database.getResponseIGDao().deleteAllCreations()
+        }
+    }
+
     fun insertFavourite(favouriteListIGEntity: FavouriteListIGEntity){
         viewModelScope.launch {
             database.getFavouriteList().insert(favouriteListIGEntity)

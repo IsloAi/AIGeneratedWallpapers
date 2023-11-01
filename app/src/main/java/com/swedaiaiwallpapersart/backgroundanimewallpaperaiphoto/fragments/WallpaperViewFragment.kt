@@ -6,7 +6,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -27,7 +26,6 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -45,34 +43,28 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import com.example.hdwallpaper.adapters.WallpaperApiSliderAdapter
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FullViewImagePopup
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
@@ -89,6 +81,7 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.concurrent.Executors
+
 class WallpaperViewFragment : Fragment() {
     private var _binding: FragmentWallpaperViewBinding? = null
     private val binding get() = _binding!!
@@ -109,7 +102,6 @@ class WallpaperViewFragment : Fragment() {
     private lateinit var myWallpaperManager : MyWallpaperManager
     private var navController: NavController? = null
     val myDialogs = MyDialogs()
-    private lateinit var auth: FirebaseAuth
     private val googleLogin = GoogleLogin()
     private lateinit var myActivity : MainActivity
     override fun onCreateView(
@@ -161,12 +153,6 @@ class WallpaperViewFragment : Fragment() {
 
        }
        binding.favouriteButton.setOnClickListener {
-
-           val auth = FirebaseAuth.getInstance()
-           val currentUser = auth.currentUser
-           if (currentUser == null){
-               findNavController().navigate(R.id.action_wallpaperViewFragment_to_signInFragment)
-           }else{
                binding.favouriteButton.isEnabled = false
                if(arrayList[position].liked==true){
                    arrayList[position].liked = false
@@ -177,7 +163,7 @@ class WallpaperViewFragment : Fragment() {
                }
                addFavourite(requireContext(),position,binding.favouriteButton)
 
-           }
+
        }
        binding.downloadWallpaper.setOnClickListener{
            if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
@@ -193,18 +179,13 @@ class WallpaperViewFragment : Fragment() {
             ViewPagerImageClick {
             @SuppressLint("SuspiciousIndentation")
             override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
-                val auth = FirebaseAuth.getInstance()
-                val currentUser = auth.currentUser
-                if (currentUser!= null) {
                     val model = arrayList[pos]
                     myDialogs.getWallpaperPopup(
                         context!!,
                         model,
                         navController!!, R.id.action_wallpaperViewFragment_to_premiumPlanFragment,
                         RetrofitInstance.getInstance(), binding.gemsText, layout)
-                }else{
-                    findNavController().navigate(R.id.action_wallpaperViewFragment_to_signInFragment)
-                }
+
             }
         },object:FullViewImage{
             override fun getFullImageUrl(image:String) {

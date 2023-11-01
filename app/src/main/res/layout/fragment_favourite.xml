@@ -67,16 +67,13 @@
                 android:textStyle="bold"
                 tools:ignore="HardcodedText"/>
 
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/animationDdd"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/_2sdp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/dddd"
                 android:layout_marginBottom="@dimen/_10sdp"
                 />
 

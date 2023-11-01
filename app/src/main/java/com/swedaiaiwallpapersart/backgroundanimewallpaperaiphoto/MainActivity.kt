@@ -12,13 +12,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
@@ -32,19 +31,17 @@ import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetailsParams
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.auth.FirebaseAuth
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.StyleListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetPromptDetails
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.CatListModelIG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.SelectedPromptListModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Counter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ResetCounterInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
@@ -63,6 +60,8 @@ class MainActivity : AppCompatActivity(){
     private val selectedPromptList =  ArrayList<SelectedPromptListModel>()
     private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt:String? =null
+
+    val myCatNameViewModel: MyCatNameViewModel by viewModels()
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +73,7 @@ class MainActivity : AppCompatActivity(){
         createTimer()
         purchasesPrice()
         val firebaseMessageReceiver = MyFirebaseMessageReceiver()
+        myCatNameViewModel.fetchWallpapers(binding.progressBar)
 
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("tracingImageId", "onCreate: id= $deviceID")
@@ -119,13 +119,8 @@ class MainActivity : AppCompatActivity(){
 
         if(formattedDate > MySharePreference.getDate(this).toString()){
             MySharePreference.setDate(this,formattedDate)
-            //do update other values
             MySharePreference.setDailyRewardCounter(this,false)
-            val auth = FirebaseAuth.getInstance()
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
                 resetCounter(MySharePreference.getUserID(this)!!)
-            }
         }else{
             MySharePreference.setDate(this,formattedDate)
         }

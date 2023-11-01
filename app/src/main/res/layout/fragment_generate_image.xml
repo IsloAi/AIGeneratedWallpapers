@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Generate your on Wallpaper"
+                android:text="Generate your own Wallpaper"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/white"
                 android:fontFamily="@font/raleway_medium"
@@ -46,16 +46,13 @@
                 android:textSize="22sp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText"/>
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/animationDdd"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/_2sdp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/dddd"
                 android:layout_marginBottom="@dimen/_10sdp"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -88,6 +85,7 @@
                         android:hint="Type text and generate Wallpaper"
                         android:inputType="textMultiLine"
                         android:minLines="4"
+                        android:textCursorDrawable="@drawable/cursor_ed"
                         android:paddingHorizontal="@dimen/_7sdp"
                         android:paddingTop="@dimen/_5sdp"
                         android:scrollbars="vertical"
@@ -152,6 +150,22 @@
                         android:textSize="16sp"
                         android:fontFamily="@font/raleway_medium"
                         android:textStyle="bold"
+                        app:layout_constraintBottom_toTopOf="@+id/historyRecyclerView"
+                        />
+
+                    <TextView
+                        android:id="@+id/seeAllCreations"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="See All"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:layout_constraintTop_toTopOf="@id/creationTite"
+                        app:layout_constraintBottom_toBottomOf="@id/creationTite"
+                        android:textSize="13sp"
+                        android:fontFamily="@font/raleway_medium"
+                        android:textStyle="normal"
                         app:layout_constraintBottom_toTopOf="@+id/historyRecyclerView"
                         />
 <!--                    <TextView-->

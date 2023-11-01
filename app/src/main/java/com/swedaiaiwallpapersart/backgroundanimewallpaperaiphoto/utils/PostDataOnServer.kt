@@ -82,7 +82,7 @@ class PostDataOnServer {
             gemsTextUpdate: GemsTextUpdate,
             dialog: Dialog,
             lockButton: ImageView,
-            diamondIcon: LottieAnimationView,
+            diamondIcon: ImageView,
             gemsView: TextView
         ) {
             val retrofit = RetrofitInstance.getInstance()

@@ -1,8 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -24,23 +22,23 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.SkuDetailsParams
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PremiumAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PremiumPlanModel
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.bumptech.glide.Glide
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPremiumPlanBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PremiumAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PremiumPlanCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PremiumPlanModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
+
 class PremiumPlanFragment : Fragment() {
     private var _binding: FragmentPremiumPlanBinding? = null
     private val binding get() = _binding!!
@@ -49,7 +47,6 @@ class PremiumPlanFragment : Fragment() {
     private var  navController: NavController? = null
     private val postDataOnServer = PostDataOnServer()
     private var dialog:Dialog? = null
-    private lateinit var auth: FirebaseAuth
     private val googleLogin =GoogleLogin()
     private var isPopOpen = false
     private var adapter : PremiumAdapter? =null
@@ -57,6 +54,8 @@ class PremiumPlanFragment : Fragment() {
     private var  dialog2:Dialog? = null
     private var whichPlanSelected:Int?=null
     private val rewardAdWatched = 5
+
+    var progressDialog:ProgressDialog ?= null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -74,6 +73,11 @@ class PremiumPlanFragment : Fragment() {
         binding.backButton.setOnClickListener {
             navController?.navigateUp()
         }
+
+       Glide.with(requireContext())
+           .asGif()
+           .load(R.raw.gems_animaion)
+           .into(binding.animationView)
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
     }
     private fun setRecyclerView(){
@@ -85,15 +89,8 @@ class PremiumPlanFragment : Fragment() {
         recyclerView.adapter = adapter
     }
     private fun setCondition(plan: Int) {
-        val auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
             when(plan){
-                0-> {
-                    if(MySharePreference.getCounterValue(requireContext())!! <= 5){
-                        loadRewardedAd()
-                    }else{
-                        Toast.makeText(requireContext(), "Your daily limit is full ", Toast.LENGTH_SHORT).show() } }
+                0->  loadRewardedAd()
                 1->  purchasesPlan(0)
                 2->  purchasesPlan(1)
                 3->  purchasesPlan(2)
@@ -101,9 +98,7 @@ class PremiumPlanFragment : Fragment() {
                 5->  purchasesPlan(4)
                 6->  purchasesPlan(5)
             }
-        }else{
-            findNavController().navigate(R.id.action_premiumPlanFragment_to_signInFragment)
-        }
+
     }
     private fun planList():ArrayList<PremiumPlanModel>{
         val arrayList = ArrayList<PremiumPlanModel>()
@@ -117,7 +112,37 @@ class PremiumPlanFragment : Fragment() {
         return arrayList
     }
     private fun loadRewardedAd(){
-        Toast.makeText(requireContext(), "coming soon", Toast.LENGTH_SHORT).show()
+
+        postGems(100)
+        progressDialog = ProgressDialog(requireContext())
+        progressDialog!!.setCancelable(false)
+        progressDialog?.setMessage("Loading Ad")
+
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(requireContext(), "ca-app-pub-3940256099942544/5224354917", adRequest, object : RewardedAdLoadCallback() {
+            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                // Handle the error.
+                Log.d("loading error", loadAdError.toString())
+                progressDialog?.dismiss()
+                Toast.makeText(requireContext(), "Ad failed to load. Please check your internet connection and Try again", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onAdLoaded(ad: RewardedAd) {
+
+                Log.d("TAG", "Ad was loaded.")
+                progressDialog?.dismiss()
+                ad.show(requireActivity()
+                ) { rewardItem -> // Handle the reward.
+                    Log.d("TAG", "The user earned the reward.")
+                    val rewardAmount = rewardItem.amount
+                    val rewardType = rewardItem.type
+                    postGems(5)
+                    Toast.makeText(requireContext(),"Congratulations! You have earned 5 gems",Toast.LENGTH_SHORT).show()
+                    Log.e("Reward", "onUserEarnedReward: $rewardAmount")
+                    Log.e("Reward", "onUserEarnedReward: $rewardType")
+                }
+            }
+        })
     }
     private fun favPopup(dialog: Dialog) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

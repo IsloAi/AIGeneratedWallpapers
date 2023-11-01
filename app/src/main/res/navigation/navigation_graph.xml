@@ -140,5 +140,10 @@
         android:label="fragment_sign_up"
         tools:layout="@layout/fragment_sign_up"
         />
+    <fragment
+        android:id="@+id/viewAllCreations"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.ViewAllCreations"
+        android:label="fragment_view_all_creations"
+        tools:layout="@layout/fragment_view_all_creations" />
 
 </navigation>

@@ -15,7 +15,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.firebase.auth.FirebaseAuth
+import com.bumptech.glide.Glide
+
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFavouriteViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
@@ -48,24 +49,29 @@ class FavouriteFragment : Fragment() {
         return binding.root}
 
     private fun onCreateViewCalling(){
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
         val roomDatabase = AppDatabase.getInstance(requireContext())
         roomViewModel = ViewModelProvider(this, ViewModelFactory(roomDatabase,0))[RoomViewModel::class.java]
         myActivity = activity as MainActivity
-        val auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
+//        val auth = FirebaseAuth.getInstance()
+//        val currentUser = auth.currentUser
+//        if (currentUser != null) {
             viewVisible()
-        }else{
-            binding.errorMessage.visibility = VISIBLE
-            binding.aiRecyclerView.visibility = INVISIBLE
-            binding.selfCreationRecyclerView.visibility = INVISIBLE
-            binding.switchLayout.visibility = INVISIBLE
-            binding.errorLotti.setAnimation(R.raw.not_logged)
-            binding.errorText.text = "Please login to see your favorite wallpapers."
-            binding.googleLogin.setOnClickListener {
-                requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
-            }
-        }
+//        }else{
+//            binding.errorMessage.visibility = VISIBLE
+//            binding.aiRecyclerView.visibility = INVISIBLE
+//            binding.selfCreationRecyclerView.visibility = INVISIBLE
+//            binding.switchLayout.visibility = INVISIBLE
+//            binding.errorLotti.setAnimation(R.raw.not_logged)
+//            binding.errorText.text = "Please login to see your favorite wallpapers."
+//            binding.googleLogin.setOnClickListener {
+//                requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
+//            }
+//        }
     }
     private fun viewVisible(){
         binding.errorMessage.visibility = INVISIBLE

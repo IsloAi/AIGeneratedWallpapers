@@ -75,7 +75,7 @@
                 android:fontFamily="@font/raleway_medium"
                 />
 
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/diamondIcon"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="match_parent"
@@ -83,10 +83,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginEnd="@dimen/_3sdp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/ttttt"
-
                 />
             <TextView
                 android:id="@+id/gemsTextView"

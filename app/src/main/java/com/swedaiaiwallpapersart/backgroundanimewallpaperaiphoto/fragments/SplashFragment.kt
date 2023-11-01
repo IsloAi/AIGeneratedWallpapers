@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.google.firebase.auth.FirebaseAuth
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.GetGemsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -71,14 +70,8 @@ class SplashFragment : Fragment() {
     override fun onResume() {
         super.onResume()
              navigate()
-
-        val auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
             fetchGems()
-        }else{
-            MySharePreference.setGemsValue(requireContext(), 20)
-        }
+
     }
 
     override fun onPause() {

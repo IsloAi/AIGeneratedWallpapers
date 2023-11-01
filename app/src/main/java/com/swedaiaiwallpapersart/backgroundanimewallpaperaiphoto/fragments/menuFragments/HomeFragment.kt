@@ -21,12 +21,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.common.api.Scope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import com.bumptech.glide.Glide
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -53,7 +48,6 @@ class HomeFragment : Fragment(){
     private var  dialog:Dialog? = null
     private var  dialog2:Dialog? = null
     companion object{const val RC_SIGN_IN = 9001}
-    private var isLogin = false
     private var isPopOpen = false
     private val myDialogs = MyDialogs()
     private var isLoading = false
@@ -72,11 +66,12 @@ class HomeFragment : Fragment(){
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
         checkDailyReward()
         myActivity = activity as MainActivity
-        val auth = FirebaseAuth.getInstance()
-        val currentUser = auth.currentUser
-        isLogin = currentUser != null
-        Log.d("TraceLoging", "onCreate: $isLogin")
         navController = findNavController()
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
         binding.progressBar.visibility = VISIBLE
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
@@ -120,7 +115,7 @@ class HomeFragment : Fragment(){
                 }
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,isLogin)
+        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,true)
     }
     private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
        adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
@@ -185,22 +180,17 @@ class HomeFragment : Fragment(){
            dialog.setCancelable(false)
            dialog.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
                dialog.dismiss()
-               MySharePreference.setDailyRewardCounter(requireContext(),true)
+               MySharePreference.setDailyRewardCounter(dialog.context,true)
            }
            dialog.findViewById<Button>(R.id.buttonGetReward).setOnClickListener {
-               val auth = FirebaseAuth.getInstance()
-               val currentUser = auth.currentUser
-               if (currentUser != null){
+               dialog.dismiss()
                    val gems = MySharePreference.getGemsValue(requireContext())!!+rewardAdWatched
                    postDataOnServer.gemsPostData(requireContext(), MySharePreference.getUserID(requireContext())!!,
                        RetrofitInstance.getInstance(),gems, PostDataOnServer.isPlan)
                    MySharePreference.setDailyRewardCounter(requireContext(),true)
                    binding.gemsText.text = gems.toString()
-                   dialog.dismiss()
                    Toast.makeText(context, "You earned the 20 gems successfully", Toast.LENGTH_SHORT).show()
-               }else{
-                   requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
-               }
+
            }
            dialog.show()
        }

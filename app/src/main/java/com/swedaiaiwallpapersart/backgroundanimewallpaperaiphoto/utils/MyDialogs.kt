@@ -49,7 +49,7 @@ class MyDialogs {
         actionId: Int,
         gemsTextUpdate: GemsTextUpdate,
         lockButton: ImageView,
-        diamondIcon: LottieAnimationView,
+        diamondIcon: ImageView,
         gemsView:TextView,
         myViewModel: MyViewModel?,
     ) {
@@ -102,7 +102,7 @@ class MyDialogs {
         actionId: Int,
         gemsTextUpdate: GemsTextUpdate,
         lockButton: ImageView,
-        diamondIcon: LottieAnimationView,
+        diamondIcon: ImageView,
         gemsView:TextView
     ) {
         val dialog = Dialog(context)
