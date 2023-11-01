@@ -113,6 +113,8 @@ class PremiumPlanFragment : Fragment() {
     }
     private fun loadRewardedAd(){
 
+        //real Rewarded: 	ca-app-pub-5887559234735462/3077252807
+
         postGems(100)
         progressDialog = ProgressDialog(requireContext())
         progressDialog!!.setCancelable(false)

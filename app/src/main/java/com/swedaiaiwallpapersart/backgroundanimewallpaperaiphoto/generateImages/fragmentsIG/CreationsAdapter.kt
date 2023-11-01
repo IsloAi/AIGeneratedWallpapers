@@ -14,7 +14,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 
 
 class CreationsAdapter(private val arrayList: List<GetResponseIGEntity>,
-                     private val getbackOfID: GetbackOfID
+                     private val creationSelectionInterface: CreationSelectionInterface
 ): RecyclerView.Adapter<CreationsAdapter.ViewHolder>() {
     class ViewHolder(val binding: ListItemMyCreationsBinding): RecyclerView.ViewHolder(binding.root)
     private var context: Context? = null
@@ -33,6 +33,19 @@ class CreationsAdapter(private val arrayList: List<GetResponseIGEntity>,
             Glide.with(context!!).load(model.prompt?.get(0)).into(holder.binding.wallpaper)
         }
 
+        holder.itemView.setOnClickListener {
+            creationSelectionInterface.setOnClick(position,model)
+            creationSelectionInterface.viewMyCreations(model.id)
+        }
+
+
+
     }
     override fun getItemCount() = arrayList.size
+
+    interface CreationSelectionInterface {
+        fun setOnClick(id:Int,getResponseIGEntity: GetResponseIGEntity)
+
+        fun viewMyCreations(modelId:Int)
+    }
 }

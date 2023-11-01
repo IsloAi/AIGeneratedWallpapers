@@ -20,6 +20,13 @@ class RoomViewModel(private val database: AppDatabase, id: Int) : ViewModel() {
     }
 
 
+    fun deleteSingleImage(responseIGDao: GetResponseIGEntity){
+        viewModelScope.launch {
+            database.getResponseIGDao().deleteCreation(responseIGDao)
+        }
+    }
+
+
     fun deleteAll(){
         viewModelScope.launch {
             database.getResponseIGDao().deleteAllCreations()

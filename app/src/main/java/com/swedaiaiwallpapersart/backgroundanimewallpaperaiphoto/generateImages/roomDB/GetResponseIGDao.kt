@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
@@ -19,4 +20,7 @@ interface GetResponseIGDao {
 
     @Query("DELETE FROM get_response_ig")
     fun deleteAllCreations()
+
+    @Delete
+    fun deleteCreation(genericResponseModel: GetResponseIGEntity):Int
 }
