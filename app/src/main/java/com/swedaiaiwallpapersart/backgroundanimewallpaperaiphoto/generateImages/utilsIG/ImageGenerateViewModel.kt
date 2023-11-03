@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG
 
+import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import android.view.View.GONE
@@ -19,7 +20,7 @@ class ImageGenerateViewModel:ViewModel() {
     val responseData: MutableLiveData<GetResponseIG> by lazy {
         MutableLiveData<GetResponseIG>()
     }
-    fun loadData(context: Context,prompt: String, progress: LottieAnimationView) {
+    fun loadData(context: Context,prompt: String, progress: Dialog) {
         val retrofit = RetrofitIntenseIG.getInstance()
         val apiService = retrofit.create(PostRequestIG::class.java)
         val postData = PostRequestModelIG(
@@ -56,7 +57,7 @@ class ImageGenerateViewModel:ViewModel() {
         call.enqueue(object : Callback<GetResponseIG> {
             override fun onResponse(call: Call<GetResponseIG>, response: Response<GetResponseIG>) {
                 if (response.isSuccessful) {
-                    progress.visibility = GONE
+                    progress.dismiss()
                     val model: GetResponseIG? = response.body()
                     Log.d("imageLists", "model : ${model}")
                     Toast.makeText(context, "Generated Successfully", Toast.LENGTH_SHORT).show()
@@ -66,7 +67,7 @@ class ImageGenerateViewModel:ViewModel() {
                 }
             }
             override fun onFailure(call: Call<GetResponseIG>, t: Throwable) {
-                progress.visibility = GONE
+                progress.dismiss()
                 Log.d("imageLists", "error : ${t.message}")
                 Toast.makeText(context, "Generated Error", Toast.LENGTH_SHORT).show()
             }

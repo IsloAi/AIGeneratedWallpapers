@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -25,6 +26,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.SplashMo
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.SplashSliderAdapter
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -50,8 +52,14 @@ class SplashFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSplashBinding.inflate(inflater,container,false)
-        allOnCreateCalling()
+
         return binding.root}
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        allOnCreateCalling()
+    }
 
    private fun allOnCreateCalling(){
         circle1 = binding.circle1
@@ -153,33 +161,37 @@ class SplashFragment : Fragment() {
         layout4.setBackgroundResource(R.drawable.circle)
     }
     private fun fetchGems() {
-        val retrofit = RetrofitInstance.getInstance()
-        val service = retrofit.create(GetGemsInterface::class.java)
-        val body: MutableMap<String, Any> = HashMap()
-        body["uid"] = MySharePreference.getUserID(requireContext())!!
-        val call = service.getGems(body)
-        call.enqueue(object : Callback<GetGemsData> {
-            override fun onResponse(call: Call<GetGemsData>, response: Response<GetGemsData>) {
-                if (response.isSuccessful) {
-                    Log.d("postDataTesting", "onResponse: success ${response.body()}")
-                    response.body()?.let {
-                        val gemData = GetGemsData(it.uid,it.gems,it.counter,it.message)
-                        Log.d("postDataTesting", "onResponse: model ${gemData}")
-                        if (gemData.uid == MySharePreference.getUserID(requireContext())!!) {
-                            MySharePreference.setGemsValue(requireContext(), gemData.gems!!)
-                            MySharePreference.setCounterValue(requireContext(),gemData.counter!!)
+
+        lifecycleScope.launch {
+            val retrofit = RetrofitInstance.getInstance()
+            val service = retrofit.create(GetGemsInterface::class.java)
+            val body: MutableMap<String, Any> = HashMap()
+            body["uid"] = MySharePreference.getDeviceID(requireContext())!!
+            val call = service.getGems(body)
+            call.enqueue(object : Callback<GetGemsData> {
+                override fun onResponse(call: Call<GetGemsData>, response: Response<GetGemsData>) {
+                    if (response.isSuccessful) {
+                        Log.d("postDataTesting", "onResponse: success ${response.body()}")
+                        response.body()?.let {
+                            val gemData = GetGemsData(it.uid,it.gems,it.counter,it.message)
+                            Log.d("postDataTesting", "onResponse: model ${gemData}")
+                            if (gemData.uid == MySharePreference.getDeviceID(requireContext())!!) {
+                                MySharePreference.setGemsValue(requireContext(), gemData.gems!!)
+                                MySharePreference.setCounterValue(requireContext(),gemData.counter!!)
+                            }
                         }
+                    } else {
+                        Log.d("responseNotOk", "onResponse: Response not successful")
                     }
-                } else {
-                    Log.d("responseNotOk", "onResponse: Response not successful")
                 }
-            }
-            override fun onFailure(call: Call<GetGemsData>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error Loading", Toast.LENGTH_SHORT).show()
-                // Handle failure case
-                Log.d("responseFailure", "onFailure: Failed to fetch data $t")
-            }
-        })
+                override fun onFailure(call: Call<GetGemsData>, t: Throwable) {
+                    Toast.makeText(requireContext(), "Error Loading", Toast.LENGTH_SHORT).show()
+                    // Handle failure case
+                    Log.d("responseFailure", "onFailure: Failed to fetch data $t")
+                }
+            })
+        }
+
     }
     override fun onDestroyView() {
         super.onDestroyView()

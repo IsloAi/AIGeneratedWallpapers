@@ -2,11 +2,8 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="@dimen/_138sdp"
+    android:layout_width="match_parent"
     android:layout_height="@dimen/_190sdp"
-    android:layout_marginTop="@dimen/_8sdp"
-    android:layout_marginStart="@dimen/_5sdp"
-    android:layout_marginBottom="@dimen/_2sdp"
     android:elevation="@dimen/_10sdp"
     app:cardBackgroundColor="@color/button_bg"
     app:cardCornerRadius="@dimen/_10sdp">
@@ -31,6 +28,20 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
                     />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/creation_unselected"
+                    android:padding="@dimen/_5sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_margin="@dimen/_5sdp"
+                    android:id="@+id/select_image"
+                    android:visibility="gone"
+                    />
+
                 <ImageView
                     android:id="@+id/lockButton"
                     android:layout_width="@dimen/_25sdp"

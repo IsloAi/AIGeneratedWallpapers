@@ -27,9 +27,9 @@ class RoomViewModel(private val database: AppDatabase, id: Int) : ViewModel() {
     }
 
 
-    fun deleteAll(){
+    fun deleteAll(list:ArrayList<GetResponseIGEntity>){
         viewModelScope.launch {
-            database.getResponseIGDao().deleteAllCreations()
+            database.getResponseIGDao().deleteCreations(list)
         }
     }
 

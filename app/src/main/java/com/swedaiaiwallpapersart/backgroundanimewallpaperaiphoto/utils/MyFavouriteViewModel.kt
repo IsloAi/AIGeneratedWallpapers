@@ -22,7 +22,7 @@ class MyFavouriteViewModel: ViewModel()  {
     }
     fun fetchWallpapers(context: Context,deviceId:String, animation: LottieAnimationView) {
         val retrofit = RetrofitInstance.getInstance()
-        val service = retrofit.create(FavouriteListInterface::class.java).getList(MySharePreference.getUserID(context)!!)
+        val service = retrofit.create(FavouriteListInterface::class.java).getList(MySharePreference.getDeviceID(context)!!)
         service.enqueue(object :Callback<FavouriteListResponse>{
             override fun onResponse(
                 call: Call<FavouriteListResponse>,

@@ -28,7 +28,7 @@ class MyViewModel: ViewModel()  {
     ) {
         val retrofit = RetrofitInstance.getInstance()
         val service = if (isLogin){
-           retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getUserID(context)!!)
+           retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getDeviceID(context)!!)
         } else {
             retrofit.create(ListResponseInterfaceNoUid::class.java).getList(catName)
         }

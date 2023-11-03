@@ -59,8 +59,13 @@ class HomeFragment : Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
-        onCreatingCalling()
         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onCreatingCalling()
     }
     private fun onCreatingCalling(){
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
@@ -109,6 +114,8 @@ class HomeFragment : Fragment(){
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
                 cachedCatResponses = catResponses
+
+                Log.e("TAG", "loadData: "+catResponses )
                 if (view != null) {
                     // If the view is available, update the UI
                     updateUIWithFetchedData(catResponses)
@@ -185,7 +192,7 @@ class HomeFragment : Fragment(){
            dialog.findViewById<Button>(R.id.buttonGetReward).setOnClickListener {
                dialog.dismiss()
                    val gems = MySharePreference.getGemsValue(requireContext())!!+rewardAdWatched
-                   postDataOnServer.gemsPostData(requireContext(), MySharePreference.getUserID(requireContext())!!,
+                   postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
                        RetrofitInstance.getInstance(),gems, PostDataOnServer.isPlan)
                    MySharePreference.setDailyRewardCounter(requireContext(),true)
                    binding.gemsText.text = gems.toString()

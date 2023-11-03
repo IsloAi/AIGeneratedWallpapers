@@ -8,6 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbarLayout"
             android:layout_width="0dp"
@@ -15,8 +16,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/premiumCardLayout"
-            app:layout_constraintHeight_percent=".15">
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            app:layout_constraintHeight_percent=".1"
+            android:paddingHorizontal="@dimen/_10sdp"
+            >
             <TextView
                 android:id="@+id/premium"
                 android:layout_width="wrap_content"
@@ -24,14 +27,39 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="Settings"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/white"
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
-                android:textSize="22sp"
+                android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText"/>
+
+            <TextView
+                android:id="@+id/gemsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:textColor="@color/gems_color"
+                android:fontFamily="@font/raleway_medium"
+                android:gravity="center"
+                android:text="0"
+                app:layout_constraintEnd_toStartOf="@+id/animationDdd"
+                android:textSize="@dimen/_13sdp"
+                android:textStyle="bold"
+                tools:ignore="HardcodedText"/>
+
+            <ImageView
+                android:id="@+id/animationDdd"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginStart="@dimen/_2sdp"
+                android:layout_marginBottom="@dimen/_10sdp"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/premiumCardLayout"

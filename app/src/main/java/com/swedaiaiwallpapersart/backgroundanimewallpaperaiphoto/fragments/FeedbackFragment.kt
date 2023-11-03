@@ -64,7 +64,7 @@ class FeedbackFragment : Fragment() {
                     subject?.requestFocus()
                 }else{
                     postDataOnServer.sendFeedback(requireContext(),getMail,getName,getSubject,getMessage,
-                        MySharePreference.getUserID(requireContext())!!)
+                        MySharePreference.getDeviceID(requireContext())!!)
                     mail?.setText("")
                     name?.setText("")
                     subject?.setText("")

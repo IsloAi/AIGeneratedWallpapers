@@ -15,22 +15,6 @@
             app:layout_constraintHeight_percent=".27"
             app:layout_constraintTop_toTopOf="parent"
             />
-        <TextView
-            android:id="@+id/appNameTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/topSpace"
-            app:layout_constraintEnd_toEndOf="@+id/topSpace"
-            app:layout_constraintTop_toTopOf="@+id/topSpace"
-            app:layout_constraintBottom_toBottomOf="@+id/topSpace"
-            android:text="AI Art\nwallpapers"
-            android:fontFamily="@font/raleway_medium"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:textSize="32sp"
-
-            />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/pager"
             android:layout_width="0dp"

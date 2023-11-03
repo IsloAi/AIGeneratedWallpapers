@@ -110,6 +110,11 @@ class WallpaperViewFragment : Fragment() {
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
         navController = findNavController()
         functionality()
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
         return binding.root
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -242,7 +247,7 @@ class WallpaperViewFragment : Fragment() {
     ){
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
-        val postData = PostData(MySharePreference.getUserID(context)!!, arrayList[position].id.toString())
+        val postData = PostData(MySharePreference.getDeviceID(context)!!, arrayList[position].id.toString())
         val call = apiService.postData(postData)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

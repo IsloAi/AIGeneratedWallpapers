@@ -18,17 +18,6 @@ class MySharePreference {
         return sp.getString("key","")
     }
 
-        fun setUserID(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            val myEdit = sharedPreferences.edit()
-            myEdit.putString("setUserID",value)
-            myEdit.apply()
-        }
-
-        fun getUserID(context: Context):String?{
-            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getString("setUserID","")
-        }
 
         fun setGemsValue(context: Context,value:Int){
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)

@@ -20,10 +20,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLog
 class SignInFragment : Fragment() {
     private lateinit var binding : FragmentSignInBinding
     private var myContext : Context?= null
-    private lateinit var emailTV: EditText
-    private lateinit var passwordTV: EditText
-    private lateinit var loginBtn: TextView
-    private lateinit var progressBar: ProgressBar
     private val googleLogin = GoogleLogin()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -39,37 +35,37 @@ class SignInFragment : Fragment() {
     }
     private fun onCreatingCalling() {
         initializeUI()
-        loginBtn.setOnClickListener {loginUserAccount()}
-        binding.signUpText.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
-        }
-        binding.forgetPassword.setOnClickListener {
-            resetPassword()
-        }
-        binding.googleLogin.setOnClickListener {
-            login()
-        }
+//        loginBtn.setOnClickListener {loginUserAccount()}
+//        binding.signUpText.setOnClickListener {
+//            findNavController().navigate(R.id.action_signInFragment_to_signUpFragment)
+//        }
+//        binding.forgetPassword.setOnClickListener {
+//            resetPassword()
+//        }
+//        binding.googleLogin.setOnClickListener {
+//            login()
+//        }
     }
 
     private fun initializeUI() {
-        emailTV = binding.enterMail
-        passwordTV = binding.password
-        loginBtn = binding.login
-        progressBar = binding.progressBar
-
-        binding.passwordToggle.setOnClickListener {
-            if (passwordTV.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
-                // Password is currently visible, so switch to a password field
-                passwordTV.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-//                passwordToggle.text = "Show"
-            } else {
-                // Password is currently hidden, so switch to visible text
-                passwordTV.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-//                passwordToggle.text = "Hide"
-            }
-            // Move the cursor to the end of the text
-            passwordTV.setSelection(passwordTV.text.length)
-        }
+//        emailTV = binding.enterMail
+//        passwordTV = binding.password
+//        loginBtn = binding.login
+//        progressBar = binding.progressBar
+//
+//        binding.passwordToggle.setOnClickListener {
+//            if (passwordTV.inputType == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
+//                // Password is currently visible, so switch to a password field
+//                passwordTV.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+////                passwordToggle.text = "Show"
+//            } else {
+//                // Password is currently hidden, so switch to visible text
+//                passwordTV.inputType = InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+////                passwordToggle.text = "Hide"
+//            }
+//            // Move the cursor to the end of the text
+//            passwordTV.setSelection(passwordTV.text.length)
+//        }
     }
 
     private fun loginUserAccount() {

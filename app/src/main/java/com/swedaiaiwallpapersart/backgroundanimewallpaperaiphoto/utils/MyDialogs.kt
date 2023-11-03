@@ -82,7 +82,7 @@ class MyDialogs {
                 if(totalGems>=gems){
                   val leftGems = totalGems-gems
                     val postData = PostDataOnServer()
-                    postData.unLocking(MySharePreference.getUserID(context)!!,model,context,leftGems,gemsTextUpdate,dialog,lockButton,diamondIcon,gemsView)
+                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,leftGems,gemsTextUpdate,dialog,lockButton,diamondIcon,gemsView)
                 }
             }
         }
@@ -134,7 +134,7 @@ class MyDialogs {
                 if(totalGems>=gems){
                     val leftGems = totalGems-gems
                     val postData = PostDataOnServer()
-                    postData.unLocking(MySharePreference.getUserID(context)!!,model,context,leftGems,gemsTextUpdate,dialog,lockButton,diamondIcon,gemsView)
+                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,leftGems,gemsTextUpdate,dialog,lockButton,diamondIcon,gemsView)
                 }
             }
         }
@@ -186,7 +186,7 @@ class MyDialogs {
                 val gems = model.gems!!
                 if(totalGems>=gems){
                     val leftGems = totalGems-gems
-                    postData.unLocking(MySharePreference.getUserID(context)!!,model,context,leftGems,totalGemsView,dialog,layout)
+                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,leftGems,totalGemsView,dialog,layout)
                     //postData.gemsPostData(context,MySharePreference.getUserID(context)!!,instance,leftGems,PostDataOnServer.isPlan,layout,model)
 //                    totalGemsView.text = leftGems.toString()
                 }

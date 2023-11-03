@@ -45,6 +45,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatName
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -61,8 +64,9 @@ class MainActivity : AppCompatActivity(){
     private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt:String? =null
 
+    val mainScope = CoroutineScope(Dispatchers.IO)
+
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
-    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -120,7 +124,7 @@ class MainActivity : AppCompatActivity(){
         if(formattedDate > MySharePreference.getDate(this).toString()){
             MySharePreference.setDate(this,formattedDate)
             MySharePreference.setDailyRewardCounter(this,false)
-                resetCounter(MySharePreference.getUserID(this)!!)
+                resetCounter(MySharePreference.getDeviceID(this)!!)
         }else{
             MySharePreference.setDate(this,formattedDate)
         }
@@ -128,73 +132,83 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun resetCounter(uniqueId: String) {
-        val retrofit = RetrofitInstance.getInstance()
-        val service = retrofit.create(ResetCounterInterface::class.java)
-        val body: MutableMap<String, Any> = HashMap()
-        body["uid"] = uniqueId
-        val call = service.resetCounter(body)
-        call.enqueue(object : Callback<Counter> {
-            override fun onResponse(call: Call<Counter>, response: Response<Counter>) {
-                if (response.isSuccessful) {
-                    Log.d("CounterTestingapi", "onResponse: success ${response.body()}")
-                    response.body()?.let {
-                        val gemData = Counter(it.message)
-                        Log.d("CounterTestingapi", "onResponse: model ${gemData}")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val retrofit = RetrofitInstance.getInstance()
+            val service = retrofit.create(ResetCounterInterface::class.java)
+            val body: MutableMap<String, Any> = HashMap()
+            body["uid"] = uniqueId
+            val call = service.resetCounter(body)
+            call.enqueue(object : Callback<Counter> {
+                override fun onResponse(call: Call<Counter>, response: Response<Counter>) {
+                    if (response.isSuccessful) {
+                        Log.d("CounterTestingapi", "onResponse: success ${response.body()}")
+                        response.body()?.let {
+                            val gemData = Counter(it.message)
+                            Log.d("CounterTestingapi", "onResponse: model ${gemData}")
+                        }
+                    } else {
+                        Log.d("CounterTestingapi", "onResponse: Response not successful")
                     }
-                } else {
-                    Log.d("CounterTestingapi", "onResponse: Response not successful")
                 }
-            }
-            override fun onFailure(call: Call<Counter>, t: Throwable) {
-                Log.d("CounterTestingapi", "onFailure: Failed to fetch data $t")
-            }
-        })
+                override fun onFailure(call: Call<Counter>, t: Throwable) {
+                    Log.d("CounterTestingapi", "onFailure: Failed to fetch data $t")
+                }
+            })
+        }
+
     }
 
     private fun purchasesPrice() {
-        val billingClient = BillingClient.newBuilder(this)
-            .setListener(purchasesUpdatedListener)
-            .enablePendingPurchases()
-            .build()
-        billingClient.startConnection(object : BillingClientStateListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is ready. You can query purchases here.
-                    Log.e("TAG", "ready to purchess")
-                    val skuList: MutableList<String> = ArrayList()
-                    skuList.add("plan1")
-                    skuList.add("plan2")
-                    skuList.add("plan3")
-                    skuList.add("plan4")
-                    skuList.add("plan5")
-                    skuList.add("plan6")
-                    val params = SkuDetailsParams.newBuilder()
-                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                    billingClient.querySkuDetailsAsync(params.build()) {
-                            billingResult, skuDetailsList ->
-                        try {
-                            Constants.plan1 = skuDetailsList?.get(0)!!.price
-                            Constants.plan2 = skuDetailsList[1].price
-                            Constants.plan3 = skuDetailsList[2].price
-                            Constants.plan4 = skuDetailsList[3].price
-                            Constants.plan5 = skuDetailsList[4].price
-                            Constants.plan6 = skuDetailsList[5].price
-                        } catch (c: java.lang.Exception) {
-                            c.printStackTrace()
+
+        mainScope.launch {
+            val billingClient = BillingClient.newBuilder(this@MainActivity)
+                .setListener(purchasesUpdatedListener)
+                .enablePendingPurchases()
+                .build()
+            billingClient.startConnection(object : BillingClientStateListener {
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                        // The BillingClient is ready. You can query purchases here.
+                        Log.e("TAG", "ready to purchess")
+                        val skuList: MutableList<String> = ArrayList()
+                        skuList.add("plan1")
+                        skuList.add("plan2")
+                        skuList.add("plan3")
+                        skuList.add("plan4")
+                        skuList.add("plan5")
+                        skuList.add("plan6")
+                        val params = SkuDetailsParams.newBuilder()
+                        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+                        billingClient.querySkuDetailsAsync(params.build()) {
+                                billingResult, skuDetailsList ->
+                            try {
+                                Constants.plan1 = skuDetailsList?.get(0)!!.price
+                                Constants.plan2 = skuDetailsList[1].price
+                                Constants.plan3 = skuDetailsList[2].price
+                                Constants.plan4 = skuDetailsList[3].price
+                                Constants.plan5 = skuDetailsList[4].price
+                                Constants.plan6 = skuDetailsList[5].price
+                            } catch (c: java.lang.Exception) {
+                                c.printStackTrace()
+                            }
+                            Log.e("TAG", "sku details " + skuDetailsList!!.size)
+                            // Process the result.
+                            Log.e("TAG", "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
                         }
-                        Log.e("TAG", "sku details " + skuDetailsList!!.size)
-                        // Process the result.
-                        Log.e("TAG", "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
                     }
                 }
-            }
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                Log.e("TAG", "service disconnected")
-            }
-        })
+                override fun onBillingServiceDisconnected() {
+                    // Try to restart the connection on the next request to
+                    // Google Play by calling the startConnection() method.
+                    Log.e("TAG", "service disconnected")
+                }
+            })
+        }
+
+
+
     }
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
 //        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {

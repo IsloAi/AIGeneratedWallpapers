@@ -12,8 +12,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 23
         targetSdk 34
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 10
+        versionName "1.1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -38,7 +38,6 @@ android {
     }
     buildFeatures
             {
-                dataBinding = true
                 viewBinding true
             }
 }
@@ -50,6 +49,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-crashlytics:18.4.3'
     implementation 'com.google.firebase:firebase-analytics:21.3.0'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
+    implementation 'androidx.lifecycle:lifecycle-process:2.6.2'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

@@ -45,15 +45,23 @@ class FavouriteFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
-        onCreateViewCalling()
+
         return binding.root}
 
-    private fun onCreateViewCalling(){
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onCreateViewCalling()
 
         Glide.with(requireContext())
             .asGif()
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
+    }
+
+    private fun onCreateViewCalling(){
+
+
         val roomDatabase = AppDatabase.getInstance(requireContext())
         roomViewModel = ViewModelProvider(this, ViewModelFactory(roomDatabase,0))[RoomViewModel::class.java]
         myActivity = activity as MainActivity
@@ -136,7 +144,7 @@ class FavouriteFragment : Fragment() {
                 }
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), MySharePreference.getUserID(requireContext())!!,binding.progressBar)
+        myViewModel.fetchWallpapers(requireContext(), MySharePreference.getDeviceID(requireContext())!!,binding.progressBar)
     }
     private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
         val adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
@@ -192,7 +200,7 @@ class FavouriteFragment : Fragment() {
                 })
                 binding.selfCreationRecyclerView.adapter = adapter
             }else{
-                Toast.makeText(requireContext(), "your creation list is empty yet", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Your favorite list is currently empty. Start adding items by tapping the ❤.", Toast.LENGTH_SHORT).show()
             }
 
         }

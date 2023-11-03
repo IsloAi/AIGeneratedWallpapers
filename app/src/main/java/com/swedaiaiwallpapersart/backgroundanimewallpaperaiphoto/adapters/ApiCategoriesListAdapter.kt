@@ -53,6 +53,9 @@ class ApiCategoriesListAdapter(
     private val myActivity: MainActivity
 ):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    private var lastClickTime = 0L
+    private val debounceThreshold = 2000L // 1 second
          var context:Context? = null
         private val VIEW_TYPE_CONTAINER1 = 0
         private val VIEW_TYPE_CONTAINER2 = 1
@@ -145,22 +148,28 @@ class ApiCategoriesListAdapter(
                     return false
                 }}).into(wallpaperMainImage)
         wallpaperMainImage.setOnClickListener {
-            val gems = model.gems
-            val isBuy = model.unlockimges
-            Log.d("gems", "onBindViewHolder: $gems")
-            if (gems != null) {
-                if(gems==0 || isBuy==true){
-                    positionCallback.getPosition(position)
+            val currentTime = System.currentTimeMillis()
 
-                }else{
-                        if(whichClicked==1){
-                            myDialogs.getWallpaperPopup(context!!,model,navController,actionId,gemsTextUpdate,lockButton,diamondIcon,gemsView,myViewModel!!)
-                        }else{
-                            myDialogs.getWallpaperPopup(context!!,model,navController,actionId,gemsTextUpdate,lockButton,diamondIcon,gemsView)
+            if (currentTime - lastClickTime >= debounceThreshold) {
+                val gems = model.gems
+                val isBuy = model.unlockimges
+                Log.d("gems", "onBindViewHolder: $gems")
+
+                if (gems != null) {
+                    if (gems == 0 || isBuy == true) {
+                        positionCallback.getPosition(position)
+                    } else {
+                        if (whichClicked == 1) {
+                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!)
+                        } else {
+                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView)
                         }
-
+                    }
                 }
+                lastClickTime = currentTime
             }
+
+
         }
         favouriteButton.setOnClickListener{
             favouriteButton.isEnabled = false
@@ -185,7 +194,7 @@ class ApiCategoriesListAdapter(
         likesTextView: TextView){
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
-        val postData = PostData(MySharePreference.getUserID(context)!!, model.id.toString())
+        val postData = PostData(MySharePreference.getDeviceID(context)!!, model.id.toString())
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val response = apiService.postData(postData).execute()

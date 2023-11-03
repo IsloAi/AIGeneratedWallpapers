@@ -30,10 +30,10 @@ class GoogleLogin {
                         if (gemData.uid == id) {
                             MySharePreference.setGemsValue(context, gemData.gems!!)
                             MySharePreference.setCounterValue(context,gemData.counter!!)
-                            MySharePreference.setUserID(context,id)
+                            MySharePreference.setDeviceID(context,id)
                             gemsText.text = MySharePreference.getGemsValue(context)!!.toString()
                         }else{
-                            MySharePreference.setUserID(context,id)
+                            MySharePreference.setDate(context,id)
                             postDataOnServer.gemsPostData(context,id,RetrofitInstance.getInstance(),20,"plan")
                             gemsText.text= "20"
                         }
@@ -67,9 +67,9 @@ class GoogleLogin {
                         if (gemData.uid == id) {
                             MySharePreference.setGemsValue(context, gemData.gems!!)
                             MySharePreference.setCounterValue(context,gemData.counter!!)
-                            MySharePreference.setUserID(context,id)
+                            MySharePreference.setDeviceID(context,id)
                         }else{
-                            MySharePreference.setUserID(context,id)
+                            MySharePreference.setDeviceID(context,id)
                             postDataOnServer.gemsPostData(context,id,RetrofitInstance.getInstance(),20,"plan")
                         }
                     }

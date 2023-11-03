@@ -23,4 +23,7 @@ interface GetResponseIGDao {
 
     @Delete
     fun deleteCreation(genericResponseModel: GetResponseIGEntity):Int
+
+    @Delete
+    suspend fun deleteCreations(creations: List<GetResponseIGEntity>)
 }

@@ -24,7 +24,7 @@ class MyHomeViewModel: ViewModel()  {
     fun fetchWallpapers(context: Context, animation: LottieAnimationView, isLogin: Boolean) {
         val retrofit = RetrofitInstance.getInstance()
         val service = if (isLogin) {
-            retrofit.create(HomeListInterfaceWithId::class.java).getList(MySharePreference.getUserID(context)!!)
+            retrofit.create(HomeListInterfaceWithId::class.java).getList(MySharePreference.getDeviceID(context)!!)
         } else {
             retrofit.create(HomeListInterface::class.java).getList()
         }

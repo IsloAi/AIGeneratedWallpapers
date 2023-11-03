@@ -23,7 +23,7 @@ class ResetCountWorker(context: Context,workerParams: WorkerParameters) : Worker
         }
         if (currentTime.timeInMillis >= targetTime.timeInMillis) {
             Log.d("tracingWorkManager", "doWork: working after 15 mints")
-            resetCounter(MySharePreference.getUserID(applicationContext)!!)
+            resetCounter(MySharePreference.getDeviceID(applicationContext)!!)
             MySharePreference.setDailyRewardCounter(applicationContext,false)
         }
         return Result.success()

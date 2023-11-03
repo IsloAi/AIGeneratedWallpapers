@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/notificationLayout"
             app:layout_constraintHeight_percent=".1"
-            android:paddingHorizontal="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
             >
             <RelativeLayout
                 android:id="@+id/backButton"
@@ -45,7 +45,7 @@
                 app:layout_constraintStart_toEndOf="@+id/backButton"
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="Created Wallpaper"
-                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/white"
                 android:fontFamily="@font/raleway_medium"
@@ -69,16 +69,13 @@
                 android:textStyle="bold"
                 tools:ignore="HardcodedText"/>
 
-            <com.airbnb.lottie.LottieAnimationView
+            <ImageView
                 android:id="@+id/animationDdd"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/_2sdp"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:lottie_rawRes="@raw/dddd"
                 android:layout_marginBottom="@dimen/_10sdp"
                 />
 

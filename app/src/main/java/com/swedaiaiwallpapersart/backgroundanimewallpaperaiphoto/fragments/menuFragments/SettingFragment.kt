@@ -28,6 +28,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSettingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 
 class SettingFragment : Fragment() {
    private var _binding: FragmentSettingBinding?=null
@@ -46,10 +47,17 @@ class SettingFragment : Fragment() {
               requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_premiumPlanFragment)
           }
 
+        binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
+
         Glide.with(requireContext())
             .asGif()
             .load(R.raw.gems_animaion)
             .into(binding.animation)
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
         binding.rateUsButton.setOnClickListener {feedback()}
         binding.customerSupportButton.setOnClickListener {requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_feedbackFragment)}
         binding.shareAppButton.setOnClickListener {

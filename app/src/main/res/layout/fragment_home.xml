@@ -8,7 +8,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginVertical="@dimen/_5sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
         >
         <com.airbnb.lottie.LottieAnimationView
@@ -47,7 +46,7 @@
                 android:textColor="@color/white"
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
-                android:textSize="19sp"
+                android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText"/>
 
@@ -62,7 +61,7 @@
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
                 app:layout_constraintEnd_toStartOf="@+id/animationDdd"
-                android:textSize="22sp"
+                android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
                 tools:ignore="HardcodedText"/>
 

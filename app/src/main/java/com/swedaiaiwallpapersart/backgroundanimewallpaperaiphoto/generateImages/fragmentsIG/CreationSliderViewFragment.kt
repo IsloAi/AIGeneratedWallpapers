@@ -99,6 +99,11 @@ class CreationSliderViewFragment : Fragment() {
         navController = findNavController()
         reviewManager = ReviewManagerFactory.create(requireContext())
 
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
+
         val roomDatabase = AppDatabase.getInstance(requireContext())
         viewModel = ViewModelProvider(this, ViewModelFactory(roomDatabase,0))[RoomViewModel::class.java]
 

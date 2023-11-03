@@ -100,29 +100,39 @@ class MainFragment : Fragment(){
             setFragment(click)
             iconAndTitleSetting(click)
             homeButton.setOnClickListener {
-                click = 1
-                setFragment(click)
-                iconAndTitleSetting(click)
+                if (click !=  1){
+                    click = 1
+                    setFragment(click)
+                    iconAndTitleSetting(click)
+                }
             }
             categoryButton.setOnClickListener {
-                        click = 2
-                        iconAndTitleSetting(click)
-                        setFragment(click)
+                if (click != 2) {
+                    click = 2
+                    iconAndTitleSetting(click)
+                    setFragment(click)
+                }
             }
             favouriteButton.setOnClickListener {
-                click = 3
-                iconAndTitleSetting(click)
-                setFragment(click)
+                if (click != 3) {
+                    click = 3
+                    iconAndTitleSetting(click)
+                    setFragment(click)
+                }
             }
             generateImageButton.setOnClickListener{
-                click = 4
-                iconAndTitleSetting(click)
-                setFragment(click)
+                if (click != 4) {
+                    click = 4
+                    iconAndTitleSetting(click)
+                    setFragment(click)
+                }
             }
             settingButton.setOnClickListener {
-                click = 5
-                iconAndTitleSetting(click)
-                setFragment(click)
+                if (click != 5) {
+                    click = 5
+                    iconAndTitleSetting(click)
+                    setFragment(click)
+                }
             }
         }else{
             binding.bottomMenu.visibility = INVISIBLE

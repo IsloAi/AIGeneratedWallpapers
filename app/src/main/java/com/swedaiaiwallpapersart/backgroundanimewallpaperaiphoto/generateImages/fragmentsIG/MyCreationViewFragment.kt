@@ -18,6 +18,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
@@ -30,9 +31,19 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 class MyCreationViewFragment : Fragment() {
-    lateinit var binding:FragmentMyCreationViewBinding
+    private var _binding:FragmentMyCreationViewBinding ?= null
+    private val binding get() = _binding!!
+
+    private var bindingRef: WeakReference<FragmentMyCreationViewBinding>? = null
+
+    private var timer:CountDownTimer ?= null
+
     private var myContext: Context?= null
     private lateinit var listViewModel: ImageListViewModel
     private var timeDisplay = 0
@@ -58,11 +69,22 @@ class MyCreationViewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View{
         // Inflate the layout for this fragment
-        binding = FragmentMyCreationViewBinding.inflate(inflater,container,false)
+        _binding = FragmentMyCreationViewBinding.inflate(inflater,container,false)
+        bindingRef = WeakReference(_binding)
+        return  binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         if(myContext!= null){
             onCreateCalling()
         }
-        return  binding.root
+
+
+        Glide.with(requireContext())
+            .asGif()
+            .load(R.raw.gems_animaion)
+            .into(binding.animationDdd)
     }
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -81,14 +103,17 @@ class MyCreationViewFragment : Fragment() {
         val time = (timeDisplay*1000)
         binding.notificationMessage.text = "Estimated time to load..."
         startCountdown(timeDisplay,binding.textCounter)
-        Handler().postDelayed({
+
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            delay(time.toLong())
             binding.loading1.visibility = GONE
             binding.loading2.visibility = GONE
             binding.loading3.visibility = GONE
             binding.loading4.visibility = GONE
             loadDate()
             binding.copyButton.visibility = VISIBLE
-        },time.toLong())
+        }
         binding.backButton.setOnClickListener { findNavController().navigateUp()}
         swipeRefreshLayout.setOnRefreshListener {
             loadDate()
@@ -101,16 +126,17 @@ class MyCreationViewFragment : Fragment() {
         }
     }
     private fun loadDate(){
-        viewModel.getResponseIGById.observe(viewLifecycleOwner){
-            binding.prompt.text = it?.prompt
-            if(it?.future_links.isNullOrEmpty()){
-                Log.d("imageLists", "future_links is Empty")
-                setImage(it?.output!!,it.prompt,myId)
-            }else if(it?.output.isNullOrEmpty()){
-                Log.d("imageLists", "future_links is not empty   elssssssss")
-                setImage(it?.future_links!!,it.prompt,myId)
+            viewModel.getResponseIGById.observe(viewLifecycleOwner){
+                binding.prompt.text = it?.prompt
+                if(it?.future_links.isNullOrEmpty()){
+                    Log.d("imageLists", "future_links is Empty")
+                    setImage(it?.output!!,it.prompt,myId)
+                }else if(it?.output.isNullOrEmpty()){
+                    Log.d("imageLists", "future_links is not empty   elssssssss")
+                    setImage(it?.future_links!!,it.prompt,myId)
+                }
             }
-        }
+
         swipeRefreshLayout.isRefreshing = false
     }
     private fun setImage(list: ArrayList<String>, prompt: String?, id: Int){
@@ -136,18 +162,35 @@ class MyCreationViewFragment : Fragment() {
         findNavController().navigate(R.id.action_myViewCreationFragment_to_creationSliderViewFragment,bundle)
     }
     private fun startCountdown(initialSeconds: Int,textView:TextView) {
-      val  timer = object : CountDownTimer((initialSeconds * 1000).toLong(), 1000) {
+      timer = object : CountDownTimer((initialSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // Update the UI with the remaining seconds
+                val binding = bindingRef?.get()
                 val remainingSeconds = (millisUntilFinished / 1000).toInt()
-                textView.text = "$remainingSeconds sec"
+                if (binding != null){
+                    textView.text = "$remainingSeconds sec"
+
+                }
             }
             override fun onFinish() {
-                textView.text = ""
-                binding.notificationMessage.text = "if still not loaded then swipe down\nto refresh after few second"
+                val binding = bindingRef?.get()
+                if (binding!=null){
+                    textView.text = ""
+                    binding.notificationMessage.text = "if still not loaded then swipe down\nto refresh after few second"
+                }
+
             }
         }
-        timer.start()
+        timer?.start()
+
+
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        timer?.cancel()
+        _binding = null
     }
 
 

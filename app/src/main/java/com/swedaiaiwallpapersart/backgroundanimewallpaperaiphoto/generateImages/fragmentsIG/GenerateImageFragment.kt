@@ -1,9 +1,13 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -16,9 +20,13 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
@@ -28,6 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.CatListAdapter
@@ -48,6 +57,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GenerateImageFragment : Fragment() {
@@ -130,7 +140,7 @@ class GenerateImageFragment : Fragment() {
     @SuppressLint("SuspiciousIndentation")
     private fun postGems(){
       val totalGems = existGems?.minus(10)
-        postDataOnServer.gemsPostData(requireContext(), MySharePreference.getUserID(requireContext())!!,
+        postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
             RetrofitInstance.getInstance(),totalGems!!, PostDataOnServer.isPlan)
             MySharePreference.setGemsValue(requireContext(),totalGems)
            binding.gemsText.text = totalGems.toString()
@@ -197,13 +207,28 @@ class GenerateImageFragment : Fragment() {
         arrayList.add(CatListModelIG(R.drawable.music_insp, "Music"))
         return arrayList
     }
+
+    fun showDialog(){
+
+        val builder = AlertDialog.Builder(requireContext())
+        val binding = ImageGenerationDialogBinding.inflate(layoutInflater)
+        builder.setView(binding.root)
+        val alertDialog = builder.create()
+
+        alertDialog.setCancelable(false)
+        alertDialog.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        alertDialog.show()
+
+    }
     private fun otherWorking() {
         binding.generateButton.setOnClickListener {
+
                 if(existGems!! >=10){
                     val getPrompt = binding.edtPrompt.text
                     if(getPrompt.isNotEmpty()){
-                        binding.progressBar.visibility = VISIBLE
-                        viewModel.loadData(myContext!!,getPrompt.toString(), binding.progressBar)
+                        getUserIdDialog()
+                        viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
                     }else{
                         Toast.makeText(requireContext(), "enter your promt", Toast.LENGTH_SHORT).show()
                     }
@@ -218,24 +243,62 @@ class GenerateImageFragment : Fragment() {
             findNavController().navigate(R.id.viewAllCreations)
         }
     }
+    var textIndex = 0
+    val texts = listOf(
+        "Hold tight, your masterpiece is rendering.",
+        "Loading the beauty, just for you.",
+        "Your wallpaper is in the making.",
+        "Creating your visual delight.",
+        "Sit back and relax while we prepare your wallpaper.",
+        "Designing your screen's new look.",
+        "Almost there, customizing your background.",
+        "Your wallpaper is on its way.",
+        "Crafting your unique backdrop."
+    )
     private fun getUserIdDialog() {
         dialog = Dialog(requireContext())
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(R.layout.get_user_id)
+        dialog?.setContentView(R.layout.image_generation_dialog)
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(width, height)
         dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.setCancelable(false)
-        dialog?.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener { dialog?.dismiss() }
-        dialog?.findViewById<LinearLayout>(R.id.googleLogin)?.setOnClickListener {
-            dialog2 = Dialog(requireContext())
-            myDialogs.waiting(dialog2!!)
-            dialog?.dismiss()
-            login()
+
+        val image = dialog?.findViewById<ImageView>(R.id.generationAnimation)
+
+        Glide.with(dialog?.context!!)
+            .asGif()
+            .load(R.raw.generation_animation)
+            .into(image!!)
+
+        val animatedText = dialog?.findViewById<TextView>(R.id.animated_text)
+
+        val animation = AnimationUtils.loadAnimation(dialog?.context, android.R.anim.fade_in)
+        animation.duration = 1000
+
+        // Function to update the text and play animation
+
+
+        // Initial update
+        updateTextAndAnimate(animatedText!!,animation)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            while (true) {
+                delay(3000)
+                updateTextAndAnimate(animatedText!!,animation)
+            }
         }
+
         dialog?.show()
     }
+
+    fun updateTextAndAnimate(animatedText:TextView,animation: Animation) {
+        animatedText?.text = texts[textIndex]
+        animatedText?.startAnimation(animation)
+        textIndex = (textIndex + 1) % texts.size
+    }
+
     private fun login() {
 //        auth = FirebaseAuth.getInstance()
 //        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

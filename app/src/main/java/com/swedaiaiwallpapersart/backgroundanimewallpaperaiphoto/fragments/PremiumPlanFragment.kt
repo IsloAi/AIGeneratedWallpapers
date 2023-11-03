@@ -55,6 +55,9 @@ class PremiumPlanFragment : Fragment() {
     private var whichPlanSelected:Int?=null
     private val rewardAdWatched = 5
 
+    private var isPurchaseInProgress = false
+
+
     var progressDialog:ProgressDialog ?= null
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -62,8 +65,15 @@ class PremiumPlanFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPremiumPlanBinding.inflate(inflater, container, false)
-        onCreteViewCalling()
+
         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onCreteViewCalling()
+        isPurchaseInProgress = false
     }
    private fun onCreteViewCalling(){
         recyclerView = binding.premiumRecyclerView
@@ -89,6 +99,8 @@ class PremiumPlanFragment : Fragment() {
         recyclerView.adapter = adapter
     }
     private fun setCondition(plan: Int) {
+        if (!isPurchaseInProgress) {
+            isPurchaseInProgress = true
             when(plan){
                 0->  loadRewardedAd()
                 1->  purchasesPlan(0)
@@ -98,6 +110,9 @@ class PremiumPlanFragment : Fragment() {
                 5->  purchasesPlan(4)
                 6->  purchasesPlan(5)
             }
+        } else {
+            Toast.makeText(requireContext(),"Purchase is already in progress",Toast.LENGTH_SHORT).show()
+        }
 
     }
     private fun planList():ArrayList<PremiumPlanModel>{
@@ -114,11 +129,10 @@ class PremiumPlanFragment : Fragment() {
     private fun loadRewardedAd(){
 
         //real Rewarded: 	ca-app-pub-5887559234735462/3077252807
-
-        postGems(100)
         progressDialog = ProgressDialog(requireContext())
         progressDialog!!.setCancelable(false)
         progressDialog?.setMessage("Loading Ad")
+        progressDialog?.show()
 
         val adRequest = AdRequest.Builder().build()
         RewardedAd.load(requireContext(), "ca-app-pub-3940256099942544/5224354917", adRequest, object : RewardedAdLoadCallback() {
@@ -126,7 +140,10 @@ class PremiumPlanFragment : Fragment() {
                 // Handle the error.
                 Log.d("loading error", loadAdError.toString())
                 progressDialog?.dismiss()
-                Toast.makeText(requireContext(), "Ad failed to load. Please check your internet connection and Try again", Toast.LENGTH_SHORT).show()
+                if (isFragmentAttached){
+                    Toast.makeText(requireContext(), "Ad failed to load. Please check your internet connection and Try again", Toast.LENGTH_SHORT).show()
+
+                }
             }
 
             override fun onAdLoaded(ad: RewardedAd) {
@@ -139,7 +156,10 @@ class PremiumPlanFragment : Fragment() {
                     val rewardAmount = rewardItem.amount
                     val rewardType = rewardItem.type
                     postGems(5)
-                    Toast.makeText(requireContext(),"Congratulations! You have earned 5 gems",Toast.LENGTH_SHORT).show()
+                    if (isFragmentAttached){
+                        Toast.makeText(requireContext(),"Congratulations! You have earned 5 gems",Toast.LENGTH_SHORT).show()
+
+                    }
                     Log.e("Reward", "onUserEarnedReward: $rewardAmount")
                     Log.e("Reward", "onUserEarnedReward: $rewardType")
                 }
@@ -156,68 +176,6 @@ class PremiumPlanFragment : Fragment() {
         dialog.setCancelable(false)
         dialog.show()
     }
-//    private fun getUserIdDialog() {
-//        dialog = Dialog(requireContext())
-//        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog?.setContentView(R.layout.get_user_id)
-//        val width = WindowManager.LayoutParams.MATCH_PARENT
-//        val height = WindowManager.LayoutParams.WRAP_CONTENT
-//        dialog?.window!!.setLayout(width, height)
-//        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-//        dialog?.setCancelable(false)
-//        dialog?.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener {
-//            isPopOpen = false
-//            dialog?.dismiss()}
-//        dialog?.findViewById<LinearLayout>(R.id.googleLogin)?.setOnClickListener {
-//            isPopOpen=false
-//            dialog2 = Dialog(requireContext())
-//            myDialogs.waiting(dialog2!!)
-//            dialog?.dismiss()
-//            login()
-//        }
-//        dialog?.show()
-//    }
-//    private fun login() {
-//        auth = FirebaseAuth.getInstance()
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-//            .requestEmail()
-//            .build()
-//        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-//        val signInIntent = googleSignInClient.signInIntent
-//        startActivityForResult(signInIntent, HomeFragment.RC_SIGN_IN)
-//    }
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == HomeFragment.RC_SIGN_IN) {
-//            dialog2?.dismiss()
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            try {
-//                val account = task.getResult(ApiException::class.java)
-//                firebaseAuthWithGoogle(account.idToken!!)
-//            } catch (e: ApiException) {
-//                Toast.makeText(requireContext(), "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-//    private fun firebaseAuthWithGoogle(idToken: String) {
-//        val credential = GoogleAuthProvider.getCredential(idToken, null)
-//        auth.signInWithCredential(credential)
-//            .addOnCompleteListener(requireActivity()){ task ->
-//                if (task.isSuccessful) {
-//                    Toast.makeText(requireContext(), "Successfully login", Toast.LENGTH_SHORT).show()
-//                    val user = auth.currentUser
-//                    val  name = user?.displayName
-//                    val  email = user?.email
-//                    val  image = user?.photoUrl
-//                    if(email != null){
-//                        googleLogin.fetchGems(requireContext(),email,dialog,binding.gemsText)
-//                    }
-//                } else {
-//                    Toast.makeText(requireContext(), "Authentication failed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//    }
 
     private fun purchasesPlan(index:Int) {
         whichPlanSelected = index
@@ -288,11 +246,13 @@ class PremiumPlanFragment : Fragment() {
             } else {
                 // Handle any other error codes.
             }
+
+            isPurchaseInProgress = false
         }
         }
     private fun postGems(gems:Int){
         val totalGems = MySharePreference.getGemsValue(requireContext())!!+gems
-        postDataOnServer.gemsPostData(requireContext(), MySharePreference.getUserID(requireContext())!!,RetrofitInstance.getInstance(),totalGems, PostDataOnServer.isPlan)
+        postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,RetrofitInstance.getInstance(),totalGems, PostDataOnServer.isPlan)
         binding.gemsText.text = gems.toString()
     }
 
