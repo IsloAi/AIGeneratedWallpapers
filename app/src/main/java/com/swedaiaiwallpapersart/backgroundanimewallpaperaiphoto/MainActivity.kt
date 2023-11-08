@@ -25,11 +25,6 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetailsParams
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
@@ -75,7 +70,7 @@ class MainActivity : AppCompatActivity(){
        // workManager()
 
         createTimer()
-        purchasesPrice()
+//        purchasesPrice()
         val firebaseMessageReceiver = MyFirebaseMessageReceiver()
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
 
@@ -159,66 +154,66 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-    private fun purchasesPrice() {
-
-        mainScope.launch {
-            val billingClient = BillingClient.newBuilder(this@MainActivity)
-                .setListener(purchasesUpdatedListener)
-                .enablePendingPurchases()
-                .build()
-            billingClient.startConnection(object : BillingClientStateListener {
-                @SuppressLint("NotifyDataSetChanged")
-                override fun onBillingSetupFinished(billingResult: BillingResult) {
-                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                        // The BillingClient is ready. You can query purchases here.
-                        Log.e("TAG", "ready to purchess")
-                        val skuList: MutableList<String> = ArrayList()
-                        skuList.add("plan1")
-                        skuList.add("plan2")
-                        skuList.add("plan3")
-                        skuList.add("plan4")
-                        skuList.add("plan5")
-                        skuList.add("plan6")
-                        val params = SkuDetailsParams.newBuilder()
-                        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                        billingClient.querySkuDetailsAsync(params.build()) {
-                                billingResult, skuDetailsList ->
-                            try {
-                                Constants.plan1 = skuDetailsList?.get(0)!!.price
-                                Constants.plan2 = skuDetailsList[1].price
-                                Constants.plan3 = skuDetailsList[2].price
-                                Constants.plan4 = skuDetailsList[3].price
-                                Constants.plan5 = skuDetailsList[4].price
-                                Constants.plan6 = skuDetailsList[5].price
-                            } catch (c: java.lang.Exception) {
-                                c.printStackTrace()
-                            }
-                            Log.e("TAG", "sku details " + skuDetailsList!!.size)
-                            // Process the result.
-                            Log.e("TAG", "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
-                        }
-                    }
-                }
-                override fun onBillingServiceDisconnected() {
-                    // Try to restart the connection on the next request to
-                    // Google Play by calling the startConnection() method.
-                    Log.e("TAG", "service disconnected")
-                }
-            })
-        }
-
-
-
-    }
-    private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
-//        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-//        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-//            // Handle an error caused by a user cancelling the purchase flow.
-//            Toast.makeText(requireContext(), "Purchases Error ", Toast.LENGTH_SHORT).show()
-//        } else {
-//            // Handle any other error codes.
+//    private fun purchasesPrice() {
+//
+//        mainScope.launch {
+//            val billingClient = BillingClient.newBuilder(this@MainActivity)
+//                .setListener(purchasesUpdatedListener)
+//                .enablePendingPurchases()
+//                .build()
+//            billingClient.startConnection(object : BillingClientStateListener {
+//                @SuppressLint("NotifyDataSetChanged")
+//                override fun onBillingSetupFinished(billingResult: BillingResult) {
+//                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+//                        // The BillingClient is ready. You can query purchases here.
+//                        Log.e("TAG", "ready to purchess")
+//                        val skuList: MutableList<String> = ArrayList()
+//                        skuList.add("plan1")
+//                        skuList.add("plan2")
+//                        skuList.add("plan3")
+//                        skuList.add("plan4")
+//                        skuList.add("plan5")
+//                        skuList.add("plan6")
+//                        val params = SkuDetailsParams.newBuilder()
+//                        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+//                        billingClient.querySkuDetailsAsync(params.build()) {
+//                                billingResult, skuDetailsList ->
+//                            try {
+//                                Constants.plan1 = skuDetailsList?.get(0)!!.price
+//                                Constants.plan2 = skuDetailsList[1].price
+//                                Constants.plan3 = skuDetailsList[2].price
+//                                Constants.plan4 = skuDetailsList[3].price
+//                                Constants.plan5 = skuDetailsList[4].price
+//                                Constants.plan6 = skuDetailsList[5].price
+//                            } catch (c: java.lang.Exception) {
+//                                c.printStackTrace()
+//                            }
+//                            Log.e("TAG", "sku details " + skuDetailsList!!.size)
+//                            // Process the result.
+//                            Log.e("TAG", "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
+//                        }
+//                    }
+//                }
+//                override fun onBillingServiceDisconnected() {
+//                    // Try to restart the connection on the next request to
+//                    // Google Play by calling the startConnection() method.
+//                    Log.e("TAG", "service disconnected")
+//                }
+//            })
 //        }
-    }
+//
+//
+//
+//    }
+//    private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
+////        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+////        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+////            // Handle an error caused by a user cancelling the purchase flow.
+////            Toast.makeText(requireContext(), "Purchases Error ", Toast.LENGTH_SHORT).show()
+////        } else {
+////            // Handle any other error codes.
+////        }
+//    }
 
      @RequiresApi(Build.VERSION_CODES.N)
      fun openPopupMenu(name: String, editPrompt:EditText) {

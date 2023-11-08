@@ -16,12 +16,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.billingclient.api.BillingClient
-import com.android.billingclient.api.BillingClientStateListener
-import com.android.billingclient.api.BillingFlowParams
-import com.android.billingclient.api.BillingResult
-import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetailsParams
 import com.bumptech.glide.Glide
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -103,12 +97,12 @@ class PremiumPlanFragment : Fragment() {
             isPurchaseInProgress = true
             when(plan){
                 0->  loadRewardedAd()
-                1->  purchasesPlan(0)
-                2->  purchasesPlan(1)
-                3->  purchasesPlan(2)
-                4->  purchasesPlan(3)
-                5->  purchasesPlan(4)
-                6->  purchasesPlan(5)
+//                1->  purchasesPlan(0)
+//                2->  purchasesPlan(1)
+//                3->  purchasesPlan(2)
+//                4->  purchasesPlan(3)
+//                5->  purchasesPlan(4)
+//                6->  purchasesPlan(5)
             }
         } else {
             Toast.makeText(requireContext(),"Purchase is already in progress",Toast.LENGTH_SHORT).show()
@@ -118,12 +112,12 @@ class PremiumPlanFragment : Fragment() {
     private fun planList():ArrayList<PremiumPlanModel>{
         val arrayList = ArrayList<PremiumPlanModel>()
         arrayList.add(PremiumPlanModel("Watch Ad",5,R.drawable.card_baja,0))
-        arrayList.add(PremiumPlanModel(Constants.plan1,25,R.drawable.card_simple,1))
-        arrayList.add(PremiumPlanModel(Constants.plan2,90,R.drawable.card_simple,2))
-        arrayList.add(PremiumPlanModel(Constants.plan3,250,R.drawable.card_simple,3))
-        arrayList.add(PremiumPlanModel(Constants.plan4,700,R.drawable.card_simple,4))
-        arrayList.add(PremiumPlanModel(Constants.plan5,2000,R.drawable.card_simple,5))
-        arrayList.add(PremiumPlanModel(Constants.plan6,5000,R.drawable.card_ring,6))
+//        arrayList.add(PremiumPlanModel(Constants.plan1,25,R.drawable.card_simple,1))
+//        arrayList.add(PremiumPlanModel(Constants.plan2,90,R.drawable.card_simple,2))
+//        arrayList.add(PremiumPlanModel(Constants.plan3,250,R.drawable.card_simple,3))
+//        arrayList.add(PremiumPlanModel(Constants.plan4,700,R.drawable.card_simple,4))
+//        arrayList.add(PremiumPlanModel(Constants.plan5,2000,R.drawable.card_simple,5))
+//        arrayList.add(PremiumPlanModel(Constants.plan6,5000,R.drawable.card_ring,6))
         return arrayList
     }
     private fun loadRewardedAd(){
@@ -177,79 +171,79 @@ class PremiumPlanFragment : Fragment() {
         dialog.show()
     }
 
-    private fun purchasesPlan(index:Int) {
-        whichPlanSelected = index
-        val billingClient = BillingClient.newBuilder(requireActivity())
-            .setListener(purchasesUpdatedListener)
-            .enablePendingPurchases()
-            .build()
-        billingClient.startConnection(object : BillingClientStateListener {
-            override fun onBillingSetupFinished(billingResult: BillingResult) {
-                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-                    // The BillingClient is ready. You can query purchases here.
-                    Log.e("TAG", "ready to purchess")
-                    val skuList: MutableList<String> = ArrayList()
-                    skuList.add("plan1")
-                    skuList.add("plan2")
-                    skuList.add("plan3")
-                    skuList.add("plan4")
-                    skuList.add("plan5")
-                    skuList.add("plan6")
-                    val params = SkuDetailsParams.newBuilder()
-                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-                    billingClient.querySkuDetailsAsync(
-                        params.build()
-                    ) { billingResult, skuDetailsList ->
-                        try {
-//                            progressDialog.dismiss()
-                        } catch (c: java.lang.Exception) {
-                            c.printStackTrace()
-                        }
-                        Log.e("TAG", "sku details " + skuDetailsList!!.size)
-                        // Process the result.
-                        Log.e(
-                            "TAG",
-                            "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title
-                        )
-                        val billingFlowParams = BillingFlowParams.newBuilder()
-                            .setSkuDetails(skuDetailsList[index])
-                            .build()
-                        val responseCode = billingClient.launchBillingFlow(
-                            requireActivity(),
-                            billingFlowParams
-                        ).responseCode
-                        Log.e("TAG", "responseCode $responseCode")
-                    }
-                }
-            }
-            override fun onBillingServiceDisconnected() {
-                // Try to restart the connection on the next request to
-                // Google Play by calling the startConnection() method.
-                Log.e("TAG", "service disconnected")
-            }
-        })
-    }
-    private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
-        if (isFragmentAttached) {
-            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-                when(whichPlanSelected){
-                    0->{postGems(25)}
-                    1->{postGems(90)}
-                    2->{postGems(250)}
-                    3->{postGems(700)}
-                    4->{postGems(2000)}
-                    5->{postGems(5000)}
-                }
-            } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-                // Handle an error caused by a user cancelling the purchase flow.
-                Toast.makeText(requireContext(), "Purchases Error ", Toast.LENGTH_SHORT).show()
-            } else {
-                // Handle any other error codes.
-            }
-
-            isPurchaseInProgress = false
-        }
-        }
+//    private fun purchasesPlan(index:Int) {
+//        whichPlanSelected = index
+//        val billingClient = BillingClient.newBuilder(requireActivity())
+//            .setListener(purchasesUpdatedListener)
+//            .enablePendingPurchases()
+//            .build()
+//        billingClient.startConnection(object : BillingClientStateListener {
+//            override fun onBillingSetupFinished(billingResult: BillingResult) {
+//                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+//                    // The BillingClient is ready. You can query purchases here.
+//                    Log.e("TAG", "ready to purchess")
+//                    val skuList: MutableList<String> = ArrayList()
+//                    skuList.add("plan1")
+//                    skuList.add("plan2")
+//                    skuList.add("plan3")
+//                    skuList.add("plan4")
+//                    skuList.add("plan5")
+//                    skuList.add("plan6")
+//                    val params = SkuDetailsParams.newBuilder()
+//                    params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+//                    billingClient.querySkuDetailsAsync(
+//                        params.build()
+//                    ) { billingResult, skuDetailsList ->
+//                        try {
+////                            progressDialog.dismiss()
+//                        } catch (c: java.lang.Exception) {
+//                            c.printStackTrace()
+//                        }
+//                        Log.e("TAG", "sku details " + skuDetailsList!!.size)
+//                        // Process the result.
+//                        Log.e(
+//                            "TAG",
+//                            "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title
+//                        )
+//                        val billingFlowParams = BillingFlowParams.newBuilder()
+//                            .setSkuDetails(skuDetailsList[index])
+//                            .build()
+//                        val responseCode = billingClient.launchBillingFlow(
+//                            requireActivity(),
+//                            billingFlowParams
+//                        ).responseCode
+//                        Log.e("TAG", "responseCode $responseCode")
+//                    }
+//                }
+//            }
+//            override fun onBillingServiceDisconnected() {
+//                // Try to restart the connection on the next request to
+//                // Google Play by calling the startConnection() method.
+//                Log.e("TAG", "service disconnected")
+//            }
+//        })
+//    }
+//    private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
+//        if (isFragmentAttached) {
+//            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+//                when(whichPlanSelected){
+//                    0->{postGems(25)}
+//                    1->{postGems(90)}
+//                    2->{postGems(250)}
+//                    3->{postGems(700)}
+//                    4->{postGems(2000)}
+//                    5->{postGems(5000)}
+//                }
+//            } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
+//                // Handle an error caused by a user cancelling the purchase flow.
+//                Toast.makeText(requireContext(), "Purchases Error ", Toast.LENGTH_SHORT).show()
+//            } else {
+//                // Handle any other error codes.
+//            }
+//
+//            isPurchaseInProgress = false
+//        }
+//        }
     private fun postGems(gems:Int){
         val totalGems = MySharePreference.getGemsValue(requireContext())!!+gems
         postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,RetrofitInstance.getInstance(),totalGems, PostDataOnServer.isPlan)
