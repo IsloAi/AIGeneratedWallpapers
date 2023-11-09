@@ -1,8 +1,34 @@
 buildscript {
+
+    repositories {
+        // Add the necessary repositories here, similar to what you provided earlier
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+        maven { url "https://jcenter.bintray.com" }
+        maven { url 'https://artifact.bytedance.com/repository/pangle' }
+        maven { url 'https://android-sdk.is.com/' }
+        maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
+        maven { url "https://cboost.jfrog.io/artifactory/chartboost-ads/" }
+        maven { url "https://sdk.tapjoy.com" }
+        maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
+        maven {
+            url 'https://gitlab.begamob.com/api/v4/projects/157/packages/maven'
+            credentials(HttpHeaderCredentials) {
+                name = "Private-Token"
+                value = "glpat-r5Xa8F42sp6PXNzqDHAP"
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+    }
     dependencies {
         classpath 'com.google.gms:google-services:4.3.14'
         classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.2'
+        classpath 'com.google.firebase:perf-plugin:1.4.2'
+
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

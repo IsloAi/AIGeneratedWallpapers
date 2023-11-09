@@ -8,12 +8,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListener
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashOnBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
@@ -52,6 +56,27 @@ class SplashOnFragment : Fragment() {
             mp.seekTo(currentPosition)
             mp.start()
         }
+
+
+        SDKBaseController.getInstance().showFirstOpenAppAds(requireActivity(),12000,object:CommonAdsListenerAdapter(){
+            override fun onAdReady(priority: Int) {
+
+
+            }
+
+            override fun onAdsDismiss() {
+
+            }
+
+            override fun onAdsShowFail(errorCode: Int) {
+                Log.e("TAG", "onAdsShowFail: "+errorCode )
+            }
+
+            override fun onAdsShowed(priority: Int) {
+
+            }
+
+        })
 
         binding.getStarted.setOnClickListener {
             findNavController().navigate(R.id.action_splashOnFragment_to_splashFragment)

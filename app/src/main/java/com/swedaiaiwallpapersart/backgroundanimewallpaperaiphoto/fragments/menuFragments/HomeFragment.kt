@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
@@ -128,7 +130,24 @@ class HomeFragment : Fragment(){
        adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
             PositionCallback {
             override fun getPosition(position: Int) {
-                navigateToDestination(catResponses,position)
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "home",
+                    "home_screen_tracking",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            navigateToDestination(catResponses,position)
+                        }
+                    }
+                )
+
+
             }
         },requireParentFragment().findNavController(),R.id.action_mainFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {

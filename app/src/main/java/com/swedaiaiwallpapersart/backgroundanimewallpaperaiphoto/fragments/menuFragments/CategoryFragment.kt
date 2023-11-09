@@ -12,6 +12,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
 import com.example.hdwallpaper.Fragments.MainFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
@@ -49,7 +51,23 @@ class CategoryFragment : Fragment() {
         binding.recyclerviewAll.layoutManager = LinearLayoutManager(requireContext())
         val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
-                setFragment(string)
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    " mainscr_cate_tab_click_item",
+                    "mainscr_cate_tab_click_item",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+
+                        }
+
+                        override fun onAdsDismiss() {
+                            setFragment(string)
+                        }
+                    }
+                )
+
             }
         })
         binding.recyclerviewAll.adapter = adapter

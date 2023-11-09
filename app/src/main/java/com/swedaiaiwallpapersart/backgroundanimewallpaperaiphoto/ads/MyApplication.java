@@ -32,15 +32,6 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 
-import com.google.android.gms.ads.AdError;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.appopen.AppOpenAd;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
 import java.util.Date;
 
 /** Application class that initializes, loads and show ads when activities change states. */
@@ -60,14 +51,14 @@ public class MyApplication extends Application
     this.registerActivityLifecycleCallbacks(this);
 
     // Log the Mobile Ads SDK version.
-    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
-    MobileAds.initialize(
-        this,
-        new OnInitializationCompleteListener() {
-          @Override
-          public void onInitializationComplete(
-              @NonNull InitializationStatus initializationStatus) {}
-        });
+//    Log.d(TAG, "Google Mobile Ads SDK Version: " + MobileAds.getVersion());
+//    MobileAds.initialize(
+//        this,
+//        new OnInitializationCompleteListener() {
+//          @Override
+//          public void onInitializationComplete(
+//              @NonNull InitializationStatus initializationStatus) {}
+//        });
 //
 //      AddInitilizer addInitilizer = new AddInitilizer(getApplicationContext(), currentActivity, true, new OnAdsClosedCallBack() {
 //          @Override
@@ -144,7 +135,7 @@ public class MyApplication extends Application
     private static final String LOG_TAG = "ADS****APPOPEN";
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/3419835294";
 
-    private AppOpenAd appOpenAd = null;
+//    private AppOpenAd appOpenAd = null;
     private boolean isLoadingAd = false;
     private boolean isShowingAd = false;
 
@@ -159,30 +150,30 @@ public class MyApplication extends Application
       }
 
       isLoadingAd = true;
-      AdRequest request = new AdRequest.Builder().build();
-      AppOpenAd.load(
-          context,
-          AD_UNIT_ID,
-          request,
-          new AppOpenAd.AppOpenAdLoadCallback() {
-
-            @Override
-            public void onAdLoaded(AppOpenAd ad) {
-              appOpenAd = ad;
-              isLoadingAd = false;
-              loadTime = (new Date()).getTime();
-
-              Log.d(LOG_TAG, "onAdLoaded.");
-//              Toast.makeText(context, "onAdLoaded", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onAdFailedToLoad(LoadAdError loadAdError) {
-              isLoadingAd = false;
-              Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
-//              Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
-            }
-          });
+//      AdRequest request = new AdRequest.Builder().build();
+//      AppOpenAd.load(
+//          context,
+//          AD_UNIT_ID,
+//          request,
+//          new AppOpenAd.AppOpenAdLoadCallback() {
+//
+//            @Override
+//            public void onAdLoaded(AppOpenAd ad) {
+//              appOpenAd = ad;
+//              isLoadingAd = false;
+//              loadTime = (new Date()).getTime();
+//
+//              Log.d(LOG_TAG, "onAdLoaded.");
+////              Toast.makeText(context, "onAdLoaded", Toast.LENGTH_SHORT).show();
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(LoadAdError loadAdError) {
+//              isLoadingAd = false;
+//              Log.d(LOG_TAG, "onAdFailedToLoad: " + loadAdError.getMessage());
+////              Toast.makeText(context, "onAdFailedToLoad", Toast.LENGTH_SHORT).show();
+//            }
+//          });
     }
 
 
@@ -197,7 +188,8 @@ public class MyApplication extends Application
       // Ad references in the app open beta will time out after four hours, but this time limit
       // may change in future beta versions. For details, see:
       // https://support.google.com/admob/answer/9341964?hl=en
-      return appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4);
+//      return appOpenAd != null && wasLoadTimeLessThanNHoursAgo(4);
+      return false;
     }
 
 
@@ -232,40 +224,40 @@ public class MyApplication extends Application
 
       Log.d(LOG_TAG, "Will show ad.");
 
-      appOpenAd.setFullScreenContentCallback(
-          new FullScreenContentCallback() {
-            @Override
-            public void onAdDismissedFullScreenContent() {
-              // Set the reference to null so isAdAvailable() returns false.
-              appOpenAd = null;
-              isShowingAd = false;
-              Log.d(LOG_TAG, "onAdDismissedFullScreenContent.");
-//              Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show();
-
-              onShowAdCompleteListener.onShowAdComplete();
-              loadAd(activity);
-            }
-
-            @Override
-            public void onAdFailedToShowFullScreenContent(AdError adError) {
-              appOpenAd = null;
-              isShowingAd = false;
-
-              Log.d(LOG_TAG, "onAdFailedToShowFullScreenContent: " + adError.getMessage());
-//              Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT).show();
-
-              onShowAdCompleteListener.onShowAdComplete();
-              loadAd(activity);
-            }
-            @Override
-            public void onAdShowedFullScreenContent() {
-              Log.d(LOG_TAG, "onAdShowedFullScreenContent.");
-//              Toast.makeText(activity, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT).show();
-            }
-          });
+//      appOpenAd.setFullScreenContentCallback(
+//          new FullScreenContentCallback() {
+//            @Override
+//            public void onAdDismissedFullScreenContent() {
+//              // Set the reference to null so isAdAvailable() returns false.
+//              appOpenAd = null;
+//              isShowingAd = false;
+//              Log.d(LOG_TAG, "onAdDismissedFullScreenContent.");
+////              Toast.makeText(activity, "onAdDismissedFullScreenContent", Toast.LENGTH_SHORT).show();
+//
+//              onShowAdCompleteListener.onShowAdComplete();
+//              loadAd(activity);
+//            }
+//
+//            @Override
+//            public void onAdFailedToShowFullScreenContent(AdError adError) {
+//              appOpenAd = null;
+//              isShowingAd = false;
+//
+//              Log.d(LOG_TAG, "onAdFailedToShowFullScreenContent: " + adError.getMessage());
+////              Toast.makeText(activity, "onAdFailedToShowFullScreenContent", Toast.LENGTH_SHORT).show();
+//
+//              onShowAdCompleteListener.onShowAdComplete();
+//              loadAd(activity);
+//            }
+//            @Override
+//            public void onAdShowedFullScreenContent() {
+//              Log.d(LOG_TAG, "onAdShowedFullScreenContent.");
+////              Toast.makeText(activity, "onAdShowedFullScreenContent", Toast.LENGTH_SHORT).show();
+//            }
+//          });
 
       isShowingAd = true;
-      appOpenAd.show(activity);
+//      appOpenAd.show(activity);
     }
   }
 

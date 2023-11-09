@@ -17,10 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPremiumPlanBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PremiumAdapter
@@ -128,37 +124,37 @@ class PremiumPlanFragment : Fragment() {
         progressDialog?.setMessage("Loading Ad")
         progressDialog?.show()
 
-        val adRequest = AdRequest.Builder().build()
-        RewardedAd.load(requireContext(), "ca-app-pub-3940256099942544/5224354917", adRequest, object : RewardedAdLoadCallback() {
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                // Handle the error.
-                Log.d("loading error", loadAdError.toString())
-                progressDialog?.dismiss()
-                if (isFragmentAttached){
-                    Toast.makeText(requireContext(), "Ad failed to load. Please check your internet connection and Try again", Toast.LENGTH_SHORT).show()
-
-                }
-            }
-
-            override fun onAdLoaded(ad: RewardedAd) {
-
-                Log.d("TAG", "Ad was loaded.")
-                progressDialog?.dismiss()
-                ad.show(requireActivity()
-                ) { rewardItem -> // Handle the reward.
-                    Log.d("TAG", "The user earned the reward.")
-                    val rewardAmount = rewardItem.amount
-                    val rewardType = rewardItem.type
-                    postGems(5)
-                    if (isFragmentAttached){
-                        Toast.makeText(requireContext(),"Congratulations! You have earned 5 gems",Toast.LENGTH_SHORT).show()
-
-                    }
-                    Log.e("Reward", "onUserEarnedReward: $rewardAmount")
-                    Log.e("Reward", "onUserEarnedReward: $rewardType")
-                }
-            }
-        })
+//        val adRequest = AdRequest.Builder().build()
+//        RewardedAd.load(requireContext(), "ca-app-pub-3940256099942544/5224354917", adRequest, object : RewardedAdLoadCallback() {
+//            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+//                // Handle the error.
+//                Log.d("loading error", loadAdError.toString())
+//                progressDialog?.dismiss()
+//                if (isFragmentAttached){
+//                    Toast.makeText(requireContext(), "Ad failed to load. Please check your internet connection and Try again", Toast.LENGTH_SHORT).show()
+//
+//                }
+//            }
+//
+//            override fun onAdLoaded(ad: RewardedAd) {
+//
+//                Log.d("TAG", "Ad was loaded.")
+//                progressDialog?.dismiss()
+//                ad.show(requireActivity()
+//                ) { rewardItem -> // Handle the reward.
+//                    Log.d("TAG", "The user earned the reward.")
+//                    val rewardAmount = rewardItem.amount
+//                    val rewardType = rewardItem.type
+//                    postGems(5)
+//                    if (isFragmentAttached){
+//                        Toast.makeText(requireContext(),"Congratulations! You have earned 5 gems",Toast.LENGTH_SHORT).show()
+//
+//                    }
+//                    Log.e("Reward", "onUserEarnedReward: $rewardAmount")
+//                    Log.e("Reward", "onUserEarnedReward: $rewardType")
+//                }
+//            }
+//        })
     }
     private fun favPopup(dialog: Dialog) {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)

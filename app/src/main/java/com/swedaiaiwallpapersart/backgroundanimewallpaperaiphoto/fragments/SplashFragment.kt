@@ -17,6 +17,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.model.dto.AdsLayoutType
+import com.bmik.android.sdk.widgets.IkmNativeAdView
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.GetGemsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -58,8 +64,33 @@ class SplashFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val adLayout = LayoutInflater.from(activity).inflate(
+            R.layout.layout_custom_admob,
+            null, false
+        ) as? IkmWidgetAdLayout
+        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+        binding.adsView.setCustomNativeAdLayout(
+            R.layout.shimmer_loading_native,
+            adLayout!!
+        )
+
+        binding.adsView.loadAd(requireActivity(),"akjdah","ahgas",object:
+            CustomSDKAdsListenerAdapter() {
+
+        })
         allOnCreateCalling()
+
+
+
+
     }
+
 
    private fun allOnCreateCalling(){
         circle1 = binding.circle1
@@ -208,7 +239,7 @@ class SplashFragment : Fragment() {
         handler2 = Handler()
         handler2?.postDelayed({
             findNavController().apply { navigate(R.id.action_splashFragment_to_mainFragment) }
-        },6000)
+        },20000)
     }
 
 

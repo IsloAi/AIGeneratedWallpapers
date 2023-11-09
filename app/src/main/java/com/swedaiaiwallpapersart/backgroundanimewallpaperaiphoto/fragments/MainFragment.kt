@@ -17,6 +17,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.FavouriteFragment
@@ -68,6 +70,26 @@ class MainFragment : Fragment(){
         backHandle()
         onViewCreatingCalling()
        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        SDKBaseController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "mainscr_bottom",
+                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                    }
+                }
+            )
+
     }
     private fun backHandle(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

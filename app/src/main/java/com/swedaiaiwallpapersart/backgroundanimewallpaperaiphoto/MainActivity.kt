@@ -25,6 +25,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.bmik.android.sdk.SDKBaseController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
@@ -67,7 +68,10 @@ class MainActivity : AppCompatActivity(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-       // workManager()
+        SDKBaseController.getInstance().loadInterstitialAds(this, "home_screen","home_screen")
+
+
+        // workManager()
 
         createTimer()
 //        purchasesPrice()

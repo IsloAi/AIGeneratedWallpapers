@@ -3,6 +3,26 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+            maven { url "https://jitpack.io" }
+            maven { url "https://jcenter.bintray.com" }
+            maven { url 'https://artifact.bytedance.com/repository/pangle' }
+            maven { url 'https://android-sdk.is.com/' }
+            maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
+            maven { url "https://cboost.jfrog.io/artifactory/chartboost-ads/" }
+            maven { url "https://sdk.tapjoy.com" }
+            maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
+            maven {
+                url 'https://gitlab.begamob.com/api/v4/projects/157/packages/maven'
+                credentials(HttpHeaderCredentials) {
+                    name = "Private-Token"
+                    value = "glpat-r5Xa8F42sp6PXNzqDHAP"
+                }
+                authentication {
+                    header(HttpHeaderAuthentication)
+                }
+            }
+
+
     }
 }
 dependencyResolutionManagement {
@@ -12,6 +32,23 @@ dependencyResolutionManagement {
         mavenCentral()
         jcenter()
         maven { url 'https://jitpack.io' }
+        maven { url "https://jcenter.bintray.com" }
+        maven { url 'https://artifact.bytedance.com/repository/pangle' }
+        maven { url 'https://android-sdk.is.com/' }
+        maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea" }
+        maven { url "https://cboost.jfrog.io/artifactory/chartboost-ads/" }
+        maven { url "https://sdk.tapjoy.com" }
+        maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
+        maven {
+            url 'https://gitlab.begamob.com/api/v4/projects/157/packages/maven'
+            credentials(HttpHeaderCredentials) {
+                name = "Private-Token"
+                value = "glpat-r5Xa8F42sp6PXNzqDHAP"
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
     }
 }
 rootProject.name = "AI Generated Wallpapers"
