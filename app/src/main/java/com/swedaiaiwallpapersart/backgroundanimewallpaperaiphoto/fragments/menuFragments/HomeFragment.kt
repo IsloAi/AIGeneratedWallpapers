@@ -67,6 +67,8 @@ class HomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        SDKBaseController.getInstance(). loadInterstitialAds(activity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
+
         onCreatingCalling()
     }
     private fun onCreatingCalling(){
@@ -138,6 +140,7 @@ class HomeFragment : Fragment(){
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             //do something
                         }
 
@@ -161,27 +164,27 @@ class HomeFragment : Fragment(){
         },null,0,myActivity)
             binding.recyclerviewAll.adapter = adapter
     }
-    private fun getUserIdDialog() {
-        dialog = Dialog(requireContext())
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(R.layout.get_user_id)
-        val width = WindowManager.LayoutParams.MATCH_PARENT
-        val height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(width, height)
-        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog?.setCancelable(false)
-        dialog?.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener { dialog?.dismiss()
-        isPopOpen=false
-        }
-        dialog?.findViewById<LinearLayout>(R.id.googleLogin)?.setOnClickListener {
-            isPopOpen=false
-           dialog2 = Dialog(requireContext())
-            myDialogs.waiting(dialog2!!)
-            dialog?.dismiss()
-
-        }
-        dialog?.show()
-    }
+//    private fun getUserIdDialog() {
+//        dialog = Dialog(requireContext())
+//        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//        dialog?.setContentView(R.layout.get_user_id)
+//        val width = WindowManager.LayoutParams.MATCH_PARENT
+//        val height = WindowManager.LayoutParams.WRAP_CONTENT
+//        dialog?.window!!.setLayout(width, height)
+//        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+//        dialog?.setCancelable(false)
+//        dialog?.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener { dialog?.dismiss()
+//        isPopOpen=false
+//        }
+//        dialog?.findViewById<LinearLayout>(R.id.googleLogin)?.setOnClickListener {
+//            isPopOpen=false
+//           dialog2 = Dialog(requireContext())
+//            myDialogs.waiting(dialog2!!)
+//            dialog?.dismiss()
+//
+//        }
+//        dialog?.show()
+//    }
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse>, position:Int) {

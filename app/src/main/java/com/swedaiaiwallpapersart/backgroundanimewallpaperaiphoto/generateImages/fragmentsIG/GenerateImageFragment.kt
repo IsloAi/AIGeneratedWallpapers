@@ -33,6 +33,8 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
@@ -86,6 +88,11 @@ class GenerateImageFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         myContext = context
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        SDKBaseController.getInstance().loadRewardedAds(requireActivity(), "mainscr_generate_tab_reward")
     }
     private fun customOnCreateCalling() {
 
@@ -224,7 +231,12 @@ class GenerateImageFragment : Fragment() {
     private fun otherWorking() {
         binding.generateButton.setOnClickListener {
 
-                if(existGems!! >=10){
+            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"home_rewarded","home_rewarded_tracking",object:CustomSDKRewardedAdsListener{
+                override fun onAdsDismiss() {
+
+                }
+
+                override fun onAdsRewarded() {
                     val getPrompt = binding.edtPrompt.text
                     if(getPrompt.isNotEmpty()){
                         getUserIdDialog()
@@ -232,6 +244,21 @@ class GenerateImageFragment : Fragment() {
                     }else{
                         Toast.makeText(requireContext(), "enter your promt", Toast.LENGTH_SHORT).show()
                     }
+                }
+
+                override fun onAdsShowFail(errorCode: Int) {
+                    val getPrompt = binding.edtPrompt.text
+                    if(getPrompt.isNotEmpty()){
+                        getUserIdDialog()
+                        viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                    }else{
+                        Toast.makeText(requireContext(), "enter your promt", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            })
+                if(existGems!! >=10){
+
                 }else{
                     Toast.makeText(requireContext(), "you have no gems to generate this", Toast.LENGTH_SHORT).show()
                 }

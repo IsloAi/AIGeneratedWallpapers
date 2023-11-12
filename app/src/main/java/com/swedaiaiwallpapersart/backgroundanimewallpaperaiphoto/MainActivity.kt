@@ -68,7 +68,7 @@ class MainActivity : AppCompatActivity(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        SDKBaseController.getInstance().loadInterstitialAds(this, "home_screen","home_screen")
+//        SDKBaseController.getInstance().loadInterstitialAds(this, "category_screen","category_screen")
 
 
         // workManager()

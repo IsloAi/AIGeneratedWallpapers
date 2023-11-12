@@ -10,6 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -35,6 +38,28 @@ class ListViewFragment : Fragment() {
         _binding = FragmentListViewBinding.inflate(inflater,container,false)
         onCreateViewCalling()
         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        SDKBaseController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "home_banner",
+                " home_banner_tracking", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                }
+            )
     }
     private fun onCreateViewCalling(){
         myActivity = activity as MainActivity
@@ -83,7 +108,26 @@ class ListViewFragment : Fragment() {
         val adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
             PositionCallback {
             override fun getPosition(position: Int) {
-                navigateToDestination(catResponses,position)
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "home",
+                    "home_screen_tracking",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            navigateToDestination(catResponses,position)
+                        }
+                    }
+                )
+
+
+
             }
         },findNavController(),R.id.action_listViewFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {

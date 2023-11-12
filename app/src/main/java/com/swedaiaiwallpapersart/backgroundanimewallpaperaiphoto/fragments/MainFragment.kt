@@ -3,6 +3,7 @@ package com.example.hdwallpaper.Fragments
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -67,8 +68,7 @@ class MainFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
       _binding = FragmentMainBinding.inflate(inflater, container, false)
-        backHandle()
-        onViewCreatingCalling()
+
        return binding.root
     }
 
@@ -78,17 +78,22 @@ class MainFragment : Fragment(){
             .loadBannerAds(
                 requireActivity(),
                 binding.adsWidget as? ViewGroup,
-                "mainscr_bottom",
-                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                "home_banner",
+                " home_banner_tracking", object : CustomSDKAdsListenerAdapter() {
                     override fun onAdsLoaded() {
                         super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                     }
 
                     override fun onAdsLoadFail() {
                         super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
                     }
                 }
             )
+
+        backHandle()
+        onViewCreatingCalling()
 
     }
     private fun backHandle(){

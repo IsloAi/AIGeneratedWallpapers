@@ -39,6 +39,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -116,6 +119,28 @@ class WallpaperViewFragment : Fragment() {
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
         return binding.root
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        SDKBaseController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "home_banner",
+                " home_banner_tracking", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                }
+            )
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -335,39 +360,90 @@ class WallpaperViewFragment : Fragment() {
             dialog.dismiss()
         }
         buttonHome.setOnClickListener {
-            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
-            myHandler.post { if(state){
-                interstitialAdWithToast("Set Successfully on Home Screen", dialog)
-                state = false
-                postDelay()
-            } }
-            showRateApp()
+
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "home",
+                "home_screen_tracking",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                    }
+
+                    override fun onAdsDismiss() {
+                        myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
+                        myHandler.post { if(state){
+                            interstitialAdWithToast("Set Successfully on Home Screen", dialog)
+                            state = false
+                            postDelay()
+                        } }
+                        showRateApp()
+                    }
+                }
+            )
         }
         buttonLock.setOnClickListener {
-            myExecutor.execute {
-                myWallpaperManager.lockScreen(bitmap!!)
-            }
-            myHandler.post {
-                if(state){
-                    interstitialAdWithToast("Set Successfully on Lock Screen", dialog)
-                    state = false
-                    postDelay()
+
+
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "home",
+                "home_screen_tracking",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                    }
+
+                    override fun onAdsDismiss() {
+                        myExecutor.execute {
+                            myWallpaperManager.lockScreen(bitmap!!)
+                        }
+                        myHandler.post {
+                            if(state){
+                                interstitialAdWithToast("Set Successfully on Lock Screen", dialog)
+                                state = false
+                                postDelay()
+                            }
+                        }
+                        showRateApp()
+                    }
                 }
-            }
-            showRateApp()
+            )
+
+
         }
         buttonBothScreen.setOnClickListener {
-            myExecutor.execute {
-                myWallpaperManager.homeAndLockScreen(bitmap!!)
-            }
-            myHandler.post {
-                if(state){
-                    interstitialAdWithToast("Set Successfully on Both",dialog)
-                    state = false
-                    postDelay()
+
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "home",
+                "home_screen_tracking",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                    }
+
+                    override fun onAdsDismiss() {
+                        myExecutor.execute {
+                            myWallpaperManager.homeAndLockScreen(bitmap!!)
+                        }
+                        myHandler.post {
+                            if(state){
+                                interstitialAdWithToast("Set Successfully on Both",dialog)
+                                state = false
+                                postDelay()
+                            }
+                        }
+                        showRateApp()
+                    }
                 }
-            }
-            showRateApp()
+            )
         }
         dialog.show()
     }

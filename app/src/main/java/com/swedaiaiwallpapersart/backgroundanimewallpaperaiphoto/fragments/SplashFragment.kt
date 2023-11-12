@@ -80,10 +80,20 @@ class SplashFragment : Fragment() {
             adLayout!!
         )
 
-        binding.adsView.loadAd(requireActivity(),"akjdah","ahgas",object:
-            CustomSDKAdsListenerAdapter() {
+        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+            object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                    binding.adsView.visibility = View.GONE
+                }
 
-        })
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                }
+            }
+        )
         allOnCreateCalling()
 
 
@@ -239,7 +249,7 @@ class SplashFragment : Fragment() {
         handler2 = Handler()
         handler2?.postDelayed({
             findNavController().apply { navigate(R.id.action_splashFragment_to_mainFragment) }
-        },20000)
+        },6000)
     }
 
 

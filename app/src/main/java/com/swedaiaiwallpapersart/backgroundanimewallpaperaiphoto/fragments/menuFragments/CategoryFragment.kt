@@ -34,8 +34,14 @@ class CategoryFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)
-        onCustomCreateView()
+
        return  binding.root }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        onCustomCreateView()
+//        SDKBaseController.getInstance().loadInterstitialAds(requireActivity(),"mainscr_cate_tab_click_item","mainscr_cate_tab_click_item")
+    }
     @SuppressLint("SuspiciousIndentation")
     private fun onCustomCreateView() {
         myActivity = activity as MainActivity
@@ -54,12 +60,13 @@ class CategoryFragment : Fragment() {
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
-                    " mainscr_cate_tab_click_item",
-                    "mainscr_cate_tab_click_item",
+                    "home",
+                    "home_screen_tracking",
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
-
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            //do something
                         }
 
                         override fun onAdsDismiss() {
