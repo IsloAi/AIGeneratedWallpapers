@@ -12,7 +12,7 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 
 class MyFirebaseMessageReceiver : FirebaseMessagingService() {

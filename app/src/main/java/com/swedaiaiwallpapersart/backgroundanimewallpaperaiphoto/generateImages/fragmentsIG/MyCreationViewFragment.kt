@@ -23,8 +23,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentMyCreationViewBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentMyCreationViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
@@ -101,7 +102,7 @@ class MyCreationViewFragment : Fragment() {
             binding.copyButton.visibility = VISIBLE
         }
         val time = (timeDisplay*1000)
-        binding.notificationMessage.text = "Estimated time to load..."
+        binding.notificationMessage.text = getString(R.string.estimated_time_to_load)
         startCountdown(timeDisplay,binding.textCounter)
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -122,7 +123,8 @@ class MyCreationViewFragment : Fragment() {
             val textToCopy = binding.prompt.text.toString()
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
-            Toast.makeText(myContext, "Text copied to clipboard", Toast.LENGTH_SHORT).show()
+            Toast.makeText(myContext,
+                getString(R.string.text_copied_to_clipboard), Toast.LENGTH_SHORT).show()
         }
     }
     private fun loadDate(){
@@ -176,7 +178,8 @@ class MyCreationViewFragment : Fragment() {
                 val binding = bindingRef?.get()
                 if (binding!=null){
                     textView.text = ""
-                    binding.notificationMessage.text = "if still not loaded then swipe down\nto refresh after few second"
+                    binding.notificationMessage.text =
+                        getString(R.string.if_still_not_loaded_then_swipe_down_to_refresh_after_few_second)
                 }
 
             }

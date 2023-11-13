@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Generated Wallpapers</string>
+
+    <string name="are_you_sure_you_want_to_exit">Çıkmak istediğinizden emin misiniz..!</string>
+    <string name="categories">Kategoriler</string>
+    <string name="wallpapers">Duvar Kağıtları</string>
+    <string name="apply_wallpaper">Duvar Kağıdını Uygula</string>
+    <string name="favourites">Favoriler</string>
+    <string name="your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the">Favori listeniz şu anda boş. ❤\'e dokunarak öğe eklemeye başlayın.</string>
+    <string name="you_can_send_feedback_to_our_team">Ekibimize geri bildirim gönderebilirsiniz</string>
+    <string name="email">E-posta</string>
+    <string name="enter_your_email">E-postanızı girin</string>
+    <string name="full_name">Tam Ad</string>
+    <string name="enter_your_full_name">Tam adınızı girin</string>
+    <string name="subject">Konu</string>
+    <string name="enter_your_subject">Konunuzu girin</string>
+    <string name="message">Mesaj</string>
+    <string name="type_your_message">mesajınızı yazın</string>
+    <string name="send_feedback">Geri Bildirim Gönder</string>
+    <string name="generate_wallpaper" translatable="false">Duvar Kağıdı Oluştur</string>
+    <string name="type_text_and_generate_wallpaper">Metni yazın ve Duvar Kağıdı oluşturun</string>
+    <string name="wallpaper_inspirations">Duvar Kağıdı İlhamları</string>
+    <string name="creation">Oluşturma</string>
+    <string name="see_all">Tümünü Gör</string>
+    <string name="your_creation_list_is_empty_yet_nplease_create_your_own_wallpaper">Oluşturma listeniz henüz boş\nLütfen kendi duvar kağıdınızı oluşturun</string>
+    <string name="generate">Oluştur</string>
+    <string name="watch_an_ad">Bir Reklamı İzleyin</string>
+    <string name="trending">Trend</string>
+    <string name="created_wallpaper">Duvar Kağıdı Oluşturuldu</string>
+    <string name="prompt">İstem</string>
+    <string name="prompt_is_loading">istem yükleniyor....</string>
+    <string name="estimated_time_to_load">Tahmini yükleme süresi...</string>
+    <string name="text_copied_to_clipboard">Metin panoya kopyalandı</string>
+    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">hala yüklenmediyse birkaç saniye sonra yenilemek için\naşağı kaydırın</string>
+    <string name="settings">Ayarlar</string>
+    <string name="rate">Oran</string>
+    <string name="other">Diğer</string>
+    <string name="share_app">Uygulamayı Paylaş</string>
+    <string name="customer_support">Müşteri desteği</string>
+    <string name="rate_us">Bize Puan Verin</string>
+    <string name="privacy_policy">Gizlilik Politikası</string>
+    <string name="more_app">Daha fazla uygulama</string>
+
+    <string name="change_language">Dili Değiştir</string>
+    <string name="nature_s_perfection_on_display">Doğanın Ekrandaki Mükemmelliği</string>
+    <string name="get_started">Başlayın</string>
+    <string name="ai_generated_wallpapers">Yapay Zeka ile Oluşturulan Duvar Kağıtları</string>
+    <string name="no_creations_found">Yapım bulunamadı</string>
+    <string name="delete">Sil</string>
+    <string name="select_all">Tümünü Seç</string>
+    <string name="unselect_all">Tüm Seçimi Kaldır</string>
+    <string name="error_please_try_again">Hata lütfen tekrar deneyin</string>
+    <string name="no_internet">İnternet Yok</string>
+    <string name="you_already_send_feedback_now_you_can_send_again_after_24_hours">zaten geri bildirim gönderiyorsunuz, artık 24 saat sonra tekrar gönderebilirsiniz</string>
+    <string name="must_required_your_mail">postanız gerekli olmalıdır</string>
+    <string name="enter_a_valid_email_address">Geçerli bir e-posta adresi girin</string>
+    <string name="must_required_your_name">adınız zorunlu olmalı</string>
+    <string name="must_required_your_subject">konunuzu zorunlu kılmalı</string>
+    <string name="anime_odyssey">Anime Uzay Serüveni</string>
+    <string name="dive_into">: Dalın</string>
+    <string name="enchanting_animated_realms">Büyüleyici Animasyonlu Diyarlar</string>
+    <string name="wild_wonders">Vahşi Harikalar</string>
+    <string name="discover">": Keşfet "</string>
+    <string name="captivating_animal_kingdoms">Büyüleyici Hayvan Krallıkları</string>
+    <string name="artistic_essence">Sanatsal Öz</string>
+    <string name="elevate_your">: Seviyenizi Yükseltin</string>
+    <string name="device_with_creative_mastery">Yaratıcı Ustalığa Sahip Cihaz</string>
+    <string name="your_image_not_fetched_properly">görüntünüz düzgün şekilde getirilmedi</string>
+    <string name="set_successfully_on_home_screen">Ana Ekranda Başarıyla Ayarlandı</string>
+    <string name="set_successfully_on_lock_screen">Kilit Ekranında Başarıyla Ayarlandı</string>
+    <string name="set_successfully_on_both">Her İkisinde de Başarıyla Ayarlandı</string>
+    <string name="permission_granted_click_again_to_save_image">İzin Verildi Resmi kaydetmek için tekrar tıklayın</string>
+    <string name="storage_permission_denied">Depolama İzni Reddedildi</string>
+    <string name="saved_to_gallery">Galeriye Kaydedildi</string>
+    <string name="enter_your_prompt">isteminizi girin</string>
+
+    <string name="hold_tight_your_masterpiece_is_rendering">Sıkı durun, şaheseriniz oluşturuluyor.</string>
+    <string name="loading_the_beauty_just_for_you">Yalnızca sizin için güzellikler yükleniyor.</string>
+    <string name="your_wallpaper_is_in_the_making">Duvar kağıdınız yapım aşamasında.</string>
+    <string name="creating_your_visual_delight">Görsel zevkinizi yaratıyoruz.</string>
+    <string name="sit_back_and_relax_while_we_prepare_your_wallpaper">Biz duvar kağıdınızı hazırlarken arkanıza yaslanın ve rahatlayın.</string>
+    <string name="designing_your_screen_s_new_look">Ekranınızın yeni görünümünü tasarlama.</string>
+    <string name="almost_there_customizing_your_background">Neredeyse bitti, arka planınızı özelleştiriyorsunuz.</string>
+    <string name="your_wallpaper_is_on_its_way">Duvar kağıdınız yolda.</string>
+    <string name="crafting_your_unique_backdrop">Benzersiz arka planınızı oluşturma.</string>
+</resources>

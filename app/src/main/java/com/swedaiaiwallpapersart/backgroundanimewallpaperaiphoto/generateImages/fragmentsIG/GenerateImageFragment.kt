@@ -34,11 +34,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentGenerateImageBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.ImageGenerationDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.CatListAdapter
@@ -230,38 +235,42 @@ class GenerateImageFragment : Fragment() {
     }
     private fun otherWorking() {
         binding.generateButton.setOnClickListener {
-
-            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"home_rewarded","home_rewarded_tracking",object:CustomSDKRewardedAdsListener{
-                override fun onAdsDismiss() {
-
-                }
-
-                override fun onAdsRewarded() {
-                    val getPrompt = binding.edtPrompt.text
-                    if(getPrompt.isNotEmpty()){
-                        getUserIdDialog()
-                        viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                    }else{
-                        Toast.makeText(requireContext(), "enter your promt", Toast.LENGTH_SHORT).show()
+            if (binding.edtPrompt.text.isNotEmpty()){
+                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"mainscr_generate_tab_reward","mainscr_generate_tab_reward",object:CustomSDKRewardedAdsListener{
+                    override fun onAdsDismiss() {
+                        Log.e("********ADS", "onAdsDismiss: ", )
                     }
-                }
 
-                override fun onAdsShowFail(errorCode: Int) {
-                    val getPrompt = binding.edtPrompt.text
-                    if(getPrompt.isNotEmpty()){
-                        getUserIdDialog()
-                        viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                    }else{
-                        Toast.makeText(requireContext(), "enter your promt", Toast.LENGTH_SHORT).show()
+                    override fun onAdsRewarded() {
+                        Log.e("********ADS", "onAdsRewarded: ", )
+                        val getPrompt = binding.edtPrompt.text
+                        if(getPrompt.isNotEmpty()){
+                            getUserIdDialog()
+                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                        }else{
+                            Toast.makeText(requireContext(),
+                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
 
-            })
-                if(existGems!! >=10){
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: ", )
+                        val getPrompt = binding.edtPrompt.text
+                        if(getPrompt.isNotEmpty()){
+                            getUserIdDialog()
+                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                        }else{
+                            Toast.makeText(requireContext(), getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-                }else{
-                    Toast.makeText(requireContext(), "you have no gems to generate this", Toast.LENGTH_SHORT).show()
-                }
+                })
+            } else{
+                Toast.makeText(requireContext(), getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+
+            }
+
+
 
         }
 
@@ -272,15 +281,15 @@ class GenerateImageFragment : Fragment() {
     }
     var textIndex = 0
     val texts = listOf(
-        "Hold tight, your masterpiece is rendering.",
-        "Loading the beauty, just for you.",
-        "Your wallpaper is in the making.",
-        "Creating your visual delight.",
-        "Sit back and relax while we prepare your wallpaper.",
-        "Designing your screen's new look.",
-        "Almost there, customizing your background.",
-        "Your wallpaper is on its way.",
-        "Crafting your unique backdrop."
+        getString(R.string.hold_tight_your_masterpiece_is_rendering),
+        getString(R.string.loading_the_beauty_just_for_you),
+        getString(R.string.your_wallpaper_is_in_the_making),
+        getString(R.string.creating_your_visual_delight),
+        getString(R.string.sit_back_and_relax_while_we_prepare_your_wallpaper),
+        getString(R.string.designing_your_screen_s_new_look),
+        getString(R.string.almost_there_customizing_your_background),
+        getString(R.string.your_wallpaper_is_on_its_way),
+        getString(R.string.crafting_your_unique_backdrop)
     )
     private fun getUserIdDialog() {
         dialog = Dialog(requireContext())
@@ -291,6 +300,40 @@ class GenerateImageFragment : Fragment() {
         dialog?.window!!.setLayout(width, height)
         dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.setCancelable(false)
+        val adsView = dialog?.findViewById<IkmWidgetAdView>(R.id.adsView)
+
+        val adLayout = LayoutInflater.from(dialog?.context).inflate(
+            R.layout.layout_custom_admob,
+            null, false
+        ) as? IkmWidgetAdLayout
+        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+        adsView?.setCustomNativeAdLayout(
+            R.layout.shimmer_loading_native,
+            adLayout!!
+        )
+
+        adsView?.loadAd(requireActivity(),
+            "home_native",
+            "home_native",
+            object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+                    Log.e("**********ADS", "onAdsLoadFail: ", )
+                }
+
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("**********ADS", "onAdsLoaded: ", )
+                }
+            }
+
+        )
+
+
 
         val image = dialog?.findViewById<ImageView>(R.id.generationAnimation)
 
@@ -303,10 +346,6 @@ class GenerateImageFragment : Fragment() {
 
         val animation = AnimationUtils.loadAnimation(dialog?.context, android.R.anim.fade_in)
         animation.duration = 1000
-
-        // Function to update the text and play animation
-
-
         // Initial update
         updateTextAndAnimate(animatedText!!,animation)
 

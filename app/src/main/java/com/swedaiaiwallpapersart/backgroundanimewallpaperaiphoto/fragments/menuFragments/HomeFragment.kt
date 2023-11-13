@@ -1,10 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
@@ -13,9 +11,8 @@ import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -24,21 +21,19 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
+import com.google.gson.Gson
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentHomeBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.google.gson.Gson
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 
 class HomeFragment : Fragment(){
@@ -73,7 +68,7 @@ class HomeFragment : Fragment(){
     }
     private fun onCreatingCalling(){
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
-        checkDailyReward()
+//        checkDailyReward()
         myActivity = activity as MainActivity
         navController = findNavController()
 
@@ -197,33 +192,33 @@ class HomeFragment : Fragment(){
         }
         myViewModel.clear()
     }
-    private fun checkDailyReward(){
-       if(!MySharePreference.getDailyRewardCounter(requireContext())){
-           val dialog = Dialog(requireContext())
-           dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-           dialog.setContentView(R.layout.daily_reward)
-           val width = WindowManager.LayoutParams.MATCH_PARENT
-           val height = WindowManager.LayoutParams.WRAP_CONTENT
-           dialog.window!!.setLayout(width, height)
-           dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-           dialog.setCancelable(false)
-           dialog.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
-               dialog.dismiss()
-               MySharePreference.setDailyRewardCounter(dialog.context,true)
-           }
-           dialog.findViewById<Button>(R.id.buttonGetReward).setOnClickListener {
-               dialog.dismiss()
-                   val gems = MySharePreference.getGemsValue(requireContext())!!+rewardAdWatched
-                   postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
-                       RetrofitInstance.getInstance(),gems, PostDataOnServer.isPlan)
-                   MySharePreference.setDailyRewardCounter(requireContext(),true)
-                   binding.gemsText.text = gems.toString()
-                   Toast.makeText(context, "You earned the 20 gems successfully", Toast.LENGTH_SHORT).show()
-
-           }
-           dialog.show()
-       }
-    }
+//    private fun checkDailyReward(){
+//       if(!MySharePreference.getDailyRewardCounter(requireContext())){
+//           val dialog = Dialog(requireContext())
+//           dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//           dialog.setContentView(R.layout.daily_reward)
+//           val width = WindowManager.LayoutParams.MATCH_PARENT
+//           val height = WindowManager.LayoutParams.WRAP_CONTENT
+//           dialog.window!!.setLayout(width, height)
+//           dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+//           dialog.setCancelable(false)
+//           dialog.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
+//               dialog.dismiss()
+//               MySharePreference.setDailyRewardCounter(dialog.context,true)
+//           }
+//           dialog.findViewById<Button>(R.id.buttonGetReward).setOnClickListener {
+//               dialog.dismiss()
+//                   val gems = MySharePreference.getGemsValue(requireContext())!!+rewardAdWatched
+//                   postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
+//                       RetrofitInstance.getInstance(),gems, PostDataOnServer.isPlan)
+//                   MySharePreference.setDailyRewardCounter(requireContext(),true)
+//                   binding.gemsText.text = gems.toString()
+//                   Toast.makeText(context, "You earned the 20 gems successfully", Toast.LENGTH_SHORT).show()
+//
+//           }
+//           dialog.show()
+//       }
+//    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding =null

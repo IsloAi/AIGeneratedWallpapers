@@ -15,7 +15,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.SplashModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.SplashContainerBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.SplashContainerBinding
 
 class SplashSliderAdapter(
     private val arrayList: ArrayList<SplashModel>,

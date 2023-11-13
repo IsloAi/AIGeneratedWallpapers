@@ -29,8 +29,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.GetGemsData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.SplashModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentSplashBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.SplashSliderAdapter
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -80,7 +81,7 @@ class SplashFragment : Fragment() {
             adLayout!!
         )
 
-        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+        binding.adsView.loadAd(requireActivity(),"home_native","home_native",
             object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()

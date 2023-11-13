@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Generated Wallpapers</string>
+
+    <string name="are_you_sure_you_want_to_exit">Sind Sie sicher, dass Sie beenden möchten?!</string>
+    <string name="categories">Kategorien</string>
+    <string name="wallpapers">Hintergrundbilder</string>
+    <string name="apply_wallpaper">Hintergrundbild anwenden</string>
+    <string name="favourites">Favoriten</string>
+    <string name="your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the">Ihre Favoritenliste ist derzeit leer. Beginnen Sie mit dem Hinzufügen von Elementen, indem Sie auf ❤ tippen.</string>
+    <string name="you_can_send_feedback_to_our_team">Sie können Feedback an unser Team senden</string>
+    <string name="email">E-Mail</string>
+    <string name="enter_your_email">Geben Sie Ihre E-Mail-Adresse ein</string>
+    <string name="full_name">Vollständiger Name</string>
+    <string name="enter_your_full_name">Geben Sie Ihren vollständigen Namen ein</string>
+    <string name="subject">Betreff</string>
+    <string name="enter_your_subject">Geben Sie Ihren Betreff ein</string>
+    <string name="message">Nachricht</string>
+    <string name="type_your_message">Geben Sie Ihre Nachricht ein</string>
+    <string name="send_feedback">Feedback senden</string>
+    <string name="generate_wallpaper" translatable="false">Hintergrundbild generieren</string>
+    <string name="type_text_and_generate_wallpaper">Text eingeben und Hintergrundbild generieren</string>
+    <string name="wallpaper_inspirations">Hintergrundinspirationen</string>
+    <string name="creation">Erstellung</string>
+    <string name="see_all">Alle anzeigen</string>
+    <string name="your_creation_list_is_empty_yet_nplease_create_your_own_wallpaper">Ihre Erstellungsliste ist noch leer\nBitte erstellen Sie Ihr eigenes Hintergrundbild</string>
+    <string name="generate">Generieren</string>
+    <string name="watch_an_ad">Anzeige ansehen</string>
+    <string name="trending">Im Trend</string>
+    <string name="created_wallpaper">Hintergrundbild erstellt</string>
+    <string name="prompt">Eingabeaufforderung</string>
+    <string name="prompt_is_loading">Eingabeaufforderung wird geladen....</string>
+    <string name="estimated_time_to_load">Geschätzte Zeit zum Laden...</string>
+    <string name="text_copied_to_clipboard">Text in die Zwischenablage kopiert</string>
+    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">Wenn es immer noch nicht geladen ist, wischen Sie nach unten,\num es nach ein paar Sekunden zu aktualisieren</string>
+    <string name="settings">Einstellungen</string>
+    <string name="rate">Preis</string>
+    <string name="other">Sonstiges</string>
+    <string name="share_app">App teilen</string>
+    <string name="customer_support">Kundensupport</string>
+
+    <string name="rate_us">Bewerten Sie uns</string>
+    <string name="privacy_policy">Datenschutzerklärung</string>
+    <string name="more_app">Mehr App</string>
+    <string name="change_language">Sprache ändern</string>
+    <string name="nature_s_perfection_on_display">Die Perfektion der Natur zur Schau gestellt</string>
+    <string name="get_started">Erste Schritte</string>
+    <string name="ai_generated_wallpapers">Ai-generierte Hintergrundbilder</string>
+    <string name="no_creations_found">Keine Kreationen gefunden</string>
+    <string name="delete">Löschen</string>
+    <string name="select_all">Alle auswählen</string>
+    <string name="unselect_all">Alle abwählen</string>
+    <string name="error_please_try_again">Fehler, bitte versuchen Sie es erneut</string>
+    <string name="no_internet">Kein Internet</string>
+    <string name="you_already_send_feedback_now_you_can_send_again_after_24_hours">Sie haben bereits Feedback gesendet, jetzt können Sie nach 24 Stunden erneut senden</string>
+    <string name="must_required_your_mail">muss Ihre E-Mail-Adresse benötigen</string>
+    <string name="enter_a_valid_email_address">Geben Sie eine gültige E-Mail-Adresse ein</string>
+    <string name="must_required_your_name">muss Ihren Namen erfordern</string>
+    <string name="must_required_your_subject">Ihr Betreff muss erforderlich sein</string>
+    <string name="anime_odyssey">Anime Odyssee</string>
+    <string name="dive_into">: Eintauchen</string>
+    <string name="enchanting_animated_realms">Bezaubernde animierte Reiche</string>
+    <string name="wild_wonders">Wilde Wunder</string>
+    <string name="discover">": Entdecken "</string>
+    <string name="captivating_animal_kingdoms">Fesselnde Tierreiche</string>
+    <string name="artistic_essence">Künstlerische Essenz</string>
+    <string name="elevate_your">: Erhöhen Sie Ihr</string>
+    <string name="device_with_creative_mastery">Gerät mit kreativer Meisterschaft</string>
+    <string name="your_image_not_fetched_properly">Ihr Bild wurde nicht ordnungsgemäß abgerufen</string>
+    <string name="set_successfully_on_home_screen">Erfolgreich auf dem Startbildschirm eingestellt</string>
+    <string name="set_successfully_on_lock_screen">Erfolgreich auf Sperrbildschirm gesetzt</string>
+    <string name="set_successfully_on_both">Auf beiden erfolgreich gesetzt</string>
+    <string name="permission_granted_click_again_to_save_image">Berechtigung erteilt Klicken Sie erneut, um das Bild zu speichern</string>
+    <string name="storage_permission_denied">Speicherberechtigung verweigert</string>
+    <string name="saved_to_gallery">In der Galerie gespeichert</string>
+    <string name="enter_your_prompt">Geben Sie Ihre Eingabeaufforderung ein</string>
+
+    <string name="hold_tight_your_masterpiece_is_rendering">Halten Sie sich fest, Ihr Meisterwerk wird gerendert.</string>
+    <string name="loading_the_beauty_just_for_you">Laden Sie die Schönheit, nur für Sie.</string>
+    <string name="your_wallpaper_is_in_the_making">Ihr Hintergrundbild ist in Arbeit.</string>
+    <string name="creating_your_visual_delight">Schaffen Sie Ihr visuelles Vergnügen.</string>
+    <string name="sit_back_and_relax_while_we_prepare_your_wallpaper">Lehnen Sie sich zurück und entspannen Sie sich, während wir Ihre Tapete vorbereiten.</string>
+    <string name="designing_your_screen_s_new_look">Gestalten Sie den neuen Look Ihres Bildschirms.</string>
+    <string name="almost_there_customizing_your_background">Fast fertig, die Anpassung Ihres Hintergrunds.</string>
+    <string name="your_wallpaper_is_on_its_way">Dein Hintergrundbild ist unterwegs.</string>
+    <string name="crafting_your_unique_backdrop">Erstellen Sie Ihren einzigartigen Hintergrund.</string>
+</resources>

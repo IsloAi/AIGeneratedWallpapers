@@ -3,26 +3,25 @@ import ApiCategoriesNameAdapter
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
 import com.example.hdwallpaper.Fragments.MainFragment
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentCategoryBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 
 class CategoryFragment : Fragment() {
    private var _binding: FragmentCategoryBinding? = null

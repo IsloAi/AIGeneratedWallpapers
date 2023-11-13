@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.lottie.LottieAnimationView
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.FeedbackInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.PostGemsInterface

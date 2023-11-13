@@ -19,9 +19,11 @@ import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListener
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashOnBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentSplashOnBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.ImageGenerationDialogBinding
 
 class SplashOnFragment : Fragment() {
 
@@ -49,21 +51,21 @@ class SplashOnFragment : Fragment() {
         progress.setCancelable(false)
         progress.show()
 
-        val videoPath = "android.resource://" + requireContext().packageName + "/" + R.raw.splash_animation
-        binding.splashAnim.setMediaController(null)
-
-
-
-        // Set the video URI and start playing
-        binding.splashAnim.setVideoURI(Uri.parse(videoPath))
-        binding.splashAnim.start()
-
-        binding.splashAnim.setOnPreparedListener { mp ->
-            isVideoPrepared = true
-            mp.isLooping = true
-            mp.seekTo(currentPosition)
-            mp.start()
-        }
+//        val videoPath = "android.resource://" + requireContext().packageName + "/" + R.raw.splash_animation
+//        binding.splashAnim.setMediaController(null)
+//
+//
+//
+//        // Set the video URI and start playing
+//        binding.splashAnim.setVideoURI(Uri.parse(videoPath))
+//        binding.splashAnim.start()
+//
+//        binding.splashAnim.setOnPreparedListener { mp ->
+//            isVideoPrepared = true
+//            mp.isLooping = true
+//            mp.seekTo(currentPosition)
+//            mp.start()
+//        }
 
 
         SDKBaseController.getInstance().showFirstOpenAppAds(requireActivity(),12000,object:CommonAdsListenerAdapter(){
@@ -88,28 +90,28 @@ class SplashOnFragment : Fragment() {
         })
 
         binding.getStarted.setOnClickListener {
-            findNavController().navigate(R.id.action_splashOnFragment_to_splashFragment)
+            findNavController().navigate(R.id.onBoardingFragment)
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (isVideoPrepared) {
-            // Save the current video position
-            currentPosition = binding.splashAnim.currentPosition
-
-            // Pause or stop video playback
-            binding.splashAnim.pause()
-        }
+//        if (isVideoPrepared) {
+//            // Save the current video position
+//            currentPosition = binding.splashAnim.currentPosition
+//
+//            // Pause or stop video playback
+//            binding.splashAnim.pause()
+//        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (isVideoPrepared) {
-            // Resume video playback
-            binding.splashAnim.seekTo(currentPosition)
-            binding.splashAnim.start()
-        }
+//        if (isVideoPrepared) {
+//            // Resume video playback
+//            binding.splashAnim.seekTo(currentPosition)
+//            binding.splashAnim.start()
+//        }
     }
 
 

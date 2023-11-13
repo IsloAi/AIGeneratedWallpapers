@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Generated Wallpapers</string>
+
+    <string name="are_you_sure_you_want_to_exit">¿Estás seguro de que quieres salir...!</string>
+    <string name="categories">Categorías</string>
+    <string name="wallpapers">Fondos de pantalla</string>
+    <string name="apply_wallpaper">Aplicar fondo de pantalla</string>
+    <string name="favourites">Favoritos</string>
+    <string name="your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the">Su lista de favoritos está actualmente vacía. Comience a agregar elementos tocando ❤.</string>
+    <string name="you_can_send_feedback_to_our_team">Puedes enviar comentarios a nuestro equipo</string>
+    <string name="email">Correo electrónico</string>
+    <string name="enter_your_email">Ingrese su correo electrónico</string>
+    <string name="full_name">Nombre completo</string>
+    <string name="enter_your_full_name">Ingrese su nombre completo</string>
+    <string name="subject">Asunto</string>
+    <string name="enter_your_subject">Ingrese su asunto</string>
+    <string name="message">Mensaje</string>
+    <string name="type_your_message">escribe tu mensaje</string>
+    <string name="send_feedback">Enviar comentarios</string>
+    <string name="generate_wallpaper" translatable="false">Generar fondo de pantalla</string>
+    <string name="type_text_and_generate_wallpaper">Escribe texto y genera fondo de pantalla</string>
+    <string name="wallpaper_inspirations">Inspiraciones de fondos de pantalla</string>
+    <string name="creation">Creación</string>
+    <string name="see_all">Ver todo</string>
+    <string name="your_creation_list_is_empty_yet_nplease_create_your_own_wallpaper">Tu lista de creación aún está vacía\nPor favor, crea tu propio fondo de pantalla</string>
+    <string name="generate">Generar</string>
+    <string name="watch_an_ad">Ver un anuncio</string>
+    <string name="trending">Tendencias</string>
+    <string name="created_wallpaper">Fondo de pantalla creado</string>
+    <string name="prompt">Preguntar</string>
+    <string name="prompt_is_loading">el mensaje se está cargando...</string>
+    <string name="estimated_time_to_load">Tiempo estimado para cargar...</string>
+    <string name="text_copied_to_clipboard">Texto copiado al portapapeles</string>
+    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">si aún no está cargado, deslízate hacia abajo\n para actualizar después de unos segundos</string>
+    <string name="settings">Configuración</string>
+    <string name="rate">Tarifa</string>
+    <string name="other">Otro</string>
+    <string name="share_app">Compartir aplicación</string>
+    <string name="customer_support">Atención al cliente</string>
+    <string name="rate_us">Califícanos</string>
+
+    <string name="privacy_policy">Política de privacidad</string>
+    <string name="more_app">Más aplicación</string>
+    <string name="change_language">Cambiar idioma</string>
+    <string name="nature_s_perfection_on_display">La perfección de la naturaleza en exhibición</string>
+    <string name="get_started">Comenzar</string>
+    <string name="ai_generated_wallpapers">Fondos de pantalla generados por Ai</string>
+    <string name="no_creations_found">No se encontraron creaciones</string>
+    <string name="delete">Eliminar</string>
+    <string name="select_all">Seleccionar todo</string>
+    <string name="unselect_all">Anular selección de todo</string>
+    <string name="error_please_try_again">Error, inténtalo de nuevo</string>
+    <string name="no_internet">Sin Internet</string>
+    <string name="you_already_send_feedback_now_you_can_send_again_after_24_hours">ya enviaste comentarios, ahora puedes volver a enviarlos después de 24 horas</string>
+    <string name="must_required_your_mail">debe requerir su correo</string>
+    <string name="enter_a_valid_email_address">Ingrese una dirección de correo electrónico válida</string>
+    <string name="must_required_your_name">debe requerir su nombre</string>
+    <string name="must_required_your_subject">debe requerir su asunto</string>
+    <string name="anime_odyssey">Anime Odisea</string>
+    <string name="dive_into">: Sumérgete en</string>
+    <string name="enchanting_animated_realms">Reinos animados encantadores</string>
+    <string name="wild_wonders">Maravillas Salvajes</string>
+    <string name="discover">": Descubrir "</string>
+    <string name="captivating_animal_kingdoms">Reinos animales cautivadores</string>
+    <string name="artistic_essence">Esencia artística</string>
+    <string name="elevate_your">: Eleva tu</string>
+    <string name="device_with_creative_mastery">Dispositivo con dominio creativo</string>
+    <string name="your_image_not_fetched_properly">tu imagen no se obtuvo correctamente</string>
+    <string name="set_successfully_on_home_screen">Establecer correctamente en la pantalla de inicio</string>
+    <string name="set_successfully_on_lock_screen">Establecer correctamente en la pantalla de bloqueo</string>
+    <string name="set_successfully_on_both">Configurado correctamente en ambos</string>
+    <string name="permission_granted_click_again_to_save_image">Permiso concedido Haga clic nuevamente para guardar la imagen</string>
+    <string name="storage_permission_denied">Permiso de almacenamiento denegado</string>
+    <string name="saved_to_gallery">Guardado en la galería</string>
+    <string name="enter_your_prompt">ingrese su mensaje</string>
+
+    <string name="hold_tight_your_masterpiece_is_rendering">Espera, tu obra maestra se está renderizando.</string>
+    <string name="loading_the_beauty_just_for_you">Cargando la belleza, solo para ti.</string>
+    <string name="your_wallpaper_is_in_the_making">Tu fondo de pantalla está en proceso.</string>
+    <string name="creating_your_visual_delight">Creando tu deleite visual.</string>
+    <string name="sit_back_and_relax_while_we_prepare_your_wallpaper">Siéntate y relájate mientras preparamos tu fondo de pantalla.</string>
+    <string name="designing_your_screen_s_new_look">Diseñando la nueva apariencia de tu pantalla.</string>
+    <string name="almost_there_customizing_your_background">Ya casi llegamos, personalizando tu fondo.</string>
+    <string name="your_wallpaper_is_on_its_way">Tu fondo de pantalla está en camino.</string>
+    <string name="crafting_your_unique_backdrop">Creando tu fondo único.</string>
+</resources>

@@ -1,36 +1,26 @@
 {
   "project_info": {
-    "project_number": "322744764707",
-    "project_id": "ai-wallpapers-a53f2",
-    "storage_bucket": "ai-wallpapers-a53f2.appspot.com"
+    "project_number": "275253829628",
+    "project_id": "pub-gamican-wallpaper-debug",
+    "storage_bucket": "pub-gamican-wallpaper-debug.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:322744764707:android:a9a57425bfbf0e1846e496",
+        "mobilesdk_app_id": "1:275253829628:android:cba64d303222041c0c1c79",
         "android_client_info": {
-          "package_name": "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
+          "package_name": "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "322744764707-iedmpbpd9gf848nv8bussapjua8t9gc1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAkGtIzLCvBZg9FHrMw_DVqblkNBOc2AFI"
+          "current_key": "AIzaSyCP9E1PFWPjta0DD_7cHwB1mvh0Jv1UadI"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "322744764707-iedmpbpd9gf848nv8bussapjua8t9gc1.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

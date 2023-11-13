@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavController
 import com.airbnb.lottie.LottieAnimationView
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -32,7 +32,7 @@ class MyDialogs {
         val title = dialog.findViewById<TextView>(R.id.texttop)
         val btnNo = dialog.findViewById<Button>(R.id.btnNo)
         val btnYes = dialog.findViewById<Button>(R.id.btnYes)
-        title!!.text = "Are you sure you want to exit..!"
+        title!!.text = context.getString(R.string.are_you_sure_you_want_to_exit)
         btnYes!!.setOnClickListener {
             activity.finish()
             dialog.dismiss()
@@ -65,10 +65,9 @@ class MyDialogs {
         val title = dialog.findViewById<TextView>(R.id.unLockTextView)
         val totalGemsTextView = dialog.findViewById<TextView>(R.id.totalGems)
         val getMoreGems = dialog.findViewById<TextView>(R.id.getMoreGems)
-        val buttonGetWallpaper = dialog.findViewById<Button>(R.id.buttonGetWallpaper)
+        val buttonGetWallpaper = dialog.findViewById<ConstraintLayout>(R.id.buttonGetWallpaper)
         val totalGems = MySharePreference.getGemsValue(context)
         title!!.text = "To Unlock this wallpaper\nUse ${model.gems} Gems"
-        totalGemsTextView.text ="You have total ${totalGems} Gems"
         var gems = model.gems!!
         if (totalGems != null) {
             if(totalGems<gems){
@@ -117,10 +116,9 @@ class MyDialogs {
         val title = dialog.findViewById<TextView>(R.id.unLockTextView)
         val totalGemsTextView = dialog.findViewById<TextView>(R.id.totalGems)
         val getMoreGems = dialog.findViewById<TextView>(R.id.getMoreGems)
-        val buttonGetWallpaper = dialog.findViewById<Button>(R.id.buttonGetWallpaper)
+        val buttonGetWallpaper = dialog.findViewById<ConstraintLayout>(R.id.buttonGetWallpaper)
         val totalGems = MySharePreference.getGemsValue(context)
         title!!.text = "To Unlock this wallpaper\nUse ${model.gems} Gems"
-        totalGemsTextView.text ="You have total ${totalGems} Gems"
         var gems = model.gems!!
         if (totalGems != null) {
             if(totalGems<gems){
@@ -168,7 +166,7 @@ class MyDialogs {
         val title = dialog.findViewById<TextView>(R.id.unLockTextView)
         val totalGemsTextView = dialog.findViewById<TextView>(R.id.totalGems)
         val getMoreGems = dialog.findViewById<TextView>(R.id.getMoreGems)
-        val buttonGetWallpaper = dialog.findViewById<Button>(R.id.buttonGetWallpaper)
+        val buttonGetWallpaper = dialog.findViewById<ConstraintLayout>(R.id.buttonGetWallpaper)
         val totalGems = MySharePreference.getGemsValue(context)
         title!!.text = "To Unlock this wallpaper\nUse ${model.gems} Gems"
         totalGemsTextView.text ="You have total ${totalGems} Gems"

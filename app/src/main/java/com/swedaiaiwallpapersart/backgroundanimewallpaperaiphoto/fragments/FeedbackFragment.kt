@@ -1,4 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
+
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,17 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentFeedbackBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFeedbackBinding
 
 class FeedbackFragment : Fragment() {
    private var _binding: FragmentFeedbackBinding? = null
@@ -47,20 +46,21 @@ class FeedbackFragment : Fragment() {
             val getSubject = subject?.text.toString()
             val getMessage = message?.text.toString()
             if(MySharePreference.getFeedbackValue(requireContext())){
-                Toast.makeText(requireContext(), "you already send feedback, now you can send again after 24 hours", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),
+                    getString(R.string.you_already_send_feedback_now_you_can_send_again_after_24_hours), Toast.LENGTH_SHORT).show()
             }else{
                 if(getMail.isEmpty()){
-                    mail?.error = "must required your mail"
+                    mail?.error = getString(R.string.must_required_your_mail)
                     mail?.requestFocus()
                 }else if(!android.util.Patterns.EMAIL_ADDRESS.matcher(getMail).matches()){
-                    mail.error = "Enter a valid email address"
+                    mail.error = getString(R.string.enter_a_valid_email_address)
                     mail.requestFocus()
                 }
                 else if(getName.isEmpty()){
-                    name?.error = "must required your name"
+                    name?.error = getString(R.string.must_required_your_name)
                     name?.requestFocus()
                 }else if(getSubject.isEmpty()){
-                    subject?.error = "must required your subject"
+                    subject?.error = getString(R.string.must_required_your_subject)
                     subject?.requestFocus()
                 }else{
                     postDataOnServer.sendFeedback(requireContext(),getMail,getName,getSubject,getMessage,

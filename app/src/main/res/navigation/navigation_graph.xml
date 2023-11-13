@@ -154,5 +154,15 @@
             android:id="@+id/action_splashOnFragment_to_splashFragment"
             app:destination="@id/splashFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/localizationFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.LocalizationFragment"
+        android:label="fragment_localization"
+        tools:layout="@layout/fragment_localization" />
+    <fragment
+        android:id="@+id/onBoardingFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.OnBoardingFragment"
+        android:label="fragment_on_boarding"
+        tools:layout="@layout/fragment_on_boarding" />
 
 </navigation>

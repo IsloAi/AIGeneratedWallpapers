@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Generated Wallpapers</string>
+
+    <string name="are_you_sure_you_want_to_exit">هل أنت متأكد أنك تريد الخروج..!</string>
+    <string name="categories">الفئات</string>
+    <string name="wallpapers">خلفيات</string>
+    <string name="apply_wallpaper">تطبيق الخلفية</string>
+    <string name="favourites">المفضلة</string>
+    <string name="your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the">قائمتك المفضلة فارغة حاليًا. ابدأ بإضافة العناصر عن طريق النقر على ❤.</string>
+    <string name="you_can_send_feedback_to_our_team">يمكنك إرسال تعليقات إلى فريقنا</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="enter_your_email">أدخل بريدك الإلكتروني</string>
+    <string name="full_name">الاسم الكامل</string>
+    <string name="enter_your_full_name">أدخل اسمك الكامل</string>
+    <string name="subject">الموضوع</string>
+    <string name="enter_your_subject">أدخل موضوعك</string>
+    <string name="message">الرسالة</string>
+    <string name="type_your_message">اكتب رسالتك</string>
+    <string name="send_feedback">إرسال تعليقات</string>
+    <string name="generate_wallpaper" translatable="false">إنشاء خلفية</string>
+    <string name="type_text_and_generate_wallpaper">اكتب النص وأنشئ الخلفية</string>
+    <string name="wallpaper_inspirations">إلهام ورق الحائط</string>
+    <string name="creation">الإنشاء</string>
+    <string name="see_all">مشاهدة الكل</string>
+    <string name="your_creation_list_is_empty_yet_nplease_create_your_own_wallpaper">قائمة الإنشاءات الخاصة بك فارغة حتى الآن\nالرجاء إنشاء الخلفية الخاصة بك</string>
+    <string name="generate">إنشاء</string>
+    <string name="watch_an_ad">شاهد إعلانًا</string>
+    <string name="trending">الاتجاه</string>
+    <string name="created_wallpaper">الخلفية التي تم إنشاؤها</string>
+    <string name="prompt">مطالبة</string>
+
+    <string name="prompt_is_loading">جارٍ تحميل المطالبة....</string>
+    <string name="estimated_time_to_load">الوقت المقدر للتحميل...</string>
+    <string name="text_copied_to_clipboard">تم نسخ النص إلى الحافظة</string>
+    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">إذا لم يتم التحميل بعد، فاسحب لأسفل\nللتحديث بعد بضع ثوانٍ</string>
+    <string name="settings">الإعدادات</string>
+    <string name="rate">السعر</string>
+    <string name="other">أخرى</string>
+    <string name="share_app">مشاركة التطبيق</string>
+    <string name="customer_support">دعم العملاء</string>
+    <string name="rate_us">قيمنا</string>
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="more_app">المزيد من التطبيقات</string>
+    <string name="change_language">تغيير اللغة</string>
+    <string name="nature_s_perfection_on_display">كمال الطبيعة على الشاشة</string>
+    <string name="get_started">ابدأ</string>
+    <string name="ai_generated_wallpapers">الخلفيات التي تم إنشاؤها بواسطة الذكاء الاصطناعي</string>
+    <string name="no_creations_found">لم يتم العثور على أي إبداعات</string>
+    <string name="delete">حذف</string>
+    <string name="select_all">حدد الكل</string>
+    <string name="unselect_all">إلغاء تحديد الكل</string>
+    <string name="error_please_try_again">حدث خطأ، يرجى المحاولة مرة أخرى</string>
+    <string name="no_internet">لا يوجد إنترنت</string>
+    <string name="you_already_send_feedback_now_you_can_send_again_after_24_hours">لقد أرسلت تعليقاتك بالفعل، والآن يمكنك إرسالها مرة أخرى بعد 24 ساعة</string>
+    <string name="must_required_your_mail">يجب أن يطلب بريدك</string>
+    <string name="enter_a_valid_email_address">أدخل عنوان بريد إلكتروني صالحًا</string>
+    <string name="must_required_your_name">يجب أن يطلب اسمك</string>
+
+    <string name="must_required_your_subject">يجب أن يتطلب موضوعك</string>
+    <string name="anime_odyssey">أنمي أوديسي</string>
+    <string name="dive_into">: الغوص في</string>
+    <string name="enchanting_animated_realms">عوالم الرسوم المتحركة الساحرة</string>
+    <string name="wild_wonders">عجائب الدنيا</string>
+    <string name="discover">": اكتشف "</string>
+    <string name="captivating_animal_kingdoms">ممالك الحيوانات الآسرة</string>
+    <string name="artistic_essence">الجوهر الفني</string>
+    <string name="elevate_your">: ارفع مستوى</string>
+    <string name="device_with_creative_mastery">جهاز ذو إتقان إبداعي</string>
+    <string name="your_image_not_fetched_properly">لم يتم جلب صورتك بشكل صحيح</string>
+    <string name="set_successfully_on_home_screen">تم الضبط بنجاح على الشاشة الرئيسية</string>
+    <string name="set_successfully_on_lock_screen">تم الضبط بنجاح على شاشة القفل</string>
+    <string name="set_successfully_on_both">تم التعيين بنجاح على كليهما</string>
+    <string name="permission_granted_click_again_to_save_image">تم منح الإذن انقر مرة أخرى لحفظ الصورة</string>
+    <string name="storage_permission_denied">تم رفض إذن التخزين</string>
+    <string name="saved_to_gallery">تم الحفظ في المعرض</string>
+    <string name="enter_your_prompt">أدخل المطالبة</string>
+    <string name="hold_tight_your_masterpiece_is_rendering">انتظر، يتم عرض تحفتك الفنية.</string>
+    <string name="loading_the_beauty_just_for_you">جارٍ تحميل الجمال خصيصًا لك.</string>
+    <string name="your_wallpaper_is_in_the_making">ورق الحائط الخاص بك قيد الإنشاء.</string>
+    <string name="creating_your_visual_delight">اصنع بهجة بصرية.</string>
+    <string name="sit_back_and_relax_while_we_prepare_your_wallpaper">اجلس واسترخي بينما نقوم بإعداد ورق الحائط الخاص بك.</string>
+    <string name="designing_your_screen_s_new_look">تصميم المظهر الجديد لشاشتك.</string>
+    <string name="almost_there_customizing_your_background">لقد أوشكت على تخصيص الخلفية.</string>
+    <string name="your_wallpaper_is_on_its_way">خلفية الشاشة الخاصة بك في طريقها إليك.</string>
+    <string name="crafting_your_unique_backdrop">تصميم الخلفية الفريدة الخاصة بك.</string>
+</resources>

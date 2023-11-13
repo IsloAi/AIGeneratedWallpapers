@@ -2,10 +2,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_360sdp"
+        android:layout_height="@dimen/_170sdp"
         xmlns:app="http://schemas.android.com/apk/res-auto"
          android:paddingHorizontal="@dimen/_2sdp"
         >
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -40,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
                 android:textSize="17sp"
-                android:text="You have 40 gems "
+
+                android:text="To Unlock this wallpaper "
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/_2sdp"
                 android:fontFamily="@font/raleway_medium"
@@ -53,6 +55,7 @@
         android:layout_height="@dimen/_120sdp"
         app:lottie_rawRes="@raw/couple3_diamond"
         app:lottie_loop="true"
+        android:visibility="gone"
         app:lottie_autoPlay="true"
         android:layout_marginTop="@dimen/_10sdp"
         android:layout_gravity="center_horizontal"
@@ -64,13 +67,109 @@
             android:paddingHorizontal="@dimen/_7sdp"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:visibility="gone"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/raleway_medium"
             android:gravity="center"
             />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_45sdp"
+                android:translationZ="@dimen/_15sdp"
+                android:layout_marginHorizontal="@dimen/_25sdp"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintTop_toBottomOf="@id/feedbackContainer"
+                android:background="@drawable/yellow_frame"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/buttonGetWallpaper"
+                android:layout_marginBottom="@dimen/_10sdp"
+                >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/reward_item_video"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toTopOf="@id/watch_txt"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/generate_top"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/reward_item_magic"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="@dimen/_10sdp"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Continue"
+                        android:fontFamily="@font/raleway_medium"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        />
+
+                </LinearLayout>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Watch an Ad"
+                    android:fontFamily="@font/raleway_medium"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_15sdp"
+                    android:textStyle="normal"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/generate_top"
+                    app:layout_constraintStart_toStartOf="@id/generate_top"
+                    app:layout_constraintEnd_toEndOf="@id/generate_top"
+                    android:id="@+id/watch_txt"
+                    />
+
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:src="@drawable/rewarded_item"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    />
+
+
+
+
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
         <Button
-            android:id="@+id/buttonGetWallpaper"
+            android:visibility="gone"
             android:layout_width="@dimen/_180sdp"
             android:layout_height="@dimen/_40sdp"
             android:gravity="center"
@@ -90,6 +189,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/button_bg"
                 android:textSize="18sp"
+                android:visibility="gone"
                 android:text="Get more Gems"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal"

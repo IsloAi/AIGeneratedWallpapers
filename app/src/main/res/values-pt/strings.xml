@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AI Generated Wallpapers</string>
+
+    <string name="are_you_sure_you_want_to_exit">Tem certeza que deseja sair..!</string>
+    <string name="categories">Categorias</string>
+    <string name="wallpapers">Papéis de parede</string>
+    <string name="apply_wallpaper">Aplicar papel de parede</string>
+    <string name="favourites">Favoritos</string>
+    <string name="your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the">Sua lista de favoritos está vazia no momento. Comece a adicionar itens tocando no ❤.</string>
+    <string name="you_can_send_feedback_to_our_team">Você pode enviar feedback para nossa equipe</string>
+    <string name="email">E-mail</string>
+    <string name="enter_your_email">Digite seu e-mail</string>
+    <string name="full_name">Nome completo</string>
+    <string name="enter_your_full_name">Digite seu nome completo</string>
+    <string name="subject">Assunto</string>
+    <string name="enter_your_subject">Insira seu assunto</string>
+    <string name="message">Mensagem</string>
+    <string name="type_your_message">digite sua mensagem</string>
+    <string name="send_feedback">Enviar comentários</string>
+    <string name="generate_wallpaper" translatable="false">Gerar papel de parede</string>
+    <string name="type_text_and_generate_wallpaper">Digite o texto e gere o papel de parede</string>
+    <string name="wallpaper_inspirations">Inspirações para papéis de parede</string>
+    <string name="creation">Criação</string>
+    <string name="see_all">Ver tudo</string>
+    <string name="your_creation_list_is_empty_yet_nplease_create_your_own_wallpaper">Sua lista de criação ainda está vazia\nPor favor, crie seu próprio papel de parede</string>
+    <string name="generate">Gerar</string>
+    <string name="watch_an_ad">Assistir a um anúncio</string>
+    <string name="trending">Tendências</string>
+    <string name="created_wallpaper">Papel de parede criado</string>
+    <string name="prompt">Prompt</string>
+    <string name="prompt_is_loading">prompt está carregando....</string>
+    <string name="estimated_time_to_load">Tempo estimado para carregar...</string>
+    <string name="text_copied_to_clipboard">Texto copiado para a área de transferência</string>
+    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">se ainda não estiver carregado, deslize para baixo\para atualizar após alguns segundos</string>
+    <string name="settings">Configurações</string>
+    <string name="rate">Taxa</string>
+    <string name="other">Outro</string>
+    <string name="share_app">Compartilhar aplicativo</string>
+    <string name="customer_support">Suporte ao cliente</string>
+    <string name="rate_us">Avalie-nos</string>
+    <string name="privacy_policy">Política de Privacidade</string>
+
+    <string name="more_app">Mais aplicativos</string>
+    <string name="change_language">Alterar idioma</string>
+    <string name="nature_s_perfection_on_display">A perfeição da natureza em exibição</string>
+    <string name="get_started">Primeiros passos</string>
+    <string name="ai_generated_wallpapers">Papéis de parede gerados por IA</string>
+    <string name="no_creations_found">Nenhuma criação encontrada</string>
+    <string name="delete">Excluir</string>
+    <string name="select_all">Selecionar tudo</string>
+    <string name="unselect_all">Desmarcar tudo</string>
+    <string name="error_please_try_again">Erro, tente novamente</string>
+    <string name="no_internet">Sem Internet</string>
+    <string name="you_already_send_feedback_now_you_can_send_again_after_24_hours">você já enviou feedback, agora pode enviar novamente após 24 horas</string>
+    <string name="must_required_your_mail">é necessário seu e-mail</string>
+    <string name="enter_a_valid_email_address">Insira um endereço de e-mail válido</string>
+    <string name="must_required_your_name">é necessário seu nome</string>
+    <string name="must_required_your_subject">deve ser obrigatório seu assunto</string>
+    <string name="anime_odyssey">Anime Odisséia</string>
+    <string name="dive_into">: Mergulhe em</string>
+    <string name="enchanting_animated_realms">Encantando Reinos Animados</string>
+    <string name="wild_wonders">Maravilhas Selvagens</string>
+    <string name="discover">": Descobrir "</string>
+    <string name="captivating_animal_kingdoms">Cativantes Reinos Animais</string>
+    <string name="artistic_essence">Essência Artística</string>
+    <string name="elevate_your">: Eleve seu</string>
+    <string name="device_with_creative_mastery">Dispositivo com domínio criativo</string>
+    <string name="your_image_not_fetched_properly">sua imagem não foi buscada corretamente</string>
+    <string name="set_successfully_on_home_screen">Definido com sucesso na tela inicial</string>
+    <string name="set_successfully_on_lock_screen">Definido com sucesso na tela de bloqueio</string>
+    <string name="set_successfully_on_both">Definido com sucesso em ambos</string>
+    <string name="permission_granted_click_again_to_save_image">Permissão concedida Clique novamente para salvar a imagem</string>
+    <string name="storage_permission_denied">Permissão de armazenamento negada</string>
+    <string name="saved_to_gallery">Salvo na Galeria</string>
+    <string name="enter_your_prompt">insira seu prompt</string>
+
+    <string name="hold_tight_your_masterpiece_is_rendering">Aguente firme, sua obra-prima está sendo renderizada.</string>
+    <string name="loading_the_beauty_just_for_you">Carregando a beleza, só para você.</string>
+    <string name="your_wallpaper_is_in_the_making">Seu papel de parede está sendo feito.</string>
+    <string name="creating_your_visual_delight">Criando seu deleite visual.</string>
+    <string name="sit_back_and_relax_while_we_prepare_your_wallpaper">Sente-se e relaxe enquanto preparamos seu papel de parede.</string>
+    <string name="designing_your_screen_s_new_look">Projetando o novo visual da sua tela.</string>
+    <string name="almost_there_customizing_your_background">Quase lá, personalizando seu plano de fundo.</string>
+    <string name="your_wallpaper_is_on_its_way">Seu papel de parede está a caminho.</string>
+    <string name="crafting_your_unique_backdrop">Criando seu cenário exclusivo.</string>
+</resources>

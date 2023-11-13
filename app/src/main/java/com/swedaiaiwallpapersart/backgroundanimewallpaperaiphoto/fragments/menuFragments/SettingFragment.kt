@@ -24,8 +24,9 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.iosParameters
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSettingBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentSettingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -71,6 +72,7 @@ class SettingFragment : Fragment() {
         binding.privacyPolicyButton.setOnClickListener { openLink("https://swedebras.blogspot.com/2023/09/privacy-policy.html") }
         binding.moreAppButton.setOnClickListener { openLink("https://play.google.com/store/apps/developer?id=Swed+AI")  }
         binding.logOutButton.setOnClickListener {
+            findNavController().navigate(R.id.localizationFragment)
             }
         }
 
@@ -119,7 +121,8 @@ class SettingFragment : Fragment() {
             val myWebLink = Intent(Intent.ACTION_VIEW)
             myWebLink.data = Uri.parse(url)
             startActivity(myWebLink)
-        } else { Toast.makeText(requireContext(), "No Internet", Toast.LENGTH_SHORT).show() }
+        } else { Toast.makeText(requireContext(),
+            getString(R.string.no_internet), Toast.LENGTH_SHORT).show() }
     }
     private fun generateSharingLink(
         deepLink: Uri,

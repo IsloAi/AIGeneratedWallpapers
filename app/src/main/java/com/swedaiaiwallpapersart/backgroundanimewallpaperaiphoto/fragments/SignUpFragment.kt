@@ -16,7 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSignUpBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentSignUpBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FirebaseUtils
 
 class SignUpFragment : Fragment() {

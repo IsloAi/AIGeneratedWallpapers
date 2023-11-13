@@ -12,8 +12,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentViewAllCreationsBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentViewAllCreationsBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.HistoryAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetbackOfID
@@ -96,7 +97,7 @@ class ViewAllCreations : Fragment() {
 
         binding.selectAll.setOnClickListener {
 
-            if (binding.selectAll.text == "Unselect All"){
+            if (binding.selectAll.text == getString(R.string.unselect_all)){
                 binding.selectAll.text =  "Select All"
                 adapter?.unselectAll()
                 binding.deleteCreations.visibility = View.GONE
@@ -173,7 +174,8 @@ class ViewAllCreations : Fragment() {
             }
             requireParentFragment().findNavController().navigate(R.id.myViewCreationFragment,bundle)
         }else{
-            Toast.makeText(requireContext(), "Error please try again", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),
+                getString(R.string.error_please_try_again), Toast.LENGTH_SHORT).show()
         }
     }
 

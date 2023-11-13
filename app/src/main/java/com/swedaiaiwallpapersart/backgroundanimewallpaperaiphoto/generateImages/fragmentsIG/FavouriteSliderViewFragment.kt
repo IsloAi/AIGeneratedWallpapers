@@ -49,8 +49,9 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCreationSliderViewBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.FragmentCreationSliderViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.FavouriteWallpaperSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
@@ -133,7 +134,7 @@ class FavouriteSliderViewFragment : Fragment() {
                 if(bitmap != null){
                     openPopupMenu()
                 }else{
-                    Toast.makeText(requireContext(), "your image not fetched properly", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), resources.getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
                 }
         }
         binding.favouriteButton.setOnClickListener {
@@ -231,7 +232,7 @@ class FavouriteSliderViewFragment : Fragment() {
         buttonHome.setOnClickListener {
             myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
             myHandler.post { if(state){
-                interstitialAdWithToast("Set Successfully on Home Screen", dialog)
+                interstitialAdWithToast(resources.getString(R.string.set_successfully_on_home_screen), dialog)
                 state = false
                 postDelay()
             } }
@@ -243,7 +244,7 @@ class FavouriteSliderViewFragment : Fragment() {
             }
             myHandler.post {
                 if(state){
-                    interstitialAdWithToast("Set Successfully on Lock Screen", dialog)
+                    interstitialAdWithToast(resources.getString(R.string.set_successfully_on_lock_screen), dialog)
                     state = false
                     postDelay()
                 }
@@ -256,7 +257,7 @@ class FavouriteSliderViewFragment : Fragment() {
             }
             myHandler.post {
                 if(state){
-                    interstitialAdWithToast("Set Successfully on Both",dialog)
+                    interstitialAdWithToast(resources.getString(R.string.set_successfully_on_both),dialog)
                     state = false
                     postDelay()
                 }
@@ -301,16 +302,17 @@ class FavouriteSliderViewFragment : Fragment() {
         }
         fos?.use {
             bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, it)
-            Toast.makeText(requireContext() , "Saved to Gallery" , Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext() ,
+                getString(R.string.saved_to_gallery) , Toast.LENGTH_SHORT).show()
         }
     }
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == STORAGE_PERMISSION_CODE) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(requireContext(), "Permission Granted Click again to save image", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), resources.getString(R.string.permission_granted_click_again_to_save_image), Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(requireContext(), "Storage Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), resources.getString(R.string.storage_permission_denied), Toast.LENGTH_SHORT).show()
             }
         }
     }

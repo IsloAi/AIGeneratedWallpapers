@@ -13,7 +13,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.CatContainerBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+.CatContainerBinding
 
 class CategorySliderAdapter(
     private val arrayList: ArrayList<CatNameResponse>,
