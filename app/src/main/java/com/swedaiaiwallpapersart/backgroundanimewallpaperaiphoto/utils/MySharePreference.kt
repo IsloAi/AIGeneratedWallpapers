@@ -19,6 +19,20 @@ class MySharePreference {
     }
 
 
+        fun setLanguage(context: Context,value:String){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("language",value)
+            myEdit.apply()
+        }
+
+
+
+        fun getLanguage(context: Context):String?{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getString("language","")
+        }
+
         fun setGemsValue(context: Context,value:Int){
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
@@ -53,6 +67,18 @@ class MySharePreference {
         fun getFeedbackValue(context: Context):Boolean{
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             return sp.getBoolean("feedback",false)
+        }
+
+        fun setOnboarding(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("onboard",value)
+            myEdit.apply()
+        }
+
+        fun getOnboarding(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("onboard",false)
         }
 
         fun setUserIsSaved(context: Context,value:Boolean){

@@ -280,17 +280,19 @@ class GenerateImageFragment : Fragment() {
         }
     }
     var textIndex = 0
-    val texts = listOf(
-        getString(R.string.hold_tight_your_masterpiece_is_rendering),
-        getString(R.string.loading_the_beauty_just_for_you),
-        getString(R.string.your_wallpaper_is_in_the_making),
-        getString(R.string.creating_your_visual_delight),
-        getString(R.string.sit_back_and_relax_while_we_prepare_your_wallpaper),
-        getString(R.string.designing_your_screen_s_new_look),
-        getString(R.string.almost_there_customizing_your_background),
-        getString(R.string.your_wallpaper_is_on_its_way),
-        getString(R.string.crafting_your_unique_backdrop)
-    )
+    fun getLoadingTexts(): List<String> {
+        return listOf(
+            binding.root.context.getString(R.string.hold_tight_your_masterpiece_is_rendering),
+            binding.root.context.getString(R.string.loading_the_beauty_just_for_you),
+            binding.root.context.getString(R.string.your_wallpaper_is_in_the_making),
+            binding.root.context.getString(R.string.creating_your_visual_delight),
+            binding.root.context.getString(R.string.sit_back_and_relax_while_we_prepare_your_wallpaper),
+            binding.root.context.getString(R.string.designing_your_screen_s_new_look),
+            binding.root.context.getString(R.string.almost_there_customizing_your_background),
+            binding.root.context.getString(R.string.your_wallpaper_is_on_its_way),
+            binding.root.context.getString(R.string.crafting_your_unique_backdrop)
+        )
+    }
     private fun getUserIdDialog() {
         dialog = Dialog(requireContext())
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -317,8 +319,8 @@ class GenerateImageFragment : Fragment() {
         )
 
         adsView?.loadAd(requireActivity(),
-            "home_native",
-            "home_native",
+            "generate_renderdialog_bottom",
+            "generate_renderdialog_bottom",
             object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()
@@ -360,6 +362,7 @@ class GenerateImageFragment : Fragment() {
     }
 
     fun updateTextAndAnimate(animatedText:TextView,animation: Animation) {
+        val texts = getLoadingTexts()
         animatedText?.text = texts[textIndex]
         animatedText?.startAnimation(animation)
         textIndex = (textIndex + 1) % texts.size

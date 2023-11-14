@@ -129,8 +129,8 @@ class WallpaperViewFragment : Fragment() {
             .loadBannerAds(
                 requireActivity(),
                 binding.adsWidget as? ViewGroup,
-                "home_banner",
-                " home_banner_tracking", object : CustomSDKAdsListenerAdapter() {
+                "viewlistwallscr_bottom",
+                " viewlistwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
                     override fun onAdsLoaded() {
                         super.onAdsLoaded()
                         Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
@@ -365,8 +365,8 @@ class WallpaperViewFragment : Fragment() {
 
             SDKBaseController.getInstance().showInterstitialAds(
                 requireActivity(),
-                "home",
-                "home_screen_tracking",
+                "viewlistwallscr_setdilog_set_button",
+                "viewlistwallscr_setdilog_set_button",
                 showLoading = true,
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
@@ -391,8 +391,8 @@ class WallpaperViewFragment : Fragment() {
 
             SDKBaseController.getInstance().showInterstitialAds(
                 requireActivity(),
-                "home",
-                "home_screen_tracking",
+                "viewlistwallscr_setdilog_set_button",
+                "viewlistwallscr_setdilog_set_button",
                 showLoading = true,
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
@@ -422,8 +422,8 @@ class WallpaperViewFragment : Fragment() {
 
             SDKBaseController.getInstance().showInterstitialAds(
                 requireActivity(),
-                "home",
-                "home_screen_tracking",
+                "viewlistwallscr_setdilog_set_button",
+                "viewlistwallscr_setdilog_set_button",
                 showLoading = true,
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {

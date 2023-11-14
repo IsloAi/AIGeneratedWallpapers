@@ -38,6 +38,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Counter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ResetCounterInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -50,6 +51,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 
@@ -66,6 +68,17 @@ class MainActivity : AppCompatActivity(){
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val lan = MySharePreference.getLanguage(this)
+
+        val context = LocaleManager.setLocale(this, lan!!)
+        val resources = context.resources
+        val newLocale = Locale(lan!!)
+        val resources1 = getResources()
+        val configuration = resources1.configuration
+        configuration.setLocale(newLocale)
+        configuration.setLayoutDirection(Locale(lan!!));
+        resources1.updateConfiguration(configuration, resources.displayMetrics)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

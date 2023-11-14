@@ -47,7 +47,7 @@ class WallpaperApiSliderAdapter(
     override fun getItemCount(): Int {
         return arrayList.size
     }
-    inner class  ViewHolder(val binding:SlideItemContainerBinding ) : RecyclerView.ViewHolder(binding.root) {
+    inner class  ViewHolder(val binding: SlideItemContainerBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(arrayList: ArrayList<CatResponse>, position: Int) {
             val model = arrayList[position]
             dataSet(model,binding.imageSlide,binding.progressBar,binding.gemsTextView,binding.blurView,adapterPosition)

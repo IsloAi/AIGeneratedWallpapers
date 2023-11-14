@@ -59,13 +59,12 @@
     <string name="must_required_your_subject">must required your subject</string>
     <string name="anime_odyssey">Anime Odyssey</string>
     <string name="dive_into">: Dive into</string>
-    <string name="enchanting_animated_realms">Enchanting Animated Realms</string>
+    <string name="enchanting_animated_realms">Dive into Enchanting Animated Realms</string>
     <string name="wild_wonders">Wild Wonders</string>
-    <string name="discover">": Discover "</string>
-    <string name="captivating_animal_kingdoms">Captivating Animal Kingdoms</string>
+    <string name="captivating_animal_kingdoms">Discover Captivating Animal Kingdoms</string>
     <string name="artistic_essence">Artistic Essence</string>
     <string name="elevate_your">: Elevate Your</string>
-    <string name="device_with_creative_mastery">Device with Creative Mastery</string>
+    <string name="device_with_creative_mastery">Elevate Your Device with Creative Mastery</string>
     <string name="your_image_not_fetched_properly">your image not fetched properly</string>
     <string name="set_successfully_on_home_screen">Set Successfully on Home Screen</string>
     <string name="set_successfully_on_lock_screen">Set Successfully on Lock Screen</string>
@@ -83,5 +82,11 @@
     <string name="almost_there_customizing_your_background">Almost there, customizing your background.</string>
     <string name="your_wallpaper_is_on_its_way">Your wallpaper is on its way.</string>
     <string name="crafting_your_unique_backdrop">Crafting your unique backdrop.</string>
+    <string name="skip">Skip</string>
+    <string name="re_generate">Re-generate</string>
+    <string name="new_generation">New Generation</string>
+    <string name="navigate_back">Navigate Back</string>
+    <string name="retry">Retry</string>
+    <string name="error_loading_please_check_your_internet">Error Loading, Please check your Internet</string>
 
 </resources>

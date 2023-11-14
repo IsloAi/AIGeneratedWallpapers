@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListener
@@ -24,10 +25,13 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.dat
 .FragmentSplashOnBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .ImageGenerationDialogBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SplashOnFragment : Fragment() {
 
-    private var _binding:FragmentSplashOnBinding ?= null
+    private var _binding: FragmentSplashOnBinding?= null
     private val binding get() = _binding!!
 
     private var currentPosition = 0
@@ -46,11 +50,12 @@ class SplashOnFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val progress = ProgressDialog(requireContext())
-        progress.setMessage("Loading Ads")
-        progress.setCancelable(false)
-        progress.show()
+//        val progress = ProgressDialog(requireContext())
+//        progress.setMessage("Loading Ads")
+//        progress.setCancelable(false)
+//        progress.show()
 
+        val onBoard = MySharePreference.getOnboarding(requireContext())
 //        val videoPath = "android.resource://" + requireContext().packageName + "/" + R.raw.splash_animation
 //        binding.splashAnim.setMediaController(null)
 //
@@ -67,23 +72,39 @@ class SplashOnFragment : Fragment() {
 //            mp.start()
 //        }
 
+//        lifecycleScope.launch {
+//            delay(6000)
+//
+//
+//        }
+
 
         SDKBaseController.getInstance().showFirstOpenAppAds(requireActivity(),12000,object:CommonAdsListenerAdapter(){
             override fun onAdReady(priority: Int) {
-                progress.dismiss()
+//                progress.dismiss()
             }
 
             override fun onAdsDismiss() {
+                if (onBoard){
+                    findNavController().navigate(R.id.mainFragment)
+                }else{
+                    findNavController().navigate(R.id.onBoardingFragment)
+                }
 
             }
 
             override fun onAdsShowFail(errorCode: Int) {
                 Log.e("TAG", "onAdsShowFail: $errorCode")
-                progress.dismiss()
+                if (onBoard){
+                    findNavController().navigate(R.id.mainFragment)
+                }else{
+                    findNavController().navigate(R.id.onBoardingFragment)
+                }
+//                progress.dismiss()
             }
 
             override fun onAdsShowed(priority: Int) {
-                progress.dismiss()
+//                progress.dismiss()
 
             }
 

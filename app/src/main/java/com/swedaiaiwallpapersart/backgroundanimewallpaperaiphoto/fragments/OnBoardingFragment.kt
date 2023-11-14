@@ -15,10 +15,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.ActivityMainBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .FragmentOnBoardingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class OnBoardingFragment : Fragment() {
 
@@ -31,6 +35,15 @@ class OnBoardingFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val lan = MySharePreference.getLanguage(requireContext())
+        val context = LocaleManager.setLocale(requireContext(), lan!!)
+        val resources = context.resources
+        val newLocale = Locale(lan!!)
+        val resources1 = getResources()
+        val configuration = resources1.configuration
+        configuration.setLocale(newLocale)
+        configuration.setLayoutDirection(Locale(lan!!));
+        resources1.updateConfiguration(configuration, resources.displayMetrics)
         _binding = FragmentOnBoardingBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -79,26 +92,27 @@ class OnBoardingFragment : Fragment() {
                 setCurrentIndicator(position)
                 when (position) {
                     0 -> {
-                        binding.headTxt.text = getString(R.string.anime_odyssey)
-                        binding.onbTxt1.text = getString(R.string.dive_into)
-                        binding.onbTxt2.text = getString(R.string.enchanting_animated_realms)
 
+                        binding.onbTxt1.text = getString(R.string.enchanting_animated_realms)
                     }
                     1 -> {
-                        binding.headTxt.text = getString(R.string.wild_wonders)
-                        binding.onbTxt1.text = getString(R.string.discover)
-                        binding.onbTxt2.text = getString(R.string.captivating_animal_kingdoms)
+                        binding.onbTxt1.text = getString(R.string.captivating_animal_kingdoms)
                     }
                     2 -> {
-                        binding.headTxt.text = getString(R.string.artistic_essence)
-                        binding.onbTxt1.text = getString(R.string.elevate_your)
-                        binding.onbTxt2.text = getString(R.string.device_with_creative_mastery)
+                        binding.skipBtn.visibility = View.GONE
+                        binding.onbTxt1.text = getString(R.string.device_with_creative_mastery)
                     }
                 }
             }
         })
 
+        binding.skipBtn.setOnClickListener {
+            MySharePreference.setOnboarding(requireContext(),true)
+            findNavController().navigate(R.id.mainFragment)
+        }
+
         binding.nextBtn.setOnClickListener {
+            MySharePreference.setOnboarding(requireContext(),true)
             val currentItem = binding.onboardingViewPager.currentItem
             val lastItemIndex = (binding.onboardingViewPager.adapter?.itemCount ?: 0) - 1
 

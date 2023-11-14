@@ -65,6 +65,15 @@ class HomeFragment : Fragment(){
         SDKBaseController.getInstance(). loadInterstitialAds(activity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
 
         onCreatingCalling()
+        setEvents()
+        observeNetworkStatus()
+    }
+
+
+    private fun setEvents(){
+        binding.retryBtn.setOnClickListener {
+            loadData()
+        }
     }
     private fun onCreatingCalling(){
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
@@ -106,6 +115,24 @@ class HomeFragment : Fragment(){
            isLoading = false
     }
 
+    fun observeNetworkStatus(){
+        myViewModel.networkRequestStatus.observe(viewLifecycleOwner) { isRequestInProgress ->
+            // Update UI based on the network request status
+            if (isRequestInProgress) {
+                // Show loading state, hide retry button
+                binding.progressBar.visibility = View.VISIBLE
+                binding.retryBtn.visibility = View.GONE
+            } else {
+                // Hide loading state, show retry button if there was an error
+                if (myViewModel.wallpaperData.value == null) {
+                    binding.retryBtn.visibility = View.VISIBLE
+                } else {
+                    binding.retryBtn.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
         myViewModel = ViewModelProvider(this)[MyHomeViewModel::class.java]
@@ -117,8 +144,12 @@ class HomeFragment : Fragment(){
                 Log.e("TAG", "loadData: "+catResponses )
                 if (view != null) {
                     // If the view is available, update the UI
+                    binding.retryBtn.visibility = View.GONE
                     updateUIWithFetchedData(catResponses)
                 }
+            }else{
+                binding.retryBtn.visibility = View.VISIBLE
+                Log.e("TAG", "loadData: "+catResponses )
             }
         }
         myViewModel.fetchWallpapers(requireContext(), binding.progressBar,true)
@@ -130,8 +161,8 @@ class HomeFragment : Fragment(){
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
-                    "home",
-                    "home_screen_tracking",
+                    "mainscr_trending_tab_click_item",
+                    "mainscr_trending_tab_click_item",
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {

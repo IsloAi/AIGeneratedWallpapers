@@ -66,7 +66,7 @@ import java.io.OutputStream
 import java.util.concurrent.Executors
 
 class CreationSliderViewFragment : Fragment() {
-    private lateinit var binding:FragmentCreationSliderViewBinding
+    private lateinit var binding: FragmentCreationSliderViewBinding
     private var myContext:Context? = null
     private var arrayList = ArrayList<String>()
     private var position :Int =0

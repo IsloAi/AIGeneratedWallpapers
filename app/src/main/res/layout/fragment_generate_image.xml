@@ -251,15 +251,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:id="@+id/generate_top"
                 >
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/reward_item_magic"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:layout_marginStart="@dimen/_10sdp"
-                    />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -269,7 +261,6 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/_18sdp"
                     android:textStyle="bold"
-                    android:layout_marginStart="@dimen/_5sdp"
                     />
 
             </LinearLayout>
@@ -281,32 +272,14 @@
                 android:text="@string/watch_an_ad"
                 android:fontFamily="@font/raleway_medium"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_12sdp"
                 android:textStyle="normal"
-                android:layout_marginStart="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/generate_top"
                 app:layout_constraintStart_toStartOf="@id/generate_top"
                 app:layout_constraintEnd_toEndOf="@id/generate_top"
                 android:id="@+id/watch_txt"
                 />
-
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:src="@drawable/rewarded_item"
-                android:layout_marginEnd="@dimen/_10sdp"
-                />
-
-
-
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

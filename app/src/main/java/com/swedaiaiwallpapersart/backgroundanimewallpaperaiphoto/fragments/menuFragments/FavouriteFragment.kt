@@ -156,8 +156,8 @@ class FavouriteFragment : Fragment() {
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
-                    "home",
-                    "home_screen_tracking",
+                    "mainscr_favorite_tab_click_item",
+                    "mainscr_favorite_tab_click_item",
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {

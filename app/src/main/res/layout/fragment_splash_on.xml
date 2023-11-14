@@ -43,12 +43,24 @@
         android:fontFamily="@font/raleway_medium"
         android:textSize="@dimen/_14sdp"
         android:layout_marginBottom="@dimen/_20sdp"
-        app:layout_constraintBottom_toTopOf="@id/getStarted"
+        app:layout_constraintBottom_toTopOf="@id/splash_anim_bottom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:id="@+id/tagline"
         />
 
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:lottie_rawRes="@raw/splash_new"
+        android:id="@+id/splash_anim_bottom"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        />
 
     
     <Button
@@ -60,6 +72,7 @@
         android:layout_marginBottom="@dimen/_15sdp"
         android:layout_marginHorizontal="@dimen/_30sdp"
         android:textColor="@color/black"
+        android:visibility="gone"
         android:textSize="@dimen/_14sdp"
         android:fontFamily="@font/raleway_medium"
         android:textAllCaps="false"

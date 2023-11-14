@@ -31,6 +31,9 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.dat
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import java.util.Locale
 
 
 class MainFragment : Fragment(){
@@ -67,6 +70,15 @@ class MainFragment : Fragment(){
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
+        val lan = MySharePreference.getLanguage(requireContext())
+        val context = LocaleManager.setLocale(requireContext(), lan!!)
+        val resources = context.resources
+        val newLocale = Locale(lan!!)
+        val resources1 = getResources()
+        val configuration = resources1.configuration
+        configuration.setLocale(newLocale)
+        configuration.setLayoutDirection(Locale(lan!!));
+        resources1.updateConfiguration(configuration, resources.displayMetrics)
       _binding = FragmentMainBinding.inflate(inflater, container, false)
 
        return binding.root
@@ -127,29 +139,29 @@ class MainFragment : Fragment(){
             setFragment(click)
             iconAndTitleSetting(click)
             homeButton.setOnClickListener {
-                if (click !=  1){
-                    click = 1
+                if (click !=  2){
+                    click = 2
                     setFragment(click)
                     iconAndTitleSetting(click)
                 }
             }
             categoryButton.setOnClickListener {
-                if (click != 2) {
-                    click = 2
-                    iconAndTitleSetting(click)
-                    setFragment(click)
-                }
-            }
-            favouriteButton.setOnClickListener {
                 if (click != 3) {
                     click = 3
                     iconAndTitleSetting(click)
                     setFragment(click)
                 }
             }
-            generateImageButton.setOnClickListener{
+            favouriteButton.setOnClickListener {
                 if (click != 4) {
                     click = 4
+                    iconAndTitleSetting(click)
+                    setFragment(click)
+                }
+            }
+            generateImageButton.setOnClickListener{
+                if (click != 1) {
+                    click = 1
                     iconAndTitleSetting(click)
                     setFragment(click)
                 }
@@ -172,24 +184,32 @@ class MainFragment : Fragment(){
     private fun iconAndTitleSetting(whichClicked: Int){
       when(whichClicked){
           1->{
-              iconSelect(homeIcon,home_sel,homeTitle)
-              iconUnselected(categoryIcon,category_unsel,favouriteIcon,favourit_unsel,settingIcon,setting_unsel,generateImageIcon,creation_unsel)
-              unselectedColor(categoryTitle,favouriteTitle,settingTitle,generateImageTitle)
-          }
-          2->{
-              iconSelect(categoryIcon,category_sel,categoryTitle)
-              iconUnselected(homeIcon,home_unsel,favouriteIcon,favourit_unsel,settingIcon,setting_unsel,generateImageIcon,creation_unsel)
-              unselectedColor(homeTitle,favouriteTitle,settingTitle,generateImageTitle)
-          }
-          3->{
-              iconSelect(favouriteIcon,favourit_sel,favouriteTitle)
-              iconUnselected(homeIcon,home_unsel,categoryIcon,category_unsel,settingIcon,setting_unsel,generateImageIcon,creation_unsel)
-              unselectedColor(homeTitle,categoryTitle,settingTitle,generateImageTitle)
-          }
-          4->{
+
               iconSelect(generateImageIcon,creation_sel,generateImageTitle)
               iconUnselected(homeIcon,home_unsel,categoryIcon,category_unsel,favouriteIcon,favourit_unsel,settingIcon,setting_unsel,)
               unselectedColor(homeTitle,categoryTitle,favouriteTitle,settingTitle)
+
+          }
+          2->{
+
+              iconSelect(homeIcon,home_sel,homeTitle)
+              iconUnselected(categoryIcon,category_unsel,favouriteIcon,favourit_unsel,settingIcon,setting_unsel,generateImageIcon,creation_unsel)
+              unselectedColor(categoryTitle,favouriteTitle,settingTitle,generateImageTitle)
+
+
+          }
+          3->{
+
+              iconSelect(categoryIcon,category_sel,categoryTitle)
+              iconUnselected(homeIcon,home_unsel,favouriteIcon,favourit_unsel,settingIcon,setting_unsel,generateImageIcon,creation_unsel)
+              unselectedColor(homeTitle,favouriteTitle,settingTitle,generateImageTitle)
+
+
+          }
+          4->{
+              iconSelect(favouriteIcon,favourit_sel,favouriteTitle)
+              iconUnselected(homeIcon,home_unsel,categoryIcon,category_unsel,settingIcon,setting_unsel,generateImageIcon,creation_unsel)
+              unselectedColor(homeTitle,categoryTitle,settingTitle,generateImageTitle)
           }
           5->{
               iconSelect(settingIcon,setting_sel,settingTitle)
@@ -201,12 +221,12 @@ class MainFragment : Fragment(){
     private fun setFragment(click: Int){
         val transaction = childFragmentManager.beginTransaction()
         when(click){
-            1-> transaction.replace(R.id.fragmentContainer, HomeFragment())
-            2-> transaction.replace(R.id.fragmentContainer, CategoryFragment())
-            3-> transaction.replace(R.id.fragmentContainer, FavouriteFragment())
+            1->  transaction.replace(R.id.fragmentContainer, GenerateImageFragment())
+            2-> transaction.replace(R.id.fragmentContainer, HomeFragment())
+            3-> transaction.replace(R.id.fragmentContainer, CategoryFragment())
             4->{
                 //Toast.makeText(requireContext(), "coming soon", Toast.LENGTH_SHORT).show()
-              transaction.replace(R.id.fragmentContainer, GenerateImageFragment())
+                transaction.replace(R.id.fragmentContainer, FavouriteFragment())
             }
             5-> transaction.replace(R.id.fragmentContainer, SettingFragment())
         }
