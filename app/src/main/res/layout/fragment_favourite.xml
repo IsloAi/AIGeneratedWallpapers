@@ -157,6 +157,167 @@
                 />
         </RelativeLayout>
 
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/switchLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:id="@+id/empty_support"
+            >
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_favorites"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/_50sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/no_fav_img"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon"
+                android:textColor="#BCBCBC"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_img"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/raleway_medium"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:id="@+id/no_fav_txt"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintStart_toStartOf="@id/no_fav_img"
+                app:layout_constraintEnd_toEndOf="@id/no_fav_img"
+                android:background="@drawable/no_fav_btn"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_txt"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:id="@+id/addToFav"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_favorite"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/raleway_medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="@dimen/_25sdp"
+                    android:id="@+id/add_fav_txt"
+                    android:textSize="@dimen/_15sdp"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/heart_red"
+                    app:layout_constraintStart_toEndOf="@id/add_fav_txt"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/switchLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_7sdp"
+            android:id="@+id/empty_supportAI"
+            >
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_favorites"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="@dimen/_50sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:id="@+id/no_fav_imgAI"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon"
+                android:textColor="#BCBCBC"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_imgAI"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/raleway_medium"
+                android:textSize="@dimen/_12sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:id="@+id/no_fav_txtAI"
+                />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="@dimen/_40sdp"
+                app:layout_constraintStart_toStartOf="@id/no_fav_imgAI"
+                app:layout_constraintEnd_toEndOf="@id/no_fav_imgAI"
+                android:background="@drawable/no_fav_btn"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_txtAI"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:id="@+id/addToFavAI"
+                app:layout_constraintBottom_toBottomOf="parent"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_favorite"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/raleway_medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginEnd="@dimen/_25sdp"
+                    android:id="@+id/add_fav_txtAI"
+                    android:textSize="@dimen/_15sdp"
+                    />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/heart_red"
+                    app:layout_constraintStart_toEndOf="@id/add_fav_txtAI"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="@dimen/_10sdp"
+                    />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/error_message"
             android:layout_width="0dp"

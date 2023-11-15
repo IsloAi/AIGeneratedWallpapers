@@ -2,6 +2,7 @@
     <string name="app_name">AI Generated Wallpapers</string>
 
     <string name="hello_blank_fragment">Hello Blank Fragment</string>
+    <string name="default_notification_channel_id">Job progress</string>
     <string name="default_web_client_id">AIzaSyAkGtIzLCvBZg9FHrMw_DVqblkNBOc2AFI</string>
     <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit..!</string>
     <string name="categories">Categories</string>
@@ -88,5 +89,7 @@
     <string name="navigate_back">Navigate Back</string>
     <string name="retry">Retry</string>
     <string name="error_loading_please_check_your_internet">Error Loading, Please check your Internet</string>
+    <string name="add_favorite">Add Favorite</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Zero favorites? Let\'s fix that! \nStart by tapping the heart icon ♥️</string>
 
 </resources>

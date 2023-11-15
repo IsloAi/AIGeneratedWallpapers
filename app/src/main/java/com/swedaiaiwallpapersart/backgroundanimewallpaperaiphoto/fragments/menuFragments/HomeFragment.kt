@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
@@ -88,7 +89,7 @@ class HomeFragment : Fragment(){
         binding.progressBar.visibility = VISIBLE
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-        binding.recyclerviewAll.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
         loadData()
 //        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener(){
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

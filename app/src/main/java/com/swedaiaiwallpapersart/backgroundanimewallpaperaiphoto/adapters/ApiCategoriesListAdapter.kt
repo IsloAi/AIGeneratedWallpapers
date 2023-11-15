@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -16,6 +17,8 @@ import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.airbnb.lottie.LottieAnimationView
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -23,6 +26,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.StaggeredNativeBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.StaggeredNativeLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .WallpaperRow2Binding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
@@ -61,6 +66,11 @@ class ApiCategoriesListAdapter(
          var context:Context? = null
         private val VIEW_TYPE_CONTAINER1 = 0
         private val VIEW_TYPE_CONTAINER2 = 1
+
+    private val VIEW_TYPE_NATIVE_AD = 2
+
+    // Adjust this threshold value as needed
+    private val NATIVE_AD_INTERVAL = 10
        private val myDialogs = MyDialogs()
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatResponse,holder: ViewHolder) {
@@ -72,6 +82,12 @@ class ApiCategoriesListAdapter(
         fun bind(model: CatResponse,holder: ViewHolder) {
             setAllData(model,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
                 ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder) }
+    }
+
+    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(holder: ViewHolder){
+            loadad(holder,binding)
+        }
     }
     override fun getItemCount() = arrayList.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -85,6 +101,11 @@ class ApiCategoriesListAdapter(
             VIEW_TYPE_CONTAINER2 -> {
                 val binding = WallpaperRow2Binding.inflate(inflater, parent, false)
                 ViewHolderContainer2(binding)
+            }
+            VIEW_TYPE_NATIVE_AD -> {
+                val binding = StaggeredNativeLayoutBinding.inflate(inflater,parent,false)
+                ViewHolderContainer3(binding)
+
             }
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
@@ -101,11 +122,23 @@ class ApiCategoriesListAdapter(
                 val viewHolderContainer2 = holder as ViewHolderContainer2
                 viewHolderContainer2.bind(model,holder)
             }
+
+            VIEW_TYPE_NATIVE_AD -> {
+                val viewHolderContainer3 = holder as ViewHolderContainer3
+                viewHolderContainer3.bind(viewHolderContainer3)
+            }
         }
     }
     override fun getItemViewType(position: Int): Int {
         // Return the appropriate view type based on the position
-       return if (position % 4 < 1) VIEW_TYPE_CONTAINER1 else VIEW_TYPE_CONTAINER2
+        return if (position % (NATIVE_AD_INTERVAL + 1) == 0) {
+            // Position is a multiple of NATIVE_AD_INTERVAL, so it's a native ad
+            VIEW_TYPE_NATIVE_AD
+        } else if (position % 4 < 1) {
+            VIEW_TYPE_CONTAINER1
+        } else {
+            VIEW_TYPE_CONTAINER2
+        }
     }
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, gemsView:TextView, likes:TextView, favouriteButton: ImageView
@@ -162,9 +195,9 @@ class ApiCategoriesListAdapter(
                         positionCallback.getPosition(position)
                     } else {
                         if (whichClicked == 1) {
-                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!)
+                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!,myActivity)
                         } else {
-                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView)
+                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView,myActivity)
                         }
                     }
                 }
@@ -187,6 +220,37 @@ class ApiCategoriesListAdapter(
                 addFavourite(context!!,model,favouriteButton,likes)
 
         }
+    }
+
+    fun loadad(holder: ViewHolder,binding: StaggeredNativeLayoutBinding){
+        val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
+            R.layout.staggered_native,
+            null, false
+        ) as? IkmWidgetAdLayout
+        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+        binding.adsView.setCustomNativeAdLayout(
+            R.layout.shimmer_loading_native,
+            adLayout!!
+        )
+        binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
+            object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                    binding.adsView.visibility = View.GONE
+                }
+
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                }
+            }
+        )
     }
     @SuppressLint("SuspiciousIndentation")
     private fun addFavourite(

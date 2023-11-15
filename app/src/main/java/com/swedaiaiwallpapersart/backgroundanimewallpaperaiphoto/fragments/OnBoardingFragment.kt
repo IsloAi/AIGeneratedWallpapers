@@ -26,7 +26,7 @@ import java.util.Locale
 
 class OnBoardingFragment : Fragment() {
 
-    private var _binding:FragmentOnBoardingBinding ?= null
+    private var _binding: FragmentOnBoardingBinding?= null
     private val binding get() = _binding!!
 
     lateinit var welcomeAdapter: OnboardingAdapter
@@ -118,6 +118,36 @@ class OnBoardingFragment : Fragment() {
 
             if (currentItem < lastItemIndex) {
                 // Move to the next item
+                val adLayout = LayoutInflater.from(activity).inflate(
+                    R.layout.layout_custom_admob,
+                    null, false
+                ) as? IkmWidgetAdLayout
+                adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+                adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+                adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+                adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+                adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+                binding.adsView.setCustomNativeAdLayout(
+                    R.layout.shimmer_loading_native,
+                    adLayout!!
+                )
+
+                binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+                    object : CustomSDKAdsListenerAdapter() {
+                        override fun onAdsLoadFail() {
+                            super.onAdsLoadFail()
+                            Log.e("TAG", "onAdsLoadFail: native failded " )
+                            binding.adsView.visibility = View.GONE
+                        }
+
+                        override fun onAdsLoaded() {
+                            super.onAdsLoaded()
+                            Log.e("TAG", "onAdsLoaded: native loaded" )
+                        }
+                    }
+                )
+
                 binding.onboardingViewPager.setCurrentItem(currentItem + 1, true)
             } else {
                 findNavController().navigate(R.id.mainFragment)

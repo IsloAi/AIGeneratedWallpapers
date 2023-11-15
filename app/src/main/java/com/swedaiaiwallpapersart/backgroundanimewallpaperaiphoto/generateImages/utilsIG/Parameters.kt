@@ -29,8 +29,7 @@ class Parameters {
         val self_attention = "yes"
         val steps = "21"
         val strength = 1.0
-        val token =
-            "cB5jyQ5YTOm44wannZLfd-:APA91bEUYMl9IYAg0Xi5gVBzn9Mdji_mdMppIFTaheCQ2NhDaLMD8iTF_Gduwfz7BckTJGR-BhMTTZA9sAwkMl7OwobWoKGiFU0DC-wkJJdk4HpNutWd_c3KFrZLeIvgJL0JTZ11KjW0"
+        val token = ""
         val type = "a"
         val upscale = "no"
         val webhook = "https://edecator.com/aiApp/webhook.php"

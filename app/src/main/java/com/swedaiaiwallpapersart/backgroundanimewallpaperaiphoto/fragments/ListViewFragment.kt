@@ -112,8 +112,8 @@ class ListViewFragment : Fragment() {
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
-                    "home",
-                    "home_screen_tracking",
+                    "categoryscr_fantasy_click_item",
+                    "categoryscr_fantasy_click_item",
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {

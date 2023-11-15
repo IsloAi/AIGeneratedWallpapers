@@ -18,8 +18,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 class MyFirebaseMessageReceiver : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.d("tracingToken", "Refreshed token: $token")
+        FirebaseUtils.FIREBASE_TOKEN = token
     }
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        Log.e("tracingToken", "onMessageReceived: $remoteMessage")
         if (remoteMessage.notification != null) {
             showNotification(
                 remoteMessage.notification?.title,

@@ -33,6 +33,18 @@ class MySharePreference {
             return sp.getString("language","")
         }
 
+
+        fun setLanguageposition(context: Context,value:Int){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putInt("position",value)
+            myEdit.apply()
+        }
+
+        fun getLanguageposition(context: Context):Int?{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getInt("position",0)
+        }
         fun setGemsValue(context: Context,value:Int){
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()

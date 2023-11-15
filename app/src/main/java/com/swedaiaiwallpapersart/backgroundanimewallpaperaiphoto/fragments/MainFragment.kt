@@ -218,6 +218,18 @@ class MainFragment : Fragment(){
           }
       }
     }
+
+    fun navigateToYourDestination(pos:Int) {
+        click = pos
+        iconAndTitleSetting(click)
+        setFragment(click)
+        // If you want to perform a click on the categoryButton programmatically
+        if (pos == 1){
+            generateImageButton.performClick()
+        }else{
+            homeButton.performClick()
+        }
+    }
     private fun setFragment(click: Int){
         val transaction = childFragmentManager.beginTransaction()
         when(click){

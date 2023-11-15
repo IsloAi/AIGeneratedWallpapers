@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
+import com.example.hdwallpaper.Fragments.MainFragment
 
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFavouriteViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -33,6 +34,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.MyCreationFavAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetFavouriteImagePath
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
@@ -44,6 +46,8 @@ class FavouriteFragment : Fragment() {
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private lateinit var myActivity : MainActivity
     private lateinit var roomViewModel: RoomViewModel
+
+    private var cachedIGList: ArrayList<FavouriteListIGEntity>? = ArrayList()
     private var isLoadedData = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -95,10 +99,16 @@ class FavouriteFragment : Fragment() {
         binding.aiRecyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         binding.selfCreationRecyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
 
+
+
+        loadData()
+        loadDataFromRoomDB()
         if(MySharePreference.getFavouriteSaveState(requireContext())==1){
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
             selector(binding.aiWallpaper,binding.selfCreation)
+            binding.emptySupportAI.visibility = View.GONE
+
             if(!isLoadedData){
                 binding.progressBar.visibility = VISIBLE
             }
@@ -108,27 +118,45 @@ class FavouriteFragment : Fragment() {
             binding.aiRecyclerView.visibility =  INVISIBLE
             selector(binding.selfCreation,binding.aiWallpaper)
             binding.progressBar.visibility = INVISIBLE
+            binding.emptySupport.visibility = View.GONE
         }
 
         binding.aiWallpaper.setOnClickListener {
             selector(binding.aiWallpaper,binding.selfCreation)
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
+            binding.emptySupportAI.visibility = View.GONE
+            if (cachedCatResponses?.isEmpty() == true){
+                binding.emptySupport.visibility = View.VISIBLE
+            }
            MySharePreference.setFavouriteSaveState(requireContext(),1)
             if(!isLoadedData){
                 binding.progressBar.visibility = VISIBLE
             }
+
 
         }
         binding.selfCreation.setOnClickListener {
             selector(binding.selfCreation,binding.aiWallpaper)
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
+            binding.emptySupport.visibility = View.GONE
+            if (cachedIGList?.isEmpty() == true){
+                binding.emptySupportAI.visibility = View.VISIBLE
+            }
             MySharePreference.setFavouriteSaveState(requireContext(),2)
             binding.progressBar.visibility = INVISIBLE
         }
-        loadData()
-        loadDataFromRoomDB()
+
+
+        binding.addToFav.setOnClickListener {
+            (requireParentFragment() as MainFragment).navigateToYourDestination(2)
+        }
+
+        binding.addToFavAI.setOnClickListener {
+            (requireParentFragment() as MainFragment).navigateToYourDestination(1)
+        }
+
     }
     private fun selector(selector: TextView,unSelector:TextView){
         selector.setBackgroundResource(R.drawable.text_selector)
@@ -140,11 +168,19 @@ class FavouriteFragment : Fragment() {
         // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
+
+                binding.emptySupport.visibility = View.GONE
                 isLoadedData = true
                 cachedCatResponses = catResponses as ArrayList
                 if (view != null) {
                     updateUIWithFetchedData(catResponses)
                 }
+            }else{
+                if (MySharePreference.getFavouriteSaveState(requireContext())==1){
+                    isLoadedData = true
+                    binding.emptySupport.visibility = View.VISIBLE
+                }
+
             }
         }
         myViewModel.fetchWallpapers(requireContext(), MySharePreference.getDeviceID(requireContext())!!,binding.progressBar)
@@ -203,6 +239,10 @@ class FavouriteFragment : Fragment() {
         roomViewModel.myFavouriteList.observe(viewLifecycleOwner){
             Log.d("tracingFavouriteList", "loadDataFromRoomDB: $it")
             if(it.isNotEmpty()){
+
+                cachedIGList?.addAll(it)
+
+                binding.emptySupportAI.visibility = View.GONE
                 val adapter = MyCreationFavAdapter(it.reversed(),object:GetFavouriteImagePath{
                     override fun getPath(path: String) {
                         roomViewModel.deleteItem(path)
@@ -219,8 +259,12 @@ class FavouriteFragment : Fragment() {
                 })
                 binding.selfCreationRecyclerView.adapter = adapter
             }else{
-                Toast.makeText(requireContext(),
-                    getString(R.string.your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the), Toast.LENGTH_SHORT).show()
+                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
+                    binding.emptySupportAI.visibility = View.VISIBLE
+                    Toast.makeText(requireContext(),
+                        getString(R.string.your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the), Toast.LENGTH_SHORT).show()
+                }
+
             }
 
         }

@@ -40,13 +40,17 @@
         </activity>
         <service
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver"
-            android:exported="true">
+            android:exported="false">
             <intent-filter>
                 <action
                     android:name="com.google.firebase.MESSAGING_EVENT">
                 </action>
             </intent-filter>
         </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
 
 <!--        real app id  :ca-app-pub-5887559234735462~9939509785-->
     </application>

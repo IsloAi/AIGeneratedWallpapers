@@ -42,6 +42,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -198,12 +199,39 @@ class WallpaperViewFragment : Fragment() {
 
        }
        binding.downloadWallpaper.setOnClickListener{
-           if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
-               mSaveMediaToStorage(bitmap)
-           }else{
-               Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
 
-           }
+           SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
+               CustomSDKRewardedAdsListener {
+               override fun onAdsDismiss() {
+                   Log.e("********ADS", "onAdsDismiss: ", )
+               }
+
+               override fun onAdsRewarded() {
+                   Log.e("********ADS", "onAdsRewarded: ", )
+                   if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+                       mSaveMediaToStorage(bitmap)
+                   }else{
+                       Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+
+                   }
+
+
+               }
+
+               override fun onAdsShowFail(errorCode: Int) {
+                   Log.e("********ADS", "onAdsShowFail: ", )
+                   if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+                       mSaveMediaToStorage(bitmap)
+                   }else{
+                       Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+
+                   }
+               }
+
+           })
+
+
+
        }
    }
     private fun setViewPager() {
@@ -216,7 +244,7 @@ class WallpaperViewFragment : Fragment() {
                         context!!,
                         model,
                         navController!!, R.id.action_wallpaperViewFragment_to_premiumPlanFragment,
-                        RetrofitInstance.getInstance(), binding.gemsText, layout)
+                        RetrofitInstance.getInstance(), binding.gemsText, layout,requireActivity())
 
             }
         },object:FullViewImage{

@@ -56,6 +56,7 @@
     <TextView
         android:layout_width="20dp"
         android:layout_height="15dp"
+        android:layout_margin="@dimen/_4sdp"
         android:background="@drawable/bg_text_ads_normal"
         android:gravity="center"
         android:minWidth="15dp"

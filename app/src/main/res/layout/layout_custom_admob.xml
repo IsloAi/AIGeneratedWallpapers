@@ -4,19 +4,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/ads_background"
     tools:ignore="MissingDefaultResource,SpUsage">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/ads_padding"
-        android:layout_marginVertical="@dimen/ads_padding">
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginVertical="@dimen/_8sdp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/custom_containerAds"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_marginTop="@dimen/_5sdp"
+            app:layout_constraintTop_toBottomOf="@id/custom_call_to_action">
 
             <ImageView
                 android:id="@+id/custom_app_icon"
@@ -71,13 +73,13 @@
 
         <TextView
             android:id="@+id/custom_call_to_action"
-            android:layout_width="100dp"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/ads_button_size"
             android:layout_alignParentEnd="true"
             android:layout_marginHorizontal="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:background="@drawable/bg_btn_ads_round"
+            android:backgroundTint="@color/button_bg"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
             android:minWidth="50dp"
@@ -85,7 +87,7 @@
             android:textColor="@color/color_white_ads"
             android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/custom_media"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="install" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -94,9 +96,11 @@
         android:layout_width="wrap_content"
         android:layout_height="15dp"
         android:layout_marginStart="1dp"
-        android:background="@drawable/bg_text_ads_normal"
+        android:background="@drawable/ads_txt_bg"
+        android:backgroundTint="@color/button_bg"
         android:gravity="center"
         android:paddingHorizontal="2dp"
+        android:layout_margin="@dimen/_4sdp"
         android:text="@string/txt_ad"
         android:textColor="@color/color_white_ads"
         android:textSize="10dp" />

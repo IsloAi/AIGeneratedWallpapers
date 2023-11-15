@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/_138sdp"
+    android:layout_height="@dimen/_220sdp"
+    android:layout_marginTop="@dimen/_8sdp"
+    android:layout_marginStart="@dimen/_5sdp"
+    android:layout_marginBottom="@dimen/_2sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <com.bmik.android.sdk.widgets.IkmWidgetAdView
+        android:id="@+id/adsView"
+        android:layout_width="match_parent"
+        app:ikwad_preview_layout="@layout/shimmer_loading_native"
+        android:background="@drawable/staggerd_native_bg"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="match_parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

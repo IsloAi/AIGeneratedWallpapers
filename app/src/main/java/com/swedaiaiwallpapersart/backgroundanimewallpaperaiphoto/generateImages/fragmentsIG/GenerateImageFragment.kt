@@ -305,7 +305,7 @@ class GenerateImageFragment : Fragment() {
         val adsView = dialog?.findViewById<IkmWidgetAdView>(R.id.adsView)
 
         val adLayout = LayoutInflater.from(dialog?.context).inflate(
-            R.layout.layout_custom_admob,
+            R.layout.native_dialog_layout,
             null, false
         ) as? IkmWidgetAdLayout
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)

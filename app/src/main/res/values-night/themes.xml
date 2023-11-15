@@ -20,4 +20,7 @@
         <item name="cornerSize">0dp</item>
         <item name="cornerSizeBottomRight">@dimen/_130sdp</item>
     </style>
+    <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:background">@drawable/bottom_sheet_bg</item>
+    </style>
 </resources>

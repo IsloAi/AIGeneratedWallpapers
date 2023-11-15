@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_400sdp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="@dimen/_2sdp"
     >
@@ -12,11 +13,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/bottom_sheet_bg"
+
             android:id="@+id/mainContentLayout"
             android:paddingVertical="@dimen/_20sdp"
             android:paddingHorizontal="@dimen/_15sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintWidth_percent=".9"
             app:layout_constraintHeight_percent=".5"
             >
@@ -54,7 +54,10 @@
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/mainContentLayout"
         app:ikwad_preview_layout="@layout/shimmer_loading_native"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:paddingHorizontal="@dimen/_15sdp"
+        android:paddingVertical="@dimen/_5sdp"
+        app:layout_constraintWidth_percent="0.9"/>
 
 
 

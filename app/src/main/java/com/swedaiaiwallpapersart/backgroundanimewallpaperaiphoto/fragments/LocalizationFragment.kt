@@ -21,7 +21,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import java.util.Locale
 
 class LocalizationFragment : Fragment() {
-    private var _binding:FragmentLocalizationBinding ?= null
+    private var _binding: FragmentLocalizationBinding?= null
     private val binding get() = _binding!!
 
     var selectedItem: DummyModelLanguages? = null
@@ -41,6 +41,7 @@ class LocalizationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        pos = MySharePreference.getLanguageposition(requireContext())!!
         loadNativeAd()
         initLanguages()
         setEvents()
@@ -130,6 +131,7 @@ class LocalizationFragment : Fragment() {
         binding.applyLanguage.setOnClickListener {
             if (selectedItem != null) {
                 MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
+                MySharePreference.setLanguageposition(requireContext(),selected)
                 val context = LocaleManager.setLocale(requireContext(), selectedItem!!.lan_code)
                 val resources = context.resources
                 val newLocale = Locale(selectedItem!!.lan_code)
@@ -144,6 +146,7 @@ class LocalizationFragment : Fragment() {
             } else {
 
                 MySharePreference.setLanguage(requireContext(),"en")
+                MySharePreference.setLanguageposition(requireContext(),0)
                 val context = LocaleManager.setLocale(requireContext(), "en")
                 val resources = context.resources
                 val newLocale = Locale("en")
