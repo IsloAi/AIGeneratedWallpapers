@@ -55,7 +55,8 @@ class SplashOnFragment : Fragment() {
 //        progress.setCancelable(false)
 //        progress.show()
 
-        val onBoard = MySharePreference.getOnboarding(requireContext())
+
+        val lan = MySharePreference.getLanguage(requireContext())
 //        val videoPath = "android.resource://" + requireContext().packageName + "/" + R.raw.splash_animation
 //        binding.splashAnim.setMediaController(null)
 //
@@ -85,20 +86,20 @@ class SplashOnFragment : Fragment() {
             }
 
             override fun onAdsDismiss() {
-                if (onBoard){
-                    findNavController().navigate(R.id.mainFragment)
+                if (lan?.isEmpty() == true){
+                    findNavController().navigate(R.id.localizationFragment)
                 }else{
-                    findNavController().navigate(R.id.onBoardingFragment)
+                    findNavController().navigate(R.id.mainFragment)
                 }
 
             }
 
             override fun onAdsShowFail(errorCode: Int) {
                 Log.e("TAG", "onAdsShowFail: $errorCode")
-                if (onBoard){
-                    findNavController().navigate(R.id.mainFragment)
+                if (lan?.isEmpty() == true){
+                    findNavController().navigate(R.id.localizationFragment)
                 }else{
-                    findNavController().navigate(R.id.onBoardingFragment)
+                    findNavController().navigate(R.id.mainFragment)
                 }
 //                progress.dismiss()
             }

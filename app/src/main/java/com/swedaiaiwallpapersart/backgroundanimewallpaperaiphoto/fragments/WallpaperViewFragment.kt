@@ -256,7 +256,7 @@ class WallpaperViewFragment : Fragment() {
         viewPager2?.setCurrentItem(position, false)
         viewPager2?.clipToPadding = false
         viewPager2?.clipChildren = false
-        viewPager2?.offscreenPageLimit = 3
+        viewPager2?.offscreenPageLimit = 1
         viewPager2?.getChildAt(0)!!.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(40))

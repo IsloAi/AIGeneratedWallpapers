@@ -124,11 +124,18 @@ class LocalizationFragment : Fragment() {
     }
 
     private fun setEvents() {
-
-        binding.backButton.setOnClickListener { findNavController().navigateUp() }
+        val onBoard = MySharePreference.getOnboarding(requireContext())
+        binding.backButton.setOnClickListener {
+            if (!onBoard){
+                requireActivity().finishAffinity()
+            }else{
+                findNavController().navigateUp()
+            }
+        }
 
 
         binding.applyLanguage.setOnClickListener {
+
             if (selectedItem != null) {
                 MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
                 MySharePreference.setLanguageposition(requireContext(),selected)
@@ -140,8 +147,14 @@ class LocalizationFragment : Fragment() {
                 configuration.setLocale(newLocale)
                 configuration.setLayoutDirection(Locale(selectedItem!!.lan_code));
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
+                if (!onBoard){
 
-                findNavController().navigateUp()
+                    findNavController().navigate(R.id.onBoardingFragment)
+                }else{
+                    findNavController().navigateUp()
+                }
+
+
 
             } else {
 
@@ -159,7 +172,12 @@ class LocalizationFragment : Fragment() {
 
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
-                findNavController().navigateUp()
+                if (!onBoard){
+
+                    findNavController().navigate(R.id.onBoardingFragment)
+                }else{
+                    findNavController().navigateUp()
+                }
 
             }
         }

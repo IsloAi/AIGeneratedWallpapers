@@ -28,7 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataO
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 
 class ViewAllCreations : Fragment() {
-    private var _binding:FragmentViewAllCreationsBinding ?=  null
+    private var _binding: FragmentViewAllCreationsBinding?=  null
     private val binding get() = _binding!!
     var roomDatabase:AppDatabase ?= null
     var viewModel:RoomViewModel ?= null
@@ -117,7 +117,8 @@ class ViewAllCreations : Fragment() {
             RvItemDecore(
                 3,
                 20,
-                true
+                true,
+                0
             )
         )
 

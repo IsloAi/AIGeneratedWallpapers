@@ -18,18 +18,22 @@
 
         >
 
-    <ImageView
-        android:id="@+id/topImage"
-        android:layout_width="@dimen/_120sdp"
-        android:layout_height="@dimen/_120sdp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/texttop"
-        android:layout_marginTop="@dimen/_20sdp"
-        android:src="@drawable/exit_icon"
-        />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/confirm_exit"
+            android:textColor="@color/white"
+            android:fontFamily="@font/nunito_bold"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/confirmation_txt"
+            />
+
+
         <TextView
             android:id="@+id/texttop"
             android:layout_width="wrap_content"
@@ -39,19 +43,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:layout_marginTop="@dimen/_20sdp"
             android:fontFamily="@font/raleway_medium"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@+id/topImage"
+            app:layout_constraintTop_toBottomOf="@+id/confirmation_txt"
             />
         <Button
             android:id="@+id/btnNo"
-            android:layout_width="@dimen/_80sdp"
+            android:layout_width="0dp"
             android:layout_height="@dimen/_30sdp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            app:layout_constraintWidth_percent="0.4"
             android:gravity="center"
-            android:text="Cancle"
+            android:text="Cancel"
             android:background="@drawable/set_button_bg_unsel"
             android:textAllCaps="false"
             android:textColor="@color/black"
@@ -60,12 +62,14 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnYes"
             app:layout_constraintTop_toBottomOf="@+id/texttop"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="@dimen/_20sdp"
             android:layout_marginEnd="@dimen/_15sdp"
             />
         <Button
             android:id="@+id/btnYes"
-            android:layout_width="@dimen/_80sdp"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.4"
             android:layout_height="@dimen/_30sdp"
             android:gravity="center"
             android:text="Yes"
@@ -74,6 +78,7 @@
             android:textAllCaps="false"
             android:textColor="@color/mywhite"
             android:textSize="15sp"
+            app:layout_constraintStart_toEndOf="@id/btnNo"
             android:background="@drawable/set_button_bg_sel"
             app:layout_constraintTop_toBottomOf="@+id/texttop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -84,7 +89,8 @@
     <com.bmik.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="@dimen/_7sdp"
+        android:paddingHorizontal="@dimen/_12sdp"
+        android:paddingVertical="@dimen/_5sdp"
         app:ikwad_preview_layout="@layout/shimmer_loading_native"
         app:layout_constraintTop_toBottomOf="@id/main_container"
         android:layout_height="wrap_content" />

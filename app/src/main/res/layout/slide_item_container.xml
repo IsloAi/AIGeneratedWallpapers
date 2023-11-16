@@ -14,6 +14,9 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         />
+
+
+
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progressBar"
         android:layout_width="@dimen/_60sdp"
@@ -27,10 +30,20 @@
         android:layout_height="match_parent"
         android:id="@+id/blurView"
         >
+
+        <ImageView
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/premium_wallpaer_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_margin="@dimen/_10sdp"
+            />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/lock_fulview"
+            android:visibility="gone"
             android:scaleType="fitXY"
             />
         <TextView

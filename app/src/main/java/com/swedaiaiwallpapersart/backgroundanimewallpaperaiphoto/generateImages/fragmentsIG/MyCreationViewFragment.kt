@@ -18,9 +18,11 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -47,6 +49,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.DummyFavorite
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.CoroutineScope
@@ -74,8 +77,8 @@ class MyCreationViewFragment : Fragment() {
 
     private var  dialog: Dialog? = null
 
-    private var favouriteListIGEntity : List<FavouriteListIGEntity>? = null
-    private var imagesList:ArrayList<String> = ArrayList()
+    private var favouriteListIGEntity : ArrayList<FavouriteListIGEntity>? = ArrayList()
+    private var imagesList:ArrayList<DummyFavorite> = ArrayList()
 
     private lateinit var imageGenerateViewModel: ImageGenerateViewModel
 
@@ -104,8 +107,6 @@ class MyCreationViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
         SDKBaseController.getInstance()
             .loadBannerAds(
                 requireActivity(),
@@ -123,6 +124,16 @@ class MyCreationViewFragment : Fragment() {
                     }
                 }
             )
+
+        binding.editPrompt.setOnClickListener {
+            binding.prompt.isEnabled = true
+            binding.prompt.isFocusable = true
+            binding.prompt.isFocusableInTouchMode = true
+            binding.prompt.requestFocus()
+            val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.showSoftInput(binding.prompt, InputMethodManager.SHOW_IMPLICIT)
+
+        }
         if(myContext!= null){
             onCreateCalling()
             initObservers()
@@ -152,16 +163,12 @@ class MyCreationViewFragment : Fragment() {
         val time = (timeDisplay*1000)
         binding.notificationMessage.text = getString(R.string.estimated_time_to_load)
         startCountdown(timeDisplay,binding.textCounter)
+        loadDate()
 
         lifecycleScope.launch(Dispatchers.Main) {
 
             delay(time.toLong())
             val binding = bindingRef?.get()
-            binding?.loading1?.visibility = GONE
-            binding?.loading2?.visibility = GONE
-            binding?.loading3?.visibility = GONE
-            binding?.loading4?.visibility = GONE
-            loadDate()
             binding?.copyButton?.visibility = VISIBLE
         }
         binding.backButton.setOnClickListener { findNavController().navigateUp()}
@@ -170,75 +177,87 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.addToFav1.setOnClickListener {
-            getLargImage = imagesList[0]
+            getLargImage = imagesList[0].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+                imagesList[0].isFavorite = true
                 binding.fav1.setImageResource(R.drawable.heart_red)
             }else{
                 val image = favouriteListIGEntity!!.any {it.image == getLargImage}
                 if(!image){
                     addFavouriteList(myId!!,binding.prompt.text.toString()!!)
                     binding.fav1.setImageResource(R.drawable.heart_red)
+                    imagesList[0].isFavorite = true
                 }
                 else{
                     viewModel.deleteItem(getLargImage)
                     binding.fav1.setImageResource(R.drawable.heart_unsel)
+                    imagesList[0].isFavorite = false
                 }
             }
         }
 
 
         binding.addToFav2.setOnClickListener {
-            getLargImage = imagesList[1]
+            getLargImage = imagesList[1].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+                imagesList[1].isFavorite = true
                 binding.fav2.setImageResource(R.drawable.heart_red)
             }else{
                 val image = favouriteListIGEntity!!.any {it.image == getLargImage}
                 if(!image){
                     addFavouriteList(myId!!,binding.prompt.text.toString()!!)
                     binding.fav2.setImageResource(R.drawable.heart_red)
+                    imagesList[1].isFavorite = true
                 }
                 else{
                     viewModel.deleteItem(getLargImage)
                     binding.fav2.setImageResource(R.drawable.heart_unsel)
+                    imagesList[1].isFavorite = false
                 }
             }
         }
 
 
         binding.addToFav3.setOnClickListener {
-            getLargImage = imagesList[2]
+            getLargImage = imagesList[2].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+                imagesList[2].isFavorite = true
                 binding.fav3.setImageResource(R.drawable.heart_red)
             }else{
                 val image = favouriteListIGEntity!!.any {it.image == getLargImage}
                 if(!image){
                     addFavouriteList(myId!!,binding.prompt.text.toString()!!)
                     binding.fav3.setImageResource(R.drawable.heart_red)
+                    imagesList[2].isFavorite = true
                 }
                 else{
                     viewModel.deleteItem(getLargImage)
                     binding.fav3.setImageResource(R.drawable.heart_unsel)
+                    imagesList[2].isFavorite = false
                 }
             }
         }
 
         binding.addToFav4.setOnClickListener {
-            getLargImage = imagesList[3]
+            getLargImage = imagesList[3].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+                imagesList[3].isFavorite = true
                 binding.fav4.setImageResource(R.drawable.heart_red)
             }else{
                 val image = favouriteListIGEntity!!.any {it.image == getLargImage}
                 if(!image){
                     addFavouriteList(myId!!,binding.prompt.text.toString()!!)
                     binding.fav4.setImageResource(R.drawable.heart_red)
+                    imagesList[3].isFavorite = true
                 }
                 else{
                     viewModel.deleteItem(getLargImage)
                     binding.fav4.setImageResource(R.drawable.heart_unsel)
+                    imagesList[3].isFavorite = true
                 }
             }
         }
@@ -405,22 +424,20 @@ class MyCreationViewFragment : Fragment() {
     private fun loadDate(){
             viewModel.getResponseIGById.observe(viewLifecycleOwner){
                 it.let {
-                    binding.prompt.text = it?.prompt
-                    if(it?.future_links.isNullOrEmpty()){
+                    Log.e("TAG", "loadDate: "+it )
+                    binding.prompt.setText(it?.prompt)
+                    if(it?.output?.size!! >= 3){
                         Log.d("imageLists", "future_links is Empty")
                         imagesList.clear()
-                        imagesList.addAll(it?.output!!)
+                        for (i in 0 until it.output!!.size){
+                            imagesList.add(DummyFavorite(it.output!![i],false))
+
+                        }
+
                         setImage(it?.output!!,it.prompt,myId)
 
 
                         checkfavorites()
-                    }else if(it?.output.isNullOrEmpty()){
-                        Log.d("imageLists", "future_links is not empty   elssssssss")
-                        imagesList.clear()
-                        imagesList.addAll(it?.future_links!!)
-                        setImage(it?.future_links!!,it.prompt,myId)
-                        checkfavorites()
-
                     }
                 }
 
@@ -429,35 +446,33 @@ class MyCreationViewFragment : Fragment() {
         swipeRefreshLayout.isRefreshing = false
     }
 
+    private fun updateFavoriteIcons() {
+        binding.fav1.setImageResource(getFavoriteIcon(imagesList[0].isFavorite))
+        binding.fav2.setImageResource(getFavoriteIcon(imagesList[1].isFavorite))
+        binding.fav3.setImageResource(getFavoriteIcon(imagesList[2].isFavorite))
+        binding.fav4.setImageResource(getFavoriteIcon(imagesList[3].isFavorite))
+    }
+
     fun checkfavorites(){
-        viewModel.myFavouriteList.observe(viewLifecycleOwner){list->
-            favouriteListIGEntity = list
+        viewModel.myFavouriteList.observe(viewLifecycleOwner) { list ->
+            val favoriteUrls = list.map { it.image }
 
-            if (imagesList.isNotEmpty()){
-                for(i in list.indices){
-                    when (list[i].image) {
-                        imagesList[0] -> {
-                            binding.fav1.setImageResource(R.drawable.heart_red)
-
-                        }
-                        imagesList[1] -> {
-                            binding.fav2.setImageResource(R.drawable.heart_red)
-                        }
-                        imagesList[2] -> {
-                            binding.fav3.setImageResource(R.drawable.heart_red)
-                        }
-                        imagesList[3] -> {
-                            binding.fav4.setImageResource(R.drawable.heart_red)
-                        }
-                    }
-                }
+            imagesList.forEach { image ->
+                image.isFavorite = favoriteUrls.contains(image.url)
             }
 
-
-
+            updateFavoriteIcons()
         }
     }
 
+
+    private fun getFavoriteIcon(isFavorited: Boolean): Int {
+        return if (isFavorited) {
+            R.drawable.heart_red
+        } else {
+            R.drawable.heart_unsel
+        }
+    }
     fun initObservers(){
         val roomDatabase = AppDatabase.getInstance(requireContext())
         imageGenerateViewModel.responseData.observe(viewLifecycleOwner) { response ->
@@ -515,6 +530,11 @@ class MyCreationViewFragment : Fragment() {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    binding.editPrompt.visibility = View.VISIBLE
+                    binding.loading1?.visibility = GONE
+                    binding.loading2?.visibility = GONE
+                    binding.loading3?.visibility = GONE
+                    binding.loading4?.visibility = GONE
                     binding.notificationLayout.visibility = View.GONE
                     binding.btns.visibility = View.VISIBLE
                     binding.addToFav1.visibility = VISIBLE

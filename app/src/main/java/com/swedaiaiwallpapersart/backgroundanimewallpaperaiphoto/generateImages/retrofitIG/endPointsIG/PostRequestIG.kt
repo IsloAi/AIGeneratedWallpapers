@@ -7,6 +7,6 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface PostRequestIG {
-    @POST("api.php")
+    @POST("text_to_img.php")
     fun postData(@Body data: PostRequestModelIG): Call<GetResponseIG>
 }

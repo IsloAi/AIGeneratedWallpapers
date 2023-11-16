@@ -36,10 +36,8 @@ class CreationsAdapter(private val arrayList: List<GetResponseIGEntity>,
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val model = arrayList[position]
         val isSelected = selectedItems.contains(position)
-        if(model.future_links != null){
-            Glide.with(context!!).load(model.future_links[0]).into(holder.binding.wallpaper)
-        }else{
-            Glide.with(context!!).load(model.prompt?.get(0)).into(holder.binding.wallpaper)
+        if(model.output != null){
+            Glide.with(context!!).load(model.output?.get(0)).into(holder.binding.wallpaper)
         }
         if (isSelectionMode){
             holder.binding.selectImage.visibility = View.VISIBLE

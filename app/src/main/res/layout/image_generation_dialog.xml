@@ -3,17 +3,23 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bottom_sheet_bg"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingHorizontal="@dimen/_2sdp"
     >
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_bg"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        app:layout_constraintTop_toTopOf="parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
             android:id="@+id/mainContentLayout"
             android:paddingVertical="@dimen/_20sdp"
             android:paddingHorizontal="@dimen/_15sdp"
@@ -49,15 +55,17 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <com.bmik.android.sdk.widgets.IkmWidgetAdView
-        android:id="@+id/adsView"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/mainContentLayout"
-        app:ikwad_preview_layout="@layout/shimmer_loading_native"
-        android:layout_height="0dp"
-        android:paddingHorizontal="@dimen/_15sdp"
-        android:paddingVertical="@dimen/_5sdp"
-        app:layout_constraintWidth_percent="0.9"/>
+        <com.bmik.android.sdk.widgets.IkmWidgetAdView
+            android:id="@+id/adsView"
+            android:layout_width="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/mainContentLayout"
+            app:ikwad_preview_layout="@layout/shimmer_loading_native"
+            android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/_15sdp"
+            android:paddingVertical="@dimen/_5sdp"
+            app:layout_constraintWidth_percent="0.9"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

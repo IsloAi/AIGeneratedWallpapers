@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.NavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.airbnb.lottie.LottieAnimationView
@@ -43,6 +44,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,11 +67,8 @@ class ApiCategoriesListAdapter(
     private val debounceThreshold = 2000L // 1 second
          var context:Context? = null
         private val VIEW_TYPE_CONTAINER1 = 0
-        private val VIEW_TYPE_CONTAINER2 = 1
+    private val VIEW_TYPE_NATIVE_AD = 1
 
-    private val VIEW_TYPE_NATIVE_AD = 2
-
-    // Adjust this threshold value as needed
     private val NATIVE_AD_INTERVAL = 10
        private val myDialogs = MyDialogs()
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -78,17 +77,27 @@ class ApiCategoriesListAdapter(
             ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder)
         }
     }
-    inner class ViewHolderContainer2(private val binding: WallpaperRow2Binding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: CatResponse,holder: ViewHolder) {
-            setAllData(model,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-                ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder) }
-    }
-
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: ViewHolder){
             loadad(holder,binding)
         }
     }
+
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val layoutManager = recyclerView.layoutManager as GridLayoutManager
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
+                    layoutManager.spanCount // Make the ad span the full width
+                } else {
+                    1 // Regular item occupies 1 span
+                }
+            }
+        }
+    }
+
     override fun getItemCount() = arrayList.size
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -97,10 +106,6 @@ class ApiCategoriesListAdapter(
             VIEW_TYPE_CONTAINER1 -> {
                 val binding = WallpaperRowBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
-            }
-            VIEW_TYPE_CONTAINER2 -> {
-                val binding = WallpaperRow2Binding.inflate(inflater, parent, false)
-                ViewHolderContainer2(binding)
             }
             VIEW_TYPE_NATIVE_AD -> {
                 val binding = StaggeredNativeLayoutBinding.inflate(inflater,parent,false)
@@ -118,11 +123,6 @@ class ApiCategoriesListAdapter(
                 val viewHolderContainer1 = holder as ViewHolderContainer1
                 viewHolderContainer1.bind(model,holder)
             }
-            VIEW_TYPE_CONTAINER2 -> {
-                val viewHolderContainer2 = holder as ViewHolderContainer2
-                viewHolderContainer2.bind(model,holder)
-            }
-
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind(viewHolderContainer3)
@@ -131,13 +131,10 @@ class ApiCategoriesListAdapter(
     }
     override fun getItemViewType(position: Int): Int {
         // Return the appropriate view type based on the position
-        return if (position % (NATIVE_AD_INTERVAL + 1) == 0) {
-            // Position is a multiple of NATIVE_AD_INTERVAL, so it's a native ad
+        return if ((position + 1) % (NATIVE_AD_INTERVAL + 1) == 0) {
             VIEW_TYPE_NATIVE_AD
-        } else if (position % 4 < 1) {
-            VIEW_TYPE_CONTAINER1
         } else {
-            VIEW_TYPE_CONTAINER2
+            VIEW_TYPE_CONTAINER1
         }
     }
     @SuppressLint("SetTextI18n")
@@ -190,17 +187,17 @@ class ApiCategoriesListAdapter(
                 val isBuy = model.unlockimges
                 Log.d("gems", "onBindViewHolder: $gems")
 
-                if (gems != null) {
-                    if (gems == 0 || isBuy == true) {
+
                         positionCallback.getPosition(position)
-                    } else {
-                        if (whichClicked == 1) {
-                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!,myActivity)
-                        } else {
-                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView,myActivity)
-                        }
-                    }
-                }
+
+//                    else {
+//                        if (whichClicked == 1) {
+//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!,myActivity)
+//                        } else {
+//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView,myActivity)
+//                        }
+//                    }
+                
                 lastClickTime = currentTime
             }
 
@@ -224,7 +221,7 @@ class ApiCategoriesListAdapter(
 
     fun loadad(holder: ViewHolder,binding: StaggeredNativeLayoutBinding){
         val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
-            R.layout.staggered_native,
+            R.layout.native_dialog_layout,
             null, false
         ) as? IkmWidgetAdLayout
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)

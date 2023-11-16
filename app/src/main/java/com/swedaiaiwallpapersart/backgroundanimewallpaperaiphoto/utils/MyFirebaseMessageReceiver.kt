@@ -12,16 +12,38 @@ import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.webHookGenericResponse
 
 class MyFirebaseMessageReceiver : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.d("tracingToken", "Refreshed token: $token")
-        FirebaseUtils.FIREBASE_TOKEN = token
+        MySharePreference.setFireBaseToken(applicationContext,token)
     }
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.e("tracingToken", "onMessageReceived: $remoteMessage")
+        val data = remoteMessage.data
+        val appDatabase = AppDatabase.getInstance(applicationContext)
+        Log.e("*******Message", "onMessageReceived: "+data )
+
+        val type = data["type"]
+        if (type?.lowercase() == "a") {
+            val body = data["body"]
+            val webHookGenericResponse = Gson().fromJson(body, webHookGenericResponse::class.java)
+            Log.e("TAG", "onMessageReceived: $webHookGenericResponse")
+            val oldData = appDatabase.getResponseIGDao()?.getCreationsByIdNotLive(webHookGenericResponse.id)
+            val mutableLIst: ArrayList<String> = arrayListOf()
+            mutableLIst.addAll(webHookGenericResponse.output)
+            oldData?.output = mutableLIst
+            if (oldData!=null){
+                appDatabase.getResponseIGDao()?.UpdateData(oldData)
+            }
+            Log.e("TAG", "onMessageReceived: $body")
+//            showNotification("Notification has been generated", webHookGenericResponse)
+        }
         if (remoteMessage.notification != null) {
             showNotification(
                 remoteMessage.notification?.title,

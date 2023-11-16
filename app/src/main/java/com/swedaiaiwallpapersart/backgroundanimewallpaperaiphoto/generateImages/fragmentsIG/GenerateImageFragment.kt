@@ -117,21 +117,25 @@ class GenerateImageFragment : Fragment() {
         listViewModel = ViewModelProvider(requireActivity())[ImageListViewModel::class.java]
         viewModel.responseData.observe(viewLifecycleOwner) { response ->
             response?.let {
-                val timeDisplay = it.eta?.toInt()
+                var timeDisplay = it.eta?.toInt()
                 Log.d("imageLists", "time Display: $timeDisplay")
                 var data: GetResponseIGEntity? = null
-                if(it.output.isNotEmpty()){
-                    navigate(it.id!!,timeDisplay)
-                    data = GetResponseIGEntity(it.id!!,it.status,it.generationTime,it.output,it.webhook_status, future_links = null,it.meta?.prompt)
-                }else if(it.future_links.isNotEmpty()){
-                    navigate(it.id!!,timeDisplay)
-                    data = GetResponseIGEntity(it.id!!,it.status,it.generationTime, output = null,it.webhook_status,it.future_links,it.meta?.prompt)
-                }
-                CoroutineScope(Dispatchers.IO).launch {
-                    if (data != null) {
-                        roomDatabase.getResponseIGDao().insert(data)
+                    Log.e("TAG", "customOnCreateCalling: future links empty" )
+                    data = GetResponseIGEntity(it.id!!,it.status,it.generationTime,it.output,it.webhook_status, future_links = it.future_links,it.meta?.prompt)
+
+                    CoroutineScope(Dispatchers.IO).launch {
+                        if (data != null) {
+                            roomDatabase.getResponseIGDao().insert(data!!)
+                        }
                     }
+
+                if (timeDisplay == null){
+                    timeDisplay =0
                 }
+
+                    navigate(it.id!!,timeDisplay)
+
+
             }
         }
 
@@ -158,8 +162,8 @@ class GenerateImageFragment : Fragment() {
            binding.gemsText.text = totalGems.toString()
     }
     private fun navigate(listId: Int, timeDisplay: Int?){
-        if(timeDisplay != null){
-            if(timeDisplay>0){
+
+            if(timeDisplay!! >0){
                 postGems()
             }
             val bundle = Bundle().apply {
@@ -167,9 +171,7 @@ class GenerateImageFragment : Fragment() {
                 putInt("timeDisplay", timeDisplay)
             }
             requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_myViewCreationFragment,bundle)
-        }else{
-            Toast.makeText(requireContext(), "Error please try again", Toast.LENGTH_SHORT).show()
-        }
+
     }
     private fun loadCreationHistory(database: AppDatabase) {
         val viewModel = ViewModelProvider(this, ViewModelFactory(database,0))[RoomViewModel::class.java]
@@ -223,7 +225,7 @@ class GenerateImageFragment : Fragment() {
     fun showDialog(){
 
         val builder = AlertDialog.Builder(requireContext())
-        val binding = ImageGenerationDialogBinding.inflate(layoutInflater)
+        val binding = com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.ImageGenerationDialogBinding.inflate(layoutInflater)
         builder.setView(binding.root)
         val alertDialog = builder.create()
 

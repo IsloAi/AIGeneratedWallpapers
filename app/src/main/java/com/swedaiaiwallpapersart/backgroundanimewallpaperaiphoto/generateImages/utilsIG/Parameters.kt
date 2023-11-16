@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG
 
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FirebaseUtils
+
 class Parameters {
     companion object {
         val canvasPos = 0
@@ -29,10 +31,10 @@ class Parameters {
         val self_attention = "yes"
         val steps = "21"
         val strength = 1.0
-        val token = ""
+        val token = FirebaseUtils.FIREBASE_TOKEN
         val type = "a"
         val upscale = "no"
-        val webhook = "https://edecator.com/aiApp/webhook.php"
+        val webhook = "https://edecator.com/wallpaperApp/api/webhook.php"
         val width = "840"
     }
 

@@ -9,7 +9,7 @@ data class GetResponseIGEntity(
     val id: Int = 0,
     val status: String?,
     val generationTime: Double?,
-    val output: ArrayList<String>? = arrayListOf(),
+    var output: ArrayList<String>? = arrayListOf(),
     val webhook_status: String?,
     val future_links: ArrayList<String>? = arrayListOf(),
     val prompt: String?,

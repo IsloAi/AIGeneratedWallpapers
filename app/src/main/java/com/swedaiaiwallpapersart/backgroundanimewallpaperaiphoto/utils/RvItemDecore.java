@@ -12,31 +12,39 @@ public class RvItemDecore extends RecyclerView.ItemDecoration {
     private int spacing;
     private boolean includeEdge;
 
-    public RvItemDecore(int spanCount, int spacing, boolean includeEdge) {
+    private int adInterval; // Add the ad interval
+
+    public RvItemDecore(int spanCount, int spacing, boolean includeEdge, int adInterval) {
         this.spanCount = spanCount;
         this.spacing = spacing;
         this.includeEdge = includeEdge;
+        this.adInterval = adInterval;
     }
 
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-        int position = parent.getChildAdapterPosition(view); // item position
-        int column = position % spanCount; // item column
+        int position = parent.getChildAdapterPosition(view);
 
-        if (includeEdge) {
-            outRect.left = spacing - column * spacing / spanCount; // spacing - column * ((1f / spanCount) * spacing)
-            outRect.right = (column + 1) * spacing / spanCount; // (column + 1) * ((1f / spanCount) * spacing)
-
-            if (position < spanCount) { // top edge
-                outRect.top = spacing;
-            }
-            outRect.bottom = spacing; // item bottom
-        } else {
-            outRect.left = column * spacing / spanCount; // column * ((1f / spanCount) * spacing)
-            outRect.right = spacing - (column + 1) * spacing / spanCount; // spacing - (column + 1) * ((1f /    spanCount) * spacing)
-            if (position >= spanCount) {
-                outRect.top = spacing; // item top
+        if (position >= 0) {
+            if (isAdPosition(position)) {
+                handleAdOffsets(outRect);
+            } else {
+                handleItemOffsets(outRect);
             }
         }
+    }
+
+    private boolean isAdPosition(int position) {
+        return (position + 1) % (adInterval + 1) == 0; // Assuming ad is after every 'adInterval' items
+    }
+
+    private void handleAdOffsets(Rect outRect) {
+        outRect.set(0, 0, 0, 0); // Set no spacing for ads, adjust as needed
+    }
+
+    private void handleItemOffsets(Rect outRect) {
+        outRect.top = spacing;
+        outRect.left = spacing;
+        outRect.right = spacing;
     }
 }

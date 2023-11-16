@@ -13,6 +13,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.retrofitIG.RetrofitIntenseIG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.retrofitIG.endPointsIG.PostRequestIG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FirebaseUtils
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -48,7 +49,7 @@ class ImageGenerateViewModel:ViewModel() {
             Parameters.self_attention,
             Parameters.steps,
             Parameters.strength,
-            FirebaseUtils.FIREBASE_TOKEN,
+            MySharePreference.getFirebaseToken(context),
             Parameters.type,
             Parameters.upscale,
             Parameters.webhook,

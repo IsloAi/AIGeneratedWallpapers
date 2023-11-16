@@ -49,6 +49,9 @@ class WallpaperApiSliderAdapter(
     }
     inner class  ViewHolder(val binding: SlideItemContainerBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(arrayList: ArrayList<CatResponse>, position: Int) {
+
+
+
             val model = arrayList[position]
             dataSet(model,binding.imageSlide,binding.progressBar,binding.gemsTextView,binding.blurView,adapterPosition)
         } }
@@ -60,7 +63,9 @@ class WallpaperApiSliderAdapter(
         gemsTextView.text = model.gems.toString()
         if(model.gems==0 || model.unlockimges==true){
           blurView.visibility = INVISIBLE
-        }else{ blurView.visibility = VISIBLE }
+        }else{
+            blurView.visibility = VISIBLE
+        }
 
         imageSlide.setOnClickListener {
             Log.d("modelTracingNow", "dataSet: model else condition  ${model.unlockimges}  imageId  ${model.id}")

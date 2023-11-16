@@ -19,6 +19,19 @@ class MySharePreference {
     }
 
 
+        fun setFireBaseToken(context: Context,value:String){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("token",value)
+            myEdit.apply()
+        }
+
+        fun getFirebaseToken(context: Context):String?{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getString("token","")
+        }
+
+
         fun setLanguage(context: Context,value:String){
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()

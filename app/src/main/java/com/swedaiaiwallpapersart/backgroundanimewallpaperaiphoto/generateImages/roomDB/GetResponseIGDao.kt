@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface GetResponseIGDao {
@@ -14,8 +15,15 @@ interface GetResponseIGDao {
     @Query("SELECT * FROM get_response_ig WHERE id = :id")
     fun getGetResponseIGByID(id: Int): LiveData<GetResponseIGEntity?>
 
+
+    @Query("SELECT * FROM get_response_ig WHERE id=:Id")
+    fun getCreationsByIdNotLive(Id:Int):GetResponseIGEntity
+
     @Query("SELECT * FROM get_response_ig")
     fun getAllGetResponseIG(): LiveData<List<GetResponseIGEntity>>
+
+    @Update()
+    fun UpdateData(genericResponseModel: GetResponseIGEntity)
 
 
     @Query("DELETE FROM get_response_ig")

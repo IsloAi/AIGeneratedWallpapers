@@ -31,10 +31,8 @@ class HistoryAdapter(private val arrayList: List<GetResponseIGEntity>,
         val model = arrayList[position]
         val mainContainer = holder.binding.mainContainer
          holder.binding.title.visibility = GONE
-        if(model.future_links != null){
-            Glide.with(context!!).load(model.future_links[0]).into(holder.binding.imageViewOfList)
-        }else{
-            Glide.with(context!!).load(model.prompt?.get(0)).into(holder.binding.imageViewOfList)
+        if(model.output != null){
+            Glide.with(context!!).load(model.output?.get(0)).into(holder.binding.imageViewOfList)
         }
         mainContainer.setOnClickListener {
             getbackOfID.getId(model.id)

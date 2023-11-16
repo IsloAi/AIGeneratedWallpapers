@@ -36,6 +36,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
@@ -90,6 +91,7 @@ class HomeFragment : Fragment(){
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10))
         loadData()
 //        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener(){
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

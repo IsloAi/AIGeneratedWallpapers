@@ -111,8 +111,9 @@
 
             <Button
                 android:id="@+id/buttonApplyWallpaper"
-                android:layout_width="@dimen/_130sdp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/_35sdp"
+                android:minWidth="@dimen/_130sdp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

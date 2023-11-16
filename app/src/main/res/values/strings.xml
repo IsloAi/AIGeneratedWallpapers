@@ -91,5 +91,6 @@
     <string name="error_loading_please_check_your_internet">Error Loading, Please check your Internet</string>
     <string name="add_favorite">Add Favorite</string>
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Zero favorites? Let\'s fix that! \nStart by tapping the heart icon ♥️</string>
+    <string name="confirm_exit">Confirm Exit ???</string>
 
 </resources>
