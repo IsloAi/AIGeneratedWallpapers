@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
+import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +18,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .FragmentLocalizationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.DummyModelLanguages
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -45,6 +49,7 @@ class LocalizationFragment : Fragment() {
         loadNativeAd()
         initLanguages()
         setEvents()
+        backHandle()
     }
 
     fun loadNativeAd(){
@@ -89,11 +94,6 @@ class LocalizationFragment : Fragment() {
                 LocalizationAdapter.OnLanguageChangeListener {
 
                 override fun onLanguageItemClick(language: DummyModelLanguages?, position: Int) {
-                    Toast.makeText(
-                        requireContext(),
-                        language!!.lan_code,
-                        Toast.LENGTH_SHORT
-                    ).show()
                     selectedItem = language
                     selected = position
                 }
@@ -105,15 +105,24 @@ class LocalizationFragment : Fragment() {
 
     fun getLanguageList(pos:String): ArrayList<DummyModelLanguages> {
         val languagesList = ArrayList<DummyModelLanguages>()
-        languagesList.add(DummyModelLanguages("English", "en", R.drawable.flag_en, false))
-        languagesList.add(DummyModelLanguages("Arabic", "ar", R.drawable.flag_ar, false))
-        languagesList.add(DummyModelLanguages("German", "de", R.drawable.flag_gr, false))
-        languagesList.add(DummyModelLanguages("Spanish", "es", R.drawable.flag_sp, false))
-        languagesList.add(DummyModelLanguages("Hindi", "hi", R.drawable.flag_hi, false))
-        languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
+        languagesList.add(DummyModelLanguages("English (US)", "en", R.drawable.flag_en, false))
+        languagesList.add(DummyModelLanguages("English (UK)", "en-rGB", R.drawable.flag_uk, false))
         languagesList.add(DummyModelLanguages("French", "fr", R.drawable.flag_fr, false))
+        languagesList.add(DummyModelLanguages("German", "de", R.drawable.flag_gr, false))
+        languagesList.add(DummyModelLanguages("Japanese ", "ja", R.drawable.flag_japan, false))
+        languagesList.add(DummyModelLanguages("Korean", "ko", R.drawable.flag_korean, false))
         languagesList.add(DummyModelLanguages("Portuguese", "pt", R.drawable.flag_pr, false))
+        languagesList.add(DummyModelLanguages("Spanish", "es", R.drawable.flag_sp, false))
+        languagesList.add(DummyModelLanguages("Arabic", "ar", R.drawable.flag_ar, false))
         languagesList.add(DummyModelLanguages("Chinese", "zh", R.drawable.flag_cn, false))
+        languagesList.add(DummyModelLanguages("Italian", "it", R.drawable.flag_itly, false))
+        languagesList.add(DummyModelLanguages("Russian", "ru", R.drawable.flag_russia, false))
+        languagesList.add(DummyModelLanguages("Thai", "th", R.drawable.flag_thai, false))
+        languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
+        languagesList.add(DummyModelLanguages("Vietnamese ", "vi", R.drawable.flag_vietnamese, false))
+        languagesList.add(DummyModelLanguages("Hindi", "hi", R.drawable.flag_hi, false))
+        languagesList.add(DummyModelLanguages("Dutch", "nl", R.drawable.flag_ducth, false))
+        languagesList.add(DummyModelLanguages("Indonesian", "in", R.drawable.flag_indona, false))
         for (item in languagesList) {
             if (item.lan_code == pos) {
                 item.isSelected_lan =true
@@ -126,11 +135,13 @@ class LocalizationFragment : Fragment() {
     private fun setEvents() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
         binding.backButton.setOnClickListener {
-            if (!onBoard){
+            if (exit){
                 requireActivity().finishAffinity()
             }else{
-                findNavController().navigateUp()
+                    findNavController().navigateUp()
+
             }
+
         }
 
 
@@ -147,12 +158,17 @@ class LocalizationFragment : Fragment() {
                 configuration.setLocale(newLocale)
                 configuration.setLayoutDirection(Locale(selectedItem!!.lan_code));
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
-                if (!onBoard){
-
+                if (exit){
                     findNavController().navigate(R.id.onBoardingFragment)
                 }else{
-                    findNavController().navigateUp()
+                    if (!onBoard){
+
+                        findNavController().navigate(R.id.onBoardingFragment)
+                    }else{
+                        findNavController().navigateUp()
+                    }
                 }
+
 
 
 
@@ -172,13 +188,42 @@ class LocalizationFragment : Fragment() {
 
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
-                if (!onBoard){
-
+                if (exit){
                     findNavController().navigate(R.id.onBoardingFragment)
+                }else{
+                    if (!onBoard){
+
+                        findNavController().navigate(R.id.onBoardingFragment)
+                    }else{
+                        findNavController().navigateUp()
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    private fun backHandle(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (exit){
+                    requireActivity().finishAffinity()
                 }else{
                     findNavController().navigateUp()
                 }
+            }
+        })
 
+        if (BuildCompat.isAtLeastT()) {
+            requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                if (exit){
+                    requireActivity().finishAffinity()
+                }else{
+                    findNavController().navigateUp()
+                }
             }
         }
     }

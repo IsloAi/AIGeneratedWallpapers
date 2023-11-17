@@ -40,6 +40,8 @@ class ViewAllCreations : Fragment() {
     private var isSelectionMode = false
     var adapter:CreationsAdapter ?= null
 
+    var mlist:ArrayList<GetResponseIGEntity> = ArrayList()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,11 +64,15 @@ class ViewAllCreations : Fragment() {
 
     fun setEvents(){
         binding.deleteAllHistory.setOnClickListener {
+            if (mlist.size > 0){
+                binding.deleteAllHistory.visibility = View.GONE
+                binding.selectAll.visibility = View.VISIBLE
+                isSelectionMode = true
+                adapter?.updateSelectionMode(isSelectionMode)
+            }else{
+                Toast.makeText(requireContext(),"Please generate some art to delete",Toast.LENGTH_SHORT).show()
+            }
 
-            binding.deleteAllHistory.visibility = View.GONE
-            binding.selectAll.visibility = View.VISIBLE
-            isSelectionMode = true
-            adapter?.updateSelectionMode(isSelectionMode)
         }
 
 
@@ -86,12 +92,15 @@ class ViewAllCreations : Fragment() {
 
 
         binding.deleteCreations.setOnClickListener {
-            viewModel?.deleteAll(adapter?.getSelectedlist()!!)
+            if (adapter?.getSelectedlist()?.size!! > 0){
+                viewModel?.deleteAll(adapter?.getSelectedlist()!!)
 
-            binding.deleteAllHistory.visibility = View.VISIBLE
-            binding.selectAll.visibility = View.GONE
-            isSelectionMode = false
-            adapter?.updateSelectionMode(isSelectionMode)
+                binding.deleteAllHistory.visibility = View.VISIBLE
+                binding.selectAll.visibility = View.GONE
+                isSelectionMode = false
+                adapter?.updateSelectionMode(isSelectionMode)
+            }
+
         }
 
 
@@ -117,13 +126,15 @@ class ViewAllCreations : Fragment() {
             RvItemDecore(
                 3,
                 20,
-                true,
-                0
+                false,
+                100
             )
         )
 
         viewModel?.allGetResponseIG?.observe(viewLifecycleOwner){myList->
             if(myList.isNotEmpty()){
+                mlist.clear()
+                mlist.addAll(myList)
                 binding.emptySupport.visibility = View.GONE
                 binding.historyRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
                 adapter  = CreationsAdapter(myList,isSelectionMode,object: CreationsAdapter.CreationSelectionInterface {

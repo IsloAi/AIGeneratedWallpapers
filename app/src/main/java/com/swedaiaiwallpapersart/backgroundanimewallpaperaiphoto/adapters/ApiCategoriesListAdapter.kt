@@ -74,7 +74,7 @@ class ApiCategoriesListAdapter(
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatResponse,holder: ViewHolder) {
             setAllData(model,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-            ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder)
+            ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder,binding.errorImage)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -139,7 +139,7 @@ class ApiCategoriesListAdapter(
     }
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, gemsView:TextView, likes:TextView, favouriteButton: ImageView
-                           , lockButton:ImageView, diamondIcon:ImageView, wallpaperMainImage:ImageView,holder: ViewHolder){
+                           , lockButton:ImageView, diamondIcon:ImageView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView){
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
         gemsView.text = model.gems.toString()
@@ -172,10 +172,13 @@ class ApiCategoriesListAdapter(
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
                     Log.d("onLoadFailed", "onLoadFailed: ")
                     animationView.setAnimation(R.raw.no_data_image_found)
+                    animationView.visibility = View.VISIBLE
+                    error_img.visibility = View.VISIBLE
                     return false
                 }
                 override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                     animationView.visibility = INVISIBLE
+                    error_img.visibility = View.GONE
                     Log.d("onLoadFailed", "onResourceReady: ")
                     return false
                 }}).into(wallpaperMainImage)

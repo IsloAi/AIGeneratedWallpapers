@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
@@ -79,6 +82,7 @@ class OnBoardingFragment : Fragment() {
                 }
             }
         )
+        backHandle()
 
         populateOnbaordingItems()
         binding.onboardingViewPager.adapter = welcomeAdapter
@@ -92,10 +96,41 @@ class OnBoardingFragment : Fragment() {
                 setCurrentIndicator(position)
                 when (position) {
                     0 -> {
-
+                        binding.skipBtn.visibility = View.VISIBLE
                         binding.onbTxt1.text = getString(R.string.enchanting_animated_realms)
+
+                        val adLayout = LayoutInflater.from(activity).inflate(
+                            R.layout.layout_custom_admob,
+                            null, false
+                        ) as? IkmWidgetAdLayout
+                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+                        binding.adsView.setCustomNativeAdLayout(
+                            R.layout.shimmer_loading_native,
+                            adLayout!!
+                        )
+
+                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+                            object : CustomSDKAdsListenerAdapter() {
+                                override fun onAdsLoadFail() {
+                                    super.onAdsLoadFail()
+                                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                                    binding.adsView.visibility = View.GONE
+                                }
+
+                                override fun onAdsLoaded() {
+                                    super.onAdsLoaded()
+                                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                                }
+                            }
+                        )
                     }
                     1 -> {
+                        binding.skipBtn.visibility = View.VISIBLE
                         val adLayout = LayoutInflater.from(activity).inflate(
                             R.layout.layout_custom_admob,
                             null, false
@@ -184,10 +219,49 @@ class OnBoardingFragment : Fragment() {
         }
     }
 
+    private fun backHandle(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                when (binding.onboardingViewPager.currentItem) {
+                    2 -> {
+                        binding.onboardingViewPager.currentItem =1
+                    }
+                    1 -> {
+                        binding.onboardingViewPager.currentItem =0
+                    }
+                    0 -> {
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+        })
+
+        if (BuildCompat.isAtLeastT()) {
+            requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                when (binding.onboardingViewPager.currentItem) {
+                    2 -> {
+                        binding.onboardingViewPager.currentItem =1
+                    }
+                    1 -> {
+                        binding.onboardingViewPager.currentItem =0
+                    }
+                    0 -> {
+                        findNavController().navigateUp()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
+        _binding = null
 
     }
+
+
 
     private fun populateOnbaordingItems() {
         val welcomeItems: MutableList<Int> = ArrayList<Int>()

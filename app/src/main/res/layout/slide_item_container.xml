@@ -19,10 +19,11 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/progressBar"
-        android:layout_width="@dimen/_60sdp"
-        android:layout_height="@dimen/_60sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
        android:layout_gravity="center"
         app:lottie_autoPlay="true"
+        android:padding="@dimen/_15sdp"
         app:lottie_loop="true"
         />
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -32,11 +33,12 @@
         >
 
         <ImageView
-            android:layout_width="@dimen/_40sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/premium_wallpaer_icon"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:scaleType="centerCrop"
             android:layout_margin="@dimen/_10sdp"
             />
         <ImageView

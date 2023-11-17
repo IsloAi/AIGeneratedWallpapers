@@ -228,58 +228,70 @@
             android:id="@id/generateButton"
             android:layout_marginBottom="@dimen/_10sdp"
             >
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/reward_item_video"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="@dimen/_10sdp"
-                />
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/_2sdp"
-                android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@id/watch_txt"
                 app:layout_constraintTop_toTopOf="parent"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/generate_top"
                 >
+                <ImageView
+                    android:layout_width="@dimen/_40sdp"
+                    android:layout_height="@dimen/_40sdp"
+                    android:padding="@dimen/_5sdp"
+                    android:src="@drawable/ad_icon"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/generate_top"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    />
 
-
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/generate"
-                    android:fontFamily="@font/raleway_medium"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/_18sdp"
-                    android:textStyle="bold"
-                    />
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toTopOf="@id/watch_txt"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:id="@+id/generate_top"
+                    >
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/generate"
+                        android:fontFamily="@font/raleway_medium"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_18sdp"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/watch_an_ad"
+                        android:fontFamily="@font/raleway_medium"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/_12sdp"
+                        android:textStyle="normal"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/generate_top"
+                        app:layout_constraintStart_toStartOf="@id/generate_top"
+                        app:layout_constraintEnd_toEndOf="@id/generate_top"
+                        android:id="@+id/watch_txt"
+                        />
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/watch_an_ad"
-                android:fontFamily="@font/raleway_medium"
-                android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
-                android:textStyle="normal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/generate_top"
-                app:layout_constraintStart_toStartOf="@id/generate_top"
-                app:layout_constraintEnd_toEndOf="@id/generate_top"
-                android:id="@+id/watch_txt"
-                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

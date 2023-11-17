@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
@@ -26,6 +27,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 
 class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
@@ -75,7 +77,8 @@ class ListViewFragment : Fragment() {
          name = arguments?.getString("name").toString()
         Log.d("tracingNameCategory", "onViewCreated: name $name")
         binding.catTitle.text = name
-        binding.recyclerviewAll.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10))
         loadData()
 //        if (!isDataFetched) {
 //            if(name!=null){

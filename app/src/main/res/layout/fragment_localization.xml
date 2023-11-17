@@ -48,16 +48,13 @@
             />
 
 
-        <Button
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Apply"
             android:id="@+id/apply_language"
-            android:drawableStart="@drawable/tick"
-            android:drawablePadding="@dimen/_5sdp"
-            android:backgroundTint="#FFB700"
-            android:textColor="@color/black"
-            android:textSize="@dimen/_12sdp"
+            android:src="@drawable/tick"
+            android:padding="@dimen/_3sdp"
+            android:background="@drawable/language_apply_bg"
             android:fontFamily="@font/raleway_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

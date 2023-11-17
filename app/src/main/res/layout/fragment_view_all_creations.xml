@@ -121,6 +121,7 @@
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintBottom_toTopOf="@id/deleteCreations"
         android:layout_marginBottom="@dimen/_10sdp"
+        android:layout_marginHorizontal="@dimen/_5sdp"
         android:id="@+id/historyRecyclerView"/>
 
 

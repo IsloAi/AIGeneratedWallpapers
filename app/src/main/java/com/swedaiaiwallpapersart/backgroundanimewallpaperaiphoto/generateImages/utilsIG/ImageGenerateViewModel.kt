@@ -62,7 +62,7 @@ class ImageGenerateViewModel:ViewModel() {
                     progress.dismiss()
                     val model: GetResponseIG? = response.body()
                     Log.d("imageLists", "model : ${model}")
-                    Toast.makeText(context, "Generated Successfully", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "Generated Successfully", Toast.LENGTH_SHORT).show()
                     model?.let {
                         responseData.postValue(model)
                     }

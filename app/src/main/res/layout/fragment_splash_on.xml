@@ -2,10 +2,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/splash_background"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/splash_background"
+        android:scaleType="centerCrop"
+        />
     <VideoView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -52,11 +57,11 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_40sdp"
+        android:layout_height="@dimen/_30sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_rawRes="@raw/splash_new"
+        app:lottie_rawRes="@raw/splash_animation_new"
         android:id="@+id/splash_anim_bottom"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"

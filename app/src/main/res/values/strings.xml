@@ -34,7 +34,7 @@
     <string name="prompt_is_loading">prompt is loading....</string>
     <string name="estimated_time_to_load">Estimated time to load...</string>
     <string name="text_copied_to_clipboard">Text copied to clipboard</string>
-    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">if still not loaded then swipe down\nto refresh after few second</string>
+    <string name="if_still_not_loaded_then_swipe_down_to_refresh_after_few_second">if still not loaded then swipe down\nto refresh after few seconds</string>
     <string name="settings">Settings</string>
     <string name="rate">Rate</string>
     <string name="other">Other</string>
@@ -89,8 +89,10 @@
     <string name="navigate_back">Navigate Back</string>
     <string name="retry">Retry</string>
     <string name="error_loading_please_check_your_internet">Error Loading, Please check your Internet</string>
-    <string name="add_favorite">Add Favorite</string>
-    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Zero favorites? Let\'s fix that! \nStart by tapping the heart icon ♥️</string>
+    <string name="add_favorite">Add Favourites</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Zero Favourites? Let\'s fix this! \nStart by tapping the heart icon ️</string>
     <string name="confirm_exit">Confirm Exit ???</string>
+    <string name="watch_ad">Watch Ad</string>
+    <string name="no_thanks"><u>No, thanks</u></string>
 
 </resources>

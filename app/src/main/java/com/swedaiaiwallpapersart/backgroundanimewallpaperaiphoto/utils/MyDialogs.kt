@@ -287,12 +287,12 @@ class MyDialogs {
 
                 override fun onAdsRewarded() {
                     Log.e("********ADS", "onAdsRewarded: ", )
-                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,0,totalGemsView,dialog,layout)
+//                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,0,totalGemsView,dialog,layout)
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
                     Log.e("********ADS", "onAdsShowFail: ", )
-                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,0,totalGemsView,dialog,layout)
+//                    postData.unLocking(MySharePreference.getDeviceID(context)!!,model,context,0,totalGemsView,dialog,layout)
 
                 }
 

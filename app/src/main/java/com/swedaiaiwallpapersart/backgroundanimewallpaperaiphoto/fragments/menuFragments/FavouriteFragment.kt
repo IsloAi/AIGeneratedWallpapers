@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
@@ -38,6 +39,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 
 class FavouriteFragment : Fragment() {
    private var _binding: FragmentFavouriteBinding? = null
@@ -96,9 +98,10 @@ class FavouriteFragment : Fragment() {
         binding.progressBar.visibility = VISIBLE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
-        binding.aiRecyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        binding.selfCreationRecyclerView.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-
+        binding.aiRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.aiRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10))
+        binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10))
 
 
         loadData()
@@ -261,8 +264,8 @@ class FavouriteFragment : Fragment() {
             }else{
                 if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
                     binding.emptySupportAI.visibility = View.VISIBLE
-                    Toast.makeText(requireContext(),
-                        getString(R.string.your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the), Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(requireContext(),
+//                        getString(R.string.your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the), Toast.LENGTH_SHORT).show()
                 }
 
             }

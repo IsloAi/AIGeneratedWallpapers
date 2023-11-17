@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity(){
 
     private lateinit var controller: NavController
-    lateinit var binding:ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private val selectedPromptList =  ArrayList<SelectedPromptListModel>()
     private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt:String? =null

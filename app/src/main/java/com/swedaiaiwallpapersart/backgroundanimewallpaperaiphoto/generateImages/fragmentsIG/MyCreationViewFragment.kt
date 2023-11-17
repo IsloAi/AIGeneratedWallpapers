@@ -340,7 +340,7 @@ class MyCreationViewFragment : Fragment() {
         val adsView = dialog?.findViewById<IkmWidgetAdView>(R.id.adsView)
 
         val adLayout = LayoutInflater.from(dialog?.context).inflate(
-            R.layout.layout_custom_admob,
+            R.layout.native_dialog_layout,
             null, false
         ) as? IkmWidgetAdLayout
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -423,22 +423,27 @@ class MyCreationViewFragment : Fragment() {
 
     private fun loadDate(){
             viewModel.getResponseIGById.observe(viewLifecycleOwner){
-                it.let {
+                it.let {response ->
                     Log.e("TAG", "loadDate: "+it )
-                    binding.prompt.setText(it?.prompt)
-                    if(it?.output?.size!! >= 3){
-                        Log.d("imageLists", "future_links is Empty")
-                        imagesList.clear()
-                        for (i in 0 until it.output!!.size){
-                            imagesList.add(DummyFavorite(it.output!![i],false))
-
-                        }
-
-                        setImage(it?.output!!,it.prompt,myId)
-
-
-                        checkfavorites()
+                    response?.prompt?.let { prompt ->
+                        binding.prompt.setText(prompt.trimStart())
                     }
+                    if (response?.output != null){
+                        if(response?.output?.size!! >= 3){
+                            Log.d("imageLists", "future_links is Empty")
+                            imagesList.clear()
+                            for (i in 0 until response.output!!.size){
+                                imagesList.add(DummyFavorite(response.output!![i],false))
+
+                            }
+
+                            setImage(response?.output!!,response.prompt,myId)
+
+
+                            checkfavorites()
+                        }
+                    }
+
                 }
 
             }

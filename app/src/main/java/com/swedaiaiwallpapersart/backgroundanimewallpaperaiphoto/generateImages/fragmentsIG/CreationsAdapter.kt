@@ -95,12 +95,14 @@ class CreationsAdapter(private val arrayList: List<GetResponseIGEntity>,
 
     fun selectAll() {
         selectedItems.clear()
+        selectedList.addAll(arrayList)
         selectedItems.addAll(arrayList.indices)
         notifyDataSetChanged()
     }
 
     // Method to unselect all items
     fun unselectAll() {
+        selectedList.clear()
         selectedItems.clear()
         notifyDataSetChanged()
     }

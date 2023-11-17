@@ -121,10 +121,7 @@ class PostDataOnServer {
         uniqueId: String,
         model: CatResponse,
         context: Context,
-        leftGems: Int,
-        textView: TextView,
-        dialog: Dialog,
-        layout: ConstraintLayout
+        leftGems: Int
     ) {
         val retrofit = RetrofitInstance.getInstance()
         val service = retrofit.create(UnlockInterface::class.java)
@@ -136,11 +133,8 @@ class PostDataOnServer {
             override fun onResponse(call: Call<Counter>, response: Response<Counter>) {
                 if (response.isSuccessful) {
                     model.unlockimges = true
-                   layout.visibility = GONE
                     gemsPostData(context, uniqueId, retrofit, leftGems, isPlan)
-                    textView.text = leftGems.toString()
-                    dialog.dismiss()
-                    Toast.makeText(context, "Successful buy", Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(context, "Unlocked Successfully", Toast.LENGTH_SHORT).show()
                     response.body()?.let {
                         val gemData = Counter(it.message)
                         Log.d("unloackTestingapi", "onResponse: model ${gemData}")

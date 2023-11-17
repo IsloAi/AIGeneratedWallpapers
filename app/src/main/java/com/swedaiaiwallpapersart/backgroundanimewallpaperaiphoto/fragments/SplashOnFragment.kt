@@ -26,10 +26,15 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.dat
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .ImageGenerationDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashOnFragment : Fragment() {
+
+    companion object{
+        var exit = true
+    }
 
     private var _binding: FragmentSplashOnBinding?= null
     private val binding get() = _binding!!
@@ -79,37 +84,43 @@ class SplashOnFragment : Fragment() {
 //
 //        }
 
+        lifecycleScope.launch(Dispatchers.Main) {
 
-        SDKBaseController.getInstance().showFirstOpenAppAds(requireActivity(),12000,object:CommonAdsListenerAdapter(){
-            override fun onAdReady(priority: Int) {
+            delay(3000)
+            SDKBaseController.getInstance().showFirstOpenAppAds(requireActivity(),12000,object:CommonAdsListenerAdapter(){
+                override fun onAdReady(priority: Int) {
 //                progress.dismiss()
-            }
-
-            override fun onAdsDismiss() {
-                if (lan?.isEmpty() == true){
-                    findNavController().navigate(R.id.localizationFragment)
-                }else{
-                    findNavController().navigate(R.id.mainFragment)
                 }
 
-            }
+                override fun onAdsDismiss() {
+                    if (lan?.isEmpty() == true){
+                        findNavController().navigate(R.id.localizationFragment)
+                    }else{
+                        findNavController().navigate(R.id.mainFragment)
+                    }
 
-            override fun onAdsShowFail(errorCode: Int) {
-                Log.e("TAG", "onAdsShowFail: $errorCode")
-                if (lan?.isEmpty() == true){
-                    findNavController().navigate(R.id.localizationFragment)
-                }else{
-                    findNavController().navigate(R.id.mainFragment)
                 }
+
+                override fun onAdsShowFail(errorCode: Int) {
+                    Log.e("TAG", "onAdsShowFail: $errorCode")
+                    if (lan?.isEmpty() == true){
+                        findNavController().navigate(R.id.localizationFragment)
+                    }else{
+                        findNavController().navigate(R.id.mainFragment)
+                    }
 //                progress.dismiss()
-            }
+                }
 
-            override fun onAdsShowed(priority: Int) {
+                override fun onAdsShowed(priority: Int) {
 //                progress.dismiss()
 
-            }
+                }
 
-        })
+            })
+        }
+
+
+
 
         binding.getStarted.setOnClickListener {
             findNavController().navigate(R.id.onBoardingFragment)

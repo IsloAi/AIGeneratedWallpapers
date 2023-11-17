@@ -29,6 +29,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
@@ -67,6 +68,9 @@ class MainFragment : Fragment(){
     private val creation_unsel =R.drawable.creation_unsel
     private var click = 1
     private lateinit var myActivity : MainActivity
+
+
+
     @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
@@ -80,6 +84,7 @@ class MainFragment : Fragment(){
         configuration.setLayoutDirection(Locale(lan!!));
         resources1.updateConfiguration(configuration, resources.displayMetrics)
       _binding = FragmentMainBinding.inflate(inflater, container, false)
+        exit = false
 
        return binding.root
     }

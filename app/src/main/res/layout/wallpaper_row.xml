@@ -105,6 +105,15 @@
             app:lottie_loop="true"
             />
 
+        <ImageView
+            android:id="@+id/error_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/img"
+            android:visibility="gone"
+            android:scaleType="fitCenter"
+            />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
