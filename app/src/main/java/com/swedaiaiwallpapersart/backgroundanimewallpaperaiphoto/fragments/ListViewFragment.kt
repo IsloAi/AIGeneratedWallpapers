@@ -34,7 +34,7 @@ class ListViewFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var myViewModel: MyViewModel
     private var name = ""
-    private var isLogin = false
+    private var isLogin = true
     private lateinit var myActivity : MainActivity
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bmik.android.sdk.widgets.IkmWidgetAdLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_native_bg">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/_8sdp"
+        android:layout_marginVertical="@dimen/_10sdp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/custom_containerAds"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.2"
+            android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/custom_app_icon"
+                android:layout_width="@dimen/_60sdp"
+                android:layout_height="@dimen/_60sdp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:adjustViewBounds="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/custom_headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ads_padding"
+                app:layout_goneMarginStart="@dimen/ads_margin_gone"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:maxLines="1"
+
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="abv" />
+
+            <TextView
+                android:id="@+id/custom_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="2"
+                android:maxLines="2"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintEnd_toEndOf="@+id/custom_headline"
+                app:layout_constraintStart_toStartOf="@+id/custom_headline"
+                app:layout_constraintTop_toBottomOf="@+id/custom_headline"
+
+                tools:text="adadad" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.bmik.android.sdk.widgets.IkmWidgetMediaView
+            android:id="@+id/custom_media"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_300sdp"
+
+            app:layout_constraintBottom_toTopOf="@id/custom_call_to_action"
+            app:layout_constraintTop_toBottomOf="@+id/custom_containerAds" />
+
+        <TextView
+            android:id="@+id/custom_call_to_action"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_btn_ads_round"
+            android:backgroundTint="@color/button_bg"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:minWidth="50dp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/color_white_ads"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="install" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/ad_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginStart="1dp"
+        android:background="@drawable/ads_txt_bg"
+        android:backgroundTint="@color/button_bg"
+        android:gravity="center"
+        android:paddingHorizontal="2dp"
+        android:text="@string/txt_ad"
+        android:textColor="@color/color_white_ads"
+        android:textSize="10dp" />
+
+</com.bmik.android.sdk.widgets.IkmWidgetAdLayout>

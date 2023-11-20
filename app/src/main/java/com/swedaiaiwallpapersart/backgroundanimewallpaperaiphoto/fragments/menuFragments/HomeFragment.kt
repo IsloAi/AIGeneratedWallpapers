@@ -170,6 +170,7 @@ class HomeFragment : Fragment(){
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            navigateToDestination(catResponses,position)
                             //do something
                         }
 

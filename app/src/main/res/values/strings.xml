@@ -94,5 +94,8 @@
     <string name="confirm_exit">Confirm Exit ???</string>
     <string name="watch_ad">Watch Ad</string>
     <string name="no_thanks"><u>No, thanks</u></string>
+    <string name="no">No</string>
+    <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
+    <string name="confirm_deletion">Confirm Deletion ???</string>
 
 </resources>

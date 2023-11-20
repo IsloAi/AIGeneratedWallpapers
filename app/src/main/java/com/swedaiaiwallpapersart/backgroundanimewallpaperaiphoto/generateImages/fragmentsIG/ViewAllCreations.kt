@@ -1,17 +1,29 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.bmik.android.sdk.widgets.IkmWidgetAdView
+import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .FragmentViewAllCreationsBinding
@@ -26,6 +38,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.Retrof
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ViewAllCreations : Fragment() {
     private var _binding: FragmentViewAllCreationsBinding?=  null
@@ -39,6 +55,7 @@ class ViewAllCreations : Fragment() {
 
     private var isSelectionMode = false
     var adapter:CreationsAdapter ?= null
+    private var  dialog: Dialog? = null
 
     var mlist:ArrayList<GetResponseIGEntity> = ArrayList()
 
@@ -92,14 +109,7 @@ class ViewAllCreations : Fragment() {
 
 
         binding.deleteCreations.setOnClickListener {
-            if (adapter?.getSelectedlist()?.size!! > 0){
-                viewModel?.deleteAll(adapter?.getSelectedlist()!!)
-
-                binding.deleteAllHistory.visibility = View.VISIBLE
-                binding.selectAll.visibility = View.GONE
-                isSelectionMode = false
-                adapter?.updateSelectionMode(isSelectionMode)
-            }
+           getUserIdDialog()
 
         }
 
@@ -160,6 +170,7 @@ class ViewAllCreations : Fragment() {
 
                 binding.historyRecyclerView.adapter = adapter
             }else{
+                mlist.clear()
                 binding.historyRecyclerView.visibility = View.GONE
                 binding.emptySupport.visibility = View.VISIBLE
 //                binding.errorTitle.visibility = View.VISIBLE
@@ -189,6 +200,43 @@ class ViewAllCreations : Fragment() {
             Toast.makeText(requireContext(),
                 getString(R.string.error_please_try_again), Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun getUserIdDialog() {
+        dialog = Dialog(requireContext())
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setContentView(R.layout.dialog_delete_items)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(width, height)
+        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.setCancelable(true)
+
+        val deleteBtn = dialog?.findViewById<Button>(R.id.btnYes)
+        val NoBtn = dialog?.findViewById<Button>(R.id.btnNo)
+
+        deleteBtn?.setOnClickListener {
+            if (adapter?.getSelectedlist()?.size!! > 0){
+                viewModel?.deleteAll(adapter?.getSelectedlist()!!)
+
+                binding.deleteAllHistory.visibility = View.VISIBLE
+                binding.selectAll.visibility = View.GONE
+                isSelectionMode = false
+                adapter?.updateSelectionMode(isSelectionMode)
+
+
+                binding.deleteCreations.visibility = View.GONE
+                binding.deleteAllHistory.visibility = View.VISIBLE
+                binding.selectAll.visibility = View.GONE
+                dialog?.dismiss()
+            }
+        }
+
+        NoBtn?.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
     }
 
 

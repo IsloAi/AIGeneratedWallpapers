@@ -460,6 +460,8 @@ class MyCreationViewFragment : Fragment() {
 
     fun checkfavorites(){
         viewModel.myFavouriteList.observe(viewLifecycleOwner) { list ->
+            favouriteListIGEntity?.clear()
+            favouriteListIGEntity?.addAll(list)
             val favoriteUrls = list.map { it.image }
 
             imagesList.forEach { image ->

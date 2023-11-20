@@ -143,7 +143,17 @@ class ApiCategoriesListAdapter(
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
         gemsView.text = model.gems.toString()
-        likes.text = model.likes.toString()
+        if (model.likes!! > 0){
+            likes.text = model.likes.toString()
+        }else{
+            if (model.liked ==  true){
+                likes.text = 1.toString()
+            }else{
+                likes.text = 0.toString()
+            }
+
+        }
+
         if(model.liked==true){
             favouriteButton.setImageResource(R.drawable.heart_red)
         }else{
@@ -158,12 +168,12 @@ class ApiCategoriesListAdapter(
            lockButton.visibility = GONE
            diamondIcon.visibility = GONE
             gemsView.visibility = GONE
-            Log.d("tracingImageId", "free: category = ${model.cat_name}  , imageId =  ${model.id}")
+            Log.d("tracingImageId", "free: category = ${model.cat_name}  , imageId =  ${model.id}, model = $model")
         }else{
             lockButton.visibility = VISIBLE
             diamondIcon.visibility =GONE
             gemsView.visibility = GONE
-            Log.d("tracingImageId", "paid: category = ${model.cat_name}  , imageId = ${model.id}")
+            Log.d("tracingImageId", "paid: category = ${model.cat_name}  , imageId = ${model.id}, model = $model")
         }
         Log.d("nadeemAhmad", "setAllData: ${model.compressed_image_url}")
 

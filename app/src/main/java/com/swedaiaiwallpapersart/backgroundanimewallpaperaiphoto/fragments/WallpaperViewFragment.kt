@@ -231,13 +231,16 @@ class WallpaperViewFragment : Fragment() {
                    val model = arrayList[position]
                    arrayList[position].unlockimges = true
                    arrayList[position].gems = 0
-                   adapter?.notifyItemChanged(position)
-                   adapter?.notifyDataSetChanged()
-                   postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,model,requireContext(),0)
+
+                   val model1 = arrayList[position]
+                   postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,model1,requireContext(),0)
                    showInter = false
                    openPopupMenu()
                    binding.buttonApplyWallpaper.visibility = View.VISIBLE
                    binding.unlockWallpaper.visibility = View.GONE
+                   adapter?.notifyItemChanged(position)
+                   binding.viewPager.setCurrentItem(position,true)
+                   adapter?.notifyDataSetChanged()
                }
 
                override fun onAdsShowFail(errorCode: Int) {
@@ -246,13 +249,14 @@ class WallpaperViewFragment : Fragment() {
                    val model = arrayList[position]
                    arrayList[position].unlockimges = true
                    arrayList[position].gems = 0
-                   adapter?.notifyItemChanged(position)
-                   adapter?.notifyDataSetChanged()
+
                    postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,model,requireContext(),0)
                    showInter = false
                    openPopupMenu()
                    binding.buttonApplyWallpaper.visibility = View.VISIBLE
                    binding.unlockWallpaper.visibility = View.GONE
+                   adapter?.notifyItemChanged(position)
+                   adapter?.notifyDataSetChanged()
 
                }
 
@@ -287,7 +291,7 @@ class WallpaperViewFragment : Fragment() {
             override fun getFullImageUrl(image:String) {
                FullViewImagePopup.openFullViewWallpaper(myContext(),image)
             }
-        })
+        },myActivity)
         viewPager2?.adapter = adapter
         viewPager2?.setCurrentItem(position, false)
         if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){

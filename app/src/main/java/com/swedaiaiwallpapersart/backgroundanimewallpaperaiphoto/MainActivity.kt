@@ -25,11 +25,12 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.e
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
-.ActivityMainBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetPromptDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
@@ -37,7 +38,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Counter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ResetCounterInterface
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver
@@ -46,6 +47,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCoun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONException
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -81,12 +84,12 @@ class MainActivity : AppCompatActivity(){
         resources1.updateConfiguration(configuration, resources.displayMetrics)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 //        SDKBaseController.getInstance().loadInterstitialAds(this, "category_screen","category_screen")
 
 
         // workManager()
 
+        initFirebaseRemoteConfig()
         createTimer()
 //        purchasesPrice()
         val firebaseMessageReceiver = MyFirebaseMessageReceiver()
@@ -96,6 +99,7 @@ class MainActivity : AppCompatActivity(){
         Log.d("tracingImageId", "onCreate: id= $deviceID")
         if(deviceID != null){
             MySharePreference.setDeviceID(this,deviceID)
+            Log.e("TAG", "onCreate: "+deviceID )
         }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
@@ -112,6 +116,47 @@ class MainActivity : AppCompatActivity(){
 //            repeatInterval = 1, // 1 day
 //            repeatIntervalTimeUnit = TimeUnit.DAYS).setConstraints(constraints).build()
 //            WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("ResetCountWork", ExistingPeriodicWorkPolicy.KEEP, workRequest)
+    }
+
+    fun initFirebaseRemoteConfig() {
+        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+
+// Set default values (in case fetched values are not available)
+        val defaults: MutableMap<String, Any> = HashMap()
+        defaults["viewlistwallscr_scrollview_Status"] = "0" // Replace with your default values
+        defaults["viewlistwallscr_scrollview_fisrt_ad_line_threshold"] = "3"
+        defaults["viewlistwallscr_scrollview_line_count"] = "3"
+        defaults["viewlistwallscr_scrollview_native_design_type"] = "2"
+        firebaseRemoteConfig.setDefaultsAsync(defaults)
+
+// Set cache expiration time (you can set your own duration)
+        val configSettings = FirebaseRemoteConfigSettings.Builder()
+            .setMinimumFetchIntervalInSeconds(3600) // Example: 1 hour
+            .build()
+        firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
+
+        firebaseRemoteConfig.fetchAndActivate()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val updated = task.result
+                    Log.d("RemoteConfig", "Config params updated: $updated")
+                    // Use fetched values here
+                    val status = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_Status")
+                    val threshold = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_fisrt_ad_line_threshold")
+                    val linecount = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_line_count")
+                    val native_design_type = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_native_design_type")
+                    AdConfig.firstAdLine = threshold.toInt()
+                    AdConfig.lineCount = linecount.toInt()
+                    AdConfig.adStatus = status.toInt()
+
+                    // Retrieve other values similarly
+                    Log.d("RemoteConfig", "Status: $status, Threshold: $threshold, linecount: $linecount,nativeDesign:$native_design_type")
+                } else {
+                    // Handle error fetching config
+                    Log.e("RemoteConfig", "Fetch failed")
+                }
+            }
+
     }
 
     @SuppressLint("SuspiciousIndentation")

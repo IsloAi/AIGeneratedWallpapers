@@ -78,6 +78,7 @@ class OnBoardingFragment : Fragment() {
 
                 override fun onAdsLoaded() {
                     super.onAdsLoaded()
+                    binding.adsView.visibility = View.VISIBLE
                     Log.e("TAG", "onAdsLoaded: native loaded" )
                 }
             }
@@ -124,6 +125,7 @@ class OnBoardingFragment : Fragment() {
 
                                 override fun onAdsLoaded() {
                                     super.onAdsLoaded()
+                                    binding.adsView.visibility = View.VISIBLE
                                     Log.e("TAG", "onAdsLoaded: native loaded" )
                                 }
                             }
@@ -156,6 +158,7 @@ class OnBoardingFragment : Fragment() {
 
                                 override fun onAdsLoaded() {
                                     super.onAdsLoaded()
+                                    binding.adsView.visibility = View.VISIBLE
                                     Log.e("TAG", "onAdsLoaded: native loaded" )
                                 }
                             }
@@ -189,6 +192,7 @@ class OnBoardingFragment : Fragment() {
 
                                 override fun onAdsLoaded() {
                                     super.onAdsLoaded()
+                                    binding.adsView.visibility = View.VISIBLE
                                     Log.e("TAG", "onAdsLoaded: native loaded" )
                                 }
                             }
