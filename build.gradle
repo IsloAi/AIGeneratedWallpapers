@@ -16,7 +16,7 @@ buildscript {
         maven { url "https://sdk.tapjoy.com" }
         maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
         maven {
-            url 'https://gitlab.begamob.com/api/v4/projects/157/packages/maven'
+            url 'https://gitlab.ikameglobal.com/api/v4/projects/157/packages/maven'
             credentials(HttpHeaderCredentials) {
                 name = "Private-Token"
                 value = "glpat-r5Xa8F42sp6PXNzqDHAP"

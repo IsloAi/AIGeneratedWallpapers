@@ -182,7 +182,10 @@ class HomeFragment : Fragment(){
 
 
             }
-        },requireParentFragment().findNavController(),R.id.action_mainFragment_to_premiumPlanFragment,object :
+
+           override fun getFavorites(position: Int) {
+           }
+       },requireParentFragment().findNavController(),R.id.action_mainFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {
             override fun getGemsBack(gems: Int) {
                 binding.gemsText.text = gems.toString()

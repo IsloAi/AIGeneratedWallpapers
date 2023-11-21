@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity(){
                     val linecount = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_line_count")
                     val native_design_type = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_native_design_type")
                     AdConfig.firstAdLine = threshold.toInt()
-                    AdConfig.lineCount = linecount.toInt()
+                    AdConfig.lineCount = linecount.toInt() +  1
                     AdConfig.adStatus = status.toInt()
 
                     // Retrieve other values similarly

@@ -135,7 +135,7 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
     //ads
-    implementation 'com.ikame.android-sdk:ikm-sdk-debug:2.5.410'
+    implementation 'com.ikame.android-sdk:ikm-sdk-debug:2.6.013'
 
 
 

@@ -7,6 +7,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -70,15 +70,21 @@ class MyCreationViewFragment : Fragment() {
     private lateinit var listViewModel: ImageListViewModel
     private var timeDisplay = 0
     private lateinit var  viewModel:RoomViewModel
+
+    private var mLastClickTime: Long = 0
     private var myId = 0
     private var myActivity : MainActivity? = null
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var getLargImage: String = ""
 
+    var isClickInProgress = false
+
     private var  dialog: Dialog? = null
+    var prommpt:String = ""
 
     private var favouriteListIGEntity : ArrayList<FavouriteListIGEntity>? = ArrayList()
     private var imagesList:ArrayList<DummyFavorite> = ArrayList()
+    private var imgList:ArrayList<String> = ArrayList()
 
     private lateinit var imageGenerateViewModel: ImageGenerateViewModel
 
@@ -115,12 +121,12 @@ class MyCreationViewFragment : Fragment() {
                 " createdwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
                     override fun onAdsLoaded() {
                         super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
                     }
 
                     override fun onAdsLoadFail() {
                         super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
                     }
                 }
             )
@@ -177,6 +183,12 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.addToFav1.setOnClickListener {
+
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             getLargImage = imagesList[0].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
@@ -199,6 +211,12 @@ class MyCreationViewFragment : Fragment() {
 
 
         binding.addToFav2.setOnClickListener {
+
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             getLargImage = imagesList[1].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
@@ -221,6 +239,13 @@ class MyCreationViewFragment : Fragment() {
 
 
         binding.addToFav3.setOnClickListener {
+
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
+
             getLargImage = imagesList[2].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
@@ -242,6 +267,13 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.addToFav4.setOnClickListener {
+
+
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+
             getLargImage = imagesList[3].url
             if(favouriteListIGEntity!!.isEmpty()){
                 addFavouriteList(myId!!,binding.prompt.text.toString()!!)
@@ -264,6 +296,10 @@ class MyCreationViewFragment : Fragment() {
 
 
         binding.copyButton.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             val textToCopy = binding.prompt.text.toString()
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
@@ -272,14 +308,18 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.reGenerateBtn.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             SDKBaseController.getInstance().showRewardedAds(requireActivity(),"createdwallscr_regen_click","createdwallscr_regen_click",object:
                 CustomSDKRewardedAdsListener {
                 override fun onAdsDismiss() {
-                    Log.e("********ADS", "onAdsDismiss: ", )
+                    Log.e("********ADS", "onAdsDismiss: ")
                 }
 
                 override fun onAdsRewarded() {
-                    Log.e("********ADS", "onAdsRewarded: ", )
+                    Log.e("********ADS", "onAdsRewarded: ")
                     val getPrompt = binding.prompt.text
                     if(getPrompt.isNotEmpty()){
 
@@ -292,7 +332,7 @@ class MyCreationViewFragment : Fragment() {
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("********ADS", "onAdsShowFail: ", )
+                    Log.e("********ADS", "onAdsShowFail: ")
                     val getPrompt = binding.prompt.text
                     if(getPrompt.isNotEmpty()){
 
@@ -307,6 +347,10 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.newGenerate.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
             SDKBaseController.getInstance().showInterstitialAds(
                 requireActivity(),
                 "createdwallscr_newgen_click",
@@ -359,12 +403,12 @@ class MyCreationViewFragment : Fragment() {
             object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()
-                    Log.e("**********ADS", "onAdsLoadFail: ", )
+                    Log.e("**********ADS", "onAdsLoadFail: ")
                 }
 
                 override fun onAdsLoaded() {
                     super.onAdsLoaded()
-                    Log.e("**********ADS", "onAdsLoaded: ", )
+                    Log.e("**********ADS", "onAdsLoaded: ")
                 }
             }
 
@@ -427,6 +471,7 @@ class MyCreationViewFragment : Fragment() {
                     Log.e("TAG", "loadDate: "+it )
                     response?.prompt?.let { prompt ->
                         binding.prompt.setText(prompt.trimStart())
+                        prommpt = prompt
                     }
                     if (response?.output != null){
                         if(response?.output?.size!! >= 3){
@@ -434,6 +479,7 @@ class MyCreationViewFragment : Fragment() {
                             imagesList.clear()
                             for (i in 0 until response.output!!.size){
                                 imagesList.add(DummyFavorite(response.output!![i],false))
+                                imgList.add(response.output!![i])
 
                             }
 
@@ -556,23 +602,49 @@ class MyCreationViewFragment : Fragment() {
         Glide.with(myContext!!).load(list[1]).into(binding.imageView2)
         Glide.with(myContext!!).load(list[2]).into(binding.imageView3)
         Glide.with(myContext!!).load(list[3]).into(binding.imageView4)
-        binding.imageView1.setOnClickListener {navigate(0, list, prompt, id)}
-        binding.imageView2.setOnClickListener {navigate(1, list, prompt, id)}
-        binding.imageView3.setOnClickListener {navigate(2, list, prompt, id)}
-        binding.imageView4.setOnClickListener {navigate(3, list, prompt, id)}
+        binding.imageView1.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            navigate(0, list, prompt, id)
+        }
+        binding.imageView2.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            navigate(1, list, prompt, id)
+        }
+        binding.imageView3.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            navigate(2, list, prompt, id)
+        }
+        binding.imageView4.setOnClickListener {
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                return@setOnClickListener
+            }
+            mLastClickTime = SystemClock.elapsedRealtime();
+            navigate(3, list, prompt, id)
+        }
     }
     private fun navigate(click: Int, list: ArrayList<String>, prompt: String?, id: Int){
-        timeDisplay = 0
-        val gson = Gson()
-        val arrayListJson = gson.toJson(list)
-       val bundle =  Bundle().apply {
-            putString("arrayListJson",arrayListJson)
-            putInt("position",click)
-           putString("prompt",prompt)
-           putInt("id",id)
-        }
-        findNavController().navigate(R.id.action_myViewCreationFragment_to_creationSliderViewFragment,bundle)
+
+            timeDisplay = 0
+            val gson = Gson()
+            val arrayListJson = gson.toJson(list)
+            val bundle =  Bundle().apply {
+                putString("arrayListJson", arrayListJson)
+                putInt("position", click)
+                putString("prompt", prompt)
+                putInt("id", id)
+            }
+            findNavController().navigate(R.id.action_myViewCreationFragment_to_creationSliderViewFragment, bundle)
     }
+
     private fun startCountdown(initialSeconds: Int,textView:TextView) {
       timer = object : CountDownTimer((initialSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {

@@ -18,7 +18,7 @@
     <string name="subject">Subject</string>
     <string name="enter_your_subject">Enter your subject</string>
     <string name="message">Message</string>
-    <string name="type_your_message">type your message</string>
+    <string name="type_your_message">Type your message</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="generate_wallpaper" translatable="false">Generate Wallpaper</string>
     <string name="type_text_and_generate_wallpaper">Type text and generate Wallpaper</string>

@@ -101,7 +101,7 @@ class FavouriteFragment : Fragment() {
         binding.aiRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.aiRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10))
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10))
+        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2,20,false,1000))
 
 
         loadData()
@@ -125,6 +125,7 @@ class FavouriteFragment : Fragment() {
         }
 
         binding.aiWallpaper.setOnClickListener {
+            loadData()
             selector(binding.aiWallpaper,binding.selfCreation)
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
@@ -140,6 +141,7 @@ class FavouriteFragment : Fragment() {
 
         }
         binding.selfCreation.setOnClickListener {
+            loadDataFromRoomDB()
             selector(binding.selfCreation,binding.aiWallpaper)
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
@@ -173,6 +175,7 @@ class FavouriteFragment : Fragment() {
             if (catResponses != null) {
 
                 binding.emptySupport.visibility = View.GONE
+                binding.aiRecyclerView.visibility = View.VISIBLE
                 isLoadedData = true
                 cachedCatResponses = catResponses as ArrayList
                 if (view != null) {
@@ -182,6 +185,7 @@ class FavouriteFragment : Fragment() {
                 if (MySharePreference.getFavouriteSaveState(requireContext())==1){
                     isLoadedData = true
                     binding.emptySupport.visibility = View.VISIBLE
+                    binding.aiRecyclerView.visibility = View.GONE
                 }
 
             }
@@ -209,6 +213,10 @@ class FavouriteFragment : Fragment() {
                         }
                     }
                 )
+            }
+
+            override fun getFavorites(position: Int) {
+                loadData()
             }
         },requireParentFragment().findNavController(),R.id.action_mainFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {
@@ -244,6 +252,9 @@ class FavouriteFragment : Fragment() {
             if(it.isNotEmpty()){
 
                 cachedIGList?.addAll(it)
+                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
+                    binding.selfCreationRecyclerView.visibility = View.VISIBLE
+                }
 
                 binding.emptySupportAI.visibility = View.GONE
                 val adapter = MyCreationFavAdapter(it.reversed(),object:GetFavouriteImagePath{
@@ -264,6 +275,7 @@ class FavouriteFragment : Fragment() {
             }else{
                 if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
                     binding.emptySupportAI.visibility = View.VISIBLE
+                    binding.selfCreationRecyclerView.visibility = View.GONE
 //                    Toast.makeText(requireContext(),
 //                        getString(R.string.your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the), Toast.LENGTH_SHORT).show()
                 }

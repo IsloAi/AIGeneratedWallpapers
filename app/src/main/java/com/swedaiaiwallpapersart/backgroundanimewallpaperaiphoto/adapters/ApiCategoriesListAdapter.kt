@@ -229,6 +229,8 @@ class ApiCategoriesListAdapter(
                 }
                 addFavourite(context!!,model,favouriteButton,likes)
 
+
+
         }
     }
 
@@ -276,6 +278,7 @@ class ApiCategoriesListAdapter(
                 val response = apiService.postData(postData).execute()
                   withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
+                        positionCallback.getFavorites(1)
                         val message = response.body()?.string()
                         if (message == "Liked") {
                             val like = model.likes

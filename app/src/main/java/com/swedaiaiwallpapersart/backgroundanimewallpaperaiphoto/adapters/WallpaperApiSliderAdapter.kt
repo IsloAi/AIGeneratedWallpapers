@@ -3,14 +3,17 @@ package com.example.hdwallpaper.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -30,15 +33,14 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.NativeSliderLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .SlideItemContainerBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import java.lang.NullPointerException
 
 
 class WallpaperApiSliderAdapter(
-    private val arrayList: ArrayList<CatResponse>,
+    private val arrayList: ArrayList<CatResponse?>,
     private val viewPager2: ViewPager2,
     private val viewPagerImageClick: ViewPagerImageClick,
     private val fullViewImage: FullViewImage,
@@ -50,7 +52,8 @@ class WallpaperApiSliderAdapter(
     private val VIEW_TYPE_NATIVE_AD = 1
 
     private val firstAdLineThreshold = AdConfig.firstAdLine
-    private val lineCount = AdConfig.lineCount +1
+    private val lineCount = AdConfig.lineCount
+    private val statusAd = AdConfig.adStatus
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
 
@@ -71,25 +74,27 @@ class WallpaperApiSliderAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        Log.e("TAG", "getItemViewType: "+position )
-         when {
-            (position == firstAdLineThreshold) -> {
-                return VIEW_TYPE_NATIVE_AD // First ad
-            }
-             position > firstAdLineThreshold && (position - firstAdLineThreshold) % lineCount == 0 -> {
-                return VIEW_TYPE_NATIVE_AD // Subsequent ads
+        return if (!isNetworkAvailable() && statusAd == 0) {
+            // If network is not available, display View Container
+            VIEW_TYPE_CONTAINER1
+        } else {
+            when {
+                (position == firstAdLineThreshold) -> {
+                    return VIEW_TYPE_NATIVE_AD // First ad
+                }
+                position > firstAdLineThreshold && (position - firstAdLineThreshold) % lineCount == 0 -> {
+                    return VIEW_TYPE_NATIVE_AD // Subsequent ads
 
-            }
-            else -> {
-                return VIEW_TYPE_CONTAINER1
+                }
+                else -> {
+                    return VIEW_TYPE_CONTAINER1
+                }
             }
         }
+
     }
 
-    private fun isPositionAnAd(position: Int): Boolean {
-        val positionRelativeToFirstAd = position + 1 // Offset to start count from 1
-        return (positionRelativeToFirstAd > firstAdLineThreshold) && ((positionRelativeToFirstAd - firstAdLineThreshold) % lineCount == 0)
-    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
 
@@ -97,7 +102,12 @@ class WallpaperApiSliderAdapter(
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
                 val viewHolderContainer1 = holder as ViewHolderContainer1
-                viewHolderContainer1.bind(arrayList,position)
+                try {
+                    viewHolderContainer1.bind(arrayList,position)
+                }catch (e:NullPointerException){
+                 e.printStackTrace()
+                }
+
             }
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
@@ -110,12 +120,12 @@ class WallpaperApiSliderAdapter(
         return arrayList.size
     }
     inner class  ViewHolderContainer1(val binding: SlideItemContainerBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(arrayList: ArrayList<CatResponse>, position: Int) {
+        fun bind(arrayList: ArrayList<CatResponse?>, position: Int) {
 
 
 
             val model = arrayList[position]
-            dataSet(model,binding.imageSlide,binding.progressBar,binding.gemsTextView,binding.blurView,adapterPosition)
+            dataSet(model!!,binding.imageSlide,binding.progressBar,binding.gemsTextView,binding.blurView,adapterPosition,binding.noDataIMG)
         } }
 
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -125,7 +135,7 @@ class WallpaperApiSliderAdapter(
     }
     @SuppressLint("SuspiciousIndentation")
     private fun dataSet(model: CatResponse, imageSlide: AppCompatImageView, progressBar: LottieAnimationView,
-                        gemsTextView: TextView, blurView: ConstraintLayout, adapterPosition: Int) {
+                        gemsTextView: TextView, blurView: ConstraintLayout, adapterPosition: Int,noData:ImageView) {
         progressBar.visibility = VISIBLE
         progressBar.setAnimation(R.raw.main_loading_animation)
         gemsTextView.text = model.gems.toString()
@@ -152,13 +162,15 @@ class WallpaperApiSliderAdapter(
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    progressBar.visibility = VISIBLE
-                    progressBar.setAnimation(R.raw.no_data_image_found)
+                    progressBar.visibility = View.GONE
+                    noData.visibility = View.VISIBLE
+
                     return false
                 }
                 override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
                                              dataSource: DataSource?, isFirstResource: Boolean): Boolean {
                  progressBar.visibility = INVISIBLE
+                    noData.visibility = View.GONE
                     return false
                 }
             }).into(imageSlide)
@@ -172,6 +184,20 @@ class WallpaperApiSliderAdapter(
     private val runable = Runnable {
         arrayList.addAll(arrayList)
         notifyDataSetChanged()
+    }
+
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = mActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
+        }
     }
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: NativeSliderLayoutBinding){
@@ -194,7 +220,17 @@ class WallpaperApiSliderAdapter(
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()
                     Log.e("TAG", "onAdsLoadFail: native failded " )
-                    binding.adsView.visibility = View.GONE
+                    if (statusAd == 0){
+                        binding.adsView.visibility = View.GONE
+                    }else{
+                        if (isNetworkAvailable()){
+                            loadad(holder,binding)
+                            binding.adsView.visibility = View.VISIBLE
+                        }else{
+                            binding.adsView.visibility = View.GONE
+                        }
+                    }
+
                 }
 
                 override fun onAdsLoaded() {

@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListener
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.google.android.gms.ads.AdRequest
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
 .FragmentSplashOnBinding

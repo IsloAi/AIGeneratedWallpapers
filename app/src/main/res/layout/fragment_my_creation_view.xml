@@ -391,17 +391,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:id="@+id/promptLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:id="@+id/prompt_txt"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_7sdp"
                             android:fontFamily="@font/raleway_medium"
@@ -414,14 +411,17 @@
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
+                            android:id="@+id/bottom_line"
                             android:layout_marginHorizontal="@dimen/_10sdp"
+                            app:layout_constraintTop_toBottomOf="@id/prompt_txt"
                             android:layout_marginTop="@dimen/_3sdp"
                             android:background="@color/gray" />
 
                         <EditText
                             android:id="@+id/prompt"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minLines="3"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_3sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
@@ -433,12 +433,10 @@
                             android:text="@string/prompt_is_loading"
                             android:textColor="@color/black"
                             android:textSize="15sp"
+                            app:layout_constraintTop_toBottomOf="@id/bottom_line"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/backButton"
-                            app:layout_constraintTop_toTopOf="parent"
-                            tools:ignore="HardcodedText" />
 
-                    </LinearLayout>
+                            tools:ignore="HardcodedText" />
 
                     <ImageView
                         android:layout_width="@dimen/_25sdp"
@@ -446,7 +444,7 @@
                         android:src="@drawable/edit_light"
                         app:layout_constraintEnd_toStartOf="@id/copyButton"
                         app:layout_constraintTop_toTopOf="parent"
-                        android:layout_marginTop="@dimen/_2sdp"
+                        app:layout_constraintBottom_toTopOf="@id/bottom_line"
                         android:visibility="gone"
                         android:layout_marginEnd="@dimen/_5sdp"
                         android:padding="@dimen/_5sdp"
@@ -460,9 +458,10 @@
                         android:layout_height="@dimen/_25sdp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+
                         android:layout_marginEnd="@dimen/_7sdp"
                         android:padding="@dimen/_7sdp"
-                        android:layout_marginTop="@dimen/_2sdp"
+                        app:layout_constraintBottom_toTopOf="@id/bottom_line"
                         android:src="@drawable/content_copy"
                         />
                 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -133,6 +133,9 @@ class ListViewFragment : Fragment() {
 
 
             }
+
+            override fun getFavorites(position: Int) {
+            }
         },findNavController(),R.id.action_listViewFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {
             override fun getGemsBack(gems: Int) {

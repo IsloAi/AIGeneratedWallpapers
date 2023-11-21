@@ -206,8 +206,9 @@
                 />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/no_fav_img"
                 app:layout_constraintEnd_toEndOf="@id/no_fav_img"
                 android:background="@drawable/no_fav_btn"
@@ -294,8 +295,9 @@
                 />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40sdp"
+                android:paddingHorizontal="@dimen/_10sdp"
                 app:layout_constraintStart_toStartOf="@id/no_fav_imgAI"
                 app:layout_constraintEnd_toEndOf="@id/no_fav_imgAI"
                 android:background="@drawable/no_fav_btn"

@@ -25,26 +25,8 @@ class MyCreationFavAdapter(
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var context: Context? = null
     private val VIEW_TYPE_CONTAINER1 = 0
-    private val VIEW_TYPE_CONTAINER2 = 1
 
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: FavouriteListIGEntity, position: Int) {
-            setData(
-                model,
-                position,
-                binding.wallpaper,
-                binding.loading,
-                binding.gemsTextView,
-                binding.diamondIcon,
-                binding.likesTextView,
-                binding.setFavouriteButton,
-                binding.lockButton
-            )
-        }
-    }
-
-    inner class ViewHolderContainer2(private val binding: WallpaperRow2Binding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(model: FavouriteListIGEntity, position: Int) {
             setData(
@@ -70,12 +52,6 @@ class MyCreationFavAdapter(
                 val binding = WallpaperRowBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
-
-            VIEW_TYPE_CONTAINER2 -> {
-                val binding = WallpaperRow2Binding.inflate(inflater, parent, false)
-                ViewHolderContainer2(binding)
-            }
-
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -88,17 +64,12 @@ class MyCreationFavAdapter(
                 val viewHolderContainer1 = holder as ViewHolderContainer1
                 viewHolderContainer1.bind(model,position)
             }
-
-            VIEW_TYPE_CONTAINER2 -> {
-                val viewHolderContainer2 = holder as ViewHolderContainer2
-                viewHolderContainer2.bind(model,position)
-            }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         // Return the appropriate view type based on the position
-        return if (position % 4 < 1) VIEW_TYPE_CONTAINER1 else VIEW_TYPE_CONTAINER2
+        return if (position % 4 < 1) VIEW_TYPE_CONTAINER1 else VIEW_TYPE_CONTAINER1
     }
     private fun setData(
         model: FavouriteListIGEntity,

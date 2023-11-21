@@ -84,6 +84,7 @@ class ViewAllCreations : Fragment() {
             if (mlist.size > 0){
                 binding.deleteAllHistory.visibility = View.GONE
                 binding.selectAll.visibility = View.VISIBLE
+                binding.selectAll.text = getString(R.string.select_all)
                 isSelectionMode = true
                 adapter?.updateSelectionMode(isSelectionMode)
             }else{

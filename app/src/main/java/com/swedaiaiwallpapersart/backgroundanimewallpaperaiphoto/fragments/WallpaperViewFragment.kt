@@ -25,7 +25,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.ImageView
@@ -48,8 +47,6 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
-import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -71,19 +68,16 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FullViewImagePopup
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -102,7 +96,7 @@ import java.util.concurrent.Executors
 class WallpaperViewFragment : Fragment() {
     private var _binding: FragmentWallpaperViewBinding? = null
     private val binding get() = _binding!!
-    private var arrayList = ArrayList<CatResponse>()
+    private var arrayList = ArrayList<CatResponse?>()
     private var isFragmentAttached: Boolean = false
     private var position :Int =0
     private var viewPager2: ViewPager2? = null
@@ -169,27 +163,52 @@ class WallpaperViewFragment : Fragment() {
         if (arrayListJson != null && pos != null) {
             val gson = Gson()
             val arrayListType = object : TypeToken<ArrayList<CatResponse>>() {}.type
-            val arrayListOfImages = gson.fromJson<ArrayList<CatResponse>>(arrayListJson, arrayListType)
-            position = pos
+            val arrayListOfImages = gson.fromJson<ArrayList<CatResponse?>>(arrayListJson, arrayListType)
+            position = if (pos >= AdConfig.firstAdLine){
+                pos +1
+            }else{
+                pos
+            }
+
             arrayList = arrayListOfImages
             Log.d("gsonParsingData", "onCreate:  $arrayListOfImages"  )
         }
     }
-   private fun functionality(){
+
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+        val newData = arrayListOf<CatResponse?>()
+        for (i in data.indices){
+            if (i > AdConfig.firstAdLine && (i - AdConfig.firstAdLine) % (AdConfig.lineCount -1)  == 0) {
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+            }else if (i == AdConfig.firstAdLine){
+                newData.add(null)
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+            }
+            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            newData.add(data[i])
+        }
+        return newData
+    }
+
+
+    private fun functionality(){
        myActivity = activity as MainActivity
        viewPager2 = binding.viewPager
        binding.toolbar.setOnClickListener {
            // Set up the onBackPressed callback
            navController?.navigateUp()
        }
-       getLargImage = arrayList[position].hd_image_url!!
-       getSmallImage = arrayList[position].compressed_image_url!!
+
+       getLargImage = arrayList[position]?.hd_image_url!!
+       getSmallImage = arrayList[position]?.compressed_image_url!!
        binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
        setViewPager()
        checkRedHeart(position)
        getBitmapFromGlide(getLargImage)
        binding.buttonApplyWallpaper.setOnClickListener {
-           if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                if(bitmap != null){
                    openPopupMenu()
                }else{
@@ -203,11 +222,11 @@ class WallpaperViewFragment : Fragment() {
        }
        binding.favouriteButton.setOnClickListener {
                binding.favouriteButton.isEnabled = false
-               if(arrayList[position].liked==true){
-                   arrayList[position].liked = false
+               if(arrayList[position]?.liked==true){
+                   arrayList[position]?.liked = false
                    binding.favouriteButton.setImageResource(R.drawable.heart_unsel)
                }else{
-                   arrayList[position].liked = true
+                   arrayList[position]?.liked = true
                    binding.favouriteButton.setImageResource(R.drawable.heart_red)
                }
                addFavourite(requireContext(),position,binding.favouriteButton)
@@ -218,54 +237,63 @@ class WallpaperViewFragment : Fragment() {
 
        binding.unlockWallpaper.setOnClickListener {
 
-           SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
-               CustomSDKRewardedAdsListener {
-               override fun onAdsDismiss() {
-                   Log.e("********ADS", "onAdsDismiss: ", )
+           if(bitmap != null){
+               SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
+                   CustomSDKRewardedAdsListener {
+                   override fun onAdsDismiss() {
+                       Log.e("********ADS", "onAdsDismiss: ", )
 
-               }
+                   }
 
-               override fun onAdsRewarded() {
-                   Log.e("********ADS", "onAdsRewarded: ", )
-                   val postData = PostDataOnServer()
-                   val model = arrayList[position]
-                   arrayList[position].unlockimges = true
-                   arrayList[position].gems = 0
+                   override fun onAdsRewarded() {
+                       Log.e("********ADS", "onAdsRewarded: ", )
+                       val postData = PostDataOnServer()
+                       val model = arrayList[position]
+                       arrayList[position]?.unlockimges = true
+                       arrayList[position]?.gems = 0
 
-                   val model1 = arrayList[position]
-                   postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,model1,requireContext(),0)
-                   showInter = false
-                   openPopupMenu()
-                   binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                   binding.unlockWallpaper.visibility = View.GONE
-                   adapter?.notifyItemChanged(position)
-                   binding.viewPager.setCurrentItem(position,true)
-                   adapter?.notifyDataSetChanged()
-               }
+                       val model1 = arrayList[position]
+                       postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,
+                           model1!!,requireContext(),0)
+                       showInter = false
+                       openPopupMenu()
+                       binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                       binding.unlockWallpaper.visibility = View.GONE
+                       adapter?.notifyItemChanged(position)
+                       binding.viewPager.setCurrentItem(position,true)
+                       adapter?.notifyDataSetChanged()
+                   }
 
-               override fun onAdsShowFail(errorCode: Int) {
-                   Log.e("********ADS", "onAdsShowFail: ", )
-                   val postData = PostDataOnServer()
-                   val model = arrayList[position]
-                   arrayList[position].unlockimges = true
-                   arrayList[position].gems = 0
+                   override fun onAdsShowFail(errorCode: Int) {
+                       Log.e("********ADS", "onAdsShowFail: ", )
+                       val postData = PostDataOnServer()
+                       val model = arrayList[position]
+                       arrayList[position]?.unlockimges = true
+                       arrayList[position]?.gems = 0
 
-                   postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,model,requireContext(),0)
-                   showInter = false
-                   openPopupMenu()
-                   binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                   binding.unlockWallpaper.visibility = View.GONE
-                   adapter?.notifyItemChanged(position)
-                   adapter?.notifyDataSetChanged()
+                       postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,
+                           model!!,requireContext(),0)
+                       showInter = false
+                       openPopupMenu()
+                       binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                       binding.unlockWallpaper.visibility = View.GONE
+                       adapter?.notifyItemChanged(position)
+                       adapter?.notifyDataSetChanged()
 
-               }
+                   }
 
-           })
+               })
+           }else{
+               Toast.makeText(requireContext(),
+                   getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
+           }
+
+
 
 
        }
        binding.downloadWallpaper.setOnClickListener{
-           if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                getUserIdDialog()
            }else{
                Toast.makeText(requireContext(), "First Unlock the wallpaper to download", Toast.LENGTH_SHORT).show()
@@ -274,8 +302,12 @@ class WallpaperViewFragment : Fragment() {
 
        }
    }
+
+
     private fun setViewPager() {
-        adapter = WallpaperApiSliderAdapter(arrayList, viewPager2!!,object :
+        val array = addNullValueInsideArray(arrayList)
+        arrayList = array
+        adapter = WallpaperApiSliderAdapter(array, viewPager2!!,object :
             ViewPagerImageClick {
             @SuppressLint("SuspiciousIndentation")
             override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
@@ -294,7 +326,7 @@ class WallpaperViewFragment : Fragment() {
         },myActivity)
         viewPager2?.adapter = adapter
         viewPager2?.setCurrentItem(position, false)
-        if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+        if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             binding.unlockWallpaper.visibility = View.GONE
             binding.buttonApplyWallpaper.visibility = View.VISIBLE
         }else{
@@ -318,17 +350,45 @@ class WallpaperViewFragment : Fragment() {
         viewPager2?.setPageTransformer(transformer)
         val viewPagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(positi: Int) {
-                 getLargImage = arrayList[positi].hd_image_url!!
-                 getSmallImage = arrayList[positi].compressed_image_url!!
-                 position = positi
+                if (array[positi]?.hd_image_url != null){
+                    getLargImage = array[positi]?.hd_image_url!!
+                    getSmallImage = array[positi]?.compressed_image_url!!
 
-                if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
-                    binding.unlockWallpaper.visibility = View.GONE
-                    binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                    position = positi
+
+                    if(array[position]?.gems==0 || array[position]?.unlockimges==true){
+
+                        binding.unlockWallpaper.visibility = View.GONE
+                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                    }else{
+                        binding.unlockWallpaper.visibility = View.VISIBLE
+                        binding.buttonApplyWallpaper.visibility = View.INVISIBLE
+                    }
                 }else{
-                    binding.unlockWallpaper.visibility = View.VISIBLE
-                    binding.buttonApplyWallpaper.visibility = View.INVISIBLE
+                    position = positi
                 }
+
+
+
+
+                if (array[positi]?.hd_image_url ==  null){
+                    binding.unlockWallpaper.visibility = View.GONE
+                    binding.buttonApplyWallpaper.visibility = View.GONE
+                    binding.bottomMenu.visibility = View.GONE
+                }else{
+                    binding.bottomMenu.visibility = View.VISIBLE
+
+                    if(array[position]?.gems==0 || array[position]?.unlockimges==true){
+
+                        binding.unlockWallpaper.visibility = View.GONE
+                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                    }else{
+                        binding.unlockWallpaper.visibility = View.VISIBLE
+                        binding.buttonApplyWallpaper.visibility = View.INVISIBLE
+                    }
+
+                }
+
                 checkRedHeart(positi)
                 getBitmapFromGlide(getLargImage)
             }
@@ -359,7 +419,7 @@ class WallpaperViewFragment : Fragment() {
 
                 override fun onAdsRewarded() {
                     Log.e("********ADS", "onAdsRewarded: ")
-                    if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                         mSaveMediaToStorage(bitmap)
                     }else{
                         Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
@@ -371,7 +431,7 @@ class WallpaperViewFragment : Fragment() {
 
                 override fun onAdsShowFail(errorCode: Int) {
                     Log.e("********ADS", "onAdsShowFail: ")
-                    if(arrayList[position].gems==0 || arrayList[position].unlockimges==true){
+                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                         mSaveMediaToStorage(bitmap)
                     }else{
                         Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
@@ -399,7 +459,7 @@ class WallpaperViewFragment : Fragment() {
     }
     private fun checkRedHeart(position: Int) {
         if (isAdded) {
-        if (arrayList[position].liked == true) {
+        if (arrayList[position]?.liked == true) {
             binding.favouriteButton.setImageResource(R.drawable.heart_red) }
         else
         {
@@ -414,20 +474,20 @@ class WallpaperViewFragment : Fragment() {
     ){
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
-        val postData = PostData(MySharePreference.getDeviceID(context)!!, arrayList[position].id.toString())
+        val postData = PostData(MySharePreference.getDeviceID(context)!!, arrayList[position]?.id.toString())
         val call = apiService.postData(postData)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val message = response.body()?.string()
                     if(message=="Liked"){
-                        arrayList[position].liked = true
+                        arrayList[position]?.liked = true
                         favouriteButton.setImageResource(R.drawable.heart_red)
                     }
                     else
                     {
                         favouriteButton.setImageResource(R.drawable.heart_unsel)
-                        arrayList[position].liked = false
+                        arrayList[position]?.liked = false
                     }
                     favouriteButton.isEnabled = true
                 }
