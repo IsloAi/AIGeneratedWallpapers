@@ -17,8 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .FragmentPremiumPlanBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PremiumAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PremiumPlanCallback

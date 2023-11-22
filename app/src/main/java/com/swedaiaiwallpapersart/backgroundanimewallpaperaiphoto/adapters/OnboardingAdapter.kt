@@ -3,8 +3,8 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .ListItemOnboadingBinding
 
 
@@ -41,5 +41,5 @@ class OnboardingAdapter(welcomeItems: List<Int>) :
         return welcomeItems.size
     }
 
-    inner class OnboardingViewHolder(val binding:ListItemOnboadingBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class OnboardingViewHolder(val binding: ListItemOnboadingBinding) : RecyclerView.ViewHolder(binding.root)
 }

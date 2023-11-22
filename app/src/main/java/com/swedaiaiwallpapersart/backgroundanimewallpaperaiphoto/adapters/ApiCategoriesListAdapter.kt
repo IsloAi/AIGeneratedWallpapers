@@ -26,12 +26,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.StaggeredNativeBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.StaggeredNativeLayoutBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .WallpaperRow2Binding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .WallpaperRowBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate

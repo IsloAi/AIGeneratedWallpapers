@@ -40,8 +40,8 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.gson.Gson
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentMyCreationViewBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentMyCreationViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
@@ -332,15 +332,33 @@ class MyCreationViewFragment : Fragment() {
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("********ADS", "onAdsShowFail: ")
-                    val getPrompt = binding.prompt.text
-                    if(getPrompt.isNotEmpty()){
 
-                        getUserIdDialog()
-                        imageGenerateViewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                    }else{
-                        Toast.makeText(requireContext(), getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                    }
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "createdwallscr_regen_click_inter",
+                        "createdwallscr_regen_click_inter",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                val getPrompt = binding.prompt.text
+                                if(getPrompt.isNotEmpty()){
+
+                                    getUserIdDialog()
+                                    imageGenerateViewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                                }else{
+                                    Toast.makeText(requireContext(),
+                                        getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }
+                    )
+
+
+
                 }
 
             })

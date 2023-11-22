@@ -54,8 +54,8 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .FragmentCreationSliderViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
@@ -65,6 +65,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.InterstitialAdDismiss
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -419,7 +420,22 @@ class CreationSliderViewFragment : Fragment() {
 
                 override fun onAdsShowFail(errorCode: Int) {
                     Log.e("********ADS", "onAdsShowFail: ")
-                        mSaveMediaToStorage(bitmap)
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "viewlistwallscr_download_item_inter",
+                        "viewlistwallscr_download_item_inter",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Toast.makeText(requireContext(),"Ad Load Failed. Please try again",Toast.LENGTH_SHORT).show()
+                            }
+
+                            override fun onAdsDismiss() {
+                                mSaveMediaToStorage(bitmap)
+                            }
+                        }
+                    )
+
                 }
 
             })

@@ -23,8 +23,8 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentHomeBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
@@ -32,6 +32,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetL
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -156,6 +157,24 @@ class HomeFragment : Fragment(){
             }
         }
         myViewModel.fetchWallpapers(requireContext(), binding.progressBar,true)
+    }
+
+
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+        val newData = arrayListOf<CatResponse?>()
+        for (i in data.indices){
+            if (i > AdConfig.firstAdLine && (i - AdConfig.firstAdLine) % (AdConfig.lineCount -1)  == 0) {
+                newData.add(null)
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+            }else if (i == AdConfig.firstAdLine){
+                newData.add(null)
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+            }
+            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            newData.add(data[i])
+        }
+        return newData
     }
     private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
        adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :

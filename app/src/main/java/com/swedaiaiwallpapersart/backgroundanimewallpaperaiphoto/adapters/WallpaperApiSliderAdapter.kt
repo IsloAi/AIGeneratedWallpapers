@@ -29,9 +29,9 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.NativeSliderLayoutBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .SlideItemContainerBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
@@ -175,9 +175,9 @@ class WallpaperApiSliderAdapter(
                 }
             }).into(imageSlide)
 
-        if (adapterPosition == arrayList.size - 1) {
-            viewPager2.post(runable)
-        }
+//        if (adapterPosition == arrayList.size - 1) {
+//            viewPager2.post(runable)
+//        }
 
     }
 

@@ -17,10 +17,10 @@ class FullViewImagePopup {
     companion object{
          fun openFullViewWallpaper(context: Context,image: String) {
             val dialog = Dialog(context, R.style.Theme_Black_NoTitleBar_Fullscreen)
-            dialog.setContentView(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R.layout.full_view_wallpaper)
+            dialog.setContentView(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R.layout.full_view_wallpaper)
             dialog.show()
-            val imageView: ImageView = dialog.findViewById(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R.id.fullViewImage)
-            val closeButton: RelativeLayout = dialog.findViewById(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R.id.closeButton)
+            val imageView: ImageView = dialog.findViewById(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R.id.fullViewImage)
+            val closeButton: RelativeLayout = dialog.findViewById(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R.id.closeButton)
              imageView.isEnabled = false
              Glide.with(context)
                  .load(image)

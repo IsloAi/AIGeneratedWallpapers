@@ -9,7 +9,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .SlideItemContainerCreationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FullViewImagePopup
@@ -30,7 +30,7 @@ class FavouriteWallpaperSliderAdapter(
     override fun getItemCount(): Int {
         return arrayList.size
     }
-    inner class  ViewHolder(val binding:SlideItemContainerCreationBinding ) : RecyclerView.ViewHolder(binding.root) {
+    inner class  ViewHolder(val binding: SlideItemContainerCreationBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(arrayList: ArrayList<FavouriteListIGEntity>, position: Int) {
             val model = arrayList[position]
             dataSet(model,binding.imageSlide,position)
@@ -43,8 +43,8 @@ class FavouriteWallpaperSliderAdapter(
         imageSlide.setOnClickListener {
             FullViewImagePopup.openFullViewWallpaper(context!!,model.image!!)
         }
-        if (position == arrayList.size - 1) {
-            viewPager2.post(runable) }
+//        if (position == arrayList.size - 1) {
+//            viewPager2.post(runable) }
     }
     private val runable = Runnable {
         arrayList.addAll(arrayList)

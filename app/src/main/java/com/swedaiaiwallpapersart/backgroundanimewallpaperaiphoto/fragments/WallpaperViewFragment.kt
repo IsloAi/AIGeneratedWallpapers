@@ -59,8 +59,8 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.FragmentWallpaperViewBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
@@ -113,6 +113,8 @@ class WallpaperViewFragment : Fragment() {
     private lateinit var myWallpaperManager : MyWallpaperManager
     private var navController: NavController? = null
     val myDialogs = MyDialogs()
+    var adcount = 0
+    var totalADs = 0
     private val googleLogin = GoogleLogin()
     private lateinit var myActivity : MainActivity
 
@@ -160,17 +162,67 @@ class WallpaperViewFragment : Fragment() {
         reviewManager = ReviewManagerFactory.create(requireContext())
         val arrayListJson = arguments?.getString("arrayListJson")
         val pos = arguments?.getInt("position")
+        adcount = pos!!
         if (arrayListJson != null && pos != null) {
             val gson = Gson()
             val arrayListType = object : TypeToken<ArrayList<CatResponse>>() {}.type
             val arrayListOfImages = gson.fromJson<ArrayList<CatResponse?>>(arrayListJson, arrayListType)
-            position = if (pos >= AdConfig.firstAdLine){
-                pos +1
+
+            Log.e("******NULL", "onCreate: "+arrayListOfImages.size )
+            var adjustedPos = pos
+
+
+
+
+
+//            if (pos == AdConfig.firstAdLine){
+//                position = pos +1
+//                Log.e("*******ADJUST POSITION", "onCreate: "+position )
+//            }else if (pos > AdConfig.firstAdLine){
+//                for (i in AdConfig.firstAdLine until arrayListOfImages.size) {
+//                    if (arrayListOfImages[i] == null) {
+//                        adjustedPos++
+//
+//                        Log.e("*******ADJUST POSITION", "onCreate adjusted: "+adjustedPos )
+//
+//                    }
+//                    if (i == adjustedPos) {
+//                        Log.e("*******ADJUST POSITION", "onCreate adjusted break: "+adjustedPos )
+//                        break // Stop iterating when the adjusted position is reached
+//                    }
+//                }
+//
+//                Log.e("*******ADJUST POSITION", "onCreate adjusted: "+adjustedPos )
+//
+//                position = adjustedPos
+//            }else{
+//                position = pos
+//                Log.e("*******ADJUST POSITION", "onCreate simple: "+position )
+//            }
+
+            arrayList = addNullValueInsideArray(arrayListOfImages)
+//            for (i in AdConfig.firstAdLine until arrayList.size){
+//                if (arrayList[i] == null){
+//                    adcount ++
+//                    Log.e("******NULL", "onCreate: ads count "+adcount )
+//                }
+//
+//            }
+//            val adCountBeforePosition = arrayList.subList(0, pos).count { it == null && it != arrayList[AdConfig.firstAdLine] }
+//
+//            Log.e("******NULL", "onCreate: $adCountBeforePosition")
+
+            // Calculate the adjusted position by considering the null ads in the array
+
+            if (pos == AdConfig.firstAdLine){
+                position = pos +totalADs
+//                Log.e("*******ADJUST POSITION", "onCreate: "+position )
+            }else if (pos < AdConfig.firstAdLine){
+                position = pos
             }else{
-                pos
+                position = pos +totalADs
             }
 
-            arrayList = arrayListOfImages
             Log.d("gsonParsingData", "onCreate:  $arrayListOfImages"  )
         }
     }
@@ -180,15 +232,27 @@ class WallpaperViewFragment : Fragment() {
         for (i in data.indices){
             if (i > AdConfig.firstAdLine && (i - AdConfig.firstAdLine) % (AdConfig.lineCount -1)  == 0) {
                     newData.add(null)
+                if (i <= adcount){
+                    totalADs++
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+                }
                     Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
             }else if (i == AdConfig.firstAdLine){
                 newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                totalADs++
+                Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+
+                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
             }
             Log.e("******NULL", "addNullValueInsideArray: not null "+i )
             newData.add(data[i])
+
         }
+        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
         return newData
     }
 
@@ -201,13 +265,17 @@ class WallpaperViewFragment : Fragment() {
            navController?.navigateUp()
        }
 
-       getLargImage = arrayList[position]?.hd_image_url!!
-       getSmallImage = arrayList[position]?.compressed_image_url!!
        binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
-       setViewPager()
-       checkRedHeart(position)
-       getBitmapFromGlide(getLargImage)
-       binding.buttonApplyWallpaper.setOnClickListener {
+        setViewPager()
+        checkRedHeart(position)
+        if (arrayList[position] != null){
+            getLargImage = arrayList[position]?.hd_image_url!!
+            getSmallImage = arrayList[position]?.compressed_image_url!!
+            getBitmapFromGlide(getLargImage)
+        }
+
+
+        binding.buttonApplyWallpaper.setOnClickListener {
            if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                if(bitmap != null){
                    openPopupMenu()
@@ -260,25 +328,44 @@ class WallpaperViewFragment : Fragment() {
                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
                        binding.unlockWallpaper.visibility = View.GONE
                        adapter?.notifyItemChanged(position)
+                       viewPager2?.invalidate()
                        binding.viewPager.setCurrentItem(position,true)
-                       adapter?.notifyDataSetChanged()
                    }
 
                    override fun onAdsShowFail(errorCode: Int) {
                        Log.e("********ADS", "onAdsShowFail: ", )
-                       val postData = PostDataOnServer()
-                       val model = arrayList[position]
-                       arrayList[position]?.unlockimges = true
-                       arrayList[position]?.gems = 0
 
-                       postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,
-                           model!!,requireContext(),0)
-                       showInter = false
-                       openPopupMenu()
-                       binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                       binding.unlockWallpaper.visibility = View.GONE
-                       adapter?.notifyItemChanged(position)
-                       adapter?.notifyDataSetChanged()
+                               SDKBaseController.getInstance().showInterstitialAds(
+                                   requireActivity(),
+                                   "viewlistwallscr_item_vip_inter",
+                                   "viewlistwallscr_item_vip_inter",
+                                   showLoading = true,
+                                   adsListener = object : CommonAdsListenerAdapter() {
+                                       override fun onAdsShowFail(errorCode: Int) {
+                                           Toast.makeText(requireContext(),"Ad Load Failed. Please try again",Toast.LENGTH_SHORT).show()
+                                       }
+
+                                       override fun onAdsDismiss() {
+                                           Log.e("********ADS", "onAdsRewarded: ", )
+                                           val postData = PostDataOnServer()
+                                           val model = arrayList[position]
+                                           arrayList[position]?.unlockimges = true
+                                           arrayList[position]?.gems = 0
+
+                                           val model1 = arrayList[position]
+                                           postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,
+                                               model1!!,requireContext(),0)
+                                           showInter = false
+                                           openPopupMenu()
+                                           binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                                           binding.unlockWallpaper.visibility = View.GONE
+                                           adapter?.notifyItemChanged(position)
+                                           viewPager2?.invalidate()
+                                           binding.viewPager.setCurrentItem(position,true)
+                                       }
+                                   }
+                               )
+
 
                    }
 
@@ -305,9 +392,7 @@ class WallpaperViewFragment : Fragment() {
 
 
     private fun setViewPager() {
-        val array = addNullValueInsideArray(arrayList)
-        arrayList = array
-        adapter = WallpaperApiSliderAdapter(array, viewPager2!!,object :
+        adapter = WallpaperApiSliderAdapter(arrayList, viewPager2!!,object :
             ViewPagerImageClick {
             @SuppressLint("SuspiciousIndentation")
             override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
@@ -350,13 +435,14 @@ class WallpaperViewFragment : Fragment() {
         viewPager2?.setPageTransformer(transformer)
         val viewPagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(positi: Int) {
-                if (array[positi]?.hd_image_url != null){
-                    getLargImage = array[positi]?.hd_image_url!!
-                    getSmallImage = array[positi]?.compressed_image_url!!
+                if (positi >= 0 && positi < arrayList.size) {
+                if (arrayList[positi]?.hd_image_url != null){
+                    getLargImage = arrayList[positi]?.hd_image_url!!
+                    getSmallImage = arrayList[positi]?.compressed_image_url!!
 
                     position = positi
 
-                    if(array[position]?.gems==0 || array[position]?.unlockimges==true){
+                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
 
                         binding.unlockWallpaper.visibility = View.GONE
                         binding.buttonApplyWallpaper.visibility = View.VISIBLE
@@ -371,14 +457,17 @@ class WallpaperViewFragment : Fragment() {
 
 
 
-                if (array[positi]?.hd_image_url ==  null){
+                if (arrayList[positi]?.hd_image_url ==  null){
                     binding.unlockWallpaper.visibility = View.GONE
                     binding.buttonApplyWallpaper.visibility = View.GONE
                     binding.bottomMenu.visibility = View.GONE
+
+                    binding.adsWidget.visibility = View.GONE
                 }else{
                     binding.bottomMenu.visibility = View.VISIBLE
+                    binding.adsWidget.visibility = View.VISIBLE
 
-                    if(array[position]?.gems==0 || array[position]?.unlockimges==true){
+                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
 
                         binding.unlockWallpaper.visibility = View.GONE
                         binding.buttonApplyWallpaper.visibility = View.VISIBLE
@@ -391,6 +480,7 @@ class WallpaperViewFragment : Fragment() {
 
                 checkRedHeart(positi)
                 getBitmapFromGlide(getLargImage)
+                }
             }
         }
         viewPager2?.registerOnPageChangeCallback(viewPagerChangeCallback)
@@ -430,13 +520,28 @@ class WallpaperViewFragment : Fragment() {
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("********ADS", "onAdsShowFail: ")
-                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-                        mSaveMediaToStorage(bitmap)
-                    }else{
-                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "viewlistwallscr_download_item_inter",
+                        "viewlistwallscr_download_item_inter",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                //do something
+                            }
 
-                    }
+                            override fun onAdsDismiss() {
+                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+                                    mSaveMediaToStorage(bitmap)
+                                }else{
+                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+
+                                }
+                            }
+                        }
+                    )
+                    Log.e("********ADS", "onAdsShowFail: ")
+
                 }
 
             })

@@ -34,15 +34,16 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .FragmentGenerateImageBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .ImageGenerationDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -225,7 +226,7 @@ class GenerateImageFragment : Fragment() {
     fun showDialog(){
 
         val builder = AlertDialog.Builder(requireContext())
-        val binding = com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding.ImageGenerationDialogBinding.inflate(layoutInflater)
+        val binding = ImageGenerationDialogBinding.inflate(layoutInflater)
         builder.setView(binding.root)
         val alertDialog = builder.create()
 
@@ -256,14 +257,30 @@ class GenerateImageFragment : Fragment() {
                     }
 
                     override fun onAdsShowFail(errorCode: Int) {
+
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "mainscr_generate_tab_reward_inter",
+                            "mainscr_generate_tab_reward_inter",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    //do something
+                                }
+
+                                override fun onAdsDismiss() {
+                                    val getPrompt = binding.edtPrompt.text
+                                    if(getPrompt.isNotEmpty()){
+                                        getUserIdDialog()
+                                        viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                                    }else{
+                                        Toast.makeText(requireContext(), getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+                        )
                         Log.e("********ADS", "onAdsShowFail: ", )
-                        val getPrompt = binding.edtPrompt.text
-                        if(getPrompt.isNotEmpty()){
-                            getUserIdDialog()
-                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                        }else{
-                            Toast.makeText(requireContext(), getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                        }
+
                     }
 
                 })

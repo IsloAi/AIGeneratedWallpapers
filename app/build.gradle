@@ -6,10 +6,10 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 android {
-    namespace 'com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug'
+    namespace 'com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto'
     compileSdk 34
     defaultConfig {
-        applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug"
+        applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 23
         targetSdk 34
         versionCode 10
@@ -111,8 +111,7 @@ dependencies {
     //work manager
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
-    //Referrer Library
-    implementation "com.android.installreferrer:installreferrer:2.2"
+
 
     //firebase for google login
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
@@ -135,8 +134,9 @@ dependencies {
 
     implementation 'androidx.multidex:multidex:2.0.1'
     //ads
-    implementation 'com.ikame.android-sdk:ikm-sdk-debug:2.6.013'
+//    implementation 'com.ikame.android-sdk:ikm-sdk-debug:2.6.013'
 
+    implementation 'com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.012'
 
 
 }

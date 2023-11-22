@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PremiumPlanCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PremiumPlanModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .PremiumRowItemBinding
 
 class PremiumAdapter(val arrayList: List<PremiumPlanModel>, private val premiumPlanCallback: PremiumPlanCallback):RecyclerView.Adapter<PremiumAdapter.ViewHolder>() {

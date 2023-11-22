@@ -25,7 +25,9 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.RelativeLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
@@ -37,6 +39,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -49,8 +54,8 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.debug.databinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .FragmentCreationSliderViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.FavouriteWallpaperSliderAdapter
@@ -67,7 +72,7 @@ import java.io.OutputStream
 import java.util.concurrent.Executors
 
 class FavouriteSliderViewFragment : Fragment() {
-    private lateinit var binding:FragmentCreationSliderViewBinding
+    private lateinit var binding: FragmentCreationSliderViewBinding
     private var myContext:Context? = null
     private var arrayList = ArrayList<FavouriteListIGEntity>()
     private var position :Int =0
@@ -151,8 +156,61 @@ class FavouriteSliderViewFragment : Fragment() {
                 }
         }
         binding.downloadWallpaper.setOnClickListener{
-                mSaveMediaToStorage(bitmap)
+            getUserIdDialog()
         }
+    }
+
+    private fun getUserIdDialog() {
+        dialog = Dialog(requireContext())
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setContentView(R.layout.rewarded_ad_dialog)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(width, height)
+        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.setCancelable(false)
+        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+        var dismiss = dialog?.findViewById<TextView>(R.id.noThanks)
+
+        getReward?.setOnClickListener {
+            dialog?.dismiss()
+            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
+                CustomSDKRewardedAdsListener {
+                override fun onAdsDismiss() {
+                    Log.e("********ADS", "onAdsDismiss: ")
+                }
+
+                override fun onAdsRewarded() {
+                    Log.e("********ADS", "onAdsRewarded: ")
+                        mSaveMediaToStorage(bitmap)
+                }
+
+                override fun onAdsShowFail(errorCode: Int) {
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "viewlistwallscr_download_item_inter",
+                        "viewlistwallscr_download_item_inter",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                mSaveMediaToStorage(bitmap)
+                            }
+                        }
+                    )
+                }
+
+            })
+        }
+
+        dismiss?.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
     }
     private fun addFavouriteList(myId:Int,prompt:String){
         val data = FavouriteListIGEntity(imageId = myId, image = getLargImage, prompt = prompt)
@@ -230,39 +288,94 @@ class FavouriteSliderViewFragment : Fragment() {
             dialog.dismiss()
         }
         buttonHome.setOnClickListener {
-            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
-            myHandler.post { if(state){
-                interstitialAdWithToast(resources.getString(R.string.set_successfully_on_home_screen), dialog)
-                state = false
-                postDelay()
-            } }
-            showRateApp()
+
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "viewlistwallscr_setdilog_set_button",
+                "viewlistwallscr_setdilog_set_button",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                    }
+
+                    override fun onAdsDismiss() {
+                        myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
+                        myHandler.post { if(state){
+                            interstitialAdWithToast(resources.getString(R.string.set_successfully_on_home_screen), dialog)
+                            state = false
+                            postDelay()
+                        } }
+                        showRateApp()
+                    }
+                }
+            )
+
         }
         buttonLock.setOnClickListener {
-            myExecutor.execute {
-                myWallpaperManager.lockScreen(bitmap!!)
-            }
-            myHandler.post {
-                if(state){
-                    interstitialAdWithToast(resources.getString(R.string.set_successfully_on_lock_screen), dialog)
-                    state = false
-                    postDelay()
+
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "viewlistwallscr_setdilog_set_button",
+                "viewlistwallscr_setdilog_set_button",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                    }
+
+                    override fun onAdsDismiss() {
+                        myExecutor.execute {
+                            myWallpaperManager.lockScreen(bitmap!!)
+                        }
+                        myHandler.post {
+                            if(state){
+                                interstitialAdWithToast(resources.getString(R.string.set_successfully_on_lock_screen), dialog)
+                                state = false
+                                postDelay()
+                            }
+                        }
+                        showRateApp()
+                    }
                 }
-            }
-            showRateApp()
+            )
+
+
+
         }
         buttonBothScreen.setOnClickListener {
-            myExecutor.execute {
-                myWallpaperManager.homeAndLockScreen(bitmap!!)
-            }
-            myHandler.post {
-                if(state){
-                    interstitialAdWithToast(resources.getString(R.string.set_successfully_on_both),dialog)
-                    state = false
-                    postDelay()
+
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "viewlistwallscr_setdilog_set_button",
+                "viewlistwallscr_setdilog_set_button",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                    }
+
+                    override fun onAdsDismiss() {
+                        myExecutor.execute {
+                            myWallpaperManager.homeAndLockScreen(bitmap!!)
+                        }
+                        myHandler.post {
+                            if(state){
+                                interstitialAdWithToast(resources.getString(R.string.set_successfully_on_both),dialog)
+                                state = false
+                                postDelay()
+                            }
+                        }
+                        showRateApp()
+                    }
                 }
-            }
-            showRateApp()
+            )
+
+
+
         }
         dialog.show()
     }
