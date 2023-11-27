@@ -64,7 +64,8 @@ class CategoryFragment : Fragment() {
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            Log.e("********ADS", "onAdsShowFail: $errorCode")
+                            setFragment(string)
                             //do something
                         }
 
@@ -89,6 +90,7 @@ class CategoryFragment : Fragment() {
     private fun setFragment(name:String){
         Bundle().apply {
             putString("name",name)
+            putString("from","category")
             (requireParentFragment() as MainFragment).findNavController().navigate(R.id.action_mainFragment_to_listViewFragment,this)
         }
 

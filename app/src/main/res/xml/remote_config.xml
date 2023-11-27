@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<defaultsMap>
+    <entry>
+        <key>mainscr_trending_tab_scroll_view</key>
+        <value>
+            <map>
+                <entry>
+                    <key>Status</key>
+                    <value>1</value>
+                </entry>
+                <entry>
+                    <key>fisrt_ad_line_threshold</key>
+                    <value>4</value>
+                </entry>
+                <entry>
+                    <key>line_count</key>
+                    <value>3</value>
+                </entry>
+                <entry>
+                    <key>native_design_type</key>
+                    <value>2</value>
+                </entry>
+            </map>
+        </value>
+
+        <key>categoryscr_art_scroll_view</key>
+        <value>
+            <map>
+                <entry>
+                    <key>Status</key>
+                    <value>1</value>
+                </entry>
+                <entry>
+                    <key>fisrt_ad_line_threshold</key>
+                    <value>4</value>
+                </entry>
+                <entry>
+                    <key>line_count</key>
+                    <value>3</value>
+                </entry>
+                <entry>
+                    <key>native_design_type</key>
+                    <value>2</value>
+                </entry>
+            </map>
+        </value>
+    </entry>
+</defaultsMap>

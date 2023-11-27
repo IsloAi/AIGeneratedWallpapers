@@ -78,7 +78,10 @@ class OnBoardingFragment : Fragment() {
 
                 override fun onAdsLoaded() {
                     super.onAdsLoaded()
-                    binding.adsView.visibility = View.VISIBLE
+                    if (isAdded && view != null) {
+                        // Modify view visibility here
+                        binding.adsView.visibility = View.VISIBLE
+                    }
                     Log.e("TAG", "onAdsLoaded: native loaded" )
                 }
             }
@@ -125,7 +128,11 @@ class OnBoardingFragment : Fragment() {
 
                                 override fun onAdsLoaded() {
                                     super.onAdsLoaded()
-                                    binding.adsView.visibility = View.VISIBLE
+                                    if (isAdded && view != null) {
+                                        // Modify view visibility here
+                                        binding.adsView.visibility = View.VISIBLE
+                                    }
+
                                     Log.e("TAG", "onAdsLoaded: native loaded" )
                                 }
                             }
@@ -158,7 +165,10 @@ class OnBoardingFragment : Fragment() {
 
                                 override fun onAdsLoaded() {
                                     super.onAdsLoaded()
-                                    binding.adsView.visibility = View.VISIBLE
+                                    if (isAdded && view != null) {
+                                        // Modify view visibility here
+                                        binding.adsView.visibility = View.VISIBLE
+                                    }
                                     Log.e("TAG", "onAdsLoaded: native loaded" )
                                 }
                             }
@@ -192,7 +202,10 @@ class OnBoardingFragment : Fragment() {
 
                                 override fun onAdsLoaded() {
                                     super.onAdsLoaded()
-                                    binding.adsView.visibility = View.VISIBLE
+                                    if (isAdded && view != null) {
+                                        // Modify view visibility here
+                                        binding.adsView.visibility = View.VISIBLE
+                                    }
                                     Log.e("TAG", "onAdsLoaded: native loaded" )
                                 }
                             }

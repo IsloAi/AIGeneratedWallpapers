@@ -251,6 +251,7 @@ class CreationSliderViewFragment : Fragment() {
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
                         //do something
                     }
 
@@ -276,6 +277,7 @@ class CreationSliderViewFragment : Fragment() {
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
                         //do something
                     }
 
@@ -307,6 +309,7 @@ class CreationSliderViewFragment : Fragment() {
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
                         //do something
                     }
 

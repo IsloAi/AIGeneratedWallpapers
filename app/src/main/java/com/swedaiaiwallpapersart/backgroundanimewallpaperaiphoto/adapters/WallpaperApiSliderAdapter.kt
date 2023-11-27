@@ -42,6 +42,7 @@ import java.lang.NullPointerException
 class WallpaperApiSliderAdapter(
     private val arrayList: ArrayList<CatResponse?>,
     private val viewPager2: ViewPager2,
+    private val from:String,
     private val viewPagerImageClick: ViewPagerImageClick,
     private val fullViewImage: FullViewImage,
     private val mActivity:MainActivity
@@ -51,9 +52,9 @@ class WallpaperApiSliderAdapter(
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
 
-    private val firstAdLineThreshold = AdConfig.firstAdLine
-    private val lineCount = AdConfig.lineCount
-    private val statusAd = AdConfig.adStatus
+    private val firstAdLineThreshold = if (from == "trending") AdConfig.firstAdLineTrending else AdConfig.firstAdLineCategoryArt
+    private val lineCount = if (from == "trending") AdConfig.lineCountTrending else AdConfig.lineCountCategoryArt
+    private val statusAd = if (from == "trending") AdConfig.adStatusTrending else AdConfig.adStatusCategoryArt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
 

@@ -99,6 +99,7 @@ class SplashOnFragment : Fragment() {
                 }
 
                 override fun onAdsShowed(priority: Int) {
+                    SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"mainscr_bottom","mainscr_bottom")
 //                progress.dismiss()
 
                 }

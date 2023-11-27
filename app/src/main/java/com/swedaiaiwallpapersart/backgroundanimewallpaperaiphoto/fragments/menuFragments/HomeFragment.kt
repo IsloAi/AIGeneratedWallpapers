@@ -7,18 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
@@ -31,7 +24,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Gems
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
@@ -163,11 +155,11 @@ class HomeFragment : Fragment(){
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
         val newData = arrayListOf<CatResponse?>()
         for (i in data.indices){
-            if (i > AdConfig.firstAdLine && (i - AdConfig.firstAdLine) % (AdConfig.lineCount -1)  == 0) {
+            if (i > AdConfig.firstAdLineTrending && (i - AdConfig.firstAdLineTrending) % (AdConfig.lineCountTrending -1)  == 0) {
                 newData.add(null)
                 Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-            }else if (i == AdConfig.firstAdLine){
+            }else if (i == AdConfig.firstAdLineTrending){
                 newData.add(null)
                 Log.e("******NULL", "addNullValueInsideArray: null "+i )
             }
@@ -203,6 +195,7 @@ class HomeFragment : Fragment(){
             }
 
            override fun getFavorites(position: Int) {
+               //
            }
        },requireParentFragment().findNavController(),R.id.action_mainFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {
@@ -216,27 +209,7 @@ class HomeFragment : Fragment(){
         },null,0,myActivity)
             binding.recyclerviewAll.adapter = adapter
     }
-//    private fun getUserIdDialog() {
-//        dialog = Dialog(requireContext())
-//        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog?.setContentView(R.layout.get_user_id)
-//        val width = WindowManager.LayoutParams.MATCH_PARENT
-//        val height = WindowManager.LayoutParams.WRAP_CONTENT
-//        dialog?.window!!.setLayout(width, height)
-//        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-//        dialog?.setCancelable(false)
-//        dialog?.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener { dialog?.dismiss()
-//        isPopOpen=false
-//        }
-//        dialog?.findViewById<LinearLayout>(R.id.googleLogin)?.setOnClickListener {
-//            isPopOpen=false
-//           dialog2 = Dialog(requireContext())
-//            myDialogs.waiting(dialog2!!)
-//            dialog?.dismiss()
-//
-//        }
-//        dialog?.show()
-//    }
+
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse>, position:Int) {
@@ -244,38 +217,13 @@ class HomeFragment : Fragment(){
         val arrayListJson = gson.toJson(arrayList)
         Bundle().apply {
             putString("arrayListJson",arrayListJson)
+            putString("from","trending")
             putInt("position",position)
             requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
         myViewModel.clear()
     }
-//    private fun checkDailyReward(){
-//       if(!MySharePreference.getDailyRewardCounter(requireContext())){
-//           val dialog = Dialog(requireContext())
-//           dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//           dialog.setContentView(R.layout.daily_reward)
-//           val width = WindowManager.LayoutParams.MATCH_PARENT
-//           val height = WindowManager.LayoutParams.WRAP_CONTENT
-//           dialog.window!!.setLayout(width, height)
-//           dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-//           dialog.setCancelable(false)
-//           dialog.findViewById<ImageView>(R.id.closePopup).setOnClickListener {
-//               dialog.dismiss()
-//               MySharePreference.setDailyRewardCounter(dialog.context,true)
-//           }
-//           dialog.findViewById<Button>(R.id.buttonGetReward).setOnClickListener {
-//               dialog.dismiss()
-//                   val gems = MySharePreference.getGemsValue(requireContext())!!+rewardAdWatched
-//                   postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
-//                       RetrofitInstance.getInstance(),gems, PostDataOnServer.isPlan)
-//                   MySharePreference.setDailyRewardCounter(requireContext(),true)
-//                   binding.gemsText.text = gems.toString()
-//                   Toast.makeText(context, "You earned the 20 gems successfully", Toast.LENGTH_SHORT).show()
-//
-//           }
-//           dialog.show()
-//       }
-//    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding =null

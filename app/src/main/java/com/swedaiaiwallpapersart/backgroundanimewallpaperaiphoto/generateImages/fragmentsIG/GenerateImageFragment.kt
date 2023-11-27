@@ -118,12 +118,21 @@ class GenerateImageFragment : Fragment() {
         listViewModel = ViewModelProvider(requireActivity())[ImageListViewModel::class.java]
         viewModel.responseData.observe(viewLifecycleOwner) { response ->
             response?.let {
-                var timeDisplay = it.eta?.toInt()
+                var timeDisplay = it.eta?.toInt() ?: 0
                 Log.d("imageLists", "time Display: $timeDisplay")
-                var data: GetResponseIGEntity? = null
-                    Log.e("TAG", "customOnCreateCalling: future links empty" )
-                    data = GetResponseIGEntity(it.id!!,it.status,it.generationTime,it.output,it.webhook_status, future_links = it.future_links,it.meta?.prompt)
 
+                Log.e("TAG", "customOnCreateCalling: future links empty" )
+                var data: GetResponseIGEntity? = it.id?.let { id ->
+                    GetResponseIGEntity(
+                        id,
+                        it.status,
+                        it.generationTime,
+                        it.output,
+                        it.webhook_status,
+                        it.future_links,
+                        it.meta?.prompt
+                    )
+                }
                     CoroutineScope(Dispatchers.IO).launch {
                         if (data != null) {
                             roomDatabase.getResponseIGDao().insert(data!!)
@@ -134,7 +143,11 @@ class GenerateImageFragment : Fragment() {
                     timeDisplay =0
                 }
 
+                if (it.id != null){
                     navigate(it.id!!,timeDisplay)
+                }
+
+
 
 
             }
@@ -265,7 +278,8 @@ class GenerateImageFragment : Fragment() {
                             showLoading = true,
                             adsListener = object : CommonAdsListenerAdapter() {
                                 override fun onAdsShowFail(errorCode: Int) {
-                                    //do something
+                                    Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
+                                    Log.e("TAG", "onAdsShowFail: inter", )
                                 }
 
                                 override fun onAdsDismiss() {

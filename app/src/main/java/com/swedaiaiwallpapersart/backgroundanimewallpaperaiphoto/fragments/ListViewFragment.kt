@@ -34,6 +34,7 @@ class ListViewFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var myViewModel: MyViewModel
     private var name = ""
+    private var from = ""
     private var isLogin = true
     private lateinit var myActivity : MainActivity
 
@@ -75,6 +76,7 @@ class ListViewFragment : Fragment() {
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
          name = arguments?.getString("name").toString()
+         from = arguments?.getString("from").toString()
         Log.d("tracingNameCategory", "onViewCreated: name $name")
         binding.catTitle.text = name
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -120,6 +122,7 @@ class ListViewFragment : Fragment() {
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
+                            navigateToDestination(catResponses,position)
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             //do something
                         }
@@ -153,6 +156,7 @@ class ListViewFragment : Fragment() {
         val arrayListJson = gson.toJson(arrayList)
         val bundle =  Bundle().apply {
             putString("arrayListJson",arrayListJson)
+            putString("from",from)
             putInt("position",position)
         }
         findNavController().navigate(R.id.action_listViewFragment_to_wallpaperViewFragment,bundle)

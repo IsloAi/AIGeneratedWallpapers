@@ -112,6 +112,7 @@ class FavouriteFragment : Fragment() {
             selector(binding.aiWallpaper,binding.selfCreation)
             binding.emptySupportAI.visibility = View.GONE
 
+
             if(!isLoadedData){
                 binding.progressBar.visibility = VISIBLE
             }
@@ -173,9 +174,10 @@ class FavouriteFragment : Fragment() {
         // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
-
-                binding.emptySupport.visibility = View.GONE
-                binding.aiRecyclerView.visibility = View.VISIBLE
+                if (MySharePreference.getFavouriteSaveState(requireContext())==1){
+                    binding.emptySupport.visibility = View.GONE
+                    binding.aiRecyclerView.visibility = View.VISIBLE
+                }
                 isLoadedData = true
                 cachedCatResponses = catResponses as ArrayList
                 if (view != null) {
@@ -205,6 +207,7 @@ class FavouriteFragment : Fragment() {
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            navigateToDestination(catResponses,position)
                             //do something
                         }
 
@@ -237,6 +240,7 @@ class FavouriteFragment : Fragment() {
         Bundle().apply {
             putString("arrayListJson",arrayListJson)
             putInt("position",position)
+            putString("from","trending")
             requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_wallpaperViewFragment,this)
         }
         myViewModel.clear()

@@ -1,0 +1,7 @@
+
+7kotlin:S125³"Remove this commented out code.(È¶ËÔ
+Gkotlin:S1481f"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ
+Hkotlin:S1874Ç"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8äƒáƒÁ1
+Bkotlin:S1874È"#Deprecated code should not be used.(àü8äƒáƒÁ1
+Hkotlin:S1874×"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8äƒáƒÁ1
+gkotlin:S6510R"CMove "return" statements from all branches before "when" statement.(èş™¸ÿÿÿÿÿ8êƒáƒÁ1

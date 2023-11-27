@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -25,10 +26,15 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.bmik.android.sdk.e
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.firebase.Firebase
+import com.google.firebase.remoteconfig.ConfigUpdate
+import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
+import com.google.firebase.remoteconfig.get
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
@@ -47,8 +53,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCoun
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -89,7 +95,7 @@ class MainActivity : AppCompatActivity(){
 
         // workManager()
 
-        initFirebaseRemoteConfig()
+
         createTimer()
 //        purchasesPrice()
         val firebaseMessageReceiver = MyFirebaseMessageReceiver()
@@ -116,46 +122,133 @@ class MainActivity : AppCompatActivity(){
 //            repeatInterval = 1, // 1 day
 //            repeatIntervalTimeUnit = TimeUnit.DAYS).setConstraints(constraints).build()
 //            WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("ResetCountWork", ExistingPeriodicWorkPolicy.KEEP, workRequest)
+
+        initFirebaseRemoteConfig()
     }
 
     fun initFirebaseRemoteConfig() {
-        val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+         val first = "position_ads"
 
-// Set default values (in case fetched values are not available)
-        val defaults: MutableMap<String, Any> = HashMap()
-        defaults["viewlistwallscr_scrollview_Status"] = "0" // Replace with your default values
-        defaults["viewlistwallscr_scrollview_fisrt_ad_line_threshold"] = "3"
-        defaults["viewlistwallscr_scrollview_line_count"] = "3"
-        defaults["viewlistwallscr_scrollview_native_design_type"] = "2"
-        firebaseRemoteConfig.setDefaultsAsync(defaults)
+        var remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
 
-// Set cache expiration time (you can set your own duration)
-        val configSettings = FirebaseRemoteConfigSettings.Builder()
-            .setMinimumFetchIntervalInSeconds(3600) // Example: 1 hour
-            .build()
-        firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = 3600
+        }
+        remoteConfig.setConfigSettingsAsync(configSettings)
 
-        firebaseRemoteConfig.fetchAndActivate()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val updated = task.result
-                    Log.d("RemoteConfig", "Config params updated: $updated")
-                    // Use fetched values here
-                    val status = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_Status")
-                    val threshold = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_fisrt_ad_line_threshold")
-                    val linecount = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_line_count")
-                    val native_design_type = firebaseRemoteConfig.getString("viewlistwallscr_scrollview_native_design_type")
-                    AdConfig.firstAdLine = threshold.toInt()
-                    AdConfig.lineCount = linecount.toInt() +  1
-                    AdConfig.adStatus = status.toInt()
+        remoteConfig.setDefaultsAsync(R.xml.remote_config)
 
-                    // Retrieve other values similarly
-                    Log.d("RemoteConfig", "Status: $status, Threshold: $threshold, linecount: $linecount,nativeDesign:$native_design_type")
-                } else {
-                    // Handle error fetching config
-                    Log.e("RemoteConfig", "Fetch failed")
+
+        remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
+            override fun onUpdate(configUpdate: ConfigUpdate) {
+                Log.d("TAG", "Updated keys: " + configUpdate.updatedKeys)
+
+                if (configUpdate.updatedKeys.contains(first)) {
+                    remoteConfig.activate().addOnCompleteListener {
+
+                        Log.e("TAG", "onUpdate: "+configUpdate.updatedKeys)
+
+                        val welcomeMessage = remoteConfig[first].asString()
+                        Log.e("TAG", "initFirebaseRemoteConfig: $welcomeMessage")
+
+                        try {
+                            val jsonObject = JSONObject(welcomeMessage)
+                            val trendingScrollViewArray = jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
+                            for (i in 0 until trendingScrollViewArray.length()) {
+                                val obj = trendingScrollViewArray.getJSONObject(i)
+                                val status = obj.getString("Status")
+                                val threshold = obj.getString("fisrt_ad_line_threshold")
+                                val lineCount = obj.getString("line_count")
+                                val designType = obj.getString("native_design_type")
+
+                                AdConfig.adStatusTrending = status.toInt()
+                                AdConfig.firstAdLineTrending = threshold.toInt()
+                                AdConfig.lineCountTrending = lineCount.toInt() + 1
+                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+                            }
+
+                            val cateScrollViewArray = jsonObject.getJSONArray("categoryscr_art_scroll_view")
+                            for (i in 0 until cateScrollViewArray.length()) {
+                                val obj = cateScrollViewArray.getJSONObject(i)
+                                val status = obj.getString("Status")
+                                val threshold = obj.getString("fisrt_ad_line_threshold")
+                                val lineCount = obj.getString("line_count")
+                                val designType = obj.getString("native_design_type")
+
+                                AdConfig.adStatusCategoryArt = status.toInt()
+                                AdConfig.firstAdLineCategoryArt = threshold.toInt()
+                                AdConfig.lineCountCategoryArt = lineCount.toInt() + 1
+                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+                            }
+                        }catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    }
                 }
             }
+
+            override fun onError(error: FirebaseRemoteConfigException) {
+                Log.e("TAG", "Config update error with code: " + error.code, error)
+            }
+        })
+
+
+        remoteConfig.fetchAndActivate()
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val updated = task.result
+
+                    Log.e("TAG", "Config params updated: $updated")
+                    Toast.makeText(
+                        this,
+                        "Fetch and activate succeeded",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Fetch failed",
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                }
+            }
+
+        val welcomeMessage = remoteConfig[first].asString()
+        Log.e("TAG", "initFirebaseRemoteConfig: $welcomeMessage")
+
+        try {
+            val jsonObject = JSONObject(welcomeMessage)
+            val trendingScrollViewArray = jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
+            for (i in 0 until trendingScrollViewArray.length()) {
+                val obj = trendingScrollViewArray.getJSONObject(i)
+                val status = obj.getString("Status")
+                val threshold = obj.getString("fisrt_ad_line_threshold")
+                val lineCount = obj.getString("line_count")
+                val designType = obj.getString("native_design_type")
+
+                AdConfig.adStatusTrending = status.toInt()
+                AdConfig.firstAdLineTrending = threshold.toInt()
+                AdConfig.lineCountTrending = lineCount.toInt() + 1
+                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+            }
+
+            val cateScrollViewArray = jsonObject.getJSONArray("categoryscr_art_scroll_view")
+            for (i in 0 until cateScrollViewArray.length()) {
+                val obj = cateScrollViewArray.getJSONObject(i)
+                val status = obj.getString("Status")
+                val threshold = obj.getString("fisrt_ad_line_threshold")
+                val lineCount = obj.getString("line_count")
+                val designType = obj.getString("native_design_type")
+
+                AdConfig.adStatusCategoryArt = status.toInt()
+                AdConfig.firstAdLineCategoryArt = threshold.toInt()
+                AdConfig.lineCountCategoryArt = lineCount.toInt() + 1
+                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+            }
+        }catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
 
     }
 
@@ -217,67 +310,6 @@ class MainActivity : AppCompatActivity(){
 
     }
 
-//    private fun purchasesPrice() {
-//
-//        mainScope.launch {
-//            val billingClient = BillingClient.newBuilder(this@MainActivity)
-//                .setListener(purchasesUpdatedListener)
-//                .enablePendingPurchases()
-//                .build()
-//            billingClient.startConnection(object : BillingClientStateListener {
-//                @SuppressLint("NotifyDataSetChanged")
-//                override fun onBillingSetupFinished(billingResult: BillingResult) {
-//                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
-//                        // The BillingClient is ready. You can query purchases here.
-//                        Log.e("TAG", "ready to purchess")
-//                        val skuList: MutableList<String> = ArrayList()
-//                        skuList.add("plan1")
-//                        skuList.add("plan2")
-//                        skuList.add("plan3")
-//                        skuList.add("plan4")
-//                        skuList.add("plan5")
-//                        skuList.add("plan6")
-//                        val params = SkuDetailsParams.newBuilder()
-//                        params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
-//                        billingClient.querySkuDetailsAsync(params.build()) {
-//                                billingResult, skuDetailsList ->
-//                            try {
-//                                Constants.plan1 = skuDetailsList?.get(0)!!.price
-//                                Constants.plan2 = skuDetailsList[1].price
-//                                Constants.plan3 = skuDetailsList[2].price
-//                                Constants.plan4 = skuDetailsList[3].price
-//                                Constants.plan5 = skuDetailsList[4].price
-//                                Constants.plan6 = skuDetailsList[5].price
-//                            } catch (c: java.lang.Exception) {
-//                                c.printStackTrace()
-//                            }
-//                            Log.e("TAG", "sku details " + skuDetailsList!!.size)
-//                            // Process the result.
-//                            Log.e("TAG", "skuDetailsList.get(0).getTitle() " + skuDetailsList[0].title)
-//                        }
-//                    }
-//                }
-//                override fun onBillingServiceDisconnected() {
-//                    // Try to restart the connection on the next request to
-//                    // Google Play by calling the startConnection() method.
-//                    Log.e("TAG", "service disconnected")
-//                }
-//            })
-//        }
-//
-//
-//
-//    }
-//    private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
-////        if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
-////        } else if (billingResult.responseCode == BillingClient.BillingResponseCode.USER_CANCELED) {
-////            // Handle an error caused by a user cancelling the purchase flow.
-////            Toast.makeText(requireContext(), "Purchases Error ", Toast.LENGTH_SHORT).show()
-////        } else {
-////            // Handle any other error codes.
-////        }
-//    }
-
      @RequiresApi(Build.VERSION_CODES.N)
      fun openPopupMenu(name: String, editPrompt:EditText) {
         val dialog = BottomSheetDialog(this@MainActivity)
@@ -292,7 +324,6 @@ class MainActivity : AppCompatActivity(){
         dialog.setCancelable(false)
         dialog.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener {dialog.dismiss()}
          dialog.findViewById<TextView>(R.id.titleOfPromptsCat)?.text = "$name prompts"
-//         val styleRecyclerView = dialog.findViewById<RecyclerView>(R.id.styleRecyclerView)
          val promptRecyclerView = dialog.findViewById<RecyclerView>(R.id.promptsRecyclerView)
          val applyButton: Button = dialog.findViewById(R.id.applButton)!!
           //styleRecyclerView(styleRecyclerView)

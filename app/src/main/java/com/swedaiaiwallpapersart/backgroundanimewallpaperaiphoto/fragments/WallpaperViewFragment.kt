@@ -117,6 +117,7 @@ class WallpaperViewFragment : Fragment() {
     var totalADs = 0
     private val googleLogin = GoogleLogin()
     private lateinit var myActivity : MainActivity
+    private var from = ""
 
     var showInter = true
 
@@ -162,6 +163,7 @@ class WallpaperViewFragment : Fragment() {
         reviewManager = ReviewManagerFactory.create(requireContext())
         val arrayListJson = arguments?.getString("arrayListJson")
         val pos = arguments?.getInt("position")
+        from = arguments?.getString("from")!!
         adcount = pos!!
         if (arrayListJson != null && pos != null) {
             val gson = Gson()
@@ -214,10 +216,10 @@ class WallpaperViewFragment : Fragment() {
 
             // Calculate the adjusted position by considering the null ads in the array
 
-            if (pos == AdConfig.firstAdLine){
+            if (pos == AdConfig.firstAdLineTrending){
                 position = pos +totalADs
 //                Log.e("*******ADJUST POSITION", "onCreate: "+position )
-            }else if (pos < AdConfig.firstAdLine){
+            }else if (pos < AdConfig.firstAdLineTrending){
                 position = pos
             }else{
                 position = pos +totalADs
@@ -229,29 +231,58 @@ class WallpaperViewFragment : Fragment() {
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
         val newData = arrayListOf<CatResponse?>()
-        for (i in data.indices){
-            if (i > AdConfig.firstAdLine && (i - AdConfig.firstAdLine) % (AdConfig.lineCount -1)  == 0) {
+
+        if (from == "trending"){
+            for (i in data.indices){
+                if (i > AdConfig.firstAdLineTrending && (i - AdConfig.firstAdLineTrending) % (AdConfig.lineCountTrending -1)  == 0) {
                     newData.add(null)
-                if (i <= adcount){
+                    if (i <= adcount){
+                        totalADs++
+                        Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                        Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+                    }
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+                }else if (i == AdConfig.firstAdLineTrending){
+                    newData.add(null)
                     totalADs++
                     Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
                     Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
                 }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                newData.add(data[i])
+
+            }
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+        }else{
+            for (i in data.indices){
+                if (i > AdConfig.firstAdLineCategoryArt && (i - AdConfig.firstAdLineCategoryArt) % (AdConfig.lineCountCategoryArt -1)  == 0) {
+                    newData.add(null)
+                    if (i <= adcount){
+                        totalADs++
+                        Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                        Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+                    }
                     Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-            }else if (i == AdConfig.firstAdLine){
-                newData.add(null)
-                totalADs++
-                Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
-                Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+                }else if (i == AdConfig.firstAdLineCategoryArt){
+                    newData.add(null)
+                    totalADs++
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
 
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                newData.add(data[i])
+
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-            newData.add(data[i])
-
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
+
 
         return newData
     }
@@ -392,7 +423,7 @@ class WallpaperViewFragment : Fragment() {
 
 
     private fun setViewPager() {
-        adapter = WallpaperApiSliderAdapter(arrayList, viewPager2!!,object :
+        adapter = WallpaperApiSliderAdapter(arrayList, viewPager2!!,from,object :
             ViewPagerImageClick {
             @SuppressLint("SuspiciousIndentation")
             override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
