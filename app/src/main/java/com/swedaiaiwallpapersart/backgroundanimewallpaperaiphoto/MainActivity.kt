@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity(){
                                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
 
-                            val cateScrollViewArray = jsonObject.getJSONArray("categoryscr_art_scroll_view")
+                            val cateScrollViewArray = jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
                             for (i in 0 until cateScrollViewArray.length()) {
                                 val obj = cateScrollViewArray.getJSONObject(i)
                                 val status = obj.getString("Status")
@@ -232,7 +232,7 @@ class MainActivity : AppCompatActivity(){
                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
 
-            val cateScrollViewArray = jsonObject.getJSONArray("categoryscr_art_scroll_view")
+            val cateScrollViewArray = jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
             for (i in 0 until cateScrollViewArray.length()) {
                 val obj = cateScrollViewArray.getJSONObject(i)
                 val status = obj.getString("Status")

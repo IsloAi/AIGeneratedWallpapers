@@ -1,32 +1,33 @@
 
-]kotlin:S1172«"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8„ııƒÁ1
-Jkotlin:S6508ª"*Replace this usage of Void type with Unit.(àŒÄÜ8‡ııƒÁ1
-Ykotlin:S899é":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8‰ııƒÁ1
+]kotlin:S1172Ñ"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8„ııƒÁ1
+Jkotlin:S6508Ğ"*Replace this usage of Void type with Unit.(àŒÄÜ8‡ııƒÁ1
+Ykotlin:S899":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8‰ııƒÁ1
 <kotlin:S125´"Remove this commented out code.(ß…±µıÿÿÿÿ
 6kotlin:S125Î"Remove this commented out code.(Ù¯ëi
 <kotlin:S125İ"Remove this commented out code.(‘”¸¤ıÿÿÿÿ
 Ckotlin:S125¯"Remove this commented out code.(ÖÈÀ†úÿÿÿÿ8ııƒÁ1
-<kotlin:S6310„"Avoid hardcoded dispatchers.(µØ˜í8¸ııƒÁ1
-[kotlin:S1144„";Remove this unused private "loadBitmapFromUrlAsync" method.(µØ˜í8ÍııƒÁ1
-Okotlin:S1144“"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8ÓııƒÁ1
-Vkotlin:S1144“"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8üııƒÁ1
+<kotlin:S6310Š"Avoid hardcoded dispatchers.(µØ˜í8¸ııƒÁ1
+[kotlin:S1144Š";Remove this unused private "loadBitmapFromUrlAsync" method.(µØ˜í8ÍııƒÁ1
+Okotlin:S1144™"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8ÓııƒÁ1
+Vkotlin:S1144¹"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8üııƒÁ1
 Okotlin:S1481®"0Remove this unused "adjustedPos" local variable.(“ÍÓD8ò³ÖƒÁ1
 Okotlin:S1481ş"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8½şıƒÁ1
 Okotlin:S1481Ş"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¾şıƒÁ1
 Jkotlin:S1481®"*Remove this unused "model" local variable.(Ôûı¦8¾şıƒÁ1
-Mkotlin:S1481²"-Remove this unused "behavior" local variable.(Ø¦š¾8¾şıƒÁ1
+Mkotlin:S1481¸"-Remove this unused "behavior" local variable.(Ø¦š¾8¾şıƒÁ1
 qkotlin:S1192­"LDefine a constant instead of duplicating this literal "******NULL" 17 times.(¶¤™­úÿÿÿÿ8Š´ÖƒÁ1
 ‡kotlin:S1192ñ"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 8 times.(Ÿ™£Ñşÿÿÿÿ8˜»ÿƒÁ1
-€kotlin:S1192¾"`Define a constant instead of duplicating this literal "Please first buy your wallpaper" 3 times.(Ì¢íŸ8ÖşıƒÁ1
+€kotlin:S1192¾"`Define a constant instead of duplicating this literal "Please first buy your wallpaper" 4 times.(Ì¢íŸ8ÖşıƒÁ1
 rkotlin:S1192×"MDefine a constant instead of duplicating this literal "********ADS" 10 times.(²¨ñÿÿÿÿÿ8×şıƒÁ1
 ukotlin:S1192Ü"PDefine a constant instead of duplicating this literal "onAdsRewarded: " 3 times.(©Ø·³ûÿÿÿÿ8×şıƒÁ1
 ukotlin:S1192ï"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 5 times.(åª°—üÿÿÿÿ8×şıƒÁ1
 Akotlin:S1874"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ
-Hkotlin:S1874È"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8İşıƒÁ1
-Hkotlin:S1874‡"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8ŞşıƒÁ1
+Hkotlin:S1874î"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8İşıƒÁ1
+Hkotlin:S1874­"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8ŞşıƒÁ1
 wkotlin:S3776è"RRefactor this method to reduce its Cognitive Complexity from 24 to the 15 allowed.(”ÔÈÎüÿÿÿÿ8 »ÿƒÁ1
 wkotlin:S3776£"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(¶÷Èïøÿÿÿÿ8àşıƒÁ1
 wkotlin:S3776©"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(Ÿ™¸ëüÿÿÿÿ8áşıƒÁ1
-rkotlin:S3776ª"RRefactor this method to reduce its Cognitive Complexity from 36 to the 15 allowed.(‹İ¬…8âşıƒÁ1
+rkotlin:S3776‰"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ğçİ„8ÚŠ®Á1
+rkotlin:S3776°"RRefactor this method to reduce its Cognitive Complexity from 51 to the 15 allowed.(‹İ¬…8âşıƒÁ1
 rkotlin:S3776Ô"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8ãşıƒÁ1
-zkotlin:S1186Ñ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ïşıƒÁ1
+zkotlin:S1186×"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ïşıƒÁ1

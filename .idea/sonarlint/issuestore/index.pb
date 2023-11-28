@@ -43,3 +43,5 @@ xapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fra
 kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/OnBoardingFragment.kt,8\7\8700ea02049aaaba9e875b28946eb1b438daced1
 ù
 mapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/LocalizationFragment.kt,e\7\e7abd5a9cf63f888eec175d8d85afb50f2493cdf
+ï
+eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/MainFragment.kt,c\a\caf1521978ce9ac1b0620382e302b8732a610f91

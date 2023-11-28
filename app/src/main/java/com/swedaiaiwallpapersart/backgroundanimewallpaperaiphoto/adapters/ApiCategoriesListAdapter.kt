@@ -259,6 +259,7 @@ class ApiCategoriesListAdapter(
 
                 override fun onAdsLoaded() {
                     super.onAdsLoaded()
+                    binding.adsView.visibility = View.VISIBLE
                     Log.e("TAG", "onAdsLoaded: native loaded" )
                 }
             }

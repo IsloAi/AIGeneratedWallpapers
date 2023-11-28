@@ -558,6 +558,12 @@ class WallpaperViewFragment : Fragment() {
                         showLoading = true,
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
+                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+                                    mSaveMediaToStorage(bitmap)
+                                }else{
+                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+
+                                }
                                 //do something
                             }
 
@@ -706,6 +712,14 @@ class WallpaperViewFragment : Fragment() {
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
+                            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
+                            myHandler.post { if(state){
+                                interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
+                                state = false
+                                postDelay()
+                            } }
+                            showRateApp()
+                            binding.viewPager.setCurrentItem(position+1,true)
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             //do something
                         }
@@ -747,6 +761,18 @@ class WallpaperViewFragment : Fragment() {
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            myExecutor.execute {
+                                myWallpaperManager.lockScreen(bitmap!!)
+                            }
+                            myHandler.post {
+                                if(state){
+                                    interstitialAdWithToast(getString(R.string.set_successfully_on_lock_screen), dialog)
+                                    state = false
+                                    postDelay()
+                                }
+                            }
+                            showRateApp()
+                            binding.viewPager.setCurrentItem(position+1,true)
                             //do something
                         }
 
@@ -797,6 +823,18 @@ class WallpaperViewFragment : Fragment() {
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            myExecutor.execute {
+                                myWallpaperManager.homeAndLockScreen(bitmap!!)
+                            }
+                            myHandler.post {
+                                if(state){
+                                    interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+                                    state = false
+                                    postDelay()
+                                }
+                            }
+                            showRateApp()
+                            binding.viewPager.setCurrentItem(position+1,true)
                             //do something
                         }
 
