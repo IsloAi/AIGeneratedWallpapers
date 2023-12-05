@@ -80,20 +80,25 @@ class SplashOnFragment : Fragment() {
                 }
 
                 override fun onAdsDismiss() {
-                    if (lan?.isEmpty() == true){
+                    if (lan?.isEmpty() == true && isAdded){
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
-                        findNavController().navigate(R.id.mainFragment)
+                        if (isAdded){
+                            findNavController().navigate(R.id.mainFragment)
+                        }
+
                     }
 
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
                     Log.e("TAG", "onAdsShowFail: $errorCode")
-                    if (lan?.isEmpty() == true){
+                    if (lan?.isEmpty() == true && isAdded){
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
-                        findNavController().navigate(R.id.mainFragment)
+                        if (isAdded) {
+                            findNavController().navigate(R.id.mainFragment)
+                        }
                     }
 //                progress.dismiss()
                 }

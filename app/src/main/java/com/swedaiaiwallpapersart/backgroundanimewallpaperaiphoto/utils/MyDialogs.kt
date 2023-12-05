@@ -157,6 +157,7 @@ class MyDialogs {
         val title = dialog.findViewById<TextView>(R.id.totalGems)
         val buttonGetWallpaper = dialog.findViewById<ConstraintLayout>(R.id.buttonGetWallpaper)
         val totalGems = MySharePreference.getGemsValue(context)
+
         title!!.text = "To Unlock this wallpaper Gems"
         buttonGetWallpaper!!.setOnClickListener {
             SDKBaseController.getInstance().showRewardedAds(activity,"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:

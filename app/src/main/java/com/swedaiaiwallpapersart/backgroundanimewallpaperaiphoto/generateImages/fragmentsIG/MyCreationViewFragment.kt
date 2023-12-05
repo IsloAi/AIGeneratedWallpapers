@@ -601,17 +601,20 @@ class MyCreationViewFragment : Fragment() {
                     dataSource: DataSource?,
                     isFirstResource: Boolean
                 ): Boolean {
-                    binding.editPrompt.visibility = View.VISIBLE
-                    binding.loading1?.visibility = GONE
-                    binding.loading2?.visibility = GONE
-                    binding.loading3?.visibility = GONE
-                    binding.loading4?.visibility = GONE
-                    binding.notificationLayout.visibility = View.GONE
-                    binding.btns.visibility = View.VISIBLE
-                    binding.addToFav1.visibility = VISIBLE
-                    binding.addToFav2.visibility = VISIBLE
-                    binding.addToFav3.visibility = VISIBLE
-                    binding.addToFav4.visibility = VISIBLE
+                    if (isAdded){
+                        binding.editPrompt.visibility = View.VISIBLE
+                        binding.loading1?.visibility = GONE
+                        binding.loading2?.visibility = GONE
+                        binding.loading3?.visibility = GONE
+                        binding.loading4?.visibility = GONE
+                        binding.notificationLayout.visibility = View.GONE
+                        binding.btns.visibility = View.VISIBLE
+                        binding.addToFav1.visibility = VISIBLE
+                        binding.addToFav2.visibility = VISIBLE
+                        binding.addToFav3.visibility = VISIBLE
+                        binding.addToFav4.visibility = VISIBLE
+                    }
+
                     return false // Return false to allow Glide to handle the resource ready event
                 }
             })

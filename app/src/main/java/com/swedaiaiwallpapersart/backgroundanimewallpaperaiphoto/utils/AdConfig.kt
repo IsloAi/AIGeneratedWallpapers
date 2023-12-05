@@ -8,4 +8,8 @@ object AdConfig {
     var firstAdLineCategoryArt = 0
     var lineCountCategoryArt = 0
     var adStatusCategoryArt = 1
+
+    var firstAdLineViewListWallSRC = 0
+    var lineCountViewListWallSRC = 0
+    var adStatusViewListWallSRC = 1
 }

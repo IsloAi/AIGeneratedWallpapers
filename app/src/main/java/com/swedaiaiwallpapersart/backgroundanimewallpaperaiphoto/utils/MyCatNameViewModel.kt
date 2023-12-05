@@ -26,7 +26,7 @@ class MyCatNameViewModel: ViewModel()  {
                         progressBar.visibility= GONE
                     val catNameResponses: ArrayList<CatNameResponse>? = response.body()
                     if (catNameResponses != null) {
-                        Log.e("TAG", "onResponse: "+catNameResponses )
+                        Log.e("TAG", "onResponse: $catNameResponses")
                       _wallpaperData.value = catNameResponses!!
                     }
                 } else {

@@ -1,4 +1,4 @@
-package com.example.hdwallpaper.adapters
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -52,8 +52,16 @@ class WallpaperApiSliderAdapter(
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
 
-    private val firstAdLineThreshold = if (from == "trending") AdConfig.firstAdLineTrending else AdConfig.firstAdLineCategoryArt
-    private val lineCount = if (from == "trending") AdConfig.lineCountTrending else AdConfig.lineCountCategoryArt
+    private val firstAdLineThreshold = if (from == "trending") {
+        if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+    } else {
+        if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+    }
+    private val lineCount = if (from == "trending") {
+        if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
+    } else {
+        if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+    }
     private val statusAd = if (from == "trending") AdConfig.adStatusTrending else AdConfig.adStatusCategoryArt
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 

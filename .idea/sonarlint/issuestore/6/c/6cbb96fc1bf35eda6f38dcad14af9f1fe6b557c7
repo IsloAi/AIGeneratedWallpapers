@@ -1,10 +1,11 @@
 
-kkotlin:S117"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ˆ¨‚®şÿÿÿÿ
-5kotlin:S6310˜"Avoid hardcoded dispatchers.(Í¡·Ş
-5kotlin:S6310°"Avoid hardcoded dispatchers.(Í¡·Ş
-ekotlin:S107"HThis function has 11 parameters, which is greater than the 7 authorized.(îÌê®şÿÿÿÿ
-Hkotlin:S1481È"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ
-2kotlin:S1128"Remove this unused import.(ÖàÉâ
-7kotlin:S1128 "Remove this unused import.(¬†ÙÏşÿÿÿÿ
-2kotlin:S1128/"Remove this unused import.(üŸÿ¥
-Akotlin:S1874ø"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ
+rkotlin:S117 "NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ˆ¨‚®şÿÿÿÿ8²¯ÑÃ1
+<kotlin:S6310ª"Avoid hardcoded dispatchers.(Í¡·Ş8´¯ÑÃ1
+<kotlin:S6310Â"Avoid hardcoded dispatchers.(Í¡·Ş8´¯ÑÃ1
+lkotlin:S107Ÿ"HThis function has 11 parameters, which is greater than the 7 authorized.(îÌê®şÿÿÿÿ8Î¯ÑÃ1
+Okotlin:S1481’"/Remove this unused "adPosition" local variable.(²úÒ8Ü¯ÑÃ1
+Okotlin:S1481Ú"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ8Ü¯ÑÃ1
+9kotlin:S1128"Remove this unused import.(ÖàÉâ8ä¯ÑÃ1
+>kotlin:S1128 "Remove this unused import.(¬†ÙÏşÿÿÿÿ8ä¯ÑÃ1
+9kotlin:S11280"Remove this unused import.(üŸÿ¥8ä¯ÑÃ1
+Hkotlin:S1874Š"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8é¯ÑÃ1

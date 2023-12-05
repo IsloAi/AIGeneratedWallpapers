@@ -51,7 +51,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.example.hdwallpaper.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
@@ -121,7 +121,9 @@ class WallpaperViewFragment : Fragment() {
 
     var showInter = true
 
-    var adapter: WallpaperApiSliderAdapter ?= null
+
+
+    var adapter: WallpaperApiSliderAdapter?= null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentWallpaperViewBinding.inflate(inflater,container,false)
@@ -173,68 +175,47 @@ class WallpaperViewFragment : Fragment() {
             Log.e("******NULL", "onCreate: "+arrayListOfImages.size )
             var adjustedPos = pos
 
-
-
-
-
-//            if (pos == AdConfig.firstAdLine){
-//                position = pos +1
-//                Log.e("*******ADJUST POSITION", "onCreate: "+position )
-//            }else if (pos > AdConfig.firstAdLine){
-//                for (i in AdConfig.firstAdLine until arrayListOfImages.size) {
-//                    if (arrayListOfImages[i] == null) {
-//                        adjustedPos++
-//
-//                        Log.e("*******ADJUST POSITION", "onCreate adjusted: "+adjustedPos )
-//
-//                    }
-//                    if (i == adjustedPos) {
-//                        Log.e("*******ADJUST POSITION", "onCreate adjusted break: "+adjustedPos )
-//                        break // Stop iterating when the adjusted position is reached
-//                    }
-//                }
-//
-//                Log.e("*******ADJUST POSITION", "onCreate adjusted: "+adjustedPos )
-//
-//                position = adjustedPos
-//            }else{
-//                position = pos
-//                Log.e("*******ADJUST POSITION", "onCreate simple: "+position )
-//            }
-
             arrayList = addNullValueInsideArray(arrayListOfImages)
-//            for (i in AdConfig.firstAdLine until arrayList.size){
-//                if (arrayList[i] == null){
-//                    adcount ++
-//                    Log.e("******NULL", "onCreate: ads count "+adcount )
-//                }
-//
-//            }
-//            val adCountBeforePosition = arrayList.subList(0, pos).count { it == null && it != arrayList[AdConfig.firstAdLine] }
-//
-//            Log.e("******NULL", "onCreate: $adCountBeforePosition")
 
-            // Calculate the adjusted position by considering the null ads in the array
-
-            if (pos == AdConfig.firstAdLineTrending){
-                position = pos +totalADs
-//                Log.e("*******ADJUST POSITION", "onCreate: "+position )
-            }else if (pos < AdConfig.firstAdLineTrending){
-                position = pos
-            }else{
-                position = pos +totalADs
+             val firstAdLineThreshold = if (from == "trending") {
+                if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+            } else {
+                if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
             }
+            // Calculate the adjusted position by considering the null ads in the array
+            position = if (pos == firstAdLineThreshold){
+                pos +totalADs
+            }else if (pos < firstAdLineThreshold){
+                pos
+            }else{
+                pos +totalADs
+            }
+
+
+
 
             Log.d("gsonParsingData", "onCreate:  $arrayListOfImages"  )
         }
     }
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
+         val firstAdLineThreshold = if (from == "trending") {
+            if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+        } else {
+            if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+        }
+         val lineCount = if (from == "trending") {
+            if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
+        } else {
+            if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+        }
+         val statusAd = if (from == "trending") AdConfig.adStatusTrending else AdConfig.adStatusCategoryArt
         val newData = arrayListOf<CatResponse?>()
 
         if (from == "trending"){
             for (i in data.indices){
-                if (i > AdConfig.firstAdLineTrending && (i - AdConfig.firstAdLineTrending) % (AdConfig.lineCountTrending -1)  == 0) {
+                if (i > firstAdLineThreshold && (i - firstAdLineThreshold) % (lineCount -1)  == 0) {
                     newData.add(null)
                     if (i <= adcount){
                         totalADs++
@@ -243,7 +224,7 @@ class WallpaperViewFragment : Fragment() {
                     }
                     Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-                }else if (i == AdConfig.firstAdLineTrending){
+                }else if (i == firstAdLineThreshold){
                     newData.add(null)
                     totalADs++
                     Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
@@ -258,7 +239,7 @@ class WallpaperViewFragment : Fragment() {
             Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
         }else{
             for (i in data.indices){
-                if (i > AdConfig.firstAdLineCategoryArt && (i - AdConfig.firstAdLineCategoryArt) % (AdConfig.lineCountCategoryArt -1)  == 0) {
+                if (i > firstAdLineThreshold && (i - firstAdLineThreshold) % (lineCount -1)  == 0) {
                     newData.add(null)
                     if (i <= adcount){
                         totalADs++
@@ -267,7 +248,7 @@ class WallpaperViewFragment : Fragment() {
                     }
                     Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-                }else if (i == AdConfig.firstAdLineCategoryArt){
+                }else if (i == firstAdLineThreshold){
                     newData.add(null)
                     totalADs++
                     Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
@@ -983,6 +964,11 @@ class WallpaperViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        isFragmentAttached = false
+    }
+
+    override fun onDetach() {
+        super.onDetach()
         isFragmentAttached = false
     }
 

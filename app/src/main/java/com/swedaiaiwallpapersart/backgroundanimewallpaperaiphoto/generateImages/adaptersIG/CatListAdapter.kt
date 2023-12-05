@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .CatListPromptWordItemBinding
@@ -23,7 +24,10 @@ class CatListAdapter( private val arrayList: ArrayList<CatListModelIG>,
     override fun onBindViewHolder(holder: ViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val model = arrayList[position]
         val mainContainer = holder.binding.mainContainer
-        holder.binding.imageViewOfList.setImageResource(model.image)
+
+        Glide.with(holder.itemView.context)
+            .load(model.image)
+            .into(holder.binding.imageViewOfList)
         holder.binding.title.text = model.title
         if (selectedItemPosition == position) {
             mainContainer.setBackgroundResource(R.drawable.plan_slected)

@@ -136,6 +136,8 @@ dependencies {
     //ads
 //    implementation 'com.ikame.android-sdk:ikm-sdk-debug:2.6.013'
 
+    
+
     implementation 'com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.012'
 
 

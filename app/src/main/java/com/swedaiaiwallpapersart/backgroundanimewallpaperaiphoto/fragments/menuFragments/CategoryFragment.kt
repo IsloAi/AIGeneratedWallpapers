@@ -88,11 +88,13 @@ class CategoryFragment : Fragment() {
         }
     }
     private fun setFragment(name:String){
-        Bundle().apply {
+       val bundle =  Bundle().apply {
             putString("name",name)
             putString("from","category")
-            (requireParentFragment() as MainFragment).findNavController().navigate(R.id.action_mainFragment_to_listViewFragment,this)
+
         }
+
+        (requireParentFragment() as MainFragment).findNavController().navigate(R.id.action_mainFragment_to_listViewFragment,bundle)
 
     }
 

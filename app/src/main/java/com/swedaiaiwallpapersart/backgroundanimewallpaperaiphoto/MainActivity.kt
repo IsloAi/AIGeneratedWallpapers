@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity(){
                         Log.e("TAG", "onUpdate: "+configUpdate.updatedKeys)
 
                         val welcomeMessage = remoteConfig[first].asString()
-                        Log.e("TAG", "initFirebaseRemoteConfig: $welcomeMessage")
+                        Log.e("TAG update", "initFirebaseRemoteConfig: $welcomeMessage")
 
                         try {
                             val jsonObject = JSONObject(welcomeMessage)
@@ -160,6 +160,10 @@ class MainActivity : AppCompatActivity(){
                                 val threshold = obj.getString("fisrt_ad_line_threshold")
                                 val lineCount = obj.getString("line_count")
                                 val designType = obj.getString("native_design_type")
+
+                                AdConfig.adStatusViewListWallSRC = status.toInt()
+                                AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
+                                AdConfig.lineCountViewListWallSRC = lineCount.toInt() + 1
 
                                 AdConfig.adStatusTrending = status.toInt()
                                 AdConfig.firstAdLineTrending = threshold.toInt()
@@ -178,6 +182,21 @@ class MainActivity : AppCompatActivity(){
                                 AdConfig.adStatusCategoryArt = status.toInt()
                                 AdConfig.firstAdLineCategoryArt = threshold.toInt()
                                 AdConfig.lineCountCategoryArt = lineCount.toInt() + 1
+                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+                            }
+
+                            val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
+                            for (i in 0 until mainScreenScroll.length()) {
+                                val obj = mainScreenScroll.getJSONObject(i)
+                                val status = obj.getString("Status")
+                                val threshold = obj.getString("fisrt_ad_line_threshold")
+                                val lineCount = obj.getString("line_count")
+                                val designType = obj.getString("native_design_type")
+
+
+                                AdConfig.adStatusTrending = status.toInt()
+                                AdConfig.firstAdLineTrending = threshold.toInt()
+                                AdConfig.lineCountTrending = lineCount.toInt() + 1
                                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
                         }catch (e: JSONException) {
@@ -214,7 +233,7 @@ class MainActivity : AppCompatActivity(){
             }
 
         val welcomeMessage = remoteConfig[first].asString()
-        Log.e("TAG", "initFirebaseRemoteConfig: $welcomeMessage")
+        Log.e("TAG new", "initFirebaseRemoteConfig: $welcomeMessage")
 
         try {
             val jsonObject = JSONObject(welcomeMessage)
@@ -226,9 +245,9 @@ class MainActivity : AppCompatActivity(){
                 val lineCount = obj.getString("line_count")
                 val designType = obj.getString("native_design_type")
 
-                AdConfig.adStatusTrending = status.toInt()
-                AdConfig.firstAdLineTrending = threshold.toInt()
-                AdConfig.lineCountTrending = lineCount.toInt() + 1
+                AdConfig.adStatusViewListWallSRC = status.toInt()
+                AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
+                AdConfig.lineCountViewListWallSRC = lineCount.toInt()
                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
 
@@ -243,6 +262,23 @@ class MainActivity : AppCompatActivity(){
                 AdConfig.adStatusCategoryArt = status.toInt()
                 AdConfig.firstAdLineCategoryArt = threshold.toInt()
                 AdConfig.lineCountCategoryArt = lineCount.toInt() + 1
+                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+            }
+
+
+            val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
+            for (i in 0 until mainScreenScroll.length()) {
+                val obj = mainScreenScroll.getJSONObject(i)
+                val status = obj.getString("Status")
+                val threshold = obj.getString("fisrt_ad_line_threshold")
+                val lineCount = obj.getString("line_count")
+                val designType = obj.getString("native_design_type")
+
+
+
+                AdConfig.adStatusTrending = status.toInt()
+                AdConfig.firstAdLineTrending = threshold.toInt()
+                AdConfig.lineCountTrending = lineCount.toInt() + 1
                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
         }catch (e: JSONException) {

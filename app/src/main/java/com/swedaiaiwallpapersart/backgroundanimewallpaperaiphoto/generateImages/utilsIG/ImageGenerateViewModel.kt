@@ -55,6 +55,7 @@ class ImageGenerateViewModel:ViewModel() {
             Parameters.webhook,
             Parameters.width
         )
+        Log.e("TAG", "loadData: $postData")
         val call = apiService.postData(postData)
         call.enqueue(object : Callback<GetResponseIG> {
             override fun onResponse(call: Call<GetResponseIG>, response: Response<GetResponseIG>) {

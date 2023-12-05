@@ -41,6 +41,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
@@ -68,8 +69,18 @@ class ApiCategoriesListAdapter(
          var context:Context? = null
         private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
+    private var lastAdShownPosition = -1
 
-    private val NATIVE_AD_INTERVAL = 10
+    var row = 0
+
+//    private val NATIVE_AD_INTERVAL = 10
+
+    private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+
+    val firstline = firstAdLineThreshold *2
+    private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+    val lineC = lineCount*2
+    private val statusAd =  AdConfig.adStatusViewListWallSRC
        private val myDialogs = MyDialogs()
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatResponse,holder: ViewHolder) {
@@ -130,10 +141,17 @@ class ApiCategoriesListAdapter(
         }
     }
     override fun getItemViewType(position: Int): Int {
-        // Return the appropriate view type based on the position
-        return if ((position + 1) % (NATIVE_AD_INTERVAL + 1) == 0) {
+         row = position / 2
+        Log.e("TAG", "getItemViewType: "+row )
+        val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
+//        (position + 1) % (firstline + 1) == 0
+        return if ((position + 1) == (firstline + 1)){
+            Log.e("TAG", "getItemViewType: "+row )
+            lastAdShownPosition = row
             VIEW_TYPE_NATIVE_AD
-        } else {
+        }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
+            VIEW_TYPE_NATIVE_AD
+        }  else {
             VIEW_TYPE_CONTAINER1
         }
     }

@@ -1,0 +1,8 @@
+
+7kotlin:S125ã"Remove this commented out code.(ƒïÕ¦
+5kotlin:S6310®"Avoid hardcoded dispatchers.(©ÒÕò
+jkotlin:S1192¾"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ
+@kotlin:S1874u"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ
+Akotlin:S1874"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ
+kkotlin:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from 52 to the 15 allowed.(şÅâÏ
+Lkotlin:S1066î".Merge this "if" statement with the nested one.(©ì¯Ğıÿÿÿÿ

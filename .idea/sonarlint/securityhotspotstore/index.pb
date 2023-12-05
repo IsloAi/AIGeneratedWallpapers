@@ -45,3 +45,29 @@ kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fra
 mapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/LocalizationFragment.kt,e\7\e7abd5a9cf63f888eec175d8d85afb50f2493cdf
 •
 eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/MainFragment.kt,c\a\caf1521978ce9ac1b0620382e302b8732a610f91
+Ž
+^app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MyDialogs.kt,6\6\6693e31d6b543b2adaf135b27ee65ad523af1965
+±
+€app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/fragmentsIG/MyCreationViewFragment.kt,6\0\6028271f0af1c0b7353fe35218ccbc881f9a7a53
+—
+gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MyCatNameViewModel.kt,0\b\0b83d90aaf60c9950f451cfe41edf3b887a2fb2b
+•
+eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/CatNameResponse.kt,e\9\e9575955d3494a2a7cc19c2aa524c80acb905118
+˜
+happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/RetrofitInstance.kt,2\1\214cc47c213e6c1e51c4fd5931c7e6f713ffa1cc
+œ
+lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/ApiService.kt,f\0\f008aec8dd08fa70416e2e13e8e3dd09e4d2658f
+ª
+zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/retrofitIG/RetrofitIntenseIG.kt,f\1\f148551d48ab2972e5a10e922f0fcf038f0d87a5
+³
+‚app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/retrofitIG/endPointsIG/PostRequestIG.kt,1\2\12949c6bd52b8b951d4ea4d4aeaaa2b5c46d3216
+ 
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/utilsIG/Parameters.kt,8\7\872d10d5789dad6a4484f18132c489f1be07946c
+§
+wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/adaptersIG/CatListAdapter.kt,6\1\61e2234ddddba131659ae5ee52942638ec4c9915
+¥
+uapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/roomDB/GetResponseIGDao.kt,b\4\b412fbca8f1e489a59e300e97a509b35ec951a39
+ 
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/ApiCategoriesNameAdapter.kt,7\d\7d8a2117a787a48037be999be6c26249fdb2f867
+§
+wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/models/PostRequestModelIG.kt,f\c\fc390000258e5239a6841db363ff70a480a2ea45
