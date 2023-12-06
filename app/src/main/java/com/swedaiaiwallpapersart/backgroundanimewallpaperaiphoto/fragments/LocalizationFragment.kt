@@ -12,6 +12,7 @@ import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -47,8 +48,8 @@ class LocalizationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         pos = MySharePreference.getLanguageposition(requireContext())!!
         loadNativeAd()
-        initLanguages()
         setEvents()
+        initLanguages()
         backHandle()
     }
 
@@ -134,6 +135,10 @@ class LocalizationFragment : Fragment() {
 
     private fun setEvents() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
+
+        if (!onBoard){
+            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
+        }
         binding.backButton.setOnClickListener {
             if (exit){
                 requireActivity().finishAffinity()

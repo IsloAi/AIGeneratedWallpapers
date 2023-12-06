@@ -13,8 +13,10 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -22,6 +24,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .FragmentOnBoardingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdsPreLoading
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.launch
@@ -54,38 +57,41 @@ class OnBoardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.layout_custom_admob,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
-                    binding.adsView.visibility = View.GONE
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    if (isAdded && view != null) {
-                        // Modify view visibility here
-                        binding.adsView.visibility = View.VISIBLE
-                    }
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                }
-            }
-        )
+//        val nativeAd = NativeAdsPreLoading.getOnBoaringAds()
+//
+//        val adLayout = LayoutInflater.from(activity).inflate(
+//            R.layout.layout_custom_admob,
+//            null, false
+//        ) as? IkmWidgetAdLayout
+//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//
+//        binding.adsView.setCustomNativeAdLayout(
+//            R.layout.shimmer_loading_native,
+//            adLayout!!
+//        )
+//        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+//            object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//                    Log.e("TAG", "onAdsLoadFail: native failded " )
+//                    binding.adsView.visibility = View.GONE
+//                }
+//
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    if (isAdded && view != null) {
+//                        // Modify view visibility here
+//                        binding.adsView.visibility = View.VISIBLE
+//                    }
+//                    Log.e("TAG", "onAdsLoaded: native loaded" )
+//                }
+//            }
+//        )
         backHandle()
 
         populateOnbaordingItems()
@@ -100,6 +106,7 @@ class OnBoardingFragment : Fragment() {
                 setCurrentIndicator(position)
                 when (position) {
                     0 -> {
+                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         binding.onbTxt1.text = getString(R.string.enchanting_animated_realms)
 
@@ -123,7 +130,7 @@ class OnBoardingFragment : Fragment() {
                                 override fun onAdsLoadFail() {
                                     super.onAdsLoadFail()
                                     Log.e("TAG", "onAdsLoadFail: native failded " )
-                                    binding.adsView.visibility = View.GONE
+//                                    binding.adsView.visibility = View.GONE
                                 }
 
                                 override fun onAdsLoaded() {
@@ -139,6 +146,7 @@ class OnBoardingFragment : Fragment() {
                         )
                     }
                     1 -> {
+                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         val adLayout = LayoutInflater.from(activity).inflate(
                             R.layout.layout_custom_admob,
@@ -160,7 +168,7 @@ class OnBoardingFragment : Fragment() {
                                 override fun onAdsLoadFail() {
                                     super.onAdsLoadFail()
                                     Log.e("TAG", "onAdsLoadFail: native failded " )
-                                    binding.adsView.visibility = View.GONE
+//                                    binding.adsView.visibility = View.GONE
                                 }
 
                                 override fun onAdsLoaded() {
@@ -197,7 +205,7 @@ class OnBoardingFragment : Fragment() {
                                 override fun onAdsLoadFail() {
                                     super.onAdsLoadFail()
                                     Log.e("TAG", "onAdsLoadFail: native failded " )
-                                    binding.adsView.visibility = View.GONE
+//                                    binding.adsView.visibility = View.GONE
                                 }
 
                                 override fun onAdsLoaded() {
@@ -222,6 +230,7 @@ class OnBoardingFragment : Fragment() {
             findNavController().navigate(R.id.mainFragment)
         }
 
+
         binding.nextBtn.setOnClickListener {
             MySharePreference.setOnboarding(requireContext(),true)
             val currentItem = binding.onboardingViewPager.currentItem
@@ -231,7 +240,7 @@ class OnBoardingFragment : Fragment() {
                 // Move to the next item
                 binding.onboardingViewPager.setCurrentItem(currentItem + 1, true)
             } else {
-                findNavController().navigate(R.id.mainFragment)
+                findNavController().navigate(R.id.action_onBoardingFragment_to_mainFragment)
             }
         }
     }

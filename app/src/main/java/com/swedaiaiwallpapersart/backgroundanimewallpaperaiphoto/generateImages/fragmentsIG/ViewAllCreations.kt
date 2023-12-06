@@ -138,7 +138,7 @@ class ViewAllCreations : Fragment() {
                 3,
                 20,
                 false,
-                100
+                10000
             )
         )
 

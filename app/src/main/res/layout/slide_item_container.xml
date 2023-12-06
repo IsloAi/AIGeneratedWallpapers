@@ -31,7 +31,6 @@
         android:layout_height="wrap_content"
        android:layout_gravity="center"
         app:lottie_autoPlay="true"
-        android:padding="@dimen/_15sdp"
         app:lottie_loop="true"
         />
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -1,6 +1,8 @@
 
->kotlin:S125›"Remove this commented out code.(òí ½8ªñÇ‡Á1
-9kotlin:S6531¶"Remove this useless cast.(£Í‘8¼ñÇ‡Á1
+>kotlin:S125¾"Remove this commented out code.(òí ½8ªñÇ‡Á1
+9kotlin:S6531·"Remove this useless cast.(£Í‘8¼ñÇ‡Á1
+9kotlin:S6531é"Remove this useless cast.(ıÀÁ»8Ç¼õøÃ1
 9kotlin:S1128"Remove this unused import.(´Ùí8ÁñÇ‡Á1
 >kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8ÁñÇ‡Á1
 >kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8ÁñÇ‡Á1
+pkotlin:S1192Ö"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8µ¿ôøÃ1

@@ -12,6 +12,8 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashOnBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdsPreLoading
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,6 +30,8 @@ class SplashOnFragment : Fragment() {
 
     private var currentPosition = 0
     private var isVideoPrepared = false
+
+    private lateinit var myActivity : MainActivity
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,8 +51,18 @@ class SplashOnFragment : Fragment() {
 //        progress.setCancelable(false)
 //        progress.show()
 
+        myActivity = activity as MainActivity
+
 
         val lan = MySharePreference.getLanguage(requireContext())
+
+
+        if (lan?.isEmpty() == true){
+            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
+
+        }
+
+
 //        val videoPath = "android.resource://" + requireContext().packageName + "/" + R.raw.splash_animation
 //        binding.splashAnim.setMediaController(null)
 //
@@ -73,8 +87,8 @@ class SplashOnFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.Main) {
 
-            delay(3000)
-            SDKBaseController.getInstance().showFirstOpenAppAds(requireActivity(),12000,object:CommonAdsListenerAdapter(){
+            delay(5000)
+            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,12000,object:CommonAdsListenerAdapter(){
                 override fun onAdReady(priority: Int) {
 //                progress.dismiss()
                 }
@@ -84,7 +98,9 @@ class SplashOnFragment : Fragment() {
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
                         if (isAdded){
-                            findNavController().navigate(R.id.mainFragment)
+                                findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
+
+
                         }
 
                     }
@@ -97,14 +113,14 @@ class SplashOnFragment : Fragment() {
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
                         if (isAdded) {
-                            findNavController().navigate(R.id.mainFragment)
+                            findNavController().navigate(R.id.action_splashFragment_to_mainFragment)
                         }
                     }
 //                progress.dismiss()
                 }
 
                 override fun onAdsShowed(priority: Int) {
-                    SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"mainscr_bottom","mainscr_bottom")
+
 //                progress.dismiss()
 
                 }

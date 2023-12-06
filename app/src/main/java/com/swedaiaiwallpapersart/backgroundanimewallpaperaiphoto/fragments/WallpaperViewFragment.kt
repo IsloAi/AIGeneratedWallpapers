@@ -171,17 +171,15 @@ class WallpaperViewFragment : Fragment() {
             val gson = Gson()
             val arrayListType = object : TypeToken<ArrayList<CatResponse>>() {}.type
             val arrayListOfImages = gson.fromJson<ArrayList<CatResponse?>>(arrayListJson, arrayListType)
+            arrayListOfImages.filterNotNull()
 
             Log.e("******NULL", "onCreate: "+arrayListOfImages.size )
             var adjustedPos = pos
 
             arrayList = addNullValueInsideArray(arrayListOfImages)
 
-             val firstAdLineThreshold = if (from == "trending") {
-                if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
-            } else {
-                if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-            }
+             val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+
             // Calculate the adjusted position by considering the null ads in the array
             position = if (pos == firstAdLineThreshold){
                 pos +totalADs
@@ -200,17 +198,9 @@ class WallpaperViewFragment : Fragment() {
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
 
-         val firstAdLineThreshold = if (from == "trending") {
-            if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
-        } else {
-            if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-        }
-         val lineCount = if (from == "trending") {
-            if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
-        } else {
-            if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-        }
-         val statusAd = if (from == "trending") AdConfig.adStatusTrending else AdConfig.adStatusCategoryArt
+         val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+
+         val lineCount = if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
         val newData = arrayListOf<CatResponse?>()
 
         if (from == "trending"){
@@ -288,16 +278,16 @@ class WallpaperViewFragment : Fragment() {
 
 
         binding.buttonApplyWallpaper.setOnClickListener {
-           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+//           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                if(bitmap != null){
                    openPopupMenu()
                }else{
                    Toast.makeText(requireContext(),
                        getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
                }
-           }else{
-               Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-           }
+//           }else{
+//               Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+//           }
 
        }
        binding.favouriteButton.setOnClickListener {
@@ -392,12 +382,13 @@ class WallpaperViewFragment : Fragment() {
 
        }
        binding.downloadWallpaper.setOnClickListener{
-           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-               getUserIdDialog()
-           }else{
-               Toast.makeText(requireContext(), "First Unlock the wallpaper to download", Toast.LENGTH_SHORT).show()
-
-           }
+           getUserIdDialog()
+//           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+//
+//           }else{
+//               Toast.makeText(requireContext(), "First Unlock the wallpaper to download", Toast.LENGTH_SHORT).show()
+//
+//           }
 
        }
    }
@@ -427,8 +418,8 @@ class WallpaperViewFragment : Fragment() {
             binding.unlockWallpaper.visibility = View.GONE
             binding.buttonApplyWallpaper.visibility = View.VISIBLE
         }else{
-            binding.unlockWallpaper.visibility = View.VISIBLE
-            binding.buttonApplyWallpaper.visibility = View.INVISIBLE
+            binding.unlockWallpaper.visibility = View.GONE
+            binding.buttonApplyWallpaper.visibility = View.VISIBLE
         }
 
         viewPager2?.clipToPadding = false
@@ -459,8 +450,8 @@ class WallpaperViewFragment : Fragment() {
                         binding.unlockWallpaper.visibility = View.GONE
                         binding.buttonApplyWallpaper.visibility = View.VISIBLE
                     }else{
-                        binding.unlockWallpaper.visibility = View.VISIBLE
-                        binding.buttonApplyWallpaper.visibility = View.INVISIBLE
+                        binding.unlockWallpaper.visibility = View.GONE
+                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
                     }
                 }else{
                     position = positi
@@ -484,8 +475,8 @@ class WallpaperViewFragment : Fragment() {
                         binding.unlockWallpaper.visibility = View.GONE
                         binding.buttonApplyWallpaper.visibility = View.VISIBLE
                     }else{
-                        binding.unlockWallpaper.visibility = View.VISIBLE
-                        binding.buttonApplyWallpaper.visibility = View.INVISIBLE
+                        binding.unlockWallpaper.visibility = View.GONE
+                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
                     }
 
                 }
@@ -521,12 +512,12 @@ class WallpaperViewFragment : Fragment() {
 
                 override fun onAdsRewarded() {
                     Log.e("********ADS", "onAdsRewarded: ")
-                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+//                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                         mSaveMediaToStorage(bitmap)
-                    }else{
-                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-
-                    }
+//                    }else{
+//                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+//
+//                    }
 
 
                 }
@@ -539,22 +530,22 @@ class WallpaperViewFragment : Fragment() {
                         showLoading = true,
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
-                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+//                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                                     mSaveMediaToStorage(bitmap)
-                                }else{
-                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-
-                                }
+//                                }else{
+//                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+//
+//                                }
                                 //do something
                             }
 
                             override fun onAdsDismiss() {
-                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
+//                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                                     mSaveMediaToStorage(bitmap)
-                                }else{
-                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-
-                                }
+//                                }else{
+//                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
+//
+//                                }
                             }
                         }
                     )

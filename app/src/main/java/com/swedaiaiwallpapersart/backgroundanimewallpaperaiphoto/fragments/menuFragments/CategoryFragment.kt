@@ -20,16 +20,21 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 
 class CategoryFragment : Fragment() {
    private var _binding: FragmentCategoryBinding? = null
+
+    var adcount = 0
+    var totalADs = 0
     private val binding get() = _binding!!
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
     private lateinit var myActivity : MainActivity
 
-    val catlist = ArrayList<CatNameResponse>()
+    val catlist = ArrayList<CatNameResponse?>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)
@@ -76,17 +81,46 @@ class CategoryFragment : Fragment() {
                 )
 
             }
-        })
+        },myActivity)
         binding.recyclerviewAll.adapter = adapter
 
         myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
             Log.e("TAG", "onCustomCreateView: no data exists" )
            if (wallpapersList?.size!! > 0){
                Log.e("TAG", "onCustomCreateView: data exists" )
-               adapter.updateData(newData = wallpapersList)
+               val list = addNullValueInsideArray(wallpapersList)
+               adapter.updateData(newData = list)
            }
         }
     }
+
+
+    private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+
+        val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+
+        val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+        val newData = arrayListOf<CatNameResponse?>()
+
+            for (i in data.indices){
+                if (i > firstAdLineThreshold && (i - firstAdLineThreshold) % (lineCount)  == 0) {
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+                }else if (i == firstAdLineThreshold){
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
+                newData.add(data[i])
+
+            }
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+        return newData
+    }
+
+
     private fun setFragment(name:String){
        val bundle =  Bundle().apply {
             putString("name",name)

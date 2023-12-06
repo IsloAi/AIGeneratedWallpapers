@@ -71,3 +71,11 @@ uapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/gen
 papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/ApiCategoriesNameAdapter.kt,7\d\7d8a2117a787a48037be999be6c26249fdb2f867
 ß
 wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/models/PostRequestModelIG.kt,f\c\fc390000258e5239a6841db363ff70a480a2ea45
+ñ
+fapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ads/NativeAdsPreLoading.kt,c\7\c703d2249749e196c2fdf99260a8dffb1550a986
+ù
+mapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/ViewPagerImageClick.kt,f\f\ffa6c7f672a7e01ab7845fa127c617dec8a3c905
+ì
+capp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/RvItemDecore.java,d\7\d7682a8e685638bf77b27292ddeb61dad69c7778
+™
+zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/fragmentsIG/ViewAllCreations.kt,c\f\cf923362cc04108842d8f97efe7f75af7769359f

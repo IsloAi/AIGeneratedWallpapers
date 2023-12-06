@@ -247,7 +247,7 @@ class MainActivity : AppCompatActivity(){
 
                 AdConfig.adStatusViewListWallSRC = status.toInt()
                 AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
-                AdConfig.lineCountViewListWallSRC = lineCount.toInt()
+                AdConfig.lineCountViewListWallSRC = lineCount.toInt() + 1
                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
 

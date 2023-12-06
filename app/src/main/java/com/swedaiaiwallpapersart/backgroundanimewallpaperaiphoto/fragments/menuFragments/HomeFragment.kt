@@ -45,6 +45,7 @@ class HomeFragment : Fragment(){
     private var isLoading = false
     private lateinit var myActivity : MainActivity
     private val allData = mutableListOf<CatResponse>()
+    val orignalList = arrayListOf<CatResponse?>()
     private lateinit var adapter:ApiCategoriesListAdapter
     private val postDataOnServer = PostDataOnServer()
     private val rewardAdWatched = 20
@@ -69,6 +70,11 @@ class HomeFragment : Fragment(){
         binding.retryBtn.setOnClickListener {
             loadData()
         }
+
+        binding.swipeLayout.setOnRefreshListener {
+            adapter.shuffleImage(orignalList)
+            binding.swipeLayout.isRefreshing = false
+        }
     }
     private fun onCreatingCalling(){
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
@@ -84,7 +90,7 @@ class HomeFragment : Fragment(){
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10000))
         loadData()
 //        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener(){
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -140,6 +146,8 @@ class HomeFragment : Fragment(){
                 Log.e("TAG", "loadData: "+catResponses )
                 if (view != null) {
                     // If the view is available, update the UI
+                    orignalList.clear()
+                    orignalList.addAll(catResponses)
                     binding.retryBtn.visibility = View.GONE
                     updateUIWithFetchedData(catResponses)
                 }
@@ -151,25 +159,45 @@ class HomeFragment : Fragment(){
         myViewModel.fetchWallpapers(requireContext(), binding.progressBar,true)
     }
 
-
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
+        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstLine = firstAdLineThreshold * 2
+
+        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineC = lineCount * 2
         val newData = arrayListOf<CatResponse?>()
+
         for (i in data.indices){
-            if (i > AdConfig.firstAdLineTrending && (i - AdConfig.firstAdLineTrending) % (AdConfig.lineCountTrending -1)  == 0) {
+            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
                 newData.add(null)
+
+
+
                 Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-            }else if (i == AdConfig.firstAdLineTrending){
+            }else if (i == firstLine){
                 newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
             }
             Log.e("******NULL", "addNullValueInsideArray: not null "+i )
             newData.add(data[i])
+
         }
+        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
+
+
+
         return newData
     }
-    private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
-       adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
+
+    private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
+
+        val shuffled = catResponses.shuffled()
+
+        val list = addNullValueInsideArray(shuffled)
+       adapter = ApiCategoriesListAdapter(list as ArrayList, object :
             PositionCallback {
             override fun getPosition(position: Int) {
 
@@ -181,12 +209,12 @@ class HomeFragment : Fragment(){
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(catResponses,position)
+                            navigateToDestination(list,position)
                             //do something
                         }
 
                         override fun onAdsDismiss() {
-                            navigateToDestination(catResponses,position)
+                            navigateToDestination(list,position)
                         }
                     }
                 )
@@ -212,7 +240,7 @@ class HomeFragment : Fragment(){
 
 
 
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse>, position:Int) {
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
         val gson = Gson()
         val arrayListJson = gson.toJson(arrayList)
         Bundle().apply {

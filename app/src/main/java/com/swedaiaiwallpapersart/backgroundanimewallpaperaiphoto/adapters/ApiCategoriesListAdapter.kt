@@ -3,6 +3,9 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,9 +53,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.lang.NullPointerException
 
 class ApiCategoriesListAdapter(
-    var arrayList: ArrayList<CatResponse>,
+    var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
     var navController: NavController,
     private val actionId: Int,
@@ -83,8 +87,10 @@ class ApiCategoriesListAdapter(
     private val statusAd =  AdConfig.adStatusViewListWallSRC
        private val myDialogs = MyDialogs()
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(model: CatResponse,holder: ViewHolder) {
-            setAllData(model,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
+        fun bind(modela: ArrayList<CatResponse?>,holder: ViewHolder,position: Int) {
+            val model = modela[position]
+            setAllData(
+                model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
             ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder,binding.errorImage)
         }
     }
@@ -131,8 +137,13 @@ class ApiCategoriesListAdapter(
         val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                val viewHolderContainer1 = holder as ViewHolderContainer1
-                viewHolderContainer1.bind(model,holder)
+                try {
+                    val viewHolderContainer1 = holder as ViewHolderContainer1
+                    viewHolderContainer1.bind(arrayList,viewHolderContainer1,position)
+                }catch (e:NullPointerException){
+                    e.printStackTrace()
+                }
+
             }
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
@@ -188,7 +199,7 @@ class ApiCategoriesListAdapter(
             gemsView.visibility = GONE
             Log.d("tracingImageId", "free: category = ${model.cat_name}  , imageId =  ${model.id}, model = $model")
         }else{
-            lockButton.visibility = VISIBLE
+            lockButton.visibility = GONE
             diamondIcon.visibility =GONE
             gemsView.visibility = GONE
             Log.d("tracingImageId", "paid: category = ${model.cat_name}  , imageId = ${model.id}, model = $model")
@@ -236,14 +247,16 @@ class ApiCategoriesListAdapter(
         }
         favouriteButton.setOnClickListener{
             favouriteButton.isEnabled = false
-                if(arrayList[position].liked==true){
-                    arrayList[position].liked = false
+
+
+                if(arrayList[position]?.liked==true){
+                    arrayList[position]?.liked = false
                     favouriteButton.setImageResource(R.drawable.heart_unsel)
-                    likes.text = (arrayList[position].likes!!-1).toString()
+                    likes.text = (arrayList[position]?.likes!!-1).toString()
                 }else{
-                    arrayList[position].liked = true
+                    arrayList[position]?.liked = true
                     favouriteButton.setImageResource(R.drawable.heart_red)
-                    likes.text = (arrayList[position].likes!!+1).toString()
+                    likes.text = (arrayList[position]?.likes!!+1).toString()
                 }
                 addFavourite(context!!,model,favouriteButton,likes)
 
@@ -272,7 +285,16 @@ class ApiCategoriesListAdapter(
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()
                     Log.e("TAG", "onAdsLoadFail: native failded " )
-                    binding.adsView.visibility = View.GONE
+                    if (statusAd == 0){
+                        binding.adsView.visibility = View.GONE
+                    }else{
+                        if (isNetworkAvailable()){
+                            loadad(holder,binding)
+                            binding.adsView.visibility = View.VISIBLE
+                        }else{
+                            binding.adsView.visibility = View.GONE
+                        }
+                    }
                 }
 
                 override fun onAdsLoaded() {
@@ -282,6 +304,19 @@ class ApiCategoriesListAdapter(
                 }
             }
         )
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
+        }
     }
     @SuppressLint("SuspiciousIndentation")
     private fun addFavourite(
@@ -325,6 +360,47 @@ class ApiCategoriesListAdapter(
                 }
             }
         }
+    }
+
+
+    fun shuffleImage(list: ArrayList<CatResponse?>){
+        list.shuffle()
+        val addedNull = addNullValueInsideArray(list)
+        arrayList.clear()
+        arrayList.addAll(addedNull)
+        notifyDataSetChanged()
+    }
+
+
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
+        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstLine = firstAdLineThreshold * 2
+
+        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineC = lineCount * 2
+        val newData = arrayListOf<CatResponse?>()
+
+        for (i in data.indices){
+            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                newData.add(null)
+
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+            }else if (i == firstLine){
+                newData.add(null)
+                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+            }
+            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            newData.add(data[i])
+
+        }
+        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
+
+
+
+        return newData
     }
 
 

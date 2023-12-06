@@ -39,6 +39,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 
 class FavouriteFragment : Fragment() {
@@ -99,9 +100,9 @@ class FavouriteFragment : Fragment() {
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.aiRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.aiRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10))
+        binding.aiRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10000))
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2,20,false,1000))
+        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10000))
 
 
         loadData()
@@ -194,8 +195,42 @@ class FavouriteFragment : Fragment() {
         }
         myViewModel.fetchWallpapers(requireContext(), MySharePreference.getDeviceID(requireContext())!!,binding.progressBar)
     }
-    private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
-        val adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
+
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
+        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstLine = firstAdLineThreshold * 2
+
+        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineC = lineCount * 2
+        val newData = arrayListOf<CatResponse?>()
+
+        for (i in data.indices){
+            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                newData.add(null)
+
+
+
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+            }else if (i == firstLine){
+                newData.add(null)
+                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+            }
+            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            newData.add(data[i])
+
+        }
+        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
+
+
+
+        return newData
+    }
+    private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
+        val list = addNullValueInsideArray(catResponses)
+        val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
             PositionCallback {
             override fun getPosition(position: Int) {
 
@@ -207,12 +242,12 @@ class FavouriteFragment : Fragment() {
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(catResponses,position)
+                            navigateToDestination(list,position)
                             //do something
                         }
 
                         override fun onAdsDismiss() {
-                            navigateToDestination(catResponses,position)
+                            navigateToDestination(list,position)
                         }
                     }
                 )
@@ -234,7 +269,7 @@ class FavouriteFragment : Fragment() {
         binding.aiRecyclerView.adapter = adapter
 
     }
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse>, position:Int) {
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
         val gson = Gson()
         val arrayListJson = gson.toJson(arrayList)
         Bundle().apply {

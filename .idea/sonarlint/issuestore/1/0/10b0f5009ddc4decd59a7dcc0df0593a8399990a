@@ -1,6 +1,9 @@
 
-;kotlin:S125U"Remove this commented out code.(Á÷šîÿÿÿÿÿ
-7kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ
-7kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ
-@kotlin:S18743"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ
-skotlin:S1186Œ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾
+Bkotlin:S125\"Remove this commented out code.(Á÷šîÿÿÿÿÿ8‰Ô“ùÃ1
+9kotlin:S6531¥"Remove this useless cast.(ıÀÁ»8šÔ“ùÃ1
+>kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8Ô“ùÃ1
+>kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8Ô“ùÃ1
+pkotlin:S1192‡"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8ŸÔ“ùÃ1
+‡kotlin:S1192‡"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8ŸÔ“ùÃ1
+Gkotlin:S1874:"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8 Ô“ùÃ1
+zkotlin:S1186¿"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8£Ô“ùÃ1

@@ -52,17 +52,10 @@ class WallpaperApiSliderAdapter(
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
 
-    private val firstAdLineThreshold = if (from == "trending") {
-        if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
-    } else {
-        if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-    }
-    private val lineCount = if (from == "trending") {
-        if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
-    } else {
-        if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-    }
-    private val statusAd = if (from == "trending") AdConfig.adStatusTrending else AdConfig.adStatusCategoryArt
+    private val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+
+    private val lineCount = if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
+    private val statusAd = AdConfig.adStatusTrending
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
 
@@ -151,16 +144,16 @@ class WallpaperApiSliderAdapter(
         if(model.gems==0 || model.unlockimges==true){
           blurView.visibility = INVISIBLE
         }else{
-            blurView.visibility = VISIBLE
+            blurView.visibility = INVISIBLE
         }
 
         imageSlide.setOnClickListener {
             Log.d("modelTracingNow", "dataSet: model else condition  ${model.unlockimges}  imageId  ${model.id}")
-            if(model.gems !=0 && model.unlockimges==false) {
-                viewPagerImageClick.getImagePosition(adapterPosition, blurView)
-            }else{
+//            if(model.gems !=0 && model.unlockimges==false) {
+//                viewPagerImageClick.getImagePosition(adapterPosition, blurView)
+//            }else{
                 fullViewImage.getFullImageUrl(model.hd_image_url!!)
-            }
+//            }
         }
         Glide.with(context!!).load(model.hd_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object:

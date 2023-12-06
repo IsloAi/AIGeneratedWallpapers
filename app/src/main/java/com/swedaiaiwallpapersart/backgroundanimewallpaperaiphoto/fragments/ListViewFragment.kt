@@ -24,7 +24,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCat
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -37,6 +39,11 @@ class ListViewFragment : Fragment() {
     private var from = ""
     private var isLogin = true
     private lateinit var myActivity : MainActivity
+
+    val orignalList = arrayListOf<CatResponse?>()
+
+    var adcount = 0
+    var totalADs = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentListViewBinding.inflate(inflater,container,false)
@@ -80,7 +87,7 @@ class ListViewFragment : Fragment() {
         Log.d("tracingNameCategory", "onViewCreated: name $name")
         binding.catTitle.text = name
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10000))
         loadData()
 //        if (!isDataFetched) {
 //            if(name!=null){
@@ -100,18 +107,62 @@ class ListViewFragment : Fragment() {
         // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
-//                cachedCatResponses = catResponses as ArrayList
-//                Log.d("cachedCatResponses", "loadData: all list ${cachedCatResponses}")
-//                isDataFetched = true
-                    // If the view is available, update the UI
-                    updateUIWithFetchedData(catResponses)
+
+                orignalList.clear()
+                orignalList.addAll(catResponses)
+
+
+                    updateUIWithFetchedData(catResponses as ArrayList)
             }
         }
         myViewModel.fetchWallpapers(requireContext(),name,binding.progressBar,isLogin)
     }
+
+
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
+        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstLine = firstAdLineThreshold * 2
+
+        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineC = lineCount * 2
+        val newData = arrayListOf<CatResponse?>()
+
+        for (i in data.indices){
+            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                newData.add(null)
+                    totalADs++
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+            }else if (i == firstLine){
+                newData.add(null)
+                totalADs++
+                Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+
+                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+            }
+            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            newData.add(data[i])
+
+        }
+        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
+
+
+
+        return newData
+    }
     @SuppressLint("NotifyDataSetChanged")
-    private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
-        val adapter = ApiCategoriesListAdapter(catResponses as ArrayList, object :
+    private fun updateUIWithFetchedData(catResponses: ArrayList<CatResponse>) {
+
+        val shuffled = catResponses.shuffled()
+
+        val list = addNullValueInsideArray(shuffled)
+        val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
             PositionCallback {
             override fun getPosition(position: Int) {
 
@@ -122,13 +173,13 @@ class ListViewFragment : Fragment() {
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
-                            navigateToDestination(catResponses,position)
+                            navigateToDestination(list,position)
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             //do something
                         }
 
                         override fun onAdsDismiss() {
-                            navigateToDestination(catResponses,position)
+                            navigateToDestination(list,position)
                         }
                     }
                 )
@@ -150,8 +201,14 @@ class ListViewFragment : Fragment() {
             }
         },myViewModel,1,myActivity)
         binding.recyclerviewAll.adapter = adapter
+
+
+        binding.swipeLayout.setOnRefreshListener {
+            adapter.shuffleImage(orignalList)
+            binding.swipeLayout.isRefreshing = false
+        }
     }
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse>, position:Int) {
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
         val gson = Gson()
         val arrayListJson = gson.toJson(arrayList)
         val bundle =  Bundle().apply {

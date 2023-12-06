@@ -1,12 +1,12 @@
 
-Bkotlin:S125-"Remove this commented out code.(Ò¤Ÿ¨ùÿÿÿÿ8”öÍÆÃ1
-=kotlin:S1254"Remove this commented out code.(¡–÷í8•öÍÆÃ1
-Bkotlin:S125D"Remove this commented out code.(Ëµûëüÿÿÿÿ8•öÍÆÃ1
-Bkotlin:S125O"Remove this commented out code.(‚òò¦şÿÿÿÿ8•öÍÆÃ1
-Bkotlin:S125g"Remove this commented out code.(‚òò¦şÿÿÿÿ8–öÍÆÃ1
-Bkotlin:S125l"Remove this commented out code.(‚òò¦şÿÿÿÿ8–öÍÆÃ1
-=kotlin:S125}"Remove this commented out code.(É’ÎÒ8—öÍÆÃ1
->kotlin:S125ˆ"Remove this commented out code.(É’ÎÒ8—öÍÆÃ1
-;kotlin:S6310J"Avoid hardcoded dispatchers.(©ÒÕò8˜öÍÆÃ1
-Bkotlin:S1874M"#Deprecated code should not be used.(¢î¾‘8ŸöÍÆÃ1
-qkotlin:S3776*"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ëü«8ÕëÏÆÃ1
+Bkotlin:S1251"Remove this commented out code.(Ò¤Ÿ¨ùÿÿÿÿ8ï½´õÃ1
+=kotlin:S125B"Remove this commented out code.(¡–÷í8ğ½´õÃ1
+Bkotlin:S125R"Remove this commented out code.(Ëµûëüÿÿÿÿ8ğ½´õÃ1
+Bkotlin:S125]"Remove this commented out code.(‚òò¦şÿÿÿÿ8ğ½´õÃ1
+Bkotlin:S125w"Remove this commented out code.(‚òò¦şÿÿÿÿ8ñ½´õÃ1
+Bkotlin:S125|"Remove this commented out code.(‚òò¦şÿÿÿÿ8ñ½´õÃ1
+>kotlin:S125"Remove this commented out code.(É’ÎÒ8ñ½´õÃ1
+>kotlin:S125˜"Remove this commented out code.(É’ÎÒ8ò½´õÃ1
+;kotlin:S6310X"Avoid hardcoded dispatchers.(©ÒÕò8ó½´õÃ1
+Gkotlin:S1874["#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8ú½´õÃ1
+qkotlin:S3776."RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ëü«8û½´õÃ1
