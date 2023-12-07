@@ -7,6 +7,13 @@
     tools:context=".Fragments.MenuFragments.CategoryFragment"
     android:background="@color/background"
     >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:id="@+id/backImage"
+        />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

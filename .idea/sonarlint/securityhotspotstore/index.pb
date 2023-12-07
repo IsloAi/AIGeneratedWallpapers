@@ -79,3 +79,13 @@ mapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/int
 capp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/RvItemDecore.java,d\7\d7682a8e685638bf77b27292ddeb61dad69c7778
 ™
 zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/fragmentsIG/ViewAllCreations.kt,c\f\cf923362cc04108842d8f97efe7f75af7769359f
+ç
+]app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/BlurView.kt,8\9\896f91c7dda10df90d01efdd9531e0daf08dd8e3
+™
+zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/roomDB/FavouriteListIGEntity.kt,f\3\f36157a52141c9ddf6cfa7405f3a80fab1e676e3
+≠
+}app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/adaptersIG/MyCreationFavAdapter.kt,3\f\3f71c7ac9aa8a8b5503c8a6d4dd9bd11ce80c661
+õ
+kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/LocalizationAdapter.kt,e\0\e0face97237affe57bb21a6a2e61efa37c71bedf
+¶
+vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/menuFragments/SettingFragment.kt,c\a\cafc2aa685ddbfcab547d75e07b2bec85fb68fef

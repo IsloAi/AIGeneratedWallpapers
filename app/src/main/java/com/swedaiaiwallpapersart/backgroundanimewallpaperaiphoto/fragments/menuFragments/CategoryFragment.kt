@@ -1,6 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 import ApiCategoriesNameAdapter
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,11 +11,15 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.hdwallpaper.Fragments.MainFragment
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
@@ -22,8 +28,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Stri
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
 class CategoryFragment : Fragment() {
    private var _binding: FragmentCategoryBinding? = null
@@ -34,6 +44,8 @@ class CategoryFragment : Fragment() {
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
     private lateinit var myActivity : MainActivity
 
+    private lateinit var myViewModel: MyViewModel
+
     val catlist = ArrayList<CatNameResponse?>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
@@ -43,6 +55,7 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadFirstCategory()
         onCustomCreateView()
 //        SDKBaseController.getInstance().loadInterstitialAds(requireActivity(),"mainscr_cate_tab_click_item","mainscr_cate_tab_click_item")
     }
@@ -94,6 +107,22 @@ class CategoryFragment : Fragment() {
         }
     }
 
+    private fun loadFirstCategory() {
+        myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
+        lifecycleScope.launch {
+            Log.d("functionCallingTest", "onCreateCustom:  home on create")
+
+            // Observe the LiveData in the ViewModel and update the UI accordingly
+            myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
+                if (catResponses != null) {
+                    val randomNumber = Random.nextInt(0, catResponses.size -1)
+                    getBitmapFromGlide(catResponses[randomNumber].compressed_image_url!!)
+                }
+            }
+            myViewModel.fetchWallpapers(requireContext(),"IOS",binding.progressBar,true)
+        }
+
+    }
 
     private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
 
@@ -118,6 +147,25 @@ class CategoryFragment : Fragment() {
             }
             Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
         return newData
+    }
+
+
+    private fun getBitmapFromGlide(url:String){
+        Glide.with(requireContext()).asBitmap().load(url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Log.e("TAG", "onResourceReady: bitmap loaded" )
+                    if (isAdded){
+                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
+                        binding.backImage.setImageBitmap(blurImage)
+                    }
+
+
+
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    Log.e("TAG", "onLoadCleared: cleared" )
+                } })
     }
 
 

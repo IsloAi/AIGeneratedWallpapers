@@ -48,10 +48,13 @@ import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
@@ -62,6 +65,7 @@ import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -69,6 +73,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FullViewImagePopup
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -274,6 +279,8 @@ class WallpaperViewFragment : Fragment() {
             getLargImage = arrayList[position]?.hd_image_url!!
             getSmallImage = arrayList[position]?.compressed_image_url!!
             getBitmapFromGlide(getLargImage)
+
+
         }
 
 
@@ -311,12 +318,12 @@ class WallpaperViewFragment : Fragment() {
                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
                    CustomSDKRewardedAdsListener {
                    override fun onAdsDismiss() {
-                       Log.e("********ADS", "onAdsDismiss: ", )
+                       Log.e("********ADS", "onAdsDismiss: ")
 
                    }
 
                    override fun onAdsRewarded() {
-                       Log.e("********ADS", "onAdsRewarded: ", )
+                       Log.e("********ADS", "onAdsRewarded: ")
                        val postData = PostDataOnServer()
                        val model = arrayList[position]
                        arrayList[position]?.unlockimges = true
@@ -335,7 +342,7 @@ class WallpaperViewFragment : Fragment() {
                    }
 
                    override fun onAdsShowFail(errorCode: Int) {
-                       Log.e("********ADS", "onAdsShowFail: ", )
+                       Log.e("********ADS", "onAdsShowFail: ")
 
                                SDKBaseController.getInstance().showInterstitialAds(
                                    requireActivity(),
@@ -348,7 +355,7 @@ class WallpaperViewFragment : Fragment() {
                                        }
 
                                        override fun onAdsDismiss() {
-                                           Log.e("********ADS", "onAdsRewarded: ", )
+                                           Log.e("********ADS", "onAdsRewarded: ")
                                            val postData = PostDataOnServer()
                                            val model = arrayList[position]
                                            arrayList[position]?.unlockimges = true
@@ -414,6 +421,8 @@ class WallpaperViewFragment : Fragment() {
         },myActivity)
         viewPager2?.adapter = adapter
         viewPager2?.setCurrentItem(position, false)
+
+
         if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             binding.unlockWallpaper.visibility = View.GONE
             binding.buttonApplyWallpaper.visibility = View.VISIBLE
@@ -444,6 +453,7 @@ class WallpaperViewFragment : Fragment() {
                     getSmallImage = arrayList[positi]?.compressed_image_url!!
 
                     position = positi
+
 
                     if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
 
@@ -567,7 +577,16 @@ class WallpaperViewFragment : Fragment() {
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    bitmap = resource }
+                    bitmap = resource
+
+                    if (isAdded){
+                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
+                        binding.backImage.setImageBitmap(blurImage)
+                    }
+
+
+
+                }
                 override fun onLoadCleared(placeholder: Drawable?) {
                 } })
     }

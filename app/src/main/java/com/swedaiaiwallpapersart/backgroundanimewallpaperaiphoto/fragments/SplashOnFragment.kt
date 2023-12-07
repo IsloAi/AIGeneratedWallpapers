@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashOnBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -52,6 +53,13 @@ class SplashOnFragment : Fragment() {
 //        progress.show()
 
         myActivity = activity as MainActivity
+
+
+
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.splash_anim)
+            .into(binding.splashAnimBottom)
 
 
         val lan = MySharePreference.getLanguage(requireContext())

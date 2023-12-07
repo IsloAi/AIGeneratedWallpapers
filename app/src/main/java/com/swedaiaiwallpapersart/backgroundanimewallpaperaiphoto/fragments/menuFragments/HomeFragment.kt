@@ -1,6 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
 import android.app.Dialog
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
@@ -25,6 +30,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetL
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -72,8 +78,11 @@ class HomeFragment : Fragment(){
         }
 
         binding.swipeLayout.setOnRefreshListener {
-            adapter.shuffleImage(orignalList)
+            val newList = orignalList.shuffled()
+            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
+            adapter.shuffleImage(newList as ArrayList)
             binding.swipeLayout.isRefreshing = false
+
         }
     }
     private fun onCreatingCalling(){
@@ -149,6 +158,7 @@ class HomeFragment : Fragment(){
                     orignalList.clear()
                     orignalList.addAll(catResponses)
                     binding.retryBtn.visibility = View.GONE
+
                     updateUIWithFetchedData(catResponses)
                 }
             }else{
@@ -195,6 +205,8 @@ class HomeFragment : Fragment(){
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
 
         val shuffled = catResponses.shuffled()
+        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
+
 
         val list = addNullValueInsideArray(shuffled)
        adapter = ApiCategoriesListAdapter(list as ArrayList, object :
@@ -238,15 +250,35 @@ class HomeFragment : Fragment(){
             binding.recyclerviewAll.adapter = adapter
     }
 
+    private fun getBitmapFromGlide(url:String){
+        Glide.with(requireContext()).asBitmap().load(url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Log.e("TAG", "onResourceReady: bitmap loaded" )
+                    if (isAdded){
+                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
+                        binding.backImage.setImageBitmap(blurImage)
+                    }
+
+
+
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    Log.e("TAG", "onLoadCleared: cleared" )
+                } })
+    }
+
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
         val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList)
+        val arrayListJson = gson.toJson(arrayList.filterNotNull())
+
+        val countOfNulls = arrayList.subList(0, position).count { it == null }
         Bundle().apply {
             putString("arrayListJson",arrayListJson)
             putString("from","trending")
-            putInt("position",position)
+            putInt("position",position - countOfNulls)
             requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
         myViewModel.clear()

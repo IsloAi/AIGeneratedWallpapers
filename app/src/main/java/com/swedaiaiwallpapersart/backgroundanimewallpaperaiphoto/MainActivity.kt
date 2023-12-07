@@ -218,17 +218,17 @@ class MainActivity : AppCompatActivity(){
                     val updated = task.result
 
                     Log.e("TAG", "Config params updated: $updated")
-                    Toast.makeText(
-                        this,
-                        "Fetch and activate succeeded",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+//                    Toast.makeText(
+//                        this,
+//                        "Fetch and activate succeeded",
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
                 } else {
-                    Toast.makeText(
-                        this,
-                        "Fetch failed",
-                        Toast.LENGTH_SHORT,
-                    ).show()
+//                    Toast.makeText(
+//                        this,
+//                        "Fetch failed",
+//                        Toast.LENGTH_SHORT,
+//                    ).show()
                 }
             }
 

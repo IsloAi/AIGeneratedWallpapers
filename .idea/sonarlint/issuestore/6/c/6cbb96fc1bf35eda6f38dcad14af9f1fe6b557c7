@@ -1,15 +1,16 @@
 
-rkotlin:S117«"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ˆ¨‚®şÿÿÿÿ8Ìä˜ùÃ1
-<kotlin:S6310Í"Avoid hardcoded dispatchers.(Í¡·Ş8Îä˜ùÃ1
-<kotlin:S6310å"Avoid hardcoded dispatchers.(Í¡·Ş8Îä˜ùÃ1
-lkotlin:S107ª"HThis function has 11 parameters, which is greater than the 7 authorized.(îÌê®şÿÿÿÿ8İä˜ùÃ1
-Okotlin:S1481‰"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8èä˜ùÃ1
-Okotlin:S1481"/Remove this unused "adPosition" local variable.(²úÒ8èä˜ùÃ1
-Okotlin:S1481å"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ8èä˜ùÃ1
-9kotlin:S1128!"Remove this unused import.(ÖàÉâ8ğä˜ùÃ1
->kotlin:S1128#"Remove this unused import.(¬†ÙÏşÿÿÿÿ8ğä˜ùÃ1
-9kotlin:S11283"Remove this unused import.(üŸÿ¥8ğä˜ùÃ1
-pkotlin:S1192„"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8óä˜ùÃ1
-Hkotlin:S1874—"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8õä˜ùÃ1
-Hkotlin:S1874½"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8õä˜ùÃ1
-Bkotlin:S1874¾"#Deprecated code should not be used.(àü8õä˜ùÃ1
+rkotlin:S117®"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ˆ¨‚®şÿÿÿÿ8Üöó—Ä1
+<kotlin:S6310Ğ"Avoid hardcoded dispatchers.(Í¡·Ş8İöó—Ä1
+<kotlin:S6310è"Avoid hardcoded dispatchers.(Í¡·Ş8İöó—Ä1
+lkotlin:S107­"HThis function has 11 parameters, which is greater than the 7 authorized.(îÌê®şÿÿÿÿ8èöó—Ä1
+Okotlin:S1481Œ"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8óöó—Ä1
+Okotlin:S1481 "/Remove this unused "adPosition" local variable.(²úÒ8óöó—Ä1
+Okotlin:S1481è"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ8óöó—Ä1
+>kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8°á÷—Ä1
+9kotlin:S1128""Remove this unused import.(ÖàÉâ8úöó—Ä1
+>kotlin:S1128$"Remove this unused import.(¬†ÙÏşÿÿÿÿ8úöó—Ä1
+9kotlin:S11284"Remove this unused import.(üŸÿ¥8úöó—Ä1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8üöó—Ä1
+Hkotlin:S1874š"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8şöó—Ä1
+Hkotlin:S1874À"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ÿöó—Ä1
+Bkotlin:S1874Á"#Deprecated code should not be used.(àü8üó—Ä1

@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -19,6 +21,8 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.example.hdwallpaper.Fragments.MainFragment
 
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFavouriteViewModel
@@ -40,7 +44,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import kotlin.random.Random
 
 class FavouriteFragment : Fragment() {
    private var _binding: FragmentFavouriteBinding? = null
@@ -75,21 +81,9 @@ class FavouriteFragment : Fragment() {
         val roomDatabase = AppDatabase.getInstance(requireContext())
         roomViewModel = ViewModelProvider(this, ViewModelFactory(roomDatabase,0))[RoomViewModel::class.java]
         myActivity = activity as MainActivity
-//        val auth = FirebaseAuth.getInstance()
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
+
+
             viewVisible()
-//        }else{
-//            binding.errorMessage.visibility = VISIBLE
-//            binding.aiRecyclerView.visibility = INVISIBLE
-//            binding.selfCreationRecyclerView.visibility = INVISIBLE
-//            binding.switchLayout.visibility = INVISIBLE
-//            binding.errorLotti.setAnimation(R.raw.not_logged)
-//            binding.errorText.text = "Please login to see your favorite wallpapers."
-//            binding.googleLogin.setOnClickListener {
-//                requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
-//            }
-//        }
     }
     private fun viewVisible(){
         binding.errorMessage.visibility = INVISIBLE
@@ -178,11 +172,20 @@ class FavouriteFragment : Fragment() {
                 if (MySharePreference.getFavouriteSaveState(requireContext())==1){
                     binding.emptySupport.visibility = View.GONE
                     binding.aiRecyclerView.visibility = View.VISIBLE
+                    val randomNumber = if (catResponses.size > 1) {
+                        Random.nextInt(0, catResponses.size - 1)
+                    } else {
+                        0
+                    }
+
+                    getBitmapFromGlide(catResponses[randomNumber].compressed_image_url!!)
                 }
                 isLoadedData = true
                 cachedCatResponses = catResponses as ArrayList
                 if (view != null) {
                     updateUIWithFetchedData(catResponses)
+
+
                 }
             }else{
                 if (MySharePreference.getFavouriteSaveState(requireContext())==1){
@@ -228,6 +231,24 @@ class FavouriteFragment : Fragment() {
 
         return newData
     }
+
+    private fun getBitmapFromGlide(url:String){
+        Glide.with(requireContext()).asBitmap().load(url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Log.e("TAG", "onResourceReady: bitmap loaded" )
+                    if (isAdded){
+                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
+                        binding.backImage.setImageBitmap(blurImage)
+                    }
+
+
+
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    Log.e("TAG", "onLoadCleared: cleared" )
+                } })
+    }
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
         val list = addNullValueInsideArray(catResponses)
         val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
@@ -271,10 +292,12 @@ class FavouriteFragment : Fragment() {
     }
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
         val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList)
+        val arrayListJson = gson.toJson(arrayList.filterNotNull())
+
+        val countOfNulls = arrayList.subList(0, position).count { it == null }
         Bundle().apply {
             putString("arrayListJson",arrayListJson)
-            putInt("position",position)
+            putInt("position",position - countOfNulls)
             putString("from","trending")
             requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_wallpaperViewFragment,this)
         }
@@ -291,6 +314,12 @@ class FavouriteFragment : Fragment() {
             if(it.isNotEmpty()){
 
                 cachedIGList?.addAll(it)
+                val randomNumber = if (it.size > 1) {
+                    Random.nextInt(0, it.size - 1)
+                } else {
+                    0 // Handle the case where it.size is 0 or 1
+                }
+                getBitmapFromGlide(it[randomNumber].image!!)
                 if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
                     binding.selfCreationRecyclerView.visibility = View.VISIBLE
                 }

@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -58,12 +59,7 @@ class SettingFragment : Fragment() {
         binding.rateUsButton.setOnClickListener {feedback()}
         binding.customerSupportButton.setOnClickListener {requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_feedbackFragment)}
         binding.shareAppButton.setOnClickListener {
-            generateSharingLink(
-                deepLink = "${Constants.PREFIX}/post/installapp".toUri(),
-                previewImageLink = "https://edecator.com/wallpaperApp/share.jpeg".toUri()
-            ) { generatedLink ->
-                shareDeepLink(generatedLink)
-            }
+           shareApp(requireContext())
         }
         binding.privacyPolicyButton.setOnClickListener { openLink("https://swedebras.blogspot.com/2023/09/privacy-policy.html") }
         binding.moreAppButton.setOnClickListener { openLink("https://play.google.com/store/apps/developer?id=Swed+AI")  }
@@ -81,6 +77,23 @@ class SettingFragment : Fragment() {
                 Uri.parse("https://play.google.com/store/apps/details?id=" + requireActivity().packageName)
             startActivity(i)
         }
+    }
+
+
+    fun shareApp(context: Context) {
+        val appPackageName = context.packageName
+        val appName = context.getString(R.string.app_name)
+
+        val shareIntent = Intent(Intent.ACTION_SEND)
+        shareIntent.type = "text/plain"
+        shareIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            "Check out $appName! Get it from the Play Store:\nhttps://play.google.com/store/apps/details?id=$appPackageName"
+        )
+
+        val chooser = Intent.createChooser(shareIntent, "Share $appName via")
+        chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(chooser)
     }
     private fun openLink(url:String) {
         if (InternetState.checkForInternet(requireContext())) {

@@ -55,16 +55,13 @@
         />
 
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:layout_width="@dimen/_100sdp"
-        android:layout_height="@dimen/_30sdp"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_80sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:lottie_rawRes="@raw/splash_animation_new"
         android:id="@+id/splash_anim_bottom"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
         />
 
     

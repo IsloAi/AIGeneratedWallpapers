@@ -15,6 +15,13 @@
         android:layout_marginVertical="@dimen/_5sdp"
         android:layout_marginHorizontal="@dimen/_10sdp"
         >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:id="@+id/backImage"
+            />
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progressBar"
             android:layout_width="@dimen/_150sdp"

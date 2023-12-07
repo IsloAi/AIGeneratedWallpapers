@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -76,6 +77,8 @@ class ApiCategoriesListAdapter(
     private var lastAdShownPosition = -1
 
     var row = 0
+
+    private var firstUrl:String = ""
 
 //    private val NATIVE_AD_INTERVAL = 10
 
@@ -363,12 +366,18 @@ class ApiCategoriesListAdapter(
     }
 
 
-    fun shuffleImage(list: ArrayList<CatResponse?>){
-        list.shuffle()
+    fun shuffleImage(list: ArrayList<CatResponse?>):String{
         val addedNull = addNullValueInsideArray(list)
         arrayList.clear()
         arrayList.addAll(addedNull)
         notifyDataSetChanged()
+        return getFirstImageUrl()
+    }
+
+
+
+    fun getFirstImageUrl():String{
+        return arrayList[0]?.hd_image_url!!
     }
 
 

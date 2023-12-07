@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 import android.annotation.SuppressLint
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,8 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
@@ -27,6 +31,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -161,6 +166,9 @@ class ListViewFragment : Fragment() {
 
         val shuffled = catResponses.shuffled()
 
+        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
+
+
         val list = addNullValueInsideArray(shuffled)
         val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
             PositionCallback {
@@ -204,21 +212,71 @@ class ListViewFragment : Fragment() {
 
 
         binding.swipeLayout.setOnRefreshListener {
-            adapter.shuffleImage(orignalList)
+            val newList = orignalList.shuffled()
+            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
+            adapter.shuffleImage(newList as ArrayList)
             binding.swipeLayout.isRefreshing = false
         }
     }
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+        var newPosition = position
+        var totalAdsCount = 0
+        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstLine = firstAdLineThreshold * 2
+
+        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineC = lineCount * 2
+
+        for (i in arrayList.indices){
+            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                if (i <= newPosition){
+                    totalAdsCount++
+
+                }
+            }else if (i == firstLine){
+                totalAdsCount++
+            }
+
+
+        }
+
+
         val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList)
+        val arrayListJson = gson.toJson(arrayList.filterNotNull())
+        val countOfNulls = arrayList.count { it == null }
+        newPosition = if (position == firstLine){
+            position - totalAdsCount
+        }else if (position < firstLine){
+            position
+        }else{
+            position - totalAdsCount
+        }
         val bundle =  Bundle().apply {
             putString("arrayListJson",arrayListJson)
             putString("from",from)
-            putInt("position",position)
+            putInt("position",newPosition)
         }
         findNavController().navigate(R.id.action_listViewFragment_to_wallpaperViewFragment,bundle)
         myViewModel.clear()
 
+    }
+
+    private fun getBitmapFromGlide(url:String){
+        Glide.with(requireContext()).asBitmap().load(url)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    Log.e("TAG", "onResourceReady: bitmap loaded" )
+                    if (isAdded){
+                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
+                        binding.backImage.setImageBitmap(blurImage)
+                    }
+
+
+
+                }
+                override fun onLoadCleared(placeholder: Drawable?) {
+                    Log.e("TAG", "onLoadCleared: cleared" )
+                } })
     }
 
     override fun onDestroyView() {
