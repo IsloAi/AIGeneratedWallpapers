@@ -155,7 +155,7 @@ class CategoryFragment : Fragment() {
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     Log.e("TAG", "onResourceReady: bitmap loaded" )
-                    if (isAdded){
+                    if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
@@ -175,9 +175,11 @@ class CategoryFragment : Fragment() {
             putString("from","category")
 
         }
+        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
 
-        (requireParentFragment() as MainFragment).findNavController().navigate(R.id.action_mainFragment_to_listViewFragment,bundle)
-
+            (requireParentFragment() as MainFragment).findNavController()
+                .navigate(R.id.action_mainFragment_to_listViewFragment, bundle)
+        }
     }
 
     override fun onDestroyView() {

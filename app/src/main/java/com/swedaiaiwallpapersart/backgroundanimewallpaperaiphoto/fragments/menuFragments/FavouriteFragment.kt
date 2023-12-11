@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -46,6 +47,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetL
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlin.random.Random
 
 class FavouriteFragment : Fragment() {
@@ -58,6 +63,9 @@ class FavouriteFragment : Fragment() {
 
     private var cachedIGList: ArrayList<FavouriteListIGEntity>? = ArrayList()
     private var isLoadedData = false
+
+
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
@@ -249,6 +257,7 @@ class FavouriteFragment : Fragment() {
                     Log.e("TAG", "onLoadCleared: cleared" )
                 } })
     }
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
         val list = addNullValueInsideArray(catResponses)
         val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
@@ -287,6 +296,7 @@ class FavouriteFragment : Fragment() {
                requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
             }
         },null,0,myActivity)
+        adapter.setCoroutineScope(fragmentScope)
         binding.aiRecyclerView.adapter = adapter
 
     }
@@ -295,8 +305,10 @@ class FavouriteFragment : Fragment() {
         val arrayListJson = gson.toJson(arrayList.filterNotNull())
 
         val countOfNulls = arrayList.subList(0, position).count { it == null }
+
+        sharedViewModel.clearData()
+        sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         Bundle().apply {
-            putString("arrayListJson",arrayListJson)
             putInt("position",position - countOfNulls)
             putString("from","trending")
             requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_wallpaperViewFragment,this)
@@ -307,6 +319,7 @@ class FavouriteFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        fragmentScope.cancel()
     }
     private fun loadDataFromRoomDB() {
         roomViewModel.myFavouriteList.observe(viewLifecycleOwner){

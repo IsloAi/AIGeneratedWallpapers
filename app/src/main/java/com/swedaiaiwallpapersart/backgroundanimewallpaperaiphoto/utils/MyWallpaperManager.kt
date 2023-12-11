@@ -6,49 +6,55 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Point
 import android.os.Build
+import android.os.TransactionTooLargeException
 import android.util.DisplayMetrics
 import java.io.IOException
 
 class MyWallpaperManager(var context: Context, var activity: Activity) {
 
     fun homeScreen(bitmap:Bitmap) {
-        var newBitmap = bitmap
-        val wallpaperManager = WallpaperManager.getInstance(context)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-            val metrics = DisplayMetrics()
-            activity.windowManager.defaultDisplay.getMetrics(metrics)
-            val heigh = metrics.heightPixels
-            val widt = metrics.widthPixels
-            newBitmap = Bitmap.createScaledBitmap(newBitmap, widt, heigh, true)
-        }
-        else {
-            val size = Point()
-            activity.getWindowManager().getDefaultDisplay().getRealSize(size)
-            val w: Int = size.x
-            val h: Int = size.y
+        try {
+            var newBitmap = bitmap
+            val wallpaperManager = WallpaperManager.getInstance(context)
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+                val metrics = DisplayMetrics()
+                activity.windowManager.defaultDisplay.getMetrics(metrics)
+                val heigh = metrics.heightPixels
+                val widt = metrics.widthPixels
+                newBitmap = Bitmap.createScaledBitmap(newBitmap, widt, heigh, true)
+            }
+            else {
+                val size = Point()
+                activity.getWindowManager().getDefaultDisplay().getRealSize(size)
+                val w: Int = size.x
+                val h: Int = size.y
 //            if(!newBitmap.isRecycled){
                 newBitmap = Bitmap.createScaledBitmap(newBitmap, w, h, true)
 //            }
 
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            try {
-                wallpaperManager.setBitmap(newBitmap, null, true, WallpaperManager.FLAG_SYSTEM)
-            } catch (e: IOException) {
-                e.printStackTrace()
             }
-        } else {
-            val metrics = DisplayMetrics()
-            activity.windowManager.defaultDisplay.getMetrics(metrics)
-            val height = metrics.heightPixels
-            val width = metrics.widthPixels
-            newBitmap = Bitmap.createScaledBitmap(newBitmap, width, height, true)
-            try {
-                wallpaperManager.setBitmap(newBitmap)
-            } catch (e: IOException) {
-                e.printStackTrace()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                try {
+                    wallpaperManager.setBitmap(newBitmap, null, true, WallpaperManager.FLAG_SYSTEM)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            } else {
+                val metrics = DisplayMetrics()
+                activity.windowManager.defaultDisplay.getMetrics(metrics)
+                val height = metrics.heightPixels
+                val width = metrics.widthPixels
+                newBitmap = Bitmap.createScaledBitmap(newBitmap, width, height, true)
+                try {
+                    wallpaperManager.setBitmap(newBitmap)
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
             }
+        }catch (e: TransactionTooLargeException){
+            e.printStackTrace()
         }
+
 
     }
     fun lockScreen(bit: Bitmap) {

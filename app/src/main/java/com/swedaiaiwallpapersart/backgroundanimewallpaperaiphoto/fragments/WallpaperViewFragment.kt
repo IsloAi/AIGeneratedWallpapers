@@ -37,6 +37,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -80,7 +82,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -125,6 +131,7 @@ class WallpaperViewFragment : Fragment() {
     private var from = ""
 
     var showInter = true
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
 
 
@@ -134,7 +141,53 @@ class WallpaperViewFragment : Fragment() {
         _binding = FragmentWallpaperViewBinding.inflate(inflater,container,false)
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
         navController = findNavController()
-        functionality()
+
+        reviewManager = ReviewManagerFactory.create(requireContext())
+
+        var arrayListJson:ArrayList<CatResponse> = ArrayList()
+
+        sharedViewModel.catResponseList.observe(viewLifecycleOwner) { catResponses ->
+            if (catResponses.isNotEmpty()){
+                arrayListJson = catResponses as ArrayList<CatResponse>
+                val pos = arguments?.getInt("position")
+                from = arguments?.getString("from")!!
+                adcount = pos!!
+                if (arrayListJson != null && pos != null) {
+                    val gson = Gson()
+//            val arrayListType = object : TypeToken<ArrayList<CatResponse>>() {}.type
+                    val arrayListOfImages = arrayListJson
+                    arrayListOfImages.filterNotNull()
+
+                    Log.e("******NULL", "onCreate: "+arrayListOfImages.size )
+                    var adjustedPos = pos
+
+                    arrayList = addNullValueInsideArray(arrayListOfImages)
+
+                    val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
+
+                    // Calculate the adjusted position by considering the null ads in the array
+                    position = if (pos == firstAdLineThreshold){
+                        pos +totalADs
+                    }else if (pos < firstAdLineThreshold){
+                        pos
+                    }else{
+                        pos +totalADs
+                    }
+
+
+
+
+                    Log.d("gsonParsingData", "onCreate:  $arrayListOfImages"  )
+                }
+
+
+
+
+                functionality()
+            }
+        }
+
+
 
         Glide.with(requireContext())
             .asGif()
@@ -167,38 +220,7 @@ class WallpaperViewFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        reviewManager = ReviewManagerFactory.create(requireContext())
-        val arrayListJson = arguments?.getString("arrayListJson")
-        val pos = arguments?.getInt("position")
-        from = arguments?.getString("from")!!
-        adcount = pos!!
-        if (arrayListJson != null && pos != null) {
-            val gson = Gson()
-            val arrayListType = object : TypeToken<ArrayList<CatResponse>>() {}.type
-            val arrayListOfImages = gson.fromJson<ArrayList<CatResponse?>>(arrayListJson, arrayListType)
-            arrayListOfImages.filterNotNull()
 
-            Log.e("******NULL", "onCreate: "+arrayListOfImages.size )
-            var adjustedPos = pos
-
-            arrayList = addNullValueInsideArray(arrayListOfImages)
-
-             val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
-
-            // Calculate the adjusted position by considering the null ads in the array
-            position = if (pos == firstAdLineThreshold){
-                pos +totalADs
-            }else if (pos < firstAdLineThreshold){
-                pos
-            }else{
-                pos +totalADs
-            }
-
-
-
-
-            Log.d("gsonParsingData", "onCreate:  $arrayListOfImages"  )
-        }
     }
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
@@ -389,7 +411,13 @@ class WallpaperViewFragment : Fragment() {
 
        }
        binding.downloadWallpaper.setOnClickListener{
-           getUserIdDialog()
+
+           if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+               ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+           }else{
+               getUserIdDialog()
+           }
+
 //           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
 //
 //           }else{
@@ -400,7 +428,7 @@ class WallpaperViewFragment : Fragment() {
        }
    }
 
-
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun setViewPager() {
         adapter = WallpaperApiSliderAdapter(arrayList, viewPager2!!,from,object :
             ViewPagerImageClick {
@@ -419,6 +447,7 @@ class WallpaperViewFragment : Fragment() {
                FullViewImagePopup.openFullViewWallpaper(myContext(),image)
             }
         },myActivity)
+        adapter!!.setCoroutineScope(fragmentScope)
         viewPager2?.adapter = adapter
         viewPager2?.setCurrentItem(position, false)
 
@@ -705,7 +734,12 @@ class WallpaperViewFragment : Fragment() {
                         override fun onAdsShowFail(errorCode: Int) {
                             myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
                             myHandler.post { if(state){
-                                interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
+                                if (isAdded) {
+                                    interstitialAdWithToast(
+                                        getString(R.string.set_successfully_on_home_screen),
+                                        dialog
+                                    )
+                                }
                                 state = false
                                 postDelay()
                             } }
@@ -716,12 +750,31 @@ class WallpaperViewFragment : Fragment() {
                         }
 
                         override fun onAdsDismiss() {
-                            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
-                            myHandler.post { if(state){
-                                interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
-                                state = false
-                                postDelay()
-                            } }
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                try {
+                                    myWallpaperManager.homeScreen(bitmap!!)
+                                    withContext(Dispatchers.Main) {
+                                        if (state) {
+                                            if (isAdded) {
+                                                interstitialAdWithToast(
+                                                    getString(R.string.set_successfully_on_home_screen),
+                                                    dialog
+                                                )
+                                            }
+                                            state = false
+                                            postDelay()
+                                        }
+                                    }
+                                }catch (e: Exception) {
+                                    e.printStackTrace()
+                                }
+                            }
+//                            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
+//                            myHandler.post { if(state){
+//                                interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
+//                                state = false
+//                                postDelay()
+//                            } }
                             showRateApp()
                             binding.viewPager.setCurrentItem(position+1,true)
                         }
@@ -730,7 +783,12 @@ class WallpaperViewFragment : Fragment() {
             }else{
                 myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
                 myHandler.post { if(state){
-                    interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
+                    if (isAdded) {
+                        interstitialAdWithToast(
+                            getString(R.string.set_successfully_on_home_screen),
+                            dialog
+                        )
+                    }
                     state = false
                     postDelay()
                 } }
@@ -757,7 +815,12 @@ class WallpaperViewFragment : Fragment() {
                             }
                             myHandler.post {
                                 if(state){
-                                    interstitialAdWithToast(getString(R.string.set_successfully_on_lock_screen), dialog)
+                                    if (isAdded) {
+                                        interstitialAdWithToast(
+                                            getString(R.string.set_successfully_on_lock_screen),
+                                            dialog
+                                        )
+                                    }
                                     state = false
                                     postDelay()
                                 }
@@ -773,7 +836,12 @@ class WallpaperViewFragment : Fragment() {
                             }
                             myHandler.post {
                                 if(state){
-                                    interstitialAdWithToast(getString(R.string.set_successfully_on_lock_screen), dialog)
+                                    if (isAdded) {
+                                        interstitialAdWithToast(
+                                            getString(R.string.set_successfully_on_lock_screen),
+                                            dialog
+                                        )
+                                    }
                                     state = false
                                     postDelay()
                                 }
@@ -819,7 +887,10 @@ class WallpaperViewFragment : Fragment() {
                             }
                             myHandler.post {
                                 if(state){
-                                    interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+                                    if (isAdded){
+                                        interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+
+                                    }
                                     state = false
                                     postDelay()
                                 }
@@ -835,7 +906,9 @@ class WallpaperViewFragment : Fragment() {
                             }
                             myHandler.post {
                                 if(state){
+                                    if (isAdded){
                                     interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+                                        }
                                     state = false
                                     postDelay()
                                 }
@@ -864,6 +937,12 @@ class WallpaperViewFragment : Fragment() {
 
         }
         dialog.show()
+    }
+
+    fun resizeBitmap(originalBitmap: Bitmap): Bitmap {
+        val width = originalBitmap.width / 2
+        val height = originalBitmap.height / 2
+        return Bitmap.createScaledBitmap(originalBitmap, width, height, true)
     }
     private fun postDelay(){
         Handler().postDelayed({
@@ -958,7 +1037,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
    private fun showRateApp() {
-       if(isFragmentAttached){
+       if(isFragmentAttached && isAdded){
         val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
         request.addOnCompleteListener { task ->
             if (task.isSuccessful()) {

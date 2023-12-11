@@ -10,7 +10,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 
 
-@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class ], version = 5)
+@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class ], version = 6)
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getResponseIGDao(): GetResponseIGDao
@@ -27,10 +27,25 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
-        private val MIGRATION_4_5 = object : Migration(4, 5) {
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                // Your migration code goes here if necessary
-                // For example: database.execSQL("ALTER TABLE your_table ADD COLUMN new_column_name TEXT")
+                val cursor = database.query("PRAGMA table_info(get_response_ig)")
+                var columnExists = false
+                if (cursor != null) {
+                    while (cursor.moveToNext()) {
+                        val columnName = cursor.getString(cursor.getColumnIndex("name"))
+                        if (columnName == "isSelected") {
+                            columnExists = true
+                            break
+                        }
+                    }
+                    cursor.close()
+                }
+
+                // If the column doesn't exist, add it
+                if (!columnExists) {
+                    database.execSQL("ALTER TABLE get_response_ig ADD COLUMN isSelected INTEGER NOT NULL DEFAULT 0")
+                }
             }
         }
         private fun buildDatabase(context: Context): AppDatabase {
@@ -39,7 +54,7 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "appDatabase"
             ).allowMainThreadQueries()
-                .addMigrations(MIGRATION_4_5)
+                .addMigrations(MIGRATION_5_6)
                 .build()
         }
 

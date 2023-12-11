@@ -1,14 +1,14 @@
 
-Bkotlin:S125="Remove this commented out code.(ÊÃ÷Üüÿÿÿÿ8¤ë¶ôÃ1
-Tkotlin:S1481Á"/Remove this unused "isDarkMode" local variable.(ºÂ®¿úÿÿÿÿ8üã·ïÃ1
-9kotlin:S1128"Remove this unused import.(Ú²Éë8ç–ÛõÃ1
-8kotlin:S1128"Remove this unused import.(ßª¾}8ä·ïÃ1
->kotlin:S1128"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8ä·ïÃ1
-„kotlin:S1192„"_Define a constant instead of duplicating this literal "onAdsLoadFail: native failded " 3 times.(²Šîûÿÿÿÿ8‚ä·ïÃ1
-€kotlin:S1192"[Define a constant instead of duplicating this literal "onAdsLoaded: native loaded" 3 times.(Ñ®ªÿÿÿÿÿ8ƒä·ïÃ1
-Gkotlin:S18744"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8„ä·ïÃ1
-Gkotlin:S1874{"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8„ä·ïÃ1
-Hkotlin:S1874¡"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8„ä·ïÃ1
-Hkotlin:S1874Æ"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8…ä·ïÃ1
-Hkotlin:S1874‰"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8…ä·ïÃ1
-qkotlin:S37769"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ëü«8†ä·ïÃ1
+Bkotlin:S125="Remove this commented out code.(ÊÃ÷Üüÿÿÿÿ8Ã±ÃÅ1
+Tkotlin:S1481Ã"/Remove this unused "isDarkMode" local variable.(ºÂ®¿úÿÿÿÿ8ŸÃ±ÃÅ1
+9kotlin:S1128"Remove this unused import.(Ú²Éë8¤Ã±ÃÅ1
+8kotlin:S1128"Remove this unused import.(ßª¾}8¤Ã±ÃÅ1
+>kotlin:S1128"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8¤Ã±ÃÅ1
+„kotlin:S1192„"_Define a constant instead of duplicating this literal "onAdsLoadFail: native failded " 3 times.(²Šîûÿÿÿÿ8¥Ã±ÃÅ1
+€kotlin:S1192"[Define a constant instead of duplicating this literal "onAdsLoaded: native loaded" 3 times.(Ñ®ªÿÿÿÿÿ8¥Ã±ÃÅ1
+Gkotlin:S18744"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8§Ã±ÃÅ1
+Gkotlin:S1874{"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8§Ã±ÃÅ1
+Hkotlin:S1874¡"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8§Ã±ÃÅ1
+Hkotlin:S1874Æ"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8§Ã±ÃÅ1
+Hkotlin:S1874‹"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8§Ã±ÃÅ1
+qkotlin:S37769"RRefactor this method to reduce its Cognitive Complexity from 23 to the 15 allowed.(ëü«8¨Ã±ÃÅ1

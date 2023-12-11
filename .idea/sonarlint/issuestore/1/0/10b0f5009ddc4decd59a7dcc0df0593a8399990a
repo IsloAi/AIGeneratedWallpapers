@@ -1,10 +1,12 @@
 
-Bkotlin:S125a"Remove this commented out code.(Á÷šîÿÿÿÿÿ8‹Ä•Ä1
-9kotlin:S6531­"Remove this useless cast.(ıÀÁ»8œÄ•Ä1
-Qkotlin:S1481ö"1Remove this unused "countOfNulls" local variable.(·µêœ8´ô›Ä1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8 Ä•Ä1
->kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8 Ä•Ä1
-pkotlin:S1192Œ"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8¢Ä•Ä1
-‡kotlin:S1192Œ"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8¢Ä•Ä1
-Gkotlin:S1874?"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8£Ä•Ä1
-zkotlin:S1186Ç"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8§Ä•Ä1
+Fkotlin:S6615€"&The value assigned here is never used.(ç²ÇÁ8£úùÅÅ1
+Bkotlin:S125h"Remove this commented out code.(Á÷šîÿÿÿÿÿ8©úùÅÅ1
+Ckotlin:S125ÿ"Remove this commented out code.(®‘ê©øÿÿÿÿ8©úùÅÅ1
+9kotlin:S6531µ"Remove this useless cast.(ıÀÁ»8¼úùÅÅ1
+Rkotlin:S1481ş"2Remove this unused "arrayListJson" local variable.(àñÆÑ8½úùÅÅ1
+>kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8ÁúùÅÅ1
+>kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8ÁúùÅÅ1
+pkotlin:S1192“"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8ÃúùÅÅ1
+‡kotlin:S1192“"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8ÃúùÅÅ1
+Gkotlin:S1874F"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ÄúùÅÅ1
+zkotlin:S1186Ï"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8ÉúùÅÅ1

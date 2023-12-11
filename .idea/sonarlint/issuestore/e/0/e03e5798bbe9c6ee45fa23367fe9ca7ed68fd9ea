@@ -1,6 +1,8 @@
 
-Bkotlin:S125h"Remove this commented out code.(…«¿ˆøÿÿÿÿ8ó†›˜Ä1
-Ukotlin:S1144{"1Remove this unused private "loadMoreData" method.(áÁù ÿÿÿÿÿ8ú†›˜Ä1
-9kotlin:S6531Ô"Remove this useless cast.(Á»¨©8†‡›˜Ä1
-8kotlin:S1128"Remove this unused import.(º¾Ã8éë¬˜Ä1
-pkotlin:S1192»"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Œ‡›˜Ä1
+Bkotlin:S125o"Remove this commented out code.(…«¿ˆøÿÿÿÿ8‘ÜèºÅ1
+Vkotlin:S1144‚"1Remove this unused private "loadMoreData" method.(áÁù ÿÿÿÿÿ8˜ÜèºÅ1
+9kotlin:S6531Ş"Remove this useless cast.(Á»¨©8¤ÜèºÅ1
+Rkotlin:S1481"2Remove this unused "arrayListJson" local variable.(àñÆÑ8¾ ŞÂÅ1
+>kotlin:S1128"Remove this unused import.(Øîğùÿÿÿÿ8ÿœñÁÅ1
+8kotlin:S1128"Remove this unused import.(º¾Ã8éë¬˜Ä1
+pkotlin:S1192Â"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8«ÜèºÅ1

@@ -163,7 +163,16 @@ class CreationSliderViewFragment : Fragment() {
                 }
         }
         binding.downloadWallpaper.setOnClickListener{
-            watchAdToDownload()
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+                }else{
+                    watchAdToDownload()
+                }
+            }else{
+                watchAdToDownload()
+            }
+
         }
     }
     private fun addFavouriteList(myId:Int,prompt:String){

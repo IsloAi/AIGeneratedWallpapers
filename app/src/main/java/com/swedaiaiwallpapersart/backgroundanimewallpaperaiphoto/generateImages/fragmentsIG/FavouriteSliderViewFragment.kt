@@ -156,7 +156,16 @@ class FavouriteSliderViewFragment : Fragment() {
                 }
         }
         binding.downloadWallpaper.setOnClickListener{
-            getUserIdDialog()
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q){
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+                }else{
+                    getUserIdDialog()
+                }
+            }else{
+                getUserIdDialog()
+            }
+
         }
     }
 

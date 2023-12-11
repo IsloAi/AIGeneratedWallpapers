@@ -36,6 +36,10 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.NullPointerException
 
 
@@ -56,6 +60,12 @@ class WallpaperApiSliderAdapter(
 
     private val lineCount = if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
     private val statusAd = AdConfig.adStatusTrending
+
+    private var coroutineScope: CoroutineScope? = null
+
+    fun setCoroutineScope(scope: CoroutineScope) {
+        coroutineScope = scope
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
 
@@ -203,43 +213,50 @@ class WallpaperApiSliderAdapter(
     }
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: NativeSliderLayoutBinding){
-        val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
-            R.layout.custom_native_slider_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.slider_native_shimmer,
-            adLayout!!
-        )
-        binding.adsView.loadAd(mActivity,"onboardscr_bottom","onboardscr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
-                    if (statusAd == 0){
-                        binding.adsView.visibility = View.GONE
-                    }else{
-                        if (isNetworkAvailable()){
-                            loadad(holder,binding)
-                            binding.adsView.visibility = View.VISIBLE
-                        }else{
-                            binding.adsView.visibility = View.GONE
+        coroutineScope?.launch(Dispatchers.Main) {
+            val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
+                R.layout.custom_native_slider_layout,
+                null, false
+            ) as? IkmWidgetAdLayout
+            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+            binding.adsView.setCustomNativeAdLayout(
+                R.layout.slider_native_shimmer,
+                adLayout!!
+            )
+            withContext(this.coroutineContext) {
+                binding.adsView.loadAd(mActivity,"onboardscr_bottom","onboardscr_bottom",
+                    object : CustomSDKAdsListenerAdapter() {
+                        override fun onAdsLoadFail() {
+                            super.onAdsLoadFail()
+                            Log.e("TAG", "onAdsLoadFail: native failded " )
+                            if (statusAd == 0){
+                                binding.adsView.visibility = View.GONE
+                            }else{
+                                if (isNetworkAvailable()){
+                                    loadad(holder,binding)
+                                    binding.adsView.visibility = VISIBLE
+                                }else{
+                                    binding.adsView.visibility = View.GONE
+                                }
+                            }
+
+                        }
+
+                        override fun onAdsLoaded() {
+                            super.onAdsLoaded()
+                            Log.e("TAG", "onAdsLoaded: native loaded" )
                         }
                     }
-
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                }
+                )
             }
-        )
+
+        }
+
     }
 }

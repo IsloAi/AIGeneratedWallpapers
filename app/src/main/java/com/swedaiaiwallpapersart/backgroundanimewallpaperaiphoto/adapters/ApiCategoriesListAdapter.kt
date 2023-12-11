@@ -89,6 +89,12 @@ class ApiCategoriesListAdapter(
     val lineC = lineCount*2
     private val statusAd =  AdConfig.adStatusViewListWallSRC
        private val myDialogs = MyDialogs()
+
+    private var coroutineScope: CoroutineScope? = null
+
+    fun setCoroutineScope(scope: CoroutineScope) {
+        coroutineScope = scope
+    }
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(modela: ArrayList<CatResponse?>,holder: ViewHolder,position: Int) {
             val model = modela[position]
@@ -149,6 +155,7 @@ class ApiCategoriesListAdapter(
 
             }
             VIEW_TYPE_NATIVE_AD -> {
+
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind(viewHolderContainer3)
             }
@@ -269,44 +276,55 @@ class ApiCategoriesListAdapter(
     }
 
     fun loadad(holder: ViewHolder,binding: StaggeredNativeLayoutBinding){
-        val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
-            R.layout.native_dialog_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+        coroutineScope?.launch(Dispatchers.Main) {
+            val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
+                R.layout.native_dialog_layout,
+                null, false
+            ) as? IkmWidgetAdLayout
+            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-        binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
-                    if (statusAd == 0){
-                        binding.adsView.visibility = View.GONE
-                    }else{
-                        if (isNetworkAvailable()){
-                            loadad(holder,binding)
+            binding.adsView.setCustomNativeAdLayout(
+                R.layout.shimmer_loading_native,
+                adLayout!!
+            )
+
+            withContext(this.coroutineContext) {
+                binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
+                    object : CustomSDKAdsListenerAdapter() {
+                        override fun onAdsLoadFail() {
+                            super.onAdsLoadFail()
+                            Log.e("TAG", "onAdsLoadFail: native failded " )
+                            if (statusAd == 0){
+                                binding.adsView.visibility = View.GONE
+                            }else{
+                                if (isNetworkAvailable()){
+                                    loadad(holder,binding)
+                                    binding.adsView.visibility = View.VISIBLE
+                                }else{
+                                    binding.adsView.visibility = View.GONE
+                                }
+                            }
+                        }
+
+                        override fun onAdsLoaded() {
+                            super.onAdsLoaded()
                             binding.adsView.visibility = View.VISIBLE
-                        }else{
-                            binding.adsView.visibility = View.GONE
+                            Log.e("TAG", "onAdsLoaded: native loaded" )
                         }
                     }
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    binding.adsView.visibility = View.VISIBLE
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                }
+                )
             }
-        )
+        }
+
+
+
+
+
+
     }
 
     private fun isNetworkAvailable(): Boolean {

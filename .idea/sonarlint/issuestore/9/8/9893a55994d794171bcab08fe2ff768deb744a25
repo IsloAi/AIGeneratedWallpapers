@@ -1,9 +1,10 @@
 
->kotlin:S125Û"Remove this commented out code.(òí ½8òº—™Ä1
-9kotlin:S6531¸"Remove this useless cast.(£Í‘8»—™Ä1
-9kotlin:S6531ş"Remove this useless cast.(ıÀÁ»8»—™Ä1
+>kotlin:S125è"Remove this commented out code.(òí ½8™€¤»Å1
+9kotlin:S6531À"Remove this useless cast.(£Í‘8À€¤»Å1
+9kotlin:S6531‡"Remove this useless cast.(ıÀÁ»8À€¤»Å1
+Rkotlin:S1481±"2Remove this unused "arrayListJson" local variable.(àñÆÑ8‹åÂÅ1
 9kotlin:S1128"Remove this unused import.(´Ùí8“»—™Ä1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8“»—™Ä1
->kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8“»—™Ä1
-pkotlin:S1192Ù"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8•»—™Ä1
-wkotlin:S3776§"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8á²“¢Ä1
+>kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8“»—™Ä1
+>kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8“»—™Ä1
+pkotlin:S1192á"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Í€¤»Å1
+wkotlin:S3776¯"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8Ñ€¤»Å1

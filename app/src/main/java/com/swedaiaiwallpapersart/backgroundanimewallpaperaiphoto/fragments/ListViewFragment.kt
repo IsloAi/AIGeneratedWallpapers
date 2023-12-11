@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -35,6 +36,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 
 class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
@@ -44,6 +49,8 @@ class ListViewFragment : Fragment() {
     private var from = ""
     private var isLogin = true
     private lateinit var myActivity : MainActivity
+
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     val orignalList = arrayListOf<CatResponse?>()
 
@@ -161,6 +168,7 @@ class ListViewFragment : Fragment() {
 
         return newData
     }
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
     @SuppressLint("NotifyDataSetChanged")
     private fun updateUIWithFetchedData(catResponses: ArrayList<CatResponse>) {
 
@@ -208,6 +216,7 @@ class ListViewFragment : Fragment() {
                 findNavController().navigate(R.id.action_listViewFragment_to_signInFragment)
             }
         },myViewModel,1,myActivity)
+        adapter.setCoroutineScope(fragmentScope)
         binding.recyclerviewAll.adapter = adapter
 
 
@@ -243,7 +252,7 @@ class ListViewFragment : Fragment() {
 
         val gson = Gson()
         val arrayListJson = gson.toJson(arrayList.filterNotNull())
-        val countOfNulls = arrayList.count { it == null }
+//        val countOfNulls = arrayList.count { it == null }
         newPosition = if (position == firstLine){
             position - totalAdsCount
         }else if (position < firstLine){
@@ -251,10 +260,15 @@ class ListViewFragment : Fragment() {
         }else{
             position - totalAdsCount
         }
+
+        val countOfNulls = arrayList.subList(0, position).count { it == null }
+
+        sharedViewModel.clearData()
+
+        sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         val bundle =  Bundle().apply {
-            putString("arrayListJson",arrayListJson)
             putString("from",from)
-            putInt("position",newPosition)
+            putInt("position",position - countOfNulls)
         }
         findNavController().navigate(R.id.action_listViewFragment_to_wallpaperViewFragment,bundle)
         myViewModel.clear()
@@ -282,6 +296,7 @@ class ListViewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        fragmentScope.cancel()
     }
 
 }

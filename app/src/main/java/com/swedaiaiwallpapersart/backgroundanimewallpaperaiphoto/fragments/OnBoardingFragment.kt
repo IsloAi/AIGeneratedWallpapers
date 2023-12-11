@@ -240,7 +240,9 @@ class OnBoardingFragment : Fragment() {
                 // Move to the next item
                 binding.onboardingViewPager.setCurrentItem(currentItem + 1, true)
             } else {
-                findNavController().navigate(R.id.action_onBoardingFragment_to_mainFragment)
+                if (findNavController().currentDestination?.id != R.id.mainFragment) {
+                    findNavController().navigate(R.id.action_onBoardingFragment_to_mainFragment)
+                }
             }
         }
     }

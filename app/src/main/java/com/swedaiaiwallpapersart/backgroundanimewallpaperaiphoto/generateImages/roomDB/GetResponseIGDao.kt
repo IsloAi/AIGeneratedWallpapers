@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 
 @Dao
 interface GetResponseIGDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(getResponseIG: GetResponseIGEntity)
 
     @Query("SELECT * FROM get_response_ig WHERE id = :id")
@@ -22,7 +23,7 @@ interface GetResponseIGDao {
     @Query("SELECT * FROM get_response_ig")
     fun getAllGetResponseIG(): LiveData<List<GetResponseIGEntity>>
 
-    @Update()
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     fun UpdateData(genericResponseModel: GetResponseIGEntity)
 
 

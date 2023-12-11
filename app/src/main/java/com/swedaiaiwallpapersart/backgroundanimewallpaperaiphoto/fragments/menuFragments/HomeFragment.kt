@@ -10,6 +10,8 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -36,6 +38,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeVie
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
@@ -54,6 +60,7 @@ class HomeFragment : Fragment(){
     val orignalList = arrayListOf<CatResponse?>()
     private lateinit var adapter:ApiCategoriesListAdapter
     private val postDataOnServer = PostDataOnServer()
+
     private val rewardAdWatched = 20
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
@@ -201,6 +208,8 @@ class HomeFragment : Fragment(){
 
         return newData
     }
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
+
 
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
 
@@ -209,6 +218,7 @@ class HomeFragment : Fragment(){
 
 
         val list = addNullValueInsideArray(shuffled)
+
        adapter = ApiCategoriesListAdapter(list as ArrayList, object :
             PositionCallback {
             override fun getPosition(position: Int) {
@@ -247,6 +257,7 @@ class HomeFragment : Fragment(){
                     requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
             }
         },null,0,myActivity)
+        adapter.setCoroutineScope(fragmentScope)
             binding.recyclerviewAll.adapter = adapter
     }
 
@@ -275,8 +286,14 @@ class HomeFragment : Fragment(){
         val arrayListJson = gson.toJson(arrayList.filterNotNull())
 
         val countOfNulls = arrayList.subList(0, position).count { it == null }
+         val sharedViewModel: SharedViewModel by activityViewModels()
+
+
+        sharedViewModel.clearData()
+
+        sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
+
         Bundle().apply {
-            putString("arrayListJson",arrayListJson)
             putString("from","trending")
             putInt("position",position - countOfNulls)
             requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment,this)
@@ -287,6 +304,7 @@ class HomeFragment : Fragment(){
     override fun onDestroyView() {
         super.onDestroyView()
         _binding =null
+        fragmentScope.cancel()
     }
 
 }
