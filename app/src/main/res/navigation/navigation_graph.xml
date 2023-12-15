@@ -150,6 +150,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_splashOnFragment_to_homeTabsFragment"
+            app:destination="@id/homeTabsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
 
     </fragment>
     <fragment
@@ -172,5 +180,10 @@
 
             />
     </fragment>
+    <fragment
+        android:id="@+id/homeTabsFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment"
+        android:label="fragment_home_tabs"
+        tools:layout="@layout/fragment_home_tabs" />
 
 </navigation>

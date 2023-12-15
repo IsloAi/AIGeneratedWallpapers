@@ -12,6 +12,8 @@
     <color name="gems_color">#FC9502</color>
     <color name="card_selector_pre">#FF8A00</color>
 
+    <color name="new_main_background">#1A1A1A</color>
+    <color name="tabs_bg">#2B2B2B</color>
 
     <color name="gnt_test_background_color">#00F4F4F4</color>
     <color name="gnt_test_background_color_2">#00A3A3A3</color>

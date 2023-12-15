@@ -1,12 +1,10 @@
 
-Bkotlin:S1252"Remove this commented out code.(Ò¤Ÿ¨ùÿÿÿÿ8Ÿ¿·•Ä1
-=kotlin:S125J"Remove this commented out code.(¡–÷í8 ¿·•Ä1
-Bkotlin:S125Z"Remove this commented out code.(Ëµûëüÿÿÿÿ8 ¿·•Ä1
-Bkotlin:S125e"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡¿·•Ä1
-Bkotlin:S125"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡¿·•Ä1
-Ckotlin:S125„"Remove this commented out code.(‚òò¦şÿÿÿÿ8¢¿·•Ä1
->kotlin:S125•"Remove this commented out code.(É’ÎÒ8£¿·•Ä1
->kotlin:S125 "Remove this commented out code.(É’ÎÒ8¤¿·•Ä1
-;kotlin:S6310`"Avoid hardcoded dispatchers.(©ÒÕò8§¿·•Ä1
-Gkotlin:S1874c"#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8±¿·•Ä1
-qkotlin:S3776/"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(ëü«8±¿·•Ä1
+Bkotlin:S125["Remove this commented out code.(‚òò¦şÿÿÿÿ8 ÅƒâÆ1
+Bkotlin:S125u"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
+Bkotlin:S125z"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
+;kotlin:S6310K"Avoid hardcoded dispatchers.(©ÒÕò8¤ÅƒâÆ1
+<kotlin:S6310†"Avoid hardcoded dispatchers.(Í¡·Ş8¥ÅƒâÆ1
+>kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8Ï‹ÅáÆ1
+>kotlin:S1128"Remove this unused import.(ìí¯Òÿÿÿÿÿ8Ï‹ÅáÆ1
+Gkotlin:S1874Y"#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8±ÅƒâÆ1
+qkotlin:S37767"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ëü«8Ñ‹ÅáÆ1
