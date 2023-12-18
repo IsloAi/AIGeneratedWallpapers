@@ -115,3 +115,5 @@ qapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fra
 iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/OnboardingAdapter.kt,5\1\51c574e22695668f50de9171a53d19a85e0cfab5
 œ
 lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/PopularSliderAdapter.kt,c\3\c3fed718324acb62e4c44f31d8d5604e7f578947
+ª
+zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/ApicategoriesListHorizontalAdapter.kt,6\8\688f7c5988d4db1d1243198b791c128f6ef52ad7

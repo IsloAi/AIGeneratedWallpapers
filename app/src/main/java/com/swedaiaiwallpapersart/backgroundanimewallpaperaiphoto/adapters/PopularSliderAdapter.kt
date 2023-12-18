@@ -1,7 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemPopularSliderBinding
@@ -22,19 +25,32 @@ class PopularSliderAdapter(welcomeItems: List<Int>) :
 
     override fun onBindViewHolder(holder: SliderViewHolder, position: Int) {
         val item = welcomeItems[position]
+
         when (position) {
             0 -> {
-                            
+                holder.binding.bannerInfoleft.visibility = View.GONE
+                holder.binding.bannerInforight.visibility = View.VISIBLE
+
+                holder.binding.foregroundImage.setImageResource(R.drawable.banner_gen_ai_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_gen_ai_image)
             }
             1 -> {
+                holder.binding.bannerInfoleft.visibility = View.VISIBLE
+                holder.binding.bannerInforight.visibility = View.GONE
+                holder.binding.foregroundImage.setImageResource(R.drawable.banner_categoreis_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_category_image)
 
             }
             2 -> {
+                holder.binding.bannerInfoleft.visibility = View.GONE
+                holder.binding.bannerInforight.visibility = View.VISIBLE
+                holder.binding.foregroundImage.setImageResource(R.drawable.banner_gen_ai_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_anime_image)
             }
             3 -> {
+                holder.binding.bannerInfoleft.visibility = View.VISIBLE
+                holder.binding.bannerInforight.visibility = View.GONE
+                holder.binding.foregroundImage.setImageResource(R.drawable.banner_categoreis_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_ai_wallpaper_image)
             }
         }

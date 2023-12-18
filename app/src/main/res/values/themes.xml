@@ -51,6 +51,11 @@
         <item name="cornerSizeBottomRight">@dimen/_130sdp</item>
     </style>
 
+    <style name="sliderImagreviewCorners" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">@dimen/_10sdp</item>
+    </style>
+
     <string name="ad_attribution" translatable="false">Ad</string>
 
     <style name="BottomSheetDialogTheme" parent="Theme.Design.BottomSheetDialog">

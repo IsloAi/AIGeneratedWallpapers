@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:id="@+id/layoutOnboardingIndicators"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
@@ -26,6 +26,92 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sliderPager" />
+
+
+    <TextView
+        android:id="@+id/trendingHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/trending"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="@dimen/_15sdp"
+        android:textColor="#FFFFFF"
+        android:shadowColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        android:shadowDx="0"
+        app:layout_constraintTop_toBottomOf="@id/layoutOnboardingIndicators"
+        android:shadowDy="0"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:shadowRadius="10" />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/trendingHeading"
+        app:layout_constraintBottom_toBottomOf="@id/trendingHeading"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="More"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/_12sdp"
+            android:textColor="@color/button_bg"
+            android:layout_marginEnd="@dimen/_7sdp"
+            />
+
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/icon"
+            android:padding="@dimen/_5sdp"
+            />
+    </LinearLayout>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/trendingHeading"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/list_item_trending_hroizontal"
+        android:id="@+id/recyclerviewTrending"
+        />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_centerInParent="true"
+        app:lottie_autoPlay="true"
+        android:translationZ="@dimen/_10sdp"
+        app:lottie_loop="true"
+        android:visibility="gone"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="@id/recyclerviewTrending"
+        app:layout_constraintEnd_toEndOf="@id/recyclerviewTrending"
+        app:layout_constraintTop_toTopOf="@id/recyclerviewTrending"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerviewTrending"
+        />
+
+
+
+
+
+
+
+
+
+
+
 
 
 
