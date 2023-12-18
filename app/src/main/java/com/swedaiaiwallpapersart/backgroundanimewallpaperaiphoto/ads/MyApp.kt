@@ -7,9 +7,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 
 class MyApp : SDKBaseApplication() {
 
-    init {
-        enableReward = true
-    }
+//    init {
+//        enableReward = true
+//    }
 
     override fun configIAPData(): SDKIAPProductIDProvider {
         return object : SDKIAPProductIDProvider {

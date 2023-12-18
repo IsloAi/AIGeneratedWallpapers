@@ -26,6 +26,7 @@ import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
@@ -60,6 +61,7 @@ class HomeFragment : Fragment(){
     val orignalList = arrayListOf<CatResponse?>()
     private lateinit var adapter:ApiCategoriesListAdapter
     private val postDataOnServer = PostDataOnServer()
+    private val viewModel: SaveStateViewModel by viewModels()
 
     private val rewardAdWatched = 20
 
@@ -86,7 +88,7 @@ class HomeFragment : Fragment(){
 
         binding.swipeLayout.setOnRefreshListener {
             val newList = orignalList.shuffled()
-            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
+//            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
             adapter.shuffleImage(newList as ArrayList)
             binding.swipeLayout.isRefreshing = false
 
@@ -105,9 +107,18 @@ class HomeFragment : Fragment(){
         binding.progressBar.visibility = VISIBLE
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10000))
-        loadData()
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+
+        val data = viewModel.getData()
+        if (data){
+            loadData()
+        }else{
+            binding.retryBtn.visibility = View.GONE
+            val list = viewModel.getCatList()
+            updateUIWithFetchedData(list)
+        }
+
 //        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener(){
 //            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
 //                super.onScrolled(recyclerView, dx, dy)
@@ -143,7 +154,12 @@ class HomeFragment : Fragment(){
             } else {
                 // Hide loading state, show retry button if there was an error
                 if (myViewModel.wallpaperData.value == null) {
-                    binding.retryBtn.visibility = View.VISIBLE
+                    if (viewModel.getData()){
+                        binding.retryBtn.visibility = View.VISIBLE
+                    }else{
+                        binding.retryBtn.visibility = View.GONE
+                    }
+
                 } else {
                     binding.retryBtn.visibility = View.GONE
                 }
@@ -169,7 +185,11 @@ class HomeFragment : Fragment(){
                     updateUIWithFetchedData(catResponses)
                 }
             }else{
-                binding.retryBtn.visibility = View.VISIBLE
+                if (viewModel.getData()){
+                    binding.retryBtn.visibility = View.VISIBLE
+                }else{
+                    binding.retryBtn.visibility = View.GONE
+                }
                 Log.e("TAG", "loadData: "+catResponses )
             }
         }
@@ -179,10 +199,10 @@ class HomeFragment : Fragment(){
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
 
         val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 2
+        val firstLine = firstAdLineThreshold * 3
 
         val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 2
+        val lineC = lineCount * 3
         val newData = arrayListOf<CatResponse?>()
 
         for (i in data.indices){
@@ -214,12 +234,16 @@ class HomeFragment : Fragment(){
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
 
         val shuffled = catResponses.shuffled()
-        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
+//        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
 
 
-        val list = addNullValueInsideArray(shuffled)
+        val list = if (viewModel.getData()){
+            addNullValueInsideArray(shuffled)
+        }else{
+            addNullValueInsideArray(catResponses)
+        }
 
-       adapter = ApiCategoriesListAdapter(list as ArrayList, object :
+       adapter = ApiCategoriesListAdapter(list, object :
             PositionCallback {
             override fun getPosition(position: Int) {
 
@@ -236,6 +260,7 @@ class HomeFragment : Fragment(){
                         }
 
                         override fun onAdsDismiss() {
+                            Log.e("********ADS", "onAdsDismiss: " )
                             navigateToDestination(list,position)
                         }
                     }
@@ -282,6 +307,10 @@ class HomeFragment : Fragment(){
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+
+
+        viewModel.setCatList(arrayList.filterNotNull() as ArrayList<CatResponse>)
+        viewModel.setData(false)
         val gson = Gson()
         val arrayListJson = gson.toJson(arrayList.filterNotNull())
 
@@ -293,16 +322,20 @@ class HomeFragment : Fragment(){
 
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
 
+
+
         Bundle().apply {
             putString("from","trending")
             putInt("position",position - countOfNulls)
-            requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment,this)
+            findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
+
         myViewModel.clear()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+
         _binding =null
         fragmentScope.cancel()
     }

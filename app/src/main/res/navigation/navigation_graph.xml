@@ -184,6 +184,13 @@
         android:id="@+id/homeTabsFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment"
         android:label="fragment_home_tabs"
-        tools:layout="@layout/fragment_home_tabs" />
+        tools:layout="@layout/fragment_home_tabs" >
+        <action
+            android:id="@+id/action_homeTabsFragment_to_wallpaperViewFragment"
+            app:destination="@id/wallpaperViewFragment" />
+        <action
+            android:id="@+id/action_homeTabsFragment_to_listViewFragment"
+            app:destination="@id/listViewFragment" />
+    </fragment>
 
 </navigation>

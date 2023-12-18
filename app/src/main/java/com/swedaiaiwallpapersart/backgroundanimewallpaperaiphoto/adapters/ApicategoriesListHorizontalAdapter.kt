@@ -63,14 +63,27 @@ class ApicategoriesListHorizontalAdapter(
 
         Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object: RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
                     Log.d("onLoadFailed", "onLoadFailed: ")
                     return false
                 }
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
                     Log.d("onLoadFailed", "onResourceReady: ")
                     return false
-                }}).into(image)
+                }
+            }).into(image)
         image.setOnClickListener {
             val currentTime = System.currentTimeMillis()
 

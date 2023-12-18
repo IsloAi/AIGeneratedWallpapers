@@ -2,22 +2,20 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_160sdp"
+    android:layout_height="@dimen/_200sdp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="@dimen/_10sdp"
-    app:cardCornerRadius="@dimen/_10sdp"
-   app:cardBackgroundColor="@color/button_bg"
-    android:layout_margin="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_7sdp"
+
     >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/_1sdp"
         >
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="@dimen/_10sdp"
+            app:cardCornerRadius="@dimen/_7sdp"
             >
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -48,14 +46,14 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:textSize="22sp"
+                    android:textSize="@dimen/_11sdp"
+                    android:maxLines="1"
                     android:paddingHorizontal="@dimen/_20sdp"
                     android:paddingVertical="@dimen/_6sdp"
                     android:gravity="center"
                     android:textColor="@color/mywhite"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/raleway_medium"
-                    android:background="@drawable/liste_text_bg"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:background="@drawable/category_name_bg"
                     />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

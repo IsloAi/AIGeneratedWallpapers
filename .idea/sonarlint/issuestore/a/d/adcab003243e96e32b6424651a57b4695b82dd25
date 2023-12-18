@@ -1,10 +1,10 @@
 
 ]kotlin:S1172–"8Remove this unused function parameter "adapterPosition".(€Ä™Úşÿÿÿÿ8ÿÄËúÃ1
->kotlin:S125¾"Remove this commented out code.(È¶ËÔ8ËéâÅÅ1
-Akotlin:S6310Ù"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8‰í‘ÆÅ1
+>kotlin:S125Ä"Remove this commented out code.(È¶ËÔ8…Î¿äÇ1
+Akotlin:S6310ß"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8ˆÎ¿äÇ1
 Nkotlin:S1481q"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8š«æúÃ1
-Hkotlin:S1874Ò"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8›ÅËúÃ1
-Bkotlin:S1874Ó"#Deprecated code should not be used.(àü8ïéâÅÅ1
-Hkotlin:S1874ä"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8§ä’ÆÅ1
+Hkotlin:S1874Ø"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8›Î¿äÇ1
+Bkotlin:S1874Ù"#Deprecated code should not be used.(àü8›Î¿äÇ1
+Hkotlin:S1874ê"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8›Î¿äÇ1
 gkotlin:S6510]"CMove "return" statements from all branches before "when" statement.(èş™¸ÿÿÿÿÿ8ÅËúÃ1
 {kotlin:S3923š"[Remove this conditional structure or edit its code blocks so that they're not all the same.(¹«ÉÊ8 ÅËúÃ1

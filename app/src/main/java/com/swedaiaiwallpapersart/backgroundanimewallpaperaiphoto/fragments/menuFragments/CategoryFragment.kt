@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
@@ -32,6 +33,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
@@ -55,7 +57,7 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        loadFirstCategory()
+//        loadFirstCategory()
         onCustomCreateView()
 //        SDKBaseController.getInstance().loadInterstitialAds(requireActivity(),"mainscr_cate_tab_click_item","mainscr_cate_tab_click_item")
     }
@@ -71,7 +73,8 @@ class CategoryFragment : Fragment() {
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
         binding.progressBar.visibility = View.GONE
-        binding.recyclerviewAll.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(),3)
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
         val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
 
@@ -107,36 +110,38 @@ class CategoryFragment : Fragment() {
         }
     }
 
-    private fun loadFirstCategory() {
-        myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
-        lifecycleScope.launch {
-            Log.d("functionCallingTest", "onCreateCustom:  home on create")
-
-            // Observe the LiveData in the ViewModel and update the UI accordingly
-            myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-                if (catResponses != null) {
-                    val randomNumber = Random.nextInt(0, catResponses.size -1)
-                    getBitmapFromGlide(catResponses[randomNumber].compressed_image_url!!)
-                }
-            }
-            myViewModel.fetchWallpapers(requireContext(),"IOS",binding.progressBar,true)
-        }
-
-    }
+//    private fun loadFirstCategory() {
+//        myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
+//        lifecycleScope.launch {
+//            Log.d("functionCallingTest", "onCreateCustom:  home on create")
+//
+//            // Observe the LiveData in the ViewModel and update the UI accordingly
+//            myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
+//                if (catResponses != null) {
+//                    val randomNumber = Random.nextInt(0, catResponses.size -1)
+//                    getBitmapFromGlide(catResponses[randomNumber].compressed_image_url!!)
+//                }
+//            }
+//            myViewModel.fetchWallpapers(requireContext(),"IOS",binding.progressBar,true)
+//        }
+//
+//    }
 
     private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
 
         val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+        val firstLine = firstAdLineThreshold * 3
 
         val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+        val lineC = lineCount * 3
         val newData = arrayListOf<CatNameResponse?>()
 
             for (i in data.indices){
-                if (i > firstAdLineThreshold && (i - firstAdLineThreshold) % (lineCount)  == 0) {
+                if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
                     newData.add(null)
                     Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-                }else if (i == firstAdLineThreshold){
+                }else if (i == firstLine){
                     newData.add(null)
                     Log.e("******NULL", "addNullValueInsideArray: null first "+i )
                 }
@@ -177,8 +182,7 @@ class CategoryFragment : Fragment() {
         }
         if (findNavController().currentDestination?.id != R.id.listViewFragment) {
 
-            (requireParentFragment() as MainFragment).findNavController()
-                .navigate(R.id.action_mainFragment_to_listViewFragment, bundle)
+            findNavController().navigate(R.id.listViewFragment, bundle)
         }
     }
 

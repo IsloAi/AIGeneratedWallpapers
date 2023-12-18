@@ -84,9 +84,9 @@ class ApiCategoriesListAdapter(
 
     private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
 
-    val firstline = firstAdLineThreshold *2
+    val firstline = firstAdLineThreshold *3
     private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-    val lineC = lineCount*2
+    val lineC = lineCount*3
     private val statusAd =  AdConfig.adStatusViewListWallSRC
        private val myDialogs = MyDialogs()
 
@@ -218,19 +218,32 @@ class ApiCategoriesListAdapter(
 
         Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object:RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
                     Log.d("onLoadFailed", "onLoadFailed: ")
                     animationView.setAnimation(R.raw.no_data_image_found)
                     animationView.visibility = View.VISIBLE
                     error_img.visibility = View.VISIBLE
                     return false
                 }
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
                     animationView.visibility = INVISIBLE
                     error_img.visibility = View.GONE
                     Log.d("onLoadFailed", "onResourceReady: ")
                     return false
-                }}).into(wallpaperMainImage)
+                }
+            }).into(wallpaperMainImage)
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
 

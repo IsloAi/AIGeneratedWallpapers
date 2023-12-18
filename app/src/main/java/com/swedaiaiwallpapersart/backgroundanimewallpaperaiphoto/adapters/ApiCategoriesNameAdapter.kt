@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
@@ -40,9 +41,26 @@ class ApiCategoriesNameAdapter(
 
 
     private val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+    val firstLine = firstAdLineThreshold * 3
 
     private val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+    val lineC = lineCount * 3
     private val statusAd =  AdConfig.adStatusCategoryArt
+
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        val layoutManager = recyclerView.layoutManager as GridLayoutManager
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
+                    layoutManager.spanCount // Make the ad span the full width
+                } else {
+                    1 // Regular item occupies 1 span
+                }
+            }
+        }
+    }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -90,9 +108,9 @@ class ApiCategoriesNameAdapter(
 
 
     override fun getItemViewType(position: Int): Int {
-        return if ((position + 1) == (firstAdLineThreshold + 1)){
+        return if ((position + 1) == (firstLine + 1)){
             VIEW_TYPE_NATIVE_AD
-        }else if (position + 1 > firstAdLineThreshold +1 && ((position +1) - (firstAdLineThreshold+1)) % (lineCount+1) == 0){
+        }else if (position + 1 > firstLine +1 && ((position +1) - (firstLine+1)) % (lineC+1) == 0){
             VIEW_TYPE_NATIVE_AD
         }  else {
             VIEW_TYPE_CONTAINER1
@@ -111,7 +129,7 @@ class ApiCategoriesNameAdapter(
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<Drawable>?,
+                        target: Target<Drawable>,
                         isFirstResource: Boolean
                     ): Boolean {
                         Log.d("onLoadFailed", "onLoadFailed: ")
@@ -120,10 +138,10 @@ class ApiCategoriesNameAdapter(
                     }
 
                     override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
+                        resource: Drawable,
+                        model: Any,
                         target: Target<Drawable>?,
-                        dataSource: DataSource?,
+                        dataSource: DataSource,
                         isFirstResource: Boolean
                     ): Boolean {
                         binding.loading.visibility = View.INVISIBLE

@@ -117,3 +117,9 @@ iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ada
 lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/PopularSliderAdapter.kt,c\3\c3fed718324acb62e4c44f31d8d5604e7f578947
 ™
 zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/ApicategoriesListHorizontalAdapter.kt,6\8\688f7c5988d4db1d1243198b791c128f6ef52ad7
+ë
+aapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/SaveStateViewModel.kt,3\1\31a427ce473f91275450813a0dde8c4dce6d9fce
+ù
+mapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/CategorySliderAdapter.kt,1\0\1004b197803b06a95b90410e7364d35a16b226d3
+õ
+kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/SplashSliderAdapter.kt,b\c\bcfda0c6ac4f736f4afc41e4d507836f9aab54f8

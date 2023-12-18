@@ -12,16 +12,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 
 
 class HomeTabsFragment : Fragment() {
     private var _binding:FragmentHomeTabsBinding ?= null
     private val binding get() = _binding!!
+
+    private val viewModel: SaveStateViewModel by viewModels()
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
     val titles = arrayOf("Popular","Trending","Live", "AI wallpaper","Category","Gen AI")
@@ -98,6 +104,7 @@ class HomeTabsFragment : Fragment() {
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                viewModel.setData(true)
                 updateTabAppearance(tab!!,true)
             }
 
@@ -117,8 +124,8 @@ class HomeTabsFragment : Fragment() {
         adapter.addFragment(HomeFragment(),"Bookmarks")
         adapter.addFragment(HomeFragment(),"All PDF Files")
         adapter.addFragment(HomeFragment(),"Bookmarks")
-        adapter.addFragment(HomeFragment(),"All PDF Files")
-        adapter.addFragment(HomeFragment(),"Bookmarks")
+        adapter.addFragment(CategoryFragment(),"Categories")
+        adapter.addFragment(GenerateImageFragment(),"Generate")
         binding.viewPager.adapter=adapter
         binding.viewPager.offscreenPageLimit = 0
         binding.tabLayout.setupWithViewPager(binding.viewPager)

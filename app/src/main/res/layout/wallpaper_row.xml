@@ -3,19 +3,17 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/_190sdp"
+    android:layout_height="@dimen/_200sdp"
     android:elevation="@dimen/_10sdp"
-    app:cardBackgroundColor="@color/button_bg"
-    app:cardCornerRadius="@dimen/_10sdp">
+    app:cardCornerRadius="@dimen/_7sdp">
 <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1dp"
         android:background="@drawable/bg">
 <androidx.cardview.widget.CardView
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:cardCornerRadius="@dimen/_10sdp"
+    app:cardCornerRadius="@dimen/_7sdp"
     app:cardBackgroundColor="@color/card"
     >
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,11 +33,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_margin="@dimen/_6sdp"
+            android:visibility="gone"
             android:src="@drawable/lock"
             />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

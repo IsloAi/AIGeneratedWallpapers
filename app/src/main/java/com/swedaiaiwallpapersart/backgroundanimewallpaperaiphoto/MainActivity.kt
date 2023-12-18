@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity(){
 
                                 AdConfig.adStatusCategoryArt = status.toInt()
                                 AdConfig.firstAdLineCategoryArt = threshold.toInt()
-                                AdConfig.lineCountCategoryArt = lineCount.toInt() + 1
+                                AdConfig.lineCountCategoryArt = lineCount.toInt()
                                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
 
@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity(){
 
                 AdConfig.adStatusCategoryArt = status.toInt()
                 AdConfig.firstAdLineCategoryArt = threshold.toInt()
-                AdConfig.lineCountCategoryArt = lineCount.toInt() + 1
+                AdConfig.lineCountCategoryArt = lineCount.toInt()
                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
 

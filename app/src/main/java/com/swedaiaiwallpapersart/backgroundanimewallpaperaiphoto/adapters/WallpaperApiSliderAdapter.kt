@@ -171,7 +171,7 @@ class WallpaperApiSliderAdapter(
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
                     progressBar.visibility = View.GONE
@@ -179,9 +179,15 @@ class WallpaperApiSliderAdapter(
 
                     return false
                 }
-                override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?,
-                                             dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                 progressBar.visibility = INVISIBLE
+
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    progressBar.visibility = INVISIBLE
                     noData.visibility = View.GONE
                     return false
                 }

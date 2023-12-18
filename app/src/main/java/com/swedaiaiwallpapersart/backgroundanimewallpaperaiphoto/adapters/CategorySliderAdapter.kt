@@ -32,19 +32,22 @@ class CategorySliderAdapter(
         Glide.with(context).load(hits.img_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object:
                 RequestListener<Drawable> {
+
+
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
                     return false
                 }
+
                 override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
+                    resource: Drawable,
+                    model: Any,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     return false

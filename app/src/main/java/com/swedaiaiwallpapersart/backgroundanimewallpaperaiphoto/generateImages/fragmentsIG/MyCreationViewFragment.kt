@@ -584,21 +584,21 @@ class MyCreationViewFragment : Fragment() {
         Glide.with(requireContext())
             .load(list[0])
             .listener(object : RequestListener<Drawable> {
+
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
-                    target: Target<Drawable>?,
+                    target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    // Handle the case where the image failed to load
-                    return false // Return false to allow Glide to handle the failure event
+                    return false
                 }
 
                 override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
+                    resource: Drawable,
+                    model: Any,
                     target: Target<Drawable>?,
-                    dataSource: DataSource?,
+                    dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
                     if (isAdded){
@@ -614,8 +614,7 @@ class MyCreationViewFragment : Fragment() {
                         binding.addToFav3.visibility = VISIBLE
                         binding.addToFav4.visibility = VISIBLE
                     }
-
-                    return false // Return false to allow Glide to handle the resource ready event
+                    return false
                 }
             })
             .into(binding.imageView1)
