@@ -26,13 +26,11 @@ class MyHomeViewModel: ViewModel()  {
     fun getWallpapers(): MutableLiveData<ArrayList<CatResponse>?> {
         return wallpaperData
     }
-    fun fetchWallpapers(context: Context, animation: LottieAnimationView, isLogin: Boolean) {
+    fun fetchWallpapers(context: Context, animation: LottieAnimationView,page:String) {
+        clear()
         val retrofit = RetrofitInstance.getInstance()
-        val service = if (isLogin) {
-            retrofit.create(HomeListInterfaceWithId::class.java).getList(MySharePreference.getDeviceID(context)!!)
-        } else {
-            retrofit.create(HomeListInterface::class.java).getList()
-        }
+        val service = retrofit.create(HomeListInterfaceWithId::class.java).getList(MySharePreference.getDeviceID(context)!!,page)
+
         service.enqueue(object :Callback<FavouriteListResponse>{
             override fun onResponse(
                 call: Call<FavouriteListResponse>, response: Response<FavouriteListResponse>) {

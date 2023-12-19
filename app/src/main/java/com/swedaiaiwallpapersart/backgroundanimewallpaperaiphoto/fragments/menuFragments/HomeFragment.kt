@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menu
 import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bumptech.glide.Glide
@@ -63,7 +65,12 @@ class HomeFragment : Fragment(){
     private val postDataOnServer = PostDataOnServer()
     private val viewModel: SaveStateViewModel by viewModels()
 
-    private val rewardAdWatched = 20
+    private var isFirstLoad = true
+
+    var currentPage = 1
+
+    var isLoadingData = false
+    var isLastPage = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
@@ -107,8 +114,58 @@ class HomeFragment : Fragment(){
         binding.progressBar.visibility = VISIBLE
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
+
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewAll.layoutManager = layoutManager
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+
+        var loading = false
+
+        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override
+
+            fun onScrolled(recyclerView:
+
+                               RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+
+                val totalItemCount = layoutManager.itemCount
+
+                if (!isLastPage && lastVisibleItemPosition + 4 >= totalItemCount) {
+                    isLastPage = true
+                    currentPage++
+
+                    Log.e("********new Data", "onScrolled: "+currentPage )
+                    // Fetch data for next page
+
+                    myViewModel.clear()
+                    loadData()
+                }
+            }
+        })
+
+//        binding.recyclerviewAll.addOnScrollListener(object:RecyclerView.OnScrollListener(){
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+//                super.onScrolled(recyclerView, dx, dy)
+//
+//                val visibleItemCount = layoutManager.childCount
+//                val totalItemCount = layoutManager.itemCount
+//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+//
+//                if (!isLoadingData && !isLastPage) {
+//                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
+//                        && firstVisibleItemPosition >= 0
+//                        && totalItemCount >= 30
+//                    ) {
+//                        Log.e("********new Data", "onScrolled: ", )
+//                        loadData()
+//                    }
+//                }
+//            }
+//        })
 
         val data = viewModel.getData()
         if (data){
@@ -118,25 +175,6 @@ class HomeFragment : Fragment(){
             val list = viewModel.getCatList()
             updateUIWithFetchedData(list)
         }
-
-//        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener(){
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//                val layoutManager = recyclerView.layoutManager as StaggeredGridLayoutManager
-//                val visibleItemCount = layoutManager.childCount
-//                val totalItemCount = layoutManager.itemCount
-//                val firstVisibleItemPositions = layoutManager.findFirstVisibleItemPositions(null)
-//
-//                if (!isLoading) {
-//                    val lastVisibleItemPosition = firstVisibleItemPositions.max()
-//                    // Load more data when reaching the end of the list
-//                    if (visibleItemCount + lastVisibleItemPosition >= totalItemCount) {
-//                        isLoading = true
-//                        loadMoreData()
-//                    }
-//                }
-//            }
-//        })
     }
     private fun loadMoreData(){
            cachedCatResponses?.let { allData.addAll(it) }
@@ -144,7 +182,7 @@ class HomeFragment : Fragment(){
            isLoading = false
     }
 
-    fun observeNetworkStatus(){
+    private fun observeNetworkStatus(){
         myViewModel.networkRequestStatus.observe(viewLifecycleOwner) { isRequestInProgress ->
             // Update UI based on the network request status
             if (isRequestInProgress) {
@@ -168,21 +206,37 @@ class HomeFragment : Fragment(){
     }
 
     private fun loadData() {
-        Log.d("functionCallingTest", "onCreateCustom:  home on create")
+        isLoadingData = true
+
         myViewModel = ViewModelProvider(this)[MyHomeViewModel::class.java]
-        // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
                 cachedCatResponses = catResponses
 
-                Log.e("TAG", "loadData: "+catResponses )
+
                 if (view != null) {
                     // If the view is available, update the UI
                     orignalList.clear()
                     orignalList.addAll(catResponses)
                     binding.retryBtn.visibility = View.GONE
 
-                    updateUIWithFetchedData(catResponses)
+                    if (isFirstLoad) {
+                        isFirstLoad = false // Update the flag after the initial load
+                        binding.retryBtn.visibility = View.GONE
+                        updateUIWithFetchedData(catResponses)
+                        Log.e("********new Data", "loadData new first: "+catResponses.size )
+                        Log.e("********new Data", "loadData new first: "+catResponses )
+                    } else {
+
+                        Log.e("********new Data", "loadData more: "+catResponses.size )
+                        Log.e("********new Data", "loadData more: "+catResponses )
+
+                        val list = addNullValueInsideArray(catResponses)
+                        isLastPage = false
+                        adapter.updateMoreData(list)
+                    }
+
+
                 }
             }else{
                 if (viewModel.getData()){
@@ -190,11 +244,15 @@ class HomeFragment : Fragment(){
                 }else{
                     binding.retryBtn.visibility = View.GONE
                 }
-                Log.e("TAG", "loadData: "+catResponses )
+
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,true)
+        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
     }
+
+
+
+
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
 
@@ -335,7 +393,7 @@ class HomeFragment : Fragment(){
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        isFirstLoad = true
         _binding =null
         fragmentScope.cancel()
     }

@@ -164,9 +164,6 @@ class CategoryFragment : Fragment() {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
-
-
-
                 }
                 override fun onLoadCleared(placeholder: Drawable?) {
                     Log.e("TAG", "onLoadCleared: cleared" )

@@ -7,5 +7,5 @@ import retrofit2.http.Query
 
 interface HomeListInterfaceWithId {
     @GET("getalllikes.php")
-    fun getList(@Query("uid") uid:String): Call<FavouriteListResponse>
+    fun getList(@Query("uid") uid:String, @Query("page") page:String): Call<FavouriteListResponse>
 }

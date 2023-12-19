@@ -122,7 +122,7 @@ class HomeTabsFragment : Fragment() {
         val adapter= ViewPagerAdapter(childFragmentManager)
         adapter.addFragment(PopularWallpaperFragment(),"Popular")
         adapter.addFragment(HomeFragment(),"Bookmarks")
-        adapter.addFragment(HomeFragment(),"All PDF Files")
+        adapter.addFragment(LiveWallpaperFragment(),"All PDF Files")
         adapter.addFragment(HomeFragment(),"Bookmarks")
         adapter.addFragment(CategoryFragment(),"Categories")
         adapter.addFragment(GenerateImageFragment(),"Generate")

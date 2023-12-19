@@ -26,6 +26,7 @@ import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.bmik.android.sdk.IkmSdkController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -90,6 +91,8 @@ class MainActivity : AppCompatActivity(){
         resources1.updateConfiguration(configuration, resources.displayMetrics)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
 //        SDKBaseController.getInstance().loadInterstitialAds(this, "category_screen","category_screen")
 
 
@@ -779,7 +782,12 @@ class MainActivity : AppCompatActivity(){
         }
         return list
     }
-    
+
+
+    override fun onResume() {
+        super.onResume()
+        IkmSdkController.setEnableShowResumeAds(true)
+    }
 }
 
 

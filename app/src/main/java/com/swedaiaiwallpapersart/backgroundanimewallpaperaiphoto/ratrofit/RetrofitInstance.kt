@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
     fun getInstance(): Retrofit {
         val retrofit : Retrofit = Retrofit.Builder()
-            .baseUrl("https://edecator.com/wallpaperApp/")
+            .baseUrl("https://edecator.com/wallpaperApp/V2/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         return retrofit

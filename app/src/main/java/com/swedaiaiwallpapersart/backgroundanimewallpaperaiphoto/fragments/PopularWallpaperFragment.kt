@@ -119,7 +119,7 @@ class PopularWallpaperFragment : Fragment() {
                 Log.e("TAG", "loadData: $catResponses")
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,true)
+        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,1.toString())
     }
 
 
