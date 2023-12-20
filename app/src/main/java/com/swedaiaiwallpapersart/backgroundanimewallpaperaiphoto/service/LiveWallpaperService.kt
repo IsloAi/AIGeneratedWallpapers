@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service
 import android.app.WallpaperManager
 import android.content.*
 import android.media.MediaPlayer
+import android.os.Build
 import android.os.Environment
 import android.service.wallpaper.WallpaperService
 import android.view.SurfaceHolder
@@ -21,9 +22,18 @@ class LiveWallpaperService : WallpaperService() {
 
             FirebaseApp.initializeApp(applicationContext)
 
-            val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
+            }else{
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            }
 
-            val video = File(file,"video.mp4")
+            val video = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                File(file,"video.m4v")
+            }else{
+                File(file,"video.mp4")
+            }
+
             liveVideoFilePath = video.path
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
             registerReceiver(object : BroadcastReceiver() {

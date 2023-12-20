@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -71,9 +72,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.Wallpa
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Counter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.SetMostDownloaded
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FullViewImagePopup
@@ -189,10 +192,7 @@ class WallpaperViewFragment : Fragment() {
 
 
 
-        Glide.with(requireContext())
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(binding.animationDdd)
+
         return binding.root
     }
 
@@ -293,8 +293,6 @@ class WallpaperViewFragment : Fragment() {
            // Set up the onBackPressed callback
            navController?.navigateUp()
        }
-
-       binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         setViewPager()
         checkRedHeart(position)
         if (arrayList[position] != null){
@@ -309,7 +307,9 @@ class WallpaperViewFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
 //           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                if(bitmap != null){
-                   openPopupMenu()
+
+                   val model =  arrayList[position]
+                   openPopupMenu(model!!)
                }else{
                    Toast.makeText(requireContext(),
                        getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
@@ -323,15 +323,32 @@ class WallpaperViewFragment : Fragment() {
                binding.favouriteButton.isEnabled = false
                if(arrayList[position]?.liked==true){
                    arrayList[position]?.liked = false
-                   binding.favouriteButton.setImageResource(R.drawable.heart_unsel)
+                   binding.favouriteButton.setImageResource(R.drawable.button_like)
                }else{
                    arrayList[position]?.liked = true
-                   binding.favouriteButton.setImageResource(R.drawable.heart_red)
+                   binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
                }
                addFavourite(requireContext(),position,binding.favouriteButton)
 
 
        }
+
+
+        binding.shareAPp.setOnClickListener {
+            val appPackageName = requireContext().packageName
+            val appName = requireContext().getString(R.string.app_name)
+
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain"
+            shareIntent.putExtra(
+                Intent.EXTRA_TEXT,
+                "Check out $appName! Get it from the Play Store:\nhttps://play.google.com/store/apps/details?id=$appPackageName"
+            )
+
+            val chooser = Intent.createChooser(shareIntent, "Share $appName via")
+            chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            requireContext().startActivity(chooser)
+        }
 
 
        binding.unlockWallpaper.setOnClickListener {
@@ -355,7 +372,6 @@ class WallpaperViewFragment : Fragment() {
                        postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,
                            model1!!,requireContext(),0)
                        showInter = false
-                       openPopupMenu()
                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
                        binding.unlockWallpaper.visibility = View.GONE
                        adapter?.notifyItemChanged(position)
@@ -387,7 +403,6 @@ class WallpaperViewFragment : Fragment() {
                                            postData.unLocking(MySharePreference.getDeviceID(requireContext())!!,
                                                model1!!,requireContext(),0)
                                            showInter = false
-                                           openPopupMenu()
                                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
                                            binding.unlockWallpaper.visibility = View.GONE
                                            adapter?.notifyItemChanged(position)
@@ -411,19 +426,18 @@ class WallpaperViewFragment : Fragment() {
 
        }
        binding.downloadWallpaper.setOnClickListener{
-
-           if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-               ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+           Log.e("TAG", "functionality: inside click", )
+           if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
+               if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                   Log.e("TAG", "functionality: inside click permission", )
+                   ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+               }else{
+                   Log.e("TAG", "functionality: inside click dialog", )
+                   getUserIdDialog()
+               }
            }else{
                getUserIdDialog()
            }
-
-//           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-//
-//           }else{
-//               Toast.makeText(requireContext(), "First Unlock the wallpaper to download", Toast.LENGTH_SHORT).show()
-//
-//           }
 
        }
    }
@@ -434,13 +448,6 @@ class WallpaperViewFragment : Fragment() {
             ViewPagerImageClick {
             @SuppressLint("SuspiciousIndentation")
             override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
-                    val model = arrayList[pos]
-//                    myDialogs.getWallpaperPopup(
-//                        context!!,
-//                        model,
-//                        navController!!, R.id.action_wallpaperViewFragment_to_premiumPlanFragment,
-//                        RetrofitInstance.getInstance(), binding.gemsText, layout,requireActivity())
-
             }
         },object:FullViewImage{
             override fun getFullImageUrl(image:String) {
@@ -553,6 +560,10 @@ class WallpaperViewFragment : Fragment() {
                     Log.e("********ADS", "onAdsRewarded: ")
 //                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                         mSaveMediaToStorage(bitmap)
+                    val model = arrayList[position]
+
+
+                    openPopupMenu(model!!)
 //                    }else{
 //                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
 //
@@ -622,10 +633,10 @@ class WallpaperViewFragment : Fragment() {
     private fun checkRedHeart(position: Int) {
         if (isAdded) {
         if (arrayList[position]?.liked == true) {
-            binding.favouriteButton.setImageResource(R.drawable.heart_red) }
+            binding.favouriteButton.setImageResource(R.drawable.button_like_selected) }
         else
         {
-            binding.favouriteButton.setImageResource(R.drawable.heart_unsel)
+            binding.favouriteButton.setImageResource(R.drawable.button_like)
         }
     }
     }
@@ -644,11 +655,11 @@ class WallpaperViewFragment : Fragment() {
                     val message = response.body()?.string()
                     if(message=="Liked"){
                         arrayList[position]?.liked = true
-                        favouriteButton.setImageResource(R.drawable.heart_red)
+                        favouriteButton.setImageResource(R.drawable.button_like_selected)
                     }
                     else
                     {
-                        favouriteButton.setImageResource(R.drawable.heart_unsel)
+                        favouriteButton.setImageResource(R.drawable.button_like)
                         arrayList[position]?.liked = false
                     }
                     favouriteButton.isEnabled = true
@@ -657,7 +668,7 @@ class WallpaperViewFragment : Fragment() {
                 {
                     favouriteButton.isEnabled = true
                     Toast.makeText(context, "onResponse error", Toast.LENGTH_SHORT).show()
-                    favouriteButton.setImageResource(R.drawable.heart_unsel)
+                    favouriteButton.setImageResource(R.drawable.button_like)
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -680,6 +691,36 @@ class WallpaperViewFragment : Fragment() {
             e.printStackTrace()
             null
         }
+    }
+
+
+    private fun setDownloaded( model:CatResponse){
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val retrofit = RetrofitInstance.getInstance()
+            val apiService = retrofit.create(SetMostDownloaded::class.java)
+            val call = apiService.setDownloaded(model.id.toString())
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+
+
+                        Log.e("TAG", "onResponse: success"+response.body().toString() )
+                    }
+                    else
+                    {
+                        Log.e("TAG", "onResponse: not success" )
+//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("TAG", "onResponse: failed" )
+//                    Toast.makeText(requireContext(), "onFailure error", Toast.LENGTH_SHORT).show()
+                }
+            })
+        }
+
+
     }
 
     private fun mLoad(string: String): Bitmap? {
@@ -705,7 +746,7 @@ class WallpaperViewFragment : Fragment() {
         return null
     }
     @SuppressLint("ResourceType")
-    private fun openPopupMenu() {
+    private fun openPopupMenu(model: CatResponse) {
         val dialog = BottomSheetDialog(requireContext())
         val view = layoutInflater.inflate(R.layout.set_wallpaper_menu, null)
         dialog.setContentView(view)
@@ -743,6 +784,8 @@ class WallpaperViewFragment : Fragment() {
                                 state = false
                                 postDelay()
                             } }
+
+                            setDownloaded(model)
                             showRateApp()
                             binding.viewPager.setCurrentItem(position+1,true)
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
@@ -765,6 +808,10 @@ class WallpaperViewFragment : Fragment() {
                                             postDelay()
                                         }
                                     }
+
+                                    setDownloaded(model)
+
+
                                 }catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -825,6 +872,8 @@ class WallpaperViewFragment : Fragment() {
                                     postDelay()
                                 }
                             }
+
+                            setDownloaded(model)
                             showRateApp()
                             binding.viewPager.setCurrentItem(position+1,true)
                             //do something
@@ -846,6 +895,8 @@ class WallpaperViewFragment : Fragment() {
                                     postDelay()
                                 }
                             }
+
+                            setDownloaded(model)
                             showRateApp()
                             binding.viewPager.setCurrentItem(position+1,true)
                         }
@@ -895,6 +946,7 @@ class WallpaperViewFragment : Fragment() {
                                     postDelay()
                                 }
                             }
+                            setDownloaded(model)
                             showRateApp()
                             binding.viewPager.setCurrentItem(position+1,true)
                             //do something
@@ -913,6 +965,7 @@ class WallpaperViewFragment : Fragment() {
                                     postDelay()
                                 }
                             }
+                            setDownloaded(model)
                             showRateApp()
                             binding.viewPager.setCurrentItem(position+1,true)
                         }

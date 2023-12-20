@@ -1,3 +1,7 @@
 
-Tkotlin:S1481¶"/Remove this unused "isDarkMode" local variable.(ºÂ®¿úÿÿÿÿ8¾¡¡ÛÇ1
-Rkotlin:S1481Ñ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8¿¡¡ÛÇ1
+Tkotlin:S1481Ò"/Remove this unused "isDarkMode" local variable.(ºÂ®¿úÿÿÿÿ8˜ãã±È1
+Rkotlin:S1481í"2Remove this unused "arrayListJson" local variable.(àñÆÑ8™ãã±È1
+>kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8¾ğü·È1
+pkotlin:S1192£"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ñçä±È1
+ykotlin:S1186h"ZAdd a nested comment explaining why this function is empty or complete the implementation.(¥•ü„8£ãã±È1
+ykotlin:S1186l"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8£ãã±È1

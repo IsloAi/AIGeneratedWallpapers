@@ -1,7 +1,8 @@
 
-:kotlin:S6310n"Avoid hardcoded dispatchers.(©ÓœW8ú–ˆÈ1
-Gkotlin:S108Q")Either remove or fill this block of code.(å¥‡8Ï¹ŠˆÈ1
-9kotlin:S1128"Remove this unused import.(ñúû‡8Ö¹ŠˆÈ1
-9kotlin:S1128"Remove this unused import.(¡ƒê•8Ö¹ŠˆÈ1
->kotlin:S1128"Remove this unused import.(üÒ†°ùÿÿÿÿ8Ö¹ŠˆÈ1
-pkotlin:S1192˜"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8×¹ŠˆÈ1
+:kotlin:S6310r"Avoid hardcoded dispatchers.(©ÓœW8ú†ª¹È1
+Gkotlin:S108V")Either remove or fill this block of code.(å¥‡8‡ª¹È1
+9kotlin:S1128"Remove this unused import.(ñúû‡8Œ‡ª¹È1
+9kotlin:S1128"Remove this unused import.(¡ƒê•8Œ‡ª¹È1
+>kotlin:S1128"Remove this unused import.(üÒ†°ùÿÿÿÿ8Œ‡ª¹È1
+>kotlin:S1128""Remove this unused import.(ğÔ¹¦ıÿÿÿÿ8ËÀÌºÈ1
+pkotlin:S1192Ã"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8À¢ª¹È1

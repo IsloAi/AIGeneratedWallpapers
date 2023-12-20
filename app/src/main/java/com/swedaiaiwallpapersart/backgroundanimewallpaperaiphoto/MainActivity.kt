@@ -49,8 +49,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -72,6 +74,11 @@ class MainActivity : AppCompatActivity(){
     private val selectedPromptList =  ArrayList<SelectedPromptListModel>()
     private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt:String? =null
+
+    private val viewModel: MostDownloadedViewmodel by viewModels()
+
+    private val homeViewmodel: MyHomeViewModel by viewModels()
+
 
     val mainScope = CoroutineScope(Dispatchers.IO)
 
@@ -103,6 +110,9 @@ class MainActivity : AppCompatActivity(){
 //        purchasesPrice()
         val firebaseMessageReceiver = MyFirebaseMessageReceiver()
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
+
+        viewModel.fetchWallpapers(this)
+        homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
 
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("tracingImageId", "onCreate: id= $deviceID")

@@ -1,0 +1,10 @@
+
+Hkotlin:S1172’"(Remove these unused function parameters.(íäÀ8”äÀ±È1
+>kotlin:S125‹"Remove this commented out code.(–íŸ´8Ø€Ä±È1
+mkotlin:S117“"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(À™˜Ì8Êıº±È1
+Akotlin:S6310É"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Êıº±È1
+gkotlin:S107’"HThis function has 11 parameters, which is greater than the 7 authorized.(íäÀ8×ıº±È1
+Nkotlin:S1481r"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8âıº±È1
+Hkotlin:S1874Ô"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8îıº±È1
+Hkotlin:S1874„"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8îıº±È1
+Bkotlin:S1874…"#Deprecated code should not be used.(àü8îıº±È1

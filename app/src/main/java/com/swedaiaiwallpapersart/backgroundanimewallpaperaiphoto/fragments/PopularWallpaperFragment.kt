@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
@@ -22,13 +24,18 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 
 class PopularWallpaperFragment : Fragment() {
@@ -39,7 +46,7 @@ class PopularWallpaperFragment : Fragment() {
     private lateinit var welcomeAdapter: PopularSliderAdapter
 
 
-    private lateinit var myViewModel: MyHomeViewModel
+    private  val myViewModel: MyHomeViewModel by activityViewModels()
 
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
 
@@ -48,6 +55,10 @@ class PopularWallpaperFragment : Fragment() {
     private lateinit var myActivity : MainActivity
 
 
+    private var mostUsedWallpaperAdapter :MostUsedWallpaperAdapter ?= null
+
+
+    private val viewModel: MostDownloadedViewmodel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,7 +90,28 @@ class PopularWallpaperFragment : Fragment() {
         })
 
         initTrendingData()
+        initMostUsedRV()
+        initMostDownloadedData()
+    }
 
+    private fun initMostUsedRV(){
+
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewMostUsed.layoutManager = layoutManager
+        binding.recyclerviewMostUsed.addItemDecoration(RvItemDecore(3,5,false,10000))
+        val list = ArrayList<MostDownloadImageResponse?>()
+        mostUsedWallpaperAdapter = MostUsedWallpaperAdapter(list, object : PositionCallback{
+            override fun getPosition(position: Int) {
+
+            }
+
+            override fun getFavorites(position: Int) {
+
+            }
+
+        },myActivity)
+
+        binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
     }
 
 
@@ -98,10 +130,8 @@ class PopularWallpaperFragment : Fragment() {
 
     private fun initTrendingData() {
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        myViewModel = ViewModelProvider(this)[MyHomeViewModel::class.java]
-        // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
                 cachedCatResponses = catResponses
@@ -115,11 +145,9 @@ class PopularWallpaperFragment : Fragment() {
                     updateUIWithFetchedData(catResponses)
                 }
             }else{
-//                binding.retryBtn.visibility = View.VISIBLE
                 Log.e("TAG", "loadData: $catResponses")
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,1.toString())
     }
 
 
@@ -222,6 +250,60 @@ class PopularWallpaperFragment : Fragment() {
             requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
         myViewModel.clear()
+    }
+
+
+
+    fun initMostDownloadedData(){
+        viewModel.wallpaperData.observe(viewLifecycleOwner){wallpapers ->
+            if (wallpapers != null) {
+
+                if (view != null) {
+                    // If the view is available, update the UI
+                    val list = addNullValueInsideArray(wallpapers)
+
+                    mostUsedWallpaperAdapter?.updateMoreData(list)
+
+
+                }
+            }else{
+                Toast.makeText(requireContext(),"No Data Found",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun addNullValueInsideArray(data: List<MostDownloadImageResponse?>): ArrayList<MostDownloadImageResponse?>{
+
+        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstLine = firstAdLineThreshold * 3
+
+        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineC = lineCount * 3
+        val newData = arrayListOf<MostDownloadImageResponse?>()
+
+        for (i in data.indices){
+            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                newData.add(null)
+
+
+
+                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+            }else if (i == firstLine){
+                newData.add(null)
+                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+            }
+            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            newData.add(data[i])
+
+        }
+        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+
+
+
+
+        return newData
     }
 
     override fun onDestroyView() {

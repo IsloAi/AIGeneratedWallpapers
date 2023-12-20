@@ -49,7 +49,7 @@ import kotlinx.coroutines.cancel
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
     private val binding get() = _binding!!
-    private lateinit var myViewModel: MyHomeViewModel
+    private  val myViewModel: MyHomeViewModel by activityViewModels()
     private var navController: NavController? = null
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private var  dialog:Dialog? = null
@@ -67,7 +67,7 @@ class HomeFragment : Fragment(){
 
     private var isFirstLoad = true
 
-    var currentPage = 1
+    var currentPage = 2
 
     var isLoadingData = false
     var isLastPage = false
@@ -134,7 +134,7 @@ class HomeFragment : Fragment(){
 
                 val totalItemCount = layoutManager.itemCount
 
-                if (!isLastPage && lastVisibleItemPosition + 4 >= totalItemCount) {
+                if (!isLastPage && lastVisibleItemPosition + 8 >= totalItemCount) {
                     isLastPage = true
                     currentPage++
 
@@ -207,8 +207,6 @@ class HomeFragment : Fragment(){
 
     private fun loadData() {
         isLoadingData = true
-
-        myViewModel = ViewModelProvider(this)[MyHomeViewModel::class.java]
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
                 cachedCatResponses = catResponses
@@ -247,7 +245,13 @@ class HomeFragment : Fragment(){
 
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
+
+        if (!isFirstLoad){
+            myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
+        }
+
+
+
     }
 
 

@@ -1,7 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.content.ContentValues
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -37,6 +40,8 @@ import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
+import java.util.concurrent.TimeUnit
 
 class LiveWallpaperFragment : Fragment() {
 
@@ -106,31 +111,69 @@ class LiveWallpaperFragment : Fragment() {
 
 
     fun downloadVideo(url: String, destinationFile: File) {
-
         lifecycleScope.launch(Dispatchers.IO) {
-            val client = OkHttpClient()
+
+            val client = OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS) // Increase the timeout duration
+                .build()
             val request = Request.Builder()
-                .url(url)
+                .url("https://edecator.com/wallpaperApp/Live_Wallpaper/19.m4v")
                 .build()
 
             client.newCall(request).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
                 val inputStream = response.body?.byteStream()
-                val outputStream = FileOutputStream(destinationFile)
 
-                inputStream?.use { input ->
-                    outputStream.use { output ->
-                        input.copyTo(output)
+                try {
+                    inputStream?.use { input ->
+                        val resolver = requireContext().contentResolver
+
+                        val contentValues = ContentValues().apply {
+                            put(MediaStore.MediaColumns.DISPLAY_NAME, "video") // Set the display name
+                            put(MediaStore.MediaColumns.MIME_TYPE, "video/m4v") // Set the MIME type
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM) // Use Environment.DIRECTORY_DOWNLOADS for API 29+
+                            } else {
+                                // For Android 26 and below, use direct file operation
+                                saveVideoToFile(input, destinationFile)
+                                IkmSdkController.setEnableShowResumeAds(false)
+                                LiveWallpaperService.setToWallPaper(requireContext())
+                                return@use
+                            }
+                        }
+
+                        val contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+
+                        val item = resolver.insert(contentUri, contentValues)
+
+                        item?.let { uri ->
+                            resolver.openOutputStream(uri)?.use { output ->
+                                input.copyTo(output)
+                            }
+
+                            IkmSdkController.setEnableShowResumeAds(false)
+                            LiveWallpaperService.setToWallPaper(requireContext())
+                        }
+
+
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    // Handle exceptions
                 }
-
-                IkmSdkController.setEnableShowResumeAds(false)
-                LiveWallpaperService.setToWallPaper(requireContext())
-
             }
         }
+    }
 
+    // Function for saving video file directly to the destination file
+    private fun saveVideoToFile(inputStream: InputStream, destinationFile: File) {
+        val outputStream = FileOutputStream(destinationFile)
+        inputStream.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
     }
 
 
