@@ -1,8 +1,19 @@
 
-:kotlin:S6310r"Avoid hardcoded dispatchers.(©ÓœW8ú†ª¹È1
-Gkotlin:S108V")Either remove or fill this block of code.(å¥‡8‡ª¹È1
-9kotlin:S1128"Remove this unused import.(ñúû‡8Œ‡ª¹È1
-9kotlin:S1128"Remove this unused import.(¡ƒê•8Œ‡ª¹È1
->kotlin:S1128"Remove this unused import.(üÒ†°ùÿÿÿÿ8Œ‡ª¹È1
->kotlin:S1128""Remove this unused import.(ğÔ¹¦ıÿÿÿÿ8ËÀÌºÈ1
-pkotlin:S1192Ã"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8À¢ª¹È1
+Gkotlin:S108R")Either remove or fill this block of code.(å¥‡8‹ŸÚÈ1
+9kotlin:S1128"Remove this unused import.(®Ü³ÿ8¶ï€ÛÈ1
+9kotlin:S1128"Remove this unused import.(Üº¸¡8¶ï€ÛÈ1
+9kotlin:S1128"Remove this unused import.(˜»ˆ8šÖ‚ÛÈ1
+>kotlin:S1128"Remove this unused import.(ÖÇØıÿÿÿÿ8¶ï€ÛÈ1
+>kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8ŸŸÚÈ1
+>kotlin:S1128"Remove this unused import.(ÙÃä¡şÿÿÿÿ8¶ï€ÛÈ1
+>kotlin:S1128"Remove this unused import.(Áü¹Øûÿÿÿÿ8·ï€ÛÈ1
+>kotlin:S1128"Remove this unused import.(èãÊõûÿÿÿÿ8·ï€ÛÈ1
+>kotlin:S1128"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8·ï€ÛÈ1
+9kotlin:S1128 "Remove this unused import.(³…”8¸ï€ÛÈ1
+9kotlin:S1128!"Remove this unused import.(¬û»¥8¸ï€ÛÈ1
+>kotlin:S1128""Remove this unused import.( í»Òùÿÿÿÿ8œÖ‚ÛÈ1
+>kotlin:S1128#"Remove this unused import.(‘”ˆ’üÿÿÿÿ8¸ï€ÛÈ1
+>kotlin:S1128$"Remove this unused import.(ˆîáüÿÿÿÿ8¸ï€ÛÈ1
+>kotlin:S1128%"Remove this unused import.(çüøÉúÿÿÿÿ8¸ï€ÛÈ1
+>kotlin:S1128&"Remove this unused import.(üÎÛ øÿÿÿÿ8¹ï€ÛÈ1
+okotlin:S1192w"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¡ŸÚÈ1

@@ -179,6 +179,14 @@
             app:popExitAnim="@anim/slide_out_right"
 
             />
+        <action
+            android:id="@+id/action_onBoardingFragment_to_homeTabsFragment"
+            app:destination="@id/homeTabsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
     </fragment>
     <fragment
         android:id="@+id/homeTabsFragment"
@@ -192,5 +200,15 @@
             android:id="@+id/action_homeTabsFragment_to_listViewFragment"
             app:destination="@id/listViewFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/downloadLiveWallpaperFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.DownloadLiveWallpaperFragment"
+        android:label="fragment_download_live_wallpaper"
+        tools:layout="@layout/fragment_download_live_wallpaper" />
+    <fragment
+        android:id="@+id/liveWallpaperPreviewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.LiveWallpaperPreviewFragment"
+        android:label="fragment_live_wallpaper_preview"
+        tools:layout="@layout/fragment_live_wallpaper_preview" />
 
 </navigation>

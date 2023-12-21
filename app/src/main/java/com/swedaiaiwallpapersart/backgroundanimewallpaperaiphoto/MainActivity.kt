@@ -17,6 +17,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -52,6 +53,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebas
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,6 +80,8 @@ class MainActivity : AppCompatActivity(){
     private val viewModel: MostDownloadedViewmodel by viewModels()
 
     private val homeViewmodel: MyHomeViewModel by viewModels()
+
+    private  val liveViewModel: LiveWallpaperViewModel by viewModels()
 
 
     val mainScope = CoroutineScope(Dispatchers.IO)
@@ -113,6 +117,7 @@ class MainActivity : AppCompatActivity(){
 
         viewModel.fetchWallpapers(this)
         homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
+        liveViewModel.fetchWallpapers(this)
 
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("tracingImageId", "onCreate: id= $deviceID")

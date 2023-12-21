@@ -6,8 +6,11 @@ import android.media.MediaPlayer
 import android.os.Build
 import android.os.Environment
 import android.service.wallpaper.WallpaperService
+import android.util.Log
 import android.view.SurfaceHolder
 import com.google.firebase.FirebaseApp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import java.io.File
 import java.io.IOException
 
@@ -22,19 +25,14 @@ class LiveWallpaperService : WallpaperService() {
 
             FirebaseApp.initializeApp(applicationContext)
 
-            val file = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES)
-            }else{
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            }
+            val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
 
-            val video = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                File(file,"video.m4v")
-            }else{
-                File(file,"video.mp4")
-            }
+//
+            val video =  file.path + "/" + MySharePreference.getFileName(applicationContext)
 
-            liveVideoFilePath = video.path
+            Log.e("TAG", "onCreate: $video")
+
+            liveVideoFilePath = video
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
             registerReceiver(object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {

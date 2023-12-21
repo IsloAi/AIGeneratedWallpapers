@@ -185,10 +185,6 @@ iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ser
 japp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/PositionCallback.kt,c\1\c145716a72467301ae28ccb6553536b591ebf201
 š
 japp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/downloadCallback.kt,3\3\33425f53378db8d41ebf605b826bcde0f6f00184
-ž
-napp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/mostDownloadedImages.kt,2\4\2429dce5ec8d20548d14b0e45772027beda775b2
-¦
-vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/MostDownloadedImages.kt,5\f\5fa5ebb0b60786eaa6a5c4e12ab41c566fb19581
 ¤
 tapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/MostDownloadImages.kt,b\7\b7bb94eb92c8126bfa74de65573d27f01bbbf094
 ¡
@@ -247,3 +243,23 @@ Q.idea/sonarlint/securityhotspotstore/d/1/d103df78cee78bb79ad7296b61be183364c35d
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
 w
 G.idea/sonarlint/issuestore/9/c/9cc63e5d8e7ba0e8cc98669036fac80daf7e60fa,6\0\609a6cfbbf32df9533347d72f619c5ca80cbf617
+›
+kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/FavouriteListResponse.kt,7\2\7244a42cdb0b8dc08abcd0cf822337eef44ec841
+‘
+aapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/CatResponse.kt,f\3\f3b08c2601d60f04602db49879c774839a4d0b33
+£
+sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/GetLiveWallpapers.kt,9\e\9e81d58073a6effa011982caa3f1ccf9a20b8d9f
+ 
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/LiveWallpaperViewModel.kt,8\e\8e7e7170b5f47d8f8d3f1fe16acab7c9e4ee4c22
+˜
+happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/LiveImagesResponse.kt,1\d\1dc77e39bf89fdb41b41f7acb24c566ebb040ef6
+˜
+happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/LiveWallpaperModel.kt,0\a\0a3f409498e8c7dcebde3c5b45a6300a0913afbe
+¦
+vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/DownloadLiveWallpaperFragment.kt,9\e\9e20845bc29657d1e4c69506953459c9f04c56f8
+¥
+uapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/LiveWallpaperPreviewFragment.kt,d\5\d5e25286a2c63355c1d8472dbda5dcfc8a7bfacc
+Ž
+^app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/Constants.kt,b\5\b5f0a91a0a6aacb54ea75d33a627ea7db3d34214
+–
+fapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MySharePreference.kt,a\b\ab8ed208eac278ea5d072e482a983339a76dec34

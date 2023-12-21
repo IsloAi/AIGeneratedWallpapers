@@ -29,7 +29,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.temp.VideoItem
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import kotlinx.coroutines.CoroutineScope
@@ -39,7 +39,7 @@ import kotlinx.coroutines.withContext
 
 
 class LiveWallpaperAdapter(
-    var arrayList: ArrayList<VideoItem?>,
+    var arrayList: ArrayList<LiveWallpaperModel?>,
     var positionCallback: downloadCallback,
     private val myActivity: MainActivity
 ):
@@ -72,7 +72,7 @@ class LiveWallpaperAdapter(
         coroutineScope = scope
     }
     inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(modela: ArrayList<VideoItem?>, holder: RecyclerView.ViewHolder, position: Int) {
+        fun bind(modela: ArrayList<LiveWallpaperModel?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
             setAllData(
                 model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
@@ -153,7 +153,7 @@ class LiveWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: VideoItem, position:Int, animationView: LottieAnimationView, gemsView: TextView, likes: TextView, favouriteButton: ImageView
+    private fun setAllData(model: LiveWallpaperModel, position:Int, animationView: LottieAnimationView, gemsView: TextView, likes: TextView, favouriteButton: ImageView
                            , lockButton: ImageView, diamondIcon: ImageView, wallpaperMainImage: ImageView, holder: RecyclerView.ViewHolder, error_img: ImageView
     ){
         animationView.visibility = View.VISIBLE
@@ -191,11 +191,11 @@ class LiveWallpaperAdapter(
 //            Log.d("tracingImageId", "paid: category = ${model.cat_name}  , imageId = ${model.id}, model = $model")
 //        }
 //        Log.d("nadeemAhmad", "setAllData: ${model.compressed_image_url}")
-        Log.e("*******urls", "setAllData: "+model.videos.medium )
+//        Log.e("*******urls", "setAllData: "+model.videos.medium )
 
 
 
-        Glide.with(context!!).load(model.videos.medium.url).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context!!).load(model.thumnail_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

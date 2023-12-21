@@ -241,7 +241,7 @@ class OnBoardingFragment : Fragment() {
                 binding.onboardingViewPager.setCurrentItem(currentItem + 1, true)
             } else {
                 if (findNavController().currentDestination?.id != R.id.mainFragment) {
-                    findNavController().navigate(R.id.action_onBoardingFragment_to_mainFragment)
+                    findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
                 }
             }
         }

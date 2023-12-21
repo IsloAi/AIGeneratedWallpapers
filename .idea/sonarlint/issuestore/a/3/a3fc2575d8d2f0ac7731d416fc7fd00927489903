@@ -1,15 +1,16 @@
 
-Ykotlin:S1172á"4Remove this unused function parameter "notSelected".(þð‹ýÿÿÿÿ8º–á·È1
-=kotlin:S125g"Remove this commented out code.(ÙèÜÝ8Ç–á·È1
->kotlin:S125†"Remove this commented out code.( ¾ºÎ8È–á·È1
-Ckotlin:S125ê"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8È–á·È1
-Ckotlin:S125ð"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8È–á·È1
-Ckotlin:S125"Remove this commented out code.(ð·Äýÿÿÿÿ8É–á·È1
->kotlin:S125°"Remove this commented out code.(£Ãš‰8Ê–á·È1
-Ckotlin:S125Á"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8Ê–á·È1
-=kotlin:S125Ï"Remove this commented out code.(è»»_8Ë–á·È1
-[kotlin:S1481o"<Remove this unused "firebaseMessageReceiver" local variable.(Õèþô8‡—á·È1
-Mkotlin:S1481ó"-Remove this unused "behavior" local variable.(Ø¦š¾8ˆ—á·È1
-9kotlin:S1128"Remove this unused import.(´Ùí8•—á·È1
-Gkotlin:S1874b"#Deprecated code should not be used.(Ý‘Ïôûÿÿÿÿ8 —á·È1
-wkotlin:S3776Ž"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(„ö÷àøÿÿÿÿ8¢—á·È1
+Ykotlin:S1172æ"4Remove this unused function parameter "notSelected".(þð‹ýÿÿÿÿ8Ý¹“ÙÈ1
+=kotlin:S125k"Remove this commented out code.(ÙèÜÝ8ù¹“ÙÈ1
+>kotlin:S125‹"Remove this commented out code.( ¾ºÎ8û¹“ÙÈ1
+Ckotlin:S125ï"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8ü¹“ÙÈ1
+Ckotlin:S125õ"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8ý¹“ÙÈ1
+Ckotlin:S125’"Remove this commented out code.(ð·Äýÿÿÿÿ8€º“ÙÈ1
+>kotlin:S125µ"Remove this commented out code.(£Ãš‰8…º“ÙÈ1
+Ckotlin:S125Æ"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8‡º“ÙÈ1
+=kotlin:S125Ô"Remove this commented out code.(è»»_8Šº“ÙÈ1
+[kotlin:S1481s"<Remove this unused "firebaseMessageReceiver" local variable.(Õèþô8€»“ÙÈ1
+Mkotlin:S1481ø"-Remove this unused "behavior" local variable.(Ø¦š¾8€»“ÙÈ1
+9kotlin:S1128"Remove this unused import.(´Ùí8œ»“ÙÈ1
+9kotlin:S1128"Remove this unused import.(Æü³Ï8œ»“ÙÈ1
+Gkotlin:S1874f"#Deprecated code should not be used.(Ý‘Ïôûÿÿÿÿ8­»“ÙÈ1
+wkotlin:S3776“"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(„ö÷àøÿÿÿÿ8¯»“ÙÈ1

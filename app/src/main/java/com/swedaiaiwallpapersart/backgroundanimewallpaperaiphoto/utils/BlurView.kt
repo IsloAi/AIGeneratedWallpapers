@@ -27,4 +27,8 @@ object BlurView {
         tmpOut.copyTo(outputBitmap)
         return outputBitmap
     }
+
+
+    var filePath = ""
+    var fileName = ""
 }

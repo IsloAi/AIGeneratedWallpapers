@@ -72,6 +72,7 @@ class SplashOnFragment : Fragment() {
 
 
         animateLoadingText()
+        animateImages()
         lifecycleScope.launch(Dispatchers.Main) {
 
             val duration = 5000 // 5000 milliseconds = 5 seconds
@@ -125,6 +126,9 @@ class SplashOnFragment : Fragment() {
 
             })
         }
+
+
+
     }
 
     private fun animateLoadingText() {
