@@ -53,6 +53,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebas
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import kotlinx.coroutines.CoroutineScope
@@ -80,6 +81,7 @@ class MainActivity : AppCompatActivity(){
     private val viewModel: MostDownloadedViewmodel by viewModels()
 
     private val homeViewmodel: MyHomeViewModel by viewModels()
+    private val allwallpapers: AllWallpapersViewmodel by viewModels()
 
     private  val liveViewModel: LiveWallpaperViewModel by viewModels()
 
@@ -104,20 +106,15 @@ class MainActivity : AppCompatActivity(){
         setContentView(binding.root)
 
 
-//        SDKBaseController.getInstance().loadInterstitialAds(this, "category_screen","category_screen")
-
-
-        // workManager()
-
-
         createTimer()
-//        purchasesPrice()
         val firebaseMessageReceiver = MyFirebaseMessageReceiver()
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
 
         viewModel.fetchWallpapers(this)
         homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
         liveViewModel.fetchWallpapers(this)
+
+        allwallpapers.fetchWallpapers(this)
 
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("tracingImageId", "onCreate: id= $deviceID")
@@ -127,20 +124,6 @@ class MainActivity : AppCompatActivity(){
         }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
-
-
-
-// this code will work with counter // watch ad counter will set zro at 12 am everyday  this code also contain a class the class name is "ResetCountWorker"
-//        val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-//        val workRequest = PeriodicWorkRequest.Builder(ResetCountWorker::class.java,15, TimeUnit.MINUTES)
-//            .setConstraints(constraints).build()
-//        WorkManager.getInstance(this).enqueue(workRequest)
-
-//        val workRequest = PeriodicWorkRequestBuilder<ResetCountWorker>(
-//            repeatInterval = 1, // 1 day
-//            repeatIntervalTimeUnit = TimeUnit.DAYS).setConstraints(constraints).build()
-//            WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork("ResetCountWork", ExistingPeriodicWorkPolicy.KEEP, workRequest)
-
         initFirebaseRemoteConfig()
     }
 

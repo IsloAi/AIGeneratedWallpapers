@@ -87,19 +87,14 @@ class ListViewFragment : Fragment() {
     private fun onCreateViewCalling(){
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.VISIBLE
-        binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-
-        Glide.with(requireContext())
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(binding.animationDdd)
          name = arguments?.getString("name").toString()
          from = arguments?.getString("from").toString()
         Log.d("tracingNameCategory", "onViewCreated: name $name")
         binding.catTitle.text = name
-        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(2,20,false,10000))
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
+
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
         loadData()
 //        if (!isDataFetched) {
 //            if(name!=null){
@@ -109,8 +104,8 @@ class ListViewFragment : Fragment() {
 //            binding.progressBar.visibility = View.INVISIBLE
 //            updateUIWithFetchedData(cachedCatResponses!!)
 //        }
-        binding.backButton.setOnClickListener {
-            requireActivity().onBackPressed()
+        binding.toolbar.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
     private fun loadData() {
@@ -134,10 +129,10 @@ class ListViewFragment : Fragment() {
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
 
         val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 2
+        val firstLine = firstAdLineThreshold * 3
 
         val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 2
+        val lineC = lineCount * 3
         val newData = arrayListOf<CatResponse?>()
 
         for (i in data.indices){
@@ -174,7 +169,7 @@ class ListViewFragment : Fragment() {
 
         val shuffled = catResponses.shuffled()
 
-        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
+//        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
 
 
         val list = addNullValueInsideArray(shuffled)
@@ -209,7 +204,6 @@ class ListViewFragment : Fragment() {
         },findNavController(),R.id.action_listViewFragment_to_premiumPlanFragment,object :
             GemsTextUpdate {
             override fun getGemsBack(gems: Int) {
-                binding.gemsText.text = gems.toString()
             }
         },object: GetLoginDetails {
             override fun loginDetails() {
@@ -222,7 +216,7 @@ class ListViewFragment : Fragment() {
 
         binding.swipeLayout.setOnRefreshListener {
             val newList = orignalList.shuffled()
-            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
+//            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
             adapter.shuffleImage(newList as ArrayList)
             binding.swipeLayout.isRefreshing = false
         }
@@ -275,23 +269,23 @@ class ListViewFragment : Fragment() {
 
     }
 
-    private fun getBitmapFromGlide(url:String){
-        Glide.with(requireContext()).asBitmap().load(url)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    Log.e("TAG", "onResourceReady: bitmap loaded" )
-                    if (isAdded){
-                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
-                        binding.backImage.setImageBitmap(blurImage)
-                    }
-
-
-
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    Log.e("TAG", "onLoadCleared: cleared" )
-                } })
-    }
+//    private fun getBitmapFromGlide(url:String){
+//        Glide.with(requireContext()).asBitmap().load(url)
+//            .into(object : CustomTarget<Bitmap>() {
+//                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+//                    Log.e("TAG", "onResourceReady: bitmap loaded" )
+//                    if (isAdded){
+//                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
+//                        binding.backImage.setImageBitmap(blurImage)
+//                    }
+//
+//
+//
+//                }
+//                override fun onLoadCleared(placeholder: Drawable?) {
+//                    Log.e("TAG", "onLoadCleared: cleared" )
+//                } })
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

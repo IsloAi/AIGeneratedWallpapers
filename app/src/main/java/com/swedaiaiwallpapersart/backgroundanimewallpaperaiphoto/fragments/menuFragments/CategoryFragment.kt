@@ -46,9 +46,9 @@ class CategoryFragment : Fragment() {
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
     private lateinit var myActivity : MainActivity
 
-    private lateinit var myViewModel: MyViewModel
-
     val catlist = ArrayList<CatNameResponse?>()
+
+    private lateinit var myViewModel: MyViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)

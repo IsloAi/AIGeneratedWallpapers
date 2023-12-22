@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/new_main_background"
-    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.LiveWallpaperPreviewFragment">
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperPreviewFragment">
 
 
 

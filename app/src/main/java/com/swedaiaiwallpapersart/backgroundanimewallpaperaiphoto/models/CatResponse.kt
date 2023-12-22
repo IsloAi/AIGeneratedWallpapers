@@ -7,5 +7,8 @@ data class CatResponse(
     var gems                 :Int? =null,
     var likes                :Int? =null,
     var liked                :Boolean? = null,
-    var unlockimges                :Boolean? = null
+    var unlockimges                :Boolean? = null,
+    var img_size: Int? = null, // Added field
+    var tags: String? = null, // Added field (assuming "Tags" is an array)
+    var capacity: String? = null // Added field
 )

@@ -184,7 +184,7 @@ class GenerateImageFragment : Fragment() {
                 putInt("listId",listId)
                 putInt("timeDisplay", timeDisplay)
             }
-            requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_myViewCreationFragment,bundle)
+           findNavController().navigate(R.id.myViewCreationFragment,bundle)
 
     }
     private fun loadCreationHistory(database: AppDatabase) {
@@ -279,6 +279,16 @@ class GenerateImageFragment : Fragment() {
                                 showLoading = true,
                                 adsListener = object : CommonAdsListenerAdapter() {
                                     override fun onAdsShowFail(errorCode: Int) {
+                                        val getPrompt = binding.edtPrompt.text
+                                        if(getPrompt.isNotEmpty()){
+                                            getUserIdDialog()
+                                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                                        }else{
+                                            Toast.makeText(requireContext(),
+                                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+                                        }
+
+
                                         Toast.makeText(
                                             requireContext(),
                                             "Ad not available,Please try again...",

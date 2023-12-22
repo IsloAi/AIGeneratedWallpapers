@@ -202,13 +202,18 @@
     </fragment>
     <fragment
         android:id="@+id/downloadLiveWallpaperFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.DownloadLiveWallpaperFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment"
         android:label="fragment_download_live_wallpaper"
         tools:layout="@layout/fragment_download_live_wallpaper" />
     <fragment
         android:id="@+id/liveWallpaperPreviewFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.LiveWallpaperPreviewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperPreviewFragment"
         android:label="fragment_live_wallpaper_preview"
         tools:layout="@layout/fragment_live_wallpaper_preview" />
+    <fragment
+        android:id="@+id/searchWallpapersFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SearchWallpapersFragment"
+        android:label="fragment_search_wallpapers"
+        tools:layout="@layout/fragment_search_wallpapers" />
 
 </navigation>
