@@ -162,7 +162,7 @@ class WallpaperApiSliderAdapter(
 //            if(model.gems !=0 && model.unlockimges==false) {
 //                viewPagerImageClick.getImagePosition(adapterPosition, blurView)
 //            }else{
-                fullViewImage.getFullImageUrl(model.hd_image_url!!)
+                fullViewImage.getFullImageUrl(model)
 //            }
         }
         Glide.with(context!!).load(model.hd_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)

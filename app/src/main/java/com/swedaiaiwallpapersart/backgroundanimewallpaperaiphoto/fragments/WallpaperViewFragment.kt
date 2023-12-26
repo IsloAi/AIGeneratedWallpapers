@@ -450,8 +450,12 @@ class WallpaperViewFragment : Fragment() {
             override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
             }
         },object:FullViewImage{
-            override fun getFullImageUrl(image:String) {
-               FullViewImagePopup.openFullViewWallpaper(myContext(),image)
+            override fun getFullImageUrl(image:CatResponse) {
+
+                sharedViewModel.selectCat(image)
+
+                navController?.navigate(R.id.fullScreenImageViewFragment)
+//               FullViewImagePopup.openFullViewWallpaper(myContext(),image)
             }
         },myActivity)
         adapter!!.setCoroutineScope(fragmentScope)
@@ -787,7 +791,6 @@ class WallpaperViewFragment : Fragment() {
 
                             setDownloaded(model)
                             showRateApp()
-                            binding.viewPager.setCurrentItem(position+1,true)
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             //do something
                         }
@@ -823,7 +826,6 @@ class WallpaperViewFragment : Fragment() {
 //                                postDelay()
 //                            } }
                             showRateApp()
-                            binding.viewPager.setCurrentItem(position+1,true)
                         }
                     }
                 )
@@ -840,7 +842,6 @@ class WallpaperViewFragment : Fragment() {
                     postDelay()
                 } }
                 showRateApp()
-                binding.viewPager.setCurrentItem(position+1,true)
                 showInter = true
             }
 
@@ -875,7 +876,6 @@ class WallpaperViewFragment : Fragment() {
 
                             setDownloaded(model)
                             showRateApp()
-                            binding.viewPager.setCurrentItem(position+1,true)
                             //do something
                         }
 
@@ -898,7 +898,7 @@ class WallpaperViewFragment : Fragment() {
 
                             setDownloaded(model)
                             showRateApp()
-                            binding.viewPager.setCurrentItem(position+1,true)
+
                         }
                     }
                 )
@@ -914,7 +914,6 @@ class WallpaperViewFragment : Fragment() {
                     }
                 }
                 showRateApp()
-                binding.viewPager.setCurrentItem(position+1,true)
                 showInter = true
             }
 
@@ -948,7 +947,6 @@ class WallpaperViewFragment : Fragment() {
                             }
                             setDownloaded(model)
                             showRateApp()
-                            binding.viewPager.setCurrentItem(position+1,true)
                             //do something
                         }
 
@@ -967,7 +965,6 @@ class WallpaperViewFragment : Fragment() {
                             }
                             setDownloaded(model)
                             showRateApp()
-                            binding.viewPager.setCurrentItem(position+1,true)
                         }
                     }
                 )
@@ -983,7 +980,6 @@ class WallpaperViewFragment : Fragment() {
                     }
                 }
                 showRateApp()
-                binding.viewPager.setCurrentItem(position+1,true)
                 showInter = true
             }
 

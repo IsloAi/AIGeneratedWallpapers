@@ -4,26 +4,28 @@ import android.R
 import android.app.Dialog
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.widget.ImageView
-import android.widget.RelativeLayout
+import android.view.LayoutInflater
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FullViewWallpaperBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 
 class FullViewImagePopup {
     companion object{
-         fun openFullViewWallpaper(context: Context,image: String) {
+
+
+         fun openFullViewWallpaper(context: Context,image: CatResponse) {
             val dialog = Dialog(context, R.style.Theme_Black_NoTitleBar_Fullscreen)
-            dialog.setContentView(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R.layout.full_view_wallpaper)
+             val binding = FullViewWallpaperBinding.inflate(LayoutInflater.from(context))
+             dialog.setContentView(binding.root)
             dialog.show()
-            val imageView: ImageView = dialog.findViewById(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R.id.fullViewImage)
-            val closeButton: RelativeLayout = dialog.findViewById(com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R.id.closeButton)
-             imageView.isEnabled = false
+
+             binding.fullViewImage.isEnabled = false
              Glide.with(context)
-                 .load(image)
+                 .load(image.hd_image_url)
                  .listener(object : RequestListener<Drawable> {
                      override fun onLoadFailed(
                          e: GlideException?,
@@ -41,12 +43,13 @@ class FullViewImagePopup {
                          dataSource: DataSource,
                          isFirstResource: Boolean
                      ): Boolean {
-                         imageView.isEnabled = true
+                         binding.fullViewImage.isEnabled = true
+
                          return false
                      }
                  })
-                 .into(imageView)
-            closeButton.setOnClickListener {
+                 .into(binding.fullViewImage)
+             binding.closeButton.setOnClickListener {
                 dialog.dismiss()
             }
         }

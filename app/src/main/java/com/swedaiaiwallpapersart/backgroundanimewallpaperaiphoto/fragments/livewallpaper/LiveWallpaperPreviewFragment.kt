@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.IkmSdkController
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -53,7 +54,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         binding.toolbar.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack(R.id.homeTabsFragment,false)
         }
     }
 

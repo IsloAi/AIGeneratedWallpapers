@@ -17,6 +17,8 @@ class SharedViewModel : ViewModel() {
     private val _currentPosition = MutableLiveData<Int>()
     val currentPosition: LiveData<Int> = _currentPosition
 
+    val selectedCat = MutableLiveData<CatResponse>()
+
     fun setData(catResponses: List<CatResponse>, position: Int) {
         _catResponseList.value = catResponses
         _currentPosition.value = position
@@ -32,6 +34,10 @@ class SharedViewModel : ViewModel() {
 
     fun clearLiveWallpaper() {
         _liveWallpaperResponseList.value = emptyList()
+    }
+
+    fun selectCat(cat: CatResponse) {
+        selectedCat.value = cat
     }
 
 

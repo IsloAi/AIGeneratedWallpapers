@@ -215,5 +215,9 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SearchWallpapersFragment"
         android:label="fragment_search_wallpapers"
         tools:layout="@layout/fragment_search_wallpapers" />
+    <fragment
+        android:id="@+id/fullScreenImageViewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.FullScreenImageViewFragment"
+        android:label="FullScreenImageViewFragment" />
 
 </navigation>

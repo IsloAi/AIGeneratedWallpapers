@@ -123,6 +123,7 @@
         app:ikwad_preview_layout="@layout/shimmer_loading_native"
         android:background="@drawable/ads_background"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutOnboardingIndicators"
         android:layout_height="wrap_content" />
 
 

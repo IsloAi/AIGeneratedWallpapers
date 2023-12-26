@@ -41,7 +41,7 @@ class FavouriteWallpaperSliderAdapter(
         Log.d("imageLists", "dataSet: string model in adapter $model")
         Glide.with(context!!).load(model.image).into(imageSlide)
         imageSlide.setOnClickListener {
-            FullViewImagePopup.openFullViewWallpaper(context!!,model.image!!)
+//            FullViewImagePopup.openFullViewWallpaper(context!!,model!!)
         }
 //        if (position == arrayList.size - 1) {
 //            viewPager2.post(runable) }

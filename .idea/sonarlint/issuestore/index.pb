@@ -271,3 +271,11 @@ Q.idea/sonarlint/securityhotspotstore/5/a/5a09696e993704cac150539361a30ef577e918
 Q.idea/sonarlint/securityhotspotstore/c/c/ccd20094457350b4b2698c7b3e7a7a572359e350,8\6\861102d67249853acd1bdbf62539e5947dc96bdd
 Å
 Q.idea/sonarlint/securityhotspotstore/5/0/50b91ffd1190e434a37f9449a624ffe0c824748d,3\c\3c56102a12bee4734ec027b2059671e0b5ef7511
+ó
+gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/FullViewImage.kt,6\d\6df921b1ad6d6ceaf8b9f5b5c47aa3379d63f049
+∏
+áapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/adaptersIG/CreationWallpaperSliderAdapter.kt,6\b\6b0c444050dbba3875913cb2ce2a692ab31ff787
+π
+àapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/adaptersIG/FavouriteWallpaperSliderAdapter.kt,f\6\f68615341a8ad34b054abad8a5a2bd8ec12bd8aa
+§
+tapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/FullScreenImageViewFragment.kt,8\1\8156db30571df8cd719f9c1aec328853bc6ac81d
