@@ -81,6 +81,7 @@ class GenerateImageFragment : Fragment() {
     private val myDialogs = MyDialogs()
     private var existGems:Int? = null
     private val postDataOnServer = PostDataOnServer()
+    private var hasNavigated = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -143,8 +144,9 @@ class GenerateImageFragment : Fragment() {
                     timeDisplay =0
                 }
 
-                if (it.id != null){
+                if (it.id != null && !hasNavigated){
                     navigate(it.id!!,timeDisplay)
+                    hasNavigated =  true
                 }
 
 

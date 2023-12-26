@@ -16,6 +16,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,24 +31,22 @@ class AllWallpapersViewmodel: ViewModel()  {
 
             val retrofit = RetrofitInstance.getInstance()
             val service = retrofit.create(AllWallpapers::class.java).getList(
-                MySharePreference.getDeviceID(context)!!)
+                "jhkjhsda324")
 
-            service.enqueue(object :Callback<CatResponse>{
+            service.enqueue(object :Callback<FavouriteListResponse>{
                 override fun onResponse(
-                    call: Call<CatResponse>, response: Response<CatResponse>) {
+                    call: Call<FavouriteListResponse>, response: Response<FavouriteListResponse>) {
                     if(response.isSuccessful){
 
-                        Log.e("TAG", "initSearchData: "+response.body() )
-                        val parsedResponse = response.body()?.let { Gson().fromJson(it.toString(), Array<CatResponse>::class.java).toList() }
-                        val list:ArrayList<CatResponse>? = arrayListOf()
-                        list?.addAll(parsedResponse!!)
+                        Log.e("TAG", "initSearchData: "+response.body()?.images )
 
-                        wallpaperData.value = list
+
+                     wallpaperData.value = response.body()?.images
                     }
 
 
                 }
-                override fun onFailure(call: Call<CatResponse>, t: Throwable) {
+                override fun onFailure(call: Call<FavouriteListResponse>, t: Throwable) {
                     viewModelScope.launch(Dispatchers.Main) {
 
                         Toast.makeText(context,

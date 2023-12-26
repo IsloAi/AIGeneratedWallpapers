@@ -334,16 +334,7 @@ class HomeFragment : Fragment(){
            override fun getFavorites(position: Int) {
                //
            }
-       },requireParentFragment().findNavController(),R.id.action_mainFragment_to_premiumPlanFragment,object :
-            GemsTextUpdate {
-            override fun getGemsBack(gems: Int) {
-                binding.gemsText.text = gems.toString()
-            }
-        },object :GetLoginDetails{
-            override fun loginDetails() {
-                    requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_signInFragment)
-            }
-        },null,0,myActivity)
+       },myActivity)
         adapter.setCoroutineScope(fragmentScope)
             binding.recyclerviewAll.adapter = adapter
     }

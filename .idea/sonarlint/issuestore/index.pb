@@ -159,8 +159,6 @@ wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/rat
 sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/PostGemsInterface.kt,c\3\c348b37f0546deae9a4cb97d6e4e7c455355fbe8
 ¬
 |app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/ListResponseInterfaceNoUid.kt,4\d\4d081bb203adf7b18409eebe49563d7420273e70
-ž
-napp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/LiveWallpaperFragment.kt,b\7\b75096f0490f130a692958deba4e1080d28b69cf
 œ
 lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/LiveWallpaperAdapter.kt,9\2\92018151af285d4ba42846501e89d179e731b79d
 ›
@@ -237,10 +235,6 @@ papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/vie
 happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/LiveImagesResponse.kt,1\d\1dc77e39bf89fdb41b41f7acb24c566ebb040ef6
 ˜
 happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/LiveWallpaperModel.kt,0\a\0a3f409498e8c7dcebde3c5b45a6300a0913afbe
-¦
-vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/DownloadLiveWallpaperFragment.kt,9\e\9e20845bc29657d1e4c69506953459c9f04c56f8
-¥
-uapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/LiveWallpaperPreviewFragment.kt,d\5\d5e25286a2c63355c1d8472dbda5dcfc8a7bfacc
 Ž
 ^app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/Constants.kt,b\5\b5f0a91a0a6aacb54ea75d33a627ea7db3d34214
 –

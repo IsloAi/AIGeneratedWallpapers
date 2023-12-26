@@ -2,12 +2,16 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import ApiCategoriesNameAdapter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
@@ -15,12 +19,18 @@ import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchWallpapersFragment : Fragment() {
 
@@ -31,7 +41,10 @@ class SearchWallpapersFragment : Fragment() {
 
     val catlist = ArrayList<CatNameResponse?>()
     var adapter:ApiCategoriesNameAdapter ?= null
+    var searchAdapter:ApiCategoriesListAdapter ?= null
 
+
+    private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private  val myViewModel: AllWallpapersViewmodel by activityViewModels()
 
     override fun onCreateView(
@@ -53,12 +66,136 @@ class SearchWallpapersFragment : Fragment() {
         initDataObserver()
         initSearchData()
         editTextLayoutsFocus()
+        setEvents()
 
+        initSearchRv()
+
+
+
+
+    }
+
+    private fun initSearchRv(){
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewAll.layoutManager = layoutManager
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+        searchAdapter = ApiCategoriesListAdapter(arrayListOf(), object :
+            PositionCallback {
+            override fun getPosition(position: Int) {
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "mainscr_trending_tab_click_item",
+                    "mainscr_trending_tab_click_item",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+//                            navigateToDestination(list,position)
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            Log.e("********ADS", "onAdsDismiss: " )
+//                            navigateToDestination(list,position)
+                        }
+                    }
+                )
+
+
+            }
+
+            override fun getFavorites(position: Int) {
+                //
+            }
+        },myActivity)
+        binding.recyclerviewAll.adapter = searchAdapter
+
+
+    }
+
+
+    fun setEvents(){
+        binding.suggestCar.setOnClickListener {
+            binding.searchEdt.setText("Car")
+        }
+
+        binding.backBtn.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+
+
+        binding.searchEdt.addTextChangedListener(object:TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+                if (p0.isNullOrBlank()){
+                    binding.searchSuggestions.visibility = View.VISIBLE
+                    binding.recyclerviewCatgory.visibility = View.GONE
+                    binding.recyclerviewAll.visibility = View.GONE
+                    binding.emptySupport.visibility = View.GONE
+                }else{
+                    var list:ArrayList<CatResponse?> = arrayListOf()
+                    searchInList(p0.toString(), cachedCatResponses) { filteredList ->
+
+                        Log.e("TAG", "afterTextChanged: "+filteredList )
+
+
+
+                        if (filteredList.isNotEmpty()) {
+                            binding.searchSuggestions.visibility = View.GONE
+                            binding.recyclerviewCatgory.visibility = View.GONE
+                            binding.recyclerviewAll.visibility = View.VISIBLE
+                            searchAdapter?.updateData(filteredList)
+                        }else{
+                            binding.searchSuggestions.visibility = View.GONE
+                            binding.recyclerviewCatgory.visibility = View.GONE
+                            binding.recyclerviewAll.visibility = View.GONE
+                            binding.emptySupport.visibility = View.VISIBLE
+                        }
+                    }
+                }
+
+
+//                Log.e("TAG", "afterTextChanged: "+searchInList("Car",cachedCatResponses) )
+            }
+
+        })
+    }
+
+    fun searchInList(
+        searchString: String,
+        catResponses: List<CatResponse>?,
+        callback: (ArrayList<CatResponse?>) -> Unit
+    ) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val filteredList = catResponses?.filter { catResponse ->
+                catResponse.Tags?.let { tags ->
+                    tags.split(", ").any { tag ->
+                        tag.contains(searchString, ignoreCase = true)
+                    }
+                } ?: false
+            }
+            val resultList = ArrayList(filteredList ?: listOf())
+            withContext(Dispatchers.Main) {
+                callback(resultList)
+            }
+        }
     }
 
     private fun initSearchData(){
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
+                cachedCatResponses?.addAll(catResponses)
+//
 
                 Log.e("TAG", "initSearchData: "+catResponses.size )
 
@@ -125,6 +262,9 @@ class SearchWallpapersFragment : Fragment() {
             }
         }
     }
+
+
+
 
 
     private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{

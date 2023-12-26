@@ -1,2 +1,11 @@
 
-pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8Ä±àŠÉ1
+<kotlin:S125d"Remove this commented out code.(Ù¼¢'8®ÿ®§Ê1
+>kotlin:S125¨"Remove this commented out code.(…é8–ŞÈ§Ê1
+;kotlin:S6310³"Avoid hardcoded dispatchers.(©ÓœW8šŞÈ§Ê1
+<kotlin:S6310¼"Avoid hardcoded dispatchers.(Í¡·Ş8šŞÈ§Ê1
+Nkotlin:S1481’")Remove this unused "list" local variable.(ˆš´·ùÿÿÿÿ8§ŞÈ§Ê1
+9kotlin:S1128"Remove this unused import.(ÔËŸÀ8ªÌš¨Ê1
+pkotlin:S1192]"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8Äÿ®§Ê1
+pkotlin:S1192š"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8¬ŞÈ§Ê1
+zkotlin:S1186‚"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8Èÿ®§Ê1
+kotlin:S1186†"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8Éÿ®§Ê1

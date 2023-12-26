@@ -75,6 +75,7 @@
             android:fontFamily="@font/poppins_medium"
             android:textSize="@dimen/_15sdp"
             android:maxLines="1"
+            android:imeOptions="actionGo"
             android:id="@+id/searchEdt"
             />
 
@@ -249,6 +250,54 @@
         app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
         />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerviewAll"
+        android:layout_width="0dp"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+        />
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        android:visibility="gone"
+        android:id="@+id/emptySupport"
+
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/empty_image_search"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/empImage"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No images Found"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintTop_toBottomOf="@id/empImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/_7sdp"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

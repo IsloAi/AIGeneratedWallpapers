@@ -59,12 +59,6 @@ import java.lang.NullPointerException
 class ApiCategoriesListAdapter(
     var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
-    var navController: NavController,
-    private val actionId: Int,
-    private val gemsTextUpdate: GemsTextUpdate,
-    private val getLoginDetails: GetLoginDetails,
-    private val myViewModel: MyViewModel?,
-    private val whichClicked: Int,
     private val myActivity: MainActivity
 ):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -455,6 +449,13 @@ class ApiCategoriesListAdapter(
             }
         }
         notifyItemRangeInserted(startPosition, list.size)
+    }
+
+
+    fun updateData(list:ArrayList<CatResponse?>){
+        arrayList.clear()
+        arrayList.addAll(list)
+        notifyDataSetChanged()
     }
 
 

@@ -201,15 +201,7 @@ class ListViewFragment : Fragment() {
 
             override fun getFavorites(position: Int) {
             }
-        },findNavController(),R.id.action_listViewFragment_to_premiumPlanFragment,object :
-            GemsTextUpdate {
-            override fun getGemsBack(gems: Int) {
-            }
-        },object: GetLoginDetails {
-            override fun loginDetails() {
-                findNavController().navigate(R.id.action_listViewFragment_to_signInFragment)
-            }
-        },myViewModel,1,myActivity)
+        },myActivity)
         adapter.setCoroutineScope(fragmentScope)
         binding.recyclerviewAll.adapter = adapter
 
