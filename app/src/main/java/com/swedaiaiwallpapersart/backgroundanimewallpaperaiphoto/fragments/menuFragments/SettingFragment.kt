@@ -66,6 +66,12 @@ class SettingFragment : Fragment() {
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.localizationFragment)
             }
+
+        binding.toolbar.setOnClickListener {
+
+            findNavController().popBackStack()
+
+        }
         }
     private fun feedback() {
         try {

@@ -62,7 +62,7 @@
     <Button
         android:id="@+id/buttonApplyWallpaper"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.75"
+        app:layout_constraintWidth_percent="0.65"
         android:layout_height="@dimen/_35sdp"
         android:minWidth="@dimen/_160sdp"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +79,18 @@
         android:textSize="15sp"
         android:textColor="@color/mywhite"
         android:background="@drawable/new_button_bg"
+        />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/button_download"
+        app:layout_constraintTop_toTopOf="@id/buttonApplyWallpaper"
+        app:layout_constraintBottom_toBottomOf="@id/buttonApplyWallpaper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonApplyWallpaper"
+        android:id="@+id/downloadWallpaper"
         />
 
 

@@ -1,4 +1,6 @@
 
-Mkotlin:S1481")Remove this unused "item" local variable.(”ı¹¹ıÿÿÿÿ8€èëÙÇ1
-9kotlin:S1128"Remove this unused import.(Ñå¾ô8ıŞûÙÇ1
-9kotlin:S1128"Remove this unused import.(Êµ–8–˜ŸÚÇ1
+Mkotlin:S1481")Remove this unused "item" local variable.(”ı¹¹ıÿÿÿÿ8»ÌûØÊ1
+9kotlin:S1128"Remove this unused import.(Ñå¾ô8¼ÌûØÊ1
+9kotlin:S1128"Remove this unused import.(Êµ–8¼ÌûØÊ1
+qkotlin:S101S"NRename class "joinButtons" to match the regular expression ^[A-Z][a-zA-Z0-9]*$(ÿ„íÿÿÿÿÿ8¼ÌûØÊ1
+fkotlin:S6517S"BMake this interface functional or replace it with a function type.(ÿ„íÿÿÿÿÿ8¾ÌûØÊ1

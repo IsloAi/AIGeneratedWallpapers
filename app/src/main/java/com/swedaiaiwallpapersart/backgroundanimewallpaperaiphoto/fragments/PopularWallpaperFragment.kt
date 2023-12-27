@@ -3,7 +3,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,8 +10,8 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -22,13 +21,9 @@ import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPopularWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
@@ -62,7 +57,7 @@ class PopularWallpaperFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentPopularWallpaperBinding.inflate(inflater,container,false)
         // Inflate the layout for this fragment
@@ -89,7 +84,11 @@ class PopularWallpaperFragment : Fragment() {
             }
         })
 
-        initTrendingData()
+        binding.more.setOnClickListener {
+            (requireParentFragment() as HomeTabsFragment).navigateToTrending(1)
+        }
+
+
         initMostUsedRV()
         initMostDownloadedData()
     }
@@ -102,16 +101,21 @@ class PopularWallpaperFragment : Fragment() {
         val list = ArrayList<MostDownloadImageResponse?>()
         mostUsedWallpaperAdapter = MostUsedWallpaperAdapter(list, object : PositionCallback{
             override fun getPosition(position: Int) {
-
+                //
             }
 
             override fun getFavorites(position: Int) {
-
+                //
             }
 
         },myActivity)
 
         binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initTrendingData()
     }
 
 
@@ -122,9 +126,39 @@ class PopularWallpaperFragment : Fragment() {
         welcomeItems.add(3)
         welcomeItems.add(4)
 
-        welcomeAdapter = PopularSliderAdapter(welcomeItems)
+        welcomeAdapter = PopularSliderAdapter(welcomeItems,object:PopularSliderAdapter.joinButtons{
+            override fun clickEvent(position: Int) {
+                when (position) {
+                    0 -> {
+                        (requireParentFragment() as HomeTabsFragment).navigateToTrending(5)
+                    }
+                    1 -> {
+                        (requireParentFragment() as HomeTabsFragment).navigateToTrending(4)
+                    }
+                    2 -> {
+                        setFragment("Anime")
+                    }
+                    3 -> {
+                        (requireParentFragment() as HomeTabsFragment).navigateToTrending(3)
+                    }
+                }
+            }
+
+        })
 
 
+    }
+
+    private fun setFragment(name:String){
+        val bundle =  Bundle().apply {
+            putString("name",name)
+            putString("from","category")
+
+        }
+        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+
+            findNavController().navigate(R.id.listViewFragment, bundle)
+        }
     }
 
 
@@ -207,9 +241,6 @@ class PopularWallpaperFragment : Fragment() {
 
     private fun setCurrentIndicator(index: Int) {
         val childCount = binding.layoutOnboardingIndicators.childCount
-        val isDarkMode = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
-                Configuration.UI_MODE_NIGHT_YES
-
         for (i in 0 until childCount) {
             val imageView = binding.layoutOnboardingIndicators.getChildAt(i) as ImageView
 
@@ -249,7 +280,6 @@ class PopularWallpaperFragment : Fragment() {
             putInt("position",position - countOfNulls)
             requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
-        myViewModel.clear()
     }
 
 

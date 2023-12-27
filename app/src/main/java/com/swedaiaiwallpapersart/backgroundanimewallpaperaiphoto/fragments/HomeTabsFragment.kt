@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -17,12 +18,14 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 
 
 class HomeTabsFragment : Fragment() {
@@ -30,6 +33,10 @@ class HomeTabsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val viewModel: SaveStateViewModel by viewModels()
+
+    private var existDialog = MyDialogs()
+    private lateinit var myActivity : MainActivity
+
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
     val titles = arrayOf("Popular","Trending","Live", "AI wallpaper","Category","Gen AI")
@@ -46,6 +53,9 @@ class HomeTabsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+            myActivity = activity as MainActivity
+
             setGradienttext()
             setViewPager()
             initTabs()
@@ -54,18 +64,27 @@ class HomeTabsFragment : Fragment() {
 
     private fun setEvents(){
         binding.settings.setOnClickListener {
-
+            findNavController().navigate(R.id.settingFragment)
         }
 
 
         binding.search.setOnClickListener {
             findNavController().navigate(R.id.searchWallpapersFragment)
         }
+        backHandle()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun backHandle(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+            }
+        })
     }
 
     private fun setGradienttext(){
@@ -152,5 +171,9 @@ class HomeTabsFragment : Fragment() {
                 tabCardView.setCardBackgroundColor(resources.getColor(R.color.tabs_bg))
             }
         }
+    }
+
+    fun navigateToTrending(index:Int){
+        binding.viewPager.currentItem = index
     }
 }

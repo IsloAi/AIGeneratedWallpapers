@@ -115,7 +115,7 @@ class FullScreenImageViewFragment : DialogFragment() {
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
 
         binding.closeButton.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
         setEvents()

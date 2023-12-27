@@ -8,9 +8,10 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.recyclerview.widget.RecyclerView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemPopularSliderBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 
 
-class PopularSliderAdapter(welcomeItems: List<Int>) :
+class PopularSliderAdapter(welcomeItems: List<Int>,var positionCallback: joinButtons) :
     RecyclerView.Adapter<PopularSliderAdapter.SliderViewHolder>() {
     private val welcomeItems: List<Int>
 
@@ -31,12 +32,15 @@ class PopularSliderAdapter(welcomeItems: List<Int>) :
                 holder.binding.bannerInfoleft.visibility = View.GONE
                 holder.binding.bannerInforight.visibility = View.VISIBLE
 
+                holder.binding.heading.text = "Generative AI"
+
                 holder.binding.foregroundImage.setImageResource(R.drawable.banner_gen_ai_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_gen_ai_image)
             }
             1 -> {
                 holder.binding.bannerInfoleft.visibility = View.VISIBLE
                 holder.binding.bannerInforight.visibility = View.GONE
+                holder.binding.headingleft.text = "Category"
                 holder.binding.foregroundImage.setImageResource(R.drawable.banner_categoreis_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_category_image)
 
@@ -44,14 +48,27 @@ class PopularSliderAdapter(welcomeItems: List<Int>) :
             2 -> {
                 holder.binding.bannerInfoleft.visibility = View.GONE
                 holder.binding.bannerInforight.visibility = View.VISIBLE
+                holder.binding.heading.text = "Anime"
                 holder.binding.foregroundImage.setImageResource(R.drawable.banner_gen_ai_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_anime_image)
             }
             3 -> {
                 holder.binding.bannerInfoleft.visibility = View.VISIBLE
                 holder.binding.bannerInforight.visibility = View.GONE
+                holder.binding.headingleft.text = "AI Wallpaper"
                 holder.binding.foregroundImage.setImageResource(R.drawable.banner_categoreis_foreground)
                 holder.binding.onBoardImg.setImageResource(R.drawable.banner_ai_wallpaper_image)
+            }
+        }
+
+        with(holder){
+            binding.navigateLeft.setOnClickListener {
+                positionCallback.clickEvent(position)
+
+            }
+
+            binding.navigateRight.setOnClickListener {
+                positionCallback.clickEvent(position)
             }
         }
     }
@@ -61,4 +78,9 @@ class PopularSliderAdapter(welcomeItems: List<Int>) :
     }
 
     inner class SliderViewHolder(val binding: ListItemPopularSliderBinding) : RecyclerView.ViewHolder(binding.root)
+
+
+    interface joinButtons{
+        fun clickEvent(position:Int)
+    }
 }

@@ -193,7 +193,7 @@ class HomeFragment : Fragment(){
                 // Hide loading state, show retry button if there was an error
                 if (myViewModel.wallpaperData.value == null) {
                     if (viewModel.getData()){
-                        binding.retryBtn.visibility = View.VISIBLE
+                        binding.retryBtn.visibility = View.GONE
                     }else{
                         binding.retryBtn.visibility = View.GONE
                     }
@@ -238,7 +238,7 @@ class HomeFragment : Fragment(){
                 }
             }else{
                 if (viewModel.getData()){
-                    binding.retryBtn.visibility = View.VISIBLE
+                    binding.retryBtn.visibility = View.GONE
                 }else{
                     binding.retryBtn.visibility = View.GONE
                 }

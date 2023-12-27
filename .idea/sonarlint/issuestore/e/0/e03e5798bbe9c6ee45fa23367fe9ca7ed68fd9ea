@@ -12,3 +12,5 @@ Rkotlin:S1481ğ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8Ê´å
 vkotlin:S1192"QDefine a constant instead of duplicating this literal "********new Data" 5 times.(æ¢„şÿÿÿÿ8Ñ´å·È1
 pkotlin:S1192”"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ò´å·È1
 wkotlin:S3776Ğ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8”çì·È1
+{kotlin:S3923ğ"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8òÆşÕÊ1
+{kotlin:S3923Ã"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8—Ç€ÖÊ1

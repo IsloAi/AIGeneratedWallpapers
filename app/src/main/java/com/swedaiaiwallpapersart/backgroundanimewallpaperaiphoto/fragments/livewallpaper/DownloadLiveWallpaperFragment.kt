@@ -71,8 +71,9 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     private fun initObservers(){
 
-        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+//        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
 
+        val file = requireContext().filesDir
         val video = File(file,"video.mp4")
         sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner){wallpaper ->
             if (wallpaper.isNotEmpty()){
@@ -114,8 +115,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     private fun downloadVideo(url: String, destinationFile: File,size:Float) {
 
-        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-
+//        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".mp4"
 
         val filepath = File(file,fileName)

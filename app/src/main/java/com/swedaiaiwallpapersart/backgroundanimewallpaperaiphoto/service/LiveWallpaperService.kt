@@ -25,7 +25,7 @@ class LiveWallpaperService : WallpaperService() {
 
             FirebaseApp.initializeApp(applicationContext)
 
-            val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val file = applicationContext.filesDir
 
 //
             val video =  file.path + "/" + MySharePreference.getFileName(applicationContext)

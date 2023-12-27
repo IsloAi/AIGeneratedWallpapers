@@ -136,6 +136,11 @@ class WallpaperViewFragment : Fragment() {
     var showInter = true
     val sharedViewModel: SharedViewModel by activityViewModels()
 
+    var firstTime = true
+    var oldPosition = 0
+
+    val TAG = "SLIDERFRAGMENT"
+
 
 
     var adapter: WallpaperApiSliderAdapter?= null
@@ -148,39 +153,50 @@ class WallpaperViewFragment : Fragment() {
         reviewManager = ReviewManagerFactory.create(requireContext())
 
         var arrayListJson:ArrayList<CatResponse> = ArrayList()
-
         sharedViewModel.catResponseList.observe(viewLifecycleOwner) { catResponses ->
             if (catResponses.isNotEmpty()){
+                arrayListJson.clear()
+
                 arrayListJson = catResponses as ArrayList<CatResponse>
                 val pos = arguments?.getInt("position")
                 from = arguments?.getString("from")!!
+
+                Log.e(TAG, "recieved position: $pos")
+                Log.e(TAG, "recieved from: $from")
+
                 adcount = pos!!
                 if (arrayListJson != null && pos != null) {
-                    val gson = Gson()
-//            val arrayListType = object : TypeToken<ArrayList<CatResponse>>() {}.type
                     val arrayListOfImages = arrayListJson
                     arrayListOfImages.filterNotNull()
 
-                    Log.e("******NULL", "onCreate: "+arrayListOfImages.size )
-                    var adjustedPos = pos
+                    Log.e(TAG, "onCreate: "+arrayListOfImages.size )
 
                     arrayList = addNullValueInsideArray(arrayListOfImages)
 
                     val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
 
+
                     // Calculate the adjusted position by considering the null ads in the array
-                    position = if (pos == firstAdLineThreshold){
-                        pos +totalADs
-                    }else if (pos < firstAdLineThreshold){
-                        pos
-                    }else{
-                        pos +totalADs
+                    if (firstTime){
+                        position = 0
+                        position = if (pos == firstAdLineThreshold){
+                            pos +totalADs
+                        }else if (pos < firstAdLineThreshold){
+                            pos
+                        }else{
+                            pos +totalADs
+                        }
+
+                        firstTime = false
                     }
 
 
+                    Log.e(TAG, "new position: $position")
 
 
-                    Log.d("gsonParsingData", "onCreate:  $arrayListOfImages"  )
+
+
+                    Log.d(TAG, "onCreate:  $arrayListOfImages"  )
                 }
 
 
@@ -194,6 +210,19 @@ class WallpaperViewFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+//        outState.putInt("currentItem", position)
+    }
+
+    // Restore the state
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+//        val currentItem = savedInstanceState?.getInt("currentItem") ?: 0
+//        position = currentItem
+//        binding.viewPager.setCurrentItem(currentItem, false)
     }
 
 
@@ -225,6 +254,7 @@ class WallpaperViewFragment : Fragment() {
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
 
+        totalADs = 0
          val firstAdLineThreshold = if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
 
          val lineCount = if (AdConfig.lineCountTrending != 0) AdConfig.lineCountTrending else 5
@@ -253,7 +283,7 @@ class WallpaperViewFragment : Fragment() {
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+            Log.e(TAG, "addNullValueInsideArray:size "+newData.size )
         }else{
             for (i in data.indices){
                 if (i > firstAdLineThreshold && (i - firstAdLineThreshold) % (lineCount -1)  == 0) {
@@ -291,7 +321,8 @@ class WallpaperViewFragment : Fragment() {
        viewPager2 = binding.viewPager
        binding.toolbar.setOnClickListener {
            // Set up the onBackPressed callback
-           navController?.navigateUp()
+           firstTime = true
+           navController?.popBackStack()
        }
         setViewPager()
         checkRedHeart(position)
@@ -453,6 +484,8 @@ class WallpaperViewFragment : Fragment() {
             override fun getFullImageUrl(image:CatResponse) {
 
                 sharedViewModel.selectCat(image)
+
+                sharedViewModel.setPosition(position)
 
                 navController?.navigate(R.id.fullScreenImageViewFragment)
 //               FullViewImagePopup.openFullViewWallpaper(myContext(),image)

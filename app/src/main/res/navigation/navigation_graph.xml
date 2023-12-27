@@ -219,5 +219,9 @@
         android:id="@+id/fullScreenImageViewFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.FullScreenImageViewFragment"
         android:label="FullScreenImageViewFragment" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.SettingFragment"
+        android:label="SettingFragment" />
 
 </navigation>
