@@ -147,6 +147,10 @@ dependencies {
 
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
 
+    //pagging
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+
 
 
 

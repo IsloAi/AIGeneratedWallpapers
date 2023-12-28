@@ -13,6 +13,7 @@ Okotlin:S1481ö"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ8â¨¤‘È1
 >kotlin:S1128$"Remove this unused import.(¬†ÙÏşÿÿÿÿ8é¨¤‘È1
 9kotlin:S11284"Remove this unused import.(üŸÿ¥8é¨¤‘È1
 pkotlin:S1192¦"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ë¨¤‘È1
+Bkotlin:S1874`"#Deprecated code should not be used.(€„µ8Ş¹©ûÊ1
 Hkotlin:S1874©"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8î¨¤‘È1
 Hkotlin:S1874Ù"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8î¨¤‘È1
 Bkotlin:S1874Ú"#Deprecated code should not be used.(àü8î¨¤‘È1

@@ -23,22 +23,15 @@ class MyViewModel: ViewModel()  {
     fun fetchWallpapers(
         context: Context,
         catName: String,
-        animation: LottieAnimationView,
-        isLogin: Boolean
     ) {
         val retrofit = RetrofitInstance.getInstance()
-        val service = if (isLogin){
-           retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getDeviceID(context)!!)
-        } else {
-            retrofit.create(ListResponseInterfaceNoUid::class.java).getList(catName)
-        }
+        val service = retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getDeviceID(context)!!)
 
 
 
         service.enqueue(object : Callback<List<CatResponse>> {
             override fun onResponse(call: Call<List<CatResponse>>, response: Response<List<CatResponse>>) {
                 if (response.isSuccessful) {
-                    animation.visibility = View.INVISIBLE
                     val catResponses: List<CatResponse>? = response.body()
                     if (catResponses != null) {
                         Log.d("responseOk", "onResponse: response  "+catResponses)
@@ -51,7 +44,6 @@ class MyViewModel: ViewModel()  {
             }
 
             override fun onFailure(call: Call<List<CatResponse>>, t: Throwable) {
-                animation.visibility = View.INVISIBLE
                 Toast.makeText(context, "Error Loading", Toast.LENGTH_SHORT).show()
                 // Handle failure case
                 Log.d("responseOk", "onResponse: response onFailure ")

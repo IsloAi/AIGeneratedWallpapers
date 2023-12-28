@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,7 +45,7 @@ import kotlinx.coroutines.cancel
 class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
     private val binding get() = _binding!!
-    private lateinit var myViewModel: MyViewModel
+     val myViewModel: MyViewModel by activityViewModels()
     private var name = ""
     private var from = ""
     private var isLogin = true
@@ -56,6 +57,8 @@ class ListViewFragment : Fragment() {
 
     var adcount = 0
     var totalADs = 0
+
+    val TAG = "LISTVIEWCAT"
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentListViewBinding.inflate(inflater,container,false)
@@ -86,7 +89,7 @@ class ListViewFragment : Fragment() {
     }
     private fun onCreateViewCalling(){
         myActivity = activity as MainActivity
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
          name = arguments?.getString("name").toString()
          from = arguments?.getString("from").toString()
@@ -96,33 +99,28 @@ class ListViewFragment : Fragment() {
 
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
         loadData()
-//        if (!isDataFetched) {
-//            if(name!=null){
-//                myViewModel.fetchWallpapers(requireContext(),name,binding.progressBar)
-//            }
-//        } else {
-//            binding.progressBar.visibility = View.INVISIBLE
-//            updateUIWithFetchedData(cachedCatResponses!!)
-//        }
         binding.toolbar.setOnClickListener {
             findNavController().navigateUp()
         }
     }
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
         // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
+
+                Log.e(TAG, "loadData: "+catResponses )
 
                 orignalList.clear()
                 orignalList.addAll(catResponses)
 
 
                     updateUIWithFetchedData(catResponses as ArrayList)
+            }else{
+                Log.e(TAG, "loadData: "+catResponses )
             }
         }
-        myViewModel.fetchWallpapers(requireContext(),name,binding.progressBar,isLogin)
+//        myViewModel.fetchWallpapers(requireContext(),name)
     }
 
 

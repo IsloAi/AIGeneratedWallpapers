@@ -4,6 +4,5 @@ import com.google.gson.annotations.SerializedName
 
 
 data class MostDownloadedImageModel (
-    @SerializedName("images")
-    val images: List<MostDownloadImageResponse>
+    val images: ArrayList<MostDownloadImageResponse>
 )

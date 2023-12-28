@@ -1,9 +1,9 @@
 
-Bkotlin:S125|"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8ÒÙøäÇ1
-Rkotlin:S1481¤"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8İÙøäÇ1
-Lkotlin:S1481£",Remove this unused "tabIcon" local variable.(™Î‡è8İÙøäÇ1
-Bkotlin:S1874j"#Deprecated code should not be used.(‚Õ‡º8áÙøäÇ1
-Bkotlin:S1874z"#Deprecated code should not be used.(ê¶«Ê8áÙøäÇ1
-Ckotlin:S1874¨"#Deprecated code should not be used.(ê¶«Ê8áÙøäÇ1
-Bkotlin:S1874«"#Deprecated code should not be used.(…ı£t8áÙøäÇ1
-zkotlin:S1186"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ãÙøäÇ1
+Ckotlin:S125"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8Å…öÊ1
+Rkotlin:S1481©"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8­Å…öÊ1
+Lkotlin:S1481¨",Remove this unused "tabIcon" local variable.(™Î‡è8½Å…öÊ1
+Bkotlin:S1874o"#Deprecated code should not be used.(‚Õ‡º8ÃÅ…öÊ1
+Bkotlin:S1874"#Deprecated code should not be used.(ê¶«Ê8ÃÅ…öÊ1
+Ckotlin:S1874­"#Deprecated code should not be used.(ê¶«Ê8ÃÅ…öÊ1
+Bkotlin:S1874°"#Deprecated code should not be used.(…ı£t8ÃÅ…öÊ1
+zkotlin:S1186’"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ÇÅ…öÊ1

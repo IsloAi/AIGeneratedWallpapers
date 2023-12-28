@@ -82,7 +82,12 @@ class HomeTabsFragment : Fragment() {
     private fun backHandle(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                if (binding.viewPager.currentItem != 0){
+                    binding.viewPager.setCurrentItem(0)
+                }else{
+                    existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                }
+
             }
         })
     }

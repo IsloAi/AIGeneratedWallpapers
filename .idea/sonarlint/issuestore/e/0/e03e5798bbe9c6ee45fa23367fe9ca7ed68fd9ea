@@ -1,16 +1,16 @@
 
 =kotlin:S125b"Remove this commented out code.(ïÄÊ»8±´å·È1
-Ckotlin:S125–"Remove this commented out code.(…«¿ˆøÿÿÿÿ8²´å·È1
->kotlin:S125«"Remove this commented out code.(Èòñú8²´å·È1
-Vkotlin:S1144³"1Remove this unused private "loadMoreData" method.(áÁù ÿÿÿÿÿ8º´å·È1
-\kotlin:S1144Ö"7Remove this unused private "getBitmapFromGlide" method.(³ñşºøÿÿÿÿ8½´å·È1
+Ckotlin:S125’"Remove this commented out code.(…«¿ˆøÿÿÿÿ8ÁÆõøÊ1
+>kotlin:S125§"Remove this commented out code.(Èòñú8ÂÆõøÊ1
+Vkotlin:S1144¯"1Remove this unused private "loadMoreData" method.(áÁù ÿÿÿÿÿ8ÊÆõøÊ1
+\kotlin:S1144Ò"7Remove this unused private "getBitmapFromGlide" method.(³ñşºøÿÿÿÿ8ÌÆõøÊ1
 Pkotlin:S1481z",Remove this unused "loading" local variable.(ÆèÿÕüÿÿÿÿ8Ê´å·È1
-Rkotlin:S1481ğ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8Ê´å·È1
+Rkotlin:S1481ì"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ÛÆõøÊ1
 9kotlin:S1128"Remove this unused import.(âÉïÜ8Ğ´å·È1
 >kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8‡—æ·È1
 8kotlin:S1128"Remove this unused import.(º¾Ã8Ğ´å·È1
-vkotlin:S1192"QDefine a constant instead of duplicating this literal "********new Data" 5 times.(æ¢„şÿÿÿÿ8Ñ´å·È1
-pkotlin:S1192”"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ò´å·È1
-wkotlin:S3776Ğ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8”çì·È1
-{kotlin:S3923ğ"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8òÆşÕÊ1
-{kotlin:S3923Ã"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8—Ç€ÖÊ1
+vkotlin:S1192‰"QDefine a constant instead of duplicating this literal "********new Data" 5 times.(æ¢„şÿÿÿÿ8âÆõøÊ1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8âÆõøÊ1
+wkotlin:S3776Ì"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8åÆõøÊ1
+{kotlin:S3923ì"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8ëÆõøÊ1
+{kotlin:S3923¿"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8ëÆõøÊ1

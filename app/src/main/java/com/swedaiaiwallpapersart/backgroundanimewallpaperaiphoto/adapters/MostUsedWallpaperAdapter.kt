@@ -155,9 +155,9 @@ class MostUsedWallpaperAdapter(
             .load(R.raw.gems_animaion)
             .into(diamondIcon)
 
-        Log.e("TAG", "*******MostUsed: "+model.compressedImageUrl )
+        Log.e("TAG", "*******MostUsed: "+model.compressed_image_url )
 
-        Glide.with(context!!).load(model.compressedImageUrl).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -264,18 +264,18 @@ class MostUsedWallpaperAdapter(
 
 
     fun updateMoreData(list:ArrayList<MostDownloadImageResponse?>){
-//        val startPosition = arrayList.size
-//
-//        for(i in 0 until list.size){
-//            if (arrayList.contains(list[i])){
-//                Log.e("********new Data", "updateMoreData: already in list", )
-//            }else{
-//                arrayList.add(list[i])
-//            }
-//        }
 
-        arrayList.addAll(list)
-        notifyDataSetChanged()
+
+        val startPosition = arrayList.size
+
+        for(i in 0 until list.size){
+            if (arrayList.contains(list[i])){
+                Log.e("********new Data", "updateMoreData: already in list", )
+            }else{
+                arrayList.add(list[i])
+            }
+        }
+        notifyItemRangeInserted(startPosition, list.size)
     }
 
 

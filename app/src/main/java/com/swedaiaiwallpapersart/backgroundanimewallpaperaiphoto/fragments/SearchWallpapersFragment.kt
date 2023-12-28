@@ -121,7 +121,7 @@ class SearchWallpapersFragment : Fragment() {
         }
 
         binding.backBtn.setOnClickListener {
-            findNavController().navigateUp()
+            findNavController().popBackStack()
         }
 
 

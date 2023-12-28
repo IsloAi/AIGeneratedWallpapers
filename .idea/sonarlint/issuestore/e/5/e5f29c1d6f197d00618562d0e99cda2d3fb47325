@@ -1,4 +1,8 @@
 
-Rkotlin:S1481Œ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8„¶…ÙÊ1
-9kotlin:S1128"Remove this unused import.(¦Î¢½8‹¶…ÙÊ1
-pkotlin:S1192Á"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8”¶…ÙÊ1
+;kotlin:S6310¦"Avoid hardcoded dispatchers.(©ÓœW8çÆË1
+<kotlin:S6310°"Avoid hardcoded dispatchers.(Í¡·Ş8çÆË1
+Rkotlin:S1481"2Remove this unused "arrayListJson" local variable.(àñÆÑ8“çÆË1
+>kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8Ë´˜‚Ë1
+9kotlin:S1128"Remove this unused import.(åå8Ë´˜‚Ë1
+pkotlin:S1192ß"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8šçÆË1
+fkotlin:S6510Á"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8¡çÆË1

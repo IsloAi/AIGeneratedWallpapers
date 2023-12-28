@@ -10,6 +10,7 @@ import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -44,11 +45,12 @@ class CategoryFragment : Fragment() {
     var totalADs = 0
     private val binding get() = _binding!!
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
+
     private lateinit var myActivity : MainActivity
 
     val catlist = ArrayList<CatNameResponse?>()
 
-    private lateinit var myViewModel: MyViewModel
+    val catListViewmodel: MyViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)
@@ -77,6 +79,7 @@ class CategoryFragment : Fragment() {
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
         val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
+                catListViewmodel.fetchWallpapers(requireContext(),string)
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
@@ -86,6 +89,8 @@ class CategoryFragment : Fragment() {
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: $errorCode")
+
+
                             setFragment(string)
                             //do something
                         }
