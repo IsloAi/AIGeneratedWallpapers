@@ -50,6 +50,8 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -66,6 +68,7 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
@@ -382,6 +385,16 @@ class WallpaperViewFragment : Fragment() {
         }
 
 
+        binding.wallpaperInfo.setOnClickListener {
+            if (arrayList[position]?.id != null){
+                imageDetailsSheet()
+            }else{
+                Toast.makeText(requireContext(),"This is Ad position,No info Available",Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+
        binding.unlockWallpaper.setOnClickListener {
 
            if(bitmap != null){
@@ -512,10 +525,10 @@ class WallpaperViewFragment : Fragment() {
 
         viewPager2?.getChildAt(0)!!.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         val transformer = CompositePageTransformer()
-        transformer.addTransformer(MarginPageTransformer(40))
+        transformer.addTransformer(MarginPageTransformer(50))
         transformer.addTransformer { page, position ->
             val r: Float = 1 - Math.abs(position)
-            page.scaleY = 0.75f + r * 0.13f
+            page.scaleY = 0.82f + r * 0.16f
         }
         viewPager2?.setPageTransformer(transformer)
         val viewPagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
@@ -1131,6 +1144,30 @@ class WallpaperViewFragment : Fragment() {
         }
        }
     }
+
+    fun imageDetailsSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = BottomSheetInfoBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+
+        binding.btnYes.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        if (arrayList[position] != null){
+            binding.imageName.text =  arrayList[position]?.image_name
+            binding.imageSize.text = arrayList[position]?.img_size.toString() + " Kb"
+            binding.imageCapacity.text =  arrayList[position]?.capacity
+            binding.imageTags.text =  arrayList[position]?.Tags
+        }else{
+            Toast.makeText(requireContext(),"This is Ad position,No info Available",Toast.LENGTH_SHORT).show()
+        }
+
+
+
+        bottomSheetDialog.show()
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

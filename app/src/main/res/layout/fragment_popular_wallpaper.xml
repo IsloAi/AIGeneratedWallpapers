@@ -9,12 +9,13 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/new_main_background"
         android:id="@+id/topBar"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
             android:layout_height="wrap_content">
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/sliderPager"
@@ -116,40 +117,49 @@
             app:layout_constraintBottom_toBottomOf="@id/recyclerviewTrending"
             />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_scrollFlags="scroll|enterAlways|snap"
+        android:id="@+id/refresh"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
-        <TextView
-            android:id="@+id/wallpaper4kHeading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="4k Wallpapers"
-            app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="@dimen/_15sdp"
-            android:textColor="#FFFFFF"
-            android:shadowColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:shadowRadius="10" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerviewMostUsed"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/wallpaper4kHeading"
-            tools:listitem="@layout/wallpaper_row"
-            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-            app:spanCount="3"
-            />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            >
+            <TextView
+                android:id="@+id/wallpaper4kHeading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4k Wallpapers"
+                app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/poppins_bold"
+                android:textSize="@dimen/_15sdp"
+                android:textColor="#FFFFFF"
+                android:shadowColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:shadowRadius="10" />
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewMostUsed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/wallpaper4kHeading"
+                tools:listitem="@layout/wallpaper_row"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 
 

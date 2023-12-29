@@ -4,10 +4,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Favourit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 
 interface GetLiveWallpapers {
 
-    @GET("getLiveWallpaper.php")
-    fun getLiveWallpapers(): Call<LiveImagesResponse>
+    @GET("getLiked_Wallpaper.php")
+    fun getLiveWallpapers(@Query("deviceid") deviceid:String): Call<LiveImagesResponse>
 }

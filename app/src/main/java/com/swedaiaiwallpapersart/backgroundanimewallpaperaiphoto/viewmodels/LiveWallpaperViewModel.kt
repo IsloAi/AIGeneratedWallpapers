@@ -11,6 +11,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImag
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.GetLiveWallpapers
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -19,6 +20,8 @@ import retrofit2.Response
 
 class LiveWallpaperViewModel: ViewModel()  {
     val wallpaperData = MutableLiveData<ArrayList<LiveWallpaperModel>?>()
+
+    val TAG = "LIVEMODEL"
 
 
     fun getWallpapers(): MutableLiveData<ArrayList<LiveWallpaperModel>?> {
@@ -29,13 +32,16 @@ class LiveWallpaperViewModel: ViewModel()  {
         viewModelScope.launch(Dispatchers.IO) {
 
             val retrofit = RetrofitInstance.getInstance()
-            val service = retrofit.create(GetLiveWallpapers::class.java).getLiveWallpapers()
+            val service = retrofit.create(GetLiveWallpapers::class.java).getLiveWallpapers(
+                MySharePreference.getDeviceID(context)!!
+            )
 
             service.enqueue(object : Callback<LiveImagesResponse> {
                 override fun onResponse(
                     call: Call<LiveImagesResponse>, response: Response<LiveImagesResponse>
                 ) {
                     if(response.isSuccessful){
+                        Log.e(TAG, "onResponse: "+response.body()?.images )
                         wallpaperData.value = response.body()?.images
                     }
                 }
@@ -45,7 +51,7 @@ class LiveWallpaperViewModel: ViewModel()  {
 
                         Toast.makeText(context,
                             context.getString(R.string.error_loading_please_check_your_internet), Toast.LENGTH_SHORT).show()
-                        Log.d("responseOk", "onResponse: response onFailure ")
+                        Log.d(TAG, "onResponse: response onFailure ")
 
                     }
 

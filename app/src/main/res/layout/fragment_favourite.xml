@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/background"
+    android:background="@color/new_main_background"
     >
 
     <ImageView
@@ -33,6 +33,9 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             />
+
+
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolBar"
             android:layout_width="0dp"
@@ -40,51 +43,76 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/switchLayout"
-            app:layout_constraintHeight_percent=".1"
-            android:paddingHorizontal="@dimen/_10sdp"
+            app:layout_constraintHeight_percent=".091"
+            android:background="@color/new_main_background"
             >
-            <TextView
-                android:id="@+id/premium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="@string/favourites"
+
+            <RelativeLayout
+                android:id="@+id/toolbar"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/white"
-                android:fontFamily="@font/raleway_medium"
+                android:layout_marginStart="@dimen/_5sdp"
+                app:layout_constraintTop_toTopOf="parent"
                 android:gravity="center"
-                android:textSize="@dimen/_13sdp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText"/>
+                app:layout_constraintStart_toStartOf="parent">
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_back_arrow"
+                    />
+            </RelativeLayout>
 
             <TextView
-                android:id="@+id/gemsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/gems_color"
-                android:fontFamily="@font/raleway_medium"
+                android:text="@string/favourites"
+                android:textColor="@color/white"
+                android:fontFamily="@font/poppins_semibold"
+                app:layout_constraintTop_toTopOf="@id/toolbar"
+                app:layout_constraintBottom_toBottomOf="@id/toolbar"
+                app:layout_constraintStart_toEndOf="@id/toolbar"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:textSize="@dimen/_14sdp"
                 android:gravity="center"
-                android:visibility="gone"
-                android:text="0"
-                app:layout_constraintEnd_toStartOf="@+id/animationDdd"
-                android:textSize="@dimen/_13sdp"
-                android:textStyle="bold"
-                tools:ignore="HardcodedText"/>
+                />
+
 
             <ImageView
-                android:id="@+id/animationDdd"
-                android:layout_width="@dimen/_40sdp"
-                android:layout_height="@dimen/_40sdp"
-                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/share_app"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="@dimen/_2sdp"
-                android:layout_marginBottom="@dimen/_10sdp"
+                android:id="@+id/shareAPp"
+                android:visibility="gone"
+                android:padding="@dimen/_5sdp"
+
                 />
+
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/information_wallpaper"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/shareAPp"
+                android:id="@+id/wallpaperInfo"
+                android:visibility="gone"
+                android:padding="@dimen/_5sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                />
+
+
+
+
+
+
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -102,7 +130,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent=".7"
+                app:layout_constraintWidth_percent=".9"
                 android:elevation="@dimen/_10sdp"
                 app:cardCornerRadius="@dimen/_7sdp"
                 app:cardBackgroundColor="@color/white"
@@ -132,9 +160,23 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         app:layout_constraintStart_toEndOf="@+id/ai_wallpaper"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/live"
                         android:fontFamily="@font/raleway_medium"
                         android:text="AI Generated"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="12sp"
+                        android:textColor="@color/black"
+                        />
+
+                    <TextView
+                        android:id="@+id/live"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        app:layout_constraintStart_toEndOf="@+id/self_creation"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:fontFamily="@font/raleway_medium"
+                        android:text="Live"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textSize="12sp"
@@ -160,6 +202,12 @@
                 />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selfCreationRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/liveRecyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 />

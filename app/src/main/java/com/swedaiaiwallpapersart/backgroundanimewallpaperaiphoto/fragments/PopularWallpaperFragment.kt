@@ -52,6 +52,7 @@ class PopularWallpaperFragment : Fragment() {
     private val myViewModel: MyHomeViewModel by activityViewModels()
 
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
+    private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
     val orignalList = arrayListOf<CatResponse?>()
 
@@ -63,11 +64,15 @@ class PopularWallpaperFragment : Fragment() {
 
     private val viewModel: MostDownloadedViewmodel by activityViewModels()
 
-    var cachedMostDownloaded = ArrayList<MostDownloadImageResponse?>()
+    var cachedMostDownloaded = ArrayList<CatResponse?>()
 
     var isLoadingMore = false
 
     var dataset = false
+
+
+    var externalOpen = false
+    var oldPosition = 0
 
     val TAG = "POPULARTAB"
     override fun onCreateView(
@@ -101,12 +106,35 @@ class PopularWallpaperFragment : Fragment() {
             }
         })
 
+
+        setEvents()
+        initMostUsedRV()
+    }
+
+    private fun setEvents(){
+        binding.refresh.setOnRefreshListener {
+
+            val newData = cachedMostDownloaded.filterNotNull()
+            val nullAdd = addNullValueInsideArray(newData.shuffled())
+
+            cachedMostDownloaded.clear()
+            cachedMostDownloaded = nullAdd
+            val initialItems = getItems(0, 30)
+            startIndex = 0
+            mostUsedWallpaperAdapter?.addNewData()
+            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+            mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+            startIndex += 30
+
+
+
+            binding.refresh.isRefreshing = false
+
+        }
+
         binding.more.setOnClickListener {
             (requireParentFragment() as HomeTabsFragment).navigateToTrending(1)
         }
-
-
-        initMostUsedRV()
     }
 
     private fun initMostUsedRV() {
@@ -114,10 +142,38 @@ class PopularWallpaperFragment : Fragment() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewMostUsed.layoutManager = layoutManager
         binding.recyclerviewMostUsed.addItemDecoration(RvItemDecore(3, 5, false, 10000))
-        val list = ArrayList<MostDownloadImageResponse?>()
+        val list = ArrayList<CatResponse?>()
         mostUsedWallpaperAdapter = MostUsedWallpaperAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
-                //
+
+                externalOpen = true
+                val allItems = mostUsedWallpaperAdapter?.getAllItems()
+                if (addedItems?.isNotEmpty() == true){
+                    addedItems?.clear()
+                }
+
+
+                addedItems = allItems
+
+                oldPosition = position
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "mainscr_all_tab_click_item",
+                    "mainscr_all_tab_click_item",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                            navigateToDestination(allItems!!, position)
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            navigateToDestination(allItems!!, position)
+                        }
+                    }
+                )
             }
 
             override fun getFavorites(position: Int) {
@@ -183,12 +239,13 @@ class PopularWallpaperFragment : Fragment() {
                     }
                 }
             } else {
+                Log.e(TAG, "initMostDownloadedData: no Data Found " )
                 Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<MostDownloadImageResponse?> {
+    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
         val endIndex = startIndex1 + chunkSize
         if (startIndex1 >= cachedMostDownloaded.size) {
             return arrayListOf()
@@ -203,7 +260,7 @@ class PopularWallpaperFragment : Fragment() {
     }
 
 
-    private fun addNullValueInsideArray(data: List<MostDownloadImageResponse?>): ArrayList<MostDownloadImageResponse?> {
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
 
         val firstAdLineThreshold =
             if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
@@ -212,7 +269,7 @@ class PopularWallpaperFragment : Fragment() {
         val lineCount =
             if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
         val lineC = lineCount * 3
-        val newData = arrayListOf<MostDownloadImageResponse?>()
+        val newData = arrayListOf<CatResponse?>()
 
         for (i in data.indices) {
             if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
@@ -241,8 +298,43 @@ class PopularWallpaperFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+//        dataset = false
+//        startIndex = 0
         initTrendingData()
+
         initMostDownloadedData()
+        if (dataset){
+
+            Log.e(TAG, "onResume: Data set $dataset")
+            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
+
+            if (addedItems?.isEmpty() == true){
+                Log.e(TAG, "onResume: "+cachedMostDownloaded.size )
+
+
+            }
+            mostUsedWallpaperAdapter?.updateMoreData(addedItems!!)
+
+            binding.recyclerviewMostUsed.layoutManager?.scrollToPosition(oldPosition)
+
+        }
+
+    }
+
+
+    override fun onPause() {
+        super.onPause()
+
+        if (!externalOpen){
+            val allItems = mostUsedWallpaperAdapter?.getAllItems()
+            if (addedItems?.isNotEmpty() == true){
+                addedItems?.clear()
+            }
+
+            addedItems = allItems
+        }
+
     }
 
     private fun populateOnbaordingItems() {

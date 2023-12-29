@@ -1,10 +1,21 @@
 
->kotlin:S125ß"Remove this commented out code.(òí ½8™€¤»Å1
-9kotlin:S6531À"Remove this useless cast.(£Í‘8À€¤»Å1
-9kotlin:S6531‡"Remove this useless cast.(ıÀÁ»8À€¤»Å1
-Rkotlin:S1481¨"2Remove this unused "arrayListJson" local variable.(àñÆÑ8‹åÂÅ1
-9kotlin:S1128"Remove this unused import.(´Ùí8“»—™Ä1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8“»—™Ä1
->kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8“»—™Ä1
-pkotlin:S1192á"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Í€¤»Å1
-wkotlin:S3776¯"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8Ñ€¤»Å1
+>kotlin:S125ß"Remove this commented out code.(¸¯ü8Ú£ªË1
+Ckotlin:S125å"Remove this commented out code.(³³ØËûÿÿÿÿ8Ú£ªË1
+>kotlin:S125Ÿ"Remove this commented out code.( È°8Ú£ªË1
+>kotlin:S125¸"Remove this commented out code.(òí ½8Û£ªË1
+Hkotlin:S108§")Either remove or fill this block of code.(å¥‡8ğ£ªË1
+9kotlin:S6531è"Remove this useless cast.(£Í‘8ù£ªË1
+9kotlin:S6531¾"Remove this useless cast.(ıÀÁ»8ù£ªË1
+Rkotlin:S1481"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ú£ªË1
+Vkotlin:S1481š"1Remove this unused "randomNumber" local variable.(²ÑãÕıÿÿÿÿ8ú£ªË1
+>kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8¤ªË1
+9kotlin:S1128"Remove this unused import.(ÁÈÚø8¤ªË1
+9kotlin:S1128"Remove this unused import.(´Ùí8¤ªË1
+9kotlin:S1128"Remove this unused import.(³¹¦–8ûË»ªË1
+>kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8¤ªË1
+>kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8¤ªË1
+>kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8¤ªË1
+>kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8¤ªË1
+9kotlin:S1128"Remove this unused import.(ÒÂ¦8¤ªË1
+pkotlin:S1192‰"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(£¬éÿÿÿÿÿ8„¤ªË1
+[kotlin:S6511x"=Merge chained "if" statements into a single "when" statement.(Éø›k8¤ªË1

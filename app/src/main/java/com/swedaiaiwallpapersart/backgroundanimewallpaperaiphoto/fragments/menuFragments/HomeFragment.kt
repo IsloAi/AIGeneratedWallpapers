@@ -72,6 +72,8 @@ class HomeFragment : Fragment(){
     var isLoadingData = false
     var isLastPage = false
 
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         return binding.root
@@ -233,6 +235,10 @@ class HomeFragment : Fragment(){
 
                 }
             }else{
+                myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
+
+                isFirstLoad = true
+
                 if (viewModel.getData()){
                     binding.retryBtn.visibility = View.GONE
                 }else{

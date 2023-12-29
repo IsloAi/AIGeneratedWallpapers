@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -76,10 +78,33 @@ class LiveWallpaperFragment : Fragment() {
         val adapter = LiveWallpaperAdapter(catResponses, object :
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
-                BlurView.filePath = ""
-                sharedViewModel.clearLiveWallpaper()
-                sharedViewModel.setLiveWallpaper(listOf(model))
-                findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "mainscr_live_tab_click_item",
+                    "mainscr_live_tab_click_item",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                            BlurView.filePath = ""
+                            sharedViewModel.clearLiveWallpaper()
+                            sharedViewModel.setLiveWallpaper(listOf(model))
+                            findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            BlurView.filePath = ""
+                            sharedViewModel.clearLiveWallpaper()
+                            sharedViewModel.setLiveWallpaper(listOf(model))
+                            findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                        }
+                    }
+                )
+
+
+
             }
         },myActivity)
         binding.liveReccyclerview.adapter = adapter

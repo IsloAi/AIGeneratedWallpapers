@@ -72,6 +72,10 @@ class SettingFragment : Fragment() {
             findNavController().popBackStack()
 
         }
+
+        binding.favorites.setOnClickListener {
+            findNavController().navigate(R.id.favouriteFragment)
+        }
         }
     private fun feedback() {
         try {

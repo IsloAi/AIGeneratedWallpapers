@@ -1,45 +1,48 @@
 
-]kotlin:S1172é"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8ú¨ßÚÊ1
-Jkotlin:S6508è"*Replace this usage of Void type with Unit.(àŒÄÜ8ü¨ßÚÊ1
-Ykotlin:S899§":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8ı¨ßÚÊ1
-=kotlin:S125Ù"Remove this commented out code.(ÀñÔ88‰©ßÚÊ1
->kotlin:S125ß"Remove this commented out code.(éÎÂú8Š©ßÚÊ1
-Ckotlin:S125ë"Remove this commented out code.(ŒÔ¡ªúÿÿÿÿ8Š©ßÚÊ1
-Ckotlin:S125î"Remove this commented out code.(±š¡®ûÿÿÿÿ8Œ©ßÚÊ1
->kotlin:S125ó"Remove this commented out code.(Ïİş8Œ©ßÚÊ1
-Ckotlin:S125×"Remove this commented out code.(—şµ“üÿÿÿÿ8Œ©ßÚÊ1
-<kotlin:S6310Î"Avoid hardcoded dispatchers.(µØ˜í8œ©ßÚÊ1
-;kotlin:S6310à"Avoid hardcoded dispatchers.(©ÓœW8©ßÚÊ1
-;kotlin:S6310À"Avoid hardcoded dispatchers.(©ÓœW8©ßÚÊ1
-<kotlin:S6310Ã"Avoid hardcoded dispatchers.(Í¡·Ş8©ßÚÊ1
-[kotlin:S1144Î";Remove this unused private "loadBitmapFromUrlAsync" method.(µØ˜í8­©ßÚÊ1
-Okotlin:S1144û"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8³©ßÚÊ1
-Vkotlin:S1144Ñ"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8Ç©ßÚÊ1
-Okotlin:S1481­"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8ü©ßÚÊ1
-Okotlin:S1481"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8ü©ßÚÊ1
-Mkotlin:S1481š"-Remove this unused "behavior" local variable.(Ø¦š¾8ü©ßÚÊ1
-9kotlin:S11286"Remove this unused import.(™¢ı§8ŒªßÚÊ1
->kotlin:S11288"Remove this unused import.(»«¦úøÿÿÿÿ8ŒªßÚÊ1
-8kotlin:S11289"Remove this unused import.(Ë›Ë78ŒªßÚÊ1
->kotlin:S1128;"Remove this unused import.(İáÛ¦ÿÿÿÿÿ8ŒªßÚÊ1
->kotlin:S1128B"Remove this unused import.(’—ÄÑùÿÿÿÿ8ŒªßÚÊ1
->kotlin:S1128C"Remove this unused import.(¸ô¿ßùÿÿÿÿ8ŒªßÚÊ1
-qkotlin:S1192"LDefine a constant instead of duplicating this literal "******NULL" 15 times.(Ÿ™£Ñşÿÿÿÿ8’ªßÚÊ1
-‡kotlin:S1192"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 8 times.(Ÿ™£Ñşÿÿÿÿ8’ªßÚÊ1
-rkotlin:S1192‡"MDefine a constant instead of duplicating this literal "********ADS" 10 times.(™ù£êøÿÿÿÿ8’ªßÚÊ1
-ukotlin:S1192Œ"PDefine a constant instead of duplicating this literal "onAdsRewarded: " 3 times.(©ÂÄ‰úÿÿÿÿ8’ªßÚÊ1
-pkotlin:S1192"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 5 times.(±È÷®8’ªßÚÊ1
-Hkotlin:S1874è"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8˜ªßÚÊ1
-Hkotlin:S1874†"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8™ªßÚÊ1
-Hkotlin:S1874Å"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8™ªßÚÊ1
-rkotlin:S3776“"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(©Àùè8›ªßÚÊ1
-wkotlin:S3776ÿ"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(”ÔÈÎüÿÿÿÿ8›ªßÚÊ1
-wkotlin:S3776¿"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(¶÷Èïøÿÿÿÿ8›ªßÚÊ1
-wkotlin:S3776İ"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(Ÿ™¸ëüÿÿÿÿ8œªßÚÊ1
-rkotlin:S3776’"RRefactor this method to reduce its Cognitive Complexity from 99 to the 15 allowed.(ò¡®í8œªßÚÊ1
-rkotlin:S3776Š"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8ªßÚÊ1
-kotlin:S1186á"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÛÅûÏûÿÿÿÿ8¨ªßÚÊ1
-zkotlin:S1186›"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8¨ªßÚÊ1
-€kotlin:S3923ó"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8°ªßÚÊ1
-€kotlin:S3923“"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8°ªßÚÊ1
-€kotlin:S3923¬"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8°ªßÚÊ1
+]kotlin:S1172ö"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8ÈœåªË1
+Jkotlin:S6508õ"*Replace this usage of Void type with Unit.(àŒÄÜ8ÊœåªË1
+Ykotlin:S899´":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8ËœåªË1
+=kotlin:S125Ü"Remove this commented out code.(ÀñÔ88×œåªË1
+>kotlin:S125â"Remove this commented out code.(éÎÂú8ØœåªË1
+Ckotlin:S125ø"Remove this commented out code.(ŒÔ¡ªúÿÿÿÿ8ØœåªË1
+Ckotlin:S125û"Remove this commented out code.(±š¡®ûÿÿÿÿ8ÚœåªË1
+>kotlin:S125€"Remove this commented out code.(Ïİş8ÚœåªË1
+Ckotlin:S125ä"Remove this commented out code.(—şµ“üÿÿÿÿ8ÚœåªË1
+<kotlin:S6310Û"Avoid hardcoded dispatchers.(µØ˜í8êœåªË1
+;kotlin:S6310í"Avoid hardcoded dispatchers.(©ÓœW8ëœåªË1
+;kotlin:S6310Í"Avoid hardcoded dispatchers.(©ÓœW8ìœåªË1
+<kotlin:S6310Ğ"Avoid hardcoded dispatchers.(Í¡·Ş8ìœåªË1
+[kotlin:S1144Û";Remove this unused private "loadBitmapFromUrlAsync" method.(µØ˜í8øœåªË1
+Okotlin:S1144ˆ"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8şœåªË1
+Vkotlin:S1144Ş"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8åªË1
+>kotlin:S6531£"Remove this useless cast.(òĞÛÉıÿÿÿÿ8½åªË1
+Okotlin:S1481º"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¿åªË1
+Okotlin:S1481›"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¿åªË1
+Mkotlin:S1481§"-Remove this unused "behavior" local variable.(Ø¦š¾8¿åªË1
+9kotlin:S11285"Remove this unused import.(œÓìä8Ä™§«Ë1
+>kotlin:S11286"Remove this unused import.(â£¡µüÿÿÿÿ8¸ƒ¥«Ë1
+9kotlin:S11288"Remove this unused import.(™¢ı§8ÏåªË1
+>kotlin:S1128:"Remove this unused import.(»«¦úøÿÿÿÿ8ÏåªË1
+8kotlin:S1128;"Remove this unused import.(Ë›Ë78ÏåªË1
+>kotlin:S1128="Remove this unused import.(İáÛ¦ÿÿÿÿÿ8ÏåªË1
+>kotlin:S1128D"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÏåªË1
+>kotlin:S1128E"Remove this unused import.(¸ô¿ßùÿÿÿÿ8ÏåªË1
+qkotlin:S1192"LDefine a constant instead of duplicating this literal "******NULL" 15 times.(Ÿ™£Ñşÿÿÿÿ8ÔåªË1
+‡kotlin:S1192"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 8 times.(Ÿ™£Ñşÿÿÿÿ8ÔåªË1
+rkotlin:S1192”"MDefine a constant instead of duplicating this literal "********ADS" 10 times.(™ù£êøÿÿÿÿ8ÕåªË1
+ukotlin:S1192™"PDefine a constant instead of duplicating this literal "onAdsRewarded: " 3 times.(©ÂÄ‰úÿÿÿÿ8ÕåªË1
+pkotlin:S1192«"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 5 times.(±È÷®8ÕåªË1
+Hkotlin:S1874ë"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ÛåªË1
+Hkotlin:S1874“"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8ÛåªË1
+Hkotlin:S1874Ò"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8ÛåªË1
+rkotlin:S3776–"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(©Àùè8İåªË1
+wkotlin:S3776‚"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(”ÔÈÎüÿÿÿÿ8İåªË1
+wkotlin:S3776Â"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(¶÷Èïøÿÿÿÿ8ŞåªË1
+wkotlin:S3776ê"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(Ÿ™¸ëüÿÿÿÿ8ŞåªË1
+rkotlin:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from 99 to the 15 allowed.(ò¡®í8ßåªË1
+rkotlin:S3776—"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8àåªË1
+kotlin:S1186î"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÛÅûÏûÿÿÿÿ8ìåªË1
+zkotlin:S1186¨"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ìåªË1
+€kotlin:S3923€"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8óåªË1
+€kotlin:S3923 "[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8ôåªË1
+€kotlin:S3923¹"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8ôåªË1

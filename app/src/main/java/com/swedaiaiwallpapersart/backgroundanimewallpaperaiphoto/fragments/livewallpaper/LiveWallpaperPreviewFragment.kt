@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -24,6 +25,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
@@ -31,8 +33,20 @@ import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavoruiteLiveWallpaperBody
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -44,6 +58,10 @@ class LiveWallpaperPreviewFragment : Fragment() {
     private var _binding:FragmentLiveWallpaperPreviewBinding ?= null
     private val binding get() = _binding!!
 
+    val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private var livewallpaper: LiveWallpaperModel ?= null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,9 +72,29 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initObservers()
         setWallpaperOnView()
+
         setEvents()
 
+    }
+
+    private fun initObservers(){
+
+        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner){wallpaper ->
+            if (wallpaper.isNotEmpty()){
+
+                Log.e("TAG", "initObservers: $wallpaper")
+
+                livewallpaper = wallpaper[0]
+
+                if (livewallpaper?.liked == true){
+                    binding.setLiked.setImageResource(R.drawable.button_like_selected)
+                }else{
+                    binding.setLiked.setImageResource(R.drawable.button_like)
+                }
+            }
+        }
     }
 
     private fun backHandle(){
@@ -82,6 +120,18 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack(R.id.homeTabsFragment,false)
+        }
+
+        binding.setLiked.setOnClickListener {
+            binding.setLiked.isEnabled = false
+            if(livewallpaper?.liked==true){
+                livewallpaper?.liked = false
+                binding.setLiked.setImageResource(R.drawable.button_like)
+            }else{
+                livewallpaper?.liked = true
+                binding.setLiked.setImageResource(R.drawable.button_like_selected)
+            }
+            addFavourite(requireContext(),binding.setLiked)
         }
 
         backHandle()
@@ -185,6 +235,44 @@ class LiveWallpaperPreviewFragment : Fragment() {
         val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
         val activities = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
         return activities.isNotEmpty()
+    }
+
+    private fun addFavourite(
+        context: Context,
+        favouriteButton: ImageView
+    ){
+        val retrofit = RetrofitInstance.getInstance()
+        val apiService = retrofit.create(LikeLiveWallpaper::class.java)
+        val postData = FavoruiteLiveWallpaperBody(MySharePreference.getDeviceID(context)!!, livewallpaper?.id.toString())
+        val call = apiService.postLike(postData)
+        call.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                if (response.isSuccessful) {
+                    val message = response.body()?.string()
+                    if(message=="Liked"){
+//                        livewallpaper.id = true
+                        favouriteButton.setImageResource(R.drawable.button_like_selected)
+                    }
+                    else
+                    {
+                        favouriteButton.setImageResource(R.drawable.button_like)
+//                        arrayList[position]?.liked = false
+                    }
+                    favouriteButton.isEnabled = true
+                }
+                else
+                {
+                    favouriteButton.isEnabled = true
+                    Toast.makeText(context, "onResponse error", Toast.LENGTH_SHORT).show()
+                    favouriteButton.setImageResource(R.drawable.button_like)
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "onFailure error", Toast.LENGTH_SHORT).show()
+                favouriteButton.isEnabled = true
+            }
+        })
     }
 
 

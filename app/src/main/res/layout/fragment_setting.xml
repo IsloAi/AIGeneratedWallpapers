@@ -235,8 +235,8 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     >
                       <ImageView
-                          android:layout_width="wrap_content"
-                          android:layout_height="wrap_content"
+                          android:layout_width="@dimen/_17sdp"
+                          android:layout_height="@dimen/_17sdp"
                           android:src="@drawable/rate_us"
                           android:layout_gravity="center_vertical"
                           />
@@ -262,8 +262,8 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     >
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
                         android:src="@drawable/feedback"
                         android:layout_gravity="center_vertical"
                         />
@@ -288,8 +288,8 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     >
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
                         android:src="@drawable/share"
                         android:layout_gravity="center_vertical"
                         />
@@ -325,8 +325,8 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     >
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
                         android:src="@drawable/privacy_p"
                         android:layout_gravity="center_vertical"
                         />
@@ -351,8 +351,8 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     >
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
                         android:src="@drawable/more_app"
                         android:layout_gravity="center_vertical"
                         />
@@ -360,6 +360,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/more_app"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/raleway_medium"
+                        android:layout_gravity="center_vertical"
+                        android:textSize="14sp"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/favorites"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:paddingVertical="@dimen/_2sdp"
+                    android:layout_marginStart="@dimen/_7sdp"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
+                        android:src="@drawable/heart_unsel"
+                        android:layout_gravity="center_vertical"
+                        app:tint="@color/white" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/favourites"
                         android:textColor="@color/white"
                         android:fontFamily="@font/raleway_medium"
                         android:layout_gravity="center_vertical"
@@ -379,8 +407,8 @@
                     android:layout_marginStart="@dimen/_7sdp"
                     >
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
                         android:src="@drawable/language_icon"
                         android:layout_gravity="center_vertical"
                         />

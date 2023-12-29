@@ -27,8 +27,8 @@ import retrofit2.Response
 
 
 class MostDownloadedViewmodel: ViewModel()  {
-    val wallpaperData = MutableLiveData<ArrayList<MostDownloadImageResponse>?>()
-    fun getWallpapers(): MutableLiveData<ArrayList<MostDownloadImageResponse>?> {
+    val wallpaperData = MutableLiveData<ArrayList<CatResponse>?>()
+    fun getWallpapers(): MutableLiveData<ArrayList<CatResponse>?> {
         return wallpaperData
     }
     fun fetchWallpapers(context: Context) {
@@ -37,11 +37,11 @@ class MostDownloadedViewmodel: ViewModel()  {
             val retrofit = RetrofitInstance.getInstance()
             val service = retrofit.create(MostDownloadImages::class.java).postData(MySharePreference.getDeviceID(context)!!)
 
-            service.enqueue(object : Callback<MostDownloadedImageModel> {
+            service.enqueue(object : Callback<FavouriteListResponse> {
 
                 override fun onResponse(
-                    call: Call<MostDownloadedImageModel>,
-                    response: Response<MostDownloadedImageModel>
+                    call: Call<FavouriteListResponse>,
+                    response: Response<FavouriteListResponse>
                 ) {
                     if(response.isSuccessful){
 
@@ -63,7 +63,7 @@ class MostDownloadedViewmodel: ViewModel()  {
                     }
                 }
 
-                override fun onFailure(call: Call<MostDownloadedImageModel>, t: Throwable) {
+                override fun onFailure(call: Call<FavouriteListResponse>, t: Throwable) {
                     Toast.makeText(context,
                         context.getString(R.string.error_loading_please_check_your_internet), Toast.LENGTH_SHORT).show()
                     Log.e("MostDownloaded", "onFailure: ${t.message}")

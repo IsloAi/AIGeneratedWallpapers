@@ -116,6 +116,9 @@ class GenerateImageFragment : Fragment() {
         binding.gemsText.text = existGems.toString()
         loadRecyclerView()
         viewModel = ViewModelProvider(this)[ImageGenerateViewModel::class.java]
+
+
+
         listViewModel = ViewModelProvider(requireActivity())[ImageListViewModel::class.java]
         viewModel.responseData.observe(viewLifecycleOwner) { response ->
             response?.let {
@@ -123,7 +126,7 @@ class GenerateImageFragment : Fragment() {
                 Log.d("imageLists", "time Display: $timeDisplay")
 
                 Log.e("TAG", "customOnCreateCalling: future links empty" )
-                var data: GetResponseIGEntity? = it.id?.let { id ->
+                val data: GetResponseIGEntity? = it.id?.let { id ->
                     GetResponseIGEntity(
                         id,
                         it.status,
@@ -134,9 +137,15 @@ class GenerateImageFragment : Fragment() {
                         it.meta?.prompt
                     )
                 }
+
+                val oldData = roomDatabase.getResponseIGDao().getCreationsByIdNotLive(data?.id!!)
                     CoroutineScope(Dispatchers.IO).launch {
                         if (data != null) {
-                            roomDatabase.getResponseIGDao().insert(data!!)
+
+                            if (oldData == null){
+                                roomDatabase.getResponseIGDao().insert(data)
+                            }
+
                         }
                     }
 
@@ -156,7 +165,6 @@ class GenerateImageFragment : Fragment() {
         }
 
         otherWorking()
-        loadCreationHistory(roomDatabase)
         binding.edtPrompt.setBackgroundResource(0)
         binding.clearTextView.setOnClickListener {
             binding.edtPrompt.setText("")
@@ -168,6 +176,12 @@ class GenerateImageFragment : Fragment() {
                 binding.clearTextView.setImageResource(R.drawable.cross_white)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val roomDatabase = AppDatabase.getInstance(requireContext())
+        loadCreationHistory(roomDatabase)
     }
     @SuppressLint("SuspiciousIndentation")
     private fun postGems(){
@@ -265,6 +279,7 @@ class GenerateImageFragment : Fragment() {
                         if(getPrompt.isNotEmpty()){
                             getUserIdDialog()
                             viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                            hasNavigated = false
                         }else{
                             Toast.makeText(requireContext(),
                                 getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()

@@ -38,7 +38,7 @@ import kotlinx.coroutines.withContext
 
 
 class MostUsedWallpaperAdapter(
-    var arrayList: ArrayList<MostDownloadImageResponse?>,
+    var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
     private val myActivity: MainActivity
 ):
@@ -64,7 +64,7 @@ class MostUsedWallpaperAdapter(
     private var coroutineScope: CoroutineScope? = null
 
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(modela: ArrayList<MostDownloadImageResponse?>, holder: RecyclerView.ViewHolder, position: Int) {
+        fun bind(modela: ArrayList<CatResponse?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
             setAllData(
                 model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
@@ -143,7 +143,7 @@ class MostUsedWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: MostDownloadImageResponse, position:Int, animationView: LottieAnimationView, gemsView: TextView, likes: TextView, favouriteButton: ImageView
+    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, gemsView: TextView, likes: TextView, favouriteButton: ImageView
                            , lockButton: ImageView, diamondIcon: ImageView, wallpaperMainImage: ImageView, holder: RecyclerView.ViewHolder, error_img: ImageView
     ){
         animationView.visibility = View.VISIBLE
@@ -215,7 +215,7 @@ class MostUsedWallpaperAdapter(
             )
 
             withContext(this.coroutineContext) {
-                binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
+                binding.adsView.loadAd(myActivity,"mainscr_all_tab_scroll","mainscr_all_tab_scroll",
                     object : CustomSDKAdsListenerAdapter() {
                         override fun onAdsLoadFail() {
                             super.onAdsLoadFail()
@@ -263,7 +263,14 @@ class MostUsedWallpaperAdapter(
     }
 
 
-    fun updateMoreData(list:ArrayList<MostDownloadImageResponse?>){
+    fun addNewData(){
+        arrayList.clear()
+        notifyDataSetChanged()
+
+    }
+
+
+    fun updateMoreData(list:ArrayList<CatResponse?>){
 
 
         val startPosition = arrayList.size
@@ -276,6 +283,11 @@ class MostUsedWallpaperAdapter(
             }
         }
         notifyItemRangeInserted(startPosition, list.size)
+    }
+
+
+    fun getAllItems():ArrayList<CatResponse?>{
+        return arrayList
     }
 
 

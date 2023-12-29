@@ -1,16 +1,18 @@
 
-Bkotlin:S125N"Remove this commented out code.(ı…¢¥ÿÿÿÿÿ8ñÖ´¨Ê1
->kotlin:S125³"Remove this commented out code.(£§¼®8òÖ´¨Ê1
->kotlin:S125À"Remove this commented out code.(¡­ìõ8óÖ´¨Ê1
-Ckotlin:S125É"Remove this commented out code.(îîûöûÿÿÿÿ8õÖ´¨Ê1
-Jkotlin:S1144²"*Remove this unused private "login" method.(±Ëû¹8‹×´¨Ê1
->kotlin:S1128"Remove this unused import.(ë–³ğùÿÿÿÿ8­×´¨Ê1
-9kotlin:S1128"Remove this unused import.(Úÿ †8­×´¨Ê1
-9kotlin:S1128"Remove this unused import.(¼„¹8­×´¨Ê1
-9kotlin:S1128"Remove this unused import.(Áå­8­×´¨Ê1
-9kotlin:S1128 "Remove this unused import.(¥ïú8®×´¨Ê1
-qkotlin:S1192ƒ"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(²¨ñÿÿÿÿÿ8°×´¨Ê1
-Hkotlin:S1874û"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8²×´¨Ê1
-Ckotlin:S1874½"#Deprecated code should not be used.(‚´Ã¬8²×´¨Ê1
-wkotlin:S3776ş"RRefactor this method to reduce its Cognitive Complexity from 36 to the 15 allowed.(™ßî±ùÿÿÿÿ8´×´¨Ê1
-rkotlin:S3776’"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(Ê«™ú8µ×´¨Ê1
+Bkotlin:S125N"Remove this commented out code.(ı…¢¥ÿÿÿÿÿ8®è½¬Ë1
+>kotlin:S125Â"Remove this commented out code.(£§¼®8¯è½¬Ë1
+>kotlin:S125Ï"Remove this commented out code.(¡­ìõ8¯è½¬Ë1
+Ckotlin:S125Ø"Remove this commented out code.(îîûöûÿÿÿÿ8±è½¬Ë1
+Jkotlin:S1144Á"*Remove this unused private "login" method.(±Ëû¹8Ãè½¬Ë1
+>kotlin:S1128"Remove this unused import.(ë–³ğùÿÿÿÿ8âè½¬Ë1
+9kotlin:S1128"Remove this unused import.(Úÿ †8ãè½¬Ë1
+9kotlin:S1128"Remove this unused import.(¼„¹8ãè½¬Ë1
+9kotlin:S1128"Remove this unused import.(Áå­8ãè½¬Ë1
+9kotlin:S1128 "Remove this unused import.(¥ïú8ãè½¬Ë1
+qkotlin:S1192‘"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(²¨ñÿÿÿÿÿ8åè½¬Ë1
+Hkotlin:S1874Š"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8çè½¬Ë1
+Ckotlin:S1874Ì"#Deprecated code should not be used.(‚´Ã¬8çè½¬Ë1
+qkotlin:S3776h"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Ë÷€8éè½¬Ë1
+wkotlin:S3776Œ"RRefactor this method to reduce its Cognitive Complexity from 36 to the 15 allowed.(™ßî±ùÿÿÿÿ8éè½¬Ë1
+rkotlin:S3776¡"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(Ê«™ú8êè½¬Ë1
+Nkotlin:S1066".Merge this "if" statement with the nested one.(ß¸é8¿†¾¬Ë1

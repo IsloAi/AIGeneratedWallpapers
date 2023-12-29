@@ -11,5 +11,5 @@ import retrofit2.http.Query
 
 interface MostDownloadImages {
     @GET("get_mostdownloaded.php")
-    fun postData(@Query("deviceid") deviceid:String): Call<MostDownloadedImageModel>
+    fun postData(@Query("deviceid") deviceid:String): Call<FavouriteListResponse>
 }

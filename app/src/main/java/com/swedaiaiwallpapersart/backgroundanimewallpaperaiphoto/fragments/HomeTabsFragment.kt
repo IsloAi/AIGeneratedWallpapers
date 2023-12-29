@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayout
@@ -26,6 +27,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 
 
 class HomeTabsFragment : Fragment() {
@@ -36,6 +38,8 @@ class HomeTabsFragment : Fragment() {
 
     private var existDialog = MyDialogs()
     private lateinit var myActivity : MainActivity
+
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
@@ -174,6 +178,16 @@ class HomeTabsFragment : Fragment() {
             } else {
                 // Set the stroke color for unselected tab
                 tabCardView.setCardBackgroundColor(resources.getColor(R.color.tabs_bg))
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sharedViewModel.selectTab.observe(viewLifecycleOwner){
+            if (it !=  null && it != 0){
+                navigateToTrending(it)
+                sharedViewModel.selectTab(0)
             }
         }
     }

@@ -278,7 +278,7 @@ class LiveWallpaperAdapter(
             )
 
             withContext(this.coroutineContext) {
-                binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
+                binding.adsView.loadAd(myActivity,"mainscr_live_tab_scroll","mainscr_live_tab_scroll",
                     object : CustomSDKAdsListenerAdapter() {
                         override fun onAdsLoadFail() {
                             super.onAdsLoadFail()
