@@ -143,13 +143,13 @@ class MySharePreference {
 
 
         fun setFileName(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val sharedPreferences: SharedPreferences = context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
             myEdit.putString("video",value)
             myEdit.apply()
         }
         fun getFileName(context: Context):String?{
-            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val sp: SharedPreferences = context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
             return sp.getString("video","")
         }
 

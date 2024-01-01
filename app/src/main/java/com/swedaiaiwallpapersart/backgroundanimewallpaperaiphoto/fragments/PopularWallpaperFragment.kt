@@ -51,7 +51,7 @@ class PopularWallpaperFragment : Fragment() {
 
     private val myViewModel: MyHomeViewModel by activityViewModels()
 
-    private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
+    private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
     val orignalList = arrayListOf<CatResponse?>()
@@ -60,15 +60,18 @@ class PopularWallpaperFragment : Fragment() {
 
 
     private var mostUsedWallpaperAdapter: MostUsedWallpaperAdapter? = null
+    private var adapter: ApicategoriesListHorizontalAdapter? = null
 
 
     private val viewModel: MostDownloadedViewmodel by activityViewModels()
 
     var cachedMostDownloaded = ArrayList<CatResponse?>()
 
+
     var isLoadingMore = false
 
     var dataset = false
+    var datasetTrending = false
 
 
     var externalOpen = false
@@ -106,6 +109,8 @@ class PopularWallpaperFragment : Fragment() {
             }
         })
 
+
+        updateUIWithFetchedData()
 
         setEvents()
         initMostUsedRV()
@@ -299,11 +304,21 @@ class PopularWallpaperFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-//        dataset = false
-//        startIndex = 0
         initTrendingData()
 
         initMostDownloadedData()
+
+        if (datasetTrending){
+            if (cachedCatResponses?.isEmpty() == true){
+                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+
+
+            }
+            adapter?.updateMoreData(cachedCatResponses)
+
+        }
+
+
         if (dataset){
 
             Log.e(TAG, "onResume: Data set $dataset")
@@ -386,35 +401,42 @@ class PopularWallpaperFragment : Fragment() {
 
 
     private fun initTrendingData() {
-        binding.progressBar.setAnimation(R.raw.main_loading_animation)
-        binding.progressBar.visibility = View.GONE
-        Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                cachedCatResponses = catResponses
+        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
+            if (wallpapers != null) {
 
-                Log.e("TAG", "loadData: " + catResponses)
                 if (view != null) {
-                    // If the view is available, update the UI
-                    orignalList.clear()
-                    orignalList.addAll(catResponses)
 
-                    updateUIWithFetchedData(catResponses)
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        if (!datasetTrending) {
+
+                            val list = wallpapers.take(100)
+                            cachedCatResponses.addAll(list)
+
+                            Log.e(TAG, "initMostDownloadedData: " + list)
+
+                            withContext(Dispatchers.Main) {
+                                adapter?.updateMoreData(cachedCatResponses)
+                            }
+
+                            datasetTrending = true
+                        }
+                    }
                 }
             } else {
-                Log.e("TAG", "loadData: $catResponses")
+                Log.e(TAG, "initMostDownloadedData: no Data Found " )
             }
         }
     }
 
-    private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
+    private fun updateUIWithFetchedData() {
 
+        val list = ArrayList<CatResponse?>()
 
-        val adapter =
-            ApicategoriesListHorizontalAdapter(catResponses as ArrayList<CatResponse?>, object :
+        adapter =
+            ApicategoriesListHorizontalAdapter(list, object :
                 PositionCallback {
                 override fun getPosition(position: Int) {
-
+                    val allItems = adapter?.getAllItems()
                     SDKBaseController.getInstance().showInterstitialAds(
                         requireActivity(),
                         "mainscr_trending_tab_click_item",
@@ -423,12 +445,12 @@ class PopularWallpaperFragment : Fragment() {
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                navigateToDestination(catResponses, position)
+                                navigateToDestination(allItems!!, position)
                                 //do something
                             }
 
                             override fun onAdsDismiss() {
-                                navigateToDestination(catResponses, position)
+                                navigateToDestination(allItems!!, position)
                             }
                         }
                     )

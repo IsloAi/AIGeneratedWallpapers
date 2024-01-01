@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -43,36 +45,37 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataO
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
     private val binding get() = _binding!!
     private  val myViewModel: MyHomeViewModel by activityViewModels()
     private var navController: NavController? = null
-    private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
-    private var  dialog:Dialog? = null
-    private var  dialog2:Dialog? = null
-    companion object{const val RC_SIGN_IN = 9001}
-    private var isPopOpen = false
-    private val myDialogs = MyDialogs()
-    private var isLoading = false
+    private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private lateinit var myActivity : MainActivity
-    private val allData = mutableListOf<CatResponse>()
-    val orignalList = arrayListOf<CatResponse?>()
+
     private lateinit var adapter:ApiCategoriesListAdapter
-    private val postDataOnServer = PostDataOnServer()
     private val viewModel: SaveStateViewModel by viewModels()
 
     private var isFirstLoad = true
 
-    var currentPage = 2
+    var isLoadingMore = false
+    val TAG = "HOMEFRAG"
 
-    var isLoadingData = false
-    var isLastPage = false
+    var dataset = false
+
+    var startIndex = 0
+    var oldPosition = 0
 
 
+    var externalOpen = false
+
+    private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
@@ -86,19 +89,27 @@ class HomeFragment : Fragment(){
 
         onCreatingCalling()
         setEvents()
-        observeNetworkStatus()
     }
 
 
     private fun setEvents(){
-        binding.retryBtn.setOnClickListener {
-            loadData()
-        }
 
         binding.swipeLayout.setOnRefreshListener {
-            val newList = orignalList.shuffled()
-//            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
-            adapter.shuffleImage(newList as ArrayList)
+
+            val newData = cachedCatResponses.filterNotNull()
+            val nullAdd = addNullValueInsideArray(newData.shuffled())
+
+            cachedCatResponses.clear()
+            cachedCatResponses = nullAdd
+            val initialItems = getItems(0, 30)
+            startIndex = 0
+            adapter.addNewData()
+            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+            adapter.updateMoreData(initialItems)
+            startIndex += 30
+
+
+
             binding.swipeLayout.isRefreshing = false
 
         }
@@ -108,20 +119,15 @@ class HomeFragment : Fragment(){
 //        checkDailyReward()
         myActivity = activity as MainActivity
         navController = findNavController()
-
-        Glide.with(requireContext())
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(binding.animationDdd)
-        binding.progressBar.visibility = VISIBLE
-        binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
-        binding.progressBar.setAnimation(R.raw.main_loading_animation)
+        binding.progressBar.visibility = View.GONE
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
 
-        var loading = false
+
+        setAdapter()
+
 
         binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -129,134 +135,124 @@ class HomeFragment : Fragment(){
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
+                val totalItemCount = adapter.itemCount
+                Log.e(TAG, "onScrolled: insdie scroll listener")
+                if (lastVisibleItemPosition + 10 >= totalItemCount) {
 
-                val totalItemCount = layoutManager.itemCount
-
-                if (!isLastPage && lastVisibleItemPosition + 8 >= totalItemCount) {
-                    isLastPage = true
-                    currentPage++
-
-                    Log.e("********new Data", "onScrolled: "+currentPage )
-                    // Fetch data for next page
-
-                    myViewModel.clear()
-                    loadData()
-                }
-            }
-        })
-
-//        binding.recyclerviewAll.addOnScrollListener(object:RecyclerView.OnScrollListener(){
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//
-//                val visibleItemCount = layoutManager.childCount
-//                val totalItemCount = layoutManager.itemCount
-//                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-//
-//                if (!isLoadingData && !isLastPage) {
-//                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
-//                        && firstVisibleItemPosition >= 0
-//                        && totalItemCount >= 30
-//                    ) {
-//                        Log.e("********new Data", "onScrolled: ", )
-//                        loadData()
-//                    }
-//                }
-//            }
-//        })
-
-        val data = viewModel.getData()
-        if (data){
-            loadData()
-        }else{
-            binding.retryBtn.visibility = View.GONE
-            val list = viewModel.getCatList()
-            updateUIWithFetchedData(list)
-        }
-    }
-    private fun loadMoreData(){
-           cachedCatResponses?.let { allData.addAll(it) }
-           adapter.notifyDataSetChanged()
-           isLoading = false
-    }
-
-    private fun observeNetworkStatus(){
-        myViewModel.networkRequestStatus.observe(viewLifecycleOwner) { isRequestInProgress ->
-            // Update UI based on the network request status
-            if (isRequestInProgress) {
-                // Show loading state, hide retry button
-                binding.progressBar.visibility = View.VISIBLE
-                binding.retryBtn.visibility = View.GONE
-            } else {
-                // Hide loading state, show retry button if there was an error
-                if (myViewModel.wallpaperData.value == null) {
-                    if (viewModel.getData()){
-                        binding.retryBtn.visibility = View.GONE
-                    }else{
-                        binding.retryBtn.visibility = View.GONE
+                    isLoadingMore = true
+                    // End of list reached
+                    val nextItems = getItems(startIndex, 30)
+                    if (nextItems.isNotEmpty()) {
+                        Log.e(TAG, "onScrolled: inside 3 coondition")
+                        adapter?.updateMoreData(nextItems)
+                        startIndex += 30 // Update startIndex for the next batch of data
+                    } else {
+                        Log.e(TAG, "onScrolled: inside 4 coondition")
                     }
 
-                } else {
-                    binding.retryBtn.visibility = View.GONE
                 }
+
+
             }
-        }
+        })
     }
 
     private fun loadData() {
-        isLoadingData = true
-        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                cachedCatResponses = catResponses
 
+
+        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
+            if (wallpapers != null) {
 
                 if (view != null) {
-                    // If the view is available, update the UI
-                    orignalList.clear()
-                    orignalList.addAll(catResponses)
-                    binding.retryBtn.visibility = View.GONE
 
-                    if (isFirstLoad) {
-                        isFirstLoad = false // Update the flag after the initial load
-                        binding.retryBtn.visibility = View.GONE
-                        updateUIWithFetchedData(catResponses)
-                        Log.e("********new Data", "loadData new first: "+catResponses.size )
-                        Log.e("********new Data", "loadData new first: "+catResponses )
-                    } else {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        if (!dataset) {
+                            val list = addNullValueInsideArray(wallpapers.shuffled())
 
-                        Log.e("********new Data", "loadData more: "+catResponses.size )
-                        Log.e("********new Data", "loadData more: "+catResponses )
+                            cachedCatResponses = list
 
-                        val list = addNullValueInsideArray(catResponses)
-                        isLastPage = false
-                        adapter.updateMoreData(list)
+                            val initialItems = getItems(0, 30)
+
+                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+
+                            withContext(Dispatchers.Main) {
+                                adapter.updateMoreData(initialItems)
+                                startIndex += 30
+                            }
+
+                            dataset = true
+                        }
                     }
-
-
                 }
-            }else{
-                myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
-
-                isFirstLoad = true
-
-                if (viewModel.getData()){
-                    binding.retryBtn.visibility = View.GONE
-                }else{
-                    binding.retryBtn.visibility = View.GONE
-                }
-
+            } else {
+                Log.e(TAG, "initMostDownloadedData: no Data Found " )
             }
         }
 
-        if (!isFirstLoad){
-            myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
-        }
 
+
+
+
+//        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
+//            if (catResponses != null) {
+//                cachedCatResponses = catResponses
+//
+//
+//                if (view != null) {
+//                    // If the view is available, update the UI
+//                    orignalList.clear()
+//                    orignalList.addAll(catResponses)
+//                    binding.retryBtn.visibility = View.GONE
+//
+//                    if (isFirstLoad) {
+//                        isFirstLoad = false // Update the flag after the initial load
+//                        binding.retryBtn.visibility = View.GONE
+//                        updateUIWithFetchedData(catResponses)
+//                        Log.e("********new Data", "loadData new first: "+catResponses.size )
+//                        Log.e("********new Data", "loadData new first: "+catResponses )
+//                    } else {
+//
+//                        Log.e("********new Data", "loadData more: "+catResponses.size )
+//                        Log.e("********new Data", "loadData more: "+catResponses )
+//
+//                        val list = addNullValueInsideArray(catResponses)
+//                        isLastPage = false
+//                        adapter.updateMoreData(list)
+//                    }
+//
+//
+//                }
+//            }else{
+//                myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
+//
+//                isFirstLoad = true
+//
+//                if (viewModel.getData()){
+//                    binding.retryBtn.visibility = View.GONE
+//                }else{
+//                    binding.retryBtn.visibility = View.GONE
+//                }
+//
+//            }
+//        }
 
 
     }
 
 
+    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
+        val endIndex = startIndex1 + chunkSize
+        if (startIndex1 >= cachedCatResponses.size) {
+            return arrayListOf()
+        } else {
+            isLoadingMore = false
+            val subList = cachedCatResponses.subList(
+                startIndex1,
+                endIndex.coerceAtMost(cachedCatResponses.size)
+            )
+            return ArrayList(subList)
+        }
+    }
 
 
 
@@ -295,21 +291,23 @@ class HomeFragment : Fragment(){
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
 
-    private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
+    private fun setAdapter() {
 
-        val shuffled = catResponses.shuffled()
-//        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
-
-
-        val list = if (viewModel.getData()){
-            addNullValueInsideArray(shuffled)
-        }else{
-            addNullValueInsideArray(catResponses)
-        }
-
-       adapter = ApiCategoriesListAdapter(list, object :
+        val list = ArrayList<CatResponse?>()
+        adapter = ApiCategoriesListAdapter(list, object :
             PositionCallback {
             override fun getPosition(position: Int) {
+
+                externalOpen = true
+                val allItems = adapter.getAllItems()
+                if (addedItems?.isNotEmpty() == true){
+                    addedItems?.clear()
+                }
+
+
+                addedItems = allItems
+
+                oldPosition = position
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
@@ -333,30 +331,15 @@ class HomeFragment : Fragment(){
 
             }
 
-           override fun getFavorites(position: Int) {
-               //
-           }
-       },myActivity)
+            override fun getFavorites(position: Int) {
+                //
+            }
+        },myActivity)
         adapter.setCoroutineScope(fragmentScope)
-            binding.recyclerviewAll.adapter = adapter
-    }
-
-    private fun getBitmapFromGlide(url:String){
-        Glide.with(requireContext()).asBitmap().load(url)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    Log.e("TAG", "onResourceReady: bitmap loaded" )
-                    if (isAdded){
-                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
-                        binding.backImage.setImageBitmap(blurImage)
-                    }
+        binding.recyclerviewAll.adapter = adapter
 
 
 
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    Log.e("TAG", "onLoadCleared: cleared" )
-                } })
     }
 
 
@@ -385,7 +368,45 @@ class HomeFragment : Fragment(){
             findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
 
-        myViewModel.clear()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+//        dataset = false
+//        startIndex = 0
+
+        loadData()
+        if (dataset){
+
+            Log.e(TAG, "onResume: Data set $dataset")
+//            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
+
+            if (addedItems?.isEmpty() == true){
+                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+
+
+            }
+            adapter.updateMoreData(addedItems!!)
+
+            binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
+
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (!externalOpen){
+            val allItems = adapter.getAllItems()
+            if (addedItems?.isNotEmpty() == true){
+                addedItems?.clear()
+            }
+
+            addedItems = allItems
+        }
+
     }
 
     override fun onDestroyView() {

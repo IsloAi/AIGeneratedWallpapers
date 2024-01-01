@@ -227,7 +227,9 @@ class OnBoardingFragment : Fragment() {
 
         binding.skipBtn.setOnClickListener {
             MySharePreference.setOnboarding(requireContext(),true)
-            findNavController().navigate(R.id.mainFragment)
+            if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
+                findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+            }
         }
 
 
@@ -240,7 +242,7 @@ class OnBoardingFragment : Fragment() {
                 // Move to the next item
                 binding.onboardingViewPager.setCurrentItem(currentItem + 1, true)
             } else {
-                if (findNavController().currentDestination?.id != R.id.mainFragment) {
+                if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
                     findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
                 }
             }

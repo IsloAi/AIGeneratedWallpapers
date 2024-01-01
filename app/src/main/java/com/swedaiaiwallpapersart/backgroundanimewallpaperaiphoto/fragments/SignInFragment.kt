@@ -123,18 +123,7 @@ class SignInFragment : Fragment() {
 //        val signInIntent = googleSignInClient.signInIntent
 //        startActivityForResult(signInIntent, HomeFragment.RC_SIGN_IN)
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == HomeFragment.RC_SIGN_IN) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            try {
-//                val account = task.getResult(ApiException::class.java)
-//                firebaseAuthWithGoogle(account.idToken!!)
-//            } catch (e: ApiException) {
-//                Toast.makeText(requireContext(), "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
-//            }
-        }
-    }
+
     private fun firebaseAuthWithGoogle(idToken: String) {
 //        val credential = GoogleAuthProvider.getCredential(idToken, null)
 //        auth.signInWithCredential(credential)

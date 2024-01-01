@@ -75,7 +75,8 @@
             android:fontFamily="@font/poppins_medium"
             android:textSize="@dimen/_15sdp"
             android:maxLines="1"
-            android:imeOptions="actionGo"
+            android:inputType="text"
+            android:imeOptions="actionDone"
             android:id="@+id/searchEdt"
             />
 

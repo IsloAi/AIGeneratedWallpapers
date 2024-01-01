@@ -1,16 +1,19 @@
 
-=kotlin:S125d"Remove this commented out code.(ïÄÊ»8½§¤Ë1
-Ckotlin:S125”"Remove this commented out code.(…«¿ˆøÿÿÿÿ8Ÿ½§¤Ë1
->kotlin:S125­"Remove this commented out code.(Èòñú8Ÿ½§¤Ë1
-Vkotlin:S1144±"1Remove this unused private "loadMoreData" method.(áÁù ÿÿÿÿÿ8«½§¤Ë1
-\kotlin:S1144Ø"7Remove this unused private "getBitmapFromGlide" method.(³ñşºøÿÿÿÿ8­½§¤Ë1
-Pkotlin:S1481|",Remove this unused "loading" local variable.(ÆèÿÕüÿÿÿÿ8Â½§¤Ë1
-Rkotlin:S1481ò"2Remove this unused "arrayListJson" local variable.(àñÆÑ8Â½§¤Ë1
+>kotlin:S125Ä"Remove this commented out code.(ò’÷§8üè•¤Ì1
+Ckotlin:S125ÿ"Remove this commented out code.(Ò»ˆşÿÿÿÿ8ç¢—¤Ì1
+;kotlin:S6310¨"Avoid hardcoded dispatchers.(©ÓœW8‚é•¤Ì1
+<kotlin:S6310²"Avoid hardcoded dispatchers.(Í¡·Ş8‚é•¤Ì1
+Rkotlin:S1481á"2Remove this unused "arrayListJson" local variable.(àñÆÑ8Ÿé•¤Ì1
+9kotlin:S1128"Remove this unused import.(ıºÎà8´òô¤Ì1
+>kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8«µß¤Ì1
+9kotlin:S1128"Remove this unused import.(ÁÈÚø8«µß¤Ì1
 9kotlin:S1128"Remove this unused import.(âÉïÜ8Ç½§¤Ë1
->kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8Ç½§¤Ë1
-8kotlin:S1128"Remove this unused import.(º¾Ã8Ç½§¤Ë1
-vkotlin:S1192‹"QDefine a constant instead of duplicating this literal "********new Data" 5 times.(æ¢„şÿÿÿÿ8Ê½§¤Ë1
-pkotlin:S1192–"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ê½§¤Ë1
-wkotlin:S3776Î"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8Î½§¤Ë1
-{kotlin:S3923ò"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8Õ½§¤Ë1
-{kotlin:S3923Á"[Remove this conditional structure or edit its code blocks so that they're not all the same.(™şÈ«8Ö½§¤Ë1
+>kotlin:S1128"Remove this unused import.(é°´ãşÿÿÿÿ8Àìû¤Ì1
+9kotlin:S1128"Remove this unused import.(´Ùí8ë‡â¤Ì1
+>kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8Ç½§¤Ë1
+>kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8Éüë¤Ì1
+8kotlin:S1128"Remove this unused import.(º¾Ã8Ç½§¤Ë1
+>kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8¬µß¤Ì1
+9kotlin:S1128"Remove this unused import.(ÒÂ¦8¬µß¤Ì1
+pkotlin:S1192’"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¦é•¤Ì1
+fkotlin:S6510õ"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8±é•¤Ì1

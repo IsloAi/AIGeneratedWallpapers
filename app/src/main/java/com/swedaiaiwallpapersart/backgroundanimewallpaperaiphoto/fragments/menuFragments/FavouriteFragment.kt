@@ -122,6 +122,7 @@ class FavouriteFragment : Fragment() {
             binding.aiRecyclerView.visibility = VISIBLE
             selector(binding.aiWallpaper,binding.selfCreation,binding.live)
             binding.emptySupportAI.visibility = View.GONE
+            binding.liveRecyclerview.visibility = View.GONE
 
 
             if(!isLoadedData){
@@ -134,6 +135,7 @@ class FavouriteFragment : Fragment() {
             selector(binding.selfCreation,binding.aiWallpaper,binding.live)
             binding.progressBar.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
+            binding.liveRecyclerview.visibility = View.GONE
         }else if(MySharePreference.getFavouriteSaveState(requireContext()) ==3){
             initObservers()
             binding.selfCreationRecyclerView.visibility = INVISIBLE
@@ -391,7 +393,7 @@ class FavouriteFragment : Fragment() {
         Bundle().apply {
             putInt("position",position - countOfNulls)
             putString("from","trending")
-            requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_wallpaperViewFragment,this)
+            findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
         myViewModel.clear()
     }
@@ -429,7 +431,7 @@ class FavouriteFragment : Fragment() {
                             putString("arrayListJson",arrayListJson)
                             putInt("position",position)
                         }
-                        requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_favouriteSliderViewFragment,bundle)
+                        findNavController().navigate(R.id.favouriteSliderViewFragment,bundle)
                     }
                 })
                 binding.selfCreationRecyclerView.adapter = adapter

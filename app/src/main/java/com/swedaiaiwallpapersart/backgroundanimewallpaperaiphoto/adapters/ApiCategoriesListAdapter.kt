@@ -264,9 +264,7 @@ class ApiCategoriesListAdapter(
         }
         favouriteButton.setOnClickListener{
             favouriteButton.isEnabled = false
-
-
-                if(arrayList[position]?.liked==true){
+            if(arrayList[position]?.liked==true){
                     arrayList[position]?.liked = false
                     favouriteButton.setImageResource(R.drawable.heart_unsel)
                     likes.text = (arrayList[position]?.likes!!-1).toString()
@@ -451,6 +449,15 @@ class ApiCategoriesListAdapter(
         notifyItemRangeInserted(startPosition, list.size)
     }
 
+    fun getAllItems():ArrayList<CatResponse?>{
+        return arrayList
+    }
+
+    fun addNewData(){
+        arrayList.clear()
+        notifyDataSetChanged()
+
+    }
 
     fun updateData(list:ArrayList<CatResponse?>){
         arrayList.clear()

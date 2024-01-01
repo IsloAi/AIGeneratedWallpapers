@@ -148,7 +148,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/self_creation"
                         app:layout_constraintStart_toStartOf="parent"
                         android:fontFamily="@font/raleway_medium"
-                        android:text="Ai Wallpaper"
+                        android:text="AI Wallpaper"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textSize="12sp"

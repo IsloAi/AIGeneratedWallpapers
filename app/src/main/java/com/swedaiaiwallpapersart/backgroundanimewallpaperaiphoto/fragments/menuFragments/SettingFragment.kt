@@ -57,7 +57,7 @@ class SettingFragment : Fragment() {
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
         binding.rateUsButton.setOnClickListener {feedback()}
-        binding.customerSupportButton.setOnClickListener {requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_feedbackFragment)}
+        binding.customerSupportButton.setOnClickListener {findNavController().navigate(R.id.feedbackFragment)}
         binding.shareAppButton.setOnClickListener {
            shareApp(requireContext())
         }

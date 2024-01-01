@@ -1,17 +1,14 @@
 
 Bkotlin:S125N"Remove this commented out code.(ı…¢¥ÿÿÿÿÿ8®è½¬Ë1
->kotlin:S125Â"Remove this commented out code.(£§¼®8¯è½¬Ë1
->kotlin:S125Ï"Remove this commented out code.(¡­ìõ8¯è½¬Ë1
-Ckotlin:S125Ø"Remove this commented out code.(îîûöûÿÿÿÿ8±è½¬Ë1
-Jkotlin:S1144Á"*Remove this unused private "login" method.(±Ëû¹8Ãè½¬Ë1
 >kotlin:S1128"Remove this unused import.(ë–³ğùÿÿÿÿ8âè½¬Ë1
+8kotlin:S1128"Remove this unused import.(Ş‚½8—ßö¤Ì1
 9kotlin:S1128"Remove this unused import.(Úÿ †8ãè½¬Ë1
 9kotlin:S1128"Remove this unused import.(¼„¹8ãè½¬Ë1
 9kotlin:S1128"Remove this unused import.(Áå­8ãè½¬Ë1
 9kotlin:S1128 "Remove this unused import.(¥ïú8ãè½¬Ë1
+9kotlin:S11281"Remove this unused import.(ÜÏ8•˜û¤Ì1
 qkotlin:S1192‘"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(²¨ñÿÿÿÿÿ8åè½¬Ë1
 Hkotlin:S1874Š"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8çè½¬Ë1
-Ckotlin:S1874Ì"#Deprecated code should not be used.(‚´Ã¬8çè½¬Ë1
 qkotlin:S3776h"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Ë÷€8éè½¬Ë1
 wkotlin:S3776Œ"RRefactor this method to reduce its Cognitive Complexity from 36 to the 15 allowed.(™ßî±ùÿÿÿÿ8éè½¬Ë1
 rkotlin:S3776¡"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(Ê«™ú8êè½¬Ë1

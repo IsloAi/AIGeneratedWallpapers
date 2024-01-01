@@ -57,7 +57,7 @@ class HomeTabsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        SplashOnFragment.exit = false
             myActivity = activity as MainActivity
 
             setGradienttext()

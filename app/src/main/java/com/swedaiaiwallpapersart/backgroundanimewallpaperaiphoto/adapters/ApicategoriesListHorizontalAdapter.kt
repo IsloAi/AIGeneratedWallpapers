@@ -101,6 +101,23 @@ class ApicategoriesListHorizontalAdapter(
         }
     }
 
+    fun updateMoreData(list:ArrayList<CatResponse?>){
+        val startPosition = arrayList.size
+
+        for(i in 0 until list.size){
+            if (arrayList.contains(list[i])){
+                Log.e("********new Data", "updateMoreData: already in list", )
+            }else{
+                arrayList.add(list[i])
+            }
+        }
+        notifyItemRangeInserted(startPosition, list.size)
+    }
+
+    fun getAllItems():ArrayList<CatResponse?>{
+        return arrayList
+    }
+
 
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

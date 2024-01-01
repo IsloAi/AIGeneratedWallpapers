@@ -67,6 +67,10 @@ class DownloadLiveWallpaperFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
         }
+
+        binding.toolbar.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun initObservers(){
@@ -149,7 +153,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 .startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
                         lifecycleScope.launch(Dispatchers.Main) {
-                            Toast.makeText(requireContext(),"File Downloaded",Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(requireContext(),"File Downloaded",Toast.LENGTH_SHORT).show()
                             binding.buttonApplyWallpaper.visibility = View.VISIBLE
 
                         }

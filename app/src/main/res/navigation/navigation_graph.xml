@@ -34,9 +34,7 @@
         <action
             android:id="@+id/action_mainFragment_to_premiumPlanFragment"
             app:destination="@id/premiumPlanFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_feedbackFragment"
-            app:destination="@id/feedbackFragment" />
+
         <action
             android:id="@+id/action_mainFragment_to_myViewCreationFragment"
             app:destination="@id/myViewCreationFragment" />

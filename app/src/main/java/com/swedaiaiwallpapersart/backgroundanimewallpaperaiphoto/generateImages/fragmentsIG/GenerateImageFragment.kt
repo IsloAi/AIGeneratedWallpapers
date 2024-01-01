@@ -446,47 +446,4 @@ class GenerateImageFragment : Fragment() {
         textIndex = (textIndex + 1) % texts.size
     }
 
-    private fun login() {
-//        auth = FirebaseAuth.getInstance()
-//        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-//            .requestEmail()
-//            .build()
-//        val googleSignInClient = GoogleSignIn.getClient(requireContext(), gso)
-//        val signInIntent = googleSignInClient.signInIntent
-//        startActivityForResult(signInIntent, HomeFragment.RC_SIGN_IN)
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == HomeFragment.RC_SIGN_IN) {
-            dialog2?.dismiss()
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            try {
-//                val account = task.getResult(ApiException::class.java)
-//                firebaseAuthWithGoogle(account.idToken!!)
-//            } catch (e: ApiException) {
-//                Toast.makeText(requireContext(), "Google sign in failed: ${e.message}", Toast.LENGTH_SHORT).show()
-//            }
-        }
-    }
-//    private fun firebaseAuthWithGoogle(idToken: String) {
-//        val credential = GoogleAuthProvider.getCredential(idToken, null)
-//        auth.signInWithCredential(credential)
-//            .addOnCompleteListener(requireActivity()){ task ->
-//                if (task.isSuccessful) {
-//                    Toast.makeText(requireContext(), "Successfully login", Toast.LENGTH_SHORT).show()
-//                    val user = auth.currentUser
-//                    val  name = user?.displayName
-//                    val  email = user?.email
-//                    val  image = user?.photoUrl
-//                    if(email != null){
-//                        googleLogin.fetchGems(requireContext(),email,dialog,binding.gemsText)
-//                    }
-//                } else {
-//                    Toast.makeText(requireContext(), "Authentication failed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//    }
-
-
 }
