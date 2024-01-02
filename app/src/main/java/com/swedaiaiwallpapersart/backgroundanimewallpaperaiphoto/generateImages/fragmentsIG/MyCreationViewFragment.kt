@@ -50,6 +50,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.DummyFavorite
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.CoroutineScope
@@ -377,12 +378,22 @@ class MyCreationViewFragment : Fragment() {
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        findNavController().navigateUp()
+
+                        if (BlurView.genFrom == "main"){
+                            findNavController().navigateUp()
+                        }else{
+                            findNavController().popBackStack(R.id.homeTabsFragment,false)
+                        }
+
                         //do something
                     }
 
                     override fun onAdsDismiss() {
-                        findNavController().navigateUp()
+                        if (BlurView.genFrom == "main"){
+                            findNavController().navigateUp()
+                        }else{
+                            findNavController().popBackStack(R.id.homeTabsFragment,false)
+                        }
                     }
                 }
             )

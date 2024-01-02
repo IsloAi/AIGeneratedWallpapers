@@ -58,6 +58,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -212,6 +213,7 @@ class GenerateImageFragment : Fragment() {
             binding.historyRecyclerView.layoutManager = gridLayoutManager
             val adapter  = HistoryAdapter(myList.reversed(),object:GetbackOfID{
                 override fun getId(id:Int){
+                    BlurView.genFrom = "main"
                     navigate(id,0)
                 }
             })
@@ -268,6 +270,7 @@ class GenerateImageFragment : Fragment() {
     private fun otherWorking() {
         binding.generateButton.setOnClickListener {
             if (binding.edtPrompt.text.isNotEmpty()){
+                BlurView.genFrom = "main"
                 SDKBaseController.getInstance().showRewardedAds(requireActivity(),"mainscr_generate_tab_reward","mainscr_generate_tab_reward",object:CustomSDKRewardedAdsListener{
                     override fun onAdsDismiss() {
                         Log.e("********ADS", "onAdsDismiss: ", )
@@ -278,6 +281,7 @@ class GenerateImageFragment : Fragment() {
                         val getPrompt = binding.edtPrompt.text
                         if(getPrompt.isNotEmpty()){
                             getUserIdDialog()
+
                             viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
                             hasNavigated = false
                         }else{
@@ -354,6 +358,7 @@ class GenerateImageFragment : Fragment() {
 
 
         binding.seeAllCreations.setOnClickListener {
+            BlurView.genFrom = "all"
             findNavController().navigate(R.id.viewAllCreations)
         }
     }

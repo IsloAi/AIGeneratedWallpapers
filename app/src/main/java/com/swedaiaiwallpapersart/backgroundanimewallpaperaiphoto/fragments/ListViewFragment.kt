@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
@@ -39,8 +40,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewMod
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.withContext
 
 class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
@@ -54,9 +57,18 @@ class ListViewFragment : Fragment() {
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     val orignalList = arrayListOf<CatResponse?>()
+    var adapter:ApiCategoriesListAdapter ?= null
+
+    private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
+    private var addedItems: ArrayList<CatResponse?>? = ArrayList()
+    var dataset = false
+    var oldPosition = 0
 
     var adcount = 0
     var totalADs = 0
+    var externalOpen = false
+
+    var startIndex = 0
 
     val TAG = "LISTVIEWCAT"
 
@@ -98,9 +110,101 @@ class ListViewFragment : Fragment() {
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
 
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
-        loadData()
+
+        val list = ArrayList<CatResponse?>()
+         adapter = ApiCategoriesListAdapter(list, object :
+            PositionCallback {
+            override fun getPosition(position: Int) {
+
+                externalOpen = true
+                val allItems = adapter?.getAllItems()
+                if (addedItems?.isNotEmpty() == true){
+                    addedItems?.clear()
+                }
+
+
+                addedItems = allItems
+
+                oldPosition = position
+
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "categoryscr_fantasy_click_item",
+                    "categoryscr_fantasy_click_item",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            navigateToDestination(list,position)
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            navigateToDestination(list,position)
+                        }
+                    }
+                )
+
+
+
+            }
+
+            override fun getFavorites(position: Int) {
+            }
+        },myActivity)
+
+
+        adapter!!.setCoroutineScope(fragmentScope)
+        binding.recyclerviewAll.adapter = adapter
+
+
+        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+
+                val totalItemCount = adapter!!.itemCount
+                Log.e(TAG, "onScrolled: insdie scroll listener")
+                if (lastVisibleItemPosition + 10 >= totalItemCount) {
+                    // End of list reached
+                    val nextItems = getItems(startIndex, 30)
+                    if (nextItems.isNotEmpty()) {
+                        Log.e(TAG, "onScrolled: inside 3 coondition")
+                        adapter?.updateMoreData(nextItems)
+                        startIndex += 30 // Update startIndex for the next batch of data
+                    } else {
+                        Log.e(TAG, "onScrolled: inside 4 coondition")
+                    }
+
+                }
+
+
+            }
+        })
+
         binding.toolbar.setOnClickListener {
             findNavController().navigateUp()
+        }
+
+        binding.swipeLayout.setOnRefreshListener {
+
+            val newData = cachedCatResponses.filterNotNull()
+            val nullAdd = addNullValueInsideArray(newData.shuffled())
+
+            cachedCatResponses.clear()
+            cachedCatResponses = nullAdd
+            val initialItems = getItems(0, 30)
+            startIndex = 0
+            adapter?.addNewData()
+            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+            adapter?.updateMoreData(initialItems)
+            startIndex += 30
+
+
+
+            binding.swipeLayout.isRefreshing = false
+
         }
     }
     private fun loadData() {
@@ -109,18 +213,75 @@ class ListViewFragment : Fragment() {
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
 
+                if (!dataset) {
+                    val list = addNullValueInsideArray(catResponses.shuffled())
+
+                    cachedCatResponses = list
+
+                    val initialItems = getItems(0, 30)
+
+                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
+
+                        adapter?.updateMoreData(initialItems)
+                        startIndex += 30
+                    dataset = true
+                }
+
                 Log.e(TAG, "loadData: "+catResponses )
-
-                orignalList.clear()
-                orignalList.addAll(catResponses)
-
-
-                    updateUIWithFetchedData(catResponses as ArrayList)
             }else{
                 Log.e(TAG, "loadData: "+catResponses )
             }
         }
-//        myViewModel.fetchWallpapers(requireContext(),name)
+    }
+
+    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
+        val endIndex = startIndex1 + chunkSize
+        if (startIndex1 >= cachedCatResponses.size) {
+            return arrayListOf()
+        } else {
+            val subList = cachedCatResponses.subList(
+                startIndex1,
+                endIndex.coerceAtMost(cachedCatResponses.size)
+            )
+            return ArrayList(subList)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loadData()
+
+        if (dataset){
+
+            Log.e(TAG, "onResume: Data set $dataset")
+            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
+
+            if (addedItems?.isEmpty() == true){
+                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+
+
+            }
+            adapter?.updateMoreData(addedItems!!)
+
+            binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
+
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        if (!externalOpen){
+            val allItems = adapter?.getAllItems()
+            if (addedItems?.isNotEmpty() == true){
+                addedItems?.clear()
+            }
+
+            addedItems = allItems
+        }
+
     }
 
 
@@ -163,51 +324,16 @@ class ListViewFragment : Fragment() {
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     @SuppressLint("NotifyDataSetChanged")
-    private fun updateUIWithFetchedData(catResponses: ArrayList<CatResponse>) {
-
-        val shuffled = catResponses.shuffled()
-
-//        getBitmapFromGlide(shuffled[0]?.compressed_image_url!!)
-
-
-        val list = addNullValueInsideArray(shuffled)
-        val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
-            PositionCallback {
-            override fun getPosition(position: Int) {
-
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "categoryscr_fantasy_click_item",
-                    "categoryscr_fantasy_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            navigateToDestination(list,position)
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-                            navigateToDestination(list,position)
-                        }
-                    }
-                )
+    private fun updateUIWithFetchedData() {
 
 
 
-            }
 
-            override fun getFavorites(position: Int) {
-            }
-        },myActivity)
-        adapter.setCoroutineScope(fragmentScope)
-        binding.recyclerviewAll.adapter = adapter
 
 
         binding.swipeLayout.setOnRefreshListener {
             val newList = orignalList.shuffled()
-//            getBitmapFromGlide(newList[0]!!.compressed_image_url!!)
-            adapter.shuffleImage(newList as ArrayList)
+            adapter?.shuffleImage(newList as ArrayList)
             binding.swipeLayout.isRefreshing = false
         }
     }
@@ -255,27 +381,9 @@ class ListViewFragment : Fragment() {
             putInt("position",position - countOfNulls)
         }
         findNavController().navigate(R.id.action_listViewFragment_to_wallpaperViewFragment,bundle)
-        myViewModel.clear()
+
 
     }
-
-//    private fun getBitmapFromGlide(url:String){
-//        Glide.with(requireContext()).asBitmap().load(url)
-//            .into(object : CustomTarget<Bitmap>() {
-//                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-//                    Log.e("TAG", "onResourceReady: bitmap loaded" )
-//                    if (isAdded){
-//                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
-//                        binding.backImage.setImageBitmap(blurImage)
-//                    }
-//
-//
-//
-//                }
-//                override fun onLoadCleared(placeholder: Drawable?) {
-//                    Log.e("TAG", "onLoadCleared: cleared" )
-//                } })
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

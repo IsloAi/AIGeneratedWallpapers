@@ -24,6 +24,7 @@ class MyViewModel: ViewModel()  {
         context: Context,
         catName: String,
     ) {
+        clear()
         val retrofit = RetrofitInstance.getInstance()
         val service = retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getDeviceID(context)!!)
 
