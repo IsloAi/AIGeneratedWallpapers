@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.live
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
@@ -35,9 +36,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavoruiteLiveWallpaperBody
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -109,9 +108,25 @@ class LiveWallpaperPreviewFragment : Fragment() {
     private fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
 
+            val file = requireContext().filesDir
+            val filepath = File(file,BlurView.fileName)
+            val newFile = File(file,"video.mp4")
+            BlurView.filePath = newFile.path
+
+
             if (isLiveWallpaperSupported(requireContext())){
                 IkmSdkController.setEnableShowResumeAds(false)
-                LiveWallpaperService.setToWallPaper(requireContext())
+
+
+                val info = WallpaperManager.getInstance(requireContext()).wallpaperInfo
+                if (info == null || info.packageName != requireContext().packageName) {
+                    filepath.renameTo(newFile)
+                    LiveWallpaperService.setToWallPaper(requireContext())
+                } else {
+                    showSimpleDialog(requireContext(),"Do you want to change the live wallpaper?","")
+
+
+                }
             }else{
                 Toast.makeText(requireContext(),"This device do not support Live Wallpapers",Toast.LENGTH_SHORT).show()
             }
@@ -141,10 +156,10 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
                 if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                    Log.e("TAG", "functionality: inside click permission", )
+                    Log.e("TAG", "functionality: inside click permission")
                     ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 }else{
-                    Log.e("TAG", "functionality: inside click dialog", )
+                    Log.e("TAG", "functionality: inside click dialog")
                     getUserIdDialog()
                 }
             }else{
@@ -152,6 +167,32 @@ class LiveWallpaperPreviewFragment : Fragment() {
             }
 
         }
+    }
+
+    fun showSimpleDialog(context: Context, title: kotlin.String, message: kotlin.String) {
+        val builder = AlertDialog.Builder(context)
+        builder.setTitle(title)
+            .setMessage(message)
+
+        builder.setPositiveButton("Yes"
+        ) { p0, p1 ->
+            val file = requireContext().filesDir
+            val filepath = File(file,BlurView.fileName)
+            val newFile = File(file,"video.mp4")
+            filepath.renameTo(newFile)
+            p0.dismiss()
+        }
+
+        builder.setNegativeButton("No"
+        ) { p0, p1 ->
+
+            p0.dismiss()
+
+        }
+
+        // Create and show the dialog
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun getUserIdDialog() {
@@ -296,6 +337,13 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         binding.liveWallpaper.start()
+    }
+
+
+    fun isLiveWallpaperServiceRunning(context: Context): Boolean {
+        val wallpaperManager = WallpaperManager.getInstance(context)
+        val wallpaperInfo = wallpaperManager.wallpaperInfo
+        return wallpaperInfo != null && wallpaperInfo.serviceName == LiveWallpaperService::class.java.name
     }
 
 

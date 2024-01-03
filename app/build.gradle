@@ -152,6 +152,9 @@ dependencies {
     implementation "androidx.paging:paging-runtime:$paging_version"
 
 
+    implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
+
+
 
 
 }

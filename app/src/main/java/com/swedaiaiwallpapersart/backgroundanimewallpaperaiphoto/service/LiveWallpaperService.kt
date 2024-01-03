@@ -1,15 +1,17 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service
 
 import android.app.WallpaperManager
-import android.content.*
+import android.content.BroadcastReceiver
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.media.MediaPlayer
-import android.os.Build
-import android.os.Environment
 import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.SurfaceHolder
 import com.google.firebase.FirebaseApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import java.io.File
 import java.io.IOException
@@ -19,20 +21,13 @@ class LiveWallpaperService : WallpaperService() {
         private var myMediaPlayer: MediaPlayer? = null
         private var liveWallBroadcastReceiver: BroadcastReceiver? = null
         private var liveVideoFilePath: String? = null
-
+        private val context: Context? = null
         override fun onCreate(surfaceHolder: SurfaceHolder) {
             super.onCreate(surfaceHolder)
 
             FirebaseApp.initializeApp(applicationContext)
 
-            val file = applicationContext.filesDir
 
-//
-            val video =  file.path + "/" + MySharePreference.getFileName(applicationContext)
-
-            Log.e("TAG", "onCreate: $video")
-
-            liveVideoFilePath = video
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
             registerReceiver(object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
@@ -48,8 +43,24 @@ class LiveWallpaperService : WallpaperService() {
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
             super.onSurfaceCreated(holder)
-            myMediaPlayer = MediaPlayer().apply {
-                setSurface(holder.surface)
+
+            myMediaPlayer = MediaPlayer()
+            myMediaPlayer?.setSurface(holder.surface)
+            startPlayer()
+        }
+
+        fun startPlayer(){
+            val file = applicationContext.filesDir
+
+//
+            val video =  file.path + "/" + "video.mp4"
+
+            Log.e("TAG", "onCreate: $video")
+
+            liveVideoFilePath = video
+
+
+            myMediaPlayer?.apply {
                 setDataSource(liveVideoFilePath)
                 isLooping = true
                 setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
@@ -74,6 +85,8 @@ class LiveWallpaperService : WallpaperService() {
                 myMediaPlayer!!.pause()
             }
         }
+
+
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
             super.onSurfaceDestroyed(holder)

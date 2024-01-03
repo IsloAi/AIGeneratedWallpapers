@@ -323,20 +323,6 @@ class ListViewFragment : Fragment() {
         return newData
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
-    @SuppressLint("NotifyDataSetChanged")
-    private fun updateUIWithFetchedData() {
-
-
-
-
-
-
-        binding.swipeLayout.setOnRefreshListener {
-            val newList = orignalList.shuffled()
-            adapter?.shuffleImage(newList as ArrayList)
-            binding.swipeLayout.isRefreshing = false
-        }
-    }
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
         var newPosition = position
         var totalAdsCount = 0

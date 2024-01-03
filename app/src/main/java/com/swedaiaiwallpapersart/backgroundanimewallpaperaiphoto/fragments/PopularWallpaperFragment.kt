@@ -32,6 +32,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -47,6 +48,8 @@ class PopularWallpaperFragment : Fragment() {
     private lateinit var welcomeAdapter: PopularSliderAdapter
 
     var startIndex = 0
+
+    val catListViewmodel: MyViewModel by activityViewModels()
 
 
     private val myViewModel: MyHomeViewModel by activityViewModels()
@@ -372,7 +375,28 @@ class PopularWallpaperFragment : Fragment() {
                         }
 
                         2 -> {
-                            setFragment("Anime")
+                            catListViewmodel.fetchWallpapers(requireContext(),"Anime")
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "mainscr_cate_tab_click_item",
+                                "mainscr_cate_tab_click_item",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        Log.e("********ADS", "onAdsShowFail: $errorCode")
+
+
+                                        setFragment("Anime")
+                                        //do something
+                                    }
+
+                                    override fun onAdsDismiss() {
+                                        setFragment("Anime")
+                                    }
+                                }
+                            )
+
+
                         }
 
                         3 -> {

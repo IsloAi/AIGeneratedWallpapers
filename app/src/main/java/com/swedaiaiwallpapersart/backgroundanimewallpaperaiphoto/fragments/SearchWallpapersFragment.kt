@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -26,8 +27,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameR
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,6 +45,14 @@ class SearchWallpapersFragment : Fragment() {
     val catlist = ArrayList<CatNameResponse?>()
     var adapter:ApiCategoriesNameAdapter ?= null
     var searchAdapter:ApiCategoriesListAdapter ?= null
+
+    val catListViewmodel: MyViewModel by activityViewModels()
+
+    var catgories = true
+
+    private var addedItems: ArrayList<CatResponse?>? = ArrayList()
+
+    var searched = false
 
 
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
@@ -65,11 +76,29 @@ class SearchWallpapersFragment : Fragment() {
 
         initDataObserver()
         initSearchData()
-        editTextLayoutsFocus()
-        setEvents()
 
         initSearchRv()
+        setEvents()
 
+
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (catgories){
+            binding.searchSuggestions.visibility = View.GONE
+            binding.recyclerviewCatgory.visibility = View.VISIBLE
+            binding.recyclerviewAll.visibility = View.GONE
+            editTextLayoutsFocus()
+        }else{
+            binding.searchSuggestions.visibility = View.VISIBLE
+            binding.recyclerviewCatgory.visibility = View.GONE
+            binding.recyclerviewAll.visibility = View.VISIBLE
+            editTextLayoutsFocus()
+        }
 
 
 
@@ -83,6 +112,11 @@ class SearchWallpapersFragment : Fragment() {
             PositionCallback {
             override fun getPosition(position: Int) {
 
+                val items = searchAdapter?.getAllItems()
+                addedItems?.addAll(items!!)
+
+                catgories = false
+
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
                     "mainscr_trending_tab_click_item",
@@ -91,13 +125,13 @@ class SearchWallpapersFragment : Fragment() {
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
-//                            navigateToDestination(list,position)
+                            navigateToDestination(items!!,position)
                             //do something
                         }
 
                         override fun onAdsDismiss() {
                             Log.e("********ADS", "onAdsDismiss: " )
-//                            navigateToDestination(list,position)
+                            navigateToDestination(items!!,position)
                         }
                     }
                 )
@@ -120,55 +154,74 @@ class SearchWallpapersFragment : Fragment() {
             binding.searchEdt.setText("Car")
         }
 
+        binding.suggestDark.setOnClickListener {
+            binding.searchEdt.setText("Dark")
+        }
+
+        binding.suggestNeon.setOnClickListener {
+            binding.searchEdt.setText("Neon")
+        }
+
+        binding.suggestAIWallpapers.setOnClickListener {
+            binding.searchEdt.setText("Ai Wallpaper")
+        }
+
+        binding.suggestHoroscope.setOnClickListener {
+            binding.searchEdt.setText("Horoscope")
+        }
+
+        binding.suggestGameLOL.setOnClickListener {
+            binding.searchEdt.setText("Game")
+        }
         binding.backBtn.setOnClickListener {
             findNavController().popBackStack()
         }
 
+        binding.searchEdt.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
+                }
 
-        binding.searchEdt.addTextChangedListener(object:TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+                }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                override fun afterTextChanged(p0: Editable?) {
 
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-                if (p0.isNullOrBlank()){
-                    binding.searchSuggestions.visibility = View.VISIBLE
-                    binding.recyclerviewCatgory.visibility = View.GONE
-                    binding.recyclerviewAll.visibility = View.GONE
-                    binding.emptySupport.visibility = View.GONE
-                }else{
-                    var list:ArrayList<CatResponse?> = arrayListOf()
-                    searchInList(p0.toString(), cachedCatResponses) { filteredList ->
-
-                        Log.e("TAG", "afterTextChanged: "+filteredList )
-
-
-
-                        if (filteredList.isNotEmpty()) {
-                            binding.searchSuggestions.visibility = View.GONE
-                            binding.recyclerviewCatgory.visibility = View.GONE
-                            binding.recyclerviewAll.visibility = View.VISIBLE
-                            searchAdapter?.updateData(filteredList)
-                        }else{
-                            binding.searchSuggestions.visibility = View.GONE
+                        if (p0.isNullOrBlank()) {
+                            binding.searchSuggestions.visibility = View.VISIBLE
                             binding.recyclerviewCatgory.visibility = View.GONE
                             binding.recyclerviewAll.visibility = View.GONE
-                            binding.emptySupport.visibility = View.VISIBLE
+                            binding.emptySupport.visibility = View.GONE
+                        } else {
+                            searchInList(p0.toString(), cachedCatResponses) { filteredList ->
+
+                                Log.e("TAG", "afterTextChanged: " + filteredList)
+
+
+                                if (filteredList.isNotEmpty()) {
+                                    binding.searchSuggestions.visibility = View.GONE
+                                    binding.recyclerviewCatgory.visibility = View.GONE
+                                    binding.recyclerviewAll.visibility = View.VISIBLE
+                                    searchAdapter?.updateData(filteredList)
+                                } else {
+                                    binding.searchSuggestions.visibility = View.GONE
+                                    binding.recyclerviewCatgory.visibility = View.GONE
+                                    binding.recyclerviewAll.visibility = View.GONE
+                                    binding.emptySupport.visibility = View.VISIBLE
+                                }
+
+
+                            }
                         }
-                    }
-                }
+
 
 
 //                Log.e("TAG", "afterTextChanged: "+searchInList("Car",cachedCatResponses) )
-            }
+                }
 
-        })
+            })
+
     }
 
     fun searchInList(
@@ -229,6 +282,10 @@ class SearchWallpapersFragment : Fragment() {
         adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
 
+                catgories = true
+
+                catListViewmodel.fetchWallpapers(requireContext(),string)
+
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
                     "mainscr_cate_tab_click_item",
@@ -260,6 +317,26 @@ class SearchWallpapersFragment : Fragment() {
                 val list = addNullValueInsideArray(wallpapersList)
                 adapter?.updateData(newData = list)
             }
+        }
+    }
+
+
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
+        val gson = Gson()
+        val arrayListJson = gson.toJson(arrayList.filterNotNull())
+
+        val countOfNulls = arrayList.subList(0, position).count { it == null }
+        val sharedViewModel: SharedViewModel by activityViewModels()
+
+
+        sharedViewModel.clearData()
+
+        sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
+
+        Bundle().apply {
+            putString("from", "trending")
+            putInt("position", position - countOfNulls)
+            requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
     }
 

@@ -1,2 +1,7 @@
 
-qkotlin:S1192²"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8æ½û¨Ë1
+Zkotlin:S1172²"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8íş¤ûÌ1
+Zkotlin:S1172»"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8É¼’ûÌ1
+akotlin:S899¶"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8Ë¼’ûÌ1
+`kotlin:S899{"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8óß¦ûÌ1
+qkotlin:S1192Û"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8Šÿ¤ûÌ1
+qkotlin:S3776l"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ñàõà8é¼’ûÌ1

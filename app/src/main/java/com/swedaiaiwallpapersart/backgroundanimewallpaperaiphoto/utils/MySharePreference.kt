@@ -144,6 +144,7 @@ class MySharePreference {
 
         fun setFileName(context: Context,value:String){
             val sharedPreferences: SharedPreferences = context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
+            sharedPreferences.edit().clear().apply()
             val myEdit = sharedPreferences.edit()
             myEdit.putString("video",value)
             myEdit.apply()

@@ -49,7 +49,7 @@ class LiveWallpaperFragment : Fragment() {
 
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
-        loadData()
+
     }
 
 
@@ -69,6 +69,11 @@ class LiveWallpaperFragment : Fragment() {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadData()
     }
 
 
