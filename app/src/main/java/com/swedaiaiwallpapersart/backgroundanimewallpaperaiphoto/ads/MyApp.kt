@@ -9,17 +9,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 
 class MyApp : SDKBaseApplication() {
 
-//    init {
-//        enableReward = true
-//    }
 
-
-    companion object{
-        var path = ""
-
-        fun getCurrentPath(context: Context):String{
-            return MySharePreference.getFileName(context.applicationContext)!!
-        }
+    override fun enableRewardAd(): Boolean {
+        return true
     }
 
 

@@ -54,12 +54,12 @@ class MostUsedWallpaperAdapter(
     var row = 0
 
 
-    private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+    private val firstAdLineThreshold = if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
 
     val firstline = firstAdLineThreshold *3
-    private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+    private val lineCount = if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
     val lineC = lineCount*3
-    private val statusAd =  AdConfig.adStatusViewListWallSRC
+    private val statusAd =  AdConfig.adStatusMostUsed
 
     private var coroutineScope: CoroutineScope? = null
 
@@ -219,7 +219,7 @@ class MostUsedWallpaperAdapter(
                     object : CustomSDKAdsListenerAdapter() {
                         override fun onAdsLoadFail() {
                             super.onAdsLoadFail()
-                            Log.e("TAG", "onAdsLoadFail: native failded " )
+                            Log.e("MostUsedAdapter", "onAdsLoadFail: native failded " )
                             if (statusAd == 0){
                                 binding.adsView.visibility = View.GONE
                             }else{
@@ -235,7 +235,7 @@ class MostUsedWallpaperAdapter(
                         override fun onAdsLoaded() {
                             super.onAdsLoaded()
                             binding.adsView.visibility = View.VISIBLE
-                            Log.e("TAG", "onAdsLoaded: native loaded" )
+                            Log.e("MostUsedAdapter", "onAdsLoaded: native loaded" )
                         }
                     }
                 )

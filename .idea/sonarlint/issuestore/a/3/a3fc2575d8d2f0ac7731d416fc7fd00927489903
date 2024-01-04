@@ -1,14 +1,15 @@
 
-Ykotlin:S1172Õ"4Remove this unused function parameter "notSelected".(þð‹ýÿÿÿÿ8ÿž“‹É1
-Ckotlin:S125Þ"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8ŽŸ“‹É1
-Ckotlin:S125ä"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8Ÿ“‹É1
-Ckotlin:S125"Remove this commented out code.(ð·Äýÿÿÿÿ8Ÿ“‹É1
->kotlin:S125¤"Remove this commented out code.(£Ãš‰8’Ÿ“‹É1
-Ckotlin:S125µ"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8’Ÿ“‹É1
-=kotlin:S125Ã"Remove this commented out code.(è»»_8”Ÿ“‹É1
+Ykotlin:S1172ö"4Remove this unused function parameter "notSelected".(þð‹ýÿÿÿÿ8ÿž“‹É1
+Ckotlin:S125ï"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8ŽŸ“‹É1
+Ckotlin:S125õ"Remove this commented out code.(ŒÊ†Áýÿÿÿÿ8Ÿ“‹É1
+Ckotlin:S125¢"Remove this commented out code.(ð·Äýÿÿÿÿ8Ÿ“‹É1
+>kotlin:S125Å"Remove this commented out code.(£Ãš‰8’Ÿ“‹É1
+Ckotlin:S125Ö"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8’Ÿ“‹É1
+=kotlin:S125ä"Remove this commented out code.(è»»_8”Ÿ“‹É1
 [kotlin:S1481n"<Remove this unused "firebaseMessageReceiver" local variable.(Õèþô8÷­‹É1
-Mkotlin:S1481ç"-Remove this unused "behavior" local variable.(Ø¦š¾8ÖŸ“‹É1
+Mkotlin:S1481ˆ"-Remove this unused "behavior" local variable.(Ø¦š¾8ÖŸ“‹É1
 9kotlin:S1128"Remove this unused import.(´Ùí8‡®‹É1
 9kotlin:S1128"Remove this unused import.(Æü³Ï8‡®‹É1
 Gkotlin:S1874h"#Deprecated code should not be used.(Ý‘Ïôûÿÿÿÿ8”®‹É1
-wkotlin:S3776‚"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(„ö÷àøÿÿÿÿ8ôŸ“‹É1
+wkotlin:S3776‚"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8ôŸ“‹É1
+wkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìþÿÿÿÿ8ìä¡Í1

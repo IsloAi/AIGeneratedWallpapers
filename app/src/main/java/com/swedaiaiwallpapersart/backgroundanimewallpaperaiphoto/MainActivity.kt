@@ -200,6 +200,23 @@ class MainActivity : AppCompatActivity(){
                                 AdConfig.lineCountTrending = lineCount.toInt() + 1
                                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
+
+                            val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
+                            for (i in 0 until mostUsedScreen.length()) {
+                                val obj = mostUsedScreen.getJSONObject(i)
+                                val status = obj.getString("Status")
+                                val threshold = obj.getString("fisrt_ad_line_threshold")
+                                val lineCount = obj.getString("line_count")
+                                val designType = obj.getString("native_design_type")
+
+
+                                AdConfig.adStatusMostUsed = status.toInt()
+                                AdConfig.firstAdLineMostUsed = threshold.toInt()
+                                AdConfig.lineCountMostUsed = lineCount.toInt() + 1
+                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+                            }
+
+
                         }catch (e: JSONException) {
                             e.printStackTrace()
                         }
@@ -281,6 +298,22 @@ class MainActivity : AppCompatActivity(){
                 AdConfig.firstAdLineTrending = threshold.toInt()
                 AdConfig.lineCountTrending = lineCount.toInt() + 1
                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
+            }
+
+
+            val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
+            for (i in 0 until mostUsedScreen.length()) {
+                val obj = mostUsedScreen.getJSONObject(i)
+                val status = obj.getString("Status")
+                val threshold = obj.getString("fisrt_ad_line_threshold")
+                val lineCount = obj.getString("line_count")
+                val designType = obj.getString("native_design_type")
+
+
+                AdConfig.adStatusMostUsed = status.toInt()
+                AdConfig.firstAdLineMostUsed = threshold.toInt()
+                AdConfig.lineCountMostUsed = lineCount.toInt() + 1
+                println("MostUsed: Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
         }catch (e: JSONException) {
             e.printStackTrace()

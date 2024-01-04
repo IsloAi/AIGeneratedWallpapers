@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
@@ -71,6 +72,24 @@ class SearchWallpapersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
+
+        SDKBaseController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "searchscr_bottom",
+                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                    }
+                }
+            )
 
         initCatgories()
 

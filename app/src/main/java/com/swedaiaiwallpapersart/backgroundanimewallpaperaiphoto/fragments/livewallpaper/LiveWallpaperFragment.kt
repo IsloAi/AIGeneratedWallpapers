@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
@@ -22,6 +23,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class LiveWallpaperFragment : Fragment() {
 
@@ -32,6 +35,9 @@ class LiveWallpaperFragment : Fragment() {
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var myActivity : MainActivity
+    var adapter:LiveWallpaperAdapter ?= null
+
+    val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,7 +55,7 @@ class LiveWallpaperFragment : Fragment() {
 
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
-
+        updateUIWithFetchedData()
     }
 
 
@@ -63,7 +69,7 @@ class LiveWallpaperFragment : Fragment() {
                     // If the view is available, update the UI
 //
                     val list = addNullValueInsideArray(catResponses)
-                    updateUIWithFetchedData(list)
+                    adapter?.updateMoreData(list)
                 }
             }else{
 
@@ -77,13 +83,12 @@ class LiveWallpaperFragment : Fragment() {
     }
 
 
-    private fun updateUIWithFetchedData(catResponses: ArrayList<LiveWallpaperModel?>) {
+    private fun updateUIWithFetchedData() {
 
-
-        val adapter = LiveWallpaperAdapter(catResponses, object :
+        val list = ArrayList<LiveWallpaperModel?>()
+        adapter = LiveWallpaperAdapter(list, object :
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
-
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
                     "mainscr_live_tab_click_item",
@@ -100,10 +105,26 @@ class LiveWallpaperFragment : Fragment() {
                         }
 
                         override fun onAdsDismiss() {
+                            Log.e("TAG", "onAdsDismiss: ", )
                             BlurView.filePath = ""
                             sharedViewModel.clearLiveWallpaper()
                             sharedViewModel.setLiveWallpaper(listOf(model))
-                            findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                            }
+                        }
+
+                        override fun onAdsShowTimeout() {
+                            super.onAdsShowTimeout()
+                            Log.e(TAG, "onAdsShowTimeout: " )
+
+                            sharedViewModel.clearLiveWallpaper()
+                            sharedViewModel.setLiveWallpaper(listOf(model))
+
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                            }
                         }
                     }
                 )

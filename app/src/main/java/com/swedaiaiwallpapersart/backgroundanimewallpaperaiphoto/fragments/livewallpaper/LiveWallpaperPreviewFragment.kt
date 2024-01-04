@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer.OnCompletionListener
+import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
@@ -18,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -31,6 +33,7 @@ import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
@@ -71,6 +74,25 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        SDKBaseController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "searchscr_bottom",
+                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                    }
+                }
+            )
         initObservers()
         setWallpaperOnView()
 
@@ -111,25 +133,29 @@ class LiveWallpaperPreviewFragment : Fragment() {
             val file = requireContext().filesDir
             val filepath = File(file,BlurView.fileName)
             val newFile = File(file,"video.mp4")
-            BlurView.filePath = newFile.path
 
 
-            if (isLiveWallpaperSupported(requireContext())){
-                IkmSdkController.setEnableShowResumeAds(false)
+
+//            if (isLiveWallpaperSupported(requireContext())){
 
 
-                val info = WallpaperManager.getInstance(requireContext()).wallpaperInfo
+                val info = WallpaperManager.getInstance(requireContext().applicationContext).wallpaperInfo
+
+
+
                 if (info == null || info.packageName != requireContext().packageName) {
+                    IkmSdkController.setEnableShowResumeAds(false)
                     filepath.renameTo(newFile)
+                    BlurView.filePath = newFile.path
                     LiveWallpaperService.setToWallPaper(requireContext())
                 } else {
-                    showSimpleDialog(requireContext(),"Do you want to change the live wallpaper?","")
+                    showSimpleDialog(requireContext(),"Do you want to change the live wallpaper? The applied wallpaper will be removed","")
 
 
                 }
-            }else{
-                Toast.makeText(requireContext(),"This device do not support Live Wallpapers",Toast.LENGTH_SHORT).show()
-            }
+//            }else{
+//                Toast.makeText(requireContext(),"This device do not support Live Wallpapers",Toast.LENGTH_SHORT).show()
+//            }
 
         }
 
@@ -169,6 +195,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
     }
 
+
+
     fun showSimpleDialog(context: Context, title: kotlin.String, message: kotlin.String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
@@ -179,7 +207,28 @@ class LiveWallpaperPreviewFragment : Fragment() {
             val file = requireContext().filesDir
             val filepath = File(file,BlurView.fileName)
             val newFile = File(file,"video.mp4")
-            filepath.renameTo(newFile)
+
+            if (newFile.exists()){
+                if (newFile.delete()){
+                    Log.e("TAG", "showSimpleDialog:fileDelete " )
+                }
+            }
+            BlurView.filePath = newFile.path
+            if (filepath.renameTo(newFile)){
+                BlurView.filePath = newFile.path
+
+                notifyFileNameChanged(requireContext(),filepath.path,newFile.path)
+                Log.e("TAG", "showSimpleDialog: renamed")
+                IkmSdkController.setEnableShowResumeAds(false)
+                LiveWallpaperService.setToWallPaper(requireContext())
+
+
+            }else{
+                Log.e("TAG", "showSimpleDialog: failed")
+            }
+
+
+
             p0.dismiss()
         }
 
@@ -193,6 +242,34 @@ class LiveWallpaperPreviewFragment : Fragment() {
         // Create and show the dialog
         val dialog = builder.create()
         dialog.show()
+    }
+
+
+    fun notifyFileNameChanged(context: Context?, oldFilePath: String?, newFilePath: String?) {
+        val oldFile = File(oldFilePath)
+        val newFile = File(newFilePath)
+
+        // Make sure both old and new files exist before proceeding
+        if (oldFile.exists() && newFile.exists()) {
+            // Get the MIME type of the file
+            val mimeType = getMimeType(newFilePath!!)
+
+            // Notify the system about the file name change
+            MediaScannerConnection.scanFile(
+                context,
+                arrayOf(oldFile.absolutePath, newFile.absolutePath),
+                arrayOf(mimeType, mimeType)
+            ) { path, uri ->
+                // File scan completed
+
+                Toast.makeText(context,"renaming a file may take sometime to take effect.",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun getMimeType(filePath: String): String? {
+        val extension = MimeTypeMap.getFileExtensionFromUrl(filePath)
+        return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
 
     private fun getUserIdDialog() {

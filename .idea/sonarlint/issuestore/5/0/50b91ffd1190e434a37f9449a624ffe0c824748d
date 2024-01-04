@@ -1,3 +1,5 @@
 
-@kotlin:S108D")Either remove or fill this block of code.(å¥‡
-ikotlin:S1192†"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ
+;kotlin:S6310q"Avoid hardcoded dispatchers.(©ÒÕò8•ä…¢Í1
+;kotlin:S6310}"Avoid hardcoded dispatchers.(©ÒÕò8šâ‘¢Í1
+Gkotlin:S108J")Either remove or fill this block of code.(å¥‡8™ä…¢Í1
+pkotlin:S1192›"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ÿä…¢Í1

@@ -389,15 +389,6 @@ class ApiCategoriesListAdapter(
     }
 
 
-    fun shuffleImage(list: ArrayList<CatResponse?>):String{
-        val addedNull = addNullValueInsideArray(list)
-        arrayList.clear()
-        arrayList.addAll(addedNull)
-        notifyDataSetChanged()
-        return getFirstImageUrl()
-    }
-
-
 
     fun getFirstImageUrl():String{
         return arrayList[0]?.hd_image_url!!

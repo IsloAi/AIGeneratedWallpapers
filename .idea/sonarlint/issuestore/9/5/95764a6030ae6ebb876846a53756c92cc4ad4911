@@ -1,7 +1,8 @@
 
-Zkotlin:S1172²"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8íþ¤ûÌ1
-Zkotlin:S1172»"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8É¼’ûÌ1
-akotlin:S899¶"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êþÿÿÿÿ8Ë¼’ûÌ1
-`kotlin:S899{"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êþÿÿÿÿ8óß¦ûÌ1
-qkotlin:S1192Û"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8Šÿ¤ûÌ1
-qkotlin:S3776l"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ñàõà8é¼’ûÌ1
+Zkotlin:S1172Î"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8£ˆÛ™Í1
+Zkotlin:S1172ì"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8£ˆÛ™Í1
+Wkotlin:S1172†"2Use "_" instead of these unused lambda parameters.(ðù¼Ôûÿÿÿÿ8¤ˆÛ™Í1
+akotlin:S899”"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êþÿÿÿÿ8§ˆÛ™Í1
+qkotlin:S1192¨"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8áˆÛ™Í1
+Gkotlin:S1874P"#Deprecated code should not be used.(¿²Ö˜ýÿÿÿÿ8÷Î‚žÍ1
+Mkotlin:S1066Ó".Merge this "if" statement with the nested one.(€¡ê8³—¾šÍ1

@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service
 
 import android.app.WallpaperManager
+import android.content.ActivityNotFoundException
 import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
@@ -10,6 +11,7 @@ import android.media.MediaPlayer
 import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.SurfaceHolder
+import android.widget.Toast
 import com.google.firebase.FirebaseApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -17,6 +19,9 @@ import java.io.File
 import java.io.IOException
 
 class LiveWallpaperService : WallpaperService() {
+
+    private var wallpaperUpdateReceiver: BroadcastReceiver? = null
+
     internal inner class WallpaperVideoEngine : Engine() {
         private var myMediaPlayer: MediaPlayer? = null
         private var liveWallBroadcastReceiver: BroadcastReceiver? = null
@@ -26,6 +31,18 @@ class LiveWallpaperService : WallpaperService() {
             super.onCreate(surfaceHolder)
 
             FirebaseApp.initializeApp(applicationContext)
+
+
+//            wallpaperUpdateReceiver = object : BroadcastReceiver() {
+//                override fun onReceive(context: Context?, intent: Intent?) {
+//                        if (intent?.action == "com.yourapp.WALLPAPER_FILE_UPDATED") {
+//                            // Reload the wallpaper with the updated file
+//                           setToWallPaper(applicationContext)
+//                        }
+//                }
+//            }
+//            val filter = IntentFilter("com.yourapp.WALLPAPER_FILE_UPDATED")
+//            registerReceiver(wallpaperUpdateReceiver, filter)
 
 
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
@@ -50,6 +67,7 @@ class LiveWallpaperService : WallpaperService() {
         }
 
         fun startPlayer(){
+            try {
             val file = applicationContext.filesDir
 
 //
@@ -67,14 +85,19 @@ class LiveWallpaperService : WallpaperService() {
                 prepare()
                 start()
             }
-            try {
-                val file = File("$filesDir/unmute")
-                if (file.exists()) myMediaPlayer!!.setVolume(1.0f, 1.0f) else myMediaPlayer!!.setVolume(
-                    0f,
-                    0f
-                )
+
+//                val file1 = File("$filesDir/unmute")
+//                if (file1.exists()) myMediaPlayer!!.setVolume(1.0f, 1.0f) else myMediaPlayer!!.setVolume(
+//                    0f,
+//                    0f
+//                )
             } catch (e: IOException) {
                 e.printStackTrace()
+            }
+            catch (e: IllegalStateException) {
+                // Log the exception for debugging
+                Log.e("TAG", "IllegalStateException occurred", e)
+
             }
         }
 
@@ -100,6 +123,7 @@ class LiveWallpaperService : WallpaperService() {
             myMediaPlayer?.release()
             myMediaPlayer = null
             unregisterReceiver(liveWallBroadcastReceiver)
+//            unregisterReceiver(wallpaperUpdateReceiver)
         }
     }
 
@@ -127,19 +151,41 @@ class LiveWallpaperService : WallpaperService() {
         }
 
         fun setToWallPaper(context: Context) {
-            Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
-                putExtra(
-                    WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                    ComponentName(context, LiveWallpaperService::class.java)
-                )
-            }.also {
-                context.startActivity(it)
-            }
+
             try {
-                WallpaperManager.getInstance(context).clear()
-            } catch (e: IOException) {
+                Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
+                    putExtra(
+                        WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                        ComponentName(context, LiveWallpaperService::class.java)
+                    )
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+
+
+                }.also {
+//                if (it.resolveActivity(context.packageManager) != null) {
+                    context.startActivity(it)
+//                }else{
+//                    Toast.makeText(context,"this device don't support Live Wallpaper",Toast.LENGTH_SHORT).show()
+//                }
+
+                }
+                try {
+                    WallpaperManager.getInstance(context).clear()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }catch (e:ActivityNotFoundException){
                 e.printStackTrace()
+                Toast.makeText(context,"this device don't support Live Wallpaper",Toast.LENGTH_SHORT).show()
             }
+
+
+
+        }
+
+        fun notifyWallpaperFileUpdated(context: Context) {
+            val updateIntent = Intent("com.yourapp.WALLPAPER_FILE_UPDATED")
+            context.sendBroadcast(updateIntent)
         }
     }
 }

@@ -12,4 +12,9 @@ object AdConfig {
     var firstAdLineViewListWallSRC = 0
     var lineCountViewListWallSRC = 0
     var adStatusViewListWallSRC = 1
+
+
+    var firstAdLineMostUsed = 0
+    var lineCountMostUsed = 0
+    var adStatusMostUsed = 1
 }

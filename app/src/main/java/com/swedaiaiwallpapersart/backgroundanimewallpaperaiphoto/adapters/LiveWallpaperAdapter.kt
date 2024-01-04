@@ -29,6 +29,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -317,5 +318,35 @@ class LiveWallpaperAdapter(
             val networkInfo = connectivityManager.activeNetworkInfo
             networkInfo != null && networkInfo.isConnected
         }
+    }
+
+
+    fun updateMoreData(list:ArrayList<LiveWallpaperModel?>){
+        val startPosition = arrayList.size
+
+        for(i in 0 until list.size){
+            if (arrayList.contains(list[i])){
+                Log.e("********new Data", "updateMoreData: already in list", )
+            }else{
+                arrayList.add(list[i])
+            }
+        }
+        notifyItemRangeInserted(startPosition, list.size)
+    }
+
+    fun getAllItems():ArrayList<LiveWallpaperModel?>{
+        return arrayList
+    }
+
+    fun addNewData(){
+        arrayList.clear()
+        notifyDataSetChanged()
+
+    }
+
+    fun updateData(list:ArrayList<LiveWallpaperModel?>){
+        arrayList.clear()
+        arrayList.addAll(list)
+        notifyDataSetChanged()
     }
 }

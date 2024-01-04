@@ -1,17 +1,14 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG
 
-import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -22,14 +19,11 @@ import android.view.Window
 import android.view.WindowManager
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,12 +35,9 @@ import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.FragmentGenerateImageBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.ImageGenerationDialogBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.CatListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.HistoryAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetbackNameOfCat
@@ -59,7 +50,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -300,14 +290,14 @@ class GenerateImageFragment : Fragment() {
                                 showLoading = true,
                                 adsListener = object : CommonAdsListenerAdapter() {
                                     override fun onAdsShowFail(errorCode: Int) {
-                                        val getPrompt = binding.edtPrompt.text
-                                        if(getPrompt.isNotEmpty()){
-                                            getUserIdDialog()
-                                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                                        }else{
-                                            Toast.makeText(requireContext(),
-                                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                                        }
+//                                        val getPrompt = binding.edtPrompt.text
+//                                        if(getPrompt.isNotEmpty()){
+//                                            getUserIdDialog()
+//                                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+//                                        }else{
+//                                            Toast.makeText(requireContext(),
+//                                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+//                                        }
 
 
                                         Toast.makeText(

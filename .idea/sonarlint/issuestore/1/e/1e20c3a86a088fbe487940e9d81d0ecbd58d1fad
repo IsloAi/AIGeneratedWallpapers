@@ -1,8 +1,8 @@
 
-Bkotlin:S125Y"Remove this commented out code.(‚òò¦şÿÿÿÿ8 ÅƒâÆ1
-Bkotlin:S125s"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
-Bkotlin:S125x"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
-;kotlin:S6310I"Avoid hardcoded dispatchers.(©ÒÕò8¤ÅƒâÆ1
-<kotlin:S6310‡"Avoid hardcoded dispatchers.(Í¡·Ş8¥ÅƒâÆ1
-Gkotlin:S1874W"#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8±ÅƒâÆ1
+Bkotlin:S125Z"Remove this commented out code.(‚òò¦şÿÿÿÿ8 ÅƒâÆ1
+Bkotlin:S125t"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
+Bkotlin:S125y"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
+;kotlin:S6310J"Avoid hardcoded dispatchers.(©ÒÕò8¤ÅƒâÆ1
+<kotlin:S6310ˆ"Avoid hardcoded dispatchers.(Í¡·Ş8¥ÅƒâÆ1
+Gkotlin:S1874X"#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8±ÅƒâÆ1
 qkotlin:S37764"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ëü«8Ñ‹ÅáÆ1

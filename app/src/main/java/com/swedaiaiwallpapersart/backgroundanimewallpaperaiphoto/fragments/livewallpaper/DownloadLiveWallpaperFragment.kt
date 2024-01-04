@@ -16,6 +16,10 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -48,6 +52,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     private var animationJob: Job? = null
 
+    val TAG = "DOWNLOAD_SCREEN"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -60,6 +66,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
+        loadAd()
         AndroidNetworking.initialize(requireContext())
 
         setEvents()
@@ -67,10 +74,69 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     }
 
+    fun loadAd(){
+        val adLayout = LayoutInflater.from(activity).inflate(
+            R.layout.layout_custom_admob,
+            null, false
+        ) as? IkmWidgetAdLayout
+        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+        binding.adsView.setCustomNativeAdLayout(
+            R.layout.shimmer_loading_native,
+            adLayout!!
+        )
+
+        binding.adsView.loadAd(requireActivity(),"downloadscr_native_bottom","downloadscr_native_bottom",
+            object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+                    Log.e("TAG", "onAdsLoadFail: native failded " )
+//                                    binding.adsView.visibility = View.GONE
+                }
+
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    if (isAdded && view != null) {
+                        // Modify view visibility here
+                        binding.adsView.visibility = View.VISIBLE
+                    }
+
+                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                }
+            }
+        )
+    }
+
 
     fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
-           findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+            SDKBaseController.getInstance().showInterstitialAds(
+                requireActivity(),
+                "downloadscr_set_click",
+                "downloadscr_set_click",
+                showLoading = true,
+                adsListener = object : CommonAdsListenerAdapter() {
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        //do something
+                        findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+                    }
+
+                    override fun onAdsDismiss() {
+                        Log.e(TAG, "onAdsDismiss: ", )
+
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+                        }
+
+                    }
+                }
+            )
+
         }
 
         binding.toolbar.setOnClickListener {
@@ -99,6 +165,9 @@ class DownloadLiveWallpaperFragment : Fragment() {
             }
         }
     }
+
+
+
 
 
     private fun getBitmapFromGlide(url:String){
@@ -150,9 +219,13 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
                         val percentage = (bytesDownloaded * 100 / totalSize).toInt()
                         Log.e("TAG", "downloadVideo: $percentage")
-                                binding.progress.progress =percentage
+
+                        if (isAdded){
+                            binding.progress.progress =percentage
                             binding.progressTxt.text =
                                 (bytesDownloaded * 100 / totalSize).toString() + "%"
+                        }
+
 
                     }
                 }

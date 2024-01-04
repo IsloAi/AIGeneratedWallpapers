@@ -60,6 +60,7 @@ class SplashOnFragment : Fragment() {
 
 
         if (lan?.isEmpty() == true){
+            Log.e("TAG", "onViewCreated: load pre", )
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
 
         }

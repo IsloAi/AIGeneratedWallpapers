@@ -5,6 +5,7 @@ import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Bundle
 import android.text.TextPaint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
@@ -51,7 +54,6 @@ class HomeTabsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeTabsBinding.inflate(inflater,container,false)
-        // Inflate the layout for this fragment
         return binding.root
     }
 
@@ -59,13 +61,33 @@ class HomeTabsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         SplashOnFragment.exit = false
             myActivity = activity as MainActivity
-
+            loadbannerAd()
             setGradienttext()
             setViewPager()
             initTabs()
             setEvents()
     }
 
+
+    fun loadbannerAd(){
+        SDKBaseController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "mainscr_bottom",
+                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                }
+            )
+    }
     private fun setEvents(){
         binding.settings.setOnClickListener {
             findNavController().navigate(R.id.settingFragment)

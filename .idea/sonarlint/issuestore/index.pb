@@ -287,9 +287,3 @@ papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/mod
 wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/adaptersIG/HistoryAdapter.kt,7\6\7600b8efaa7a78df3af3635d58365110956c665d
 —
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SignInFragment.kt,6\8\6847fce60fc04116772f07e713e7924165081e34
- 
-papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/VideoLiveWallpaperService.kt,1\f\1f93ce5825a9778c424f56e9568d6272217fac8c
-›
-kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/GLWallpaperService.java,e\e\eef7cd6d67be5dc6fc781c26eeb446ee91cd6b0b
-œ
-lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/GLWallpaperRenderer.java,9\7\97f2f401f6b793eb6df0aefd4931c4454e78c6d9

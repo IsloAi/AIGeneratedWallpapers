@@ -271,11 +271,11 @@ class PopularWallpaperFragment : Fragment() {
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
 
         val firstAdLineThreshold =
-            if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+            if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
         val firstLine = firstAdLineThreshold * 3
 
         val lineCount =
-            if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
         val lineC = lineCount * 3
         val newData = arrayListOf<CatResponse?>()
 
