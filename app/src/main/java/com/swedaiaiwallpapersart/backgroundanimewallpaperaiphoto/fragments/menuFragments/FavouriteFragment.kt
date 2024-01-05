@@ -343,7 +343,7 @@ class FavouriteFragment : Fragment() {
             override fun getFavorites(position: Int) {
                 loadData()
             }
-        },myActivity)
+        },myActivity,"favorites")
         adapter.setCoroutineScope(fragmentScope)
         binding.aiRecyclerView.adapter = adapter
 

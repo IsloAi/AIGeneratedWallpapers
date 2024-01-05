@@ -32,7 +32,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewMod
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -161,11 +164,14 @@ class SearchWallpapersFragment : Fragment() {
             override fun getFavorites(position: Int) {
                 //
             }
-        },myActivity)
+        },myActivity,"search")
+        searchAdapter!!.setCoroutineScope(fragmentScope)
         binding.recyclerviewAll.adapter = searchAdapter
 
 
     }
+
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
 
     fun setEvents(){
@@ -405,5 +411,6 @@ class SearchWallpapersFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        fragmentScope.cancel()
     }
 }

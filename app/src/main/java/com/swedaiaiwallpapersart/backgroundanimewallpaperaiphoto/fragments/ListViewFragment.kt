@@ -151,7 +151,7 @@ class ListViewFragment : Fragment() {
 
             override fun getFavorites(position: Int) {
             }
-        },myActivity)
+        },myActivity,"category")
 
 
         adapter!!.setCoroutineScope(fragmentScope)

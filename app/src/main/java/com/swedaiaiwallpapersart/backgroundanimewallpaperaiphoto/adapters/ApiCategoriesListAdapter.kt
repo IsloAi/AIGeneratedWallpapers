@@ -59,7 +59,8 @@ import java.lang.NullPointerException
 class ApiCategoriesListAdapter(
     var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
-    private val myActivity: MainActivity
+    private val myActivity: MainActivity,
+    from:String
 ):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -73,6 +74,17 @@ class ApiCategoriesListAdapter(
     var row = 0
 
     private var firstUrl:String = ""
+
+    val tracking = if (from == "trending"){
+        "mainscr_trending_tab_scroll_view"
+    }else if (from == "category"){
+        "mainscr_sub_cate_tab_scroll"
+
+    }else if (from == "search"){
+        "searchscr_scroll_view"
+    }else{
+        "mainscr_sub_cate_tab_click_item"
+    }
 
 //    private val NATIVE_AD_INTERVAL = 10
 
@@ -281,6 +293,8 @@ class ApiCategoriesListAdapter(
     }
 
     fun loadad(holder: ViewHolder,binding: StaggeredNativeLayoutBinding){
+
+        Log.e("TAG", "loadad: $tracking")
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
                 R.layout.native_dialog_layout,
@@ -298,7 +312,7 @@ class ApiCategoriesListAdapter(
             )
 
             withContext(this.coroutineContext) {
-                binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
+                binding.adsView.loadAd(myActivity,tracking,tracking,
                     object : CustomSDKAdsListenerAdapter() {
                         override fun onAdsLoadFail() {
                             super.onAdsLoadFail()

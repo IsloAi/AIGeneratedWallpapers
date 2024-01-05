@@ -334,7 +334,7 @@ class HomeFragment : Fragment(){
             override fun getFavorites(position: Int) {
                 //
             }
-        },myActivity)
+        },myActivity,"trending")
         adapter.setCoroutineScope(fragmentScope)
         binding.recyclerviewAll.adapter = adapter
 

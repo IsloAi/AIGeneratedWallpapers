@@ -16,6 +16,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -23,7 +24,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
 class LiveWallpaperFragment : Fragment() {
@@ -56,6 +60,7 @@ class LiveWallpaperFragment : Fragment() {
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
         updateUIWithFetchedData()
+        adapter!!.setCoroutineScope(fragmentScope)
     }
 
 
@@ -70,6 +75,7 @@ class LiveWallpaperFragment : Fragment() {
 //
                     val list = addNullValueInsideArray(catResponses)
                     adapter?.updateMoreData(list)
+                    adapter!!.setCoroutineScope(fragmentScope)
                 }
             }else{
 
@@ -133,9 +139,13 @@ class LiveWallpaperFragment : Fragment() {
 
             }
         },myActivity)
+
         binding.liveReccyclerview.adapter = adapter
     }
 
+
+
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
     private fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?>{
 

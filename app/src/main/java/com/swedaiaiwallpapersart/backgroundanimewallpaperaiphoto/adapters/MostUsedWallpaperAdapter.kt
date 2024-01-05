@@ -51,6 +51,8 @@ class MostUsedWallpaperAdapter(
     private val VIEW_TYPE_NATIVE_AD = 1
     private var lastAdShownPosition = -1
 
+    val TAG = "MOSTUSEDADAPTER"
+
     var row = 0
 
 
@@ -66,6 +68,7 @@ class MostUsedWallpaperAdapter(
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(modela: ArrayList<CatResponse?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
+            Log.e(TAG, "bind: content place", )
             setAllData(
                 model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
                 ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder,binding.errorImage)
@@ -73,6 +76,7 @@ class MostUsedWallpaperAdapter(
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder){
+            Log.e(TAG, "bind: ad place", )
             loadad(holder,binding)
         }
     }
@@ -198,6 +202,8 @@ class MostUsedWallpaperAdapter(
     }
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
+
+        Log.e(TAG, "loadad: inside methodd" )
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
                 R.layout.native_dialog_layout,
@@ -214,12 +220,15 @@ class MostUsedWallpaperAdapter(
                 adLayout!!
             )
 
+            Log.e(TAG, "loadad: inside layout set" )
+
             withContext(this.coroutineContext) {
                 binding.adsView.loadAd(myActivity,"mainscr_all_tab_scroll","mainscr_all_tab_scroll",
                     object : CustomSDKAdsListenerAdapter() {
+
                         override fun onAdsLoadFail() {
                             super.onAdsLoadFail()
-                            Log.e("MostUsedAdapter", "onAdsLoadFail: native failded " )
+                            Log.e(TAG, "onAdsLoadFail: native failded " )
                             if (statusAd == 0){
                                 binding.adsView.visibility = View.GONE
                             }else{
@@ -235,7 +244,7 @@ class MostUsedWallpaperAdapter(
                         override fun onAdsLoaded() {
                             super.onAdsLoaded()
                             binding.adsView.visibility = View.VISIBLE
-                            Log.e("MostUsedAdapter", "onAdsLoaded: native loaded" )
+                            Log.e(TAG, "onAdsLoaded: native loaded" )
                         }
                     }
                 )
@@ -247,6 +256,10 @@ class MostUsedWallpaperAdapter(
 
 
 
+    }
+
+    fun setCoroutineScope(scope: CoroutineScope) {
+        coroutineScope = scope
     }
 
     private fun isNetworkAvailable(): Boolean {

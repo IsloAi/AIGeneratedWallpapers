@@ -36,7 +36,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewMod
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -81,6 +83,8 @@ class PopularWallpaperFragment : Fragment() {
     var oldPosition = 0
 
     val TAG = "POPULARTAB"
+
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -189,6 +193,7 @@ class PopularWallpaperFragment : Fragment() {
             }
 
         }, myActivity)
+        mostUsedWallpaperAdapter!!.setCoroutineScope(fragmentScope)
 
         binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
 

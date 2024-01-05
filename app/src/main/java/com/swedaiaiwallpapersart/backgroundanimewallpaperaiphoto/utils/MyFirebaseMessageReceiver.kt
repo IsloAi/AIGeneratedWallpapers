@@ -10,6 +10,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import com.bmik.android.sdk.core.fcm.BaseIkFirebaseMessagingService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
@@ -18,10 +19,17 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.webHookGenericResponse
 
-class MyFirebaseMessageReceiver : FirebaseMessagingService() {
+class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
     override fun onNewToken(token: String) {
         Log.d("tracingToken", "Refreshed token: $token")
         MySharePreference.setFireBaseToken(applicationContext,token)
+    }
+
+    override fun splashActivityClass(): Class<*>? {
+        return MainActivity::class.java
+//okay, yeah it's the activity which holds all the fragments. yes.
+    // i want activity can start can show first open ad. it ok. right?Yeah that's right
+    // oke, well done. tthanks you
     }
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.e("tracingToken", "onMessageReceived: $remoteMessage")
@@ -42,7 +50,6 @@ class MyFirebaseMessageReceiver : FirebaseMessagingService() {
                 appDatabase.getResponseIGDao()?.UpdateData(oldData)
             }
             Log.e("TAG", "onMessageReceived: $body")
-//            showNotification("Notification has been generated", webHookGenericResponse)
         }
         if (remoteMessage.notification != null) {
             showNotification(

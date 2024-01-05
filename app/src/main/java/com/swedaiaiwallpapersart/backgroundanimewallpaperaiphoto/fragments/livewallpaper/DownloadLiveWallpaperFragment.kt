@@ -76,7 +76,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     fun loadAd(){
         val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.layout_custom_admob,
+            R.layout.large_native_layout,
             null, false
         ) as? IkmWidgetAdLayout
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -232,12 +232,15 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 .startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
                         lifecycleScope.launch(Dispatchers.Main) {
-                            binding.progressTxt.text = "100%"
-                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                            if (isAdded){
+                                binding.progressTxt.text = "100%"
+                                binding.buttonApplyWallpaper.visibility = View.VISIBLE
 
-                            animationJob?.cancel()
+                                animationJob?.cancel()
 
-                            binding.loadingTxt.text = "Download Successfull"
+                                binding.loadingTxt.text = "Download Successfull"
+                            }
+
 
                         }
                     }
@@ -281,6 +284,10 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        if (animationJob?.isActive == true){
+            animationJob?.cancel()
+        }
+
         _binding =  null
     }
 }

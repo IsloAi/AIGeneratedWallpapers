@@ -262,6 +262,7 @@ class LiveWallpaperAdapter(
     }
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
+        Log.e("TAG", "loadad: inside method", )
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
                 R.layout.native_dialog_layout,
@@ -277,6 +278,7 @@ class LiveWallpaperAdapter(
                 R.layout.shimmer_loading_native,
                 adLayout!!
             )
+            Log.e("TAG", "loadad: inside main scope", )
 
             withContext(this.coroutineContext) {
                 binding.adsView.loadAd(myActivity,"mainscr_live_tab_scroll","mainscr_live_tab_scroll",
