@@ -1,12 +1,12 @@
 
-;kotlin:S6310ë"Avoid hardcoded dispatchers.(©ÓœW8ØÎï¥Ì1
-;kotlin:S6310¶"Avoid hardcoded dispatchers.(©ÓœW8ØÎï¥Ì1
-<kotlin:S6310õ"Avoid hardcoded dispatchers.(Í¡·Ş8ØÎï¥Ì1
-<kotlin:S6310¾"Avoid hardcoded dispatchers.(Í¡·Ş8ØÎï¥Ì1
-Rkotlin:S1481Ÿ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8óÎï¥Ì1
->kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8úÎï¥Ì1
-9kotlin:S1128"Remove this unused import.(åå8úÎï¥Ì1
-~kotlin:S1192‰"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 3 times.(é¯›•ıÿÿÿÿ8üÎï¥Ì1
-qkotlin:S1192³"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8±’ÈíÌ1
-pkotlin:S1192¥"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8üÎï¥Ì1
-fkotlin:S6510‡"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8‰Ïï¥Ì1
+;kotlin:S6310ğ"Avoid hardcoded dispatchers.(©ÓœW8‚ÅóïÎ1
+;kotlin:S6310¼"Avoid hardcoded dispatchers.(©ÓœW8‚ÅóïÎ1
+<kotlin:S6310ú"Avoid hardcoded dispatchers.(Í¡·Ş8ƒÅóïÎ1
+<kotlin:S6310Ä"Avoid hardcoded dispatchers.(Í¡·Ş8ƒÅóïÎ1
+Rkotlin:S1481©"2Remove this unused "arrayListJson" local variable.(àñÆÑ8šÅóïÎ1
+>kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8¡ÅóïÎ1
+9kotlin:S1128"Remove this unused import.(åå8¡ÅóïÎ1
+~kotlin:S1192Š"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 3 times.(é¯›•ıÿÿÿÿ8£ÅóïÎ1
+qkotlin:S1192µ"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8»íóïÎ1
+pkotlin:S1192«"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8£ÅóïÎ1
+fkotlin:S6510Œ"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8®ÅóïÎ1

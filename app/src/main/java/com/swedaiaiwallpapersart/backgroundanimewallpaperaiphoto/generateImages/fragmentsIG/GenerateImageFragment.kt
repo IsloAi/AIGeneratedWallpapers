@@ -129,8 +129,12 @@ class GenerateImageFragment : Fragment() {
                     )
                 }
 
-                val oldData = roomDatabase.getResponseIGDao().getCreationsByIdNotLive(data?.id!!)
-                    CoroutineScope(Dispatchers.IO).launch {
+                val oldData = data?.id?.let { roomId ->
+                    roomDatabase.getResponseIGDao().getCreationsByIdNotLive(roomId)
+                }
+
+//                val oldData = roomDatabase.getResponseIGDao().getCreationsByIdNotLive(data?.id!!)
+                CoroutineScope(Dispatchers.IO).launch {
                         if (data != null) {
 
                             if (oldData == null){

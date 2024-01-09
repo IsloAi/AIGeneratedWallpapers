@@ -1,8 +1,9 @@
 
 Bkotlin:S125E"Remove this commented out code.(ύ…Ά¥ÿÿÿÿÿ8®θ½¬Λ1
-Ckotlin:S125¥"Remove this commented out code.(©ϋΨÿÿÿÿÿ8λύλΝ1
-qkotlin:S1192"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(²¨ρÿÿÿÿÿ8εθ½¬Λ1
-Hkotlin:S1874…"#Deprecated code should not be used.(Ζ‹„Σωÿÿÿÿ8ηθ½¬Λ1
+Ckotlin:S125"Remove this commented out code.(°‹ξωÿÿÿÿ8Ά‘ώρΞ1
+Ckotlin:S125©"Remove this commented out code.(©ϋΨÿÿÿÿÿ8λύλΝ1
+qkotlin:S1192"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(²¨ρÿÿÿÿÿ8εθ½¬Λ1
+Hkotlin:S1874‰"#Deprecated code should not be used.(Ζ‹„Σωÿÿÿÿ8ηθ½¬Λ1
 qkotlin:S3776_"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Λχ€8ιθ½¬Λ1
-wkotlin:S3776„"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(™ίξ±ωÿÿÿÿ8ιθ½¬Λ1
-Nkotlin:S1066†".Merge this "if" statement with the nested one.(ίΈι8Ώ†Ύ¬Λ1
+wkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 29 to the 15 allowed.(™ίξ±ωÿÿÿÿ8ιθ½¬Λ1
+Nkotlin:S1066".Merge this "if" statement with the nested one.(ίΈι8Ώ†Ύ¬Λ1

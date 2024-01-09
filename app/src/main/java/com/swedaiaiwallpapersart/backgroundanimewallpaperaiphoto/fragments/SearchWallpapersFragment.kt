@@ -110,6 +110,10 @@ class SearchWallpapersFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        if (addedItems?.isNotEmpty() == true){
+            searchAdapter?.updateData(addedItems!!)
+        }
+
         if (catgories){
             binding.searchSuggestions.visibility = View.GONE
             binding.recyclerviewCatgory.visibility = View.VISIBLE
@@ -133,6 +137,7 @@ class SearchWallpapersFragment : Fragment() {
         searchAdapter = ApiCategoriesListAdapter(arrayListOf(), object :
             PositionCallback {
             override fun getPosition(position: Int) {
+                searched = true
 
                 val items = searchAdapter?.getAllItems()
                 addedItems?.addAll(items!!)
@@ -219,25 +224,31 @@ class SearchWallpapersFragment : Fragment() {
                             binding.recyclerviewAll.visibility = View.GONE
                             binding.emptySupport.visibility = View.GONE
                         } else {
-                            searchInList(p0.toString(), cachedCatResponses) { filteredList ->
+                            if (!searched){
+                                searchInList(p0.toString(), cachedCatResponses) { filteredList ->
 
-                                Log.e("TAG", "afterTextChanged: " + filteredList)
+                                    Log.e("TAG", "afterTextChanged: " + filteredList)
 
 
-                                if (filteredList.isNotEmpty()) {
-                                    binding.searchSuggestions.visibility = View.GONE
-                                    binding.recyclerviewCatgory.visibility = View.GONE
-                                    binding.recyclerviewAll.visibility = View.VISIBLE
-                                    searchAdapter?.updateData(filteredList)
-                                } else {
-                                    binding.searchSuggestions.visibility = View.GONE
-                                    binding.recyclerviewCatgory.visibility = View.GONE
-                                    binding.recyclerviewAll.visibility = View.GONE
-                                    binding.emptySupport.visibility = View.VISIBLE
+                                    if (filteredList.isNotEmpty()) {
+                                        binding.searchSuggestions.visibility = View.GONE
+                                        binding.recyclerviewCatgory.visibility = View.GONE
+                                        binding.recyclerviewAll.visibility = View.VISIBLE
+                                        searchAdapter?.updateData(filteredList)
+                                    } else {
+                                        binding.searchSuggestions.visibility = View.GONE
+                                        binding.recyclerviewCatgory.visibility = View.GONE
+                                        binding.recyclerviewAll.visibility = View.GONE
+                                        binding.emptySupport.visibility = View.VISIBLE
+                                    }
+
+
                                 }
-
-
+                            }else{
+                                searched = false
                             }
+
+
                         }
 
 
@@ -272,6 +283,9 @@ class SearchWallpapersFragment : Fragment() {
     private fun initSearchData(){
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
+                if (!cachedCatResponses.isNullOrEmpty()){
+                    cachedCatResponses?.clear()
+                }
                 cachedCatResponses?.addAll(catResponses)
 //
 

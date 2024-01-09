@@ -128,11 +128,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
                     override fun onAdsDismiss() {
                         Log.e(TAG, "onAdsDismiss: ", )
-
-                        lifecycleScope.launch(Dispatchers.Main) {
                             findNavController().navigate(R.id.liveWallpaperPreviewFragment)
-                        }
-
                     }
                 }
             )

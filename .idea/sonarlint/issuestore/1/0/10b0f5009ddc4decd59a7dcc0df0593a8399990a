@@ -1,21 +1,9 @@
 
-Fkotlin:S6615à"&The value assigned here is never used.(ç²ÇÁ8åÇ¤ÇÌ1
-Ckotlin:S125ß"Remove this commented out code.(®‘ê©øÿÿÿÿ8èÇ¤ÇÌ1
-Rkotlin:S1481Ş"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ùÇ¤ÇÌ1
-9kotlin:S1128"Remove this unused import.(ï›’8è·ÁíÌ1
->kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8ıÇ¤ÇÌ1
-9kotlin:S1128"Remove this unused import.(ÁÈÚø8ıÇ¤ÇÌ1
->kotlin:S1128"Remove this unused import.(Øîğùÿÿÿÿ8ıÇ¤ÇÌ1
->kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8ıÇ¤ÇÌ1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8ıÇ¤ÇÌ1
->kotlin:S1128"Remove this unused import.(ÀÕá‚ÿÿÿÿÿ8şÇ¤ÇÌ1
->kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8şÇ¤ÇÌ1
->kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8şÇ¤ÇÌ1
-9kotlin:S1128"Remove this unused import.(ÒÂ¦8şÇ¤ÇÌ1
->kotlin:S1128+"Remove this unused import.(èãÊõûÿÿÿÿ8’´·ÇÌ1
->kotlin:S1128."Remove this unused import.(ŞŠ‹Ùüÿÿÿÿ8’´·ÇÌ1
-pkotlin:S1192­"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8€È¤ÇÌ1
-‡kotlin:S1192­"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8€È¤ÇÌ1
-Gkotlin:S1874U"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8È¤ÇÌ1
-zkotlin:S1186˜"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8…È¤ÇÌ1
-fkotlin:S6510ï"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8û–¯ÇÌ1
+Fkotlin:S6615Ô"&The value assigned here is never used.(ç²ÇÁ8ÀäïÎ1
+Ckotlin:S125Ó"Remove this commented out code.(®‘ê©øÿÿÿÿ8…ÀäïÎ1
+Rkotlin:S1481Ò"2Remove this unused "arrayListJson" local variable.(àñÆÑ8›ÀäïÎ1
+pkotlin:S1192¡"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8¢ÀäïÎ1
+‡kotlin:S1192¡"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8¢ÀäïÎ1
+Gkotlin:S1874D"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8£ÀäïÎ1
+zkotlin:S1186Œ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8§ÀäïÎ1
+fkotlin:S6510ã"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8¨ÀäïÎ1

@@ -1,12 +1,11 @@
 
-]kotlin:S1172Â"8Remove this unused function parameter "destinationFile".(•§èáşÿÿÿÿ8…Ğ™ÈÍ1
-=kotlin:S125•"Remove this commented out code.(í‚Ò38ŠĞ™ÈÍ1
-=kotlin:S125Ä"Remove this commented out code.(í‚Ò38ŠĞ™ÈÍ1
-;kotlin:S6310Ñ"Avoid hardcoded dispatchers.(©ÓœW8Ğ™ÈÍ1
-<kotlin:S6310‚"Avoid hardcoded dispatchers.(Í¡·Ş8Ğ™ÈÍ1
-<kotlin:S6310Ú"Avoid hardcoded dispatchers.(©ÒÕò8Ğ™ÈÍ1
-<kotlin:S6310„"Avoid hardcoded dispatchers.(©ÒÕò8Ğ™ÈÍ1
-<kotlin:S6310ê"Avoid hardcoded dispatchers.(©ÒÕò8Ğ™ÈÍ1
-Ykotlin:S1144”"4Remove this unused private "saveVideoToFile" method.(¤—ışÿÿÿÿ8’Ğ™ÈÍ1
+]kotlin:S1172¾"8Remove this unused function parameter "destinationFile".(•§èáşÿÿÿÿ8…Ğ™ÈÍ1
+=kotlin:S125‘"Remove this commented out code.(í‚Ò38ŠĞ™ÈÍ1
+=kotlin:S125À"Remove this commented out code.(í‚Ò38ŠĞ™ÈÍ1
+;kotlin:S6310Í"Avoid hardcoded dispatchers.(©ÓœW8Ğ™ÈÍ1
+<kotlin:S6310ş"Avoid hardcoded dispatchers.(Í¡·Ş8Ğ™ÈÍ1
+<kotlin:S6310Ö"Avoid hardcoded dispatchers.(©ÒÕò8Ğ™ÈÍ1
+<kotlin:S6310æ"Avoid hardcoded dispatchers.(©ÒÕò8Ğ™ÈÍ1
+Ykotlin:S1144"4Remove this unused private "saveVideoToFile" method.(¤—ışÿÿÿÿ8’Ğ™ÈÍ1
 Gkotlin:S1874X"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8£Ğ™ÈÍ1
-zkotlin:S1186¼"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8¨Ğ™ÈÍ1
+zkotlin:S1186¸"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8¨Ğ™ÈÍ1

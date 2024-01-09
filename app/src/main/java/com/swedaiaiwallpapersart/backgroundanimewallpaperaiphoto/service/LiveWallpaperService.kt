@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.media.MediaPlayer
+import android.os.Build
 import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.SurfaceHolder
@@ -26,6 +27,7 @@ class LiveWallpaperService : WallpaperService() {
         private var myMediaPlayer: MediaPlayer? = null
         private var liveWallBroadcastReceiver: BroadcastReceiver? = null
         private var liveVideoFilePath: String? = null
+        private var isReceiverRegistered = false
         private val context: Context? = null
         override fun onCreate(surfaceHolder: SurfaceHolder) {
             super.onCreate(surfaceHolder)
@@ -46,16 +48,32 @@ class LiveWallpaperService : WallpaperService() {
 
 
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
-            registerReceiver(object : BroadcastReceiver() {
-                override fun onReceive(context: Context, intent: Intent) {
-                    val action = intent.getBooleanExtra(KEY_ACTION, false)
-                    if (action) {
-                        myMediaPlayer!!.setVolume(0f, 0f)
-                    } else {
-                        myMediaPlayer!!.setVolume(1.0f, 1.0f)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                registerReceiver(object : BroadcastReceiver() {
+                    override fun onReceive(context: Context, intent: Intent) {
+                        val action = intent.getBooleanExtra(KEY_ACTION, false)
+                        if (action) {
+                            myMediaPlayer!!.setVolume(0f, 0f)
+                        } else {
+                            myMediaPlayer!!.setVolume(1.0f, 1.0f)
+                        }
+                        isReceiverRegistered = true
                     }
-                }
-            }.also { liveWallBroadcastReceiver = it }, intentFilter)
+                }.also { liveWallBroadcastReceiver = it }, intentFilter, RECEIVER_EXPORTED)
+            }else{
+                registerReceiver(object : BroadcastReceiver() {
+                    override fun onReceive(context: Context, intent: Intent) {
+                        val action = intent.getBooleanExtra(KEY_ACTION, false)
+                        if (action) {
+                            myMediaPlayer!!.setVolume(0f, 0f)
+                        } else {
+                            myMediaPlayer!!.setVolume(1.0f, 1.0f)
+                        }
+                        isReceiverRegistered = true
+                    }
+                }.also { liveWallBroadcastReceiver = it }, intentFilter)
+            }
         }
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
@@ -103,9 +121,9 @@ class LiveWallpaperService : WallpaperService() {
 
         override fun onVisibilityChanged(visible: Boolean) {
             if (visible) {
-                myMediaPlayer!!.start()
+                myMediaPlayer?.start()
             } else {
-                myMediaPlayer!!.pause()
+                myMediaPlayer?.pause()
             }
         }
 
@@ -122,7 +140,11 @@ class LiveWallpaperService : WallpaperService() {
             super.onDestroy()
             myMediaPlayer?.release()
             myMediaPlayer = null
-            unregisterReceiver(liveWallBroadcastReceiver)
+            if (isReceiverRegistered){
+                unregisterReceiver(liveWallBroadcastReceiver)
+                isReceiverRegistered = false
+            }
+
 //            unregisterReceiver(wallpaperUpdateReceiver)
         }
     }

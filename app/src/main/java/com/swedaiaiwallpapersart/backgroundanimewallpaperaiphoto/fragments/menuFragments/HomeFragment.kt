@@ -72,6 +72,9 @@ class HomeFragment : Fragment(){
     var startIndex = 0
     var oldPosition = 0
 
+    var isNavigationInProgress = false
+
+
 
     var externalOpen = false
 
@@ -298,37 +301,39 @@ class HomeFragment : Fragment(){
             PositionCallback {
             override fun getPosition(position: Int) {
 
-                externalOpen = true
-                val allItems = adapter.getAllItems()
-                if (addedItems?.isNotEmpty() == true){
-                    addedItems?.clear()
-                }
-
-
-                addedItems = allItems
-
-                oldPosition = position
-
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_trending_tab_click_item",
-                    "mainscr_trending_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(list,position)
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-                            Log.e("********ADS", "onAdsDismiss: " )
-                            navigateToDestination(list,position)
-                        }
+                if (!isNavigationInProgress){
+                    externalOpen = true
+                    val allItems = adapter.getAllItems()
+                    if (addedItems?.isNotEmpty() == true){
+                        addedItems?.clear()
                     }
-                )
+
+                    isNavigationInProgress = true
 
 
+                    addedItems = allItems
+
+                    oldPosition = position
+
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_trending_tab_click_item",
+                        "mainscr_trending_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                navigateToDestination(allItems,position)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                Log.e("********ADS", "onAdsDismiss: " )
+                                navigateToDestination(allItems,position)
+                            }
+                        }
+                    )
+                }
             }
 
             override fun getFavorites(position: Int) {
@@ -367,6 +372,8 @@ class HomeFragment : Fragment(){
             putInt("position",position - countOfNulls)
             findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
+
+        isNavigationInProgress = false
 
     }
 

@@ -1132,17 +1132,39 @@ class WallpaperViewFragment : Fragment() {
     }
 
    private fun showRateApp() {
-       if(isFragmentAttached && isAdded){
-        val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
-        request.addOnCompleteListener { task ->
-            if (task.isSuccessful()) {
-                // Getting the ReviewInfo object
-                val reviewInfo: ReviewInfo = task.getResult()
-                val flow: Task<Void> = reviewManager!!.launchReviewFlow(requireActivity(), reviewInfo)
-                flow.addOnCompleteListener { task1 -> }
-            }
-        }
+
+       try {
+           viewLifecycleOwner.lifecycleScope.launch {
+               if (isAdded && isResumed) {
+                   val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
+                   request.addOnCompleteListener { task ->
+                       if (isAdded && isResumed) {
+                           if (task.isSuccessful()) {
+                               val reviewInfo: ReviewInfo = task.getResult()
+                               val flow: Task<Void> = reviewManager!!.launchReviewFlow(myActivity, reviewInfo)
+                               flow.addOnCompleteListener { task1 -> }
+                           }
+                       }
+                   }
+               }
+           }
+       }catch (e:IllegalStateException){
+           e.printStackTrace()
+       }catch (e:Exception){
+           e.printStackTrace()
        }
+
+//       if(isFragmentAttached && isAdded){
+//        val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
+//        request.addOnCompleteListener { task ->
+//            if (task.isSuccessful()) {
+//                // Getting the ReviewInfo object
+//                val reviewInfo: ReviewInfo = task.getResult()
+//                val flow: Task<Void> = reviewManager!!.launchReviewFlow(myActivity, reviewInfo)
+//                flow.addOnCompleteListener { task1 -> }
+//            }
+//        }
+//       }
     }
 
     fun imageDetailsSheet() {

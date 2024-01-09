@@ -88,15 +88,26 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
             builder = NotificationCompat.Builder(this)
         }
 
-        builder.setSmallIcon(R.drawable.app_icon)
-            .setContentTitle(title)
-            .setContentText(message)
-            .setAutoCancel(true)
-            .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
-            .setOnlyAlertOnce(true)
-            .setContentIntent(pendingIntent)
-            .setContent(getCustomDesign(title, message))
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+            builder.setSmallIcon(R.drawable.app_icon)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent)
+                .setContent(getCustomDesign(title, message))
+        }else{
+            builder.setSmallIcon(R.drawable.app_icon)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setAutoCancel(true)
+                .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
+                .setOnlyAlertOnce(true)
+                .setContentIntent(pendingIntent)
+                .setContentTitle(title)
+                .setContentText(message)
+        }
         val notificationManagerCompat = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManagerCompat.notify(0, builder.build())
     }

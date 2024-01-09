@@ -115,10 +115,8 @@ class LiveWallpaperFragment : Fragment() {
                             BlurView.filePath = ""
                             sharedViewModel.clearLiveWallpaper()
                             sharedViewModel.setLiveWallpaper(listOf(model))
+                            findNavController().navigate(R.id.downloadLiveWallpaperFragment)
 
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-                            }
                         }
 
                         override fun onAdsShowTimeout() {

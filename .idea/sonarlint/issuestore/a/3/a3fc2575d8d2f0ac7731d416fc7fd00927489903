@@ -1,15 +1,27 @@
 
-Ykotlin:S1172ö"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8ÿ“‹É1
-Ckotlin:S125ï"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ÿ“‹É1
-Ckotlin:S125õ"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ÿ“‹É1
-Ckotlin:S125¢"Remove this commented out code.(ğ·Äıÿÿÿÿ8Ÿ“‹É1
->kotlin:S125Å"Remove this commented out code.(£Ãš‰8’Ÿ“‹É1
-Ckotlin:S125Ö"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8’Ÿ“‹É1
-=kotlin:S125ä"Remove this commented out code.(è»»_8”Ÿ“‹É1
-[kotlin:S1481n"<Remove this unused "firebaseMessageReceiver" local variable.(Õèşô8÷­‹É1
-Mkotlin:S1481ˆ"-Remove this unused "behavior" local variable.(Ø¦š¾8ÖŸ“‹É1
-9kotlin:S1128"Remove this unused import.(´Ùí8‡®‹É1
-9kotlin:S1128"Remove this unused import.(Æü³Ï8‡®‹É1
-Gkotlin:S1874h"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8”®‹É1
-wkotlin:S3776‚"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8ôŸ“‹É1
-wkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8ìä¡Í1
+Ykotlin:S1172Î"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8 Ñ‰ìÎ1
+Ckotlin:S125ó"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ÿ“‹É1
+Ckotlin:S125ù"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ÿ“‹É1
+Ckotlin:S125ú"Remove this commented out code.(ğ·Äıÿÿÿÿ8¶Ñ‰ìÎ1
+>kotlin:S125"Remove this commented out code.(£Ãš‰8¸Ñ‰ìÎ1
+Ckotlin:S125®"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8¹Ñ‰ìÎ1
+=kotlin:S125¼"Remove this commented out code.(è»»_8ºÑ‰ìÎ1
+Mkotlin:S1481à"-Remove this unused "behavior" local variable.(Ø¦š¾8®Ò‰ìÎ1
+9kotlin:S1128"Remove this unused import.(Ô£àı8Òü†ìÎ1
+8kotlin:S1128"Remove this unused import.(ÑÁ«b8Óü†ìÎ1
+9kotlin:S1128"Remove this unused import.(©¶Ùç8Õü†ìÎ1
+9kotlin:S1128"Remove this unused import.(üƒŠ¸8×ü†ìÎ1
+8kotlin:S1128"Remove this unused import.(Ş‚½8×ü†ìÎ1
+>kotlin:S1128"Remove this unused import.(¿ƒÆ§şÿÿÿÿ8×ü†ìÎ1
+9kotlin:S1128"Remove this unused import.(´Ùí8‡®‹É1
+9kotlin:S1128"Remove this unused import.(¦şû8×ü†ìÎ1
+9kotlin:S1128"Remove this unused import.(Æü³Ï8‡®‹É1
+>kotlin:S1128D"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8êÒ‰ìÎ1
+9kotlin:S1128G"Remove this unused import.(ßĞÕ©8êÒ‰ìÎ1
+>kotlin:S1128H"Remove this unused import.(öŒÎƒÿÿÿÿÿ8ëÒ‰ìÎ1
+9kotlin:S1128I"Remove this unused import.(´â 8ëÒ‰ìÎ1
+9kotlin:S1128J"Remove this unused import.(Ñç€8¼‘ˆìÎ1
+>kotlin:S1128K"Remove this unused import.(Šëİ¨ÿÿÿÿÿ8¼‘ˆìÎ1
+Gkotlin:S1874o"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8”®‹É1
+wkotlin:S3776†"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8ôŸ“‹É1
+wkotlin:S3776”"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8ìä¡Í1

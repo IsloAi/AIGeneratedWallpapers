@@ -9,10 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/banner_gen_ai_image"
-        android:scaleType="centerCrop"
         android:id="@+id/onBoardImg"
         app:shapeAppearanceOverlay="@style/sliderImagreviewCorners"
-
         app:layout_constraintTop_toTopOf="parent"
         />
 

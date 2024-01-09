@@ -1,6 +1,11 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -11,12 +16,14 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
+import android.widget.RemoteViews
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.app.NotificationCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -105,9 +112,6 @@ class MainActivity : AppCompatActivity(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        createTimer()
-        val firebaseMessageReceiver = MyFirebaseMessageReceiver()
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
 
         viewModel.fetchWallpapers(this)
@@ -334,50 +338,6 @@ class MainActivity : AppCompatActivity(){
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
         )
-    }
-    private fun createTimer() {
-        val calendar = Calendar.getInstance()
-        val currentDate = calendar.time
-
-        val dateFormat = SimpleDateFormat("dd-MM-yyyy")
-        val formattedDate = dateFormat.format(currentDate)
-
-        if(formattedDate > MySharePreference.getDate(this).toString()){
-            MySharePreference.setDate(this,formattedDate)
-            MySharePreference.setDailyRewardCounter(this,false)
-                resetCounter(MySharePreference.getDeviceID(this)!!)
-        }else{
-            MySharePreference.setDate(this,formattedDate)
-        }
-
-    }
-
-    private fun resetCounter(uniqueId: String) {
-
-        CoroutineScope(Dispatchers.IO).launch {
-            val retrofit = RetrofitInstance.getInstance()
-            val service = retrofit.create(ResetCounterInterface::class.java)
-            val body: MutableMap<String, Any> = HashMap()
-            body["uid"] = uniqueId
-            val call = service.resetCounter(body)
-            call.enqueue(object : Callback<Counter> {
-                override fun onResponse(call: Call<Counter>, response: Response<Counter>) {
-                    if (response.isSuccessful) {
-                        Log.d("CounterTestingapi", "onResponse: success ${response.body()}")
-                        response.body()?.let {
-                            val gemData = Counter(it.message)
-                            Log.d("CounterTestingapi", "onResponse: model ${gemData}")
-                        }
-                    } else {
-                        Log.d("CounterTestingapi", "onResponse: Response not successful")
-                    }
-                }
-                override fun onFailure(call: Call<Counter>, t: Throwable) {
-                    Log.d("CounterTestingapi", "onFailure: Failed to fetch data $t")
-                }
-            })
-        }
-
     }
 
      @RequiresApi(Build.VERSION_CODES.N)

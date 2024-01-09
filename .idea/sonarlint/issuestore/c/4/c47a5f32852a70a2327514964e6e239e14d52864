@@ -1,6 +1,6 @@
 
-]kotlin:S1172ö"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8ÈœåªË1
-Jkotlin:S6508õ"*Replace this usage of Void type with Unit.(àŒÄÜ8ÊœåªË1
+]kotlin:S1172ù"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8†œ èÎ1
+Okotlin:S6508ø"*Replace this usage of Void type with Unit.(êÎ—¸ıÿÿÿÿ8‡œ èÎ1
 Ykotlin:S899´":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8ËœåªË1
 =kotlin:S125Ü"Remove this commented out code.(ÀñÔ88×œåªË1
 >kotlin:S125â"Remove this commented out code.(éÎÂú8ØœåªË1
@@ -8,6 +8,7 @@ Ckotlin:S125ø"Remove this commented out code.(ŒÔ¡ªúÿÿÿÿ8ØœåªË1
 Ckotlin:S125û"Remove this commented out code.(±š¡®ûÿÿÿÿ8ÚœåªË1
 >kotlin:S125€"Remove this commented out code.(Ïİş8ÚœåªË1
 Ckotlin:S125ä"Remove this commented out code.(—şµ“üÿÿÿÿ8ÚœåªË1
+Ckotlin:S125…	"Remove this commented out code.(Íèéïúÿÿÿÿ8›œ èÎ1
 <kotlin:S6310Û"Avoid hardcoded dispatchers.(µØ˜í8êœåªË1
 ;kotlin:S6310í"Avoid hardcoded dispatchers.(©ÓœW8ëœåªË1
 ;kotlin:S6310Í"Avoid hardcoded dispatchers.(©ÓœW8ìœåªË1
@@ -43,6 +44,7 @@ rkotlin:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from
 rkotlin:S3776—"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8àåªË1
 kotlin:S1186î"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ÛÅûÏûÿÿÿÿ8ìåªË1
 zkotlin:S1186¨"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ìåªË1
+Skotlin:S1066õ".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8Â èÎ1
 €kotlin:S3923€"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8óåªË1
 €kotlin:S3923 "[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8ôåªË1
 €kotlin:S3923¹"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8ôåªË1

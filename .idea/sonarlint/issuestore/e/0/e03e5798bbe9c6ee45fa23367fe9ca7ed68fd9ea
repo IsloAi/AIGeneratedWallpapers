@@ -1,19 +1,19 @@
 
->kotlin:S125Ä"Remove this commented out code.(ò’÷§8üè•¤Ì1
-Ckotlin:S125ÿ"Remove this commented out code.(Ò»ˆşÿÿÿÿ8ç¢—¤Ì1
-;kotlin:S6310¨"Avoid hardcoded dispatchers.(©ÓœW8‚é•¤Ì1
-<kotlin:S6310²"Avoid hardcoded dispatchers.(Í¡·Ş8‚é•¤Ì1
-Rkotlin:S1481á"2Remove this unused "arrayListJson" local variable.(àñÆÑ8Ÿé•¤Ì1
-9kotlin:S1128"Remove this unused import.(ıºÎà8´òô¤Ì1
->kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8«µß¤Ì1
-9kotlin:S1128"Remove this unused import.(ÁÈÚø8«µß¤Ì1
-9kotlin:S1128"Remove this unused import.(âÉïÜ8Ç½§¤Ë1
->kotlin:S1128"Remove this unused import.(é°´ãşÿÿÿÿ8Àìû¤Ì1
-9kotlin:S1128"Remove this unused import.(´Ùí8ë‡â¤Ì1
->kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8Ç½§¤Ë1
->kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8Éüë¤Ì1
-8kotlin:S1128"Remove this unused import.(º¾Ã8Ç½§¤Ë1
->kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8¬µß¤Ì1
-9kotlin:S1128"Remove this unused import.(ÒÂ¦8¬µß¤Ì1
-pkotlin:S1192’"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¦é•¤Ì1
-fkotlin:S6510õ"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8±é•¤Ì1
+>kotlin:S125Ç"Remove this commented out code.(ò’÷§8ùĞÂåÎ1
+Ckotlin:S125†"Remove this commented out code.(Ò»ˆşÿÿÿÿ8ùĞÂåÎ1
+;kotlin:S6310«"Avoid hardcoded dispatchers.(©ÓœW8ÿĞÂåÎ1
+<kotlin:S6310µ"Avoid hardcoded dispatchers.(Í¡·Ş8ÿĞÂåÎ1
+Rkotlin:S1481æ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ÑÂåÎ1
+9kotlin:S1128"Remove this unused import.(ıºÎà8–ÑÂåÎ1
+>kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8–ÑÂåÎ1
+9kotlin:S1128"Remove this unused import.(ÁÈÚø8–ÑÂåÎ1
+9kotlin:S1128"Remove this unused import.(âÉïÜ8–ÑÂåÎ1
+>kotlin:S1128"Remove this unused import.(é°´ãşÿÿÿÿ8–ÑÂåÎ1
+9kotlin:S1128"Remove this unused import.(´Ùí8–ÑÂåÎ1
+>kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8–ÑÂåÎ1
+>kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8–ÑÂåÎ1
+8kotlin:S1128"Remove this unused import.(º¾Ã8–ÑÂåÎ1
+>kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8–ÑÂåÎ1
+9kotlin:S1128"Remove this unused import.(ÒÂ¦8—ÑÂåÎ1
+pkotlin:S1192•"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8˜ÑÂåÎ1
+fkotlin:S6510ø"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8ŸÑÂåÎ1

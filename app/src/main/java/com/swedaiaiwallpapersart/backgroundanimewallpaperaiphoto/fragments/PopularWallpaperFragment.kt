@@ -83,6 +83,7 @@ class PopularWallpaperFragment : Fragment() {
     var oldPosition = 0
 
     val TAG = "POPULARTAB"
+    var isNavigationInProgress = false
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     override fun onCreateView(
@@ -157,35 +158,39 @@ class PopularWallpaperFragment : Fragment() {
         val list = ArrayList<CatResponse?>()
         mostUsedWallpaperAdapter = MostUsedWallpaperAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
+                if (!isNavigationInProgress){
+                    externalOpen = true
+                    val allItems = mostUsedWallpaperAdapter?.getAllItems()
+                    if (addedItems?.isNotEmpty() == true){
+                        addedItems?.clear()
+                    }
+                    isNavigationInProgress = true
 
-                externalOpen = true
-                val allItems = mostUsedWallpaperAdapter?.getAllItems()
-                if (addedItems?.isNotEmpty() == true){
-                    addedItems?.clear()
+
+                    addedItems = allItems
+
+                    oldPosition = position
+
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_all_tab_click_item",
+                        "mainscr_all_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                navigateToDestination(allItems!!, position)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                navigateToDestination(allItems!!, position)
+                            }
+                        }
+                    )
                 }
 
 
-                addedItems = allItems
-
-                oldPosition = position
-
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_all_tab_click_item",
-                    "mainscr_all_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                            navigateToDestination(allItems!!, position)
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-                            navigateToDestination(allItems!!, position)
-                        }
-                    }
-                )
             }
 
             override fun getFavorites(position: Int) {
@@ -274,6 +279,7 @@ class PopularWallpaperFragment : Fragment() {
 
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+        Log.e(TAG, "addNullValueInsideArray: "+data.size )
 
         val firstAdLineThreshold =
             if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
@@ -465,24 +471,28 @@ class PopularWallpaperFragment : Fragment() {
             ApicategoriesListHorizontalAdapter(list, object :
                 PositionCallback {
                 override fun getPosition(position: Int) {
-                    val allItems = adapter?.getAllItems()
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "mainscr_trending_tab_click_item",
-                        "mainscr_trending_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                navigateToDestination(allItems!!, position)
-                                //do something
-                            }
+                    if (!isNavigationInProgress){
+                        isNavigationInProgress = true
+                        val allItems = adapter?.getAllItems()
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "mainscr_trending_tab_click_item",
+                            "mainscr_trending_tab_click_item",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                    navigateToDestination(allItems!!, position)
+                                    //do something
+                                }
 
-                            override fun onAdsDismiss() {
-                                navigateToDestination(allItems!!, position)
+                                override fun onAdsDismiss() {
+                                    navigateToDestination(allItems!!, position)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
+
 
 
                 }
@@ -555,6 +565,8 @@ class PopularWallpaperFragment : Fragment() {
             putInt("position", position - countOfNulls)
             requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
+
+        isNavigationInProgress = false
     }
 
     override fun onDestroyView() {
