@@ -1,12 +1,12 @@
 
-Ykotlin:S1172Î"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8 Ñ‰ìÎ1
-Ckotlin:S125ó"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ÿ“‹É1
-Ckotlin:S125ù"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ÿ“‹É1
-Ckotlin:S125ú"Remove this commented out code.(ğ·Äıÿÿÿÿ8¶Ñ‰ìÎ1
->kotlin:S125"Remove this commented out code.(£Ãš‰8¸Ñ‰ìÎ1
-Ckotlin:S125®"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8¹Ñ‰ìÎ1
-=kotlin:S125¼"Remove this commented out code.(è»»_8ºÑ‰ìÎ1
-Mkotlin:S1481à"-Remove this unused "behavior" local variable.(Ø¦š¾8®Ò‰ìÎ1
+Ykotlin:S1172ı"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8‰§Ÿ’Ï1
+Ckotlin:S125¢"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8˜§Ÿ’Ï1
+Ckotlin:S125¨"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8™§Ÿ’Ï1
+Ckotlin:S125©"Remove this commented out code.(ğ·Äıÿÿÿÿ8š§Ÿ’Ï1
+>kotlin:S125Ì"Remove this commented out code.(£Ãš‰8œ§Ÿ’Ï1
+Ckotlin:S125İ"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8§Ÿ’Ï1
+=kotlin:S125ë"Remove this commented out code.(è»»_8§Ÿ’Ï1
+Mkotlin:S1481"-Remove this unused "behavior" local variable.(Ø¦š¾8ê§Ÿ’Ï1
 9kotlin:S1128"Remove this unused import.(Ô£àı8Òü†ìÎ1
 8kotlin:S1128"Remove this unused import.(ÑÁ«b8Óü†ìÎ1
 9kotlin:S1128"Remove this unused import.(©¶Ùç8Õü†ìÎ1
@@ -16,12 +16,14 @@ Mkotlin:S1481à"-Remove this unused "behavior" local variable.(Ø¦š¾8®Ò‰ìÎ1
 9kotlin:S1128"Remove this unused import.(´Ùí8‡®‹É1
 9kotlin:S1128"Remove this unused import.(¦şû8×ü†ìÎ1
 9kotlin:S1128"Remove this unused import.(Æü³Ï8‡®‹É1
->kotlin:S1128D"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8êÒ‰ìÎ1
-9kotlin:S1128G"Remove this unused import.(ßĞÕ©8êÒ‰ìÎ1
->kotlin:S1128H"Remove this unused import.(öŒÎƒÿÿÿÿÿ8ëÒ‰ìÎ1
-9kotlin:S1128I"Remove this unused import.(´â 8ëÒ‰ìÎ1
-9kotlin:S1128J"Remove this unused import.(Ñç€8¼‘ˆìÎ1
->kotlin:S1128K"Remove this unused import.(Šëİ¨ÿÿÿÿÿ8¼‘ˆìÎ1
-Gkotlin:S1874o"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8”®‹É1
-wkotlin:S3776†"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8ôŸ“‹É1
-wkotlin:S3776”"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8ìä¡Í1
+>kotlin:S1128E"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8ü§Ÿ’Ï1
+9kotlin:S1128K"Remove this unused import.(ßĞÕ©8êÒ‰ìÎ1
+>kotlin:S1128L"Remove this unused import.(öŒÎƒÿÿÿÿÿ8ëÒ‰ìÎ1
+9kotlin:S1128M"Remove this unused import.(´â 8ëÒ‰ìÎ1
+9kotlin:S1128N"Remove this unused import.(Ñç€8¼‘ˆìÎ1
+>kotlin:S1128O"Remove this unused import.(Šëİ¨ÿÿÿÿÿ8ş§Ÿ’Ï1
+Hkotlin:S1874•"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8Œ¨Ÿ’Ï1
+wkotlin:S3776µ"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8¦¨Ÿ’Ï1
+wkotlin:S3776Ã"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8¨¨Ÿ’Ï1
+ykotlin:S1186k"ZAdd a nested comment explaining why this function is empty or complete the implementation.(ªöì´8µ¨Ÿ’Ï1
+~kotlin:S1186n"ZAdd a nested comment explaining why this function is empty or complete the implementation.(® —åûÿÿÿÿ8ß¯™’Ï1

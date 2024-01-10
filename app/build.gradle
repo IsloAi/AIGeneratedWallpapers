@@ -12,8 +12,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 20
-        versionName "1.2.6"
+        versionCode 21
+        versionName "1.2.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -42,6 +42,12 @@ android {
             {
                 viewBinding true
             }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 
     defaultConfig {
         // ...
@@ -152,6 +158,8 @@ dependencies {
 
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
+
+    implementation("io.github.farimarwat:anrspy:1.3")
 
 
 

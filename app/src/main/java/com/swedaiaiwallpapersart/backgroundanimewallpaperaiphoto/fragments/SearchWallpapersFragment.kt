@@ -111,7 +111,9 @@ class SearchWallpapersFragment : Fragment() {
         super.onResume()
 
         if (addedItems?.isNotEmpty() == true){
-            searchAdapter?.updateData(addedItems!!)
+            searchAdapter?.addNewData()
+            searchAdapter?.updateMoreData(addedItems!!)
+//            searchAdapter?.updateData(addedItems!!)
         }
 
         if (catgories){
@@ -234,7 +236,10 @@ class SearchWallpapersFragment : Fragment() {
                                         binding.searchSuggestions.visibility = View.GONE
                                         binding.recyclerviewCatgory.visibility = View.GONE
                                         binding.recyclerviewAll.visibility = View.VISIBLE
-                                        searchAdapter?.updateData(filteredList)
+
+                                        searchAdapter?.addNewData()
+                                        searchAdapter?.updateMoreData(filteredList)
+//                                        searchAdapter?.updateData(filteredList)
                                     } else {
                                         binding.searchSuggestions.visibility = View.GONE
                                         binding.recyclerviewCatgory.visibility = View.GONE

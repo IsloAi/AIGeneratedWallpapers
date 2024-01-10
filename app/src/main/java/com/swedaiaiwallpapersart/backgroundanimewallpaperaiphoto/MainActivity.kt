@@ -37,6 +37,7 @@ import androidx.work.WorkManager
 import com.bmik.android.sdk.IkmSdkController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -68,6 +69,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
+import pk.farimarwat.anrspy.agent.ANRSpyAgent
+import pk.farimarwat.anrspy.agent.ANRSpyListener
+import pk.farimarwat.anrspy.models.MethodModel
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -91,11 +95,45 @@ class MainActivity : AppCompatActivity(){
     private val allwallpapers: AllWallpapersViewmodel by viewModels()
 
     private  val liveViewModel: LiveWallpaperViewModel by viewModels()
+    val TAG= "ANRSPY"
 
 
     val mainScope = CoroutineScope(Dispatchers.IO)
 
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
+
+
+    private var mCallback = object : ANRSpyListener {
+        override fun onWait(ms: Long) {
+
+        }
+        override fun onAnrStackTrace(stackstrace: Array<StackTraceElement>) {
+
+        }
+        override fun onReportAvailable(methodList: List<MethodModel>) {
+            if(methodList.isNotEmpty()){
+                Log.e(TAG,"Methods-------")
+                for(item in methodList){
+                    Log.e(TAG,"Method: ${item.name} ElapsedTime: ${item.elapsedTime} Thread: ${item.thread.name}")
+                }
+                Log.e(TAG,"End Methods ----\n")
+            }
+
+        }
+        override fun onAnrDetected(
+            details: String,
+            stackTrace: Array<StackTraceElement>,
+            packageMethods: List<String>?
+        ) {
+            packageMethods?.let {
+                Log.e(TAG,"-----ANR Detected-------")
+                it.forEach {
+                    Log.e(TAG,it)
+                }
+                Log.e(TAG,"-------------------")
+            }
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -129,6 +167,15 @@ class MainActivity : AppCompatActivity(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
         initFirebaseRemoteConfig()
+        val firebaseinstance = FirebaseAnalytics.getInstance(this)
+        val anrSpyAgent = ANRSpyAgent.Builder(this  )
+            .setTimeOut(5000)
+            .setSpyListener(mCallback)
+            .setThrowException(false)
+            .enableReportAnnotatedMethods(true)
+            .setFirebaseInstance(firebaseinstance)
+            .build()
+        anrSpyAgent.start()
     }
 
     fun initFirebaseRemoteConfig() {

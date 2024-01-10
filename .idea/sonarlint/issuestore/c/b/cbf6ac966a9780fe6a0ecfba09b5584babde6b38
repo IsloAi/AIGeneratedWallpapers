@@ -1,11 +1,13 @@
 
->kotlin:S125€"Remove this commented out code.(…é8ÍšïÌ1
-;kotlin:S6310Œ"Avoid hardcoded dispatchers.(©ÓœW8•ÍšïÌ1
-<kotlin:S6310•"Avoid hardcoded dispatchers.(Í¡·Ş8•ÍšïÌ1
-Rkotlin:S1481í"2Remove this unused "arrayListJson" local variable.(àñÆÑ8§ÍšïÌ1
+=kotlin:S125t"Remove this commented out code.(ô·°Ë8‘‡¢Ï1
+Ckotlin:S125ò"Remove this commented out code.(çùò—øÿÿÿÿ8Ù¨£Ï1
+>kotlin:S125…"Remove this commented out code.(…é8ÍšïÌ1
+;kotlin:S6310‘"Avoid hardcoded dispatchers.(©ÓœW8•ÍšïÌ1
+<kotlin:S6310š"Avoid hardcoded dispatchers.(Í¡·Ş8•ÍšïÌ1
+Rkotlin:S1481ò"2Remove this unused "arrayListJson" local variable.(àñÆÑ8§ÍšïÌ1
 9kotlin:S1128"Remove this unused import.(ÔËŸÀ8¿ã—ïÌ1
-qkotlin:S1192š"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8²ÍšïÌ1
-pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8²ÍšïÌ1
+qkotlin:S1192œ"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8²ÍšïÌ1
+pkotlin:S1192“"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8²ÍšïÌ1
 Gkotlin:S1874P"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8™÷ïÍ1
-zkotlin:S1186Ó"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8¸ÍšïÌ1
-kotlin:S1186×"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8Ëã—ïÌ1
+zkotlin:S1186Õ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8¸ÍšïÌ1
+kotlin:S1186Ù"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8Ëã—ïÌ1
