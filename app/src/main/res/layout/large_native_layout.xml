@@ -82,7 +82,7 @@
             android:layout_marginHorizontal="8dp"
 
             android:background="@drawable/bg_btn_ads_round"
-            android:backgroundTint="@color/button_bg"
+            android:backgroundTint="#024CE7"
             android:fontFamily="@font/roboto_medium"
             android:gravity="center"
             android:minWidth="50dp"

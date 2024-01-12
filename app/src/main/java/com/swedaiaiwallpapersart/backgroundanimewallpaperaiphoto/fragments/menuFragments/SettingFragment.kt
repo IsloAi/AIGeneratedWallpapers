@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -61,8 +62,11 @@ class SettingFragment : Fragment() {
         binding.shareAppButton.setOnClickListener {
            shareApp(requireContext())
         }
-        binding.privacyPolicyButton.setOnClickListener { openLink("https://swedebras.blogspot.com/2023/09/privacy-policy.html") }
-        binding.moreAppButton.setOnClickListener { openLink("https://play.google.com/store/apps/developer?id=Swed+AI")  }
+
+        binding.privacyPolicyButton.setOnClickListener { openLink("https://bluell.net/privacy/") }
+        binding.moreAppButton.setOnClickListener {
+
+            openLink("https://play.google.com/store/apps/dev?id=6602716762126600526")  }
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.localizationFragment)
             }
@@ -77,6 +81,20 @@ class SettingFragment : Fragment() {
             findNavController().navigate(R.id.favouriteFragment)
         }
         }
+
+
+    fun openDeveloperPage(context: Context, developerId: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://developer?id=$developerId"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            // If the Play Store app is not available, open the Play Store website
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=$developerId"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
+        }
+    }
     private fun feedback() {
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${requireActivity().packageName}"))
@@ -106,12 +124,24 @@ class SettingFragment : Fragment() {
         context.startActivity(chooser)
     }
     private fun openLink(url:String) {
-        if (InternetState.checkForInternet(requireContext())) {
-            val myWebLink = Intent(Intent.ACTION_VIEW)
-            myWebLink.data = Uri.parse(url)
-            startActivity(myWebLink)
-        } else { Toast.makeText(requireContext(),
-            getString(R.string.no_internet), Toast.LENGTH_SHORT).show() }
+        try {
+            if (InternetState.checkForInternet(requireContext())) {
+                val myWebLink = Intent(Intent.ACTION_VIEW)
+                myWebLink.data = Uri.parse(url)
+                startActivity(myWebLink)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.no_internet), Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }catch (e: ActivityNotFoundException) {
+            val developerId = "6602716762126600526"
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=$developerId"))
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        }
     }
     private fun generateSharingLink(
         deepLink: Uri,
@@ -119,17 +149,11 @@ class SettingFragment : Fragment() {
         getShareableLink: (String) -> Unit = {},
     ) {
         FirebaseDynamicLinks.getInstance().createDynamicLink().run {
-            // What is this link parameter? You will get to know when we will actually use this function.
             link = deepLink
-
-            // [domainUriPrefix] will be the domain name you added when setting up Dynamic Links at Firebase Console.
-            // You can find it in the Dynamic Links dashboard.
             domainUriPrefix = Constants.PREFIX
 
-            // Pass your preview Image Link here;
             setSocialMetaTagParameters(
                 DynamicLink.SocialMetaTagParameters.Builder().setImageUrl(previewImageLink).build())
-            // Required
             androidParameters {
                 build()
             }

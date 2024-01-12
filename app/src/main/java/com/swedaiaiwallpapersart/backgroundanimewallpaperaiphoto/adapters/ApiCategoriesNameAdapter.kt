@@ -39,6 +39,9 @@ class ApiCategoriesNameAdapter(
     private var lastAdShownPosition = -1
     var context: Context? = null
 
+    private var lastClickTime = 0L
+    private val debounceThreshold = 2000L // 1 second
+
 
     private val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
     val firstLine = firstAdLineThreshold * 3
@@ -152,7 +155,14 @@ class ApiCategoriesNameAdapter(
                 .into(binding.catIconImage)
 
             binding.catIconImage.setOnClickListener {
-                stringCallback.getStringCall(model.cat_name!!)
+
+                val currentTime = System.currentTimeMillis()
+
+                if (currentTime - lastClickTime >= debounceThreshold) {
+                    stringCallback.getStringCall(model.cat_name!!)
+                    lastClickTime = currentTime
+                }
+
             }
         }
     }

@@ -289,3 +289,9 @@ wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/gen
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SignInFragment.kt,6\8\6847fce60fc04116772f07e713e7924165081e34
 œ
 lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/PremiumPlanFragment.kt,0\d\0dbc8cbd4d96f6b21fdeb46d70bd9c4de47a7568
+<
+build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+
+Q.idea/sonarlint/securityhotspotstore/f/0/f07866736216be0ee2aba49e392191aeae700a35,2\5\25f6469773b9f3ebb994178c1114a60412389f58
+N
+app/debug/output-metadata.json,6\d\6d0d047f57b3ed56db47b6d89a6ec6080e4cb494

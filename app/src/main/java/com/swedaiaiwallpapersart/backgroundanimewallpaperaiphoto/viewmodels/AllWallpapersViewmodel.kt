@@ -31,7 +31,8 @@ class AllWallpapersViewmodel: ViewModel()  {
 
             val retrofit = RetrofitInstance.getInstance()
             val service = retrofit.create(AllWallpapers::class.java).getList(
-                "jhkjhsda324")
+                MySharePreference.getDeviceID(context)!!
+            )
 
             service.enqueue(object :Callback<FavouriteListResponse>{
                 override fun onResponse(

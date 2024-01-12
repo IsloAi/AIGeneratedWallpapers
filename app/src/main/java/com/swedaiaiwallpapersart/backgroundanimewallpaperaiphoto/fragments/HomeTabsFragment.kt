@@ -215,6 +215,9 @@ class HomeTabsFragment : Fragment() {
     }
 
     fun navigateToTrending(index:Int){
-        binding.viewPager.currentItem = index
+        if (isAdded){
+            binding.viewPager.currentItem = index
+        }
+
     }
 }

@@ -122,13 +122,19 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 adsListener = object : CommonAdsListenerAdapter() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        if (isAdded){
+                            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+
+                        }
                         //do something
-                        findNavController().navigate(R.id.liveWallpaperPreviewFragment)
                     }
 
                     override fun onAdsDismiss() {
                         Log.e(TAG, "onAdsDismiss: ", )
+                        if (isAdded){
                             findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+
+                        }
                     }
                 }
             )

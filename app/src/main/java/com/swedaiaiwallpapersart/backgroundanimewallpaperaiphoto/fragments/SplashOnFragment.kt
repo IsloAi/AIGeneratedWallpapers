@@ -84,7 +84,7 @@ class SplashOnFragment : Fragment() {
                 delay(interval.toLong())
             }
 
-            delay(5000)
+            delay(3000)
             SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,12000,object:CommonAdsListenerAdapter(){
                 override fun onAdReady(priority: Int) {
 //                progress.dismiss()

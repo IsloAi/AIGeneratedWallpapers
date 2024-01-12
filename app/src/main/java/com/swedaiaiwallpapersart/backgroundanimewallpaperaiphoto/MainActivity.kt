@@ -1,11 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.annotation.SuppressLint
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -16,15 +11,11 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
-import android.widget.RemoteViews
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.app.NotificationCompat
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +28,6 @@ import androidx.work.WorkManager
 import com.bmik.android.sdk.IkmSdkController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -51,32 +41,17 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetPromptDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.SelectedPromptListModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Counter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ResetCounterInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFirebaseMessageReceiver
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
-import pk.farimarwat.anrspy.agent.ANRSpyAgent
-import pk.farimarwat.anrspy.agent.ANRSpyListener
-import pk.farimarwat.anrspy.models.MethodModel
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -97,43 +72,9 @@ class MainActivity : AppCompatActivity(){
     private  val liveViewModel: LiveWallpaperViewModel by viewModels()
     val TAG= "ANRSPY"
 
-
-    val mainScope = CoroutineScope(Dispatchers.IO)
-
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
 
 
-    private var mCallback = object : ANRSpyListener {
-        override fun onWait(ms: Long) {
-
-        }
-        override fun onAnrStackTrace(stackstrace: Array<StackTraceElement>) {
-
-        }
-        override fun onReportAvailable(methodList: List<MethodModel>) {
-            if(methodList.isNotEmpty()){
-                Log.e(TAG,"Methods-------")
-                for(item in methodList){
-                    Log.e(TAG,"Method: ${item.name} ElapsedTime: ${item.elapsedTime} Thread: ${item.thread.name}")
-                }
-                Log.e(TAG,"End Methods ----\n")
-            }
-
-        }
-        override fun onAnrDetected(
-            details: String,
-            stackTrace: Array<StackTraceElement>,
-            packageMethods: List<String>?
-        ) {
-            packageMethods?.let {
-                Log.e(TAG,"-----ANR Detected-------")
-                it.forEach {
-                    Log.e(TAG,it)
-                }
-                Log.e(TAG,"-------------------")
-            }
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -167,15 +108,6 @@ class MainActivity : AppCompatActivity(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
         initFirebaseRemoteConfig()
-        val firebaseinstance = FirebaseAnalytics.getInstance(this)
-        val anrSpyAgent = ANRSpyAgent.Builder(this  )
-            .setTimeOut(5000)
-            .setSpyListener(mCallback)
-            .setThrowException(false)
-            .enableReportAnnotatedMethods(true)
-            .setFirebaseInstance(firebaseinstance)
-            .build()
-        anrSpyAgent.start()
     }
 
     fun initFirebaseRemoteConfig() {

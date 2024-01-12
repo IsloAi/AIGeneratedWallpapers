@@ -1,12 +1,13 @@
 
-;kotlin:S6310ğ"Avoid hardcoded dispatchers.(©ÓœW8‚ÅóïÎ1
-;kotlin:S6310¼"Avoid hardcoded dispatchers.(©ÓœW8‚ÅóïÎ1
-<kotlin:S6310ú"Avoid hardcoded dispatchers.(Í¡·Ş8ƒÅóïÎ1
-<kotlin:S6310Ä"Avoid hardcoded dispatchers.(Í¡·Ş8ƒÅóïÎ1
-Rkotlin:S1481©"2Remove this unused "arrayListJson" local variable.(àñÆÑ8šÅóïÎ1
+;kotlin:S6310õ"Avoid hardcoded dispatchers.(©ÓœW8÷á­ÂÏ1
+;kotlin:S6310Á"Avoid hardcoded dispatchers.(©ÓœW8÷á­ÂÏ1
+<kotlin:S6310ÿ"Avoid hardcoded dispatchers.(Í¡·Ş8øá­ÂÏ1
+<kotlin:S6310É"Avoid hardcoded dispatchers.(Í¡·Ş8øá­ÂÏ1
+Rkotlin:S1481³"2Remove this unused "arrayListJson" local variable.(àñÆÑ8¬¿®ÂÏ1
 >kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8¡ÅóïÎ1
 9kotlin:S1128"Remove this unused import.(åå8¡ÅóïÎ1
 ~kotlin:S1192Š"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 3 times.(é¯›•ıÿÿÿÿ8£ÅóïÎ1
 qkotlin:S1192µ"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8»íóïÎ1
-pkotlin:S1192«"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8£ÅóïÎ1
-fkotlin:S6510Œ"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8®ÅóïÎ1
+pkotlin:S1192°"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8½â­ÂÏ1
+wkotlin:S3776™"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8Äâ­ÂÏ1
+fkotlin:S6510‘"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8Ëâ­ÂÏ1

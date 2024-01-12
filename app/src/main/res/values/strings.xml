@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AI Generated Wallpapers</string>
+    <string name="app_name">4K Wallpapers - AI Generator</string>
 
     <string name="hello_blank_fragment">Hello Blank Fragment</string>
     <string name="default_notification_channel_id">Job progress</string>
@@ -46,7 +46,7 @@
     <string name="change_language">Change Language</string>
     <string name="nature_s_perfection_on_display">Nature\'s Perfection on Display</string>
     <string name="get_started">Get Started</string>
-    <string name="ai_generated_wallpapers">Ai Generated Wallpapers</string>
+    <string name="ai_generated_wallpapers">4K Wallpapers - AI Generator</string>
     <string name="no_creations_found">No Creations found</string>
     <string name="delete">Delete</string>
     <string name="select_all">Select All</string>

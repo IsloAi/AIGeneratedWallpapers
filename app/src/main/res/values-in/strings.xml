@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AI Generated Wallpapers</string>
+    <string name="app_name">4K Wallpapers - AI Generator</string>
 
     <string name="hello_blank_fragment">Halo Blank Fragment</string>
     <string name="default_notification_channel_id">Progres Pekerjaan</string>

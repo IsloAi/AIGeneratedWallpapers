@@ -122,7 +122,12 @@ class SearchWallpapersFragment : Fragment() {
             binding.recyclerviewAll.visibility = View.GONE
             editTextLayoutsFocus()
         }else{
-            binding.searchSuggestions.visibility = View.VISIBLE
+
+            if (addedItems?.isNotEmpty() == true){
+                binding.searchSuggestions.visibility = View.GONE
+            }else{
+                binding.searchSuggestions.visibility = View.VISIBLE
+            }
             binding.recyclerviewCatgory.visibility = View.GONE
             binding.recyclerviewAll.visibility = View.VISIBLE
             editTextLayoutsFocus()
@@ -236,6 +241,7 @@ class SearchWallpapersFragment : Fragment() {
                                         binding.searchSuggestions.visibility = View.GONE
                                         binding.recyclerviewCatgory.visibility = View.GONE
                                         binding.recyclerviewAll.visibility = View.VISIBLE
+                                        binding.emptySupport.visibility = View.GONE
 
                                         searchAdapter?.addNewData()
                                         searchAdapter?.updateMoreData(filteredList)
@@ -308,7 +314,11 @@ class SearchWallpapersFragment : Fragment() {
     private fun editTextLayoutsFocus(){
         binding.searchEdt.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                binding.searchSuggestions.visibility = View.VISIBLE
+                if (addedItems?.isNotEmpty() == true){
+                    binding.searchSuggestions.visibility = View.GONE
+                }else{
+                    binding.searchSuggestions.visibility = View.VISIBLE
+                }
                 binding.recyclerviewCatgory.visibility = View.GONE
             } else {
                 binding.searchSuggestions.visibility = View.GONE
@@ -421,10 +431,14 @@ class SearchWallpapersFragment : Fragment() {
             putString("from","category")
 
         }
-        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
 
-            findNavController().navigate(R.id.listViewFragment, bundle)
+        if (isAdded ){
+            if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+
+                findNavController().navigate(R.id.listViewFragment, bundle)
+            }
         }
+
     }
 
     override fun onDestroyView() {

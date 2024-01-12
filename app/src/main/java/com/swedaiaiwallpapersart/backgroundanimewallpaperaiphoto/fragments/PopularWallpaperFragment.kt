@@ -179,12 +179,17 @@ class PopularWallpaperFragment : Fragment() {
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                navigateToDestination(allItems!!, position)
+                                if (isAdded){
+                                    navigateToDestination(allItems!!, position)
+                                }
+
                                 //do something
                             }
 
                             override fun onAdsDismiss() {
-                                navigateToDestination(allItems!!, position)
+                                if (isAdded){
+                                    navigateToDestination(allItems!!, position)
+                                }
                             }
                         }
                     )
@@ -482,12 +487,17 @@ class PopularWallpaperFragment : Fragment() {
                             adsListener = object : CommonAdsListenerAdapter() {
                                 override fun onAdsShowFail(errorCode: Int) {
                                     Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                    navigateToDestination(allItems!!, position)
+
+                                    if (isAdded){
+                                        navigateToDestination(allItems!!, position)
+                                    }
                                     //do something
                                 }
 
                                 override fun onAdsDismiss() {
-                                    navigateToDestination(allItems!!, position)
+                                    if (isAdded){
+                                        navigateToDestination(allItems!!, position)
+                                    }
                                 }
                             }
                         )
