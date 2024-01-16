@@ -242,8 +242,11 @@ class PopularWallpaperFragment : Fragment() {
 
                 if (view != null) {
 
+                    Log.e(TAG, "initMostDownloadedData: ", )
+
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (!dataset) {
+                            Log.e(TAG, "initMostDownloadedData: $dataset")
                             val list = addNullValueInsideArray(wallpapers.shuffled())
 
                             cachedMostDownloaded = list
@@ -337,7 +340,6 @@ class PopularWallpaperFragment : Fragment() {
 
         }
 
-
         if (dataset){
 
             Log.e(TAG, "onResume: Data set $dataset")
@@ -360,13 +362,22 @@ class PopularWallpaperFragment : Fragment() {
     override fun onPause() {
         super.onPause()
 
+        Log.e(TAG, "onPause: ", )
+
         if (!externalOpen){
+
             val allItems = mostUsedWallpaperAdapter?.getAllItems()
+
+            Log.e(TAG, "onPause: all items${allItems?.size}")
             if (addedItems?.isNotEmpty() == true){
+
+                Log.e(TAG, "onPause: cleared", )
                 addedItems?.clear()
             }
 
-            addedItems = allItems
+            allItems?.let { addedItems?.addAll(it) }
+
+            Log.e(TAG, "onPause: "+addedItems?.size )
         }
 
     }

@@ -23,6 +23,13 @@ class SharedViewModel : ViewModel() {
     private val _selectTab = MutableLiveData<Int>()
     val selectTab: LiveData<Int> = _selectTab
 
+
+    private val _liveAdPosition = MutableLiveData<Int>()
+    val liveAdPosition: LiveData<Int> = _liveAdPosition
+
+    private val _wallAdPosition = MutableLiveData<Int>()
+    val wallAdPosition: LiveData<Int> = _wallAdPosition
+
     val selectedCat = MutableLiveData<CatResponse>()
 
     fun setData(catResponses: List<CatResponse>, position: Int) {
@@ -54,6 +61,15 @@ class SharedViewModel : ViewModel() {
         _selectTab.value = position
     }
 
+
+    fun setAdPosition(position: Int){
+        _liveAdPosition.value = position
+    }
+
+
+    fun setWallAdPosition(position: Int){
+        _wallAdPosition.value = position
+    }
 
 
 

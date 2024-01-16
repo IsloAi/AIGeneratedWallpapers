@@ -20,9 +20,6 @@ import java.io.File
 import java.io.IOException
 
 class LiveWallpaperService : WallpaperService() {
-
-    private var wallpaperUpdateReceiver: BroadcastReceiver? = null
-
     internal inner class WallpaperVideoEngine : Engine() {
         private var myMediaPlayer: MediaPlayer? = null
         private var liveWallBroadcastReceiver: BroadcastReceiver? = null

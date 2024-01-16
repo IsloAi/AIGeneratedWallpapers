@@ -411,7 +411,7 @@ class HomeFragment : Fragment(){
                 addedItems?.clear()
             }
 
-            addedItems = allItems
+            addedItems?.addAll(allItems)
         }
 
     }

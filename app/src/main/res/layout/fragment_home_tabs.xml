@@ -99,6 +99,7 @@
         app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:tabGravity="start"
+        app:tabRippleColor="#00FCFCFC"
         app:tabPaddingStart="0dp"
         app:tabPaddingEnd="5dp"
         app:tabMode="scrollable"

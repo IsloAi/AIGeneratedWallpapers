@@ -57,18 +57,19 @@ import java.io.IOException
 
 class LiveWallpaperPreviewFragment : Fragment() {
 
-    private var _binding:FragmentLiveWallpaperPreviewBinding ?= null
+    private var _binding: FragmentLiveWallpaperPreviewBinding? = null
     private val binding get() = _binding!!
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    private var livewallpaper: LiveWallpaperModel ?= null
+    private var livewallpaper: LiveWallpaperModel? = null
+    var adPosition = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentLiveWallpaperPreviewBinding.inflate(inflater,container,false)
+        _binding = FragmentLiveWallpaperPreviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -100,79 +101,90 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
 
-        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner){wallpaper ->
-            if (wallpaper.isNotEmpty()){
+        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            if (wallpaper.isNotEmpty()) {
 
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 livewallpaper = wallpaper[0]
 
-                if (livewallpaper?.liked == true){
+                if (livewallpaper?.liked == true) {
                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
-                }else{
+                } else {
                     binding.setLiked.setImageResource(R.drawable.button_like)
                 }
             }
         }
+
+
+        sharedViewModel.liveAdPosition.observe(viewLifecycleOwner) {
+            adPosition = it
+        }
     }
 
-    private fun backHandle(){
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().popBackStack(R.id.homeTabsFragment,false)
-            }
-        })
+    private fun backHandle() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().popBackStack(R.id.homeTabsFragment, false)
+                }
+            })
     }
 
 
-    private fun setEvents(){
+    private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
 
-            val file = requireContext().filesDir
-            val filepath = File(file,BlurView.fileName)
-            val newFile = File(file,"video.mp4")
+            if (adPosition % 2 != 0){
+                setWallpaper()
+            }else{
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "mainscr_live_tab_click_item",
+                    "mainscr_live_tab_click_item",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            setWallpaper()
+
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            setWallpaper()
+
+                        }
+
+                        override fun onAdsShowTimeout() {
+                            setWallpaper()
+                        }
+                    }
+                )
+            }
 
 
 
-//            if (isLiveWallpaperSupported(requireContext())){
 
-
-                val info = WallpaperManager.getInstance(requireContext().applicationContext).wallpaperInfo
-
-
-
-                if (info == null || info.packageName != requireContext().packageName) {
-                    IkmSdkController.setEnableShowResumeAds(false)
-                    filepath.renameTo(newFile)
-                    BlurView.filePath = newFile.path
-                    LiveWallpaperService.setToWallPaper(requireContext())
-                } else {
-                    showSimpleDialog(requireContext(),"Do you want to change the live wallpaper? The applied wallpaper will be removed","")
-
-
-                }
-//            }else{
-//                Toast.makeText(requireContext(),"This device do not support Live Wallpapers",Toast.LENGTH_SHORT).show()
-//            }
 
         }
 
         binding.toolbar.setOnClickListener {
-            findNavController().popBackStack(R.id.homeTabsFragment,false)
+            findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
 
         binding.setLiked.setOnClickListener {
             binding.setLiked.isEnabled = false
-            if(livewallpaper?.liked==true){
+            if (livewallpaper?.liked == true) {
                 livewallpaper?.liked = false
                 binding.setLiked.setImageResource(R.drawable.button_like)
-            }else{
+            } else {
                 livewallpaper?.liked = true
                 binding.setLiked.setImageResource(R.drawable.button_like_selected)
             }
-            addFavourite(requireContext(),binding.setLiked)
+            addFavourite(requireContext(), binding.setLiked)
         }
 
         backHandle()
@@ -180,15 +192,23 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         binding.downloadWallpaper.setOnClickListener {
 
-            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
-                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_DENIED
+                ) {
                     Log.e("TAG", "functionality: inside click permission")
-                    ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
-                }else{
+                    ActivityCompat.requestPermissions(
+                        requireContext() as Activity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        1
+                    )
+                } else {
                     Log.e("TAG", "functionality: inside click dialog")
                     getUserIdDialog()
                 }
-            }else{
+            } else {
                 getUserIdDialog()
             }
 
@@ -196,34 +216,57 @@ class LiveWallpaperPreviewFragment : Fragment() {
     }
 
 
+    fun setWallpaper(){
+        val file = requireContext().filesDir
+        val filepath = File(file, BlurView.fileName)
+        val newFile = File(file, "video.mp4")
+
+        val info = WallpaperManager.getInstance(requireContext().applicationContext).wallpaperInfo
+        if (info == null || info.packageName != requireContext().packageName) {
+            IkmSdkController.setEnableShowResumeAds(false)
+            filepath.renameTo(newFile)
+            BlurView.filePath = newFile.path
+            LiveWallpaperService.setToWallPaper(requireContext())
+        } else {
+            showSimpleDialog(
+                requireContext(),
+                "Do you want to change the live wallpaper? The applied wallpaper will be removed",
+                ""
+            )
+
+
+        }
+    }
+
 
     fun showSimpleDialog(context: Context, title: kotlin.String, message: kotlin.String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
             .setMessage(message)
 
-        builder.setPositiveButton("Yes"
+        builder.setPositiveButton(
+            "Yes"
         ) { p0, p1 ->
             val file = requireContext().filesDir
-            val filepath = File(file,BlurView.fileName)
-            val newFile = File(file,"video.mp4")
+            val filepath = File(file, BlurView.fileName)
+            val newFile = File(file, "video.mp4")
 
-            if (newFile.exists()){
-                if (newFile.delete()){
-                    Log.e("TAG", "showSimpleDialog:fileDelete " )
+            if (newFile.exists()) {
+                if (newFile.delete()) {
+                    Log.e("TAG", "showSimpleDialog:fileDelete ")
                 }
             }
             BlurView.filePath = newFile.path
-            if (filepath.renameTo(newFile)){
+            if (filepath.renameTo(newFile)) {
                 BlurView.filePath = newFile.path
 
-                notifyFileNameChanged(requireContext(),filepath.path,newFile.path)
+                notifyFileNameChanged(requireContext(), filepath.path, newFile.path)
                 Log.e("TAG", "showSimpleDialog: renamed")
                 IkmSdkController.setEnableShowResumeAds(false)
                 LiveWallpaperService.setToWallPaper(requireContext())
 
 
-            }else{
+            } else {
                 Log.e("TAG", "showSimpleDialog: failed")
             }
 
@@ -232,7 +275,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
             p0.dismiss()
         }
 
-        builder.setNegativeButton("No"
+        builder.setNegativeButton(
+            "No"
         ) { p0, p1 ->
 
             p0.dismiss()
@@ -262,7 +306,11 @@ class LiveWallpaperPreviewFragment : Fragment() {
             ) { path, uri ->
                 // File scan completed
 
-                Toast.makeText(context,"renaming a file may take sometime to take effect.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    context,
+                    "renaming a file may take sometime to take effect.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -274,9 +322,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     private fun getUserIdDialog() {
 
-        val source =  File(BlurView.filePath)
+        val source = File(BlurView.filePath)
         val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-        val destination =  File(file,BlurView.fileName)
+        val destination = File(file, BlurView.fileName)
         val dialog = Dialog(requireContext())
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(R.layout.rewarded_ad_dialog)
@@ -290,40 +338,44 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         getReward?.setOnClickListener {
             dialog.dismiss()
-            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
-                CustomSDKRewardedAdsListener {
-                override fun onAdsDismiss() {
-                    Log.e("********ADS", "onAdsDismiss: ")
-                }
+            SDKBaseController.getInstance().showRewardedAds(
+                requireActivity(),
+                "viewlistwallscr_download_item",
+                "viewlistwallscr_download_item",
+                object :
+                    CustomSDKRewardedAdsListener {
+                    override fun onAdsDismiss() {
+                        Log.e("********ADS", "onAdsDismiss: ")
+                    }
 
-                override fun onAdsRewarded() {
-                    Log.e("********ADS", "onAdsRewarded: ")
+                    override fun onAdsRewarded() {
+                        Log.e("********ADS", "onAdsRewarded: ")
 
-                    copyFiles(source,destination)
+                        copyFiles(source, destination)
 
-                }
+                    }
 
-                override fun onAdsShowFail(errorCode: Int) {
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "viewlistwallscr_download_item_inter",
-                        "viewlistwallscr_download_item_inter",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                copyFiles(source,destination)
+                    override fun onAdsShowFail(errorCode: Int) {
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "viewlistwallscr_download_item_inter",
+                            "viewlistwallscr_download_item_inter",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    copyFiles(source, destination)
+                                }
+
+                                override fun onAdsDismiss() {
+                                    copyFiles(source, destination)
+                                }
                             }
+                        )
+                        Log.e("********ADS", "onAdsShowFail: ")
 
-                            override fun onAdsDismiss() {
-                                copyFiles(source,destination)
-                            }
-                        }
-                    )
-                    Log.e("********ADS", "onAdsShowFail: ")
+                    }
 
-                }
-
-            })
+                })
         }
 
         dismiss?.setOnClickListener {
@@ -334,58 +386,59 @@ class LiveWallpaperPreviewFragment : Fragment() {
     }
 
 
-        fun copyFiles(source:File,destination:File){
-            try {
-                val inputStream = FileInputStream(source)
-                val outputStream = FileOutputStream(destination)
-                inputStream.copyTo(outputStream)
-                inputStream.close()
-                outputStream.close()
+    fun copyFiles(source: File, destination: File) {
+        try {
+            val inputStream = FileInputStream(source)
+            val outputStream = FileOutputStream(destination)
+            inputStream.copyTo(outputStream)
+            inputStream.close()
+            outputStream.close()
 
-                Toast.makeText(requireContext(),"Wallpaper downloaded",Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
-                Toast.makeText(requireContext(),"Download failed",Toast.LENGTH_SHORT).show()
-                // Handle error
-            }
+            Toast.makeText(requireContext(), "Wallpaper downloaded", Toast.LENGTH_SHORT).show()
+        } catch (e: IOException) {
+            Toast.makeText(requireContext(), "Download failed", Toast.LENGTH_SHORT).show()
+            // Handle error
         }
+    }
 
     fun isLiveWallpaperSupported(context: Context): Boolean {
         val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
-        val activities = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        val activities =
+            context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
         return activities.isNotEmpty()
     }
 
     private fun addFavourite(
         context: Context,
         favouriteButton: ImageView
-    ){
+    ) {
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(LikeLiveWallpaper::class.java)
-        val postData = FavoruiteLiveWallpaperBody(MySharePreference.getDeviceID(context)!!, livewallpaper?.id.toString())
+        val postData = FavoruiteLiveWallpaperBody(
+            MySharePreference.getDeviceID(context)!!,
+            livewallpaper?.id.toString()
+        )
         val call = apiService.postLike(postData)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val message = response.body()?.string()
-                    if(message=="Liked"){
+                    if (message == "Liked") {
 //                        livewallpaper.id = true
                         favouriteButton.setImageResource(R.drawable.button_like_selected)
-                    }
-                    else
-                    {
+                    } else {
                         favouriteButton.setImageResource(R.drawable.button_like)
 //                        arrayList[position]?.liked = false
                     }
                     favouriteButton.isEnabled = true
-                }
-                else
-                {
+                } else {
                     favouriteButton.isEnabled = true
                     Toast.makeText(context, "onResponse error", Toast.LENGTH_SHORT).show()
                     favouriteButton.setImageResource(R.drawable.button_like)
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
+
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                 Toast.makeText(context, "onFailure error", Toast.LENGTH_SHORT).show()
                 favouriteButton.isEnabled = true
@@ -400,7 +453,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
     }
 
 
-    private fun setWallpaperOnView(){
+    private fun setWallpaperOnView() {
 
         binding.liveWallpaper.setMediaController(null)
         binding.liveWallpaper.setVideoPath(BlurView.filePath)
