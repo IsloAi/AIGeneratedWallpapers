@@ -1,8 +1,11 @@
 
-Bkotlin:S125Z"Remove this commented out code.(‚òò¦şÿÿÿÿ8 ÅƒâÆ1
-Bkotlin:S125t"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
-Bkotlin:S125y"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
-;kotlin:S6310J"Avoid hardcoded dispatchers.(©ÒÕò8¤ÅƒâÆ1
-<kotlin:S6310ˆ"Avoid hardcoded dispatchers.(Í¡·Ş8¥ÅƒâÆ1
-Gkotlin:S1874X"#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8±ÅƒâÆ1
-qkotlin:S37764"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ëü«8Ñ‹ÅáÆ1
+Bkotlin:S125["Remove this commented out code.(‚òò¦şÿÿÿÿ8 ÅƒâÆ1
+Bkotlin:S125u"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
+Bkotlin:S125z"Remove this commented out code.(‚òò¦şÿÿÿÿ8¡ÅƒâÆ1
+;kotlin:S6310K"Avoid hardcoded dispatchers.(©ÒÕò8¤ÅƒâÆ1
+<kotlin:S6310‰"Avoid hardcoded dispatchers.(Í¡·Ş8¥ÅƒâÆ1
+Vkotlin:S1481 "1Remove this unused "currentIndex" local variable.(Ì´–Ğúÿÿÿÿ8Üˆ–„Ò1
+Okotlin:S1481˜"/Remove this unused "mainImages" local variable.(¸üíÌ8İˆ–„Ò1
+Mkotlin:S1481’"-Remove this unused "bgImages" local variable.(÷¥†8ßˆ–„Ò1
+Gkotlin:S1874Y"#Deprecated code should not be used.(ìŠÑŞùÿÿÿÿ8±ÅƒâÆ1
+qkotlin:S37765"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ëü«8Ñ‹ÅáÆ1

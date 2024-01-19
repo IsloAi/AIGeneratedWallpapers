@@ -295,3 +295,7 @@ lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fra
 Q.idea/sonarlint/securityhotspotstore/f/0/f07866736216be0ee2aba49e392191aeae700a35,2\5\25f6469773b9f3ebb994178c1114a60412389f58
 N
 app/debug/output-metadata.json,6\d\6d0d047f57b3ed56db47b6d89a6ec6080e4cb494
+ó
+gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SplashFragment.kt,2\5\257e17601b007de0e29267125dd13b23eb6c3a1d
+Å
+Q.idea/sonarlint/securityhotspotstore/2/5/257e17601b007de0e29267125dd13b23eb6c3a1d,8\3\8344028477b284785f3a7d7aa8c1ac7096409cd3

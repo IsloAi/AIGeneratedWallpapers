@@ -20,6 +20,7 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/sliderPager"
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/_20sdp"
                 android:layout_height="@dimen/_150sdp"
                 app:layout_constraintTop_toTopOf="parent" />
 

@@ -210,8 +210,12 @@ class FullScreenImageViewFragment : DialogFragment() {
                         showLoading = true,
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
+
+                                if (isAdded){
+                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+                                }
 //                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-                                mSaveMediaToStorage(bitmap)
+//                                mSaveMediaToStorage(bitmap)
 //                                }else{
 //                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
 //

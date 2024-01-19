@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -157,15 +158,15 @@ class SplashOnFragment : Fragment() {
         )
 
         var currentIndex = 0
-        animateImages = viewLifecycleOwner.lifecycleScope.launch {
-            while (isActive) {
-                binding.spalshBgImage.setImageResource(bgImages[currentIndex])
-                binding.splashMainImage.setImageResource(mainImages[currentIndex])
-
-                currentIndex = (currentIndex + 1) % bgImages.size
-                delay(1000) // Wait for 1 second before changing images
-            }
-        }
+//        animateImages = viewLifecycleOwner.lifecycleScope.launch {
+//            while (isActive) {
+//                binding.spalshBgImage.setImageResource(bgImages[currentIndex])
+//                binding.splashMainImage.setImageResource(mainImages[currentIndex])
+//
+//                currentIndex = (currentIndex + 1) % bgImages.size
+//                delay(1000) // Wait for 1 second before changing images
+//            }
+//        }
     }
 
 
@@ -182,6 +183,14 @@ class SplashOnFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        val videoUri: Uri = Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.splash_new)
+        binding.videoView.setVideoURI(videoUri)
+        binding.videoView.start()
+
+        binding.videoView.setOnCompletionListener {
+            binding.videoView.start()
+        }
     }
 
 

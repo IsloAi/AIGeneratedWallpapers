@@ -439,7 +439,9 @@ class CreationSliderViewFragment : Fragment() {
                         showLoading = true,
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
-                                Toast.makeText(requireContext(),"Ad Load Failed. Please try again",Toast.LENGTH_SHORT).show()
+                                if (isAdded){
+                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+                                }
                             }
 
                             override fun onAdsDismiss() {

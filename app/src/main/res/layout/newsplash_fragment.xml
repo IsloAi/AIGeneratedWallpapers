@@ -13,6 +13,7 @@
         app:layout_constraintHeight_percent="0.65"
         android:src="@drawable/splashnew_bg1"
         android:scaleType="centerCrop"
+        android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/spalsh_bg_image"
         />
@@ -22,11 +23,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         app:layout_constraintHeight_percent="0.65"
         android:src="@drawable/splash_image1_new"
         android:scaleType="centerCrop"
         android:id="@+id/splash_main_image"
         />
+
+
+    <VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 
 
@@ -35,39 +43,75 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintHeight_percent="0.5"
-        android:background="@drawable/spash_foreground"
+        android:background="@drawable/overlay"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/_30sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/text4k"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4K"
+            android:background="@drawable/ads_background"
+            android:paddingHorizontal="@dimen/_7sdp"
+            android:textSize="@dimen/_22sdp"
+            android:backgroundTint="#FFC700"
+            android:fontFamily="@font/microgramma"
+            android:textColor="@color/black"
+            />
+
+
+
+
+
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wallpaper"
+            android:textColor="#FFC700"
+            android:layout_marginStart="@dimen/_4sdp"
+            android:fontFamily="@font/microgramma"
+            android:textSize="@dimen/_22sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/splash_app_name"
+            />
+    </LinearLayout>
+
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to"
+        android:text="Thousands of new high quality images everyday"
         android:textColor="@color/white"
         android:fontFamily="@font/poppins_medium"
-        android:textSize="@dimen/_15sdp"
+        android:textSize="@dimen/_12sdp"
+        android:layout_marginHorizontal="@dimen/_15sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text4k"
         android:id="@+id/splash_welcome_text"
-        app:layout_constraintBottom_toTopOf="@id/splash_app_name"
         />
 
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="4K Wallpapers"
-        android:textColor="@color/button_bg"
-        android:fontFamily="@font/microgramma"
-        android:textSize="@dimen/_22sdp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/splash_main_image"
-        android:layout_marginBottom="@dimen/_3sdp"
-        android:id="@+id/splash_app_name"
-        />
 
 
     <TextView

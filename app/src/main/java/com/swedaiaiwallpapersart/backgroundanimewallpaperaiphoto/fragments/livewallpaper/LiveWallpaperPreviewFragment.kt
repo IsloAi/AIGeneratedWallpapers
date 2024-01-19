@@ -363,7 +363,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
                             showLoading = true,
                             adsListener = object : CommonAdsListenerAdapter() {
                                 override fun onAdsShowFail(errorCode: Int) {
-                                    copyFiles(source, destination)
+                                    if (isAdded){
+                                        Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+                                    }
                                 }
 
                                 override fun onAdsDismiss() {

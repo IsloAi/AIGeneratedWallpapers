@@ -17,27 +17,23 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.model.dto.AdsLayoutType
-import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.GetGemsInterface
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.SplashSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.GetGemsData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.SplashModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.FragmentSplashBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.SplashSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.GetGemsInterface
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.Math.abs
+
 class SplashFragment : Fragment() {
     private var _binding : FragmentSplashBinding? = null
     private val binding get() = _binding!!
