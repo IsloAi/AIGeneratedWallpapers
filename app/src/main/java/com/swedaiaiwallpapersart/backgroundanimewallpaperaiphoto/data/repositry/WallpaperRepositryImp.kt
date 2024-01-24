@@ -1,0 +1,102 @@
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
+
+import android.util.Log
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.WallpaperRepositry
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import javax.inject.Inject
+
+
+class WallpaperRepositryImp@Inject constructor(
+    private val webApiInterface: EndPointsInterface,
+):WallpaperRepositry {
+
+    override fun GenerateDeviceToken(deviceId: String): Flow<Response<TokenResponse>> = channelFlow {
+        try {
+            trySend(Response.Loading)
+            val resp = webApiInterface.generateDeviceToken(deviceId = deviceId)
+
+
+            if (resp.isSuccessful){
+                val header = resp.headers()
+
+
+
+                val apiKey: String? = header["x-api-key"]
+                trySend(Response.Success(TokenResponse(apiKey!!)))
+
+
+
+                Log.e("TAG", "GenerateDeviceToken: $apiKey")
+
+            }else{
+                Log.e("TAG", "GenerateDeviceToken: not success", )
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("TAG", "GenerateDeviceToken: "+e.message )
+//            trySend(retrofit2.Response.error(res))
+        }
+        awaitClose()
+    }
+
+    override fun getAllWallpapers(
+        apiKey: String,
+        page: String,
+        record: String
+    ): Flow<Response<ArrayList<CatResponse>>> = channelFlow {
+
+        try {
+            trySend(Response.Loading)
+            Log.e("TAG", "GenerateTextToImage: I came here")
+            val resp = webApiInterface.getAllWallpapers(apiKey,page,record)
+            Log.e("TAG", "GenerateTextToImage: $resp")
+
+            if (resp.isSuccessful){
+
+                trySend(Response.Success(resp.body()?.images))
+            }
+
+
+
+            Log.e("TAG", "getAllWallpapers: " )
+
+//            when (resp.status.lowercase()) {
+//                "failed"->{
+//                    trySend(Response.Error(resp.message.toString()))
+//                }
+//                "success" -> {
+//                    trySend(Response.Success(resp))
+//                }
+//
+//                "processing" -> {
+////                        trySend(Response.Processing(resp))
+////                        val eta = resp.eta?.toInt()
+////                        val etaInMillis = (eta!! * 1000)
+////                        delay(etaInMillis.toLong())
+////                        val id = resp.id
+////                        val respQueued = webApiInterface.FetchImageData(id, dtoObject)
+//                    resp.output = listOf("","","","")
+//                    trySend(Response.Success(resp))
+//                }
+//
+//                "error" -> {
+//                    trySend(Response.Error(resp.message.toString()))
+//                }
+//            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
+
+        awaitClose()
+
+    }
+}

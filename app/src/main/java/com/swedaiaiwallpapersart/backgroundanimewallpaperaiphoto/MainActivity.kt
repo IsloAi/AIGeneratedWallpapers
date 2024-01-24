@@ -16,6 +16,7 @@ import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,15 +48,19 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatName
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(){
 
     private lateinit var controller: NavController
@@ -71,6 +76,8 @@ class MainActivity : AppCompatActivity(){
 
     private  val liveViewModel: LiveWallpaperViewModel by viewModels()
     val TAG= "ANRSPY"
+
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
 
@@ -100,6 +107,8 @@ class MainActivity : AppCompatActivity(){
         allwallpapers.fetchWallpapers(this)
 
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+        mainActivityViewModel.generateDeviceToken(deviceID)
+        initObservers()
         Log.d("tracingImageId", "onCreate: id= $deviceID")
         if(deviceID != null){
             MySharePreference.setDeviceID(this,deviceID)
@@ -108,6 +117,62 @@ class MainActivity : AppCompatActivity(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
         initFirebaseRemoteConfig()
+    }
+
+    fun initObservers(){
+        lifecycleScope.launch {
+            mainActivityViewModel.deviceTokenResponse.collect(){ result ->
+                when(result){
+                    is Response.Loading -> {
+//                        Log.e(TAG, "promptType in loading $promptType")
+                    }
+
+                    is Response.Success -> {
+                        Log.e(TAG, "initObservers: "+result.data )
+                        result.data?.token?.let { mainActivityViewModel.getAllModels("Bearer $it","1","4000") }
+
+
+                    }
+
+                    is Response.Error -> {
+
+                    }
+
+                    else -> {
+                    }
+
+
+                }
+
+            }
+        }
+
+        lifecycleScope.launch {
+            mainActivityViewModel.allModels.observe(this@MainActivity){ result ->
+                when(result){
+                    is Response.Loading -> {
+//                        Log.e(TAG, "promptType in loading $promptType")
+                    }
+
+                    is Response.Success -> {
+                        Log.e(TAG, "initObservers: "+result.data )
+
+
+                    }
+
+                    is Response.Error -> {
+
+                    }
+
+                    else -> {
+                    }
+
+
+                }
+
+            }
+        }
+
     }
 
     fun initFirebaseRemoteConfig() {

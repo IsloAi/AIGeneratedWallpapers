@@ -1,12 +1,18 @@
 
-Ykotlin:S1172¹"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8´ŞèÏ1
-Ckotlin:S125Ş"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8¦´ŞèÏ1
-Ckotlin:S125ä"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8§´ŞèÏ1
-Ckotlin:S125å"Remove this commented out code.(ğ·Äıÿÿÿÿ8¨´ŞèÏ1
->kotlin:S125ˆ"Remove this commented out code.(£Ãš‰8©´ŞèÏ1
-Ckotlin:S125™"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8«´ŞèÏ1
-=kotlin:S125§"Remove this commented out code.(è»»_8­´ŞèÏ1
-Mkotlin:S1481Ë"-Remove this unused "behavior" local variable.(Ø¦š¾8”µŞèÏ1
-Gkotlin:S1874Z"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8Œ¨Ÿ’Ï1
-vkotlin:S3776q"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8»µŞèÏ1
-vkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8¾µŞèÏ1
+Ykotlin:S1172ú"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8…´ÖÓ1
+=kotlin:S125"Remove this commented out code.(åïÿ’8“´ÖÓ1
+>kotlin:S125š"Remove this commented out code.(åïÿ’8”´ÖÓ1
+Ckotlin:S125Ÿ"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8”´ÖÓ1
+Ckotlin:S125¥"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8•´ÖÓ1
+Ckotlin:S125¦"Remove this commented out code.(ğ·Äıÿÿÿÿ8•´ÖÓ1
+>kotlin:S125É"Remove this commented out code.(£Ãš‰8–´ÖÓ1
+Ckotlin:S125Ú"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8—´ÖÓ1
+=kotlin:S125è"Remove this commented out code.(è»»_8˜´ÖÓ1
+Gkotlin:S108‰")Either remove or fill this block of code.(›Ñû08Ñ´ÖÓ1
+Mkotlin:S108")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Ñ´ÖÓ1
+Gkotlin:S108£")Either remove or fill this block of code.(›Ñû08Ñ´ÖÓ1
+Mkotlin:S108§")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Ñ´ÖÓ1
+Mkotlin:S1481Œ"-Remove this unused "behavior" local variable.(Ø¦š¾8ò´ÖÓ1
+Gkotlin:S1874a"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8µÖÓ1
+wkotlin:S3776²"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8 µÖÓ1
+wkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8£µÖÓ1

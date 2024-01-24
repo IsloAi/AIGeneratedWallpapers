@@ -17,4 +17,6 @@ object AdConfig {
     var firstAdLineMostUsed = 0
     var lineCountMostUsed = 0
     var adStatusMostUsed = 1
+
+    val BASE_URL = "https://edecator.com/wallpaperApp/V3/"
 }

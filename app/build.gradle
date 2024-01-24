@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'dagger.hilt.android.plugin'
 }
 android {
     namespace 'com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto'
@@ -163,6 +164,12 @@ dependencies {
 
 
     implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
+
+
+    //Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:2.46.1"
+    implementation 'androidx.hilt:hilt-common:1.1.0'
+    kapt "com.google.dagger:hilt-android-compiler:2.46.1"
 
 //
 

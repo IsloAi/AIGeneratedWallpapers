@@ -6,7 +6,9 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.keep.SDKIAPProductIDProvider
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class MyApp : SDKBaseApplication() {
 
 
