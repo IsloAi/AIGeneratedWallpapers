@@ -72,6 +72,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -151,6 +152,9 @@ class WallpaperViewFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentWallpaperViewBinding.inflate(inflater,container,false)
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
+
+        navigationInProgress = false
+
         navController = findNavController()
 
         reviewManager = ReviewManagerFactory.create(requireContext())

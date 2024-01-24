@@ -26,12 +26,14 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
@@ -67,6 +69,9 @@ class HomeFragment : Fragment(){
     var isLoadingMore = false
     val TAG = "HOMEFRAG"
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+
     var dataset = false
 
     var startIndex = 0
@@ -82,6 +87,7 @@ class HomeFragment : Fragment(){
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         return binding.root
     }
 
@@ -300,39 +306,42 @@ class HomeFragment : Fragment(){
         adapter = ApiCategoriesListAdapter(list, object :
             PositionCallback {
             override fun getPosition(position: Int) {
+                if (!navigationInProgress){
 
-                if (!isNavigationInProgress){
-                    externalOpen = true
-                    val allItems = adapter.getAllItems()
-                    if (addedItems?.isNotEmpty() == true){
-                        addedItems?.clear()
-                    }
-
-                    isNavigationInProgress = true
-
-
-                    addedItems = allItems
-
-                    oldPosition = position
-
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "mainscr_trending_tab_click_item",
-                        "mainscr_trending_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                navigateToDestination(allItems,position)
-                                //do something
-                            }
-
-                            override fun onAdsDismiss() {
-                                Log.e("********ADS", "onAdsDismiss: " )
-                                navigateToDestination(allItems,position)
-                            }
+                    if (!isNavigationInProgress){
+                        externalOpen = true
+                        val allItems = adapter.getAllItems()
+                        if (addedItems?.isNotEmpty() == true){
+                            addedItems?.clear()
                         }
-                    )
+
+                        isNavigationInProgress = true
+
+
+                        addedItems = allItems
+
+                        oldPosition = position
+
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "mainscr_trending_tab_click_item",
+                            "mainscr_trending_tab_click_item",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                    navigateToDestination(allItems,position)
+                                    //do something
+                                }
+
+                                override fun onAdsDismiss() {
+                                    Log.e("********ADS", "onAdsDismiss: " )
+                                    navigateToDestination(allItems,position)
+                                }
+
+                            }
+                        )
+                    }
                 }
             }
 
@@ -350,6 +359,7 @@ class HomeFragment : Fragment(){
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+        Log.e(TAG, "navigateToDestination: inside", )
 
 
         viewModel.setCatList(arrayList.filterNotNull() as ArrayList<CatResponse>)
@@ -358,7 +368,7 @@ class HomeFragment : Fragment(){
         val arrayListJson = gson.toJson(arrayList.filterNotNull())
 
         val countOfNulls = arrayList.subList(0, position).count { it == null }
-         val sharedViewModel: SharedViewModel by activityViewModels()
+        val sharedViewModel: SharedViewModel by activityViewModels()
 
 
         sharedViewModel.clearData()
@@ -368,9 +378,12 @@ class HomeFragment : Fragment(){
 
 
         Bundle().apply {
+            Log.e(TAG, "navigateToDestination: inside bundle", )
+
             putString("from","trending")
             putInt("position",position - countOfNulls)
             findNavController().navigate(R.id.wallpaperViewFragment,this)
+            navigationInProgress = false
         }
 
         isNavigationInProgress = false
@@ -400,10 +413,18 @@ class HomeFragment : Fragment(){
 
         }
 
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+
     }
 
     override fun onPause() {
         super.onPause()
+        Log.e(TAG, "onPause: ", )
 
         if (!externalOpen){
             val allItems = adapter.getAllItems()

@@ -44,6 +44,10 @@ class HomeTabsFragment : Fragment() {
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
+    companion object{
+        var navigationInProgress = false
+    }
+
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
     val titles = arrayOf("Popular","Trending","Live", "AI wallpaper","Category","Gen AI")
