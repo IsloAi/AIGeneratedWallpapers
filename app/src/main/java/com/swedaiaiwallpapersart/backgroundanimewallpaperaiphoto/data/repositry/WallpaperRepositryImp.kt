@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
 
 import android.util.Log
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.WallpaperRepositry
@@ -51,7 +52,7 @@ class WallpaperRepositryImp@Inject constructor(
         apiKey: String,
         page: String,
         record: String
-    ): Flow<Response<ArrayList<CatResponse>>> = channelFlow {
+    ): Flow<Response<ArrayList<SingleAllResponse>>> = channelFlow {
 
         try {
             trySend(Response.Loading)

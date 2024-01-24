@@ -1,18 +1,24 @@
 
-Ykotlin:S1172ú"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8…´ÖÓ1
-=kotlin:S125"Remove this commented out code.(åïÿ’8“´ÖÓ1
->kotlin:S125š"Remove this commented out code.(åïÿ’8”´ÖÓ1
-Ckotlin:S125Ÿ"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8”´ÖÓ1
-Ckotlin:S125¥"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8•´ÖÓ1
-Ckotlin:S125¦"Remove this commented out code.(ğ·Äıÿÿÿÿ8•´ÖÓ1
->kotlin:S125É"Remove this commented out code.(£Ãš‰8–´ÖÓ1
-Ckotlin:S125Ú"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8—´ÖÓ1
-=kotlin:S125è"Remove this commented out code.(è»»_8˜´ÖÓ1
-Gkotlin:S108‰")Either remove or fill this block of code.(›Ñû08Ñ´ÖÓ1
-Mkotlin:S108")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Ñ´ÖÓ1
-Gkotlin:S108£")Either remove or fill this block of code.(›Ñû08Ñ´ÖÓ1
-Mkotlin:S108§")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Ñ´ÖÓ1
-Mkotlin:S1481Œ"-Remove this unused "behavior" local variable.(Ø¦š¾8ò´ÖÓ1
-Gkotlin:S1874a"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8µÖÓ1
-wkotlin:S3776²"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8 µÖÓ1
-wkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8£µÖÓ1
+Ykotlin:S1172Á"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8…´ÖÓ1
+=kotlin:S125u"Remove this commented out code.(ßòĞµ8¦ûœÜÓ1
+>kotlin:S125‰"Remove this commented out code.(åïÿ’8â¥àÖÓ1
+Ckotlin:S125"Remove this commented out code.(¦¶ô…ÿÿÿÿÿ8ê•×Ó1
+>kotlin:S125¦"Remove this commented out code.(åïÿ’8â¥àÖÓ1
+Ckotlin:S125â"Remove this commented out code.(ñ÷Úùşÿÿÿÿ8İÎ×Ó1
+Ckotlin:S125æ"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8”´ÖÓ1
+Ckotlin:S125ì"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8•´ÖÓ1
+Ckotlin:S125í"Remove this commented out code.(ğ·Äıÿÿÿÿ8•´ÖÓ1
+>kotlin:S125"Remove this commented out code.(£Ãš‰8–´ÖÓ1
+Ckotlin:S125¡"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8—´ÖÓ1
+=kotlin:S125¯"Remove this commented out code.(è»»_8˜´ÖÓ1
+Hkotlin:S108Ø")Either remove or fill this block of code.(‚ò‚8Õ¦àÖÓ1
+Mkotlin:S108ó")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8Õ¦àÖÓ1
+Gkotlin:S108•")Either remove or fill this block of code.(›Ñû08Ö¦àÖÓ1
+Mkotlin:S108™")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Ö¦àÖÓ1
+Gkotlin:S108¯")Either remove or fill this block of code.(›Ñû08ÀÏ×Ó1
+Mkotlin:S108³")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ÀÏ×Ó1
+Mkotlin:S1481Ó"-Remove this unused "behavior" local variable.(Ø¦š¾8ò´ÖÓ1
+>kotlin:S1128+"Remove this unused import.(’—ÄÑùÿÿÿÿ8ŒŸ‘×Ó1
+Gkotlin:S1874k"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8­§àÖÓ1
+wkotlin:S3776ù"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8 µÖÓ1
+wkotlin:S3776‡"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8£µÖÓ1

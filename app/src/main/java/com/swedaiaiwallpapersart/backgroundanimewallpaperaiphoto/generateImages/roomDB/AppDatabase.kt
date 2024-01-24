@@ -8,22 +8,53 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.WallpapersDao
 
 
-@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class ], version = 6)
+@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class ], version = 7)
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getResponseIGDao(): GetResponseIGDao
     abstract fun getFavouriteList(): FavouriteListIGDao
+
+    abstract fun wallpapersDao():WallpapersDao
 
 
     companion object {
         @Volatile
         private var instance: AppDatabase? = null
 
+        private val LOCK = Any()
+
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: buildDatabase(context).also { instance = it }
+        }
+
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
+            }
+        }
+
+        private val MIGRATION_6_7 = object : Migration(6, 7) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // Perform migration steps for version 7 to version 8
+                // Add any necessary changes, such as creating the new table
+                database.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `allWallpapers` (" +
+                            "`id` INTEGER PRIMARY KEY NOT NULL, " +
+                            "`cat_name` TEXT, " +
+                            "`image_name` TEXT, " +
+                            "`hd_image_url` TEXT, " +
+                            "`compressed_image_url` TEXT, " +
+                            "`likes` INTEGER, " +
+                            "`liked` INTEGER, " +
+                            "`size` INTEGER, " +
+                            "`Tags` TEXT, " +
+                            "`capacity` TEXT" +
+                            ")"
+                )
             }
         }
 
@@ -54,7 +85,7 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "appDatabase"
             ).allowMainThreadQueries()
-                .addMigrations(MIGRATION_5_6)
+                .addMigrations(MIGRATION_5_6, MIGRATION_6_7)
                 .build()
         }
 

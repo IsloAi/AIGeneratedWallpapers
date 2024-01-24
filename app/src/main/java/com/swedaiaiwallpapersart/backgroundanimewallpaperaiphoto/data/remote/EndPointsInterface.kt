@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote
 
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
@@ -22,5 +23,5 @@ interface EndPointsInterface {
         @Query("page") page:String,
         @Query("record") record:String
 
-    ):retrofit2.Response<FavouriteListResponse>
+    ):retrofit2.Response<ListResponse>
 }

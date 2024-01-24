@@ -6,8 +6,11 @@ import androidx.work.WorkManager
 import com.google.gson.GsonBuilder
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.FetchDataRepositoryImpl
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.WallpaperRepositryImp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.FetchDataRepository
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.WallpaperRepositry
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import dagger.Module
 import dagger.Provides
@@ -71,18 +74,22 @@ object HiltModule {
         return WallpaperRepositryImp(webApiInterface)
     }
 
+    @Provides
+    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return AppDatabase(context)
+    }
+
 //    @Provides
 //    fun provideUpdateGemsRepository(firestore: FirebaseFirestore):UpdateGemsRepository{
 //        return UpdateGemsRespositryImpl(firestore = firestore)
 //    }
 
-//    @Provides
-//    fun provideFetchDataRepository(
-//        webApiInterface: WebApiInterface,
-//        appDatabase: AppDatabase
-//    ): FetchDataRepository {
-//        return FetchDataRepositoryImpl(webApiInterface, appDatabase)
-//    }
+    @Provides
+    fun provideFetchDataRepository(
+        appDatabase: AppDatabase
+    ): FetchDataRepository {
+        return FetchDataRepositoryImpl(appDatabase)
+    }
 
 //    @Provides
 //    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {

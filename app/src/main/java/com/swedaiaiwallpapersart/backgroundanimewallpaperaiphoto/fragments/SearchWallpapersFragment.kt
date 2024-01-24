@@ -9,8 +9,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,6 +24,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
@@ -29,22 +32,28 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchWallpapersFragment : Fragment() {
 
     private var _binding:FragmentSearchWallpapersBinding ?= null
     private val binding get() = _binding!!
 
     private lateinit var myActivity : MainActivity
+
+
 
     val catlist = ArrayList<CatNameResponse?>()
     var adapter:ApiCategoriesNameAdapter ?= null
@@ -60,7 +69,7 @@ class SearchWallpapersFragment : Fragment() {
 
 
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
-    private  val myViewModel: AllWallpapersViewmodel by activityViewModels()
+    private  val myViewModel: AllWallpapersViewmodel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -292,22 +301,62 @@ class SearchWallpapersFragment : Fragment() {
     }
 
     private fun initSearchData(){
-        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                if (!cachedCatResponses.isNullOrEmpty()){
-                    cachedCatResponses?.clear()
-                }
-                cachedCatResponses?.addAll(catResponses)
+//        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
+//            if (catResponses != null) {
+//                if (!cachedCatResponses.isNullOrEmpty()){
+//                    cachedCatResponses?.clear()
+//                }
+//                cachedCatResponses?.addAll(catResponses)
+////
 //
+//                Log.e("TAG", "initSearchData: "+catResponses.size )
+//
+//
+//            }else{
+//
+//                Log.e("TAG", "initSearchData: no data" )
+//            }
+//        }
 
-                Log.e("TAG", "initSearchData: "+catResponses.size )
 
+        myViewModel.allCreations.observe(viewLifecycleOwner){result ->
+            when (result) {
+                is Response.Loading -> {
+//                    binding.tvNoData.visibility=View.GONE
+//                    customProgressBar.show(requireContext())
+                }
 
-            }else{
+                is Response.Success -> {
+//                    binding.tvNoData.visibility=View.GONE
+//                    customProgressBar.getDialog()?.dismiss()
+                    if (!result.data.isNullOrEmpty()) {
+                        result.data.forEach { item ->
+                            val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                            if (cachedCatResponses?.contains(model) != true){
+                                cachedCatResponses?.add(model)
+                            }
 
-                Log.e("TAG", "initSearchData: no data" )
+                        }
+                    }
+                }
+
+                is Response.Error -> {
+//                    binding.tvNoData.visibility=View.VISIBLE
+//                    customProgressBar.getDialog()?.dismiss()
+                    Log.e("TAG", "error: ${result.message}")
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {
+//                    customProgressBar.getDialog()?.dismiss()
+//                    binding.tvNoData.visibility=View.GONE
+                }
             }
         }
+
+
+
     }
 
 
@@ -372,6 +421,8 @@ class SearchWallpapersFragment : Fragment() {
                 adapter?.updateData(newData = list)
             }
         }
+
+
     }
 
 

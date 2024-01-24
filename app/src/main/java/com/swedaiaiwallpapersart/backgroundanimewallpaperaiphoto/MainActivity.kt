@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -22,9 +23,12 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.work.Constraints
+import androidx.work.Data
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.bmik.android.sdk.IkmSdkController
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -36,6 +40,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.get
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
@@ -43,6 +48,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.SelectedPromptListModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
@@ -58,7 +64,9 @@ import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.Locale
+import java.util.UUID
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(){
@@ -72,7 +80,6 @@ class MainActivity : AppCompatActivity(){
     private val viewModel: MostDownloadedViewmodel by viewModels()
 
     private val homeViewmodel: MyHomeViewModel by viewModels()
-    private val allwallpapers: AllWallpapersViewmodel by viewModels()
 
     private  val liveViewModel: LiveWallpaperViewModel by viewModels()
     val TAG= "ANRSPY"
@@ -80,6 +87,9 @@ class MainActivity : AppCompatActivity(){
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
+
+    @Inject
+    lateinit var workManager: WorkManager
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,7 +114,7 @@ class MainActivity : AppCompatActivity(){
         homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
         liveViewModel.fetchWallpapers(this)
 
-        allwallpapers.fetchWallpapers(this)
+//        allwallpapers.fetchWallpapers(this)
 
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         mainActivityViewModel.generateDeviceToken(deviceID)
@@ -129,7 +139,9 @@ class MainActivity : AppCompatActivity(){
 
                     is Response.Success -> {
                         Log.e(TAG, "initObservers: "+result.data )
-                        result.data?.token?.let { mainActivityViewModel.getAllModels("Bearer $it","1","4000") }
+
+                        result.data?.token?.let { initWorkManager(it) }
+//                        result.data?.token?.let { mainActivityViewModel.getAllModels("Bearer $it","1","4000") }
 
 
                     }
@@ -155,7 +167,7 @@ class MainActivity : AppCompatActivity(){
                     }
 
                     is Response.Success -> {
-                        Log.e(TAG, "initObservers: "+result.data )
+                        Log.e(TAG, "initObservers: "+result.data?.size )
 
 
                     }
@@ -173,6 +185,65 @@ class MainActivity : AppCompatActivity(){
             }
         }
 
+    }
+
+    private fun initWorkManager(key:String) {
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresStorageNotLow(false)
+            .setRequiresBatteryNotLow(false)
+            .build()
+        val data = Data.Builder()
+
+        data.apply {
+            putString("key",key )
+        }
+        val oneTimeWorkRequest =
+            OneTimeWorkRequest.Builder(ForegroundWorker::class.java)
+                .setConstraints(constraints)
+                .setInputData(data.build())
+                .addTag(UUID.randomUUID().toString())
+                .build()
+
+        workManager.enqueue(oneTimeWorkRequest)
+        Toast.makeText(this@MainActivity, "Image download is started", Toast.LENGTH_SHORT).show()
+        workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.id)
+            .observe(this@MainActivity) { workInfo: WorkInfo? ->
+                if (workInfo != null) {
+
+                    val progress = workInfo.progress
+
+                    if (progress.getLong("Progress", 0) > 0) {
+
+                    }
+                    when (workInfo.state) {
+                        WorkInfo.State.SUCCEEDED -> {
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Image has been downloaded",
+                                Toast.LENGTH_SHORT
+                            ).show()
+//                            workManager.cancelAllWorkByTag("downloadImg")
+
+                        }
+
+                        WorkInfo.State.RUNNING -> {
+                            Log.e(TAG, "initObservers:running buddy")
+                        }
+
+                        WorkInfo.State.FAILED -> {
+                            Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_SHORT).show()
+                            val outputdata = workInfo.outputData
+                            Log.e(
+                                TAG,
+                                "error in fragment ${outputdata.getString("error")}",
+                            )
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
     }
 
     fun initFirebaseRemoteConfig() {

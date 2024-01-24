@@ -325,3 +325,17 @@ eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/uti
 rapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/FetechAllWallpapers.kt,d\5\d58559ab950a7f9196200a6759af16b5142e0978
 ©
 yapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/FetechAllWallpapersUsecase.kt,9\d\9db4feb427ee9fa1f28b072c24be9a59cb75c421
+Ÿ
+oapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/model/response/ListResponse.kt,b\5\b57d0af4fa49242f2ff86f6270a93ff49f995a2a
+¤
+tapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/model/response/SingleAllResponse.kt,c\9\c96a9db8025c635f799c9ae8355c45ddef446339
+©
+yapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/model/response/SingleDatabaseResponse.kt,5\4\5453663e60c1f5c1fbf0f8a25b838da36277622d
+œ
+lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/remote/dao/WallpapersDao.kt,1\9\19fbacbb39c1b7f55bac7fc12ce2630d179e2480
+£
+sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/repositry/FetchDataRepository.kt,c\8\c8fbd878e23a7fbfe66831bacf08ef03c06b453d
+¥
+uapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/repositry/FetchDataRepositoryImpl.kt,f\d\fd040e5da8c7056691904cff5fadfcdb17691a1a
+¦
+vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetAllWallpapersUsecase.kt,b\2\b2f9cac27263d761d6dc3feaaf22ddf2a20c8799

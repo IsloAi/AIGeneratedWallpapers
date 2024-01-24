@@ -1,3 +1,12 @@
 
-=kotlin:S125C"Remove this commented out code.(×œ„Ã8Âû÷ÒÓ1
->kotlin:S1128"Remove this unused import.(âÆ³šýÿÿÿÿ8Çû÷ÒÓ1
+?kotlin:S66156" Remove this useless initializer.(«ƒûç8Ð®ŸÛÓ1
+Bkotlin:S1259"Remove this commented out code.(è´¬¿ÿÿÿÿÿ8Ñ®ŸÛÓ1
+=kotlin:S125M"Remove this commented out code.(þê±ž8Ò®ŸÛÓ1
+=kotlin:S125k"Remove this commented out code.(×œ„Ã8Ô®ŸÛÓ1
+Gkotlin:S108<")Either remove or fill this block of code.(·Úøš8×®ŸÛÓ1
+Fkotlin:S108H")Either remove or fill this block of code.(›Ñû08Ø®ŸÛÓ1
+9kotlin:S1128	"Remove this unused import.(´Ùí8Ü®ŸÛÓ1
+>kotlin:S1128"Remove this unused import.(ÙÃä¡þÿÿÿÿ8Ü®ŸÛÓ1
+>kotlin:S1128"Remove this unused import.(âÆ³šýÿÿÿÿ8Ü®ŸÛÓ1
+>kotlin:S1128"Remove this unused import.(Ó¸Ñÿÿÿÿÿ8Ü®ŸÛÓ1
+>kotlin:S1128"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8Ü®ŸÛÓ1

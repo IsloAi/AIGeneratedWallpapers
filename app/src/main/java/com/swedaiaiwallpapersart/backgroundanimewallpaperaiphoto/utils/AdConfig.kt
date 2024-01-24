@@ -19,4 +19,7 @@ object AdConfig {
     var adStatusMostUsed = 1
 
     val BASE_URL = "https://edecator.com/wallpaperApp/V3/"
+
+    val HD_ImageUrl = "https://edecator.com/wallpaperApp/images/"
+    val Compressed_Image_url = "https://edecator.com/wallpaperApp/compress/"
 }

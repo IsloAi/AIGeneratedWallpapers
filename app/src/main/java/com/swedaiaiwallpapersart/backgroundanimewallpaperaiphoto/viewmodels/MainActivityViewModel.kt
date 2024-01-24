@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.FetechAllWallpapersUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GenerateDeviceTokenUsecase
@@ -21,8 +22,8 @@ import javax.inject.Inject
 class MainActivityViewModel@Inject constructor(private val generateDeviceTokenUsecase: GenerateDeviceTokenUsecase
 ,private val fetechAllWallpapersUsecase: FetechAllWallpapersUsecase):  ViewModel()  {
 
-    private var _allModels= MutableLiveData<Response<ArrayList<CatResponse>>>(Response.Success(null))
-    val allModels: LiveData<Response<ArrayList<CatResponse>>> = _allModels
+    private var _allModels= MutableLiveData<Response<ArrayList<SingleAllResponse>>>(Response.Success(null))
+    val allModels: LiveData<Response<ArrayList<SingleAllResponse>>> = _allModels
 
 
     private var _devicetokenResponse= MutableStateFlow<Response<TokenResponse>>(Response.Success(null))

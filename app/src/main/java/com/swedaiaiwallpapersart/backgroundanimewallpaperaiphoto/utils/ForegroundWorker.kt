@@ -6,22 +6,30 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
+import androidx.lifecycle.lifecycleScope
 import androidx.work.CoroutineWorker
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.FetechAllWallpapersUsecase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @HiltWorker
-class ForegroundWorker@AssistedInject constructor(
+class ForegroundWorker @AssistedInject constructor(
+     @Assisted appContext : Context,
+     @Assisted params : WorkerParameters,
     private val fetechAllWallpapersUsecase: FetechAllWallpapersUsecase,
-    @Assisted appContext : Context,
-    @Assisted params : WorkerParameters
+    private val appDatabase: AppDatabase
 ) : CoroutineWorker(appContext, params) {
     private val notificationManager =
         appContext.getSystemService(NotificationManager::class.java)
@@ -37,11 +45,43 @@ class ForegroundWorker@AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         Log.d(TAG, "Started job")
+
+
         try {
+            val inputData = inputData.getString("key")
             createNotificationChannel()
 
             var result = Result.failure()
 
+            fetechAllWallpapersUsecase.invoke("Bearer $inputData","1","4000").collect(){result ->
+//                Log.e(TAG, "doWork: $it")
+
+                when (result) {
+                    is Response.Loading -> {
+
+                    }
+
+                    is Response.Success -> {
+                        result.data?.forEach { item ->
+
+                            val model = SingleDatabaseResponse(item.id,item.cat_name,item.image_name,AdConfig.HD_ImageUrl+item.url,AdConfig.Compressed_Image_url+item.url,item.likes,item.liked,item.size,item.Tags,item.capacity)
+                            appDatabase.wallpapersDao().insert(model)
+                        }
+                    }
+
+                    is Response.Error -> {
+
+                    }
+
+                    else -> {
+//                        Toast.makeText(requireContext(), "it is in else clause", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+
+
+            }
+            result = Result.success()
 
 
 

@@ -1,15 +1,21 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.content.Context
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import com.bmik.android.sdk.SDKBaseApplication
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.keep.SDKIAPProductIDProvider
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
 @HiltAndroidApp
-class MyApp : SDKBaseApplication() {
+class MyApp : SDKBaseApplication(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
 
 
     override fun enableRewardAd(): Boolean {
@@ -48,5 +54,11 @@ class MyApp : SDKBaseApplication() {
         SDKBaseController.getInstance().setAutoReloadRewarded(true)
         setEnableShowLoadingResumeAds(true)
     }
+
+    override val workManagerConfiguration: Configuration
+        get() =  Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
+
 }
 
