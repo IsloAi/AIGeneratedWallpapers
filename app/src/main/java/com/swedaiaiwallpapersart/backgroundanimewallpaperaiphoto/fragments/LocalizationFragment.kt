@@ -149,7 +149,6 @@ class LocalizationFragment : Fragment() {
 
 
         binding.applyLanguage.setOnClickListener {
-
             if (selectedItem != null) {
                 MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
                 MySharePreference.setLanguageposition(requireContext(),selected)
@@ -171,10 +170,6 @@ class LocalizationFragment : Fragment() {
                         findNavController().navigateUp()
                     }
                 }
-
-
-
-
             } else {
 
                 MySharePreference.setLanguage(requireContext(),"en")

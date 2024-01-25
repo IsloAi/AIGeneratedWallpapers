@@ -299,3 +299,5 @@ N
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SplashFragment.kt,2\5\257e17601b007de0e29267125dd13b23eb6c3a1d
 Å
 Q.idea/sonarlint/securityhotspotstore/2/5/257e17601b007de0e29267125dd13b23eb6c3a1d,8\3\8344028477b284785f3a7d7aa8c1ac7096409cd3
+í
+bapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/LocaleManager.kt,9\7\979a5649299ee8fa86c471b7a8be4530d7fb77b0

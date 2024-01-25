@@ -149,9 +149,12 @@ dependencies {
 //        exclude group: 'com.squareup.okio'
 //    }
 
-    implementation ('com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.402'){
+    implementation ('com.ikame.android-sdk:ikm-sdk-debug:2.6.450'){
         exclude group: 'com.squareup.okio'
     }
+//    implementation ('com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.402'){
+//        exclude group: 'com.squareup.okio'
+//    }
     //glass morphism
 
 

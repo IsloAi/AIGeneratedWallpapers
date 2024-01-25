@@ -1,14 +1,14 @@
 
-=kotlin:S125t"Remove this commented out code.(ô·°Ë8‘‡¢Ï1
-Ckotlin:S125ø"Remove this commented out code.(çùò—øÿÿÿÿ8¦úÁÏ1
->kotlin:S125‹"Remove this commented out code.(…é8„¦úÁÏ1
-;kotlin:S6310—"Avoid hardcoded dispatchers.(©ÓœW8¦úÁÏ1
-<kotlin:S6310 "Avoid hardcoded dispatchers.(Í¡·Ş8’¦úÁÏ1
-Rkotlin:S1481ü"2Remove this unused "arrayListJson" local variable.(àñÆÑ8»¦úÁÏ1
-9kotlin:S1128"Remove this unused import.(ÔËŸÀ8¿ã—ïÌ1
-qkotlin:S1192¡"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8Ï¦úÁÏ1
-pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8Ğ¦úÁÏ1
-Gkotlin:S1874P"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8™÷ïÍ1
-zkotlin:S1186Ú"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8Ş¦úÁÏ1
-kotlin:S1186Ş"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8Ş¦úÁÏ1
-Skotlin:S1066³".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8â¦úÁÏ1
+=kotlin:S125t"Remove this commented out code.(ô·°Ë8Æ¯˜€Ô1
+Ckotlin:S125ø"Remove this commented out code.(çùò—øÿÿÿÿ8É¯˜€Ô1
+>kotlin:S125‹"Remove this commented out code.(…é8Ë¯˜€Ô1
+;kotlin:S6310—"Avoid hardcoded dispatchers.(©ÓœW8Ô¯˜€Ô1
+<kotlin:S6310 "Avoid hardcoded dispatchers.(Í¡·Ş8Õ¯˜€Ô1
+Rkotlin:S1481ü"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ïİµÜÓ1
+9kotlin:S1128"Remove this unused import.(ÔËŸÀ8°°˜€Ô1
+qkotlin:S1192¡"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8³°˜€Ô1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8üİµÜÓ1
+Gkotlin:S1874P"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8Ä°˜€Ô1
+zkotlin:S1186Ú"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8Û°˜€Ô1
+kotlin:S1186Ş"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8Û°˜€Ô1
+Skotlin:S1066³".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8‰ŞµÜÓ1

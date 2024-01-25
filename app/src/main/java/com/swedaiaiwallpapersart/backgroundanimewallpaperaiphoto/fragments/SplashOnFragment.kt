@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -52,6 +53,7 @@ class SplashOnFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        IkmSdkController.setEnableShowResumeAds(false)
 
         myActivity = activity as MainActivity
 
@@ -86,7 +88,7 @@ class SplashOnFragment : Fragment() {
             }
 
             delay(3000)
-            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,12000,object:CommonAdsListenerAdapter(){
+            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
                 override fun onAdReady(priority: Int) {
 //                progress.dismiss()
                 }
@@ -102,7 +104,7 @@ class SplashOnFragment : Fragment() {
                         }
 
                     }
-
+                    IkmSdkController.setEnableShowResumeAds(true)
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
@@ -114,6 +116,7 @@ class SplashOnFragment : Fragment() {
                             findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
                         }
                     }
+                    IkmSdkController.setEnableShowResumeAds(true)
 //                progress.dismiss()
                 }
 

@@ -1,9 +1,9 @@
 
->kotlin:S125Í"Remove this commented out code.(ò’÷§8È’—®Ó1
-Ckotlin:S125“"Remove this commented out code.(Ò»ˆşÿÿÿÿ8É’—®Ó1
-;kotlin:S6310±"Avoid hardcoded dispatchers.(©ÓœW8Ò’—®Ó1
-<kotlin:S6310»"Avoid hardcoded dispatchers.(Í¡·Ş8Ò’—®Ó1
-Rkotlin:S1481ğ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8é’—®Ó1
+>kotlin:S125Í"Remove this commented out code.(ò’÷§8¯±˜€Ô1
+Ckotlin:S125“"Remove this commented out code.(Ò»ˆşÿÿÿÿ8°±˜€Ô1
+;kotlin:S6310±"Avoid hardcoded dispatchers.(©ÓœW8¹±˜€Ô1
+<kotlin:S6310»"Avoid hardcoded dispatchers.(Í¡·Ş8º±˜€Ô1
+Rkotlin:S1481ğ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8Ü±˜€Ô1
 9kotlin:S1128"Remove this unused import.(ıºÎà8ï’—®Ó1
 >kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8ï’—®Ó1
 9kotlin:S1128"Remove this unused import.(ÁÈÚø8ï’—®Ó1
@@ -15,6 +15,6 @@ Rkotlin:S1481ğ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8é’—
 8kotlin:S1128"Remove this unused import.(º¾Ã8ğ’—®Ó1
 >kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8ğ’—®Ó1
 9kotlin:S1128"Remove this unused import.(ÒÂ¦8ğ’—®Ó1
-pkotlin:S1192›"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ò’—®Ó1
-Nkotlin:S1066µ".Merge this "if" statement with the nested one.(šÖÉù8ú’—®Ó1
-fkotlin:S6510ş"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8ú’—®Ó1
+pkotlin:S1192›"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¿²˜€Ô1
+Nkotlin:S1066µ".Merge this "if" statement with the nested one.(šÖÉù8Ê²˜€Ô1
+fkotlin:S6510ş"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8Ë²˜€Ô1
