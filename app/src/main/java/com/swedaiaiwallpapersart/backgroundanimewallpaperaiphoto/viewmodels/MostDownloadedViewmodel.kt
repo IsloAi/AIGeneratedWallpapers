@@ -4,12 +4,16 @@ import android.content.Context
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.airbnb.lottie.LottieAnimationView
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.FetechAllWallpapersUsecase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetAllWallpapersUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
@@ -17,6 +21,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDown
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.MostDownloadImages
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
@@ -24,9 +29,10 @@ import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
-
-class MostDownloadedViewmodel: ViewModel()  {
+@HiltViewModel
+class MostDownloadedViewmodel@Inject constructor(private val getAllWallpapersUsecase: GetAllWallpapersUsecase): ViewModel()  {
     val wallpaperData = MutableLiveData<ArrayList<CatResponse>?>()
     fun getWallpapers(): MutableLiveData<ArrayList<CatResponse>?> {
         return wallpaperData
@@ -72,6 +78,31 @@ class MostDownloadedViewmodel: ViewModel()  {
         }
 
     }
+
+
+
+    private var _allCreations = MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>>(
+        com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
+            emptyList()
+        ))
+    val allCreations: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>> = _allCreations
+
+    fun getAllCreations(){
+        viewModelScope.launch {
+            getAllWallpapersUsecase.invoke().collect(){
+                _allCreations.value=it
+            }
+        }
+    }
+
+    fun clearAllCreations(){
+        _allCreations.value= com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(emptyList())
+    }
+
+    init {
+        getAllCreations()
+    }
+
     fun clear(){
         wallpaperData.value = null
     }

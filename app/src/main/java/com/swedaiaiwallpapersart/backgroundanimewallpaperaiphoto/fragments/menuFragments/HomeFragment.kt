@@ -94,10 +94,10 @@ class HomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SDKBaseController.getInstance(). loadInterstitialAds(activity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
+//        SDKBaseController.getInstance(). loadInterstitialAds(activity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
 
-        onCreatingCalling()
-        setEvents()
+//        onCreatingCalling()
+//        setEvents()
     }
 
 
@@ -390,52 +390,52 @@ class HomeFragment : Fragment(){
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-//        dataset = false
-//        startIndex = 0
-
-        loadData()
-        if (dataset){
-
-            Log.e(TAG, "onResume: Data set $dataset")
-//            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
-
-            if (addedItems?.isEmpty() == true){
-                Log.e(TAG, "onResume: "+cachedCatResponses.size )
-
-
-            }
-            adapter.updateMoreData(addedItems!!)
-
-            binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
-
-        }
-
-        if (isAdded){
-            val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending")
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
-
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e(TAG, "onPause: ", )
-
-        if (!externalOpen){
-            val allItems = adapter.getAllItems()
-            if (addedItems?.isNotEmpty() == true){
-                addedItems?.clear()
-            }
-
-            addedItems?.addAll(allItems)
-        }
-
-    }
+//    override fun onResume() {
+//        super.onResume()
+//
+////        dataset = false
+////        startIndex = 0
+//
+//        loadData()
+//        if (dataset){
+//
+//            Log.e(TAG, "onResume: Data set $dataset")
+////            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
+//
+//            if (addedItems?.isEmpty() == true){
+//                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+//
+//
+//            }
+//            adapter.updateMoreData(addedItems!!)
+//
+//            binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
+//
+//        }
+//
+//        if (isAdded){
+//            val bundle = Bundle()
+//            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending")
+//            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+//            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+//        }
+//
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        Log.e(TAG, "onPause: ", )
+//
+//        if (!externalOpen){
+//            val allItems = adapter.getAllItems()
+//            if (addedItems?.isNotEmpty() == true){
+//                addedItems?.clear()
+//            }
+//
+//            addedItems?.addAll(allItems)
+//        }
+//
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

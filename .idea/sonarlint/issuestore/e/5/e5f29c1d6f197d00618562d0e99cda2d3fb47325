@@ -1,13 +1,19 @@
 
-;kotlin:S6310÷"Avoid hardcoded dispatchers.(©ÓœW8÷á­ÂÏ1
-;kotlin:S6310Ì"Avoid hardcoded dispatchers.(©ÓœW8—˜ç’Ñ1
-<kotlin:S6310‚"Avoid hardcoded dispatchers.(Í¡·Ş8øá­ÂÏ1
-<kotlin:S6310Ô"Avoid hardcoded dispatchers.(Í¡·Ş8—˜ç’Ñ1
-Rkotlin:S1481¾"2Remove this unused "arrayListJson" local variable.(àñÆÑ8¯˜ç’Ñ1
->kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8¡ÅóïÎ1
-9kotlin:S1128"Remove this unused import.(åå8¡ÅóïÎ1
-~kotlin:S1192Š"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(é¯›•ıÿÿÿÿ8£ÅóïÎ1
-qkotlin:S1192µ"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8»íóïÎ1
-pkotlin:S1192³"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8½â­ÂÏ1
-wkotlin:S3776™"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8Äâ­ÂÏ1
-fkotlin:S6510”"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8Ëâ­ÂÏ1
+Ckotlin:S125Š"Remove this commented out code.(Äı”¥üÿÿÿÿ8‘Œ»ÿÓ1
+>kotlin:S125ø"Remove this commented out code.(«±¯ö8“Œ»ÿÓ1
+Ckotlin:S125œ"Remove this commented out code.(À…âÿÿÿÿÿ8“Œ»ÿÓ1
+Ckotlin:S125¡"Remove this commented out code.(À…âÿÿÿÿÿ8“Œ»ÿÓ1
+Ckotlin:S125É"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8”Œ»ÿÓ1
+>kotlin:S125Ñ"Remove this commented out code.(´“§8”Œ»ÿÓ1
+;kotlin:S6310•"Avoid hardcoded dispatchers.(©ÓœW8œŒ»ÿÓ1
+<kotlin:S6310"Avoid hardcoded dispatchers.(Í¡·Ş8œŒ»ÿÓ1
+<kotlin:S6310»"Avoid hardcoded dispatchers.(©ÒÕò8œŒ»ÿÓ1
+Rkotlin:S1481‡"2Remove this unused "arrayListJson" local variable.(àñÆÑ8µŒ»ÿÓ1
+>kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8¼Œ»ÿÓ1
+9kotlin:S1128"Remove this unused import.(åå8¼Œ»ÿÓ1
+qkotlin:S1192½"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8¿Œ»ÿÓ1
+ykotlin:S1192°"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 3 times.(ö‰²Á8¿Œ»ÿÓ1
+pkotlin:S1192ü"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¿Œ»ÿÓ1
+wkotlin:S3776¡"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8ÃŒ»ÿÓ1
+qkotlin:S3776÷"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8ÃŒ»ÿÓ1
+fkotlin:S6510İ"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8ÊŒ»ÿÓ1

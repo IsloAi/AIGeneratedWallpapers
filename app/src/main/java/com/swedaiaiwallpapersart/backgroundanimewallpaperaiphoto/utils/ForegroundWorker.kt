@@ -6,12 +6,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.hilt.work.HiltWorker
-import androidx.lifecycle.lifecycleScope
 import androidx.work.CoroutineWorker
-import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -20,9 +17,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 @HiltWorker
 class ForegroundWorker @AssistedInject constructor(
@@ -42,6 +36,8 @@ class ForegroundWorker @AssistedInject constructor(
 
     lateinit var notification: Notification
 
+    var currentPage = 1
+
 
     override suspend fun doWork(): Result {
         Log.d(TAG, "Started job")
@@ -51,9 +47,9 @@ class ForegroundWorker @AssistedInject constructor(
             val inputData = inputData.getString("key")
             createNotificationChannel()
 
-            var result = Result.failure()
+            var resulta = Result.failure()
 
-            fetechAllWallpapersUsecase.invoke("Bearer $inputData","1","4000").collect(){result ->
+            fetechAllWallpapersUsecase.invoke("Bearer $inputData",currentPage.toString(),"200").collect(){result ->
 //                Log.e(TAG, "doWork: $it")
 
                 when (result) {
@@ -66,7 +62,21 @@ class ForegroundWorker @AssistedInject constructor(
 
                             val model = SingleDatabaseResponse(item.id,item.cat_name,item.image_name,AdConfig.HD_ImageUrl+item.url,AdConfig.Compressed_Image_url+item.url,item.likes,item.liked,item.size,item.Tags,item.capacity)
                             appDatabase.wallpapersDao().insert(model)
+
+
+//                            if (item == result.data.last()){
+//                                resulta = Result.success()
+//                            }
                         }
+
+                        currentPage++
+
+                        loadNextData(inputData!!)
+
+                        // Set the result as success only when it's the last item in the page
+//                        if (result.data?.isEmpty() == true || result.data?.size!! < 100) {
+//                            resulta = Result.success()
+//                        }
                     }
 
                     is Response.Error -> {
@@ -81,11 +91,11 @@ class ForegroundWorker @AssistedInject constructor(
 
 
             }
-            result = Result.success()
 
 
 
-            return result
+
+            return resulta
         } catch (e: Exception) {
             return Result.failure(workDataOf("error" to e.localizedMessage))
         }
@@ -101,6 +111,51 @@ class ForegroundWorker @AssistedInject constructor(
                     )
                 )
             }
+        }
+    }
+
+    private suspend fun loadNextData(inputData:String){
+        fetechAllWallpapersUsecase.invoke("Bearer $inputData",currentPage.toString(),"200").collect(){result ->
+//                Log.e(TAG, "doWork: $it")
+
+            when (result) {
+                is Response.Loading -> {
+
+                }
+
+                is Response.Success -> {
+                    result.data?.forEach { item ->
+
+                        val model = SingleDatabaseResponse(item.id,item.cat_name,item.image_name,AdConfig.HD_ImageUrl+item.url,AdConfig.Compressed_Image_url+item.url,item.likes,item.liked,item.size,item.Tags,item.capacity)
+                        appDatabase.wallpapersDao().insert(model)
+
+
+//                            if (item == result.data.last()){
+//                                resulta = Result.success()
+//                            }
+                    }
+
+                    currentPage++
+
+                    loadNextData(inputData)
+
+                    // Set the result as success only when it's the last item in the page
+                    if (result.data?.isEmpty() == true || result.data?.size!! < 100) {
+
+                    }
+                }
+
+                is Response.Error -> {
+
+                }
+
+                else -> {
+//                        Toast.makeText(requireContext(), "it is in else clause", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
+
         }
     }
 

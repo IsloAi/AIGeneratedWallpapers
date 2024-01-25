@@ -188,7 +188,7 @@ class HomeTabsFragment : Fragment() {
         adapter.addFragment(CategoryFragment(),"Categories")
         adapter.addFragment(GenerateImageFragment(),"Generate")
         binding.viewPager.adapter=adapter
-        binding.viewPager.offscreenPageLimit = 0
+        binding.viewPager.offscreenPageLimit = 1
         binding.tabLayout.setupWithViewPager(binding.viewPager)
     }
 

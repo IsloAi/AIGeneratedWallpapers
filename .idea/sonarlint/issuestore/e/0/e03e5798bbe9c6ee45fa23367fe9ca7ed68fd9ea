@@ -1,8 +1,13 @@
 
+Bkotlin:S125a"Remove this commented out code.(Èùƒ«ùÿÿÿÿ8ä¿æÿÓ1
+Bkotlin:S125c"Remove this commented out code.(ª·ò“ùÿÿÿÿ8¯òæÿÓ1
 >kotlin:S125Í"Remove this commented out code.(ò’÷§8È’—®Ó1
-Ckotlin:S125“"Remove this commented out code.(Ò»ˆşÿÿÿÿ8É’—®Ó1
+Ckotlin:S125‰"Remove this commented out code.(â¯ôüÿÿÿÿ8®ªèÿÓ1
 ;kotlin:S6310±"Avoid hardcoded dispatchers.(©ÓœW8Ò’—®Ó1
 <kotlin:S6310»"Avoid hardcoded dispatchers.(Í¡·Ş8Ò’—®Ó1
+Mkotlin:S1144h".Remove this unused private "setEvents" method.(ñàõà8¹òæÿÓ1
+Zkotlin:S1144~"6Remove this unused private "onCreatingCalling" method.(ù¤•ùÿÿÿÿ8»òæÿÓ1
+Rkotlin:S1144©"-Remove this unused private "loadData" method.(×ÿ‚ñúÿÿÿÿ8·ªèÿÓ1
 Rkotlin:S1481ğ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8é’—®Ó1
 9kotlin:S1128"Remove this unused import.(ıºÎà8ï’—®Ó1
 >kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8ï’—®Ó1

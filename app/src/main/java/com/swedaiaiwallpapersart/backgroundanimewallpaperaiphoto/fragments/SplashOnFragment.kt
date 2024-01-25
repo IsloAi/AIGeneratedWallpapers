@@ -86,44 +86,52 @@ class SplashOnFragment : Fragment() {
             }
 
             delay(3000)
-            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,12000,object:CommonAdsListenerAdapter(){
-                override fun onAdReady(priority: Int) {
-//                progress.dismiss()
+
+            if (lan?.isEmpty() == true && isAdded){
+                findNavController().navigate(R.id.localizationFragment)
+            }else{
+                if (isAdded) {
+                    findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
                 }
-
-                override fun onAdsDismiss() {
-                    if (lan?.isEmpty() == true && isAdded){
-                        findNavController().navigate(R.id.localizationFragment)
-                    }else{
-                        if (isAdded){
-                                findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
-
-
-                        }
-
-                    }
-
-                }
-
-                override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("TAG", "onAdsShowFail: $errorCode")
-                    if (lan?.isEmpty() == true && isAdded){
-                        findNavController().navigate(R.id.localizationFragment)
-                    }else{
-                        if (isAdded) {
-                            findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
-                        }
-                    }
-//                progress.dismiss()
-                }
-
-                override fun onAdsShowed(priority: Int) {
-
-//                progress.dismiss()
-
-                }
-
-            })
+            }
+//            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,12000,object:CommonAdsListenerAdapter(){
+//                override fun onAdReady(priority: Int) {
+////                progress.dismiss()
+//                }
+//
+//                override fun onAdsDismiss() {
+//                    if (lan?.isEmpty() == true && isAdded){
+//                        findNavController().navigate(R.id.localizationFragment)
+//                    }else{
+//                        if (isAdded){
+//                                findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
+//
+//
+//                        }
+//
+//                    }
+//
+//                }
+//
+//                override fun onAdsShowFail(errorCode: Int) {
+//                    Log.e("TAG", "onAdsShowFail: $errorCode")
+//                    if (lan?.isEmpty() == true && isAdded){
+//                        findNavController().navigate(R.id.localizationFragment)
+//                    }else{
+//                        if (isAdded) {
+//                            findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
+//                        }
+//                    }
+////                progress.dismiss()
+//                }
+//
+//                override fun onAdsShowed(priority: Int) {
+//
+////                progress.dismiss()
+//
+//                }
+//
+//            })
         }
 
 

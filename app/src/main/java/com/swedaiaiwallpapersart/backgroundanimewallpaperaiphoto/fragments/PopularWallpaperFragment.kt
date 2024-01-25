@@ -27,27 +27,35 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class PopularWallpaperFragment : Fragment() {
+@AndroidEntryPoint
+class PopularWallpaperFragment () : Fragment() {
 
     private var _binding: FragmentPopularWallpaperBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var welcomeAdapter: PopularSliderAdapter
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     var startIndex = 0
 
@@ -127,21 +135,21 @@ class PopularWallpaperFragment : Fragment() {
     private fun setEvents(){
         binding.refresh.setOnRefreshListener {
 
-            val newData = cachedMostDownloaded.filterNotNull()
-            val nullAdd = addNullValueInsideArray(newData.shuffled())
-
-            cachedMostDownloaded.clear()
-            cachedMostDownloaded = nullAdd
-            val initialItems = getItems(0, 30)
-            startIndex = 0
-            mostUsedWallpaperAdapter?.addNewData()
-            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-            mostUsedWallpaperAdapter?.updateMoreData(initialItems)
-            startIndex += 30
-
-
-
-            binding.refresh.isRefreshing = false
+//            val newData = cachedMostDownloaded.filterNotNull()
+//            val nullAdd = addNullValueInsideArray(newData.shuffled())
+//
+//            cachedMostDownloaded.clear()
+//            cachedMostDownloaded = nullAdd
+//            val initialItems = getItems(0, 30)
+//            startIndex = 0
+//            mostUsedWallpaperAdapter?.addNewData()
+//            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+//            mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+//            startIndex += 30
+//
+//
+//
+//            binding.refresh.isRefreshing = false
 
         }
 
@@ -237,38 +245,103 @@ class PopularWallpaperFragment : Fragment() {
 
 
     private fun initMostDownloadedData() {
-        viewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
-            if (wallpapers != null) {
+//        viewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
+//            if (wallpapers != null) {
+//
+//                if (view != null) {
+//
+//                    Log.e(TAG, "initMostDownloadedData: ", )
+//
+//                    lifecycleScope.launch(Dispatchers.IO) {
+//                        if (!dataset) {
+//                            Log.e(TAG, "initMostDownloadedData: $dataset")
+//                            val list = addNullValueInsideArray(wallpapers.shuffled())
+//
+//                            cachedMostDownloaded = list
+//
+//                            val initialItems = getItems(0, 30)
+//
+//                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+//
+//                            withContext(Dispatchers.Main) {
+//                                mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+//                                startIndex += 30
+//                            }
+//
+//                            dataset = true
+//                        }
+//                    }
+//                }
+//            } else {
+//                Log.e(TAG, "initMostDownloadedData: no Data Found " )
+//                Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
-                if (view != null) {
+            viewModel.allCreations.observe(viewLifecycleOwner){result ->
+                when (result) {
+                    is Response.Loading -> {
+//                    binding.tvNoData.visibility=View.GONE
+//                    customProgressBar.show(requireContext())
+                    }
 
-                    Log.e(TAG, "initMostDownloadedData: ", )
+                    is Response.Success -> {
+//                    binding.tvNoData.visibility=View.GONE
+//                    customProgressBar.getDialog()?.dismiss()
+                        if (!result.data.isNullOrEmpty()) {
+                            val list = arrayListOf<CatResponse>()
+                            result.data.forEach { item ->
+                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                                if (!list.contains(model)){
+                                    list.add(model)
+                                }
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        if (!dataset) {
-                            Log.e(TAG, "initMostDownloadedData: $dataset")
-                            val list = addNullValueInsideArray(wallpapers.shuffled())
-
-                            cachedMostDownloaded = list
-
-                            val initialItems = getItems(0, 30)
-
-                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-
-                            withContext(Dispatchers.Main) {
-                                mostUsedWallpaperAdapter?.updateMoreData(initialItems)
-                                startIndex += 30
                             }
 
-                            dataset = true
+
+                            if (view != null) {
+                                lifecycleScope.launch {
+                                    Log.e(TAG, "initMostDownloadedData: ", )
+                                    if (!dataset) {
+                                        Log.e(TAG, "initMostDownloadedData: $dataset")
+                                        val newList = addNullValueInsideArray(list.shuffled())
+
+                                        cachedMostDownloaded = newList
+
+                                        val initialItems = getItems(0, 30)
+
+                                        Log.e(TAG, "initMostDownloadedData: " + initialItems)
+
+                                        lifecycleScope.launch(Dispatchers.Main) {
+                                            mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+                                            startIndex += 30
+                                        }
+
+                                        dataset = true
+                                    }
+                                }
+
+                            }
                         }
                     }
+
+                    is Response.Error -> {
+//                    binding.tvNoData.visibility=View.VISIBLE
+//                    customProgressBar.getDialog()?.dismiss()
+                        Log.e("TAG", "error: ${result.message}")
+                        Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                    else -> {
+//                    customProgressBar.getDialog()?.dismiss()
+//                    binding.tvNoData.visibility=View.GONE
+                    }
                 }
-            } else {
-                Log.e(TAG, "initMostDownloadedData: no Data Found " )
-                Toast.makeText(requireContext(), "No Data Found", Toast.LENGTH_SHORT).show()
             }
-        }
+
+
+
     }
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
@@ -286,7 +359,7 @@ class PopularWallpaperFragment : Fragment() {
     }
 
 
-    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+    private suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
         Log.e(TAG, "addNullValueInsideArray: "+data.size )
 
         val firstAdLineThreshold =

@@ -40,7 +40,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.get
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
-import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
@@ -55,10 +54,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeVie
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AllWallpapersViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.json.JSONException
@@ -77,7 +74,7 @@ class MainActivity : AppCompatActivity(){
     private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt:String? =null
 
-    private val viewModel: MostDownloadedViewmodel by viewModels()
+//    private val viewModel: MostDownloadedViewmodel by viewModels()
 
     private val homeViewmodel: MyHomeViewModel by viewModels()
 
@@ -90,6 +87,9 @@ class MainActivity : AppCompatActivity(){
 
     @Inject
     lateinit var workManager: WorkManager
+
+    private var isWorkManagerInitialized = false
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -110,7 +110,7 @@ class MainActivity : AppCompatActivity(){
 
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
 
-        viewModel.fetchWallpapers(this)
+//        viewModel.fetchWallpapers(this)
         homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
         liveViewModel.fetchWallpapers(this)
 
@@ -138,36 +138,13 @@ class MainActivity : AppCompatActivity(){
                     }
 
                     is Response.Success -> {
-                        Log.e(TAG, "initObservers: "+result.data )
+                        Log.e(TAG, "initObservers: first time "+result.data )
+                        if (!isWorkManagerInitialized) {
 
-                        result.data?.token?.let { initWorkManager(it) }
-//                        result.data?.token?.let { mainActivityViewModel.getAllModels("Bearer $it","1","4000") }
+                            result.data?.token?.let { initWorkManager(it) }
 
-
-                    }
-
-                    is Response.Error -> {
-
-                    }
-
-                    else -> {
-                    }
-
-
-                }
-
-            }
-        }
-
-        lifecycleScope.launch {
-            mainActivityViewModel.allModels.observe(this@MainActivity){ result ->
-                when(result){
-                    is Response.Loading -> {
-//                        Log.e(TAG, "promptType in loading $promptType")
-                    }
-
-                    is Response.Success -> {
-                        Log.e(TAG, "initObservers: "+result.data?.size )
+                            isWorkManagerInitialized = true
+                        }
 
 
                     }

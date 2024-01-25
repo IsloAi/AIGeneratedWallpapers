@@ -321,8 +321,6 @@ sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/dat
 yapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GenerateDeviceTokenUsecase.kt,0\9\094fac22ff721ba3c4026e7d1625474c51f9183e
 •
 eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/ForegroundWorker.kt,c\5\c5b09668c4a640f7b43e0cf958dd07dd0354768a
-¢
-rapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/FetechAllWallpapers.kt,d\5\d58559ab950a7f9196200a6759af16b5142e0978
 ©
 yapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/FetechAllWallpapersUsecase.kt,9\d\9db4feb427ee9fa1f28b072c24be9a59cb75c421
 Ÿ
