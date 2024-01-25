@@ -14,6 +14,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.FetechAllWallpapersUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetAllWallpapersUsecase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetTrendingWallpaperUseCase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
@@ -32,7 +33,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class MostDownloadedViewmodel@Inject constructor(private val getAllWallpapersUsecase: GetAllWallpapersUsecase): ViewModel()  {
+class MostDownloadedViewmodel@Inject constructor(private val getAllWallpapersUsecase: GetAllWallpapersUsecase,
+                                                 private val getTrendingWallpaperUseCase: GetTrendingWallpaperUseCase): ViewModel()  {
     val wallpaperData = MutableLiveData<ArrayList<CatResponse>?>()
     fun getWallpapers(): MutableLiveData<ArrayList<CatResponse>?> {
         return wallpaperData
@@ -100,9 +102,29 @@ class MostDownloadedViewmodel@Inject constructor(private val getAllWallpapersUse
     }
 
     init {
-        getAllCreations()
+            getAllCreations()
+
     }
 
+
+    private var _trendingWallpapers = MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>>(
+        com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
+            emptyList()
+        ))
+    val trendingWallpapers: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>> = _trendingWallpapers
+
+
+    fun getAllTrendingWallpapers(){
+        viewModelScope.launch {
+            getTrendingWallpaperUseCase.invoke().collect(){
+                _trendingWallpapers.value=it
+            }
+        }
+    }
+
+    fun clearAllTrending(){
+        _allCreations.value= com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(emptyList())
+    }
     fun clear(){
         wallpaperData.value = null
     }

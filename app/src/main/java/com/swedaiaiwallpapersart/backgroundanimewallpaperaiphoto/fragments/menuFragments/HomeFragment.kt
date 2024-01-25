@@ -44,15 +44,17 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+@AndroidEntryPoint
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
     private val binding get() = _binding!!
@@ -94,10 +96,11 @@ class HomeFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        SDKBaseController.getInstance(). loadInterstitialAds(activity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
+        myActivity = activity as MainActivity
+        SDKBaseController.getInstance(). loadInterstitialAds(myActivity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
 
-//        onCreatingCalling()
-//        setEvents()
+        onCreatingCalling()
+        setEvents()
     }
 
 
@@ -126,7 +129,7 @@ class HomeFragment : Fragment(){
     private fun onCreatingCalling(){
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
 //        checkDailyReward()
-        myActivity = activity as MainActivity
+
         navController = findNavController()
         binding.progressBar.visibility = View.GONE
 
@@ -169,33 +172,88 @@ class HomeFragment : Fragment(){
     private fun loadData() {
 
 
-        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
-            if (wallpapers != null) {
+//        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
+//            if (wallpapers != null) {
+//
+//                if (view != null) {
+//
+//                    lifecycleScope.launch(Dispatchers.IO) {
+//                        if (!dataset) {
+//                            val list = addNullValueInsideArray(wallpapers.shuffled())
+//
+//                            cachedCatResponses = list
+//
+//                            val initialItems = getItems(0, 30)
+//
+//                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+//
+//                            withContext(Dispatchers.Main) {
+//                                adapter.updateMoreData(initialItems)
+//                                startIndex += 30
+//                            }
+//
+//                            dataset = true
+//                        }
+//                    }
+//                }
+//            } else {
+//                Log.e(TAG, "initMostDownloadedData: no Data Found " )
+//            }
+//        }
 
-                if (view != null) {
+        myViewModel.getAllTrendingWallpapers()
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        if (!dataset) {
-                            val list = addNullValueInsideArray(wallpapers.shuffled())
+        myViewModel.trendingWallpapers.observe(viewLifecycleOwner){result ->
+            when (result) {
+                is Response.Loading -> {
 
-                            cachedCatResponses = list
+                }
 
-                            val initialItems = getItems(0, 30)
+                is Response.Success -> {
+                    if (view != null) {
 
-                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            if (!dataset) {
 
-                            withContext(Dispatchers.Main) {
-                                adapter.updateMoreData(initialItems)
-                                startIndex += 30
+                                val tempList =  ArrayList<CatResponse>()
+
+
+                                result.data?.forEach {item ->
+                                    val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                                    if (!tempList.contains(model)){
+                                        tempList.add(model)
+                                    }
+                                }
+
+                                val list = addNullValueInsideArray(tempList.shuffled())
+
+                                cachedCatResponses = list
+
+                                val initialItems = getItems(0, 30)
+
+                                Log.e(TAG, "initMostDownloadedData: " + initialItems)
+
+                                withContext(Dispatchers.Main) {
+                                    adapter.updateMoreData(initialItems)
+                                    startIndex += 30
+                                }
+
+                                dataset = true
                             }
-
-                            dataset = true
                         }
                     }
                 }
-            } else {
-                Log.e(TAG, "initMostDownloadedData: no Data Found " )
+
+                is Response.Error -> {
+                    Log.e("TAG", "error: ${result.message}")
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {
+                }
             }
+
         }
 
 
@@ -266,6 +324,7 @@ class HomeFragment : Fragment(){
 
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
 
         val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
         val firstLine = firstAdLineThreshold * 3
@@ -390,52 +449,52 @@ class HomeFragment : Fragment(){
 
     }
 
-//    override fun onResume() {
-//        super.onResume()
-//
-////        dataset = false
-////        startIndex = 0
-//
-//        loadData()
-//        if (dataset){
-//
-//            Log.e(TAG, "onResume: Data set $dataset")
-////            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
-//
-//            if (addedItems?.isEmpty() == true){
-//                Log.e(TAG, "onResume: "+cachedCatResponses.size )
-//
-//
-//            }
-//            adapter.updateMoreData(addedItems!!)
-//
-//            binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
-//
-//        }
-//
-//        if (isAdded){
-//            val bundle = Bundle()
-//            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending")
-//            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
-//            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-//        }
-//
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        Log.e(TAG, "onPause: ", )
-//
-//        if (!externalOpen){
-//            val allItems = adapter.getAllItems()
-//            if (addedItems?.isNotEmpty() == true){
-//                addedItems?.clear()
-//            }
-//
-//            addedItems?.addAll(allItems)
-//        }
-//
-//    }
+    override fun onResume() {
+        super.onResume()
+
+//        dataset = false
+//        startIndex = 0
+
+        loadData()
+        if (dataset){
+
+            Log.e(TAG, "onResume: Data set $dataset")
+//            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
+
+            if (addedItems?.isEmpty() == true){
+                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+
+
+            }
+            adapter.updateMoreData(addedItems!!)
+
+            binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
+
+        }
+
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.e(TAG, "onPause: ", )
+
+        if (!externalOpen){
+            val allItems = adapter.getAllItems()
+            if (addedItems?.isNotEmpty() == true){
+                addedItems?.clear()
+            }
+
+            addedItems?.addAll(allItems)
+        }
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

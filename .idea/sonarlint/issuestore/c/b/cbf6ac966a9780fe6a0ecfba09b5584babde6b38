@@ -1,20 +1,20 @@
 
-=kotlin:S125}"Remove this commented out code.(ô·°Ë8êø®ÜÓ1
-Ckotlin:S125"Remove this commented out code.(çùò—øÿÿÿÿ8êø®ÜÓ1
->kotlin:S125”"Remove this commented out code.(…é8ëø®ÜÓ1
->kotlin:S125°"Remove this commented out code.(ò’÷§8ƒèêÜÓ1
-Ckotlin:S125Å"Remove this commented out code.(À…âÿÿÿÿÿ8ëø®ÜÓ1
-Ckotlin:S125Ê"Remove this commented out code.(À…âÿÿÿÿÿ8ëø®ÜÓ1
-Ckotlin:S125Ø"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8Š¶ÜÓ1
->kotlin:S125à"Remove this commented out code.(´“§8§ñµÜÓ1
-;kotlin:S6310 "Avoid hardcoded dispatchers.(©ÓœW8õø®ÜÓ1
-<kotlin:S6310©"Avoid hardcoded dispatchers.(Í¡·Ş8õø®ÜÓ1
+=kotlin:S125}"Remove this commented out code.(ô·°Ë8³°ÃÔ1
+Ckotlin:S125"Remove this commented out code.(çùò—øÿÿÿÿ8¹°ÃÔ1
+>kotlin:S125”"Remove this commented out code.(…é8º°ÃÔ1
+>kotlin:S125°"Remove this commented out code.(ò’÷§8Ä°ÃÔ1
+Ckotlin:S125Å"Remove this commented out code.(À…âÿÿÿÿÿ8Å°ÃÔ1
+Ckotlin:S125Ê"Remove this commented out code.(À…âÿÿÿÿÿ8Å°ÃÔ1
+Ckotlin:S125Ø"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8Ç°ÃÔ1
+>kotlin:S125à"Remove this commented out code.(´“§8Ç°ÃÔ1
+;kotlin:S6310 "Avoid hardcoded dispatchers.(©ÓœW8Ü°ÃÔ1
+<kotlin:S6310©"Avoid hardcoded dispatchers.(Í¡·Ş8Ü°ÃÔ1
 Rkotlin:S1481¯"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ïİµÜÓ1
-9kotlin:S1128"Remove this unused import.(ÔËŸÀ8¢ù®ÜÓ1
->kotlin:S1128."Remove this unused import.(¢‡Œşÿÿÿÿ8¢ù®ÜÓ1
-qkotlin:S1192ª"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8¥ù®ÜÓ1
+9kotlin:S1128"Remove this unused import.(ÔËŸÀ8°°˜€Ô1
+>kotlin:S1128."Remove this unused import.(¢‡Œşÿÿÿÿ8Ó±ÃÔ1
+qkotlin:S1192ª"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8×±ÃÔ1
 pkotlin:S1192Ğ"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8üİµÜÓ1
-Gkotlin:S1874Y"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8©ù®ÜÓ1
-zkotlin:S1186ã"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8¯ù®ÜÓ1
-kotlin:S1186ç"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8¯ù®ÜÓ1
+Gkotlin:S1874Y"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8İ±ÃÔ1
+zkotlin:S1186ã"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8ü±ÃÔ1
+kotlin:S1186ç"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8ı±ÃÔ1
 Skotlin:S1066æ".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8‰ŞµÜÓ1

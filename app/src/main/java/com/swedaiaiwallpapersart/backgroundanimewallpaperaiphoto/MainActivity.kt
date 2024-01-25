@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity(){
 
 //    private val viewModel: MostDownloadedViewmodel by viewModels()
 
-    private val homeViewmodel: MyHomeViewModel by viewModels()
+//    private val homeViewmodel: MyHomeViewModel by viewModels()
 
     private  val liveViewModel: LiveWallpaperViewModel by viewModels()
     val TAG= "ANRSPY"
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity(){
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
 
 //        viewModel.fetchWallpapers(this)
-        homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
+//        homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
         liveViewModel.fetchWallpapers(this)
 
 //        allwallpapers.fetchWallpapers(this)

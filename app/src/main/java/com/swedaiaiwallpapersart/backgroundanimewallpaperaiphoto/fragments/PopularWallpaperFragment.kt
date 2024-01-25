@@ -61,9 +61,6 @@ class PopularWallpaperFragment () : Fragment() {
 
     val catListViewmodel: MyViewModel by activityViewModels()
 
-
-    private val myViewModel: MyHomeViewModel by activityViewModels()
-
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
@@ -359,7 +356,7 @@ class PopularWallpaperFragment () : Fragment() {
     }
 
 
-    private suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+     suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
         Log.e(TAG, "addNullValueInsideArray: "+data.size )
 
         val firstAdLineThreshold =
@@ -399,9 +396,9 @@ class PopularWallpaperFragment () : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        initTrendingData()
-
         initMostDownloadedData()
+
+        initTrendingData()
 
         if (datasetTrending){
             if (cachedCatResponses?.isEmpty() == true){
@@ -525,31 +522,78 @@ class PopularWallpaperFragment () : Fragment() {
 
 
     private fun initTrendingData() {
-        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
-            if (wallpapers != null) {
+        viewModel.getAllTrendingWallpapers()
 
-                if (view != null) {
+        viewModel.trendingWallpapers.observe(viewLifecycleOwner){result ->
+            when (result) {
+                is Response.Loading -> {
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        if (!datasetTrending) {
+                }
 
-                            val list = wallpapers.take(100)
-                            cachedCatResponses.addAll(list)
+                is Response.Success -> {
+                    if (view != null) {
 
-                            Log.e(TAG, "initMostDownloadedData: " + list)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            if (!datasetTrending) {
 
-                            withContext(Dispatchers.Main) {
-                                adapter?.updateMoreData(cachedCatResponses)
+                                val list = result.data?.take(100)
+
+                                list?.forEach {item->
+                                    val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                                    if (!cachedCatResponses.contains(model)){
+                                        cachedCatResponses.add(model)
+                                    }
+                                }
+                                Log.e(TAG, "initMostDownloadedData: " + list)
+
+                                withContext(Dispatchers.Main) {
+                                    adapter?.updateMoreData(cachedCatResponses)
+                                }
+
+                                datasetTrending = true
                             }
-
-                            datasetTrending = true
                         }
                     }
                 }
-            } else {
-                Log.e(TAG, "initMostDownloadedData: no Data Found " )
+
+                is Response.Error -> {
+                    Log.e("TAG", "error: ${result.message}")
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {
+                }
             }
+
         }
+
+
+//        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
+//            if (wallpapers != null) {
+//
+//                if (view != null) {
+//
+//                    lifecycleScope.launch(Dispatchers.IO) {
+//                        if (!datasetTrending) {
+//
+//                            val list = wallpapers.take(100)
+//                            cachedCatResponses.addAll(list)
+//
+//                            Log.e(TAG, "initMostDownloadedData: " + list)
+//
+//                            withContext(Dispatchers.Main) {
+//                                adapter?.updateMoreData(cachedCatResponses)
+//                            }
+//
+//                            datasetTrending = true
+//                        }
+//                    }
+//                }
+//            } else {
+//                Log.e(TAG, "initMostDownloadedData: no Data Found " )
+//            }
+//        }
     }
 
     private fun updateUIWithFetchedData() {

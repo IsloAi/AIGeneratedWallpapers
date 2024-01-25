@@ -8,4 +8,6 @@ import kotlinx.coroutines.flow.Flow
 interface FetchDataRepository {
 
     fun fetechAllWallpapers(): Flow<Response<List<SingleDatabaseResponse>>>
+
+    fun fetechTrendingWallpapers():Flow<Response<List<SingleDatabaseResponse>>>
 }

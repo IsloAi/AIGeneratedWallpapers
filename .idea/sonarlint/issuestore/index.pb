@@ -337,3 +337,9 @@ sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/dom
 uapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/repositry/FetchDataRepositoryImpl.kt,f\d\fd040e5da8c7056691904cff5fadfcdb17691a1a
 ¦
 vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetAllWallpapersUsecase.kt,b\2\b2f9cac27263d761d6dc3feaaf22ddf2a20c8799
+’
+bapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/LocaleManager.kt,9\7\979a5649299ee8fa86c471b7a8be4530d7fb77b0
+ª
+zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetTrendingWallpaperUseCase.kt,1\6\164acb3acb9e6393ed40ba3b76c915ff0d19ea33
+™
+iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/FeedbackFragment.kt,5\6\56443cd4ff51c22618450a89675a1058521be693
