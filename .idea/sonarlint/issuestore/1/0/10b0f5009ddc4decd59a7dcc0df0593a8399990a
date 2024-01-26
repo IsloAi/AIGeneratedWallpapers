@@ -1,7 +1,0 @@
-
-Fkotlin:S6615ÿ"&The value assigned here is never used.(ç²ÇÁ8Ùßé¡Ô1
-Ckotlin:S125þ"Remove this commented out code.(®‘ê©øÿÿÿÿ8Üßé¡Ô1
-Rkotlin:S1481ý"2Remove this unused "arrayListJson" local variable.(àñÆÑ8óßé¡Ô1
-pkotlin:S1192Ì"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñþÿÿÿÿ8úßé¡Ô1
-‡kotlin:S1192Ì"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñþÿÿÿÿ8ûßé¡Ô1
-fkotlin:S6510Ž"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8‚àé¡Ô1
