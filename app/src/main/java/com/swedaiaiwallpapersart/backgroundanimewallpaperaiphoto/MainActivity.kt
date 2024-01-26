@@ -183,7 +183,7 @@ class MainActivity : AppCompatActivity(){
                 .build()
 
         workManager.enqueue(oneTimeWorkRequest)
-        Toast.makeText(this@MainActivity, "Image download is started", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this@MainActivity, "Image download is started", Toast.LENGTH_SHORT).show()
         workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.id)
             .observe(this@MainActivity) { workInfo: WorkInfo? ->
                 if (workInfo != null) {
@@ -195,11 +195,11 @@ class MainActivity : AppCompatActivity(){
                     }
                     when (workInfo.state) {
                         WorkInfo.State.SUCCEEDED -> {
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Image has been downloaded",
-                                Toast.LENGTH_SHORT
-                            ).show()
+//                            Toast.makeText(
+//                                this@MainActivity,
+//                                "Image has been downloaded",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
 //                            workManager.cancelAllWorkByTag("downloadImg")
 
                         }

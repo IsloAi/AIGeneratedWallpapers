@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -56,6 +57,7 @@ class SplashOnFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        IkmSdkController.setEnableShowResumeAds(false)
 
 
         myActivity = activity as MainActivity
@@ -109,6 +111,8 @@ class SplashOnFragment : Fragment() {
 
                     }
 
+                    IkmSdkController.setEnableShowResumeAds(true)
+
                 }
 
                 override fun onAdsShowFail(errorCode: Int) {
@@ -120,6 +124,8 @@ class SplashOnFragment : Fragment() {
                             findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
                         }
                     }
+
+                    IkmSdkController.setEnableShowResumeAds(true)
 //                progress.dismiss()
                 }
 

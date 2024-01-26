@@ -20,6 +20,11 @@ import java.io.File
 import java.io.IOException
 
 class LiveWallpaperService : WallpaperService() {
+
+    override fun onCreate() {
+        super.onCreate()
+        FirebaseApp.initializeApp(applicationContext)
+    }
     internal inner class WallpaperVideoEngine : Engine() {
         private var myMediaPlayer: MediaPlayer? = null
         private var liveWallBroadcastReceiver: BroadcastReceiver? = null
