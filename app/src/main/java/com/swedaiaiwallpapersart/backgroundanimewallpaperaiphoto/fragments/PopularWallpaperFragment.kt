@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPopularWallpaperBinding
@@ -68,6 +69,8 @@ class PopularWallpaperFragment () : Fragment() {
 
     private lateinit var myActivity: MainActivity
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     private var mostUsedWallpaperAdapter: MostUsedWallpaperAdapter? = null
     private var adapter: ApicategoriesListHorizontalAdapter? = null
@@ -104,6 +107,7 @@ class PopularWallpaperFragment () : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         myActivity = activity as MainActivity
 
@@ -132,21 +136,29 @@ class PopularWallpaperFragment () : Fragment() {
     private fun setEvents(){
         binding.refresh.setOnRefreshListener {
 
-//            val newData = cachedMostDownloaded.filterNotNull()
-//            val nullAdd = addNullValueInsideArray(newData.shuffled())
-//
-//            cachedMostDownloaded.clear()
-//            cachedMostDownloaded = nullAdd
-//            val initialItems = getItems(0, 30)
-//            startIndex = 0
-//            mostUsedWallpaperAdapter?.addNewData()
-//            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-//            mostUsedWallpaperAdapter?.updateMoreData(initialItems)
-//            startIndex += 30
-//
-//
-//
-//            binding.refresh.isRefreshing = false
+            lifecycleScope.launch {
+                val newData = cachedMostDownloaded.filterNotNull()
+                val nullAdd = addNullValueInsideArray(newData.shuffled())
+
+                cachedMostDownloaded.clear()
+                cachedMostDownloaded = nullAdd
+                val initialItems = getItems(0, 30)
+                startIndex = 0
+
+                withContext(Dispatchers.Main){
+                    mostUsedWallpaperAdapter?.addNewData()
+                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                    mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+                    startIndex += 30
+
+
+
+                    binding.refresh.isRefreshing = false
+                }
+
+            }
+
+
 
         }
 
@@ -426,6 +438,13 @@ class PopularWallpaperFragment () : Fragment() {
 
         }
 
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Popular Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+
     }
 
 
@@ -472,7 +491,7 @@ class PopularWallpaperFragment () : Fragment() {
                         }
 
                         2 -> {
-                            catListViewmodel.fetchWallpapers(requireContext(),"Anime")
+                            catListViewmodel.getAllCreations("Anime")
                             SDKBaseController.getInstance().showInterstitialAds(
                                 requireActivity(),
                                 "mainscr_cate_tab_click_item",

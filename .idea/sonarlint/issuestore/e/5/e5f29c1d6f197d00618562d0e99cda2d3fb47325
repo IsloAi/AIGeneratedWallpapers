@@ -1,24 +1,23 @@
 
-Ckotlin:S125‡"Remove this commented out code.(Äı”¥üÿÿÿÿ8‹ÅöƒÔ1
->kotlin:S125õ"Remove this commented out code.(«±¯ö8ÅöƒÔ1
-Ckotlin:S125™"Remove this commented out code.(À…âÿÿÿÿÿ8ÅöƒÔ1
-Ckotlin:S125"Remove this commented out code.(À…âÿÿÿÿÿ8ÅöƒÔ1
-Ckotlin:S125Æ"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8ÅöƒÔ1
->kotlin:S125Î"Remove this commented out code.(´“§8ÅöƒÔ1
-Ckotlin:S125¼"Remove this commented out code.(İ¥ççûÿÿÿÿ8ÅöƒÔ1
-;kotlin:S6310˜"Avoid hardcoded dispatchers.(©ÓœW8™ÅöƒÔ1
-<kotlin:S6310¥"Avoid hardcoded dispatchers.(Í¡·Ş8šÅöƒÔ1
-<kotlin:S6310¸"Avoid hardcoded dispatchers.(©ÒÕò8šÅöƒÔ1
-Hkotlin:S108‘")Either remove or fill this block of code.(·Úøš8ªÅöƒÔ1
-Mkotlin:S108µ")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ªÅöƒÔ1
-Rkotlin:S1481³"2Remove this unused "arrayListJson" local variable.(àñÆÑ8·ÅöƒÔ1
+>kotlin:S125"Remove this commented out code.(«±¯ö8ÅöƒÔ1
+Ckotlin:S125¥"Remove this commented out code.(À…âÿÿÿÿÿ8ÅöƒÔ1
+Ckotlin:S125ª"Remove this commented out code.(À…âÿÿÿÿÿ8ÅöƒÔ1
+Ckotlin:S125Ò"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8ÅöƒÔ1
+>kotlin:S125Ú"Remove this commented out code.(´“§8ÅöƒÔ1
+Ckotlin:S125Ï"Remove this commented out code.(İ¥ççûÿÿÿÿ8ÅöƒÔ1
+<kotlin:S6310”"Avoid hardcoded dispatchers.(Í¡·Ş8šÅöƒÔ1
+;kotlin:S6310«"Avoid hardcoded dispatchers.(©ÓœW8™ÅöƒÔ1
+<kotlin:S6310¸"Avoid hardcoded dispatchers.(Í¡·Ş8šÅöƒÔ1
+<kotlin:S6310Ä"Avoid hardcoded dispatchers.(©ÒÕò8òˆŸ¢Ô1
+Hkotlin:S108¤")Either remove or fill this block of code.(·Úøš8ªÅöƒÔ1
+Mkotlin:S108È")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ªÅöƒÔ1
+Rkotlin:S1481Æ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8·ÅöƒÔ1
 >kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8¿ÅöƒÔ1
 9kotlin:S1128"Remove this unused import.(åå8¿ÅöƒÔ1
->kotlin:S1128#"Remove this unused import.(ğÔ¹¦ıÿÿÿÿ8‡‚à…Ô1
-qkotlin:S1192º"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8ÃÅöƒÔ1
-ykotlin:S1192­"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 3 times.(ö‰²Á8ÃÅöƒÔ1
-pkotlin:S1192ù"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ÃÅöƒÔ1
-wkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8ÈÅöƒÔ1
-qkotlin:S3776ô"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8ÈÅöƒÔ1
-rkotlin:S3776Œ"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8ÉÅöƒÔ1
-fkotlin:S6510Ú"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8ĞÅöƒÔ1
+~kotlin:S1192–"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(é¯›•ıÿÿÿÿ8›±Ÿ¢Ô1
+qkotlin:S1192Æ"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8ÃÅöƒÔ1
+pkotlin:S1192…"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ÃÅöƒÔ1
+wkotlin:S3776ª"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8ÈÅöƒÔ1
+qkotlin:S3776€"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8ÈÅöƒÔ1
+rkotlin:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8ÉÅöƒÔ1
+fkotlin:S6510æ"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8ĞÅöƒÔ1

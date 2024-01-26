@@ -34,6 +34,7 @@ import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
@@ -73,6 +74,10 @@ class GenerateImageFragment : Fragment() {
     private var existGems:Int? = null
     private val postDataOnServer = PostDataOnServer()
     private var hasNavigated = false
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -90,6 +95,9 @@ class GenerateImageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
         SDKBaseController.getInstance().loadRewardedAds(requireActivity(), "mainscr_generate_tab_reward")
     }
     private fun customOnCreateCalling() {
@@ -177,6 +185,13 @@ class GenerateImageFragment : Fragment() {
         super.onResume()
         val roomDatabase = AppDatabase.getInstance(requireContext())
         loadCreationHistory(roomDatabase)
+
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Generate Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
     }
     @SuppressLint("SuspiciousIndentation")
     private fun postGems(){

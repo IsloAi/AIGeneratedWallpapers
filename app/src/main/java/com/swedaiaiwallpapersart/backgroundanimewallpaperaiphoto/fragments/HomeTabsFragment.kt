@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.google.android.material.tabs.TabLayout
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -44,6 +45,9 @@ class HomeTabsFragment : Fragment() {
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     companion object{
         var navigationInProgress = false
     }
@@ -63,6 +67,8 @@ class HomeTabsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         SplashOnFragment.exit = false
             myActivity = activity as MainActivity
             loadbannerAd()
@@ -71,6 +77,9 @@ class HomeTabsFragment : Fragment() {
             initTabs()
             setEvents()
     }
+
+
+
 
 
     fun loadbannerAd(){
@@ -215,6 +224,13 @@ class HomeTabsFragment : Fragment() {
                 navigateToTrending(it)
                 sharedViewModel.selectTab(0)
             }
+        }
+
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Home Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
 

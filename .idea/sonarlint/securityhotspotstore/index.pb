@@ -343,3 +343,5 @@ bapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/uti
 zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetTrendingWallpaperUseCase.kt,1\6\164acb3acb9e6393ed40ba3b76c915ff0d19ea33
 ™
 iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/FeedbackFragment.kt,5\6\56443cd4ff51c22618450a89675a1058521be693
+«
+{app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetCategoryWallpapersUseCase.kt,5\3\535bd063f3ff9067ca8a0bfdea0bfa0653472e3d

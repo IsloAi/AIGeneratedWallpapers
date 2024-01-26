@@ -21,6 +21,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -198,27 +199,69 @@ class ListViewFragment : Fragment() {
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
         // Observe the LiveData in the ViewModel and update the UI accordingly
-        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
+//        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
+//            if (catResponses != null) {
+//
+//                if (!dataset) {
+//                    val list = addNullValueInsideArray(catResponses.shuffled())
+//
+//                    cachedCatResponses = list
+//
+//                    val initialItems = getItems(0, 30)
+//
+//                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
+//
+//                        adapter?.updateMoreData(initialItems)
+//                        startIndex += 30
+//                    dataset = true
+//                }
+//
+//                Log.e(TAG, "loadData: "+catResponses )
+//            }else{
+//                Log.e(TAG, "loadData: "+catResponses )
+//            }
+//        }
 
-                if (!dataset) {
-                    val list = addNullValueInsideArray(catResponses.shuffled())
 
-                    cachedCatResponses = list
+        myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->
+            when(result){
 
-                    val initialItems = getItems(0, 30)
+                is Response.Loading ->{
 
-                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                }
+
+                is Response.Success ->{
+                    if (!dataset) {
+                        var tempList = ArrayList<CatResponse>()
+
+                        result.data?.forEach {item ->
+                            val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                            if (!tempList.contains(model)){
+                                tempList.add(model)
+                            }
+                        }
+
+                        val list = addNullValueInsideArray(tempList.shuffled())
+
+                        cachedCatResponses = list
+
+                        val initialItems = getItems(0, 30)
+
+                        Log.e(TAG, "initMostDownloadedData: " + initialItems)
 
                         adapter?.updateMoreData(initialItems)
                         startIndex += 30
-                    dataset = true
+                        dataset = true
+                    }
                 }
 
-                Log.e(TAG, "loadData: "+catResponses )
-            }else{
-                Log.e(TAG, "loadData: "+catResponses )
+                is Response.Error ->{
+
+                }
+
+                else -> {}
             }
+
         }
     }
 

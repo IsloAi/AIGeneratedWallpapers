@@ -18,6 +18,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentOnBoardingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
@@ -31,6 +32,8 @@ class OnBoardingFragment : Fragment() {
     private val binding get() = _binding!!
 
     lateinit var welcomeAdapter: OnboardingAdapter
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +54,9 @@ class OnBoardingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
 
 
 //        val nativeAd = NativeAdsPreLoading.getOnBoaringAds()
@@ -284,6 +290,16 @@ class OnBoardingFragment : Fragment() {
         super.onDestroyView()
         _binding = null
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Onboarding Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
     }
 
 

@@ -20,5 +20,8 @@ interface WallpapersDao {
     @Query("SELECT * FROM allWallpapers WHERE likes != 0 ORDER BY likes DESC ")
     fun getTrendingWallpapers():List<SingleDatabaseResponse>
 
+    @Query("SELECT * FROM allWallpapers WHERE cat_name=:cat")
+    fun getCategoryWallpaper(cat:String):List<SingleDatabaseResponse>
+
 
 }

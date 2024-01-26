@@ -474,7 +474,7 @@ class HomeFragment : Fragment(){
 
         if (isAdded){
             val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLocalizationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
@@ -34,6 +35,8 @@ class LocalizationFragment : Fragment() {
 
     var pos = 0
     var adapter: LocalizationAdapter? = null
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,6 +48,9 @@ class LocalizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         pos = MySharePreference.getLanguageposition(requireContext())!!
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
         loadNativeAd()
         setEvents()
         initLanguages()
@@ -84,6 +90,16 @@ class LocalizationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Language Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
     }
 
     fun initLanguages(){

@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.hdwallpaper.Fragments.MainFragment
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -50,6 +51,9 @@ class CategoryFragment : Fragment() {
 
     val catlist = ArrayList<CatNameResponse?>()
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+
     val catListViewmodel: MyViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
@@ -60,6 +64,8 @@ class CategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        loadFirstCategory()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
         onCustomCreateView()
 //        SDKBaseController.getInstance().loadInterstitialAds(requireActivity(),"mainscr_cate_tab_click_item","mainscr_cate_tab_click_item")
     }
@@ -79,7 +85,7 @@ class CategoryFragment : Fragment() {
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
         val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
-                catListViewmodel.fetchWallpapers(requireContext(),string)
+                catListViewmodel.getAllCreations(string)
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
@@ -185,6 +191,16 @@ class CategoryFragment : Fragment() {
         if (findNavController().currentDestination?.id != R.id.listViewFragment) {
 
             findNavController().navigate(R.id.listViewFragment, bundle)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Categories Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
 

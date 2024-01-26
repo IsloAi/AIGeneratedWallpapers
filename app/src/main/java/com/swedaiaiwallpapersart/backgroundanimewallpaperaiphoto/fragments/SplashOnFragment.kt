@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -28,6 +29,8 @@ class SplashOnFragment : Fragment() {
     companion object{
         var exit = true
     }
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var _binding: NewsplashFragmentBinding?= null
     private val binding get() = _binding!!
@@ -52,6 +55,8 @@ class SplashOnFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
 
         myActivity = activity as MainActivity
 
@@ -191,6 +196,13 @@ class SplashOnFragment : Fragment() {
 
         binding.videoView.setOnCompletionListener {
             binding.videoView.start()
+        }
+
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
 

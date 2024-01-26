@@ -387,7 +387,7 @@ class SearchWallpapersFragment : Fragment() {
 
                 catgories = true
 
-                catListViewmodel.fetchWallpapers(requireContext(),string)
+                catListViewmodel.getAllCreations(string)
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),

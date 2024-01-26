@@ -10,4 +10,8 @@ interface FetchDataRepository {
     fun fetechAllWallpapers(): Flow<Response<List<SingleDatabaseResponse>>>
 
     fun fetechTrendingWallpapers():Flow<Response<List<SingleDatabaseResponse>>>
+
+    fun fetechCategoryWallpapers(cat:String):Flow<Response<List<SingleDatabaseResponse>>>
+
+
 }

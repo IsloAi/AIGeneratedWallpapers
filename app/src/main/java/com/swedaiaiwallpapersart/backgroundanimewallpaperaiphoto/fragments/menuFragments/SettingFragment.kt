@@ -15,6 +15,7 @@ import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.dynamiclinks.DynamicLink
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -33,11 +34,16 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 class SettingFragment : Fragment() {
    private var _binding: FragmentSettingBinding?=null
     private val binding get() = _binding!!
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentSettingBinding.inflate(inflater
             ,container,false)
         myCreated()
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
         return binding.root
     }
     @SuppressLint("SuspiciousIndentation")
@@ -241,6 +247,17 @@ class SettingFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Settings Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
     }
 
 }

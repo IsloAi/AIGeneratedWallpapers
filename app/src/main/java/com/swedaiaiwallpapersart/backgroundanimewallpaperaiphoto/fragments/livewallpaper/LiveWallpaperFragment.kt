@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -41,6 +42,8 @@ class LiveWallpaperFragment : Fragment() {
     private lateinit var myActivity : MainActivity
     var adapter:LiveWallpaperAdapter ?= null
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,6 +57,7 @@ class LiveWallpaperFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         myActivity = activity as MainActivity
 
@@ -86,6 +90,13 @@ class LiveWallpaperFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         loadData()
+
+        if (isAdded){
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
     }
 
 

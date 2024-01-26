@@ -51,4 +51,23 @@ class FetchDataRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
+    override fun fetechCategoryWallpapers(cat: String): Flow<Response<List<SingleDatabaseResponse>>> = channelFlow {
+        try {
+
+            trySend(Response.Loading)
+
+            val creations= appDatabase.wallpapersDao().getCategoryWallpaper(cat)
+            if (creations.isNotEmpty()){
+                trySend(Response.Success(creations))
+            }else{
+                trySend(Response.Error("No Data found"))
+            }
+
+        }
+        catch (e:Exception){
+            trySend(Response.Error("Unexpected error ${e.message}"))
+        }
+        awaitClose()
+    }
 }
