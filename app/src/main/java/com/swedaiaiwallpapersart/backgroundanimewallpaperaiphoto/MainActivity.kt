@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -40,12 +41,18 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfigException
 import com.google.firebase.remoteconfig.get
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetPromptDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.SelectedPromptListModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
@@ -57,44 +64,57 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.IOException
+import java.io.InputStream
 import java.util.Locale
 import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
 
     private lateinit var controller: NavController
     lateinit var binding: ActivityMainBinding
-    private val selectedPromptList =  ArrayList<SelectedPromptListModel>()
+    private val selectedPromptList = ArrayList<SelectedPromptListModel>()
     private var arrayList = ArrayList<Prompts>()
-    private var selectedPrompt:String? =null
+    private var selectedPrompt: String? = null
 
 //    private val viewModel: MostDownloadedViewmodel by viewModels()
 
 //    private val homeViewmodel: MyHomeViewModel by viewModels()
 
-    private  val liveViewModel: LiveWallpaperViewModel by viewModels()
-    val TAG= "ANRSPY"
+    private val liveViewModel: LiveWallpaperViewModel by viewModels()
+    val TAG = "ANRSPY"
 
-    private val mainActivityViewModel: MainActivityViewModel by viewModels()
+//    private val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
 
+    var tokenGenerated = false
+
+//    @Inject
+//    lateinit var workManager: WorkManager
+
     @Inject
-    lateinit var workManager: WorkManager
+    lateinit var appDatabase: AppDatabase
 
     private var isWorkManagerInitialized = false
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+//        if (!tokenGenerated){
+//            mainActivityViewModel.generateDeviceToken(deviceID)
+//            tokenGenerated = true
+//        }
         val lan = MySharePreference.getLanguage(this)
 
         val context = LocaleManager.setLocale(this, lan!!)
@@ -109,122 +129,236 @@ class MainActivity : AppCompatActivity(){
         setContentView(binding.root)
 
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
-
-//        viewModel.fetchWallpapers(this)
-//        homeViewmodel.fetchWallpapers(this,binding.progressBar,"1")
         liveViewModel.fetchWallpapers(this)
 
-//        allwallpapers.fetchWallpapers(this)
+        GlobalScope.launch {
+            val jsonFileName = "wallpapers.json"
+            val jsonString = readJsonFile(this@MainActivity, jsonFileName)
 
-        val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-        mainActivityViewModel.generateDeviceToken(deviceID)
-        initObservers()
-        Log.d("tracingImageId", "onCreate: id= $deviceID")
-        if(deviceID != null){
-            MySharePreference.setDeviceID(this,deviceID)
-            Log.e("TAG", "onCreate: "+deviceID )
+            if (jsonString.isNotEmpty()) {
+                val imageList = parseJson(jsonString)
+
+                if (imageList != null) {
+                    val images = imageList.images
+
+                    images.forEach { item ->
+                        Log.e(TAG, "onCreate: "+item )
+                        val model = SingleDatabaseResponse(
+                            item.id,
+                            item.cat_name,
+                            item.image_name,
+                            AdConfig.HD_ImageUrl + item.url,
+                            AdConfig.Compressed_Image_url + item.url,
+                            item.likes,
+                            item.liked,
+                            item.size,
+                            item.Tags,
+                            item.capacity
+                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            appDatabase.wallpapersDao().insert(model)
+                        }
+                    }
+                    // Now 'images' contains the parsed data from the JSON file
+                    // Do whatever you need with the data
+                } else {
+                    // Handle parsing error
+                }
+            } else {
+                // Handle file reading error
+            }
         }
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+
+
+
+
+
+
+
+
+
+//        initObservers()
+        Log.d("tracingImageId", "onCreate: id= $deviceID")
+        if (deviceID != null) {
+            MySharePreference.setDeviceID(this, deviceID)
+            Log.e("TAG", "onCreate: " + deviceID)
+        }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
         initFirebaseRemoteConfig()
     }
 
-    fun initObservers(){
-        lifecycleScope.launch {
-            mainActivityViewModel.deviceTokenResponse.collect(){ result ->
-                when(result){
-                    is Response.Loading -> {
-//                        Log.e(TAG, "promptType in loading $promptType")
-                    }
-
-                    is Response.Success -> {
-                        Log.e(TAG, "initObservers: first time "+result.data )
-                        if (!isWorkManagerInitialized) {
-
-                            result.data?.token?.let { initWorkManager(it) }
-
-                            isWorkManagerInitialized = true
-                        }
-
-
-                    }
-
-                    is Response.Error -> {
-
-                    }
-
-                    else -> {
-                    }
-
-
-                }
-
-            }
+    fun parseJson(jsonString: String): ListResponse? {
+        return try {
+            val gson = Gson()
+            gson.fromJson(jsonString, ListResponse::class.java)
+        } catch (e: JsonSyntaxException) {
+            e.printStackTrace()
+            null
         }
-
     }
 
-    private fun initWorkManager(key:String) {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresStorageNotLow(false)
-            .setRequiresBatteryNotLow(false)
-            .build()
-        val data = Data.Builder()
 
-        data.apply {
-            putString("key",key )
+    fun readJsonFile(context: Context, fileName: String): String {
+        return try {
+            val inputStream: InputStream = context.assets.open(fileName)
+            val size: Int = inputStream.available()
+            val buffer = ByteArray(size)
+            inputStream.read(buffer)
+            inputStream.close()
+            String(buffer, Charsets.UTF_8)
+        } catch (e: IOException) {
+            e.printStackTrace()
+            ""
         }
-        val oneTimeWorkRequest =
-            OneTimeWorkRequest.Builder(ForegroundWorker::class.java)
-                .setConstraints(constraints)
-                .setInputData(data.build())
-                .addTag(UUID.randomUUID().toString())
-                .build()
-
-        workManager.enqueue(oneTimeWorkRequest)
-//        Toast.makeText(this@MainActivity, "Image download is started", Toast.LENGTH_SHORT).show()
-        workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.id)
-            .observe(this@MainActivity) { workInfo: WorkInfo? ->
-                if (workInfo != null) {
-
-                    val progress = workInfo.progress
-
-                    if (progress.getLong("Progress", 0) > 0) {
-
-                    }
-                    when (workInfo.state) {
-                        WorkInfo.State.SUCCEEDED -> {
-//                            Toast.makeText(
-//                                this@MainActivity,
-//                                "Image has been downloaded",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                            workManager.cancelAllWorkByTag("downloadImg")
-
-                        }
-
-                        WorkInfo.State.RUNNING -> {
-                            Log.e(TAG, "initObservers:running buddy")
-                        }
-
-                        WorkInfo.State.FAILED -> {
-                            Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_SHORT).show()
-                            val outputdata = workInfo.outputData
-                            Log.e(
-                                TAG,
-                                "error in fragment ${outputdata.getString("error")}",
-                            )
-                        }
-
-                        else -> {}
-                    }
-                }
-            }
     }
+
+//    fun initObservers() {
+//        lifecycleScope.launch {
+//            mainActivityViewModel.deviceTokenResponse.collect() { result ->
+//                when (result) {
+//                    is Response.Loading -> {
+////                        Log.e(TAG, "promptType in loading $promptType")
+//                    }
+//
+//                    is Response.Success -> {
+//                        Log.e(TAG, "initObservers: first time " + result.data)
+//                        if (!isWorkManagerInitialized) {
+//
+//                            result.data?.token?.let { initWorkManager(it) }
+//
+//                            isWorkManagerInitialized = true
+//
+//                            result.data?.token?.let {
+//                                mainActivityViewModel.getAllModels(
+//                                    "Bearer $it",
+//                                    "1",
+//                                    "200"
+//                                )
+//                            }
+//                        }
+//
+//
+//                    }
+//
+//                    is Response.Error -> {
+//
+//                    }
+//
+//                    else -> {
+//                    }
+//
+//
+//                }
+//
+//            }
+//        }
+//
+//        mainActivityViewModel.allModels.observe(this@MainActivity) { result ->
+//            when (result) {
+//                is Response.Loading -> {
+////                        Log.e(TAG, "promptType in loading $promptType")
+//                }
+//
+//                is Response.Success -> {
+//                    result.data?.forEach { item ->
+//
+//                        val model = SingleDatabaseResponse(
+//                            item.id,
+//                            item.cat_name,
+//                            item.image_name,
+//                            AdConfig.HD_ImageUrl + item.url,
+//                            AdConfig.Compressed_Image_url + item.url,
+//                            item.likes,
+//                            item.liked,
+//                            item.size,
+//                            item.Tags,
+//                            item.capacity
+//                        )
+//                        CoroutineScope(Dispatchers.IO).launch {
+//                            appDatabase.wallpapersDao().insert(model)
+//                        }
+//
+//                    }
+//
+//                }
+//
+//                is Response.Error -> {
+//
+//                }
+//
+//                else -> {
+//                }
+//
+//
+//            }
+//        }
+//
+//
+//    }
+
+//    private fun initWorkManager(key: String) {
+//        val constraints = Constraints.Builder()
+//            .setRequiredNetworkType(NetworkType.CONNECTED)
+//            .setRequiresStorageNotLow(false)
+//            .setRequiresBatteryNotLow(false)
+//            .build()
+//        val data = Data.Builder()
+//
+//        data.apply {
+//            putString("key", key)
+//        }
+//        val oneTimeWorkRequest =
+//            OneTimeWorkRequest.Builder(ForegroundWorker::class.java)
+//                .setConstraints(constraints)
+//                .setInputData(data.build())
+//                .addTag(UUID.randomUUID().toString())
+//                .build()
+//
+//        workManager.enqueue(oneTimeWorkRequest)
+////        Toast.makeText(this@MainActivity, "Image download is started", Toast.LENGTH_SHORT).show()
+//        workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.id)
+//            .observe(this@MainActivity) { workInfo: WorkInfo? ->
+//                if (workInfo != null) {
+//
+//                    val progress = workInfo.progress
+//
+//                    if (progress.getLong("Progress", 0) > 0) {
+//
+//                    }
+//                    when (workInfo.state) {
+//                        WorkInfo.State.SUCCEEDED -> {
+////                            Toast.makeText(
+////                                this@MainActivity,
+////                                "Image has been downloaded",
+////                                Toast.LENGTH_SHORT
+////                            ).show()
+////                            workManager.cancelAllWorkByTag("downloadImg")
+//
+//                        }
+//
+//                        WorkInfo.State.RUNNING -> {
+//                            Log.e(TAG, "initObservers:running buddy")
+//                        }
+//
+//                        WorkInfo.State.FAILED -> {
+//                            Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_SHORT).show()
+//                            val outputdata = workInfo.outputData
+//                            Log.e(
+//                                TAG,
+//                                "error in fragment ${outputdata.getString("error")}",
+//                            )
+//                        }
+//
+//                        else -> {}
+//                    }
+//                }
+//            }
+//    }
 
     fun initFirebaseRemoteConfig() {
-         val first = "position_ads"
+        val first = "position_ads"
 
         var remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
 
@@ -243,14 +377,20 @@ class MainActivity : AppCompatActivity(){
                 if (configUpdate.updatedKeys.contains(first)) {
                     remoteConfig.activate().addOnCompleteListener {
 
-                        Log.e("TAG", "onUpdate: "+configUpdate.updatedKeys)
+                        Log.e("TAG", "onUpdate: " + configUpdate.updatedKeys)
 
                         val welcomeMessage = remoteConfig[first].asString()
+
+                        val onboarding = remoteConfig["onboarding_screen"].asBoolean()
+
+                        AdConfig.showOnboarding = onboarding
+                        Log.e(TAG, "onUpdate: " + onboarding)
                         Log.e("TAG update", "initFirebaseRemoteConfig: $welcomeMessage")
 
                         try {
                             val jsonObject = JSONObject(welcomeMessage)
-                            val trendingScrollViewArray = jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
+                            val trendingScrollViewArray =
+                                jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
                             for (i in 0 until trendingScrollViewArray.length()) {
                                 val obj = trendingScrollViewArray.getJSONObject(i)
                                 val status = obj.getString("Status")
@@ -268,7 +408,8 @@ class MainActivity : AppCompatActivity(){
                                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
 
-                            val cateScrollViewArray = jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
+                            val cateScrollViewArray =
+                                jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
                             for (i in 0 until cateScrollViewArray.length()) {
                                 val obj = cateScrollViewArray.getJSONObject(i)
                                 val status = obj.getString("Status")
@@ -282,7 +423,8 @@ class MainActivity : AppCompatActivity(){
                                 println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
 
-                            val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
+                            val mainScreenScroll =
+                                jsonObject.getJSONArray("viewlistwallscr_scrollview")
                             for (i in 0 until mainScreenScroll.length()) {
                                 val obj = mainScreenScroll.getJSONObject(i)
                                 val status = obj.getString("Status")
@@ -313,7 +455,7 @@ class MainActivity : AppCompatActivity(){
                             }
 
 
-                        }catch (e: JSONException) {
+                        } catch (e: JSONException) {
                             e.printStackTrace()
                         }
                     }
@@ -347,11 +489,17 @@ class MainActivity : AppCompatActivity(){
             }
 
         val welcomeMessage = remoteConfig[first].asString()
+        val onboarding = remoteConfig["onboarding_screen"].asBoolean()
+        AdConfig.showOnboarding = onboarding
+        Log.e(TAG, "onUpdate: $onboarding")
         Log.e("TAG new", "initFirebaseRemoteConfig: $welcomeMessage")
+
+        Log.e(TAG, "initFirebaseRemoteConfig: $remoteConfig")
 
         try {
             val jsonObject = JSONObject(welcomeMessage)
-            val trendingScrollViewArray = jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
+            val trendingScrollViewArray =
+                jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
             for (i in 0 until trendingScrollViewArray.length()) {
                 val obj = trendingScrollViewArray.getJSONObject(i)
                 val status = obj.getString("Status")
@@ -411,7 +559,7 @@ class MainActivity : AppCompatActivity(){
                 AdConfig.lineCountMostUsed = lineCount.toInt() + 1
                 println("MostUsed: Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
             }
-        }catch (e: JSONException) {
+        } catch (e: JSONException) {
             e.printStackTrace()
         }
 
@@ -419,21 +567,22 @@ class MainActivity : AppCompatActivity(){
     }
 
     @SuppressLint("SuspiciousIndentation")
-    private fun workManager(){
+    private fun workManager() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
         val periodicWorkRequest = PeriodicWorkRequestBuilder<ResetCountWorker>(
-            1, TimeUnit.DAYS).setConstraints(constraints).build()
-             WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            1, TimeUnit.DAYS
+        ).setConstraints(constraints).build()
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
             "ResetCountWorker",
             ExistingPeriodicWorkPolicy.KEEP,
             periodicWorkRequest
         )
     }
 
-     @RequiresApi(Build.VERSION_CODES.N)
-     fun openPopupMenu(name: String, editPrompt:EditText) {
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun openPopupMenu(name: String, editPrompt: EditText) {
         val dialog = BottomSheetDialog(this@MainActivity)
         val view = layoutInflater.inflate(R.layout.prompt_bulider, null)
         dialog.setContentView(view)
@@ -444,13 +593,14 @@ class MainActivity : AppCompatActivity(){
         val behavior = params.behavior
         (view.getParent() as View).setBackgroundColor(Color.TRANSPARENT)
         dialog.setCancelable(false)
-        dialog.findViewById<RelativeLayout>(R.id.closeButton)?.setOnClickListener {dialog.dismiss()}
-         dialog.findViewById<TextView>(R.id.titleOfPromptsCat)?.text = "$name prompts"
-         val promptRecyclerView = dialog.findViewById<RecyclerView>(R.id.promptsRecyclerView)
-         val applyButton: Button = dialog.findViewById(R.id.applButton)!!
-          //styleRecyclerView(styleRecyclerView)
-          promptRecyclerView(promptRecyclerView,name,applyButton,editPrompt,dialog)
-          dialog.show()
+        dialog.findViewById<RelativeLayout>(R.id.closeButton)
+            ?.setOnClickListener { dialog.dismiss() }
+        dialog.findViewById<TextView>(R.id.titleOfPromptsCat)?.text = "$name prompts"
+        val promptRecyclerView = dialog.findViewById<RecyclerView>(R.id.promptsRecyclerView)
+        val applyButton: Button = dialog.findViewById(R.id.applButton)!!
+        //styleRecyclerView(styleRecyclerView)
+        promptRecyclerView(promptRecyclerView, name, applyButton, editPrompt, dialog)
+        dialog.show()
 
     }
 
@@ -463,8 +613,8 @@ class MainActivity : AppCompatActivity(){
         dialog: BottomSheetDialog
     ) {
         promptRecyclerView?.layoutManager = LinearLayoutManager(this@MainActivity)
-        val adapter = PromptListAdapter(prompts(name,false),object:GetPromptDetails{
-            override fun getPrompt(prompt:String) {
+        val adapter = PromptListAdapter(prompts(name, false), object : GetPromptDetails {
+            override fun getPrompt(prompt: String) {
                 selectedPrompt = ""
                 selectedPrompt = prompt
 //                val model = list[position]
@@ -483,10 +633,10 @@ class MainActivity : AppCompatActivity(){
 
         applyButton.setOnClickListener {
             val getPromptText = editPrompt.text.toString()
-            if(getPromptText.isNotEmpty()){
+            if (getPromptText.isNotEmpty()) {
                 val extendPrompt = "$getPromptText, $selectedPrompt"
                 editPrompt.setText(extendPrompt)
-            }else{
+            } else {
                 editPrompt.setText(selectedPrompt)
             }
 
@@ -516,9 +666,6 @@ class MainActivity : AppCompatActivity(){
 //            }
 
 
-
-
-
 //            var getText = editPrompt.text.toString()
 //            if(arrayList.isNotEmpty()){
 //               for(item in arrayList){
@@ -533,7 +680,8 @@ class MainActivity : AppCompatActivity(){
 
         }
     }
-//
+
+    //
 //    @RequiresApi(Build.VERSION_CODES.N)
 //    fun updateSelectedPromptList(arrayList: ArrayList<Prompts>, selectedPromptList: MutableList<SelectedPromptListModel>): Boolean {
 //        for (item in arrayList) {
@@ -551,32 +699,33 @@ class MainActivity : AppCompatActivity(){
 //
 //        return true // The execution is complete
 //    }
-    private fun prompts(name: String, notSelected: Boolean):ArrayList<Prompts>{
+    private fun prompts(name: String, notSelected: Boolean): ArrayList<Prompts> {
         val list = ArrayList<Prompts>()
-        when(name){
-            "Nature"->{
-              list.add(Prompts("Create a serene nature wallpaper featuring a peaceful lakeside scene"))
-              list.add(Prompts("Design a nature wallpaper with a lush, green forest and a hidden waterfall"))
-              list.add(Prompts("Capture the beauty of a vibrant sunrise over a calm ocean for your nature wallpaper"))
-              list.add(Prompts("Illustrate a starry night in the mountains as a stunning nature background"))
-              list.add(Prompts("Craft a nature wallpaper showcasing a field of colorful wildflowers"))
-              list.add(Prompts("Paint a tropical paradise with palm trees and a pristine beach for your wallpaper"))
-              list.add(Prompts("Compose a nature background with a snow-covered landscape and a cozy cabin"))
-              list.add(Prompts("Design a peaceful nature wallpaper with a tranquil meadow and grazing deer"))
-              list.add(Prompts("Create a mesmerizing wallpaper of the Northern Lights dancing in the Arctic sky"))
-              list.add(Prompts("Illustrate the grandeur of a canyon with layers of red rocks as your nature background"))
-              list.add(Prompts("Craft a serene lake surrounded by autumn trees for a calming wallpaper"))
-              list.add(Prompts("Design a mystical forest with fireflies illuminating the night for your wallpaper."))
-              list.add(Prompts("Capture the elegance of a lone, majestic eagle soaring in the sky for your nature wallpaper"))
-              list.add(Prompts("Paint a vibrant coral reef with tropical fish for an underwater nature background"))
-              list.add(Prompts("Create a nature wallpaper featuring a field of lavender in full bloom"))
-              list.add(Prompts("Illustrate a towering waterfall crashing into a crystal-clear pool in the woods"))
-              list.add(Prompts("Craft a wallpaper with a close-up of dewdrops on a spiderweb"))
-              list.add(Prompts("Design a nature background with a serene garden full of blooming roses"))
-              list.add(Prompts("Capture a breathtaking sunset over a serene mountain lake for your wallpaper"))
-              list.add(Prompts("Compose a wallpaper featuring a rainbow stretching across a lush valley"))
+        when (name) {
+            "Nature" -> {
+                list.add(Prompts("Create a serene nature wallpaper featuring a peaceful lakeside scene"))
+                list.add(Prompts("Design a nature wallpaper with a lush, green forest and a hidden waterfall"))
+                list.add(Prompts("Capture the beauty of a vibrant sunrise over a calm ocean for your nature wallpaper"))
+                list.add(Prompts("Illustrate a starry night in the mountains as a stunning nature background"))
+                list.add(Prompts("Craft a nature wallpaper showcasing a field of colorful wildflowers"))
+                list.add(Prompts("Paint a tropical paradise with palm trees and a pristine beach for your wallpaper"))
+                list.add(Prompts("Compose a nature background with a snow-covered landscape and a cozy cabin"))
+                list.add(Prompts("Design a peaceful nature wallpaper with a tranquil meadow and grazing deer"))
+                list.add(Prompts("Create a mesmerizing wallpaper of the Northern Lights dancing in the Arctic sky"))
+                list.add(Prompts("Illustrate the grandeur of a canyon with layers of red rocks as your nature background"))
+                list.add(Prompts("Craft a serene lake surrounded by autumn trees for a calming wallpaper"))
+                list.add(Prompts("Design a mystical forest with fireflies illuminating the night for your wallpaper."))
+                list.add(Prompts("Capture the elegance of a lone, majestic eagle soaring in the sky for your nature wallpaper"))
+                list.add(Prompts("Paint a vibrant coral reef with tropical fish for an underwater nature background"))
+                list.add(Prompts("Create a nature wallpaper featuring a field of lavender in full bloom"))
+                list.add(Prompts("Illustrate a towering waterfall crashing into a crystal-clear pool in the woods"))
+                list.add(Prompts("Craft a wallpaper with a close-up of dewdrops on a spiderweb"))
+                list.add(Prompts("Design a nature background with a serene garden full of blooming roses"))
+                list.add(Prompts("Capture a breathtaking sunset over a serene mountain lake for your wallpaper"))
+                list.add(Prompts("Compose a wallpaper featuring a rainbow stretching across a lush valley"))
             }
-            "Anime"->{
+
+            "Anime" -> {
                 list.add(Prompts("Design a striking anime wallpaper featuring your favorite anime character"))
                 list.add(Prompts("Illustrate a serene and dreamy anime landscape with cherry blossoms"))
                 list.add(Prompts("Create a dynamic action scene with two anime characters clashing in battle"))
@@ -598,7 +747,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Create a steampunk-inspired anime background with intricate machinery"))
                 list.add(Prompts("Compose a surreal and abstract anime wallpaper with vibrant colors"))
             }
-            "Fantasy"->{
+
+            "Fantasy" -> {
                 list.add(Prompts("Design a whimsical fantasy wallpaper with magical creatures in an enchanted forest."))
                 list.add(Prompts("Illustrate a breathtaking dragon soaring over a mystical landscape."))
                 list.add(Prompts("Create a wallpaper featuring a hidden, ancient city in a fantasy realm."))
@@ -620,7 +770,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Craft a fantasy marketplace bustling with strange and magical items."))
                 list.add(Prompts("Compose a wallpaper inspired by a unique fantasy concept or your own imagination."))
             }
-            "Pattern"->{
+
+            "Pattern" -> {
                 list.add(Prompts("Design an intricate floral pattern wallpaper with vibrant, blooming flowers."))
                 list.add(Prompts("Create a geometric pattern wallpaper featuring mesmerizing shapes and symmetry."))
                 list.add(Prompts("Illustrate a playful polka dot pattern wallpaper in lively, contrasting colors."))
@@ -642,7 +793,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Design a tribal pattern wallpaper influenced by indigenous art and symbols."))
                 list.add(Prompts("Illustrate an abstract pattern with bold and freeform shapes."))
             }
-            "Space"->{
+
+            "Space" -> {
                 list.add(Prompts("Illustrate a breathtaking cosmic scene with galaxies, nebulae, and distant stars."))
                 list.add(Prompts("Design a futuristic space station wallpaper with sleek, metallic elements."))
                 list.add(Prompts("Create a planetary system wallpaper featuring various colorful planets and their moons."))
@@ -664,7 +816,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Create a starship bridge wallpaper with advanced controls and navigation systems."))
                 list.add(Prompts("Design an alien encounter wallpaper with friendly extraterrestrial beings."))
             }
-            "Super Heroes"->{
+
+            "Super Heroes" -> {
                 list.add(Prompts("Design an epic battle scene between superheroes and supervillains."))
                 list.add(Prompts("Create a wallpaper featuring your favorite comic book superhero in action."))
                 list.add(Prompts("Illustrate a superhero team-up wallpaper with multiple heroes joining forces."))
@@ -686,29 +839,31 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Illustrate a patriotic hero wallpaper with a flag-waving, justice-seeking character."))
                 list.add(Prompts("Design a retro-futuristic superhero wallpaper inspired by science fiction."))
             }
-            "Art"->{
-            list.add(Prompts("Design an abstract art wallpaper using vibrant colors and shapes."))
-            list.add(Prompts("Create a surreal art wallpaper with dreamlike and imaginative elements."))
-            list.add(Prompts("Illustrate a nature-inspired art wallpaper featuring landscapes or wildlife."))
-            list.add(Prompts("Craft a minimalist art wallpaper with a focus on simplicity and elegance."))
-            list.add(Prompts("Compose a pop art wallpaper inspired by the works of famous pop artists."))
-            list.add(Prompts("Design a digital art wallpaper showcasing futuristic and technological themes."))
-            list.add(Prompts("Create a vintage art wallpaper that emulates the styles of different time periods."))
-            list.add(Prompts("Craft a mosaic art wallpaper using small pieces to form a larger image."))
-            list.add(Prompts("Illustrate a watercolor art wallpaper with soft and flowing colors."))
-            list.add(Prompts("Design a graffiti art wallpaper that captures the urban and street art vibe."))
-            list.add(Prompts("Compose a collage art wallpaper with a mix of images and textures."))
-            list.add(Prompts("Create an impressionist art wallpaper inspired by famous painters like Monet."))
-            list.add(Prompts("Craft a surrealism art wallpaper that blurs the lines between reality and dreams."))
-            list.add(Prompts("Illustrate a cubist art wallpaper with geometric shapes and abstraction."))
-            list.add(Prompts("Design a pointillism art wallpaper using tiny dots to create the image."))
-            list.add(Prompts("Craft a calligraphy art wallpaper with beautiful handwritten text or quotes."))
-            list.add(Prompts("Create a stained glass art wallpaper with colorful and intricate patterns."))
-            list.add(Prompts("Design a paper-cut art wallpaper that mimics the art of paper cutting."))
-            list.add(Prompts("Compose a 3D art wallpaper with depth and realism."))
-            list.add(Prompts("Illustrate a still-life art wallpaper featuring everyday objects as the subject."))
-        }
-        "City & Building"->{
+
+            "Art" -> {
+                list.add(Prompts("Design an abstract art wallpaper using vibrant colors and shapes."))
+                list.add(Prompts("Create a surreal art wallpaper with dreamlike and imaginative elements."))
+                list.add(Prompts("Illustrate a nature-inspired art wallpaper featuring landscapes or wildlife."))
+                list.add(Prompts("Craft a minimalist art wallpaper with a focus on simplicity and elegance."))
+                list.add(Prompts("Compose a pop art wallpaper inspired by the works of famous pop artists."))
+                list.add(Prompts("Design a digital art wallpaper showcasing futuristic and technological themes."))
+                list.add(Prompts("Create a vintage art wallpaper that emulates the styles of different time periods."))
+                list.add(Prompts("Craft a mosaic art wallpaper using small pieces to form a larger image."))
+                list.add(Prompts("Illustrate a watercolor art wallpaper with soft and flowing colors."))
+                list.add(Prompts("Design a graffiti art wallpaper that captures the urban and street art vibe."))
+                list.add(Prompts("Compose a collage art wallpaper with a mix of images and textures."))
+                list.add(Prompts("Create an impressionist art wallpaper inspired by famous painters like Monet."))
+                list.add(Prompts("Craft a surrealism art wallpaper that blurs the lines between reality and dreams."))
+                list.add(Prompts("Illustrate a cubist art wallpaper with geometric shapes and abstraction."))
+                list.add(Prompts("Design a pointillism art wallpaper using tiny dots to create the image."))
+                list.add(Prompts("Craft a calligraphy art wallpaper with beautiful handwritten text or quotes."))
+                list.add(Prompts("Create a stained glass art wallpaper with colorful and intricate patterns."))
+                list.add(Prompts("Design a paper-cut art wallpaper that mimics the art of paper cutting."))
+                list.add(Prompts("Compose a 3D art wallpaper with depth and realism."))
+                list.add(Prompts("Illustrate a still-life art wallpaper featuring everyday objects as the subject."))
+            }
+
+            "City & Building" -> {
                 list.add(Prompts("Design a cityscape wallpaper with a futuristic, sci-fi twist."))
                 list.add(Prompts("Capture the essence of a bustling urban city in your wallpaper."))
                 list.add(Prompts("Create a night skyline wallpaper with the city's lights shining brightly."))
@@ -730,7 +885,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Capture the beauty of city parks and green spaces in your wallpaper."))
                 list.add(Prompts("Create a city at sunset or sunrise with warm, golden hues."))
             }
-            "Ocean"->{
+
+            "Ocean" -> {
                 list.add(Prompts("Design a serene ocean sunset wallpaper with calming colors."))
                 list.add(Prompts("Capture the power of crashing waves in a coastal wallpaper."))
                 list.add(Prompts("Illustrate a tropical paradise wallpaper with palm trees and turquoise waters."))
@@ -752,7 +908,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Craft a night sky over the ocean wallpaper with stars and moonlight."))
                 list.add(Prompts("Design an ocean conservancy wallpaper to raise awareness of marine life."))
             }
-            "Travel"->{
+
+            "Travel" -> {
                 list.add(Prompts("Design a wanderlust-inspired travel wallpaper featuring iconic landmarks."))
                 list.add(Prompts("Capture the beauty of a mountainous landscape in your wallpaper."))
                 list.add(Prompts("Illustrate a tropical paradise wallpaper with palm trees and crystal-clear waters."))
@@ -774,7 +931,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Craft an adventure sports-themed wallpaper with surfing and mountain climbing."))
                 list.add(Prompts("Design a travel journal-inspired wallpaper with sketches and notes."))
             }
-            "Love"->{
+
+            "Love" -> {
                 list.add(Prompts("Design a romantic wallpaper with a couple sharing a kiss at sunset."))
                 list.add(Prompts("Create a heartwarming wallpaper featuring hand-drawn love quotes."))
                 list.add(Prompts("Illustrate a cozy fireplace scene with two mugs of hot cocoa for your wallpaper."))
@@ -796,7 +954,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Create a garden of love-themed wallpaper with blooming flowers."))
                 list.add(Prompts("Illustrate a futuristic love story wallpaper with sci-fi elements."))
             }
-            "Sadness"->{
+
+            "Sadness" -> {
                 list.add(Prompts("Design a somber wallpaper featuring a lone figure walking in the rain."))
                 list.add(Prompts("Illustrate a tearful eye with expressive emotions for your wallpaper."))
                 list.add(Prompts("Create a melancholic landscape wallpaper with fading colors and dark clouds."))
@@ -818,7 +977,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Design a rainy city street wallpaper with reflections on wet pavement."))
                 list.add(Prompts("Illustrate a fallen angel-themed wallpaper with a sense of loss."))
             }
-            "Mountain"->{
+
+            "Mountain" -> {
                 list.add(Prompts("Design a majestic mountain range wallpaper at sunrise or sunset."))
                 list.add(Prompts("Illustrate a serene lake nestled amidst towering mountains for your wallpaper."))
                 list.add(Prompts("Create an adventurous hiking trail wallpaper with breathtaking mountain views."))
@@ -840,7 +1000,8 @@ class MainActivity : AppCompatActivity(){
                 list.add(Prompts("Create a mountain sunrise wallpaper with the first light touching the peaks."))
                 list.add(Prompts("Design a mountain seasons wallpaper showcasing the four seasons' beauty."))
             }
-            "Music"->{
+
+            "Music" -> {
                 list.add(Prompts("Design a musical notes wallpaper with vibrant colors and a dynamic composition."))
                 list.add(Prompts("Illustrate a vintage vinyl record wallpaper with a touch of nostalgia."))
                 list.add(Prompts("Create a rock and roll wallpaper featuring iconic electric guitars."))

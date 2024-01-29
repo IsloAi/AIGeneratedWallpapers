@@ -913,7 +913,7 @@ class WallpaperViewFragment : Fragment() {
                         override fun onAdsShowFail(errorCode: Int) {
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             myExecutor.execute {
-                                myWallpaperManager.lockScreen(bitmap!!)
+                                bitmap?.let { it1 -> myWallpaperManager.lockScreen(it1) }
                             }
                             myHandler.post {
                                 if(state){

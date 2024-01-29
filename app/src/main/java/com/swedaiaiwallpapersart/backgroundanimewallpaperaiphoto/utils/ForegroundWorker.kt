@@ -36,7 +36,7 @@ class ForegroundWorker @AssistedInject constructor(
 
     lateinit var notification: Notification
 
-    var currentPage = 1
+    var currentPage = 2
 
 
     override suspend fun doWork(): Result {
@@ -63,10 +63,6 @@ class ForegroundWorker @AssistedInject constructor(
                             val model = SingleDatabaseResponse(item.id,item.cat_name,item.image_name,AdConfig.HD_ImageUrl+item.url,AdConfig.Compressed_Image_url+item.url,item.likes,item.liked,item.size,item.Tags,item.capacity)
                             appDatabase.wallpapersDao().insert(model)
 
-
-//                            if (item == result.data.last()){
-//                                resulta = Result.success()
-//                            }
                         }
 
                         currentPage++

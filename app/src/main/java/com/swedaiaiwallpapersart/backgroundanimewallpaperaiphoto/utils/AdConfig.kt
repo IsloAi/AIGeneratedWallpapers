@@ -18,6 +18,8 @@ object AdConfig {
     var lineCountMostUsed = 0
     var adStatusMostUsed = 1
 
+    var showOnboarding = true
+
     val BASE_URL = "https://edecator.com/wallpaperApp/V3/"
 
     val HD_ImageUrl = "https://edecator.com/wallpaperApp/images/"

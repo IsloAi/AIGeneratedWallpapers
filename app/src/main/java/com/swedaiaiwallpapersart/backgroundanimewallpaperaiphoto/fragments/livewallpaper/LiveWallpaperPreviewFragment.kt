@@ -217,6 +217,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
 
     fun setWallpaper(){
+
+        if (isAdded){
         val file = requireContext().filesDir
         val filepath = File(file, BlurView.fileName)
         val newFile = File(file, "video.mp4")
@@ -234,6 +236,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 ""
             )
 
+
+        }
 
         }
     }

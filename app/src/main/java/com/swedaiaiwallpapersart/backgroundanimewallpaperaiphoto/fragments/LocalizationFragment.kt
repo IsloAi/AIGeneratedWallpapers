@@ -20,6 +20,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.DummyModelLanguages
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import java.util.Locale
@@ -178,11 +179,20 @@ class LocalizationFragment : Fragment() {
                 configuration.setLayoutDirection(Locale(selectedItem!!.lan_code));
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
                 if (exit){
-                    findNavController().navigate(R.id.onBoardingFragment)
+                    if (AdConfig.showOnboarding){
+                        findNavController().navigate(R.id.onBoardingFragment)
+                    }else{
+                        findNavController().navigate(R.id.homeTabsFragment)
+                    }
                 }else{
                     if (!onBoard){
+                        if (AdConfig.showOnboarding){
+                            findNavController().navigate(R.id.onBoardingFragment)
+                        }else{
+                            findNavController().navigate(R.id.homeTabsFragment)
+                        }
 
-                        findNavController().navigate(R.id.onBoardingFragment)
+
                     }else{
                         findNavController().navigateUp()
                     }
@@ -208,11 +218,18 @@ class LocalizationFragment : Fragment() {
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
                 if (exit){
-                    findNavController().navigate(R.id.onBoardingFragment)
+                    if (AdConfig.showOnboarding){
+                        findNavController().navigate(R.id.onBoardingFragment)
+                    }else{
+                        findNavController().navigate(R.id.homeTabsFragment)
+                    }
                 }else{
                     if (!onBoard){
-
-                        findNavController().navigate(R.id.onBoardingFragment)
+                        if (AdConfig.showOnboarding){
+                            findNavController().navigate(R.id.onBoardingFragment)
+                        }else{
+                            findNavController().navigate(R.id.homeTabsFragment)
+                        }
                     }else{
                         findNavController().navigateUp()
                     }
