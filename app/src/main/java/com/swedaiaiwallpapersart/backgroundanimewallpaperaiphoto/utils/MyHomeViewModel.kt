@@ -10,7 +10,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.airbnb.lottie.LottieAnimationView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetAllLikedUseCase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetAllLikesUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetAllWallpapersUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetTrendingWallpaperUseCase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.HomeListInterface
@@ -27,7 +31,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class MyHomeViewModel@Inject constructor(private val getTrendingWallpaperUseCase: GetTrendingWallpaperUseCase
+class MyHomeViewModel@Inject constructor(private val getTrendingWallpaperUseCase: GetTrendingWallpaperUseCase, private val getAllLikesUsecase: GetAllLikesUsecase,private val getAllLikedUseCase: GetAllLikedUseCase
 ): ViewModel()  {
     val wallpaperData = MutableLiveData<ArrayList<CatResponse>?>()
 
@@ -89,6 +93,35 @@ class MyHomeViewModel@Inject constructor(private val getTrendingWallpaperUseCase
         viewModelScope.launch {
             getTrendingWallpaperUseCase.invoke().collect(){
                 _trendingWallpapers.value=it
+            }
+        }
+    }
+
+
+    private var _allLikes = MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<LikesResponse>>>(
+        com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
+            arrayListOf()
+        ))
+    val allLikes: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<LikesResponse>>> = _allLikes
+    fun getAllLikes(){
+        viewModelScope.launch {
+            getAllLikesUsecase.invoke().collect(){
+                _allLikes.value=it
+            }
+        }
+    }
+
+
+
+    private var _allLiked = MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<LikedResponse>>>(
+        com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
+            arrayListOf()
+        ))
+    val allLiked: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<LikedResponse>>> = _allLiked
+    fun getAllLiked(device:String){
+        viewModelScope.launch {
+            getAllLikedUseCase.invoke(device).collect(){
+                _allLiked.value=it
             }
         }
     }

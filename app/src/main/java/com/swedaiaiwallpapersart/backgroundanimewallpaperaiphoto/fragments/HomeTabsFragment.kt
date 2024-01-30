@@ -30,10 +30,16 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livew
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class HomeTabsFragment : Fragment() {
     private var _binding:FragmentHomeTabsBinding ?= null
     private val binding get() = _binding!!
@@ -44,6 +50,12 @@ class HomeTabsFragment : Fragment() {
     private lateinit var myActivity : MainActivity
 
     val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private  val myViewModel: MyHomeViewModel by activityViewModels()
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
+
 
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -71,11 +83,67 @@ class HomeTabsFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         SplashOnFragment.exit = false
             myActivity = activity as MainActivity
+            getSetTotallikes()
             loadbannerAd()
             setGradienttext()
             setViewPager()
             initTabs()
             setEvents()
+    }
+
+    fun getSetTotallikes(){
+        myViewModel.getAllLikes()
+
+        MySharePreference.getDeviceID(requireContext())?.let { myViewModel.getAllLiked(it) }
+
+        myViewModel.allLikes.observe(viewLifecycleOwner){result->
+            when(result){
+                is Response.Success -> {
+                    result.data?.forEach {item->
+                        appDatabase.wallpapersDao().updateLikes(item.likes,item.id.toInt())
+
+                    }
+                }
+
+                is Response.Loading -> {
+
+                }
+
+                is Response.Error -> {
+
+                }
+                is Response.Processing -> {
+
+                }
+
+            }
+
+        }
+
+        myViewModel.allLiked.observe(viewLifecycleOwner){result->
+            when(result){
+                is Response.Success -> {
+                    result.data?.forEach {item->
+
+                        Log.e("TAG", "getSetTotallikes: "+item )
+                        appDatabase.wallpapersDao().updateLiked(true,item.imageid.toInt())
+                    }
+                }
+
+                is Response.Loading -> {
+
+                }
+
+                is Response.Error -> {
+
+                }
+                is Response.Processing -> {
+
+                }
+
+            }
+
+        }
     }
 
 

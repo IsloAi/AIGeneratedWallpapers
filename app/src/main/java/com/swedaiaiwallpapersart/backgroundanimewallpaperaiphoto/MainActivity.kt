@@ -1,8 +1,9 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -13,9 +14,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
@@ -23,14 +24,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.Constraints
-import androidx.work.Data
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkInfo
-import androidx.work.WorkManager
 import com.bmik.android.sdk.IkmSdkController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
@@ -45,6 +38,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
@@ -52,17 +46,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.SelectedPromptListModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ResetCountWorker
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,18 +62,19 @@ import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
-import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),ConnectivityListener {
 
     private lateinit var controller: NavController
     lateinit var binding: ActivityMainBinding
     private val selectedPromptList = ArrayList<SelectedPromptListModel>()
     private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt: String? = null
+
+    private var alertDialog: AlertDialog? = null
+
 
 //    private val viewModel: MostDownloadedViewmodel by viewModels()
 
@@ -116,6 +106,8 @@ class MainActivity : AppCompatActivity() {
 //            tokenGenerated = true
 //        }
         val lan = MySharePreference.getLanguage(this)
+        (application as? MyApp)?.setConnectivityListener(this)
+
 
         val context = LocaleManager.setLocale(this, lan!!)
         val resources = context.resources
@@ -130,6 +122,11 @@ class MainActivity : AppCompatActivity() {
 
         myCatNameViewModel.fetchWallpapers(binding.progressBar)
         liveViewModel.fetchWallpapers(this)
+
+        if (!isNetworkAvailable()){
+            showNoInternetDialog()
+
+        }
 
         GlobalScope.launch {
             val jsonFileName = "wallpapers.json"
@@ -189,6 +186,19 @@ class MainActivity : AppCompatActivity() {
         initFirebaseRemoteConfig()
     }
 
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
+        }
+    }
+
     fun parseJson(jsonString: String): ListResponse? {
         return try {
             val gson = Gson()
@@ -214,148 +224,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-//    fun initObservers() {
-//        lifecycleScope.launch {
-//            mainActivityViewModel.deviceTokenResponse.collect() { result ->
-//                when (result) {
-//                    is Response.Loading -> {
-////                        Log.e(TAG, "promptType in loading $promptType")
-//                    }
-//
-//                    is Response.Success -> {
-//                        Log.e(TAG, "initObservers: first time " + result.data)
-//                        if (!isWorkManagerInitialized) {
-//
-//                            result.data?.token?.let { initWorkManager(it) }
-//
-//                            isWorkManagerInitialized = true
-//
-//                            result.data?.token?.let {
-//                                mainActivityViewModel.getAllModels(
-//                                    "Bearer $it",
-//                                    "1",
-//                                    "200"
-//                                )
-//                            }
-//                        }
-//
-//
-//                    }
-//
-//                    is Response.Error -> {
-//
-//                    }
-//
-//                    else -> {
-//                    }
-//
-//
-//                }
-//
-//            }
-//        }
-//
-//        mainActivityViewModel.allModels.observe(this@MainActivity) { result ->
-//            when (result) {
-//                is Response.Loading -> {
-////                        Log.e(TAG, "promptType in loading $promptType")
-//                }
-//
-//                is Response.Success -> {
-//                    result.data?.forEach { item ->
-//
-//                        val model = SingleDatabaseResponse(
-//                            item.id,
-//                            item.cat_name,
-//                            item.image_name,
-//                            AdConfig.HD_ImageUrl + item.url,
-//                            AdConfig.Compressed_Image_url + item.url,
-//                            item.likes,
-//                            item.liked,
-//                            item.size,
-//                            item.Tags,
-//                            item.capacity
-//                        )
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            appDatabase.wallpapersDao().insert(model)
-//                        }
-//
-//                    }
-//
-//                }
-//
-//                is Response.Error -> {
-//
-//                }
-//
-//                else -> {
-//                }
-//
-//
-//            }
-//        }
-//
-//
-//    }
-
-//    private fun initWorkManager(key: String) {
-//        val constraints = Constraints.Builder()
-//            .setRequiredNetworkType(NetworkType.CONNECTED)
-//            .setRequiresStorageNotLow(false)
-//            .setRequiresBatteryNotLow(false)
-//            .build()
-//        val data = Data.Builder()
-//
-//        data.apply {
-//            putString("key", key)
-//        }
-//        val oneTimeWorkRequest =
-//            OneTimeWorkRequest.Builder(ForegroundWorker::class.java)
-//                .setConstraints(constraints)
-//                .setInputData(data.build())
-//                .addTag(UUID.randomUUID().toString())
-//                .build()
-//
-//        workManager.enqueue(oneTimeWorkRequest)
-////        Toast.makeText(this@MainActivity, "Image download is started", Toast.LENGTH_SHORT).show()
-//        workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.id)
-//            .observe(this@MainActivity) { workInfo: WorkInfo? ->
-//                if (workInfo != null) {
-//
-//                    val progress = workInfo.progress
-//
-//                    if (progress.getLong("Progress", 0) > 0) {
-//
-//                    }
-//                    when (workInfo.state) {
-//                        WorkInfo.State.SUCCEEDED -> {
-////                            Toast.makeText(
-////                                this@MainActivity,
-////                                "Image has been downloaded",
-////                                Toast.LENGTH_SHORT
-////                            ).show()
-////                            workManager.cancelAllWorkByTag("downloadImg")
-//
-//                        }
-//
-//                        WorkInfo.State.RUNNING -> {
-//                            Log.e(TAG, "initObservers:running buddy")
-//                        }
-//
-//                        WorkInfo.State.FAILED -> {
-//                            Toast.makeText(this@MainActivity, "Failed", Toast.LENGTH_SHORT).show()
-//                            val outputdata = workInfo.outputData
-//                            Log.e(
-//                                TAG,
-//                                "error in fragment ${outputdata.getString("error")}",
-//                            )
-//                        }
-//
-//                        else -> {}
-//                    }
-//                }
-//            }
-//    }
 
     fun initFirebaseRemoteConfig() {
         val first = "position_ads"
@@ -566,21 +434,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    @SuppressLint("SuspiciousIndentation")
-    private fun workManager() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-        val periodicWorkRequest = PeriodicWorkRequestBuilder<ResetCountWorker>(
-            1, TimeUnit.DAYS
-        ).setConstraints(constraints).build()
-        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-            "ResetCountWorker",
-            ExistingPeriodicWorkPolicy.KEEP,
-            periodicWorkRequest
-        )
-    }
-
     @RequiresApi(Build.VERSION_CODES.N)
     fun openPopupMenu(name: String, editPrompt: EditText) {
         val dialog = BottomSheetDialog(this@MainActivity)
@@ -604,6 +457,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     @RequiresApi(Build.VERSION_CODES.N)
     private fun promptRecyclerView(
         promptRecyclerView: RecyclerView?,
@@ -617,16 +471,7 @@ class MainActivity : AppCompatActivity() {
             override fun getPrompt(prompt: String) {
                 selectedPrompt = ""
                 selectedPrompt = prompt
-//                val model = list[position]
-//                model.isSelected = !model.isSelected
-//                if(!model.isSelected){
-//                    layout.setBackgroundResource(R.drawable.prompt_selector)
-//                    model.isSelected = true
-//                }else{
-//                    layout.setBackgroundResource(R.drawable.unselector)
-//                    model.isSelected = false
-//                }
-//                arrayList = list
+
             }
         })
         promptRecyclerView?.adapter = adapter
@@ -640,65 +485,12 @@ class MainActivity : AppCompatActivity() {
                 editPrompt.setText(selectedPrompt)
             }
 
-            // right work
-//            val result = updateSelectedPromptList(arrayList, selectedPromptList)
-//            if (result) {
-//                for(selected in selectedPromptList){
-//                    getPromptText = "$getPromptText , ${selected.prompts}"
-//                }
-//            }
-//            editPrompt.setText(getPromptText)
-//            arrayList.clear()
-//            selectedPromptList.clear()
             dialog.dismiss()
 
-//            for(item in arrayList){
-//                val alreadyExist = selectedPromptList.any {it.id == item.id}
-//                if(item.isSelected){
-//                    if(!alreadyExist){
-//                        selectedPromptList.add(SelectedPromptListModel(item.prompt,item.id))
-//                    }
-//                }else{
-//                     if(alreadyExist){
-//                         selectedPromptList.removeIf {it.id == item.id }
-//                     }
-//                }
-//            }
 
-
-//            var getText = editPrompt.text.toString()
-//            if(arrayList.isNotEmpty()){
-//               for(item in arrayList){
-//                   if(item.isSelected){
-//                       getText = "$getText,${item.prompt}"
-//                   }
-//               }
-//            }
-//            else{
-//                Toast.makeText(this@MainActivity, "Please select prompt", Toast.LENGTH_SHORT).show()
-//            }
 
         }
     }
-
-    //
-//    @RequiresApi(Build.VERSION_CODES.N)
-//    fun updateSelectedPromptList(arrayList: ArrayList<Prompts>, selectedPromptList: MutableList<SelectedPromptListModel>): Boolean {
-//        for (item in arrayList) {
-//            val alreadyExist = selectedPromptList.any { it.id == item.id }
-//            if (item.isSelected) {
-//                if (!alreadyExist) {
-//                    selectedPromptList.add(SelectedPromptListModel(item.prompt, item.id))
-//                }
-//            } else {
-//                if (alreadyExist) {
-//                    selectedPromptList.removeIf { it.id == item.id }
-//                }
-//            }
-//        }
-//
-//        return true // The execution is complete
-//    }
     private fun prompts(name: String, notSelected: Boolean): ArrayList<Prompts> {
         val list = ArrayList<Prompts>()
         when (name) {
@@ -1031,6 +823,40 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         IkmSdkController.setEnableShowResumeAds(true)
+    }
+
+    override fun onNetworkAvailable() {
+        dismissNoInternetDialog()
+    }
+
+    override fun onNetworkLost() {
+       showNoInternetDialog()
+    }
+
+
+    private fun showNoInternetDialog() {
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            val builder = AlertDialog.Builder(this@MainActivity)
+            builder.setTitle("No Internet Connection")
+            builder.setMessage("Please connect to the internet and try again.")
+            builder.setCancelable(false)
+
+            alertDialog = builder.create()
+
+            // Check if the activity is still running before showing the dialog
+            alertDialog?.show()
+        }
+
+
+
+    }
+
+    private fun dismissNoInternetDialog() {
+        lifecycleScope.launch(Dispatchers.Main) {
+            alertDialog?.dismiss()
+
+        }
     }
 }
 

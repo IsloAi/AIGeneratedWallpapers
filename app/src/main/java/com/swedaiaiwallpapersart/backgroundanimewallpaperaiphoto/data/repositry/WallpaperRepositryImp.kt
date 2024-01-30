@@ -1,6 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
 
 import android.util.Log
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
@@ -99,5 +101,40 @@ class WallpaperRepositryImp@Inject constructor(
 
         awaitClose()
 
+    }
+
+    override fun getAllLikes(): Flow<Response<ArrayList<LikesResponse>>>  = channelFlow {
+        try {
+            trySend(Response.Loading)
+
+            val resp = webApiInterface.getAllLikes()
+            if (resp.isSuccessful){
+                val list = ArrayList<LikesResponse>()
+                val likesList = resp.body() ?: emptyList<LikesResponse>()
+
+
+
+                trySend(Response.Success(resp.body()))
+                Log.e("TAG", "getAllLikes: "+resp.body())
+            }
+        }catch (e:Exception){
+
+        }
+    }
+
+    override fun getLiked(deviceId: String): Flow<Response<ArrayList<LikedResponse>>> = channelFlow {
+        try {
+            trySend(Response.Loading)
+            val resp = webApiInterface.getLiked(deviceId)
+
+            if (resp.isSuccessful){
+                trySend(Response.Success(resp.body()))
+            }
+
+
+        }catch (e:Exception){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
     }
 }

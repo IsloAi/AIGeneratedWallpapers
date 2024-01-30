@@ -1,6 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkRequest
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.bmik.android.sdk.SDKBaseApplication
@@ -8,6 +10,8 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.keep.SDKIAPProductIDProvider
 import com.google.firebase.FirebaseApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ConnectivityCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
@@ -48,6 +52,12 @@ class MyApp : SDKBaseApplication(), Configuration.Provider {
         }
     }
 
+    private var connectivityListener: ConnectivityListener? = null
+
+    // Method to set the listener
+    fun setConnectivityListener(listener: ConnectivityListener) {
+        connectivityListener = listener
+    }
     override fun onCreate() {
         super.onCreate()
 
@@ -56,6 +66,25 @@ class MyApp : SDKBaseApplication(), Configuration.Provider {
         setEnableShowResumeAds(true)
         SDKBaseController.getInstance().setAutoReloadRewarded(true)
         setEnableShowLoadingResumeAds(true)
+
+
+//        val connectivityManager =
+//            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//
+//        val networkRequest = NetworkRequest.Builder().build()
+//        connectivityManager.registerNetworkCallback(networkRequest, connectivityCallback)
+
+        val connectivityCallback = ConnectivityCallback(applicationContext,object : ConnectivityListener {
+            override fun onNetworkAvailable() {
+                // Notify the listener if set
+                connectivityListener?.onNetworkAvailable()
+            }
+
+            override fun onNetworkLost() {
+                // Notify the listener if set
+                connectivityListener?.onNetworkLost()
+            }
+        })
     }
 
     override val workManagerConfiguration: Configuration

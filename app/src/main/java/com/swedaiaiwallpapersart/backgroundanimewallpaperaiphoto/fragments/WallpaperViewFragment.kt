@@ -73,6 +73,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -90,6 +91,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -109,8 +111,9 @@ import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class WallpaperViewFragment : Fragment() {
     private var _binding: FragmentWallpaperViewBinding? = null
     private val binding get() = _binding!!
@@ -144,6 +147,9 @@ class WallpaperViewFragment : Fragment() {
     var oldPosition = 0
 
     val TAG = "SLIDERFRAGMENT"
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
 
 
@@ -361,9 +367,19 @@ class WallpaperViewFragment : Fragment() {
                binding.favouriteButton.isEnabled = false
                if(arrayList[position]?.liked==true){
                    arrayList[position]?.liked = false
+                   arrayList[position]?.id?.let { it1 ->
+                       appDatabase.wallpapersDao().updateLiked(false,
+                           it1
+                       )
+                   }
                    binding.favouriteButton.setImageResource(R.drawable.button_like)
                }else{
                    arrayList[position]?.liked = true
+                   arrayList[position]?.id?.let { it1 ->
+                       appDatabase.wallpapersDao().updateLiked(true,
+                           it1
+                       )
+                   }
                    binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
                }
                addFavourite(requireContext(),position,binding.favouriteButton)
@@ -480,7 +496,7 @@ class WallpaperViewFragment : Fragment() {
            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                    Log.e("TAG", "functionality: inside click permission", )
-                   ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
+                   ActivityCompat.requestPermissions(myActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
                }else{
                    Log.e("TAG", "functionality: inside click dialog", )
                    getUserIdDialog()
@@ -619,7 +635,7 @@ class WallpaperViewFragment : Fragment() {
                     val model = arrayList[position]
 
 
-                    openPopupMenu(model!!)
+//                    openPopupMenu(model!!)
 //                    }else{
 //                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
 //
@@ -703,6 +719,8 @@ class WallpaperViewFragment : Fragment() {
         position: Int,
         favouriteButton: ImageView
     ){
+
+
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
         val postData = PostData(MySharePreference.getDeviceID(context)!!, arrayList[position]?.id.toString())

@@ -23,5 +23,13 @@ interface WallpapersDao {
     @Query("SELECT * FROM allWallpapers WHERE cat_name=:cat")
     fun getCategoryWallpaper(cat:String):List<SingleDatabaseResponse>
 
+    @Query("UPDATE allWallpapers SET likes=:totalLikes WHERE id=:Id")
+    fun updateLikes(totalLikes:String,Id: Int)
+
+    @Query("UPDATE allWallpapers SET liked=:liked WHERE id=:Id")
+    fun updateLiked(liked:Boolean,Id: Int)
+
+
+
 
 }

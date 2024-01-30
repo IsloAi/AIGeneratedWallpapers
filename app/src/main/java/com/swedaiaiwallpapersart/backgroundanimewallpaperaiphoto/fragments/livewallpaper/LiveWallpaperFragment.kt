@@ -82,6 +82,7 @@ class LiveWallpaperFragment : Fragment() {
                     adapter!!.setCoroutineScope(fragmentScope)
                 }
             }else{
+                myViewModel.fetchWallpapers(requireContext())
 
             }
         }

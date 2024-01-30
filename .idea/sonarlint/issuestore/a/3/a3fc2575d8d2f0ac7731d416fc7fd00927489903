@@ -1,25 +1,17 @@
 
-Ykotlin:S1172¾"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8óìÜ©Õ1
-Bkotlin:S125Y"Remove this commented out code.(ÜÛ½±üÿÿÿÿ8ƒíÜ©Õ1
-=kotlin:S125["Remove this commented out code.(Âú¾É8…íÜ©Õ1
-Bkotlin:S125`"Remove this commented out code.(Ê™î°øÿÿÿÿ8‡íÜ©Õ1
-=kotlin:S125r"Remove this commented out code.(ÅÔï 8‡íÜ©Õ1
->kotlin:S125Ù"Remove this commented out code.(é™€‚8‰íÜ©Õ1
-Ckotlin:S125­"Remove this commented out code.(Úâ¼œşÿÿÿÿ8¦åå©Õ1
-Ckotlin:S125İ"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8‹íÜ©Õ1
-Ckotlin:S125ã"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8‹íÜ©Õ1
-Ckotlin:S125ì"Remove this commented out code.(ğ·Äıÿÿÿÿ8íÜ©Õ1
->kotlin:S125"Remove this commented out code.(£Ãš‰8íÜ©Õ1
-Ckotlin:S125"Remove this commented out code.(ÓË·Ïùÿÿÿÿ8‘íÜ©Õ1
-=kotlin:S125¬"Remove this commented out code.(è»»_8”íÜ©Õ1
-ykotlin:S6306†"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8éÿİ©Õ1
-Mkotlin:S1481Ñ"-Remove this unused "behavior" local variable.(Ø¦š¾8åíÜ©Õ1
-9kotlin:S1128"Remove this unused import.(´Ùí8şåå©Õ1
->kotlin:S1128"Remove this unused import.(ÙÃä¡şÿÿÿÿ8ùíÜ©Õ1
-9kotlin:S1128"Remove this unused import.(“®É‡8şåå©Õ1
->kotlin:S1128"Remove this unused import.(ä·ò¢ùÿÿÿÿ8şåå©Õ1
->kotlin:S1128 "Remove this unused import.(ù‡†¡şÿÿÿÿ8şåå©Õ1
->kotlin:S1128L"Remove this unused import.(¶µÀ»úÿÿÿÿ8şåå©Õ1
-Gkotlin:S1874"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8…îÜ©Õ1
-wkotlin:S3776è"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8‡îÜ©Õ1
-wkotlin:S3776ö"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8‰îÜ©Õ1
+Ykotlin:S1172î"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8³æ­ÊÕ1
+Bkotlin:S125O"Remove this commented out code.(ÜÛ½±üÿÿÿÿ8†€íÉÕ1
+=kotlin:S125Q"Remove this commented out code.(Âú¾É8†€íÉÕ1
+Bkotlin:S125V"Remove this commented out code.(Ê™î°øÿÿÿÿ8‡€íÉÕ1
+=kotlin:S125h"Remove this commented out code.(ÅÔï 8‡€íÉÕ1
+Ckotlin:S125Ù"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ãæ­ÊÕ1
+Ckotlin:S125ß"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ãæ­ÊÕ1
+<kotlin:S6310Ç"Avoid hardcoded dispatchers.(©ÒÕò8Ñæ­ÊÕ1
+<kotlin:S6310Ø"Avoid hardcoded dispatchers.(©ÒÕò8Ñæ­ÊÕ1
+ykotlin:S6306ƒ"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8ôæ­ÊÕ1
+Mkotlin:S1481¾"-Remove this unused "behavior" local variable.(Ø¦š¾8†ç­ÊÕ1
+Gkotlin:S1874w"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8‚íÉÕ1
+Hkotlin:S1874Å"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8êó«ÊÕ1
+Bkotlin:S1874Æ"#Deprecated code should not be used.(àü8 ç­ÊÕ1
+wkotlin:S3776ä"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8£ç­ÊÕ1
+wkotlin:S3776ò"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8¤ç­ÊÕ1

@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote
 
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -24,4 +26,15 @@ interface EndPointsInterface {
         @Query("record") record:String
 
     ):retrofit2.Response<ListResponse>
+
+
+    @GET("totalLikes.php")
+    suspend fun getAllLikes(
+
+    ):retrofit2.Response<ArrayList<LikesResponse>>
+
+    @GET("getfavrt.php")
+    suspend fun getLiked(
+        @Query("deviceid") deviceId: String
+    ):retrofit2.Response<ArrayList<LikedResponse>>
 }
