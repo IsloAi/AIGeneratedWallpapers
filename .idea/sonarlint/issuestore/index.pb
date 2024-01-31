@@ -71,3 +71,11 @@ qapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ada
 papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/LiveWallpaperViewModel.kt,8\e\8e7e7170b5f47d8f8d3f1fe16acab7c9e4ee4c22
 ¯
 app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/fragmentsIG/GenerateImageFragment.kt,e\5\e5b31fc9b66d3cd72758d30eb84616b95fe7aa7b
+µ
+„app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/livewallpaper/DownloadLiveWallpaperFragment.kt,c\c\ccd20094457350b4b2698c7b3e7a7a572359e350
+P
+ app/release/output-metadata.json,0\7\079ee2b81fdfd2faf349bcf552fe1a1bc16be431
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
+]
+-.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
