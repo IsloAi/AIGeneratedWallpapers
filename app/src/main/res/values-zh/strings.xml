@@ -82,4 +82,27 @@
     <string name="almost_there_customizing_your_background">​​即将开始，自定义您的背景。</string>
     <string name="your_wallpaper_is_on_its_way">您的壁纸正在运送中。</string>
     <string name="crafting_your_unique_backdrop">制作你独特的背景。</string>
+
+    <string name="skip">跳过</string>
+    <string name="re_generate">重新生成</string>
+    <string name="new_generation">新一代</string>
+    <string name="navigate_back">返回导航</string>
+    <string name="retry">重试</string>
+    <string name="error_loading_please_check_your_internet">加载时出错，请检查您的互联网</string>
+    <string name="add_favorite">添加收藏夹</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">零收藏夹？让我们解决这个问题！ \n首先点击心形图标️</string>
+    <string name="confirm_exit">确认退出???</string>
+    <string name="watch_ad">观看广告</string>
+    <string name="no_thanks"><u>不，谢谢</u></string>
+    <string name="no">否</string>
+    <string name="are_you_sure_you_want_to_delete">您确定要删除吗？</string>
+    <string name="confirm_deletion">确认删除???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">每天都有数千张新的高质量图像</string>
+    <string name="loading">正在加载...</string>
+    <string name="popular">流行</string>
+    <string name="live">直播</string>
+    <string name="ai_wallpaper">AI壁纸</string>
+    <string name="category">类别</string>
+    <string name="gen_ai">Gen AI</string>
+    <string name="more">更多</string>
 </resources>

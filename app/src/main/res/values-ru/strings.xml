@@ -94,4 +94,18 @@
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Нет избранного? Давайте исправим это! \nНачните с нажатия на значок сердца ♥️</string>
     <string name="confirm_exit">Подтвердить выход ???</string>
 
+    <string name="watch_ad">Просмотреть рекламу</string>
+    <string name="no_thanks"><u>Нет, спасибо</u></string>
+    <string name="no">Нет</string>
+    <string name="are_you_sure_you_want_to_delete">Вы уверены, что хотите удалить?</string>
+    <string name="confirm_deletion">Подтвердить удаление ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Тысячи новых изображений высокого качества каждый день</string>
+    <string name="loading">Загрузка...</string>
+    <string name="popular">Популярное</string>
+    <string name="live">В прямом эфире</string>
+    <string name="ai_wallpaper">Обои с искусственным интеллектом</string>
+    <string name="category">Категория</string>
+    <string name="gen_ai">Поколение ИИ</string>
+    <string name="more">Еще</string>
+
 </resources>

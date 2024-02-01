@@ -94,4 +94,18 @@
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Zero preferiti? Correggiamo questo! \nInizia toccando l\'icona del cuore ♥️</string>
     <string name="confirm_exit">Confermi l\'uscita ???</string>
 
+    <string name="watch_ad">Guarda l\'annuncio</string>
+    <string name="no_thanks"><u>No, grazie</u></string>
+    <string name="no">No</string>
+    <string name="are_you_sure_you_want_to_delete">Sei sicuro di voler eliminare?</string>
+    <string name="confirm_deletion">Conferma eliminazione ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Migliaia di nuove immagini di alta qualità ogni giorno</string>
+    <string name="loading">Caricamento in corso...</string>
+    <string name="popular">Popolare</string>
+    <string name="live">In diretta</string>
+    <string name="ai_wallpaper">Sfondo AI</string>
+    <string name="category">Categoria</string>
+    <string name="gen_ai">Generazione AI</string>
+    <string name="more">Altro</string>
+
 </resources>

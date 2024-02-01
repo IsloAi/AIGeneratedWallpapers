@@ -66,7 +66,7 @@ class HomeTabsFragment : Fragment() {
 
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
-    val titles = arrayOf("Popular","Trending","Live", "AI wallpaper","Category","Gen AI")
+
 
 
     override fun onCreateView(
@@ -215,6 +215,11 @@ class HomeTabsFragment : Fragment() {
     }
 
     fun initTabs(){
+
+        val titles = arrayOf(getString(R.string.popular),getString(R.string.trending),
+            getString(R.string.live), getString(R.string.ai_wallpaper),
+            getString(R.string.category), getString(R.string.gen_ai))
+
         binding.tabLayout.setSelectedTabIndicatorHeight(0)
         val tabCount: Int = binding.tabLayout.tabCount
         for (i in 0 until tabCount) {

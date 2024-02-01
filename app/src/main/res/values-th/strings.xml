@@ -94,4 +94,19 @@
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">ยังไม่มีรายการโปรด? มาแก้ไขสิ! \nเริ่มต้นด้วยการแตะไอคอนหัวใจ ♥️</string>
     <string name="confirm_exit">ยืนยันการออก ???</string>
 
+
+    <string name="watch_ad">ดูโฆษณา</string>
+    <string name="no_thanks"><u>ไม่ ขอบคุณ</u></string>
+    <string name="no">ไม่ใช่</string>
+    <string name="are_you_sure_you_want_to_delete">คุณแน่ใจหรือไม่ว่าต้องการลบ?</string>
+    <string name="confirm_deletion">ยืนยันการลบ ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">รูปภาพคุณภาพสูงใหม่ๆ หลายพันรายการทุกวัน</string>
+    <string name="loading">กำลังโหลด...</string>
+    <string name="popular">ยอดนิยม</string>
+    <string name="live">สด</string>
+    <string name="ai_wallpaper">วอลเปเปอร์ AI</string>
+    <string name="category">หมวดหมู่</string>
+    <string name="gen_ai">เจนเอไอ</string>
+    <string name="more">เพิ่มเติม</string>
+
 </resources>

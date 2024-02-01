@@ -80,4 +80,27 @@
     <string name="your_wallpaper_is_on_its_way">आपका वॉलपेपर राह में है।</string>
     <string name="crafting_your_unique_backdrop">अपनी विशेष पृष्ठभूमि बना रहे हैं।</string>
 
+    <string name="skip">छोडना</string>
+    <string name="re_generate">दोबारा बनाने के</string>
+    <string name="new_generation">नई पीढ़ी</string>
+    <string name="navigate_back">वापस नेविगेट करें</string>
+    <string name="retry">पुन: प्रयास करें</string>
+    <string name="error_loading_please_check_your_internet">लोड करने में त्रुटि, कृपया अपना इंटरनेट जांचें</string>
+    <string name="add_favorite">पसंदीदा जोड़ें</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">शून्य पसंदीदा? आइए इसे ठीक करें! \nदिल के आइकन पर टैप करके शुरुआत करें️</string>
+    <string name="confirm_exit">बाहर निकलने की पुष्टि करें ???</string>
+    <string name="watch_ad">विज्ञापन देखें</string>
+    <string name="no_thanks"><u>जी नहीं, धन्यवाद</u></string>
+    <string name="no">नहीं</string>
+    <string name="are_you_sure_you_want_to_delete">क्या आप आश्वस्त है कि आपको डिलीट करना है?</string>
+    <string name="confirm_deletion">मिटाने की पुष्टि ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">प्रतिदिन हजारों नई उच्च गुणवत्ता वाली छवियां</string>
+    <string name="loading">लोड हो रहा है...</string>
+    <string name="popular">लोकप्रिय</string>
+    <string name="live">रहना</string>
+    <string name="ai_wallpaper">ऐ वॉलपेपर</string>
+    <string name="category">वर्ग</string>
+    <string name="gen_ai">जनरल ए.आई</string>
+    <string name="more">अधिक</string>
+
 </resources>

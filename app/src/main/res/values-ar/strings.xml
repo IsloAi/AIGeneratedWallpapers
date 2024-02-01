@@ -83,4 +83,27 @@
     <string name="almost_there_customizing_your_background">لقد أوشكت على تخصيص الخلفية.</string>
     <string name="your_wallpaper_is_on_its_way">خلفية الشاشة الخاصة بك في طريقها إليك.</string>
     <string name="crafting_your_unique_backdrop">تصميم الخلفية الفريدة الخاصة بك.</string>
+
+    <string name="skip">تخطي</string>
+    <string name="re_generate">إعادة الإنشاء</string>
+    <string name="new_generation">الجيل الجديد</string>
+    <string name="navigate_back">التنقل للخلف</string>
+    <string name="retry">إعادة المحاولة</string>
+    <string name="error_loading_please_check_your_internet">حدث خطأ أثناء التحميل، يرجى التحقق من الإنترنت لديك</string>
+    <string name="add_favorite">أضف المفضلة</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">هل لا يوجد أي مفضلات؟ دعونا نصلح هذا! \nابدأ بالنقر على أيقونة القلب ️</string>
+    <string name="confirm_exit">تأكيد الخروج ؟؟؟</string>
+    <string name="watch_ad">شاهد الإعلان</string>
+    <string name="no_thanks"><u>لا، شكرًا</u></string>
+    <string name="no">لا</string>
+    <string name="are_you_sure_you_want_to_delete">هل أنت متأكد من رغبتك في الحذف؟</string>
+    <string name="confirm_deletion">تأكيد الحذف ؟؟؟</string>
+    <string name="thousands_of_new_high_quality_images_everyday">آلاف الصور الجديدة عالية الجودة كل يوم</string>
+    <string name="loading">جارٍ التحميل...</string>
+    <string name="popular">شائع</string>
+    <string name="live">مباشر</string>
+    <string name="ai_wallpaper">خلفية الذكاء الاصطناعي</string>
+    <string name="category">الفئة</string>
+    <string name="gen_ai">الذكاء الاصطناعي العام</string>
+    <string name="more">المزيد</string>
 </resources>

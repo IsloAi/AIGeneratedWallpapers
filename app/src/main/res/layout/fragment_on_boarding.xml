@@ -45,16 +45,28 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintHeight_percent="0.55"
         android:id="@+id/onboardingViewPager" />
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="@id/onboardingViewPager"
+        app:layout_constraintEnd_toEndOf="@id/onboardingViewPager"
+        app:layout_constraintTop_toTopOf="@id/onboardingViewPager"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
+        android:layout_marginBottom="@dimen/_10sdp"
+        android:background="@drawable/blur"
+        />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/skip"
-        app:layout_constraintBottom_toBottomOf="@id/onbaord_texts"
+        app:layout_constraintBottom_toBottomOf="@id/next_btn"
         app:layout_constraintStart_toStartOf="@id/start_guide_line"
         android:textColor="@color/white"
+        android:fontFamily="@font/poppins_medium"
         android:textSize="@dimen/_12sdp"
         android:id="@+id/skipBtn"
         />
@@ -64,22 +76,35 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintWidth_percent="0.6"
-        app:layout_constraintEnd_toStartOf="@id/next_btn"
+        app:layout_constraintEnd_toEndOf="@id/end_guide_line"
         android:id="@+id/onbaord_texts"
-        app:layout_constraintStart_toEndOf="@id/skipBtn"
-        app:layout_constraintTop_toBottomOf="@id/onboardingViewPager"
+        app:layout_constraintStart_toStartOf="@id/start_guide_line"
+        app:layout_constraintBottom_toBottomOf="@id/onboardingViewPager"
         >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dive into Enchanting Animated Realms"
-            android:fontFamily="@font/raleway_medium"
-            android:textSize="@dimen/_15sdp"
+            android:text="Anime Essence"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/onbTxt2"
+            android:textSize="@dimen/_16sdp"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transform your device into an anime haven with our stunning wallpaper collection"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="@dimen/_13sdp"
             android:textColor="@color/white"
             android:gravity="center"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/onbTxt2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/onbTxt1"
@@ -88,12 +113,16 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <ImageView
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/onboard_next"
         app:layout_constraintEnd_toEndOf="@id/end_guide_line"
-        app:layout_constraintBottom_toBottomOf="@id/onbaord_texts"
+        app:layout_constraintTop_toBottomOf="@id/onboardingViewPager"
+        android:text="Next"
+        android:textColor="@color/button_bg"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="@dimen/_15sdp"
+        android:layout_marginTop="@dimen/_3sdp"
         android:id="@+id/next_btn"
         />
 
@@ -111,19 +140,17 @@
         android:orientation="horizontal"
         android:padding="15dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/onbaord_texts"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/next_btn"
+        app:layout_constraintStart_toEndOf="@id/skipBtn"
+        app:layout_constraintBottom_toBottomOf="@id/next_btn"
+        app:layout_constraintEnd_toStartOf="@id/next_btn"
         />
 
     <com.bmik.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
         app:ikwad_preview_layout="@layout/shimmer_loading_native"
-        android:background="@drawable/ads_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutOnboardingIndicators"
         android:layout_height="wrap_content" />
 
 

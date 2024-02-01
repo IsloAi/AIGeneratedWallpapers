@@ -85,4 +85,27 @@
     <string name="almost_there_customizing_your_background">Presque là, personnalisez votre arrière-plan.</string>
     <string name="your_wallpaper_is_on_its_way">Votre fond d\'écran est en route.</string>
     <string name="crafting_your_unique_backdrop">Créer votre toile de fond unique.</string>
+
+    <string name="skip">Sauter</string>
+    <string name="re_generate">Régénérer</string>
+    <string name="new_generation">Nouvelle génération</string>
+    <string name="navigate_back">Revenir en arrière</string>
+    <string name="retry">Réessayer</string>
+    <string name="error_loading_please_check_your_internet">Erreur de chargement, veuillez vérifier votre connexion Internet</string>
+    <string name="add_favorite">Ajouter des favoris</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Zéro favori ? Réparons cela ! \nCommencez par appuyer sur l\'icône en forme de cœur.</string>
+    <string name="confirm_exit">Confirmer la sortie ???</string>
+    <string name="watch_ad">Regarder l\'annonce</string>
+    <string name="no_thanks"><u>Non, merci</u></string>
+    <string name="no">Non</string>
+    <string name="are_you_sure_you_want_to_delete">Êtes-vous sûr de vouloir supprimer ?</string>
+    <string name="confirm_deletion">Confirmer la suppression ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Des milliers de nouvelles images de haute qualité chaque jour</string>
+    <string name="loading">Chargement...</string>
+    <string name="popular">Populaire</string>
+    <string name="live">En direct</string>
+    <string name="ai_wallpaper">Fond d\'écran IA</string>
+    <string name="category">Catégorie</string>
+    <string name="gen_ai">Génération IA</string>
+    <string name="more">Plus</string>
 </resources>

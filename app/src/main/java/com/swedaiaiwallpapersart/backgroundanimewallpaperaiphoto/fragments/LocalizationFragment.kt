@@ -1,6 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Bundle
+import android.text.TextPaint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
@@ -23,6 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import java.util.Locale
 
 class LocalizationFragment : Fragment() {
@@ -51,6 +57,7 @@ class LocalizationFragment : Fragment() {
         pos = MySharePreference.getLanguageposition(requireContext())!!
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        setGradienttext()
 
         loadNativeAd()
         setEvents()
@@ -58,9 +65,24 @@ class LocalizationFragment : Fragment() {
         backHandle()
     }
 
+    private fun setGradienttext(){
+        val customColors = intArrayOf(
+            Color.parseColor("#FC9502"),
+            Color.parseColor("#FF6726")
+        )
+        val paint: TextPaint = binding.applyLanguage.paint
+        val width: Float = paint.measureText("GO")
+
+        val shader = LinearGradient(
+            0f, 0f, width, binding.applyLanguage.textSize,
+            customColors, null, Shader.TileMode.CLAMP
+        )
+        binding.applyLanguage.paint.shader = shader
+    }
+
     fun loadNativeAd(){
         val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.large_native_layout,
+            R.layout.new_native_language,
             null, false
         ) as? IkmWidgetAdLayout
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -104,7 +126,8 @@ class LocalizationFragment : Fragment() {
     }
 
     fun initLanguages(){
-        binding.rvLanguages.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvLanguages.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.rvLanguages.addItemDecoration(RvItemDecore(2,20,false,10000))
         adapter =
             LocalizationAdapter(getLanguageList(sel)!!,  pos, object :
                 LocalizationAdapter.OnLanguageChangeListener {
@@ -154,15 +177,15 @@ class LocalizationFragment : Fragment() {
         if (!onBoard){
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
         }
-        binding.backButton.setOnClickListener {
-            if (exit){
-                requireActivity().finishAffinity()
-            }else{
-                    findNavController().navigateUp()
-
-            }
-
-        }
+//        binding.backButton.setOnClickListener {
+//            if (exit){
+//                requireActivity().finishAffinity()
+//            }else{
+//                    findNavController().navigateUp()
+//
+//            }
+//
+//        }
 
 
         binding.applyLanguage.setOnClickListener {

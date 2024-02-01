@@ -83,4 +83,27 @@
     <string name="almost_there_customizing_your_background">Neredeyse bitti, arka planınızı özelleştiriyorsunuz.</string>
     <string name="your_wallpaper_is_on_its_way">Duvar kağıdınız yolda.</string>
     <string name="crafting_your_unique_backdrop">Benzersiz arka planınızı oluşturma.</string>
+
+    <string name="skip">Atla</string>
+    <string name="re_generate">Yeniden oluştur</string>
+    <string name="new_generation">Yeni Nesil</string>
+    <string name="navigate_back">Geri Git</string>
+    <string name="retry">Yeniden dene</string>
+    <string name="error_loading_please_check_your_internet">Yüklenirken Hata oluştu, Lütfen internetinizi kontrol edin</string>
+    <string name="add_favorite">Favorilere Ekle</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Sıfır Favorileriniz mi var? Hadi bunu düzeltelim! \nKalp simgesine dokunarak başlayın ️</string>
+    <string name="confirm_exit">Çıkışı Onayla ???</string>
+    <string name="watch_ad">Reklamı İzle</string>
+    <string name="no_thanks"><u>Hayır, teşekkürler</u></string>
+    <string name="no">Hayır</string>
+    <string name="are_you_sure_you_want_to_delete">Silmek istediğinizden emin misiniz?</string>
+    <string name="confirm_deletion">Silme İşlemini Onayla ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Her gün binlerce yeni yüksek kaliteli resim</string>
+    <string name="loading">Yükleniyor...</string>
+    <string name="popular">Popüler</string>
+    <string name="live">Canlı</string>
+    <string name="ai_wallpaper">Yapay zeka duvar kağıdı</string>
+    <string name="category">Kategori</string>
+    <string name="gen_ai">Nesil Yapay Zeka</string>
+    <string name="more">Diğer</string>
 </resources>

@@ -94,4 +94,18 @@
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">お気に入りがありませんか？ それを修正しましょう！\nハートアイコンをタップして開始 ♥️</string>
     <string name="confirm_exit">終了を確認しますか？？？</string>
 
+    <string name="watch_ad">広告を見る</string>
+    <string name="no_thanks"><u>いいえ、ありがとう</u></string>
+    <string name="no">いいえ</string>
+    <string name="are_you_sure_you_want_to_delete">削除してもよろしいですか?</string>
+    <string name="confirm_deletion">削除を確認します ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">毎日何千もの新しい高品質画像</string>
+    <string name="loading">読み込み中...</string>
+    <string name="popular">人気</string>
+    <string name="live">ライブ</string>
+    <string name="ai_wallpaper">AI 壁紙</string>
+    <string name="category">カテゴリ</string>
+    <string name="gen_ai">AI 世代</string>
+    <string name="more">詳細</string>
+
 </resources>

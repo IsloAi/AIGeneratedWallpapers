@@ -109,10 +109,11 @@ class OnBoardingFragment : Fragment() {
                     0 -> {
                         SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
-                        binding.onbTxt1.text = getString(R.string.enchanting_animated_realms)
+                        binding.onbTxt1.text = "Transform your device into an anime haven with our stunning wallpaper collection"
+                        binding.onbTxt2.text = "Anime Essence"
 
                         val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.layout_custom_admob,
+                            R.layout.new_native_language,
                             null, false
                         ) as? IkmWidgetAdLayout
                         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -150,7 +151,7 @@ class OnBoardingFragment : Fragment() {
                         SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.layout_custom_admob,
+                            R.layout.new_native_language,
                             null, false
                         ) as? IkmWidgetAdLayout
                         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -183,11 +184,12 @@ class OnBoardingFragment : Fragment() {
                             }
                         )
 
-                        binding.onbTxt1.text = getString(R.string.captivating_animal_kingdoms)
+                        binding.onbTxt1.text = "Adorn your screen with the sleek lines and power of car-inspired wallpapers"
+                        binding.onbTxt2.text = "Car Canvas"
                     }
                     2 -> {
                         val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.layout_custom_admob,
+                            R.layout.new_native_language,
                             null, false
                         ) as? IkmWidgetAdLayout
                         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -220,7 +222,8 @@ class OnBoardingFragment : Fragment() {
                             }
                         )
                         binding.skipBtn.visibility = View.GONE
-                        binding.onbTxt1.text = getString(R.string.device_with_creative_mastery)
+                        binding.onbTxt1.text = "Immerse yourself in the world of football through dynamic and captivating wallpapers"
+                        binding.onbTxt2.text = "Football Fusion"
                     }
                 }
             }

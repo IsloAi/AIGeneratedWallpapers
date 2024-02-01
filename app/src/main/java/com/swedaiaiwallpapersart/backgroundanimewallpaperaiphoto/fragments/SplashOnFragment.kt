@@ -127,8 +127,6 @@ class SplashOnFragment : Fragment() {
                     }else{
                         if (isAdded){
                                 findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
-
-
                         }
 
                     }

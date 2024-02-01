@@ -97,5 +97,14 @@
     <string name="no">No</string>
     <string name="are_you_sure_you_want_to_delete">Are you sure you want to delete?</string>
     <string name="confirm_deletion">Confirm Deletion ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Thousands of new high quality images everyday</string>
+    <string name="loading">Loading...</string>
+    <string name="popular">Popular</string>
+    <string name="live">Live</string>
+    <string name="ai_wallpaper">AI wallpaper</string>
+    <string name="category">Category</string>
+    <string name="gen_ai">Gen AI</string>
+    <string name="more">More</string>
+    <string name="go">GO</string>
 
 </resources>

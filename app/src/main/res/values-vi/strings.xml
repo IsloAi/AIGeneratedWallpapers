@@ -94,5 +94,18 @@
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Không có yêu thích? Hãy sửa điều đó! \nBắt đầu bằng cách chạm vào biểu tượng trái tim ♥️</string>
     <string name="confirm_exit">Xác nhận thoát ???</string>
 
+    <string name="watch_ad">Xem quảng cáo</string>
+    <string name="no_thanks"><u>Không, cảm ơn</u></string>
+    <string name="no">Không</string>
+    <string name="are_you_sure_you_want_to_delete">Bạn có chắc chắn muốn xóa không?</string>
+    <string name="confirm_deletion">Xác nhận xóa ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Hàng nghìn hình ảnh mới chất lượng cao mỗi ngày</string>
+    <string name="loading">Đang tải...</string>
+    <string name="popular">Phổ biến</string>
+    <string name="live">Trực tiếp</string>
+    <string name="ai_wallpaper">Hình nền AI</string>
+    <string name="category">Danh mục</string>
+    <string name="gen_ai">Thế hệ AI</string>
+    <string name="more">Thêm</string>
 
     </resources>

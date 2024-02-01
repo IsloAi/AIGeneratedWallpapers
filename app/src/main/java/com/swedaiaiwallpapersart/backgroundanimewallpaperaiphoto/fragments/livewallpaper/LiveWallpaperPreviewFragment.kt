@@ -225,7 +225,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         val info = WallpaperManager.getInstance(requireContext().applicationContext).wallpaperInfo
         if (info == null || info.packageName != requireContext().packageName) {
-            IkmSdkController.setEnableShowResumeAds(false)
+            IkmSdkController.setEnableShowResumeAds(true)
             filepath.renameTo(newFile)
             BlurView.filePath = newFile.path
             LiveWallpaperService.setToWallPaper(requireContext())
@@ -266,7 +266,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
                 notifyFileNameChanged(requireContext(), filepath.path, newFile.path)
                 Log.e("TAG", "showSimpleDialog: renamed")
-                IkmSdkController.setEnableShowResumeAds(false)
+                IkmSdkController.setEnableShowResumeAds(true)
                 LiveWallpaperService.setToWallPaper(requireContext())
 
 

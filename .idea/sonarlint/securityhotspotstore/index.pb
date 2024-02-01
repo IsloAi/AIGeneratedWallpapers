@@ -79,3 +79,9 @@ S
 #.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
 ]
 -.idea/sonarlint/securityhotspotstore/index.pb,8\8\88a9255124c95bdc913197c120a8d560edc59c8e
+›
+kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/OnBoardingFragment.kt,8\7\8700ea02049aaaba9e875b28946eb1b438daced1
+›
+kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/LocalizationAdapter.kt,e\0\e0face97237affe57bb21a6a2e61efa37c71bedf
+™
+iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/OnboardingAdapter.kt,5\1\51c574e22695668f50de9171a53d19a85e0cfab5

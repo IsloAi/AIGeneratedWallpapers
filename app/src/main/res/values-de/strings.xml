@@ -83,4 +83,27 @@
     <string name="almost_there_customizing_your_background">Fast fertig, die Anpassung Ihres Hintergrunds.</string>
     <string name="your_wallpaper_is_on_its_way">Dein Hintergrundbild ist unterwegs.</string>
     <string name="crafting_your_unique_backdrop">Erstellen Sie Ihren einzigartigen Hintergrund.</string>
+
+    <string name="skip">Überspringen</string>
+    <string name="re_generate">Neu generieren</string>
+    <string name="new_generation">Neue Generation</string>
+    <string name="navigate_back">Zurück navigieren</string>
+    <string name="retry">Wiederholen</string>
+    <string name="error_loading_please_check_your_internet">Fehler beim Laden, bitte überprüfen Sie Ihre Internetverbindung</string>
+    <string name="add_favorite">Favoriten hinzufügen</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Null Favoriten? Lasst uns das beheben! \nTippen Sie zunächst auf das Herzsymbol ️</string>
+    <string name="confirm_exit">Beenden bestätigen???</string>
+    <string name="watch_ad">Anzeige ansehen</string>
+    <string name="no_thanks"><u>Nein, danke</u></string>
+    <string name="no">Nein</string>
+    <string name="are_you_sure_you_want_to_delete">Sind Sie sicher, dass Sie löschen möchten?</string>
+    <string name="confirm_deletion">Löschen bestätigen???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Täglich Tausende neue Bilder in hoher Qualität</string>
+    <string name="loading">Laden...</string>
+    <string name="popular">Beliebt</string>
+    <string name="live">Live</string>
+    <string name="ai_wallpaper">KI-Hintergrund</string>
+    <string name="category">Kategorie</string>
+    <string name="gen_ai">Gen AI</string>
+    <string name="more">Mehr</string>
 </resources>

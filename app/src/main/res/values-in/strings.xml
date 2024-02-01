@@ -94,4 +94,18 @@
     <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">Nol favorit? Mari kita perbaiki! \nMulai dengan mengetuk ikon hati ♥️</string>
     <string name="confirm_exit">Konfirmasi Keluar ???</string>
 
+    <string name="watch_ad">Iklan Tontonan</string>
+    <string name="no_thanks"><u>Tidak, terima kasih</u></string>
+    <string name="no">Tidak</string>
+    <string name="are_you_sure_you_want_to_delete">Apakah Anda yakin ingin menghapus?</string>
+    <string name="confirm_deletion">Konfirmasi Penghapusan ???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Ribuan gambar baru berkualitas tinggi setiap hari</string>
+    <string name="loading">Memuat...</string>
+    <string name="popular">Populer</string>
+    <string name="live">Langsung</string>
+    <string name="ai_wallpaper">Wallpaper AI</string>
+    <string name="category">Kategori</string>
+    <string name="gen_ai">Gen AI</string>
+    <string name="more">Lainnya</string>
+
 </resources>

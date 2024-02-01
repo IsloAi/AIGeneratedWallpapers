@@ -25,14 +25,14 @@ class OnboardingAdapter(welcomeItems: List<Int>) :
         val item = welcomeItems[position]
         when (position) {
             0 -> {
-                holder.binding.onBoardImg.setImageResource(R.drawable.onboading_item1)
+                holder.binding.onBoardImg.setImageResource(R.drawable.onboard_1)
             }
             1 -> {
-                holder.binding.onBoardImg.setImageResource(R.drawable.onboarding_item2)
+                holder.binding.onBoardImg.setImageResource(R.drawable.onboard_2)
 
             }
             2 -> {
-                holder.binding.onBoardImg.setImageResource(R.drawable.onboarding_item3)
+                holder.binding.onBoardImg.setImageResource(R.drawable.onboard_3)
             }
         }
     }

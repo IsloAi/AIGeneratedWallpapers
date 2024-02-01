@@ -1,2 +1,11 @@
 
-Tkotlin:S1481Ğ"/Remove this unused "isDarkMode" local variable.(ºÂ®¿úÿÿÿÿ8ŸÃ±ÃÅ1
+Bkotlin:S125>"Remove this commented out code.(ÊÃ÷Üüÿÿÿÿ8ÔµÚ Ö1
+Tkotlin:S1481Ó"/Remove this unused "isDarkMode" local variable.(ºÂ®¿úÿÿÿÿ8ŸÃ±ÃÅ1
+„kotlin:S1192†"_Define a constant instead of duplicating this literal "onAdsLoadFail: native failded " 3 times.(²Šîûÿÿÿÿ8îµÚ Ö1
+€kotlin:S1192‘"[Define a constant instead of duplicating this literal "onAdsLoaded: native loaded" 3 times.(Ñ®ªÿÿÿÿÿ8îµÚ Ö1
+Gkotlin:S18742"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8ğµÚ Ö1
+Gkotlin:S1874}"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ğµÚ Ö1
+Hkotlin:S1874£"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ğµÚ Ö1
+Hkotlin:S1874É"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ğµÚ Ö1
+Hkotlin:S1874‘"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8ğµÚ Ö1
+qkotlin:S37767"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ëü«8ñµÚ Ö1

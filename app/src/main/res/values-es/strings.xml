@@ -83,4 +83,27 @@
     <string name="almost_there_customizing_your_background">Ya casi llegamos, personalizando tu fondo.</string>
     <string name="your_wallpaper_is_on_its_way">Tu fondo de pantalla está en camino.</string>
     <string name="crafting_your_unique_backdrop">Creando tu fondo único.</string>
+
+    <string name="skip">Omitir</string>
+    <string name="re_generate">Regenerar</string>
+    <string name="new_generation">Nueva Generación</string>
+    <string name="navigate_back">Navegar hacia atrás</string>
+    <string name="retry">Reintentar</string>
+    <string name="error_loading_please_check_your_internet">Error al cargar, verifique su Internet</string>
+    <string name="add_favorite">Agregar favoritos</string>
+    <string name="zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon">¿Cero favoritos? ¡Arreglemos esto! \nComience tocando el ícono del corazón ️</string>
+    <string name="confirm_exit">¿Confirmar salida???</string>
+    <string name="watch_ad">Ver anuncio</string>
+    <string name="no_thanks"><u>No, gracias</u></string>
+    <string name="no">No</string>
+    <string name="are_you_sure_you_want_to_delete">¿Estás seguro de que deseas eliminar?</string>
+    <string name="confirm_deletion">¿¿Confirmar eliminación???</string>
+    <string name="thousands_of_new_high_quality_images_everyday">Miles de nuevas imágenes de alta calidad todos los días</string>
+    <string name="loading">Cargando...</string>
+    <string name="popular">Popular</string>
+    <string name="live">En vivo</string>
+    <string name="ai_wallpaper">fondo de pantalla de IA</string>
+    <string name="category">Categoría</string>
+    <string name="gen_ai">Gen AI</string>
+    <string name="more">Más</string>
 </resources>
