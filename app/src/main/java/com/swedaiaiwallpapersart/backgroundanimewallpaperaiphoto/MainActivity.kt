@@ -250,6 +250,21 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         val welcomeMessage = remoteConfig[first].asString()
 
                         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
+                        val positionTabs = remoteConfig["tablist"].asString()
+
+                        val tabNamesArray: Array<String> = positionTabs
+                            .replace("{", "")   // Remove the opening curly brace
+                            .replace("}", "") // Remove the closing curly brace
+                            .replace("\"","")
+                            .split(", ")        // Split the string into an array using ", " as the delimiter
+                            .toTypedArray()
+
+                        Log.e(TAG, "onUpdate: "+tabNamesArray )
+
+
+                        AdConfig.tabPositions = tabNamesArray
+
+                        Log.e(TAG, "onUpdate: "+positionTabs )
 
                         AdConfig.showOnboarding = onboarding
                         Log.e(TAG, "onUpdate: " + onboarding)
@@ -358,6 +373,17 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         val welcomeMessage = remoteConfig[first].asString()
         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
+        val positionTabs = remoteConfig["tablist"].asString()
+
+        Log.e(TAG, "onUpdate: "+positionTabs )
+        val tabNamesArray: Array<String> = positionTabs
+            .replace("{", "")   // Remove the opening curly brace
+            .replace("}", "")   // Remove the closing curly brace
+            .replace("\"","")
+            .split(", ")        // Split the string into an array using ", " as the delimiter
+            .toTypedArray()
+
+        AdConfig.tabPositions = tabNamesArray
         AdConfig.showOnboarding = onboarding
         Log.e(TAG, "onUpdate: $onboarding")
         Log.e("TAG new", "initFirebaseRemoteConfig: $welcomeMessage")

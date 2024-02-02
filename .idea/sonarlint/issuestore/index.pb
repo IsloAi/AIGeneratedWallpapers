@@ -85,3 +85,7 @@ kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fra
 kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/LocalizationAdapter.kt,e\0\e0face97237affe57bb21a6a2e61efa37c71bedf
 ™
 iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/OnboardingAdapter.kt,5\1\51c574e22695668f50de9171a53d19a85e0cfab5
+’
+bapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/LocaleManager.kt,9\7\979a5649299ee8fa86c471b7a8be4530d7fb77b0
+–
+fapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MySharePreference.kt,a\b\ab8ed208eac278ea5d072e482a983339a76dec34

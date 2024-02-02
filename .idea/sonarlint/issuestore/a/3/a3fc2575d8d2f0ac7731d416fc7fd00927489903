@@ -1,17 +1,18 @@
 
-Ykotlin:S1172î"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8³æ­ÊÕ1
-Bkotlin:S125O"Remove this commented out code.(ÜÛ½±üÿÿÿÿ8†€íÉÕ1
-=kotlin:S125Q"Remove this commented out code.(Âú¾É8†€íÉÕ1
-Bkotlin:S125V"Remove this commented out code.(Ê™î°øÿÿÿÿ8‡€íÉÕ1
-=kotlin:S125h"Remove this commented out code.(ÅÔï 8‡€íÉÕ1
-Ckotlin:S125Ù"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ãæ­ÊÕ1
-Ckotlin:S125ß"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8Ãæ­ÊÕ1
-<kotlin:S6310Ç"Avoid hardcoded dispatchers.(©ÒÕò8Ñæ­ÊÕ1
-<kotlin:S6310Ø"Avoid hardcoded dispatchers.(©ÒÕò8Ñæ­ÊÕ1
-ykotlin:S6306ƒ"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8ôæ­ÊÕ1
-Mkotlin:S1481¾"-Remove this unused "behavior" local variable.(Ø¦š¾8†ç­ÊÕ1
-Gkotlin:S1874w"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8‚íÉÕ1
-Hkotlin:S1874Å"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8êó«ÊÕ1
-Bkotlin:S1874Æ"#Deprecated code should not be used.(àü8 ç­ÊÕ1
-wkotlin:S3776ä"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8£ç­ÊÕ1
-wkotlin:S3776ò"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8¤ç­ÊÕ1
+Ykotlin:S1172ˆ"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8™ê•ÃÖ1
+Bkotlin:S125O"Remove this commented out code.(ÜÛ½±üÿÿÿÿ8§ê•ÃÖ1
+=kotlin:S125Q"Remove this commented out code.(Âú¾É8¨ê•ÃÖ1
+Bkotlin:S125V"Remove this commented out code.(Ê™î°øÿÿÿÿ8¨ê•ÃÖ1
+=kotlin:S125h"Remove this commented out code.(ÅÔï 8©ê•ÃÖ1
+Ckotlin:S125è"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8©ê•ÃÖ1
+Ckotlin:S125î"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8©ê•ÃÖ1
+<kotlin:S6310á"Avoid hardcoded dispatchers.(©ÒÕò8¹ê•ÃÖ1
+<kotlin:S6310ò"Avoid hardcoded dispatchers.(©ÒÕò8¹ê•ÃÖ1
+ykotlin:S6306ƒ"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8Ûê•ÃÖ1
+Mkotlin:S1481Ø"-Remove this unused "behavior" local variable.(Ø¦š¾8îê•ÃÖ1
+pkotlin:S1192ø"KDefine a constant instead of duplicating this literal "onUpdate: " 5 times.(¸úşÉøÿÿÿÿ8Œë•ÃÖ1
+Gkotlin:S1874w"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8–ë•ÃÖ1
+Hkotlin:S1874Å"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8–ë•ÃÖ1
+Bkotlin:S1874Æ"#Deprecated code should not be used.(àü8–ë•ÃÖ1
+wkotlin:S3776ä"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(„ö÷àøÿÿÿÿ8šë•ÃÖ1
+wkotlin:S3776ò"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ÄÔìşÿÿÿÿ8œë•ÃÖ1

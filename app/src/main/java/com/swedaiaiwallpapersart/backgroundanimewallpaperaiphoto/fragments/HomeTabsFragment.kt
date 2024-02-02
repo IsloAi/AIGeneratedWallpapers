@@ -31,6 +31,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -66,7 +67,14 @@ class HomeTabsFragment : Fragment() {
 
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
-
+    private val tabIconMap = mapOf(
+        "Popular" to R.drawable.tab_icon_popular,
+        "Trending" to R.drawable.tab_icon_trending,
+        "Live" to R.drawable.tab_icon_live,
+        "AI Wallpaper" to R.drawable.tab_icon_ai_wallpaper,
+        "Category" to R.drawable.tab_icon_categories,
+        "Gen AI" to R.drawable.tab_icon_generate
+    )
 
 
     override fun onCreateView(
@@ -216,9 +224,14 @@ class HomeTabsFragment : Fragment() {
 
     fun initTabs(){
 
+        val images = generateImagesArray(AdConfig.tabPositions)
+
+
         val titles = arrayOf(getString(R.string.popular),getString(R.string.trending),
             getString(R.string.live), getString(R.string.ai_wallpaper),
             getString(R.string.category), getString(R.string.gen_ai))
+
+
 
         binding.tabLayout.setSelectedTabIndicatorHeight(0)
         val tabCount: Int = binding.tabLayout.tabCount
@@ -231,7 +244,7 @@ class HomeTabsFragment : Fragment() {
                 var tabtitle = tab.customView!!.findViewById<TextView>(R.id.text)
 
                 tabIcon.setImageResource(images[i])
-                tabtitle.text = titles[i]
+                tabtitle.text = AdConfig.tabPositions[i]
 
 
 
@@ -261,17 +274,32 @@ class HomeTabsFragment : Fragment() {
         })
     }
 
+    private fun generateImagesArray(tabNames: Array<String>): Array<Int> {
+        return tabNames.map { tabIconMap[it] ?: R.drawable.tab_icon_popular }.toTypedArray()
+    }
+
     fun setViewPager(){
         val adapter= ViewPagerAdapter(childFragmentManager)
-        adapter.addFragment(PopularWallpaperFragment(),"Popular")
-        adapter.addFragment(HomeFragment(),"Trending")
-        adapter.addFragment(LiveWallpaperFragment(),"Live")
-        adapter.addFragment(HomeFragment(),"AI ")
-        adapter.addFragment(CategoryFragment(),"Categories")
-        adapter.addFragment(GenerateImageFragment(),"Generate")
+
+        for (tabName in AdConfig.tabPositions) {
+            val fragment = getFragmentForTab(tabName)
+            adapter.addFragment(fragment, tabName)
+        }
         binding.viewPager.adapter=adapter
         binding.viewPager.offscreenPageLimit = 1
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+    }
+
+    fun getFragmentForTab(tabName: String): Fragment {
+        return when (tabName) {
+            "Popular" -> PopularWallpaperFragment()
+            "Trending" -> HomeFragment()
+            "Live" -> LiveWallpaperFragment()
+            "AI Wallpaper" -> HomeFragment()
+            "Category" -> CategoryFragment()
+            "Gen AI" -> GenerateImageFragment()
+            else -> throw IllegalArgumentException("Unsupported tab name: $tabName")
+        }
     }
 
 
