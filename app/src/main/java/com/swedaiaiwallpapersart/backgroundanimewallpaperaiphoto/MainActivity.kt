@@ -254,12 +254,14 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                         val tabNamesArray: Array<String> = positionTabs
                             .replace("{", "")   // Remove the opening curly brace
-                            .replace("}", "") // Remove the closing curly brace
+                            .replace("}", "")   // Remove the closing curly brace
                             .replace("\"","")
                             .split(", ")        // Split the string into an array using ", " as the delimiter
                             .toTypedArray()
 
-                        Log.e(TAG, "onUpdate: "+tabNamesArray )
+                        for (i in 0 until tabNamesArray.size){
+                            Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
+                        }
 
 
                         AdConfig.tabPositions = tabNamesArray
@@ -382,6 +384,10 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             .replace("\"","")
             .split(", ")        // Split the string into an array using ", " as the delimiter
             .toTypedArray()
+
+        for (i in 0 until tabNamesArray.size){
+            Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
+        }
 
         AdConfig.tabPositions = tabNamesArray
         AdConfig.showOnboarding = onboarding

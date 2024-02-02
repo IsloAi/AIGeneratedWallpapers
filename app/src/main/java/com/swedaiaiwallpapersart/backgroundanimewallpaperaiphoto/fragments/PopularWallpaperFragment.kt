@@ -43,8 +43,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Timer
+import java.util.TimerTask
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -131,6 +135,23 @@ class PopularWallpaperFragment () : Fragment() {
 
         setEvents()
         initMostUsedRV()
+
+//        val timer = Timer()
+//
+//        timer.schedule(object : TimerTask() {
+//            override fun run() {
+//                lifecycleScope.launch(Dispatchers.Main) {
+//                    while (isActive) {
+//                        delay(3000)
+//                        val itemCount = binding.sliderPager.adapter?.itemCount ?: 0
+//                        val nextItem = (binding.sliderPager.currentItem + 1) % itemCount
+//                        binding.sliderPager.setCurrentItem(nextItem, true)
+//                    }
+//                }
+//            }
+//        }, 3000, 3000)
+
+
     }
 
     private fun setEvents(){

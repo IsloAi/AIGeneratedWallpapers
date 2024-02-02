@@ -119,6 +119,7 @@
         app:layout_constraintEnd_toEndOf="@id/end_guide_line"
         app:layout_constraintTop_toBottomOf="@id/onboardingViewPager"
         android:text="Next"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
         android:textColor="@color/button_bg"
         android:fontFamily="@font/poppins_semibold"
         android:textSize="@dimen/_15sdp"

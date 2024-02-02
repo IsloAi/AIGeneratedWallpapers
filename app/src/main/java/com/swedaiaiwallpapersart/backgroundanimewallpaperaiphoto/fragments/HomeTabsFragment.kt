@@ -275,7 +275,7 @@ class HomeTabsFragment : Fragment() {
     }
 
     private fun generateImagesArray(tabNames: Array<String>): Array<Int> {
-        return tabNames.map { tabIconMap[it] ?: R.drawable.tab_icon_popular }.toTypedArray()
+        return tabNames.map { tabIconMap[it.trim()] ?: R.drawable.tab_icon_popular }.toTypedArray()
     }
 
     fun setViewPager(){
@@ -291,14 +291,15 @@ class HomeTabsFragment : Fragment() {
     }
 
     fun getFragmentForTab(tabName: String): Fragment {
-        return when (tabName) {
+        return when (tabName.trim()) {
             "Popular" -> PopularWallpaperFragment()
             "Trending" -> HomeFragment()
             "Live" -> LiveWallpaperFragment()
             "AI Wallpaper" -> HomeFragment()
             "Category" -> CategoryFragment()
             "Gen AI" -> GenerateImageFragment()
-            else -> throw IllegalArgumentException("Unsupported tab name: $tabName")
+
+            else -> {HomeFragment()}
         }
     }
 
