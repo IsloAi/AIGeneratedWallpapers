@@ -1,8 +1,7 @@
 
->kotlin:S1128
-"Remove this unused import.(ÙÃä¡şÿÿÿÿ8ŒäéÊÕ1
->kotlin:S1128"Remove this unused import.(èãÊõûÿÿÿÿ8ŒäéÊÕ1
+<kotlin:S6310Æ"Avoid hardcoded dispatchers.(ÏÃâ8‘ğòáÙ1
+:kotlin:S6310Q"Avoid hardcoded dispatchers.(©ÓœW8¹şóáÙ1
+;kotlin:S6310T"Avoid hardcoded dispatchers.(Í¡·Ş8âàóáÙ1
 >kotlin:S1128"Remove this unused import.(ÌëÉÚşÿÿÿÿ8ŒäéÊÕ1
->kotlin:S1128 "Remove this unused import.(£ñ¹¸ûÿÿÿÿ8·äéÊÕ1
-pkotlin:S1192Ê"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¹äéÊÕ1
-qkotlin:S3776h"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(£ØîŠ8¼äéÊÕ1
+pkotlin:S1192Ô"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ËşóáÙ1
+qkotlin:S3776q"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(£ØîŠ8ÎşóáÙ1

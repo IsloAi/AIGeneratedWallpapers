@@ -36,7 +36,6 @@ class ApiCategoriesNameAdapter(
 
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    private var lastAdShownPosition = -1
     var context: Context? = null
 
     private var lastClickTime = 0L

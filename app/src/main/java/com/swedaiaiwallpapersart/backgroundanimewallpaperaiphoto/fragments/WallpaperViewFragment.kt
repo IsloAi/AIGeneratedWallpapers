@@ -510,12 +510,7 @@ class WallpaperViewFragment : Fragment() {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun setViewPager() {
-        adapter = WallpaperApiSliderAdapter(arrayList, viewPager2!!,from,object :
-            ViewPagerImageClick {
-            @SuppressLint("SuspiciousIndentation")
-            override fun getImagePosition(pos: Int, layout: ConstraintLayout) {
-            }
-        },object:FullViewImage{
+        adapter = WallpaperApiSliderAdapter(arrayList,object:FullViewImage{
             override fun getFullImageUrl(image:CatResponse) {
 
                 sharedViewModel.selectCat(image)
@@ -523,7 +518,6 @@ class WallpaperViewFragment : Fragment() {
                 sharedViewModel.setPosition(position)
 
                 navController?.navigate(R.id.fullScreenImageViewFragment)
-//               FullViewImagePopup.openFullViewWallpaper(myContext(),image)
             }
         },myActivity)
         adapter!!.setCoroutineScope(fragmentScope)

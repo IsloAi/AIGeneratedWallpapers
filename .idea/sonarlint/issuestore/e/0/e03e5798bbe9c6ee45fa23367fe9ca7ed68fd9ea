@@ -1,23 +1,15 @@
 
-Ckotlin:S125¯"Remove this commented out code.(İ¥ççûÿÿÿÿ8‹Ä—ÇÕ1
->kotlin:S125‡"Remove this commented out code.(ò’÷§8Ä—ÇÕ1
-Ckotlin:S125Î"Remove this commented out code.(Ò»ˆşÿÿÿÿ8Ä—ÇÕ1
-;kotlin:S6310×"Avoid hardcoded dispatchers.(©ÓœW8“Ä—ÇÕ1
-<kotlin:S6310ì"Avoid hardcoded dispatchers.(Í¡·Ş8“Ä—ÇÕ1
-Hkotlin:S108Ğ")Either remove or fill this block of code.(·Úøš8ĞĞ˜ÇÕ1
-Mkotlin:S108ı")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ĞĞ˜ÇÕ1
-Rkotlin:S1481«"2Remove this unused "arrayListJson" local variable.(àñÆÑ8§Ä—ÇÕ1
-9kotlin:S1128"Remove this unused import.(ıºÎà8‡±—ÇÕ1
->kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8ˆ±—ÇÕ1
-9kotlin:S1128"Remove this unused import.(ÁÈÚø8ˆ±—ÇÕ1
-9kotlin:S1128"Remove this unused import.(âÉïÜ8ˆ±—ÇÕ1
->kotlin:S1128"Remove this unused import.(é°´ãşÿÿÿÿ8ˆ±—ÇÕ1
->kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8ˆ±—ÇÕ1
->kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8ˆ±—ÇÕ1
-8kotlin:S1128"Remove this unused import.(º¾Ã8ˆ±—ÇÕ1
->kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8ˆ±—ÇÕ1
-9kotlin:S1128"Remove this unused import.(ÒÂ¦8ˆ±—ÇÕ1
-pkotlin:S1192Ö"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8°Ä—ÇÕ1
-wkotlin:S3776¬"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8³Ä—ÇÕ1
-Nkotlin:S1066ğ".Merge this "if" statement with the nested one.(šÖÉù8¸Ä—ÇÕ1
-fkotlin:S6510¸"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8¸Ä—ÇÕ1
+Ckotlin:S125ö"Remove this commented out code.(Ò»ˆşÿÿÿÿ8Ä—ÇÕ1
+<kotlin:S6310ñ"Avoid hardcoded dispatchers.(ÏÃâ8“Ä—ÇÕ1
+:kotlin:S6310a"Avoid hardcoded dispatchers.(©ÓœW8Ğ”åÙ1
+;kotlin:S6310d"Avoid hardcoded dispatchers.(Í¡·Ş8“Ä—ÇÕ1
+;kotlin:S6310¯"Avoid hardcoded dispatchers.(©ÓœW8µ÷–åÙ1
+<kotlin:S6310Ä"Avoid hardcoded dispatchers.(Í¡·Ş8¸¹˜åÙ1
+Hkotlin:S108¨")Either remove or fill this block of code.(·Úøš8ĞĞ˜ÇÕ1
+Mkotlin:S108Õ")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ĞĞ˜ÇÕ1
+>kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÿÚŞæÙ1
+>kotlin:S1128&"Remove this unused import.(ÌëÉÚşÿÿÿÿ8²ŠåÙ1
+pkotlin:S1192ÿ"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ûë˜åÙ1
+wkotlin:S3776¢"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8İë˜åÙ1
+Nkotlin:S1066".Merge this "if" statement with the nested one.(šÖÉù8âë˜åÙ1
+fkotlin:S6510á"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8âë˜åÙ1

@@ -1,13 +1,9 @@
 
-Bkotlin:S125,"Remove this commented out code.(çÔ¥òıÿÿÿÿ8Ë÷±ìÎ1
-=kotlin:S1256"Remove this commented out code.(€ÜÖ‰8öü²ìÎ1
-Bkotlin:S125A"Remove this commented out code.(÷“ üÿÿÿÿ8°ˆ´ìÎ1
-=kotlin:S125K"Remove this commented out code.(”çˆ…8‘ô´ìÎ1
 Hkotlin:S1481")Remove this unused "item" local variable.( °èÌ8˜»¯ìÎ1
 9kotlin:S1128"Remove this unused import.(Ñå¾ô8¼ÌûØÊ1
 9kotlin:S1128"Remove this unused import.(Êµ–8¼ÌûØÊ1
 8kotlin:S1128
 "Remove this unused import.(º¾Ã8àîÏìÎ1
 8kotlin:S1128"Remove this unused import.(Ö¢çn8àîÏìÎ1
-qkotlin:S101b"NRename class "joinButtons" to match the regular expression ^[A-Z][a-zA-Z0-9]*$(ÿ„íÿÿÿÿÿ8Œ›³ìÎ1
-fkotlin:S6517b"BMake this interface functional or replace it with a function type.(ÿ„íÿÿÿÿÿ8›³ìÎ1
+qkotlin:S101b"NRename class "joinButtons" to match the regular expression ^[A-Z][a-zA-Z0-9]*$(ÿ„íÿÿÿÿÿ8Õ²£æÙ1
+fkotlin:S6517b"BMake this interface functional or replace it with a function type.(ÿ„íÿÿÿÿÿ8Ø²£æÙ1

@@ -422,6 +422,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:minLines="3"
+                            android:maxLines="3"
+                            android:ellipsize="end"
                             android:layout_marginStart="@dimen/_10sdp"
                             android:layout_marginTop="@dimen/_3sdp"
                             android:layout_marginEnd="@dimen/_10sdp"
@@ -435,7 +437,6 @@
                             android:textSize="15sp"
                             app:layout_constraintTop_toBottomOf="@id/bottom_line"
                             app:layout_constraintBottom_toBottomOf="parent"
-
                             tools:ignore="HardcodedText" />
 
                     <ImageView

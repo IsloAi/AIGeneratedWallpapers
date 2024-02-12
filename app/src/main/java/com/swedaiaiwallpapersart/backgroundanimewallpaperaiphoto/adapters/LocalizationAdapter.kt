@@ -23,12 +23,8 @@ class LocalizationAdapter(
         holder.bindData(language)
         holder.itemView.isSelected = position == selectedItemPosition
         holder.itemView.setOnClickListener {
-            val previousSelectedItemPosition = selectedItemPosition
             selectedItemPosition = holder.adapterPosition
             notifyDataSetChanged()
-//            if (previousSelectedItemPosition != 6) {
-//                notifyItemChanged(previousSelectedItemPosition)
-//            }
             clickListener.onLanguageItemClick(language, position)
         }
     }

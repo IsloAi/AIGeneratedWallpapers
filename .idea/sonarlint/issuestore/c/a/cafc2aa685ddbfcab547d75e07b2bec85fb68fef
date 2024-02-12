@@ -1,0 +1,7 @@
+
+>kotlin:S125ã"Remove this commented out code.(¢µÄÏ8í®ßæÙ1
+Xkotlin:S1144˜"8Remove this unused private "generateSharingLink" method.(âÂû¸8ô®ßæÙ1
+Wkotlin:S1144·"2Remove this unused private "shareDeepLink" method.(”±¹İûÿÿÿÿ8õ®ßæÙ1
+Rkotlin:S1481Î"2Remove this unused "shortLinkTask" local variable.(Ùÿ¹×8‚¯ßæÙ1
+>kotlin:S1128"Remove this unused import.(’ØÌ§ÿÿÿÿÿ8‡¯ßæÙ1
+jkotlin:S1192z"KDefine a constant instead of duplicating this literal "text/plain" 3 times.(ÃÓ©Œ8‰¯ßæÙ1

@@ -41,7 +41,7 @@ class PopularSliderAdapter(welcomeItems: List<Int>,var positionCallback: joinBut
                 Glide.with(holder.itemView.context)
                     .load(R.drawable.banner_gen_ai_image)
                     .into(holder.binding.onBoardImg)
-//                holder.binding.onBoardImg.setImageResource(R.drawable.banner_gen_ai_image)
+
             }
             1 -> {
                 holder.binding.bannerInfoleft.visibility = View.VISIBLE
@@ -51,7 +51,7 @@ class PopularSliderAdapter(welcomeItems: List<Int>,var positionCallback: joinBut
                 Glide.with(holder.itemView.context)
                     .load(R.drawable.banner_category_image)
                     .into(holder.binding.onBoardImg)
-//                holder.binding.onBoardImg.setImageResource(R.drawable.banner_category_image)
+
 
             }
             2 -> {
@@ -62,7 +62,7 @@ class PopularSliderAdapter(welcomeItems: List<Int>,var positionCallback: joinBut
                 Glide.with(holder.itemView.context)
                     .load(R.drawable.banner_anime_image)
                     .into(holder.binding.onBoardImg)
-//                holder.binding.onBoardImg.setImageResource(R.drawable.banner_anime_image)
+
             }
             3 -> {
                 holder.binding.bannerInfoleft.visibility = View.VISIBLE
@@ -72,7 +72,7 @@ class PopularSliderAdapter(welcomeItems: List<Int>,var positionCallback: joinBut
                 Glide.with(holder.itemView.context)
                     .load(R.drawable.banner_ai_wallpaper_image)
                     .into(holder.binding.onBoardImg)
-//                holder.binding.onBoardImg.setImageResource(R.drawable.banner_ai_wallpaper_image)
+
             }
         }
 

@@ -362,8 +362,7 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         }
         buttonLock.setOnClickListener {
-
-
+            if (isAdded){
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
                     "viewlistwallscr_setdilog_set_button",
@@ -375,12 +374,12 @@ class FullScreenImageViewFragment : DialogFragment() {
                             myExecutor.execute {
                                 myWallpaperManager.lockScreen(bitmap!!)
                             }
-                                    if (isAdded) {
-                                        interstitialAdWithToast(
-                                            getString(R.string.set_successfully_on_lock_screen),
-                                            dialog
-                                        )
-                                    }
+                            if (isAdded) {
+                                interstitialAdWithToast(
+                                    getString(R.string.set_successfully_on_lock_screen),
+                                    dialog
+                                )
+                            }
 
 
 
@@ -394,17 +393,19 @@ class FullScreenImageViewFragment : DialogFragment() {
                                 myWallpaperManager.lockScreen(bitmap!!)
                             }
 
-                                    if (isAdded) {
-                                        interstitialAdWithToast(
-                                            getString(R.string.set_successfully_on_lock_screen),
-                                            dialog
-                                        )
-                                    }
+                            if (isAdded) {
+                                interstitialAdWithToast(
+                                    getString(R.string.set_successfully_on_lock_screen),
+                                    dialog
+                                )
+                            }
                             setDownloaded(model)
 
                         }
                     }
                 )
+            }
+
 
 
 

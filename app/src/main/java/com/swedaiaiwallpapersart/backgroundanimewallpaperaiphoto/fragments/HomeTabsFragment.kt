@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
@@ -38,6 +39,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -107,10 +110,14 @@ class HomeTabsFragment : Fragment() {
         myViewModel.allLikes.observe(viewLifecycleOwner){result->
             when(result){
                 is Response.Success -> {
-                    result.data?.forEach {item->
-                        appDatabase.wallpapersDao().updateLikes(item.likes,item.id.toInt())
 
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        result.data?.forEach {item->
+                            appDatabase.wallpapersDao().updateLikes(item.likes,item.id.toInt())
+
+                        }
                     }
+
                 }
 
                 is Response.Loading -> {
@@ -131,11 +138,15 @@ class HomeTabsFragment : Fragment() {
         myViewModel.allLiked.observe(viewLifecycleOwner){result->
             when(result){
                 is Response.Success -> {
-                    result.data?.forEach {item->
 
-                        Log.e("TAG", "getSetTotallikes: "+item )
-                        appDatabase.wallpapersDao().updateLiked(true,item.imageid.toInt())
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        result.data?.forEach {item->
+
+                            Log.e("TAG", "getSetTotallikes: "+item )
+                            appDatabase.wallpapersDao().updateLiked(true,item.imageid.toInt())
+                        }
                     }
+
                 }
 
                 is Response.Loading -> {

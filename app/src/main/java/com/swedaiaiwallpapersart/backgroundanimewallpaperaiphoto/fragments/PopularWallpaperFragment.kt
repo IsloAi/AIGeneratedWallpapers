@@ -390,39 +390,42 @@ class PopularWallpaperFragment () : Fragment() {
 
 
      suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
-        Log.e(TAG, "addNullValueInsideArray: "+data.size )
+         return withContext(Dispatchers.IO){
+             Log.e(TAG, "addNullValueInsideArray: "+data.size )
 
-        val firstAdLineThreshold =
-            if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
-        val firstLine = firstAdLineThreshold * 3
+             val firstAdLineThreshold =
+                 if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
+             val firstLine = firstAdLineThreshold * 3
 
-        val lineCount =
-            if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
-        val lineC = lineCount * 3
-        val newData = arrayListOf<CatResponse?>()
+             val lineCount =
+                 if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
+             val lineC = lineCount * 3
+             val newData = arrayListOf<CatResponse?>()
 
-        for (i in data.indices) {
-            if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
-                newData.add(null)
-
-
-
-                Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
-            } else if (i == firstLine) {
-                newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first " + i)
-            }
-            Log.e("******NULL", "addNullValueInsideArray: not null " + i)
-            newData.add(data[i])
-
-        }
-        Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
+             for (i in data.indices) {
+                 if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                     newData.add(null)
 
 
 
+                     Log.e("******NULL", "addNullValueInsideArray: null " + i)
 
-        return newData
+                 } else if (i == firstLine) {
+                     newData.add(null)
+                     Log.e("******NULL", "addNullValueInsideArray: null first " + i)
+                 }
+                 Log.e("******NULL", "addNullValueInsideArray: not null " + i)
+                 newData.add(data[i])
+
+             }
+             Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
+
+
+
+
+              newData
+         }
+
     }
 
 

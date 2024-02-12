@@ -36,16 +36,14 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatName
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 class CategoryFragment : Fragment() {
    private var _binding: FragmentCategoryBinding? = null
-
-    var adcount = 0
-    var totalADs = 0
     private val binding get() = _binding!!
-    val myCatNameViewModel: MyCatNameViewModel by viewModels()
 
     private lateinit var myActivity : MainActivity
 
@@ -63,23 +61,16 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        loadFirstCategory()
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         onCustomCreateView()
-//        SDKBaseController.getInstance().loadInterstitialAds(requireActivity(),"mainscr_cate_tab_click_item","mainscr_cate_tab_click_item")
     }
     @SuppressLint("SuspiciousIndentation")
     private fun onCustomCreateView() {
         myActivity = activity as MainActivity
         binding.progressBar.visibility = VISIBLE
-        binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
 
-        Glide.with(requireContext())
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(binding.animationDdd)
         binding.progressBar.visibility = View.GONE
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(),3)
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
@@ -115,37 +106,28 @@ class CategoryFragment : Fragment() {
             Log.e("TAG", "onCustomCreateView: no data exists" )
            if (wallpapersList?.size!! > 0){
                Log.e("TAG", "onCustomCreateView: data exists" )
-               val list = addNullValueInsideArray(wallpapersList)
-               adapter.updateData(newData = list)
+               lifecycleScope.launch(Dispatchers.IO) {
+                   val list = addNullValueInsideArray(wallpapersList)
+
+                   withContext(Dispatchers.Main){
+                       adapter.updateData(newData = list)
+
+                   }
+               }
+
            }
         }
     }
 
-//    private fun loadFirstCategory() {
-//        myViewModel = ViewModelProvider(this)[MyViewModel::class.java]
-//        lifecycleScope.launch {
-//            Log.d("functionCallingTest", "onCreateCustom:  home on create")
-//
-//            // Observe the LiveData in the ViewModel and update the UI accordingly
-//            myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-//                if (catResponses != null) {
-//                    val randomNumber = Random.nextInt(0, catResponses.size -1)
-//                    getBitmapFromGlide(catResponses[randomNumber].compressed_image_url!!)
-//                }
-//            }
-//            myViewModel.fetchWallpapers(requireContext(),"IOS",binding.progressBar,true)
-//        }
-//
-//    }
 
-    private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+        return withContext(Dispatchers.IO){
+            val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+            val firstLine = firstAdLineThreshold * 3
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-        val firstLine = firstAdLineThreshold * 3
-
-        val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-        val lineC = lineCount * 3
-        val newData = arrayListOf<CatNameResponse?>()
+            val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+            val lineC = lineCount * 3
+            val newData = arrayListOf<CatNameResponse?>()
 
             for (i in data.indices){
                 if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
@@ -162,23 +144,10 @@ class CategoryFragment : Fragment() {
 
             }
             Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-        return newData
-    }
+             newData
+        }
 
 
-    private fun getBitmapFromGlide(url:String){
-        Glide.with(requireContext()).asBitmap().load(url)
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    Log.e("TAG", "onResourceReady: bitmap loaded" )
-                    if (isAdded) {
-                        val blurImage: Bitmap = BlurView.blurImage(requireContext(), resource!!)!!
-                        binding.backImage.setImageBitmap(blurImage)
-                    }
-                }
-                override fun onLoadCleared(placeholder: Drawable?) {
-                    Log.e("TAG", "onLoadCleared: cleared" )
-                } })
     }
 
 

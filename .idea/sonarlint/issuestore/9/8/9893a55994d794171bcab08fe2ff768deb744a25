@@ -1,2 +1,12 @@
 
->kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8Áî£Ô1
+>kotlin:S125×"Remove this commented out code.(¸¯ü8ªáÕæÙ1
+Ckotlin:S125İ"Remove this commented out code.(³³ØËûÿÿÿÿ8«áÕæÙ1
+>kotlin:S125—"Remove this commented out code.( È°8«áÕæÙ1
+>kotlin:S125°"Remove this commented out code.(òí ½8«áÕæÙ1
+Hkotlin:S108Ÿ")Either remove or fill this block of code.(å¥‡8ÆáÕæÙ1
+9kotlin:S6531à"Remove this useless cast.(£Í‘8×áÕæÙ1
+9kotlin:S6531¶"Remove this useless cast.(ıÀÁ»8×áÕæÙ1
+Rkotlin:S1481ù"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ØáÕæÙ1
+Vkotlin:S1481’"1Remove this unused "randomNumber" local variable.(²ÑãÕıÿÿÿÿ8ØáÕæÙ1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(£¬éÿÿÿÿÿ8åáÕæÙ1
+[kotlin:S6511n"=Merge chained "if" statements into a single "when" statement.(Éø›k8ôáÕæÙ1

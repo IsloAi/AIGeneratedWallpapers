@@ -36,7 +36,6 @@ class ApicategoriesListHorizontalAdapter(
     var context: Context? = null
 
 
-    private var coroutineScope: CoroutineScope? = null
     inner class ViewHolderContainer1( val binding: ListItemTrendingHroizontalBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(modela: ArrayList<CatResponse?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
@@ -88,11 +87,6 @@ class ApicategoriesListHorizontalAdapter(
             val currentTime = System.currentTimeMillis()
 
             if (currentTime - lastClickTime >= debounceThreshold) {
-                val gems = model.gems
-                val isBuy = model.unlockimges
-                Log.d("gems", "onBindViewHolder: $gems")
-
-
                 positionCallback.getPosition(position)
                 lastClickTime = currentTime
             }

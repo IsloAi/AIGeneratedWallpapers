@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,8 +26,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
@@ -34,13 +38,11 @@ class ListViewFragment : Fragment() {
      val myViewModel: MyViewModel by activityViewModels()
     private var name = ""
     private var from = ""
-    private var isLogin = true
     private lateinit var myActivity : MainActivity
     var isNavigationInProgress = false
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    val orignalList = arrayListOf<CatResponse?>()
     var adapter:ApiCategoriesListAdapter ?= null
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
@@ -177,50 +179,33 @@ class ListViewFragment : Fragment() {
         }
 
         binding.swipeLayout.setOnRefreshListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val newData = cachedCatResponses.filterNotNull()
+                val nullAdd = addNullValueInsideArray(newData.shuffled())
 
-            val newData = cachedCatResponses.filterNotNull()
-            val nullAdd = addNullValueInsideArray(newData.shuffled())
-
-            cachedCatResponses.clear()
-            cachedCatResponses = nullAdd
-            val initialItems = getItems(0, 30)
-            startIndex = 0
-            adapter?.addNewData()
-            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-            adapter?.updateMoreData(initialItems)
-            startIndex += 30
+                cachedCatResponses.clear()
+                cachedCatResponses = nullAdd
+                val initialItems = getItems(0, 30)
+                startIndex = 0
+                withContext(Dispatchers.Main){
+                    adapter?.addNewData()
+                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                    adapter?.updateMoreData(initialItems)
+                    startIndex += 30
 
 
 
-            binding.swipeLayout.isRefreshing = false
+                    binding.swipeLayout.isRefreshing = false
+                }
+
+            }
+
+
 
         }
     }
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        // Observe the LiveData in the ViewModel and update the UI accordingly
-//        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-//            if (catResponses != null) {
-//
-//                if (!dataset) {
-//                    val list = addNullValueInsideArray(catResponses.shuffled())
-//
-//                    cachedCatResponses = list
-//
-//                    val initialItems = getItems(0, 30)
-//
-//                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
-//
-//                        adapter?.updateMoreData(initialItems)
-//                        startIndex += 30
-//                    dataset = true
-//                }
-//
-//                Log.e(TAG, "loadData: "+catResponses )
-//            }else{
-//                Log.e(TAG, "loadData: "+catResponses )
-//            }
-//        }
 
 
         myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->
@@ -232,26 +217,34 @@ class ListViewFragment : Fragment() {
 
                 is Response.Success ->{
                     if (!dataset) {
-                        var tempList = ArrayList<CatResponse>()
 
-                        result.data?.forEach {item ->
-                            val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
-                            if (!tempList.contains(model)){
-                                tempList.add(model)
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            var tempList = ArrayList<CatResponse>()
+
+                            result.data?.forEach {item ->
+                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                                if (!tempList.contains(model)){
+                                    tempList.add(model)
+                                }
                             }
+
+                            val list = addNullValueInsideArray(tempList.shuffled())
+
+                            cachedCatResponses = list
+
+                            val initialItems = getItems(0, 30)
+
+                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                            withContext(Dispatchers.Main){
+                                adapter?.updateMoreData(initialItems)
+                                startIndex += 30
+                                dataset = true
+                            }
+
+
                         }
 
-                        val list = addNullValueInsideArray(tempList.shuffled())
 
-                        cachedCatResponses = list
-
-                        val initialItems = getItems(0, 30)
-
-                        Log.e(TAG, "initMostDownloadedData: " + initialItems)
-
-                        adapter?.updateMoreData(initialItems)
-                        startIndex += 30
-                        dataset = true
                     }
                 }
 
@@ -316,78 +309,49 @@ class ListViewFragment : Fragment() {
     }
 
 
-    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 3
+        return withContext(Dispatchers.IO){
+            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+            val firstLine = firstAdLineThreshold * 3
 
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 3
-        val newData = arrayListOf<CatResponse?>()
+            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineC = lineCount * 3
+            val newData = arrayListOf<CatResponse?>()
 
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
-                newData.add(null)
+            for (i in data.indices){
+                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                    newData.add(null)
                     totalADs++
                     Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
                     Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
 
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-            }else if (i == firstLine){
-                newData.add(null)
-                totalADs++
-                Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
-                Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
+                }else if (i == firstLine){
+                    newData.add(null)
+                    totalADs++
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
+                    Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
 
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                newData.add(data[i])
+
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-            newData.add(data[i])
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
 
+
+
+
+             newData
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
 
 
-
-
-        return newData
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
-        var newPosition = position
-        var totalAdsCount = 0
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 2
-
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 2
-
-        for (i in arrayList.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
-                if (i <= newPosition){
-                    totalAdsCount++
-
-                }
-            }else if (i == firstLine){
-                totalAdsCount++
-            }
-
-
-        }
-
-
-        val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList.filterNotNull())
-//        val countOfNulls = arrayList.count { it == null }
-        newPosition = if (position == firstLine){
-            position - totalAdsCount
-        }else if (position < firstLine){
-            position
-        }else{
-            position - totalAdsCount
-        }
-
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
         sharedViewModel.clearData()

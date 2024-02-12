@@ -33,12 +33,7 @@ class MyCreationFavAdapter(
                 model,
                 position,
                 binding.wallpaper,
-                binding.loading,
-                binding.gemsTextView,
-                binding.diamondIcon,
-                binding.likesTextView,
-                binding.setFavouriteButton,
-                binding.lockButton
+                binding.loading
             )
         }
     }
@@ -76,22 +71,11 @@ class MyCreationFavAdapter(
         position: Int,
         wallpaper: ImageView,
         loading: LottieAnimationView,
-        gemsTextView: TextView,
-        diamondIcon: ImageView,
-        likesTextView: TextView,
-        favouriteButton: ImageView,
-        lockButton: ImageView
+
     ) {
         loading.visibility = INVISIBLE
-        gemsTextView.visibility = INVISIBLE
-        diamondIcon.visibility = INVISIBLE
-        likesTextView.visibility = INVISIBLE
-        lockButton.visibility = INVISIBLE
+
         Glide.with(context!!).load(model.image).into(wallpaper)
-        Glide.with(context!!).load(R.drawable.heart_red).into(favouriteButton)
-        favouriteButton.setOnClickListener {
-            getFavouriteImagePath.getPath(model.image!!)
-        }
         wallpaper.setOnClickListener {
           getFavouriteImagePath.getImageClick(position,model.prompt,model.imageId)
         }

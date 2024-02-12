@@ -45,9 +45,6 @@ import java.lang.NullPointerException
 
 class WallpaperApiSliderAdapter(
     private val arrayList: ArrayList<CatResponse?>,
-    private val viewPager2: ViewPager2,
-    private val from:String,
-    private val viewPagerImageClick: ViewPagerImageClick,
     private val fullViewImage: FullViewImage,
     private val mActivity:MainActivity
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -87,7 +84,6 @@ class WallpaperApiSliderAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return if (!isNetworkAvailable() && statusAd == 0) {
-            // If network is not available, display View Container
             VIEW_TYPE_CONTAINER1
         } else {
             when {
@@ -137,7 +133,7 @@ class WallpaperApiSliderAdapter(
 
 
             val model = arrayList[position]
-            dataSet(model!!,binding.imageSlide,binding.progressBar,binding.gemsTextView,binding.blurView,adapterPosition,binding.noDataIMG)
+            dataSet(model!!,binding.imageSlide,binding.progressBar,binding.blurView,adapterPosition,binding.noDataIMG)
         } }
 
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -147,10 +143,9 @@ class WallpaperApiSliderAdapter(
     }
     @SuppressLint("SuspiciousIndentation")
     private fun dataSet(model: CatResponse, imageSlide: AppCompatImageView, progressBar: LottieAnimationView,
-                        gemsTextView: TextView, blurView: ConstraintLayout, adapterPosition: Int,noData:ImageView) {
+                         blurView: ConstraintLayout, adapterPosition: Int,noData:ImageView) {
         progressBar.visibility = VISIBLE
         progressBar.setAnimation(R.raw.main_loading_animation)
-        gemsTextView.text = model.gems.toString()
         if(model.gems==0 || model.unlockimges==true){
           blurView.visibility = INVISIBLE
         }else{

@@ -55,9 +55,6 @@ class LiveWallpaperAdapter(
 
     var row = 0
 
-    private var firstUrl:String = ""
-
-//    private val NATIVE_AD_INTERVAL = 10
 
     private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
 
@@ -65,8 +62,6 @@ class LiveWallpaperAdapter(
     private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
     val lineC = lineCount*3
     private val statusAd =  AdConfig.adStatusViewListWallSRC
-    private val myDialogs = MyDialogs()
-
     private var coroutineScope: CoroutineScope? = null
 
     fun setCoroutineScope(scope: CoroutineScope) {
@@ -76,8 +71,7 @@ class LiveWallpaperAdapter(
         fun bind(modela: ArrayList<LiveWallpaperModel?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-                ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder,binding.errorImage)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -154,48 +148,10 @@ class LiveWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: LiveWallpaperModel, position:Int, animationView: LottieAnimationView, gemsView: TextView, likes: TextView, favouriteButton: ImageView
-                           , lockButton: ImageView, diamondIcon: ImageView, wallpaperMainImage: ImageView, holder: RecyclerView.ViewHolder, error_img: ImageView
+    private fun setAllData(model: LiveWallpaperModel, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView, error_img: ImageView
     ){
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
-//        if (model.likes!! > 0){
-//            likes.text = model.likes.toString()
-//        }else{
-//            if (model.liked ==  true){
-//                likes.text = 1.toString()
-//            }else{
-//                likes.text = 0.toString()
-//            }
-//
-//        }
-
-//        if(model.liked==true){
-//            favouriteButton.setImageResource(R.drawable.heart_red)
-//        }else{
-//            favouriteButton.setImageResource(R.drawable.heart_unsel)
-//        }
-
-//        Glide.with(holder.itemView.context)
-//            .asGif()
-//            .load(R.raw.gems_animaion)
-//            .into(diamondIcon)
-//        if(model.gems==0 || model.unlockimges==true){
-//            lockButton.visibility = View.GONE
-//            diamondIcon.visibility = View.GONE
-//            gemsView.visibility = View.GONE
-//            Log.d("tracingImageId", "free: category = ${model.cat_name}  , imageId =  ${model.id}, model = $model")
-//        }else{
-//            lockButton.visibility = View.GONE
-//            diamondIcon.visibility = View.GONE
-//            gemsView.visibility = View.GONE
-//            Log.d("tracingImageId", "paid: category = ${model.cat_name}  , imageId = ${model.id}, model = $model")
-//        }
-//        Log.d("nadeemAhmad", "setAllData: ${model.compressed_image_url}")
-//        Log.e("*******urls", "setAllData: "+model.videos.medium )
-
-
-
         Glide.with(context!!).load(model.thumnail_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -245,20 +201,7 @@ class LiveWallpaperAdapter(
 
 
         }
-        favouriteButton.setOnClickListener{
-            favouriteButton.isEnabled = false
 
-//
-//            if(arrayList[position]?.liked==true){
-//                arrayList[position]?.liked = false
-//                favouriteButton.setImageResource(R.drawable.heart_unsel)
-//                likes.text = (arrayList[position]?.likes!!-1).toString()
-//            }else{
-//                arrayList[position]?.liked = true
-//                favouriteButton.setImageResource(R.drawable.heart_red)
-//                likes.text = (arrayList[position]?.likes!!+1).toString()
-//            }
-        }
     }
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){

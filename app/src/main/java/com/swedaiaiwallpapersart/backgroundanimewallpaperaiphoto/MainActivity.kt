@@ -57,6 +57,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -69,42 +70,22 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
     private lateinit var controller: NavController
     lateinit var binding: ActivityMainBinding
-    private val selectedPromptList = ArrayList<SelectedPromptListModel>()
-    private var arrayList = ArrayList<Prompts>()
     private var selectedPrompt: String? = null
 
     private var alertDialog: AlertDialog? = null
 
-
-//    private val viewModel: MostDownloadedViewmodel by viewModels()
-
-//    private val homeViewmodel: MyHomeViewModel by viewModels()
-
     private val liveViewModel: LiveWallpaperViewModel by viewModels()
     val TAG = "ANRSPY"
 
-//    private val mainActivityViewModel: MainActivityViewModel by viewModels()
-
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
-
-    var tokenGenerated = false
-
-//    @Inject
-//    lateinit var workManager: WorkManager
 
     @Inject
     lateinit var appDatabase: AppDatabase
-
-    private var isWorkManagerInitialized = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
-//        if (!tokenGenerated){
-//            mainActivityViewModel.generateDeviceToken(deviceID)
-//            tokenGenerated = true
-//        }
         val lan = MySharePreference.getLanguage(this)
         (application as? MyApp)?.setConnectivityListener(this)
 
@@ -120,7 +101,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        myCatNameViewModel.fetchWallpapers(binding.progressBar)
+        myCatNameViewModel.fetchWallpapers()
         liveViewModel.fetchWallpapers(this)
 
         if (!isNetworkAvailable()){
@@ -156,25 +137,15 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             appDatabase.wallpapersDao().insert(model)
                         }
                     }
-                    // Now 'images' contains the parsed data from the JSON file
-                    // Do whatever you need with the data
+
                 } else {
-                    // Handle parsing error
+
                 }
             } else {
-                // Handle file reading error
+
             }
         }
 
-
-
-
-
-
-
-
-
-//        initObservers()
         Log.d("tracingImageId", "onCreate: id= $deviceID")
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID)
@@ -199,29 +170,35 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         }
     }
 
-    fun parseJson(jsonString: String): ListResponse? {
-        return try {
-            val gson = Gson()
-            gson.fromJson(jsonString, ListResponse::class.java)
-        } catch (e: JsonSyntaxException) {
-            e.printStackTrace()
-            null
+    suspend fun parseJson(jsonString: String): ListResponse? {
+        return withContext(Dispatchers.IO){
+            try {
+                val gson = Gson()
+                gson.fromJson(jsonString, ListResponse::class.java)
+            } catch (e: JsonSyntaxException) {
+                e.printStackTrace()
+                null
+            }
         }
+
     }
 
 
-    fun readJsonFile(context: Context, fileName: String): String {
-        return try {
-            val inputStream: InputStream = context.assets.open(fileName)
-            val size: Int = inputStream.available()
-            val buffer = ByteArray(size)
-            inputStream.read(buffer)
-            inputStream.close()
-            String(buffer, Charsets.UTF_8)
-        } catch (e: IOException) {
-            e.printStackTrace()
-            ""
+    suspend fun readJsonFile(context: Context, fileName: String): String {
+        return withContext(Dispatchers.IO){
+            try {
+                val inputStream: InputStream = context.assets.open(fileName)
+                val size: Int = inputStream.available()
+                val buffer = ByteArray(size)
+                inputStream.read(buffer)
+                inputStream.close()
+                String(buffer, Charsets.UTF_8)
+            } catch (e: IOException) {
+                e.printStackTrace()
+                ""
+            }
         }
+
     }
 
 

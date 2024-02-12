@@ -42,7 +42,7 @@ import java.io.InputStream
 
 class DownloadLiveWallpaperFragment : Fragment() {
 
-    private var _binding:FragmentDownloadLiveWallpaperBinding ?= null
+    private var _binding: FragmentDownloadLiveWallpaperBinding?= null
 
     private val binding get() = _binding!!
 

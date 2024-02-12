@@ -1,20 +1,14 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
-import android.app.Dialog
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -22,10 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -34,16 +24,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -54,6 +38,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 @AndroidEntryPoint
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
@@ -109,20 +94,27 @@ class HomeFragment : Fragment(){
         binding.swipeLayout.setOnRefreshListener {
 
             val newData = cachedCatResponses.filterNotNull()
-            val nullAdd = addNullValueInsideArray(newData.shuffled())
+            lifecycleScope.launch(Dispatchers.IO) {
+                val nullAdd = addNullValueInsideArray(newData.shuffled())
 
-            cachedCatResponses.clear()
-            cachedCatResponses = nullAdd
-            val initialItems = getItems(0, 30)
-            startIndex = 0
-            adapter.addNewData()
-            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-            adapter.updateMoreData(initialItems)
-            startIndex += 30
+                withContext(Dispatchers.Main){
+                    cachedCatResponses.clear()
+                    cachedCatResponses = nullAdd
+                    val initialItems = getItems(0, 30)
+                    startIndex = 0
+                    adapter.addNewData()
+                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                    adapter.updateMoreData(initialItems)
+                    startIndex += 30
 
 
 
-            binding.swipeLayout.isRefreshing = false
+                    binding.swipeLayout.isRefreshing = false
+                }
+            }
+
+
+
 
         }
     }
@@ -131,7 +123,6 @@ class HomeFragment : Fragment(){
 //        checkDailyReward()
 
         navController = findNavController()
-        binding.progressBar.visibility = View.GONE
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
@@ -152,11 +143,10 @@ class HomeFragment : Fragment(){
                 if (lastVisibleItemPosition + 10 >= totalItemCount) {
 
                     isLoadingMore = true
-                    // End of list reached
                     val nextItems = getItems(startIndex, 30)
                     if (nextItems.isNotEmpty()) {
                         Log.e(TAG, "onScrolled: inside 3 coondition")
-                        adapter?.updateMoreData(nextItems)
+                        adapter.updateMoreData(nextItems)
                         startIndex += 30 // Update startIndex for the next batch of data
                     } else {
                         Log.e(TAG, "onScrolled: inside 4 coondition")
@@ -170,36 +160,6 @@ class HomeFragment : Fragment(){
     }
 
     private fun loadData() {
-
-
-//        myViewModel.wallpaperData.observe(viewLifecycleOwner) { wallpapers ->
-//            if (wallpapers != null) {
-//
-//                if (view != null) {
-//
-//                    lifecycleScope.launch(Dispatchers.IO) {
-//                        if (!dataset) {
-//                            val list = addNullValueInsideArray(wallpapers.shuffled())
-//
-//                            cachedCatResponses = list
-//
-//                            val initialItems = getItems(0, 30)
-//
-//                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-//
-//                            withContext(Dispatchers.Main) {
-//                                adapter.updateMoreData(initialItems)
-//                                startIndex += 30
-//                            }
-//
-//                            dataset = true
-//                        }
-//                    }
-//                }
-//            } else {
-//                Log.e(TAG, "initMostDownloadedData: no Data Found " )
-//            }
-//        }
 
         myViewModel.getAllTrendingWallpapers()
 
@@ -257,53 +217,6 @@ class HomeFragment : Fragment(){
         }
 
 
-
-
-
-//        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-//            if (catResponses != null) {
-//                cachedCatResponses = catResponses
-//
-//
-//                if (view != null) {
-//                    // If the view is available, update the UI
-//                    orignalList.clear()
-//                    orignalList.addAll(catResponses)
-//                    binding.retryBtn.visibility = View.GONE
-//
-//                    if (isFirstLoad) {
-//                        isFirstLoad = false // Update the flag after the initial load
-//                        binding.retryBtn.visibility = View.GONE
-//                        updateUIWithFetchedData(catResponses)
-//                        Log.e("********new Data", "loadData new first: "+catResponses.size )
-//                        Log.e("********new Data", "loadData new first: "+catResponses )
-//                    } else {
-//
-//                        Log.e("********new Data", "loadData more: "+catResponses.size )
-//                        Log.e("********new Data", "loadData more: "+catResponses )
-//
-//                        val list = addNullValueInsideArray(catResponses)
-//                        isLastPage = false
-//                        adapter.updateMoreData(list)
-//                    }
-//
-//
-//                }
-//            }else{
-//                myViewModel.fetchWallpapers(requireContext(), binding.progressBar,currentPage.toString())
-//
-//                isFirstLoad = true
-//
-//                if (viewModel.getData()){
-//                    binding.retryBtn.visibility = View.GONE
-//                }else{
-//                    binding.retryBtn.visibility = View.GONE
-//                }
-//
-//            }
-//        }
-
-
     }
 
 
@@ -323,38 +236,42 @@ class HomeFragment : Fragment(){
 
 
 
-    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+    suspend private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+
+        return withContext(Dispatchers.IO){
+            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+            val firstLine = firstAdLineThreshold * 3
+
+            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineC = lineCount * 3
+            val newData = arrayListOf<CatResponse?>()
+
+            for (i in data.indices){
+                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                    newData.add(null)
 
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 3
 
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 3
-        val newData = arrayListOf<CatResponse?>()
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
-                newData.add(null)
+                }else if (i == firstLine){
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                newData.add(data[i])
 
-
-
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
-
-            }else if (i == firstLine){
-                newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-            newData.add(data[i])
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
 
+
+
+
+            newData
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
 
 
 
-
-        return newData
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
@@ -423,8 +340,6 @@ class HomeFragment : Fragment(){
 
         viewModel.setCatList(arrayList.filterNotNull() as ArrayList<CatResponse>)
         viewModel.setData(false)
-        val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList.filterNotNull())
 
         val countOfNulls = arrayList.subList(0, position).count { it == null }
         val sharedViewModel: SharedViewModel by activityViewModels()
@@ -451,9 +366,6 @@ class HomeFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-
-//        dataset = false
-//        startIndex = 0
 
         loadData()
         if (dataset){
@@ -500,7 +412,6 @@ class HomeFragment : Fragment(){
         super.onDestroyView()
         isFirstLoad = true
         _binding =null
-        fragmentScope.cancel()
     }
 
 }

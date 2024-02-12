@@ -29,7 +29,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,8 +69,7 @@ class MostUsedWallpaperAdapter(
             val model = modela[position]
             Log.e(TAG, "bind: content place", )
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-                ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder,binding.errorImage)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -147,17 +145,10 @@ class MostUsedWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, gemsView: TextView, likes: TextView, favouriteButton: ImageView
-                           , lockButton: ImageView, diamondIcon: ImageView, wallpaperMainImage: ImageView, holder: RecyclerView.ViewHolder, error_img: ImageView
+    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView,  error_img: ImageView
     ){
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
-
-
-        Glide.with(holder.itemView.context)
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(diamondIcon)
 
         Log.e("TAG", "*******MostUsed: "+model.compressed_image_url )
 

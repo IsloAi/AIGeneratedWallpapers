@@ -243,7 +243,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
     }
 
 
-    fun showSimpleDialog(context: Context, title: kotlin.String, message: kotlin.String) {
+    fun showSimpleDialog(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
             .setMessage(message)
@@ -407,13 +407,6 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
     }
 
-    fun isLiveWallpaperSupported(context: Context): Boolean {
-        val intent = Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER)
-        val activities =
-            context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        return activities.isNotEmpty()
-    }
-
     private fun addFavourite(
         context: Context,
         favouriteButton: ImageView
@@ -473,13 +466,6 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         binding.liveWallpaper.start()
-    }
-
-
-    fun isLiveWallpaperServiceRunning(context: Context): Boolean {
-        val wallpaperManager = WallpaperManager.getInstance(context)
-        val wallpaperInfo = wallpaperManager.wallpaperInfo
-        return wallpaperInfo != null && wallpaperInfo.serviceName == LiveWallpaperService::class.java.name
     }
 
 

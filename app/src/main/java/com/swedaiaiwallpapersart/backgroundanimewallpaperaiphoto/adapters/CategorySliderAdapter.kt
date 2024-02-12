@@ -65,7 +65,7 @@ class CategorySliderAdapter(
 
     override fun getItemCount() = arrayList.size
 
-    class ViewHolder(val binding:CatContainerBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: CatContainerBinding) : RecyclerView.ViewHolder(binding.root)
 
     private val runable = Runnable {
         arrayList.addAll(arrayList)

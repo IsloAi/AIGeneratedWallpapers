@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class LiveWallpaperFragment : Fragment() {
 
@@ -76,10 +77,18 @@ class LiveWallpaperFragment : Fragment() {
                 Log.e("TAG", "loadData: "+catResponses )
                 if (view != null) {
                     // If the view is available, update the UI
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val list = addNullValueInsideArray(catResponses)
+
+                        withContext(Dispatchers.Main){
+                            adapter?.updateMoreData(list)
+                            adapter!!.setCoroutineScope(fragmentScope)
+                        }
+
+                    }
 //
-                    val list = addNullValueInsideArray(catResponses)
-                    adapter?.updateMoreData(list)
-                    adapter!!.setCoroutineScope(fragmentScope)
+
                 }
             }else{
                 myViewModel.fetchWallpapers(requireContext())
@@ -184,37 +193,41 @@ class LiveWallpaperFragment : Fragment() {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-    private fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?>{
+    private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?>{
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 3
+        return withContext(Dispatchers.IO){
+            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+            val firstLine = firstAdLineThreshold * 3
 
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 3
-        val newData = arrayListOf<LiveWallpaperModel?>()
+            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineC = lineCount * 3
+            val newData = arrayListOf<LiveWallpaperModel?>()
 
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
-                newData.add(null)
+            for (i in data.indices){
+                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+                    newData.add(null)
 
 
 
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-            }else if (i == firstLine){
-                newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }else if (i == firstLine){
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                newData.add(data[i])
+
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-            newData.add(data[i])
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
 
+
+
+
+             newData
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
 
 
-
-
-        return newData
     }
 
 

@@ -105,8 +105,7 @@ class ApiCategoriesListAdapter(
         fun bind(modela: ArrayList<CatResponse?>,holder: ViewHolder,position: Int) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.gemsTextView,binding.likesTextView,binding.setFavouriteButton
-            ,binding.lockButton,binding.diamondIcon,binding.wallpaper,holder,binding.errorImage)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,holder,binding.errorImage)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -183,43 +182,28 @@ class ApiCategoriesListAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, gemsView:TextView, likes:TextView, favouriteButton: ImageView
-                           , lockButton:ImageView, diamondIcon:ImageView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView){
+    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView){
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
-        gemsView.text = model.gems.toString()
-        if (model.likes!! > 0){
-            likes.text = model.likes.toString()
-        }else{
-            if (model.liked ==  true){
-                likes.text = 1.toString()
-            }else{
-                likes.text = 0.toString()
-            }
+//        if (model.likes!! > 0){
+//            likes.text = model.likes.toString()
+//        }else{
+//            if (model.liked ==  true){
+//                likes.text = 1.toString()
+//            }else{
+//                likes.text = 0.toString()
+//            }
+//
+//        }
 
-        }
+//        if(model.liked==true){
+//            favouriteButton.setImageResource(R.drawable.heart_red)
+//        }else{
+//            favouriteButton.setImageResource(R.drawable.heart_unsel)
+//        }
 
-        if(model.liked==true){
-            favouriteButton.setImageResource(R.drawable.heart_red)
-        }else{
-            favouriteButton.setImageResource(R.drawable.heart_unsel)
-        }
 
-        Glide.with(holder.itemView.context)
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(diamondIcon)
-        if(model.gems==0 || model.unlockimges==true){
-           lockButton.visibility = GONE
-           diamondIcon.visibility = GONE
-            gemsView.visibility = GONE
-            Log.d("tracingImageId", "free: category = ${model.cat_name}  , imageId =  ${model.id}, model = $model")
-        }else{
-            lockButton.visibility = GONE
-            diamondIcon.visibility =GONE
-            gemsView.visibility = GONE
-            Log.d("tracingImageId", "paid: category = ${model.cat_name}  , imageId = ${model.id}, model = $model")
-        }
+//
         Log.d("nadeemAhmad", "setAllData: ${model.compressed_image_url}")
 
         Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -271,22 +255,6 @@ class ApiCategoriesListAdapter(
                 
                 lastClickTime = currentTime
             }
-
-
-        }
-        favouriteButton.setOnClickListener{
-            favouriteButton.isEnabled = false
-            if(arrayList[position]?.liked==true){
-                    arrayList[position]?.liked = false
-                    favouriteButton.setImageResource(R.drawable.heart_unsel)
-                    likes.text = (arrayList[position]?.likes!!-1).toString()
-                }else{
-                    arrayList[position]?.liked = true
-                    favouriteButton.setImageResource(R.drawable.heart_red)
-                    likes.text = (arrayList[position]?.likes!!+1).toString()
-                }
-                addFavourite(context!!,model,favouriteButton,likes)
-
 
 
         }
@@ -358,86 +326,9 @@ class ApiCategoriesListAdapter(
             networkInfo != null && networkInfo.isConnected
         }
     }
-    @SuppressLint("SuspiciousIndentation")
-    private fun addFavourite(
-        context: Context,
-        model: CatResponse,
-        favouriteButton: ImageView,
-        likesTextView: TextView){
-        val retrofit = RetrofitInstance.getInstance()
-        val apiService = retrofit.create(ApiService::class.java)
-        val postData = PostData(MySharePreference.getDeviceID(context)!!, model.id.toString())
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val response = apiService.postData(postData).execute()
-                  withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        positionCallback.getFavorites(1)
-                        val message = response.body()?.string()
-                        if (message == "Liked") {
-                            val like = model.likes
-                            val newLike = like!! + 1
-                            model.likes = newLike
-                            likesTextView.text = newLike.toString()
-                            favouriteButton.setImageResource(R.drawable.heart_red)
-                        } else {
-                            val like = model.likes
-                            val newLike = like!! - 1
-                            model.likes = newLike
-                            likesTextView.text = newLike.toString()
-                            favouriteButton.setImageResource(R.drawable.heart_unsel)
-                        }
-                        favouriteButton.isEnabled = true
-                    } else {
-                        favouriteButton.isEnabled = true
-                        Toast.makeText(context, "onResponse error", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            } catch (t: Throwable) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
-                    favouriteButton.isEnabled = true
-                }
-            }
-        }
-    }
-
-
 
     fun getFirstImageUrl():String{
         return arrayList[0]?.hd_image_url!!
-    }
-
-
-    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
-
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-        val firstLine = firstAdLineThreshold * 2
-
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-        val lineC = lineCount * 2
-        val newData = arrayListOf<CatResponse?>()
-
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
-                newData.add(null)
-
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
-
-            }else if (i == firstLine){
-                newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
-            }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-            newData.add(data[i])
-
-        }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-
-
-
-
-        return newData
     }
 
 
@@ -462,12 +353,6 @@ class ApiCategoriesListAdapter(
         arrayList.clear()
         notifyDataSetChanged()
 
-    }
-
-    fun updateData(list:ArrayList<CatResponse?>){
-        arrayList.clear()
-        arrayList.addAll(list)
-        notifyDataSetChanged()
     }
 
 
