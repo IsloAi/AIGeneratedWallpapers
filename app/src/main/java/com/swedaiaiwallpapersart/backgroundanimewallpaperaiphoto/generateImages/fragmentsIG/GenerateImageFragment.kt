@@ -102,17 +102,10 @@ class GenerateImageFragment : Fragment() {
     }
     private fun customOnCreateCalling() {
 
-        Glide.with(requireContext())
-            .asGif()
-            .load(R.raw.gems_animaion)
-            .into(binding.animationDdd)
-
-
         val roomDatabase = AppDatabase.getInstance(requireContext())
         myActivity = activity as MainActivity
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         existGems = MySharePreference.getGemsValue(requireContext())
-        binding.gemsText.text = existGems.toString()
         loadRecyclerView()
         viewModel = ViewModelProvider(this)[ImageGenerateViewModel::class.java]
 
@@ -193,22 +186,12 @@ class GenerateImageFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
-    @SuppressLint("SuspiciousIndentation")
-    private fun postGems(){
-      val totalGems = existGems?.minus(10)
-        postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
-            RetrofitInstance.getInstance(),totalGems!!, PostDataOnServer.isPlan)
-            MySharePreference.setGemsValue(requireContext(),totalGems)
-           binding.gemsText.text = totalGems.toString()
-    }
+
     private fun navigate(listId: Int, timeDisplay: Int?){
 
-            if(timeDisplay!! >0){
-                postGems()
-            }
             val bundle = Bundle().apply {
                 putInt("listId",listId)
-                putInt("timeDisplay", timeDisplay)
+                putInt("timeDisplay", timeDisplay!!)
             }
            findNavController().navigate(R.id.myViewCreationFragment,bundle)
 

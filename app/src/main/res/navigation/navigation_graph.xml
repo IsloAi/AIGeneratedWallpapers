@@ -225,5 +225,10 @@
         android:id="@+id/favouriteFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.FavouriteFragment"
         android:label="FavouriteFragment" />
+    <fragment
+        android:id="@+id/IAPFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.IAPFragment"
+        android:label="fragment_i_a_p"
+        tools:layout="@layout/fragment_i_a_p" />
 
 </navigation>

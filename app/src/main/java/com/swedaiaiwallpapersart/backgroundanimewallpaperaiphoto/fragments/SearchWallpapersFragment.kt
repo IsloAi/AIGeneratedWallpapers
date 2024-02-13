@@ -331,7 +331,7 @@ class SearchWallpapersFragment : Fragment() {
 //                    customProgressBar.getDialog()?.dismiss()
                     if (!result.data.isNullOrEmpty()) {
                         result.data.forEach { item ->
-                            val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,null,item.size,item.Tags,item.capacity)
+                            val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
                             if (cachedCatResponses?.contains(model) != true){
                                 cachedCatResponses?.add(model)
                             }

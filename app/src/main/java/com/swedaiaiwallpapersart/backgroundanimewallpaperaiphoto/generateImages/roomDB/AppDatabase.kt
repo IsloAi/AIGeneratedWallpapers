@@ -1,6 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB
 
-import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -12,7 +11,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.WallpapersDao
 
 
-@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class ], version = 7)
+@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class ], version = 8)
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getResponseIGDao(): GetResponseIGDao
@@ -34,6 +33,12 @@ abstract class AppDatabase : RoomDatabase() {
         fun getInstance(context: Context): AppDatabase {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }
+            }
+        }
+
+        private val MIGRATION_7_8 = object : Migration(7, 8) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE allWallpapers ADD COLUMN unlocked INTEGER NOT NULL DEFAULT 1")
             }
         }
 
@@ -85,7 +90,7 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "appDatabase"
             ).allowMainThreadQueries()
-                .addMigrations(MIGRATION_5_6, MIGRATION_6_7)
+                .addMigrations(MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
                 .build()
         }
 

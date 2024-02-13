@@ -30,6 +30,10 @@ interface WallpapersDao {
     fun updateLiked(liked:Boolean,Id: Int)
 
 
+    @Query("UPDATE allWallpapers SET unlocked=:liked WHERE id=:Id")
+    fun updateLocked(liked:Boolean,Id: Int)
+
+
 
 
 }

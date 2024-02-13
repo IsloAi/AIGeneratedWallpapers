@@ -106,5 +106,8 @@
     <string name="gen_ai">Gen AI</string>
     <string name="more">More</string>
     <string name="go">GO</string>
+    <string name="premium_upgrade">Premium Upgrade</string>
+    <string name="unlock_all_wallpapers">Unlock All Wallpapers</string>
+    <string name="completely_ad_free">Completely Ad-Free</string>
 
 </resources>

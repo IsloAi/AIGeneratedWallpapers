@@ -1,15 +1,15 @@
 
-<kotlin:S6310º"Avoid hardcoded dispatchers.(ÏÃâ8œ·êæÙ1
-;kotlin:S6310¶"Avoid hardcoded dispatchers.(©ÓœW8ı´íæÙ1
-<kotlin:S6310¾"Avoid hardcoded dispatchers.(Í¡·Ş8šêæÙ1
-;kotlin:S6310İ"Avoid hardcoded dispatchers.(©ÓœW8ı´íæÙ1
-<kotlin:S6310î"Avoid hardcoded dispatchers.(Í¡·Ş8ı´íæÙ1
-Hkotlin:S108Ö")Either remove or fill this block of code.(·Úøš8†µíæÙ1
-Gkotlin:S108û")Either remove or fill this block of code.(›Ñû08†µíæÙ1
-Mkotlin:S108ÿ")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8‡µíæÙ1
->kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÛİïæÙ1
-pkotlin:S1192Æ"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8–µíæÙ1
-‡kotlin:S1192Æ"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8–µíæÙ1
-Gkotlin:S1874G"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8‘áøåÙ1
-zkotlin:S1186"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8™áøåÙ1
-fkotlin:S6510‡"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8ŸµíæÙ1
+<kotlin:S6310º"Avoid hardcoded dispatchers.(ÏÃâ8·³Ã’Ú1
+;kotlin:S6310¶"Avoid hardcoded dispatchers.(©ÓœW8¸³Ã’Ú1
+<kotlin:S6310¾"Avoid hardcoded dispatchers.(Í¡·Ş8¸³Ã’Ú1
+;kotlin:S6310İ"Avoid hardcoded dispatchers.(©ÓœW8¸³Ã’Ú1
+<kotlin:S6310î"Avoid hardcoded dispatchers.(Í¡·Ş8¹³Ã’Ú1
+Hkotlin:S108Ö")Either remove or fill this block of code.(·Úøš8Ä³Ã’Ú1
+Gkotlin:S108û")Either remove or fill this block of code.(›Ñû08Å³Ã’Ú1
+Mkotlin:S108ÿ")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8Å³Ã’Ú1
+>kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8Ñ³Ã’Ú1
+pkotlin:S1192Æ"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8Ó³Ã’Ú1
+‡kotlin:S1192Æ"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8Ô³Ã’Ú1
+Gkotlin:S1874G"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8Õ³Ã’Ú1
+zkotlin:S1186"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8Ú³Ã’Ú1
+fkotlin:S6510‡"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8Û³Ã’Ú1

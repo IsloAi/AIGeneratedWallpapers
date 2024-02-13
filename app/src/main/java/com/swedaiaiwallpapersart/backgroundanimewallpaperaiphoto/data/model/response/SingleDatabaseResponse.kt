@@ -15,5 +15,6 @@ data class SingleDatabaseResponse(
     var liked: Boolean? = null,
     var size: Int? = null,
     var Tags: String? = null,
-    var capacity: String? = null
+    var capacity: String? = null,
+    var unlocked:Boolean = true
 )

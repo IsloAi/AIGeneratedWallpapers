@@ -105,7 +105,7 @@ class ApiCategoriesListAdapter(
         fun bind(modela: ArrayList<CatResponse?>,holder: ViewHolder,position: Int) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,holder,binding.errorImage)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,holder,binding.errorImage,binding.iapInd)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -182,7 +182,7 @@ class ApiCategoriesListAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView){
+    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView,iapItem:ImageView){
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 //        if (model.likes!! > 0){
@@ -202,6 +202,12 @@ class ApiCategoriesListAdapter(
 //            favouriteButton.setImageResource(R.drawable.heart_unsel)
 //        }
 
+
+        if (model.unlockimges == false){
+            iapItem.visibility = View.VISIBLE
+        }else{
+            iapItem.visibility = View.GONE
+        }
 
 //
         Log.d("nadeemAhmad", "setAllData: ${model.compressed_image_url}")

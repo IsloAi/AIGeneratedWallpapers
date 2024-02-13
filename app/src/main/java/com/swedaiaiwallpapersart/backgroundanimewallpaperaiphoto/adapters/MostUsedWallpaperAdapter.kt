@@ -69,7 +69,7 @@ class MostUsedWallpaperAdapter(
             val model = modela[position]
             Log.e(TAG, "bind: content place", )
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage,binding.iapInd)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -145,12 +145,18 @@ class MostUsedWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView,  error_img: ImageView
+    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView,  error_img: ImageView,iapItem:ImageView
     ){
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
         Log.e("TAG", "*******MostUsed: "+model.compressed_image_url )
+
+        if (model.unlockimges == false){
+            iapItem.visibility = View.VISIBLE
+        }else{
+            iapItem.visibility = View.GONE
+        }
 
         Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object: RequestListener<Drawable> {

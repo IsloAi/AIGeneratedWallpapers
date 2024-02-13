@@ -51,11 +51,15 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -78,6 +82,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     val TAG = "ANRSPY"
 
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
+
+    val mainActivityViewModel:MainActivityViewModel by viewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -119,7 +125,26 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 if (imageList != null) {
                     val images = imageList.images
 
-                    images.forEach { item ->
+//                    images.forEach { item ->
+//                        Log.e(TAG, "onCreate: "+item )
+//                        val model = SingleDatabaseResponse(
+//                            item.id,
+//                            item.cat_name,
+//                            item.image_name,
+//                            AdConfig.HD_ImageUrl + item.url,
+//                            AdConfig.Compressed_Image_url + item.url,
+//                            item.likes,
+//                            item.liked,
+//                            item.size,
+//                            item.Tags,
+//                            item.capacity
+//                        )
+//                        CoroutineScope(Dispatchers.IO).launch {
+//                            appDatabase.wallpapersDao().insert(model)
+//                        }
+//                    }
+
+                    val deferreds = images.map { item ->
                         Log.e(TAG, "onCreate: "+item )
                         val model = SingleDatabaseResponse(
                             item.id,
@@ -131,11 +156,23 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             item.liked,
                             item.size,
                             item.Tags,
-                            item.capacity
+                            item.capacity,
+                            true
                         )
-                        CoroutineScope(Dispatchers.IO).launch {
+
+                        CoroutineScope(Dispatchers.IO).async {
                             appDatabase.wallpapersDao().insert(model)
                         }
+
+                    }
+
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        deferreds.awaitAll()
+                        // This code will execute after all insert operations are completed
+                        // You can call your method here
+                        mainActivityViewModel.getMostUsed("1","400")
+                        initObservers()
                     }
 
                 } else {
@@ -155,6 +192,36 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         controller = navHostFragment.navController
         initFirebaseRemoteConfig()
+    }
+
+
+    fun initObservers(){
+        mainActivityViewModel.mostUsed.observe(this){result ->
+            when(result){
+                is Response.Success -> {
+                    result.data?.forEach { item->
+                        Log.e(TAG, "initObservers: $item")
+
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            appDatabase.wallpapersDao().updateLocked(false,item.image_id.toInt())
+                        }
+                    }
+                }
+
+                is Response.Processing -> {
+
+                    Log.e(TAG, "initObservers: processing" )
+
+                }
+
+                is Response.Error -> {
+                    Log.e(TAG, "initObservers: error" )
+                }
+
+                else -> {}
+            }
+
+        }
     }
 
     private fun isNetworkAvailable(): Boolean {
@@ -488,7 +555,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         applyButton.setOnClickListener {
             val getPromptText = editPrompt.text.toString()
             if (getPromptText.isNotEmpty()) {
-                val extendPrompt = "$getPromptText, $selectedPrompt"
+                val extendPrompt = "$selectedPrompt"
                 editPrompt.setText(extendPrompt)
             } else {
                 editPrompt.setText(selectedPrompt)

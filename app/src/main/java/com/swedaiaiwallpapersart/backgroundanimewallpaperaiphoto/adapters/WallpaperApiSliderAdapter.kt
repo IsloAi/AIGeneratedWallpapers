@@ -146,10 +146,10 @@ class WallpaperApiSliderAdapter(
                          blurView: ConstraintLayout, adapterPosition: Int,noData:ImageView) {
         progressBar.visibility = VISIBLE
         progressBar.setAnimation(R.raw.main_loading_animation)
-        if(model.gems==0 || model.unlockimges==true){
+        if(model.unlockimges==true){
           blurView.visibility = INVISIBLE
         }else{
-            blurView.visibility = INVISIBLE
+            blurView.visibility = VISIBLE
         }
 
         imageSlide.setOnClickListener {

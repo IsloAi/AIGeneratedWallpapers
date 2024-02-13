@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
 import android.util.Log
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.MostDownloadedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
@@ -45,7 +46,6 @@ class WallpaperRepositryImp@Inject constructor(
 
         } catch (e: Exception) {
             Log.e("TAG", "GenerateDeviceToken: "+e.message )
-//            trySend(retrofit2.Response.error(res))
         }
         awaitClose()
     }
@@ -71,29 +71,6 @@ class WallpaperRepositryImp@Inject constructor(
 
             Log.e("TAG", "getAllWallpapers: " )
 
-//            when (resp.status.lowercase()) {
-//                "failed"->{
-//                    trySend(Response.Error(resp.message.toString()))
-//                }
-//                "success" -> {
-//                    trySend(Response.Success(resp))
-//                }
-//
-//                "processing" -> {
-////                        trySend(Response.Processing(resp))
-////                        val eta = resp.eta?.toInt()
-////                        val etaInMillis = (eta!! * 1000)
-////                        delay(etaInMillis.toLong())
-////                        val id = resp.id
-////                        val respQueued = webApiInterface.FetchImageData(id, dtoObject)
-//                    resp.output = listOf("","","","")
-//                    trySend(Response.Success(resp))
-//                }
-//
-//                "error" -> {
-//                    trySend(Response.Error(resp.message.toString()))
-//                }
-//            }
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
@@ -136,5 +113,30 @@ class WallpaperRepositryImp@Inject constructor(
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
+    }
+
+    override fun getMostDownloaded(
+        page: String,
+        record: String
+    ): Flow<Response<ArrayList<MostDownloadedResponse>>> = channelFlow {
+
+        try {
+            trySend(Response.Loading)
+            Log.e("TAG", "GenerateTextToImage: I came here")
+            val resp = webApiInterface.getMostUsed(page,record)
+            Log.e("TAG", "GenerateTextToImage: $resp")
+
+            if (resp.isSuccessful){
+
+                trySend(Response.Success(resp.body()?.images))
+            }
+            Log.e("TAG", "getAllWallpapers: " )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
+
+        awaitClose()
+
     }
 }

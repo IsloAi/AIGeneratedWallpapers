@@ -197,6 +197,10 @@ class HomeTabsFragment : Fragment() {
         binding.search.setOnClickListener {
             findNavController().navigate(R.id.searchWallpapersFragment)
         }
+
+        binding.goPremium.setOnClickListener {
+            findNavController().navigate(R.id.IAPFragment)
+        }
         backHandle()
     }
 
