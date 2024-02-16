@@ -26,4 +26,8 @@ object AdConfig {
 
     val HD_ImageUrl = "https://edecator.com/wallpaperApp/images/"
     val Compressed_Image_url = "https://edecator.com/wallpaperApp/compress/"
+
+    var iapScreenType = 2
+
+    var ISPAIDUSER = false
 }

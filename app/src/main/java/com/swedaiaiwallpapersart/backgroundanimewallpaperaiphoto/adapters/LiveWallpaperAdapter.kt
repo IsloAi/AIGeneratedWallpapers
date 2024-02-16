@@ -71,7 +71,7 @@ class LiveWallpaperAdapter(
         fun bind(modela: ArrayList<LiveWallpaperModel?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage,binding.iap)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -148,10 +148,21 @@ class LiveWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: LiveWallpaperModel, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView, error_img: ImageView
+    private fun setAllData(model: LiveWallpaperModel, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView, error_img: ImageView,iap:ImageView
     ){
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
+
+        if (!model.unlocked){
+            if (AdConfig.ISPAIDUSER){
+                iap.visibility = View.GONE
+            }else{
+                iap.visibility = View.VISIBLE
+            }
+
+        }else{
+            iap.visibility = View.GONE
+        }
         Glide.with(context!!).load(model.thumnail_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(

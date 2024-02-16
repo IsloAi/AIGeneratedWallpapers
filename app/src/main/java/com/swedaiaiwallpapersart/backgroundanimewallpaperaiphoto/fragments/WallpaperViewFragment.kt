@@ -69,6 +69,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
@@ -355,7 +356,14 @@ class WallpaperViewFragment : Fragment() {
                        val model =  arrayList[position]
                        openPopupMenu(model!!)
                    }else{
-                       unlockDialog()
+
+                       if (AdConfig.ISPAIDUSER){
+                           val model =  arrayList[position]
+                           openPopupMenu(model!!)
+                       }else{
+                           unlockDialog()
+                       }
+
                    }
 
 
@@ -609,77 +617,67 @@ class WallpaperViewFragment : Fragment() {
 
     private fun unlockDialog() {
         val dialog = Dialog(requireContext())
+        val bindingDialog = DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(R.layout.dialog_unlock_or_watch_ads)
+        dialog?.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog?.window!!.setLayout(width, height)
         dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.setCancelable(false)
-//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-        var dismiss = dialog?.findViewById<ImageView>(R.id.cancel_Dialog)
 
-//        getReward?.setOnClickListener {
-//            dialog?.dismiss()
-//            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
-//                CustomSDKRewardedAdsListener {
-//                override fun onAdsDismiss() {
-//                    Log.e("********ADS", "onAdsDismiss: ")
-//                }
-//
-//                override fun onAdsRewarded() {
-//                    Log.e("********ADS", "onAdsRewarded: ")
-////                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-//                    mSaveMediaToStorage(bitmap)
-//                    val model = arrayList[position]
-//
-//
-////                    openPopupMenu(model!!)
-////                    }else{
-////                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-////
-////                    }
-//
-//
-//                }
-//
-//                override fun onAdsShowFail(errorCode: Int) {
-//                    SDKBaseController.getInstance().showInterstitialAds(
-//                        requireActivity(),
-//                        "viewlistwallscr_download_item_inter",
-//                        "viewlistwallscr_download_item_inter",
-//                        showLoading = true,
-//                        adsListener = object : CommonAdsListenerAdapter() {
-//                            override fun onAdsShowFail(errorCode: Int) {
-////                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-//                                if (isAdded){
-//                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
-//                                }
-////                                }else{
-////                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-////
-////                                }
-//                                //do something
-//                            }
-//
-//                            override fun onAdsDismiss() {
-////                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-//                                mSaveMediaToStorage(bitmap)
-////                                }else{
-////                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-////
-////                                }
-//                            }
-//                        }
-//                    )
-//                    Log.e("********ADS", "onAdsShowFail: ")
-//
-//                }
-//
-//            })
-//        }
-//
-        dismiss?.setOnClickListener {
+        if (AdConfig.iapScreenType == 0){
+            bindingDialog.upgradeButton.visibility = View.GONE
+            bindingDialog.orTxt.visibility =  View.INVISIBLE
+            bindingDialog.dividerEnd.visibility = View.INVISIBLE
+            bindingDialog.dividerStart.visibility = View.INVISIBLE
+        }
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.watchAds?.setOnClickListener {
+            dialog.dismiss()
+            if(bitmap != null){
+                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
+                    CustomSDKRewardedAdsListener {
+                    override fun onAdsDismiss() {
+                        Log.e("********ADS", "onAdsDismiss: ")
+
+                    }
+
+                    override fun onAdsRewarded() {
+                        Log.e("********ADS", "onAdsRewarded: ")
+                        val postData = PostDataOnServer()
+                        val model = arrayList[position]
+                        arrayList[position]?.unlockimges = true
+                        arrayList[position]?.gems = 0
+
+                        model?.id?.let { it1 ->
+                            appDatabase.wallpapersDao().updateLocked(true,
+                                it1
+                            )
+                        }
+                        adapter?.notifyItemChanged(position)
+                        viewPager2?.invalidate()
+                        binding.viewPager.setCurrentItem(position,true)
+                        openPopupMenu(model!!)
+                    }
+
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: ")
+                    }
+
+                })
+            }else{
+                Toast.makeText(requireContext(),
+                    getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        bindingDialog.upgradeButton?.setOnClickListener {
+            findNavController().navigate(R.id.IAPFragment)
+        }
+        bindingDialog.cancelDialog?.setOnClickListener {
             dialog?.dismiss()
         }
 
@@ -713,6 +711,8 @@ class WallpaperViewFragment : Fragment() {
                         mSaveMediaToStorage(bitmap)
                     val model = arrayList[position]
 
+                    model?.let { it1 -> setDownloaded(it1) }
+
 
 //                    openPopupMenu(model!!)
 //                    }else{
@@ -745,6 +745,8 @@ class WallpaperViewFragment : Fragment() {
                             override fun onAdsDismiss() {
 //                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                                     mSaveMediaToStorage(bitmap)
+                                val model = arrayList[position]
+                                model?.let { it1 -> setDownloaded(it1) }
 //                                }else{
 //                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
 //

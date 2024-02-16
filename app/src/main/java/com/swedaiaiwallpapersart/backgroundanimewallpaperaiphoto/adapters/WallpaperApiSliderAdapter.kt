@@ -149,7 +149,11 @@ class WallpaperApiSliderAdapter(
         if(model.unlockimges==true){
           blurView.visibility = INVISIBLE
         }else{
-            blurView.visibility = VISIBLE
+            if (AdConfig.ISPAIDUSER){
+                blurView.visibility = INVISIBLE
+            }else{
+                blurView.visibility = VISIBLE
+            }
         }
 
         imageSlide.setOnClickListener {

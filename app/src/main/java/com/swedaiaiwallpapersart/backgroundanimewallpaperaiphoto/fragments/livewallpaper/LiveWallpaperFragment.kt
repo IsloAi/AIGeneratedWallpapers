@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,9 +20,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -62,6 +66,8 @@ class LiveWallpaperFragment : Fragment() {
 
         myActivity = activity as MainActivity
 
+        myViewModel.getAllTrendingWallpapers()
+
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
         updateUIWithFetchedData()
@@ -71,29 +77,33 @@ class LiveWallpaperFragment : Fragment() {
 
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        // Observe the LiveData in the ViewModel and update the UI accordingly
-        myViewModel.wallpaperData.observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                Log.e("TAG", "loadData: "+catResponses )
-                if (view != null) {
-                    // If the view is available, update the UI
-
+        myViewModel.liveWallsFromDB.observe(viewLifecycleOwner){result->
+            when(result){
+                is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val list = addNullValueInsideArray(catResponses)
+                        val list = result.data?.let { addNullValueInsideArray(it) }
 
                         withContext(Dispatchers.Main){
-                            adapter?.updateMoreData(list)
+                            list?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
-
                     }
-//
+                }
+
+                is Response.Loading -> {
+                    Log.e(TAG, "loadData: Loading" )
+                }
+
+                is Response.Error -> {
+                    Log.e(TAG, "loadData: response error", )
 
                 }
-            }else{
-                myViewModel.fetchWallpapers(requireContext())
 
+                is Response.Processing -> {
+                    Log.e(TAG, "loadData: processing", )
+                }
             }
+
         }
     }
 
@@ -117,6 +127,8 @@ class LiveWallpaperFragment : Fragment() {
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
                 val newPosition = position + 1
+
+                Log.e(TAG, "getPosition: "+model )
 
                 Log.e(TAG, "getPosition: "+position )
 

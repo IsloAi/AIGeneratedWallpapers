@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.MediaPlayer.OnCompletionListener
 import android.media.MediaScannerConnection
@@ -29,6 +28,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
@@ -36,15 +36,23 @@ import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavoruiteLiveWallpaperBody
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -53,8 +61,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class LiveWallpaperPreviewFragment : Fragment() {
 
     private var _binding: FragmentLiveWallpaperPreviewBinding? = null
@@ -64,6 +73,14 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     private var livewallpaper: LiveWallpaperModel? = null
     var adPosition = 0
+
+    private lateinit var myActivity : MainActivity
+
+    @Inject
+    lateinit var webApiInterface: EndPointsInterface
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,7 +93,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        myActivity = activity as MainActivity
         SDKBaseController.getInstance()
             .loadBannerAds(
                 requireActivity(),
@@ -138,32 +155,44 @@ class LiveWallpaperPreviewFragment : Fragment() {
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
 
-            if (adPosition % 2 != 0){
-                setWallpaper()
+            Log.e("TAG", "setEvents: "+livewallpaper )
+
+            if (livewallpaper?.unlocked == false){
+                if (AdConfig.ISPAIDUSER){
+                    setWallpaper()
+                }else{
+                    unlockDialog()
+                }
             }else{
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_live_tab_click_item",
-                    "mainscr_live_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            setWallpaper()
+                if (adPosition % 2 != 0){
+                    setWallpaper()
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_live_tab_click_item",
+                        "mainscr_live_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                setWallpaper()
 
-                            //do something
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                setWallpaper()
+
+                            }
+
+                            override fun onAdsShowTimeout() {
+                                setWallpaper()
+                            }
                         }
-
-                        override fun onAdsDismiss() {
-                            setWallpaper()
-
-                        }
-
-                        override fun onAdsShowTimeout() {
-                            setWallpaper()
-                        }
-                    }
-                )
+                    )
+                }
             }
+
+
 
 
 
@@ -200,7 +229,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 ) {
                     Log.e("TAG", "functionality: inside click permission")
                     ActivityCompat.requestPermissions(
-                        requireContext() as Activity,
+                        myActivity,
                         arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                         1
                     )
@@ -215,6 +244,62 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
     }
 
+    private fun unlockDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(width, height)
+        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.setCancelable(false)
+
+        if (AdConfig.iapScreenType == 0){
+            bindingDialog.upgradeButton.visibility = View.GONE
+            bindingDialog.orTxt.visibility =  View.INVISIBLE
+            bindingDialog.dividerEnd.visibility = View.INVISIBLE
+            bindingDialog.dividerStart.visibility = View.INVISIBLE
+        }
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.watchAds?.setOnClickListener {
+            dialog.dismiss()
+                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
+                    CustomSDKRewardedAdsListener {
+                    override fun onAdsDismiss() {
+                        Log.e("********ADS", "onAdsDismiss: ")
+
+                    }
+
+                    override fun onAdsRewarded() {
+                        Log.e("********ADS", "onAdsRewarded: ")
+                        livewallpaper?.unlocked = true
+                        livewallpaper?.id?.let { it1 ->
+                            appDatabase.liveWallpaperDao().updateLocked(true,
+                                it1.toInt()
+                            )
+                        }
+                    }
+
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: ")
+                    }
+
+                })
+
+        }
+
+        bindingDialog.upgradeButton?.setOnClickListener {
+            findNavController().navigate(R.id.IAPFragment)
+        }
+        bindingDialog.cancelDialog?.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
+    }
 
     fun setWallpaper(){
 
@@ -229,6 +314,18 @@ class LiveWallpaperPreviewFragment : Fragment() {
             filepath.renameTo(newFile)
             BlurView.filePath = newFile.path
             LiveWallpaperService.setToWallPaper(requireContext())
+
+            try {
+                lifecycleScope.launch {
+                    val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                    webApiInterface.postDownloadedLive(requestBody)
+                }
+            }catch (e:Exception){
+                e.printStackTrace()
+            }
+
+
         } else {
             showSimpleDialog(
                 requireContext(),
@@ -268,7 +365,15 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 Log.e("TAG", "showSimpleDialog: renamed")
                 IkmSdkController.setEnableShowResumeAds(true)
                 LiveWallpaperService.setToWallPaper(requireContext())
+                try {
+                    lifecycleScope.launch {
+                        val requestBody = mapOf("imageid" to livewallpaper?.id)
 
+                        webApiInterface.postDownloadedLive(requestBody)
+                    }
+                }catch (e:Exception){
+                    e.printStackTrace()
+                }
 
             } else {
                 Log.e("TAG", "showSimpleDialog: failed")
@@ -374,6 +479,17 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
                                 override fun onAdsDismiss() {
                                     copyFiles(source, destination)
+
+                                    try {
+                                        lifecycleScope.launch {
+                                            val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                                              webApiInterface.postDownloadedLive(requestBody)
+                                        }
+                                    }catch (e:Exception){
+                                        e.printStackTrace()
+                                    }
+
                                 }
                             }
                         )

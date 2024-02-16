@@ -1,10 +1,16 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "liveWallpapers")
 data class LiveWallpaperModel(
+    @PrimaryKey(autoGenerate = false)
     val id:String,
     val livewallpaper_url:String,
     val thumnail_url:String,
     val videoSize:Float,
-    var liked:Boolean
+    var liked:Boolean,
+    val download:Int,
+    var unlocked:Boolean = true
 )

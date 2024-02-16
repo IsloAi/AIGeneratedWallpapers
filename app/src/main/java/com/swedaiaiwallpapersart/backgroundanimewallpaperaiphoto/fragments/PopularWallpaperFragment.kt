@@ -552,6 +552,9 @@ class PopularWallpaperFragment () : Fragment() {
                                 }
                                 Log.e(TAG, "initMostDownloadedData: " + list)
 
+                                Log.e(TAG, "initTrendingData: "+cachedCatResponses )
+
+
                                 withContext(Dispatchers.Main) {
                                     adapter?.updateMoreData(cachedCatResponses)
                                 }

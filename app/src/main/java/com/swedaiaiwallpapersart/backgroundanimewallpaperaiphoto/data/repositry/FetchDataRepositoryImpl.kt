@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.FetchDataRepository
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -58,6 +59,25 @@ class FetchDataRepositoryImpl @Inject constructor(
             trySend(Response.Loading)
 
             val creations= appDatabase.wallpapersDao().getCategoryWallpaper(cat)
+            if (creations.isNotEmpty()){
+                trySend(Response.Success(creations))
+            }else{
+                trySend(Response.Error("No Data found"))
+            }
+
+        }
+        catch (e:Exception){
+            trySend(Response.Error("Unexpected error ${e.message}"))
+        }
+        awaitClose()
+    }
+
+    override fun fetechLiveWallpapers(): Flow<Response<List<LiveWallpaperModel>>> = channelFlow {
+        try {
+
+            trySend(Response.Loading)
+
+            val creations= appDatabase.liveWallpaperDao().getAllWallpapers()
             if (creations.isNotEmpty()){
                 trySend(Response.Success(creations))
             }else{

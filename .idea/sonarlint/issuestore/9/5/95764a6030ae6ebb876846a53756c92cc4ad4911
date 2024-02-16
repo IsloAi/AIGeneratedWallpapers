@@ -1,9 +1,11 @@
 
-Zkotlin:S1172ı"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ıú»¡Õ1
-Zkotlin:S1172œ"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ıú»¡Õ1
-Wkotlin:S1172¶"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8şú»¡Õ1
-akotlin:S899å"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8€û»¡Õ1
-8kotlin:S1128	"Remove this unused import.(Ş‚½8¹úÇæÙ1
-qkotlin:S1192à"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8Üû»¡Õ1
-Gkotlin:S1874Q"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8áû»¡Õ1
-Mkotlin:S1066‚".Merge this "if" statement with the nested one.(€¡ê8íû»¡Õ1
+Zkotlin:S1172Ş"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8·÷Û1
+Zkotlin:S1172…"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8·÷Û1
+Wkotlin:S1172Ÿ"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8·÷Û1
+akotlin:S899º"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8¹÷Û1
+=kotlin:S125ˆ"Remove this commented out code.(§íËf8¾÷Û1
+>kotlin:S1128"Remove this unused import.(²…¿ßÿÿÿÿÿ8æ÷Û1
+qkotlin:S1192"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(™ù£êøÿÿÿÿ8é÷Û1
+Gkotlin:S1874b"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ì÷Û1
+rkotlin:S3776›"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ñàõà8í÷Û1
+Mkotlin:S1066ã".Merge this "if" statement with the nested one.(€¡ê8ó÷Û1

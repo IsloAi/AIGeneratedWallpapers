@@ -108,7 +108,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         setContentView(binding.root)
 
         myCatNameViewModel.fetchWallpapers()
-        liveViewModel.fetchWallpapers(this)
+        saveLiveWallpapersInDB()
+        liveViewModel.getMostUsed("1","500",deviceID)
 
         if (!isNetworkAvailable()){
             showNoInternetDialog()
@@ -194,6 +195,37 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         initFirebaseRemoteConfig()
     }
 
+
+    fun saveLiveWallpapersInDB(){
+        liveViewModel.liveWallpapers.observe(this){result->
+            when(result){
+                is Response.Success -> {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        result.data?.forEach {wallpaper->
+                            val model = wallpaper.copy(unlocked = wallpaper.download <= 200)
+                            appDatabase.liveWallpaperDao().insert(model)
+
+                        }
+                    }
+                }
+
+                is Response.Loading -> {
+                    Log.e(TAG, "loadData: Loading" )
+                }
+
+                is Response.Error -> {
+                    Log.e(TAG, "loadData: response error", )
+                    MySharePreference.getDeviceID(this)
+                        ?.let { liveViewModel.getMostUsed("1","500", it) }
+                }
+
+                is Response.Processing -> {
+                    Log.e(TAG, "loadData: processing", )
+                }
+            }
+
+        }
+    }
 
     fun initObservers(){
         mainActivityViewModel.mostUsed.observe(this){result ->
@@ -295,6 +327,23 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
                         val positionTabs = remoteConfig["tablist"].asString()
+                        val iap = remoteConfig["iap_config"].asString()
+                        Log.e(TAG, "onUpdate: $iap")
+
+                        try {
+                            val jsonObject = JSONObject(iap)
+
+                            // Get the value associated with the key "IAPScreentype"
+                            val iapScreenType = jsonObject.optInt("IAPScreentype")
+                            Log.e(TAG, "onUpdate: $iapScreenType")
+
+                            AdConfig.iapScreenType = iapScreenType
+                        }catch (e:JSONException){
+                            e.printStackTrace()
+                        }
+
+
+                        Log.e(TAG, "onUpdate: $positionTabs")
 
                         val tabNamesArray: Array<String> = positionTabs
                             .replace("{", "")   // Remove the opening curly brace
@@ -421,7 +470,25 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
         val positionTabs = remoteConfig["tablist"].asString()
 
-        Log.e(TAG, "onUpdate: "+positionTabs )
+        val iap = remoteConfig["iap_config"].asString()
+        Log.e(TAG, "onUpdate: $iap")
+
+        try {
+            val jsonObject = JSONObject(iap)
+            val iapScreenType = jsonObject.optInt("IAPScreentype")
+            Log.e(TAG, "onUpdate: $iapScreenType")
+
+        AdConfig.iapScreenType = iapScreenType
+        }catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+
+
+        // Get the value associated with the key "IAPScreentype"
+
+
+        Log.e(TAG, "onUpdate: $positionTabs")
         val tabNamesArray: Array<String> = positionTabs
             .replace("{", "")   // Remove the opening curly brace
             .replace("}", "")   // Remove the closing curly brace

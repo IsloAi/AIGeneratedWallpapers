@@ -4,12 +4,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelListMostDownloaded
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 
 import retrofit2.http.Query
 
@@ -39,6 +38,18 @@ interface EndPointsInterface {
         @Query("page") page:String,
         @Query("record") record:String
     ):retrofit2.Response<ResponseModelListMostDownloaded>
+
+    @GET("getLiked_Wallpaper.php")
+    suspend fun getLiveWallpapers(
+        @Query("page") page:String,
+        @Query("record") record:String,
+        @Query("deviceid") deviceId: String
+    ):retrofit2.Response<LiveImagesResponse>
+
+    @POST("post_downloads.php")
+    suspend fun postDownloadedLive(
+        @Body requestBody: Map<String, String?>
+    )
 
     @GET("getfavrt.php")
     suspend fun getLiked(

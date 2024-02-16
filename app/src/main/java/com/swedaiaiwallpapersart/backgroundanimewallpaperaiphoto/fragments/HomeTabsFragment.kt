@@ -94,6 +94,18 @@ class HomeTabsFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         SplashOnFragment.exit = false
             myActivity = activity as MainActivity
+
+        if (AdConfig.iapScreenType == 0){
+            binding.goPremium.visibility = View.GONE
+        }else{
+            if (AdConfig.ISPAIDUSER){
+                binding.goPremium.visibility = View.GONE
+            }else{
+                binding.goPremium.visibility = View.VISIBLE
+            }
+        }
+
+
             getSetTotallikes()
             loadbannerAd()
             setGradienttext()

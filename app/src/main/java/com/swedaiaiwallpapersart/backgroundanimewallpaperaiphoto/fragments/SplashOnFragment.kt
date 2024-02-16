@@ -14,10 +14,12 @@ import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.utils.IkmSdkUtils
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -84,6 +86,10 @@ class SplashOnFragment : Fragment() {
 
 
         val lan = MySharePreference.getLanguage(requireContext())
+
+        val premium = IkmSdkUtils.isUserIAPAvailable()
+
+        AdConfig.ISPAIDUSER = premium
 
 
         if (lan?.isEmpty() == true){

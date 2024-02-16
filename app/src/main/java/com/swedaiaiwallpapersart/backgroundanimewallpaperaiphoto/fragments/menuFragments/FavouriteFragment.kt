@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
@@ -37,12 +38,16 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFavouriteViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 class FavouriteFragment : Fragment() {
@@ -273,21 +278,49 @@ class FavouriteFragment : Fragment() {
     }
 
     fun initObservers(){
-        liveWallpaperViewModel.wallpaperData.observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                Log.e("TAG", "loadData: "+catResponses )
-                if (view != null) {
-                    // If the view is available, update the UI
 
-                    val filtered = catResponses.filter { it.liked }
-//
-                    val list = addNullValueInsideArrayLive(filtered)
-                    updateUIWithFetchedDataLive(list)
+        liveWallpaperViewModel.liveWallpapers.observe(viewLifecycleOwner){result->
+            when(result){
+                is Response.Success -> {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val filtered = result.data?.filter { it.liked }
+
+                        val list = filtered?.let { addNullValueInsideArrayLive(it) }
+                        list?.let { updateUIWithFetchedDataLive(it) }
+                    }
                 }
-            }else{
 
+                is Response.Loading -> {
+                    Log.e("TAG", "loadData: Loading" )
+                }
+
+                is Response.Error -> {
+                    Log.e("TAG", "loadData: response error", )
+                    MySharePreference.getDeviceID(requireContext())
+                        ?.let { liveWallpaperViewModel.getMostUsed("1","500", it) }
+                }
+
+                is Response.Processing -> {
+                    Log.e("TAG", "loadData: processing", )
+                }
             }
+
         }
+//        liveWallpaperViewModel.wallpaperData.observe(viewLifecycleOwner) { catResponses ->
+//            if (catResponses != null) {
+//                Log.e("TAG", "loadData: "+catResponses )
+//                if (view != null) {
+//                    // If the view is available, update the UI
+//
+//                    val filtered = catResponses.filter { it.liked }
+////
+//                    val list = addNullValueInsideArrayLive(filtered)
+//                    updateUIWithFetchedDataLive(list)
+//                }
+//            }else{
+//
+//            }
+//        }
     }
 
     private fun updateUIWithFetchedDataLive(catResponses: ArrayList<LiveWallpaperModel?>) {

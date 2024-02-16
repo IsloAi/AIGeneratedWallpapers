@@ -1,12 +1,12 @@
 
 ]kotlin:S1172’"8Remove this unused function parameter "adapterPosition".(Ü‘İíşÿÿÿÿ8ÿÄËúÃ1
->kotlin:S125¿"Remove this commented out code.(È¶ËÔ8…Î¿äÇ1
-Akotlin:S6310Ú"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8ˆÎ¿äÇ1
+>kotlin:S125Ã"Remove this commented out code.(È¶ËÔ8…Î¿äÇ1
+Akotlin:S6310Ş"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8ˆÎ¿äÇ1
 Nkotlin:S1481m"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8š«æúÃ1
 >kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8¢Š³æÙ1
 9kotlin:S1128"Remove this unused import.(¿îû•8Õ–¦æÙ1
 Hkotlin:S1874ˆ"#Deprecated code should not be used.(—è•­ıÿÿÿÿ8µÑ¹£Ë1
-Hkotlin:S1874Ó"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8›Î¿äÇ1
-Bkotlin:S1874Ô"#Deprecated code should not be used.(àü8›Î¿äÇ1
-Hkotlin:S1874å"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8›Î¿äÇ1
+Hkotlin:S1874×"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8›Î¿äÇ1
+Bkotlin:S1874Ø"#Deprecated code should not be used.(àü8›Î¿äÇ1
+Hkotlin:S1874é"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8›Î¿äÇ1
 gkotlin:S6510Y"CMove "return" statements from all branches before "when" statement.(èş™¸ÿÿÿÿÿ8ÅËúÃ1

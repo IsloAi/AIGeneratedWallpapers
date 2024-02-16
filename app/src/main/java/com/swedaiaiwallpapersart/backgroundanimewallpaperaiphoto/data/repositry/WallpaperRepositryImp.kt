@@ -10,6 +10,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.End
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.WallpaperRepositry
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -124,6 +125,32 @@ class WallpaperRepositryImp@Inject constructor(
             trySend(Response.Loading)
             Log.e("TAG", "GenerateTextToImage: I came here")
             val resp = webApiInterface.getMostUsed(page,record)
+            Log.e("TAG", "GenerateTextToImage: $resp")
+
+            if (resp.isSuccessful){
+
+                trySend(Response.Success(resp.body()?.images))
+            }
+            Log.e("TAG", "getAllWallpapers: " )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
+
+        awaitClose()
+
+    }
+
+    override fun getLiveWallpapers(
+        page: String,
+        record: String,
+        deviceId: String
+    ): Flow<Response<ArrayList<LiveWallpaperModel>>> = channelFlow {
+
+        try {
+            trySend(Response.Loading)
+            Log.e("TAG", "GenerateTextToImage: I came here")
+            val resp = webApiInterface.getLiveWallpapers(page,record,deviceId)
             Log.e("TAG", "GenerateTextToImage: $resp")
 
             if (resp.isSuccessful){

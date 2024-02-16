@@ -153,7 +153,12 @@ class MostUsedWallpaperAdapter(
         Log.e("TAG", "*******MostUsed: "+model.compressed_image_url )
 
         if (model.unlockimges == false){
-            iapItem.visibility = View.VISIBLE
+            if (AdConfig.ISPAIDUSER){
+                iapItem.visibility = View.GONE
+            }else{
+                iapItem.visibility = View.VISIBLE
+            }
+
         }else{
             iapItem.visibility = View.GONE
         }

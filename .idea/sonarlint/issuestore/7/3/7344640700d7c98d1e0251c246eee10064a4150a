@@ -1,9 +1,9 @@
 
 mkotlin:S117”"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ã¦Ú¢8…œÜÚ1
-Akotlin:S6310Ì"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8†œÜÚ1
+Akotlin:S6310Ñ"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8†œÜÚ1
 Nkotlin:S1481t"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8“œÜÚ1
 >kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8™œÜÚ1
 Gkotlin:S1874H"#Deprecated code should not be used.(†ÿøÿÿÿÿ8œœÜÚ1
-Hkotlin:S1874×"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8œœÜÚ1
-Hkotlin:S1874"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8œÜÚ1
-Bkotlin:S1874"#Deprecated code should not be used.(àü8œÜÚ1
+Hkotlin:S1874Ü"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8œœÜÚ1
+Hkotlin:S1874“"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8œÜÚ1
+Bkotlin:S1874”"#Deprecated code should not be used.(àü8œÜÚ1
