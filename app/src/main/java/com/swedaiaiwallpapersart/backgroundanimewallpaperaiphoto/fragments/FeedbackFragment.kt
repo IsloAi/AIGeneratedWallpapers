@@ -11,16 +11,27 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFeedbackBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FeedbackFragment : Fragment() {
    private var _binding: FragmentFeedbackBinding? = null
     private val binding get() = _binding!!
     private val postDataOnServer = PostDataOnServer()
+
+    @Inject
+    lateinit var endPointsInterface: EndPointsInterface
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,8 +74,16 @@ class FeedbackFragment : Fragment() {
                     subject?.error = getString(R.string.must_required_your_subject)
                     subject?.requestFocus()
                 }else{
-                    postDataOnServer.sendFeedback(requireContext(),getMail,getName,getSubject,getMessage,
-                        MySharePreference.getDeviceID(requireContext())!!)
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        endPointsInterface.postData(FeedbackModel(getMail,getName,getSubject,getMessage,
+                            MySharePreference.getDeviceID(requireContext())!!
+                        ))
+                    }
+
+
+//                    postDataOnServer.sendFeedback(requireContext(),getMail,getName,getSubject,getMessage,
+//                        MySharePreference.getDeviceID(requireContext())!!)
                     mail?.setText("")
                     name?.setText("")
                     subject?.setText("")

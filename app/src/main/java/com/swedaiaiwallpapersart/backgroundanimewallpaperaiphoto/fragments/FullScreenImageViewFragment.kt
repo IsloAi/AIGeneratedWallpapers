@@ -49,15 +49,21 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFullScreenImageViewBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.SetMostDownloaded
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -69,8 +75,11 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.util.concurrent.Executors
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FullScreenImageViewFragment : DialogFragment() {
+
 
     private var _binding:FragmentFullScreenImageViewBinding ?= null
     private val binding get() = _binding!!
@@ -80,6 +89,11 @@ class FullScreenImageViewFragment : DialogFragment() {
     private val myExecutor = Executors.newSingleThreadExecutor()
     private val myHandler = Handler(Looper.getMainLooper())
     val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private lateinit var myActivity : MainActivity
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     private lateinit var myWallpaperManager : MyWallpaperManager
 
@@ -108,6 +122,7 @@ class FullScreenImageViewFragment : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.fullViewImage.isEnabled = false
+        myActivity = activity as MainActivity
         initDataObservers()
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
 
@@ -142,7 +157,7 @@ class FullScreenImageViewFragment : DialogFragment() {
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
                 if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
                     Log.e("TAG", "functionality: inside click permission", )
-                    ActivityCompat.requestPermissions(requireContext() as Activity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                    ActivityCompat.requestPermissions(myActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 }else{
                     Log.e("TAG", "functionality: inside click dialog", )
                     getUserIdDialog()
@@ -157,7 +172,18 @@ class FullScreenImageViewFragment : DialogFragment() {
 //           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             if(bitmap != null){
 
-                openPopupMenu(responseData!!)
+                if (responseData?.unlockimges == true){
+                    openPopupMenu(responseData!!)
+                }else{
+
+                    if (AdConfig.ISPAIDUSER){
+
+                        openPopupMenu(responseData!!)
+                    }else{
+                        unlockDialog()
+                    }
+
+                }
             }else{
                 Toast.makeText(requireContext(),
                     getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
@@ -167,6 +193,69 @@ class FullScreenImageViewFragment : DialogFragment() {
 //           }
 
         }
+    }
+
+    private fun unlockDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog?.window!!.setLayout(width, height)
+        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.setCancelable(false)
+
+        if (AdConfig.iapScreenType == 0){
+            bindingDialog.upgradeButton.visibility = View.GONE
+            bindingDialog.orTxt.visibility =  View.INVISIBLE
+            bindingDialog.dividerEnd.visibility = View.INVISIBLE
+            bindingDialog.dividerStart.visibility = View.INVISIBLE
+        }
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.watchAds?.setOnClickListener {
+            dialog.dismiss()
+            if(bitmap != null){
+                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
+                    CustomSDKRewardedAdsListener {
+                    override fun onAdsDismiss() {
+                        Log.e("********ADS", "onAdsDismiss: ")
+
+                    }
+
+                    override fun onAdsRewarded() {
+                        Log.e("********ADS", "onAdsRewarded: ")
+                        responseData?.unlockimges = true
+
+                        responseData?.id?.let { it1 ->
+                            appDatabase.wallpapersDao().updateLocked(true,
+                                it1
+                            )
+                        }
+                        openPopupMenu(responseData!!)
+                    }
+
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("********ADS", "onAdsShowFail: ")
+                    }
+
+                })
+            }else{
+                Toast.makeText(requireContext(),
+                    getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        bindingDialog.upgradeButton?.setOnClickListener {
+            findNavController().navigate(R.id.IAPFragment)
+        }
+        bindingDialog.cancelDialog?.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
     }
 
 

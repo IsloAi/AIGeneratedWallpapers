@@ -484,7 +484,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                                         lifecycleScope.launch {
                                             val requestBody = mapOf("imageid" to livewallpaper?.id)
 
-                                              webApiInterface.postDownloadedLive(requestBody)
+                                            webApiInterface.postDownloadedLive(requestBody)
                                         }
                                     }catch (e:Exception){
                                         e.printStackTrace()

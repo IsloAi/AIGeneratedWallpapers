@@ -3,7 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "liveWallpapers")
+@Entity(tableName = "liveWallpaper")
 data class LiveWallpaperModel(
     @PrimaryKey(autoGenerate = false)
     val id:String,

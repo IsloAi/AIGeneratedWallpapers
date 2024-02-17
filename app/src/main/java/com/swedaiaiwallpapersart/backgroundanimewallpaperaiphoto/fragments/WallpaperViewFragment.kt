@@ -675,6 +675,7 @@ class WallpaperViewFragment : Fragment() {
         }
 
         bindingDialog.upgradeButton?.setOnClickListener {
+            dialog?.dismiss()
             findNavController().navigate(R.id.IAPFragment)
         }
         bindingDialog.cancelDialog?.setOnClickListener {

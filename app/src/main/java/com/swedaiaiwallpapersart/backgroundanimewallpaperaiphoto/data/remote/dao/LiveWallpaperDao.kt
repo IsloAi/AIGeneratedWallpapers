@@ -13,10 +13,10 @@ interface LiveWallpaperDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(databaseResponse: LiveWallpaperModel)
 
-    @Query("SELECT * FROM liveWallpapers")
+    @Query("SELECT * FROM liveWallpaper")
     fun getAllWallpapers():List<LiveWallpaperModel>
 
 
-    @Query("UPDATE liveWallpapers SET unlocked=:liked WHERE id=:Id")
+    @Query("UPDATE liveWallpaper SET unlocked=:liked WHERE id=:Id")
     fun updateLocked(liked:Boolean,Id: Int)
 }

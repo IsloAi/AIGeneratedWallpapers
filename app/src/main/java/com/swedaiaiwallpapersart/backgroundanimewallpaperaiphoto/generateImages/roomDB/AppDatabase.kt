@@ -44,7 +44,7 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
 
                 database.execSQL(
-                    "CREATE TABLE IF NOT EXISTS `liveWallpapers` (" +
+                    "CREATE TABLE IF NOT EXISTS `liveWallpaper` (" +
                             "`id` TEXT PRIMARY KEY NOT NULL, " +
                             "`livewallpaper_url` TEXT, " +
                             "`thumnail_url` TEXT, " +
@@ -107,7 +107,7 @@ abstract class AppDatabase : RoomDatabase() {
                 AppDatabase::class.java,
                 "appDatabase"
             ).allowMainThreadQueries()
-                .addMigrations(MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8)
+                .fallbackToDestructiveMigration()
                 .build()
         }
 

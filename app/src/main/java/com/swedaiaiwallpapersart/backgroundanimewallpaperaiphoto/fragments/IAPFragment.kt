@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.billing.BillingHelper
 import com.bmik.android.sdk.billing.SDKBillingHandler
 import com.bmik.android.sdk.billing.dto.PurchaseInfo
@@ -48,6 +49,9 @@ class IAPFragment : Fragment() {
 
         BillingHelper.getInstance().initBilling(requireContext())
 
+        binding.close.setOnClickListener {
+            findNavController().popBackStack()
+        }
 
 
         lifecycleScope.launch {
@@ -58,7 +62,11 @@ class IAPFragment : Fragment() {
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
-                                binding.priceWeekly.text = it
+
+                                if (isAdded){
+
+                                    binding.priceWeekly.text = it
+                                }
 
                                 priceWeekly = it
 
@@ -92,7 +100,10 @@ class IAPFragment : Fragment() {
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
-                                binding.priceYearly.text = it
+                                if (isAdded){
+                                    binding.priceYearly.text = it
+                                }
+
                                 priceYearly = it
                             }
                         }
@@ -108,7 +119,10 @@ class IAPFragment : Fragment() {
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
-                                binding.pricelifeTime.text = it
+                                if (isAdded){
+                                    binding.pricelifeTime.text = it
+                                }
+
                                 priceLife = it
                             }
                         }
