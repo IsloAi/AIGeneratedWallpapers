@@ -71,8 +71,15 @@ class SettingFragment : Fragment() {
 
         binding.privacyPolicyButton.setOnClickListener { openLink("https://bluell.net/privacy/") }
         binding.moreAppButton.setOnClickListener {
+            if (isAdded){
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "More apps click")
+                bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "More apps click")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+            }
 
-            openLink("https://play.google.com/store/apps/dev?id=6602716762126600526")  }
+            openLink("https://play.google.com/store/apps/dev?id=6602716762126600526")
+        }
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.localizationFragment)
             }

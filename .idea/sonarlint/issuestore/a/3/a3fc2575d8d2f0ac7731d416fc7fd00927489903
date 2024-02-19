@@ -1,22 +1,22 @@
 
-Ykotlin:S1172ı"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8€œÛÛ1
-Ckotlin:S125"Remove this commented out code.(âÿ¤“ûÿÿÿÿ8œÛÛ1
-Ckotlin:S125Ç"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8ŸœÛÛ1
-Ckotlin:S125Í"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8ŸœÛÛ1
-<kotlin:S6310‘"Avoid hardcoded dispatchers.(ÏÃâ8ÆœÛÛ1
-<kotlin:S6310Ÿ"Avoid hardcoded dispatchers.(ÏÃâ8ÆœÛÛ1
-<kotlin:S6310Ö"Avoid hardcoded dispatchers.(©ÒÕò8ÆœÛÛ1
-<kotlin:S6310ç"Avoid hardcoded dispatchers.(©ÒÕò8ÆœÛÛ1
-;kotlin:S6310Ë"Avoid hardcoded dispatchers.(©ÓœW8ÈœÛÛ1
-;kotlin:S6310í"Avoid hardcoded dispatchers.(©ÓœW8ÈœÛÛ1
-Hkotlin:S108¶")Either remove or fill this block of code.(å¥‡8†ÛÛ1
-Mkotlin:S108ı")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8‡ÛÛ1
-Hkotlin:S108³")Either remove or fill this block of code.(å¥‡8‡ÛÛ1
-xkotlin:S6306w"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8ÛÛ1
-Mkotlin:S1481Í"-Remove this unused "behavior" local variable.(Ø¦š¾8¶ÛÛ1
-pkotlin:S1192Ä"KDefine a constant instead of duplicating this literal "onUpdate: " 5 times.(¸úşÉøÿÿÿÿ8åÛÛ1
-Gkotlin:S1874j"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8ğÛÛ1
-Hkotlin:S1874‹"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ğÛÛ1
-Bkotlin:S1874Œ"#Deprecated code should not be used.(àü8ğÛÛ1
-wkotlin:S3776°"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(„ö÷àøÿÿÿÿ8ôÛÛ1
-wkotlin:S3776¾"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ÄÔìşÿÿÿÿ8õÛÛ1
+Ykotlin:S1172ı"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8êãşÛ1
+Ckotlin:S125"Remove this commented out code.(âÿ¤“ûÿÿÿÿ8ûãşÛ1
+Ckotlin:S125Ç"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8üãşÛ1
+Ckotlin:S125Í"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8ıãşÛ1
+<kotlin:S6310‘"Avoid hardcoded dispatchers.(ÏÃâ8ãşÛ1
+<kotlin:S6310Ÿ"Avoid hardcoded dispatchers.(ÏÃâ8ãşÛ1
+<kotlin:S6310Ö"Avoid hardcoded dispatchers.(©ÒÕò8ãşÛ1
+<kotlin:S6310ç"Avoid hardcoded dispatchers.(©ÒÕò8ãşÛ1
+;kotlin:S6310Ë"Avoid hardcoded dispatchers.(©ÓœW8ãşÛ1
+;kotlin:S6310í"Avoid hardcoded dispatchers.(©ÓœW8ãşÛ1
+Hkotlin:S108¶")Either remove or fill this block of code.(å¥‡8‡ÛÛ1
+Mkotlin:S108ı")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8­ãşÛ1
+Hkotlin:S108³")Either remove or fill this block of code.(å¥‡8®ãşÛ1
+xkotlin:S6306w"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8´ãşÛ1
+Mkotlin:S1481Í"-Remove this unused "behavior" local variable.(Ø¦š¾8ÇãşÛ1
+pkotlin:S1192Ä"KDefine a constant instead of duplicating this literal "onUpdate: " 5 times.(¸úşÉøÿÿÿÿ8ßãşÛ1
+Gkotlin:S1874j"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8çãşÛ1
+Hkotlin:S1874‹"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8çãşÛ1
+Bkotlin:S1874Œ"#Deprecated code should not be used.(àü8çãşÛ1
+wkotlin:S3776°"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(„ö÷àøÿÿÿÿ8êãşÛ1
+wkotlin:S3776¾"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ÄÔìşÿÿÿÿ8íãşÛ1

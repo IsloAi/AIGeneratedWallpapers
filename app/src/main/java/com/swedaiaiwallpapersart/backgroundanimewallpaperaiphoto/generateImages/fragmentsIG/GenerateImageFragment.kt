@@ -50,6 +50,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -66,9 +67,6 @@ class GenerateImageFragment : Fragment() {
     private lateinit var listViewModel: ImageListViewModel
     private var myContext :Context? = null
     private var  dialog: Dialog? = null
-    private var  dialog2: Dialog? = null
-//    private lateinit var auth: FirebaseAuth
-//    private val googleLogin = GoogleLogin()
     private lateinit var myActivity : MainActivity
     private val myDialogs = MyDialogs()
     private var existGems:Int? = null
@@ -285,13 +283,25 @@ class GenerateImageFragment : Fragment() {
                     override fun onAdsShowFail(errorCode: Int) {
 
                         if (isAdded && activity != null) {
-                            SDKBaseController.getInstance().showInterstitialAds(
-                                requireActivity(),
-                                "mainscr_generate_tab_reward_inter",
-                                "mainscr_generate_tab_reward_inter",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
+                            if (AdConfig.ISPAIDUSER){
+                                val getPrompt = binding.edtPrompt.text
+                                if(getPrompt.isNotEmpty()){
+                                    getUserIdDialog()
+
+                                    viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+                                    hasNavigated = false
+                                }else{
+                                    Toast.makeText(requireContext(),
+                                        getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+                                }
+                            }else{
+                                SDKBaseController.getInstance().showInterstitialAds(
+                                    requireActivity(),
+                                    "mainscr_generate_tab_reward_inter",
+                                    "mainscr_generate_tab_reward_inter",
+                                    showLoading = true,
+                                    adsListener = object : CommonAdsListenerAdapter() {
+                                        override fun onAdsShowFail(errorCode: Int) {
 //                                        val getPrompt = binding.edtPrompt.text
 //                                        if(getPrompt.isNotEmpty()){
 //                                            getUserIdDialog()
@@ -302,35 +312,37 @@ class GenerateImageFragment : Fragment() {
 //                                        }
 
 
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Ad not available,Please try again...",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        Log.e("TAG", "onAdsShowFail: inter",)
-                                    }
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Ad not available,Please try again...",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                            Log.e("TAG", "onAdsShowFail: inter",)
+                                        }
 
-                                    override fun onAdsDismiss() {
-                                        if (isAdded && activity != null) {
-                                            val getPrompt = binding.edtPrompt.text
-                                            if (getPrompt.isNotEmpty()) {
-                                                getUserIdDialog()
-                                                viewModel.loadData(
-                                                    requireContext(),
-                                                    getPrompt.toString(),
-                                                    dialog!!
-                                                )
-                                            } else {
-                                                Toast.makeText(
-                                                    requireContext(),
-                                                    getString(R.string.enter_your_prompt),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
+                                        override fun onAdsDismiss() {
+                                            if (isAdded && activity != null) {
+                                                val getPrompt = binding.edtPrompt.text
+                                                if (getPrompt.isNotEmpty()) {
+                                                    getUserIdDialog()
+                                                    viewModel.loadData(
+                                                        requireContext(),
+                                                        getPrompt.toString(),
+                                                        dialog!!
+                                                    )
+                                                } else {
+                                                    Toast.makeText(
+                                                        requireContext(),
+                                                        getString(R.string.enter_your_prompt),
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
                                             }
                                         }
                                     }
-                                }
-                            )
+                                )
+                            }
+
                         }else{
                             Log.e("TAG", "Fragment not attached to an activity in onAdsShowFail")
                         }

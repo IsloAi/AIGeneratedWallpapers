@@ -24,6 +24,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -36,6 +38,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -285,6 +288,7 @@ class HomeFragment : Fragment(){
                 if (!navigationInProgress){
 
                     if (!isNavigationInProgress){
+                        hasToNavigateHome = true
                         externalOpen = true
                         val allItems = adapter.getAllItems()
                         if (addedItems?.isNotEmpty() == true){
@@ -312,7 +316,7 @@ class HomeFragment : Fragment(){
 
                                 override fun onAdsDismiss() {
                                     Log.e("********ADS", "onAdsDismiss: " )
-                                    navigateToDestination(allItems,position)
+//                                    navigateToDestination(allItems,position)
                                 }
 
                             }
@@ -391,6 +395,17 @@ class HomeFragment : Fragment(){
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(1500)
+            if (!WallpaperViewFragment.isNavigated && hasToNavigateHome){
+                navigateToDestination(addedItems!!,oldPosition)
+            }
+        }
+
+    }
+
+    companion object{
+        var hasToNavigateHome = false
     }
 
     override fun onPause() {

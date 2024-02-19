@@ -1,25 +1,27 @@
 
-Ckotlin:S125‹"Remove this commented out code.(ÆİòŞøÿÿÿÿ8Áƒ¾ÄÖ1
-<kotlin:S6310ä"Avoid hardcoded dispatchers.(ÏÃâ8ªíÃÖ1
-<kotlin:S6310©"Avoid hardcoded dispatchers.(Í¡·Ş8ªíÃÖ1
-;kotlin:S6310"Avoid hardcoded dispatchers.(©ÓœW8‚¦±áÙ1
-<kotlin:S6310®"Avoid hardcoded dispatchers.(Í¡·Ş8ªíÃÖ1
-<kotlin:S6310¶"Avoid hardcoded dispatchers.(©ÒÕò8Õœ“ÄÖ1
-Hkotlin:S108™")Either remove or fill this block of code.(·Úøš8ÄªíÃÖ1
-Mkotlin:S108Ê")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ÓªíÃÖ1
-Hkotlin:S108—")Either remove or fill this block of code.(·Úøš8…ç‰Ú1
-Mkotlin:S108¾")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8É’ŠÚ1
-Rkotlin:S1481¡"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ìªíÃÖ1
->kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8‹«íÃÖ1
-9kotlin:S1128"Remove this unused import.(åå8‹«íÃÖ1
->kotlin:S1128."Remove this unused import.(Ó¸Ñÿÿÿÿÿ8É„¾ÄÖ1
-9kotlin:S1128/"Remove this unused import.(Ó€ùÈ8É„¾ÄÖ1
->kotlin:S11282"Remove this unused import.(¯“×£øÿÿÿÿ8É„¾ÄÖ1
-9kotlin:S11283"Remove this unused import.(†áì²8É„¾ÄÖ1
-~kotlin:S1192«"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(é¯›•ıÿÿÿÿ8‘«íÃÖ1
-qkotlin:S1192Û"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8‘«íÃÖ1
-pkotlin:S1192ö"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8°Ş±áÙ1
-wkotlin:S3776¿"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8™«íÃÖ1
-qkotlin:S3776•"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8š«íÃÖ1
-rkotlin:S3776’"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8›«íÃÖ1
-fkotlin:S6510Ö"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8¨«íÃÖ1
+Ckotlin:S125"Remove this commented out code.(ÆİòŞøÿÿÿÿ8Ø¸¿ŠÜ1
+Ckotlin:S125í"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8ÍÔüŠÜ1
+Ckotlin:S125ô"Remove this commented out code.(æÇÆüÿÿÿÿ8Ù¸¿ŠÜ1
+<kotlin:S6310ô"Avoid hardcoded dispatchers.(ÏÃâ8á¸¿ŠÜ1
+<kotlin:S6310È"Avoid hardcoded dispatchers.(©ÒÕò8á¸¿ŠÜ1
+<kotlin:S6310Î"Avoid hardcoded dispatchers.(©ÒÕò8á¸¿ŠÜ1
+<kotlin:S6310®"Avoid hardcoded dispatchers.(Í¡·Ş8â¸¿ŠÜ1
+;kotlin:S6310¼"Avoid hardcoded dispatchers.(©ÓœW8â¸¿ŠÜ1
+<kotlin:S6310Ì"Avoid hardcoded dispatchers.(Í¡·Ş8â¸¿ŠÜ1
+<kotlin:S6310Æ"Avoid hardcoded dispatchers.(©ÒÕò8ã¸¿ŠÜ1
+Hkotlin:S108©")Either remove or fill this block of code.(·Úøš8Æä¤ŠÜ1
+Mkotlin:S108Ú")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Æä¤ŠÜ1
+Hkotlin:S108µ")Either remove or fill this block of code.(·Úøš8¼ÀªŠÜ1
+Mkotlin:S108Ü")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8¼ÀªŠÜ1
+Rkotlin:S1481Â"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ÉÀªŠÜ1
+>kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8Ùä¤ŠÜ1
+9kotlin:S1128"Remove this unused import.(åå8Ùä¤ŠÜ1
+9kotlin:S11280"Remove this unused import.(Ó€ùÈ8Ùä¤ŠÜ1
+>kotlin:S11283"Remove this unused import.(¯“×£øÿÿÿÿ8Ùä¤ŠÜ1
+9kotlin:S11284"Remove this unused import.(†áì²8Úä¤ŠÜ1
+~kotlin:S1192°"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(é¯›•ıÿÿÿÿ8Üä¤ŠÜ1
+pkotlin:S1192†"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Üä¤ŠÜ1
+wkotlin:S3776Ä"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8àä¤ŠÜ1
+qkotlin:S3776¥"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8àä¤ŠÜ1
+rkotlin:S3776°"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8ÚÀªŠÜ1
+fkotlin:S6510æ"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8çä¤ŠÜ1

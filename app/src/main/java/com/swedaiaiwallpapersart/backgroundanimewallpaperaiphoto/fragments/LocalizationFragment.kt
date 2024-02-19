@@ -99,6 +99,9 @@ class LocalizationFragment : Fragment() {
             object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()
+                    if (AdConfig.ISPAIDUSER){
+                        binding.adsView.visibility = View.GONE
+                    }
                     Log.e("TAG", "onAdsLoadFail: native failded " )
                 }
 

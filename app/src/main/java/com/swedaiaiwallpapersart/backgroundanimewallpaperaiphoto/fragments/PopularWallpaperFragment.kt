@@ -28,6 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment.Companion.isNavigated
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -65,6 +66,10 @@ class PopularWallpaperFragment () : Fragment() {
     var startIndex = 0
 
     val catListViewmodel: MyViewModel by activityViewModels()
+
+    companion object{
+        var hasToNavigate = false
+    }
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
@@ -196,7 +201,9 @@ class PopularWallpaperFragment () : Fragment() {
         val list = ArrayList<CatResponse?>()
         mostUsedWallpaperAdapter = MostUsedWallpaperAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
+                Log.e(TAG, "getPosition: clicked" )
                 if (!isNavigationInProgress){
+                    hasToNavigate = true
                     externalOpen = true
                     val allItems = mostUsedWallpaperAdapter?.getAllItems()
                     if (addedItems?.isNotEmpty() == true){
@@ -216,7 +223,7 @@ class PopularWallpaperFragment () : Fragment() {
                         showLoading = true,
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                Log.e(TAG, "onAdsShowFail: " + errorCode)
                                 if (isAdded){
                                     navigateToDestination(allItems!!, position)
                                 }
@@ -225,9 +232,18 @@ class PopularWallpaperFragment () : Fragment() {
                             }
 
                             override fun onAdsDismiss() {
+                                Log.e(TAG, "onAdsDismiss: " )
                                 if (isAdded){
-                                    navigateToDestination(allItems!!, position)
+//                                    navigateToDestination(allItems!!, position)
                                 }
+                            }
+
+                            override fun onAdsShowed(priority: Int) {
+                                super.onAdsShowed(priority)
+                                Log.e(TAG, "onAdsShowed: ", )
+//                                if (isAdded){
+//                                    navigateToDestination(allItems!!, position)
+//                                }
                             }
                         }
                     )
@@ -395,6 +411,9 @@ class PopularWallpaperFragment () : Fragment() {
     override fun onResume() {
         super.onResume()
 
+
+
+
         initMostDownloadedData()
 
         initTrendingData()
@@ -408,6 +427,8 @@ class PopularWallpaperFragment () : Fragment() {
             adapter?.updateMoreData(cachedCatResponses)
 
         }
+
+
 
         if (dataset){
 
@@ -431,6 +452,15 @@ class PopularWallpaperFragment () : Fragment() {
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(1500)
+            if (!isNavigated && hasToNavigate){
+                navigateToDestination(addedItems!!,oldPosition)
+            }
+        }
+
+
 
     }
 
@@ -669,24 +699,42 @@ class PopularWallpaperFragment () : Fragment() {
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
-        val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList.filterNotNull())
+        Log.e(TAG, "navigateToDestination: " )
 
-        val countOfNulls = arrayList.subList(0, position).count { it == null }
-        val sharedViewModel: SharedViewModel by activityViewModels()
+        try {
+            val gson = Gson()
+            val arrayListJson = gson.toJson(arrayList.filterNotNull())
+
+            val countOfNulls = arrayList.subList(0, position).count { it == null }
+            val sharedViewModel: SharedViewModel by activityViewModels()
+
+            Log.e(TAG, "navigateToDestination: ", )
 
 
-        sharedViewModel.clearData()
+            sharedViewModel.clearData()
 
-        sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
+            sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
 
-        Bundle().apply {
-            putString("from", "trending")
-            putInt("position", position - countOfNulls)
-            requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment, this)
+            lifecycleScope.launch(Dispatchers.Main) {
+
+                Bundle().apply {
+                    putString("from", "trending")
+                    putInt("position", position - countOfNulls)
+                    Log.e(TAG, "navigateToDestination: inside bundle", )
+
+                    requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment, this)
+                }
+            }
+
+
+
+            isNavigationInProgress = false
+        }catch (e:IndexOutOfBoundsException){
+            e.printStackTrace()
+        }catch (e:Exception){
+            e.printStackTrace()
         }
 
-        isNavigationInProgress = false
     }
 
     override fun onDestroyView() {

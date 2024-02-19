@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.model.dto.CommonAdsAction
 import com.bmik.android.sdk.utils.IkmSdkUtils
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -62,6 +64,14 @@ class SplashOnFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         IkmSdkController.setEnableShowResumeAds(false)
 
+        SDKBaseController.getInstance().onDataInitSuccessListener = CommonAdsAction {
+            //do something
+        }
+        SDKBaseController.getInstance().onDataGetSuccessListener = {
+            //do something
+        }
+
+
 
 
 
@@ -79,6 +89,7 @@ class SplashOnFragment : Fragment() {
 
                     override fun onAdsLoadFail() {
                         super.onAdsLoadFail()
+
                         Log.e("*******ADS", "onAdsLoaded: Banner failed", )
                     }
                 }
@@ -120,7 +131,6 @@ class SplashOnFragment : Fragment() {
                 delay(interval.toLong())
             }
 
-            delay(3000)
 
             SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
                 override fun onAdReady(priority: Int) {

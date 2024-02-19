@@ -33,10 +33,13 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -74,6 +77,9 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment.Companion.hasToNavigateList
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment.Companion.hasToNavigate
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment.Companion.hasToNavigateHome
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
@@ -153,6 +159,10 @@ class WallpaperViewFragment : Fragment() {
     lateinit var appDatabase: AppDatabase
 
 
+    companion object{
+        var isNavigated =  false
+    }
+
 
     var adapter: WallpaperApiSliderAdapter?= null
     override fun onCreateView(
@@ -203,6 +213,8 @@ class WallpaperViewFragment : Fragment() {
 
                         firstTime = false
                     }
+
+                    isNavigated = true
 
 
                     Log.e(TAG, "new position: $position")
@@ -259,6 +271,34 @@ class WallpaperViewFragment : Fragment() {
                     }
                 }
             )
+
+        backHandle()
+    }
+
+    private fun backHandle(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                firstTime = true
+                isNavigated = false
+                hasToNavigate = false
+                hasToNavigateHome = false
+                hasToNavigateList = false
+                navController?.popBackStack()
+            }
+        })
+
+        if (BuildCompat.isAtLeastT()) {
+            requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT
+            ) {
+                firstTime = true
+                isNavigated = false
+                hasToNavigate = false
+                hasToNavigateList = false
+                hasToNavigateHome = false
+                navController?.popBackStack()
+            }
+        }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -336,6 +376,10 @@ class WallpaperViewFragment : Fragment() {
        binding.toolbar.setOnClickListener {
            // Set up the onBackPressed callback
            firstTime = true
+           isNavigated = false
+           hasToNavigate = false
+           hasToNavigateHome = false
+           hasToNavigateList = false
            navController?.popBackStack()
        }
         setViewPager()
@@ -512,10 +556,24 @@ class WallpaperViewFragment : Fragment() {
                    ActivityCompat.requestPermissions(myActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), STORAGE_PERMISSION_CODE)
                }else{
                    Log.e("TAG", "functionality: inside click dialog", )
-                   getUserIdDialog()
+                   if (AdConfig.ISPAIDUSER){
+                       mSaveMediaToStorage(bitmap)
+                       val model = arrayList[position]
+                       model?.let { it1 -> setDownloaded(it1) }
+                   }else{
+
+                       getUserIdDialog()
+                   }
                }
            }else{
-               getUserIdDialog()
+               if (AdConfig.ISPAIDUSER){
+                   mSaveMediaToStorage(bitmap)
+                   val model = arrayList[position]
+                   model?.let { it1 -> setDownloaded(it1) }
+               }else{
+
+                   getUserIdDialog()
+               }
            }
 
        }

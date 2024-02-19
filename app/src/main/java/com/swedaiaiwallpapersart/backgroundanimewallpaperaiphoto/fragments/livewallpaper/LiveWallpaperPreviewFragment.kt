@@ -220,7 +220,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
 
         binding.downloadWallpaper.setOnClickListener {
-
+            val source = File(BlurView.filePath)
+            val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val destination = File(file, BlurView.fileName)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                 if (ContextCompat.checkSelfPermission(
                         requireContext(),
@@ -235,10 +237,40 @@ class LiveWallpaperPreviewFragment : Fragment() {
                     )
                 } else {
                     Log.e("TAG", "functionality: inside click dialog")
-                    getUserIdDialog()
+                    if (AdConfig.ISPAIDUSER){
+                        copyFiles(source, destination)
+
+                        try {
+                            lifecycleScope.launch {
+                                val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                                webApiInterface.postDownloadedLive(requestBody)
+                            }
+                        }catch (e:Exception){
+                            e.printStackTrace()
+                        }
+                    }else{
+
+                        getUserIdDialog()
+                    }
                 }
             } else {
-                getUserIdDialog()
+                if (AdConfig.ISPAIDUSER){
+                    copyFiles(source, destination)
+
+                    try {
+                        lifecycleScope.launch {
+                            val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                            webApiInterface.postDownloadedLive(requestBody)
+                        }
+                    }catch (e:Exception){
+                        e.printStackTrace()
+                    }
+                }else{
+
+                    getUserIdDialog()
+                }
             }
 
         }
@@ -292,6 +324,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         bindingDialog.upgradeButton?.setOnClickListener {
+            dialog.dismiss()
             findNavController().navigate(R.id.IAPFragment)
         }
         bindingDialog.cancelDialog?.setOnClickListener {

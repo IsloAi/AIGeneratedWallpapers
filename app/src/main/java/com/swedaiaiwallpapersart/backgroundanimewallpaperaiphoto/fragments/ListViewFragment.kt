@@ -18,6 +18,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -29,6 +30,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -104,6 +106,8 @@ class ListViewFragment : Fragment() {
 
                 if (!isNavigationInProgress){
 
+                    hasToNavigateList = true
+
                     isNavigationInProgress = true
                 externalOpen = true
                 val allItems = adapter?.getAllItems()
@@ -129,7 +133,7 @@ class ListViewFragment : Fragment() {
                         }
 
                         override fun onAdsDismiss() {
-                            navigateToDestination(allItems!!, position)
+//                            navigateToDestination(allItems!!, position)
                         }
                     }
                 )
@@ -292,6 +296,13 @@ class ListViewFragment : Fragment() {
 
         }
 
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(1500)
+            if (!WallpaperViewFragment.isNavigated && hasToNavigateList){
+                navigateToDestination(addedItems!!,oldPosition)
+            }
+        }
+
     }
 
     override fun onPause() {
@@ -365,6 +376,10 @@ class ListViewFragment : Fragment() {
 
         isNavigationInProgress = false
 
+    }
+
+    companion object{
+        var hasToNavigateList = false
     }
 
     override fun onDestroyView() {

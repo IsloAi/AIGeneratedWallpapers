@@ -1,11 +1,12 @@
 
-Bkotlin:S125"Remove this commented out code.(‚òò¦şÿÿÿÿ8‘ô”‹Û1
-Ckotlin:S125›"Remove this commented out code.(‚òò¦şÿÿÿÿ8‘ô”‹Û1
-Ckotlin:S125 "Remove this commented out code.(‚òò¦şÿÿÿÿ8‘ô”‹Û1
-;kotlin:S6310n"Avoid hardcoded dispatchers.(©ÒÕò8•ô”‹Û1
-<kotlin:S6310¯"Avoid hardcoded dispatchers.(Í¡·Ş8•ô”‹Û1
-Vkotlin:S1481Æ"1Remove this unused "currentIndex" local variable.(Ì´–Ğúÿÿÿÿ8Ÿô”‹Û1
-Okotlin:S1481¾"/Remove this unused "mainImages" local variable.(¸üíÌ8Ÿô”‹Û1
-Mkotlin:S1481¸"-Remove this unused "bgImages" local variable.(÷¥†8Ÿô”‹Û1
-Gkotlin:S1874F"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8£ô”‹Û1
-qkotlin:S3776<"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ëü«8¤ô”‹Û1
+Ckotlin:S125‰"Remove this commented out code.(‚òò¦şÿÿÿÿ8—ØÿÛ1
+Ckotlin:S125¥"Remove this commented out code.(‚òò¦şÿÿÿÿ8—ØÿÛ1
+Ckotlin:S125ª"Remove this commented out code.(‚òò¦şÿÿÿÿ8˜ØÿÛ1
+;kotlin:S6310y"Avoid hardcoded dispatchers.(©ÒÕò8Íñ‹ÿÛ1
+<kotlin:S6310¹"Avoid hardcoded dispatchers.(Í¡·Ş8œØÿÛ1
+Vkotlin:S1481Ğ"1Remove this unused "currentIndex" local variable.(Ì´–Ğúÿÿÿÿ8¥ØÿÛ1
+Okotlin:S1481È"/Remove this unused "mainImages" local variable.(¸üíÌ8¥ØÿÛ1
+Mkotlin:S1481Â"-Remove this unused "bgImages" local variable.(÷¥†8¥ØÿÛ1
+9kotlin:S1128"Remove this unused import.(Ö¢æ¾8„ˆ™ÿÛ1
+Gkotlin:S1874P"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8Ûñ‹ÿÛ1
+qkotlin:S3776>"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ëü«8Üñ‹ÿÛ1

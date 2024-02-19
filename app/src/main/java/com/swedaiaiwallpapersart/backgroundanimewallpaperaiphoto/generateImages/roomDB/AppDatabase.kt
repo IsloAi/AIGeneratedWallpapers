@@ -13,7 +13,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 
-@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class,LiveWallpaperModel::class], version = 8)
+@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class,LiveWallpaperModel::class], version = 9)
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getResponseIGDao(): GetResponseIGDao

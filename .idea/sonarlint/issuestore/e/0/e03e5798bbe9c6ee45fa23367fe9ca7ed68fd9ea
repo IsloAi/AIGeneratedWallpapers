@@ -1,15 +1,17 @@
 
-Ckotlin:S125ö"Remove this commented out code.(Ò»ˆşÿÿÿÿ8Ä—ÇÕ1
-<kotlin:S6310ñ"Avoid hardcoded dispatchers.(ÏÃâ8“Ä—ÇÕ1
-:kotlin:S6310a"Avoid hardcoded dispatchers.(©ÓœW8Ğ”åÙ1
-;kotlin:S6310d"Avoid hardcoded dispatchers.(Í¡·Ş8“Ä—ÇÕ1
-;kotlin:S6310¯"Avoid hardcoded dispatchers.(©ÓœW8µ÷–åÙ1
-<kotlin:S6310Ä"Avoid hardcoded dispatchers.(Í¡·Ş8¸¹˜åÙ1
-Hkotlin:S108¨")Either remove or fill this block of code.(·Úøš8ĞĞ˜ÇÕ1
-Mkotlin:S108Õ")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ĞĞ˜ÇÕ1
+>kotlin:S125¿"Remove this commented out code.(ÒË¢8¦Ş§‹Ü1
+Ckotlin:S125ú"Remove this commented out code.(Ò»ˆşÿÿÿÿ8Ä—ÇÕ1
+<kotlin:S6310ô"Avoid hardcoded dispatchers.(ÏÃâ8“Ä—ÇÕ1
+<kotlin:S6310"Avoid hardcoded dispatchers.(©ÒÕò8“Ä—ÇÕ1
+:kotlin:S6310d"Avoid hardcoded dispatchers.(©ÓœW8Ğ”åÙ1
+;kotlin:S6310g"Avoid hardcoded dispatchers.(Í¡·Ş8¸¹˜åÙ1
+;kotlin:S6310²"Avoid hardcoded dispatchers.(©ÓœW8µ÷–åÙ1
+<kotlin:S6310Ç"Avoid hardcoded dispatchers.(Í¡·Ş8÷©£‹Ü1
+Hkotlin:S108«")Either remove or fill this block of code.(·Úøš8ĞĞ˜ÇÕ1
+Mkotlin:S108Ø")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ĞĞ˜ÇÕ1
 >kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÿÚŞæÙ1
->kotlin:S1128&"Remove this unused import.(ÌëÉÚşÿÿÿÿ8²ŠåÙ1
-pkotlin:S1192ÿ"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ûë˜åÙ1
-wkotlin:S3776¢"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8İë˜åÙ1
-Nkotlin:S1066".Merge this "if" statement with the nested one.(šÖÉù8âë˜åÙ1
-fkotlin:S6510á"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8âë˜åÙ1
+>kotlin:S1128("Remove this unused import.(ÌëÉÚşÿÿÿÿ8²ŠåÙ1
+pkotlin:S1192‚"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ûë˜åÙ1
+wkotlin:S3776¥"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8İë˜åÙ1
+Nkotlin:S1066 ".Merge this "if" statement with the nested one.(šÖÉù8âë˜åÙ1
+fkotlin:S6510ä"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8âë˜åÙ1
