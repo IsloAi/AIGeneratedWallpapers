@@ -135,19 +135,23 @@ class IAPFragment : Fragment() {
 
             delay(2000)
 
-            binding.terms.text = "- Subscribed users have unlimited use and access to all of its Premium features, without any ads.\n" +
-                    "- Non-subscribed users can continuously use the app with advertisements, and have a limited for use of Premium features.\n" +
-                    "- Users can subscribe with different plans: Weekly($priceWeekly), Monthly ($priceMonthly), Yearly ($priceYearly) auto-renewing subscriptions.\n" +
-                    "- Alternatively, users can purchase the full app (LIFETIME) for a one-time payment of ($priceLife). All updates and new features are received.\n" +
-                    "- Payment will be charged to your Google Account at confirmation of purchase.\n" +
-                    "- Subscriptions automatically renew unless auto-renew is disabled at least 24 hours before the end of the current period.\n" +
-                    "- Account will be charged for renewal within 24-hour prior to the end of the current period, and identify the cost of renewal.\n" +
-                    "- Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable.\n" +
-                    "- Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase. Note that uninstalling the app will not cancel your subscription.\n" +
-                    "1. On your Android phone or tablet, let's open the Google Play Store.\n" +
-                    "2. Check if you're signed in to the correct Google Account.\n" +
-                    "3. Tap Menu Subscriptions and Select the subscription you want to cancel.\n" +
-                    "4. Tap Cancel subscription."
+            if (isAdded){
+                binding.terms.text = "- Subscribed users have unlimited use and access to all of its Premium features, without any ads.\n" +
+                        "- Non-subscribed users can continuously use the app with advertisements, and have a limited for use of Premium features.\n" +
+                        "- Users can subscribe with different plans: Weekly($priceWeekly), Monthly ($priceMonthly), Yearly ($priceYearly) auto-renewing subscriptions.\n" +
+                        "- Alternatively, users can purchase the full app (LIFETIME) for a one-time payment of ($priceLife). All updates and new features are received.\n" +
+                        "- Payment will be charged to your Google Account at confirmation of purchase.\n" +
+                        "- Subscriptions automatically renew unless auto-renew is disabled at least 24 hours before the end of the current period.\n" +
+                        "- Account will be charged for renewal within 24-hour prior to the end of the current period, and identify the cost of renewal.\n" +
+                        "- Any unused portion of a free trial period, if offered, will be forfeited when the user purchases a subscription to that publication, where applicable.\n" +
+                        "- Subscriptions may be managed by the user and auto-renewal may be turned off by going to the user's Account Settings after purchase. Note that uninstalling the app will not cancel your subscription.\n" +
+                        "1. On your Android phone or tablet, let's open the Google Play Store.\n" +
+                        "2. Check if you're signed in to the correct Google Account.\n" +
+                        "3. Tap Menu Subscriptions and Select the subscription you want to cancel.\n" +
+                        "4. Tap Cancel subscription."
+            }
+
+
 
         }
 

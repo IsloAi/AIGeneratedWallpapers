@@ -183,3 +183,17 @@ iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fra
 eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/PostDataOnServer.kt,d\a\da21402be7814f7e3da5ed6289348b6fb8bc4bd8
 £
 sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/FeedbackInterface.kt,4\0\4045fcf10003c30773d818ecc6d2eba533e47316
+š
+japp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/downloadCallback.kt,3\3\33425f53378db8d41ebf605b826bcde0f6f00184
+Ž
+^app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/PostData.kt,c\3\c3fcfd9b08cb98ea018f3a7fbb0b73c72385bd5f
+¦
+vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/CatResponseInterface.kt,2\d\2d4cbd8f6df587ee5cb9eef787c2c8570fc27c9c
+™
+iapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MyFavouriteViewModel.kt,5\4\549976f6ac8946e9631209abc47ce953210728ba
+¨
+xapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/FavouriteListInterface.kt,8\7\87ebfddddece0f756230dd555e4b7db9535f340d
+£
+sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/LikeLiveWallpaper.kt,e\e\ee1cb4e89d33da0a5ddf5724d3f671cdb086e1db
+ 
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/FavoruiteLiveWallpaperBody.kt,3\1\31b0392269d9e2ea8648e7e83fbe8e1412bce0d5

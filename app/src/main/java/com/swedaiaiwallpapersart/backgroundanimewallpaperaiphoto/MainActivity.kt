@@ -19,6 +19,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -47,9 +48,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.SelectedPromptListModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
@@ -60,6 +64,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -88,6 +93,9 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     @Inject
     lateinit var appDatabase: AppDatabase
 
+    private  val myViewModel: MyHomeViewModel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,9 +115,14 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         myCatNameViewModel.fetchWallpapers()
         saveLiveWallpapersInDB()
-        liveViewModel.getMostUsed("1","500",deviceID)
+        lifecycleScope.launch {
+
+            delay(3000)
+            liveViewModel.getMostUsed("1","500",deviceID)
+        }
 
         if (!isNetworkAvailable()){
             showNoInternetDialog()
@@ -125,26 +138,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                 if (imageList != null) {
                     val images = imageList.images
-
-//                    images.forEach { item ->
-//                        Log.e(TAG, "onCreate: "+item )
-//                        val model = SingleDatabaseResponse(
-//                            item.id,
-//                            item.cat_name,
-//                            item.image_name,
-//                            AdConfig.HD_ImageUrl + item.url,
-//                            AdConfig.Compressed_Image_url + item.url,
-//                            item.likes,
-//                            item.liked,
-//                            item.size,
-//                            item.Tags,
-//                            item.capacity
-//                        )
-//                        CoroutineScope(Dispatchers.IO).launch {
-//                            appDatabase.wallpapersDao().insert(model)
-//                        }
-//                    }
-
                     val deferreds = images.map { item ->
                         Log.e(TAG, "onCreate: "+item )
                         val model = SingleDatabaseResponse(
@@ -165,6 +158,28 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             appDatabase.wallpapersDao().insert(model)
                         }
 
+                    }
+
+                    GlobalScope.launch {
+                        val fileName = "livewallpapers.json"
+                        val jsonString = readJsonFile(this@MainActivity,fileName)
+                        if (jsonString.isNotEmpty()){
+                            val imagesListLive = parseJsonLive(jsonString)
+
+                            if (imagesListLive != null){
+                                val imagesLive = imagesListLive.images
+                                val deferreds = imagesLive.map { item ->
+                                    Log.e(TAG, "onCreate: "+item )
+                                    val model = item.copy(unlocked = item.download <= 350)
+
+                                    CoroutineScope(Dispatchers.IO).async {
+                                        appDatabase.liveWallpaperDao().insert(model)
+                                    }
+
+                                }
+
+                            }
+                        }
                     }
 
 
@@ -202,7 +217,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach {wallpaper->
-                            val model = wallpaper.copy(unlocked = wallpaper.download <= 200)
+                            val model = wallpaper.copy(unlocked = wallpaper.download <= 350)
                             appDatabase.liveWallpaperDao().insert(model)
 
                         }
@@ -237,7 +252,21 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         lifecycleScope.launch(Dispatchers.IO) {
                             appDatabase.wallpapersDao().updateLocked(false,item.image_id.toInt())
                         }
+                        if (item == result.data.last()){
+                            getSetTotallikes()
+                        }
+
+
+
+
+
+
+
+
                     }
+
+
+
                 }
 
                 is Response.Processing -> {
@@ -251,6 +280,69 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 }
 
                 else -> {}
+            }
+
+        }
+    }
+
+    fun getSetTotallikes(){
+        myViewModel.getAllLikes()
+
+        MySharePreference.getDeviceID(this@MainActivity)?.let { myViewModel.getAllLiked(it) }
+
+        myViewModel.allLikes.observe(this@MainActivity){result->
+            when(result){
+                is Response.Success -> {
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        result.data?.forEach {item->
+                            appDatabase.wallpapersDao().updateLikes(item.likes,item.id.toInt())
+
+                        }
+                    }
+
+                }
+
+                is Response.Loading -> {
+
+                }
+
+                is Response.Error -> {
+
+                }
+                is Response.Processing -> {
+
+                }
+
+            }
+
+        }
+
+        myViewModel.allLiked.observe(this@MainActivity){result->
+            when(result){
+                is Response.Success -> {
+
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        result.data?.forEach {item->
+
+                            Log.e("TAG", "getSetTotallikes: "+item )
+                            appDatabase.wallpapersDao().updateLiked(true,item.imageid.toInt())
+                        }
+                    }
+
+                }
+
+                is Response.Loading -> {
+
+                }
+
+                is Response.Error -> {
+
+                }
+                is Response.Processing -> {
+
+                }
+
             }
 
         }
@@ -274,6 +366,19 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             try {
                 val gson = Gson()
                 gson.fromJson(jsonString, ListResponse::class.java)
+            } catch (e: JsonSyntaxException) {
+                e.printStackTrace()
+                null
+            }
+        }
+
+    }
+
+    suspend fun parseJsonLive(jsonString: String): LiveImagesResponse? {
+        return withContext(Dispatchers.IO){
+            try {
+                val gson = Gson()
+                gson.fromJson(jsonString, LiveImagesResponse::class.java)
             } catch (e: JsonSyntaxException) {
                 e.printStackTrace()
                 null

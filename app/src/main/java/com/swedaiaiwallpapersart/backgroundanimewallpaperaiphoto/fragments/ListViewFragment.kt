@@ -368,11 +368,13 @@ class ListViewFragment : Fragment() {
         sharedViewModel.clearData()
 
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
-        val bundle =  Bundle().apply {
+        Bundle().apply {
             putString("from",from)
             putInt("position",position - countOfNulls)
+            findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
-        findNavController().navigate(R.id.action_listViewFragment_to_wallpaperViewFragment,bundle)
+
+
 
         isNavigationInProgress = false
 

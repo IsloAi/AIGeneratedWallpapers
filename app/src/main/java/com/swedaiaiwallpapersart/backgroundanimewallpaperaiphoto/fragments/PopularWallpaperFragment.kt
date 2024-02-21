@@ -189,8 +189,12 @@ class PopularWallpaperFragment () : Fragment() {
         }
 
         binding.more.setOnClickListener {
-            (requireParentFragment() as HomeTabsFragment).navigateToTrending(1)
+            (requireParentFragment() as HomeTabsFragment).navigateToTrending((requireParentFragment() as HomeTabsFragment).getHomeFragmentIndex() )
+
+//            (requireParentFragment() as HomeTabsFragment).navigateToTrending(3)
+
         }
+
     }
 
     private fun initMostUsedRV() {

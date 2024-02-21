@@ -55,7 +55,6 @@ class HomeTabsFragment : Fragment() {
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    private  val myViewModel: MyHomeViewModel by activityViewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -104,9 +103,6 @@ class HomeTabsFragment : Fragment() {
                 binding.goPremium.visibility = View.VISIBLE
             }
         }
-
-
-            getSetTotallikes()
             loadbannerAd()
             setGradienttext()
             setViewPager()
@@ -114,68 +110,7 @@ class HomeTabsFragment : Fragment() {
             setEvents()
     }
 
-    fun getSetTotallikes(){
-        myViewModel.getAllLikes()
 
-        MySharePreference.getDeviceID(requireContext())?.let { myViewModel.getAllLiked(it) }
-
-        myViewModel.allLikes.observe(viewLifecycleOwner){result->
-            when(result){
-                is Response.Success -> {
-
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        result.data?.forEach {item->
-                            appDatabase.wallpapersDao().updateLikes(item.likes,item.id.toInt())
-
-                        }
-                    }
-
-                }
-
-                is Response.Loading -> {
-
-                }
-
-                is Response.Error -> {
-
-                }
-                is Response.Processing -> {
-
-                }
-
-            }
-
-        }
-
-        myViewModel.allLiked.observe(viewLifecycleOwner){result->
-            when(result){
-                is Response.Success -> {
-
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        result.data?.forEach {item->
-
-                            Log.e("TAG", "getSetTotallikes: "+item )
-                            appDatabase.wallpapersDao().updateLiked(true,item.imageid.toInt())
-                        }
-                    }
-
-                }
-
-                is Response.Loading -> {
-
-                }
-
-                is Response.Error -> {
-
-                }
-                is Response.Processing -> {
-
-                }
-
-            }
-
-        }
-    }
 
 
 
@@ -361,6 +296,19 @@ class HomeTabsFragment : Fragment() {
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
+    }
+
+    fun getHomeFragmentIndex(): Int {
+        val tabLayout = binding.tabLayout
+        val tabCount = tabLayout.tabCount
+        for (i in 0 until tabCount) {
+            val tab = tabLayout.getTabAt(i)
+            val tabTitle = tab?.text?.toString()
+            if (tabTitle == getString(R.string.trending)) {
+                return i
+            }
+        }
+        return -1 // If HomeFragment is not found
     }
 
     fun navigateToTrending(index:Int){

@@ -26,14 +26,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LiveWallpaperViewModel@Inject constructor(private val getLiveWallpapersUsecase: GetLiveWallpapersUsecase,private val getLiveWallpaperFromDbUsecase: GetLiveWallpaperFromDbUsecase): ViewModel()  {
-//    val wallpaperData = MutableLiveData<ArrayList<LiveWallpaperModel>?>()
-//
-//    val TAG = "LIVEMODEL"
-//
-//
-//    fun getWallpapers(): MutableLiveData<ArrayList<LiveWallpaperModel>?> {
-//        return wallpaperData
-//    }
+
 
     private var _liveWallpapers= MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<LiveWallpaperModel>>>(
         com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(null))
@@ -63,42 +56,4 @@ class LiveWallpaperViewModel@Inject constructor(private val getLiveWallpapersUse
         }
     }
 
-//    fun fetchWallpapers(context: Context) {
-//
-//        viewModelScope.launch(Dispatchers.IO) {
-//
-//            val retrofit = RetrofitInstance.getInstance()
-//            val service = retrofit.create(GetLiveWallpapers::class.java).getLiveWallpapers(
-//                MySharePreference.getDeviceID(context)!!
-//            )
-//
-//            service.enqueue(object : Callback<LiveImagesResponse> {
-//                override fun onResponse(
-//                    call: Call<LiveImagesResponse>, response: Response<LiveImagesResponse>
-//                ) {
-//                    if(response.isSuccessful){
-//                        Log.e(TAG, "onResponse: "+response.body()?.images )
-//                        wallpaperData.value = response.body()?.images
-//                    }
-//                }
-//                override fun onFailure(call: Call<LiveImagesResponse>, t: Throwable) {
-//
-//                    viewModelScope.launch(Dispatchers.Main) {
-//
-//                        Toast.makeText(context,
-//                            context.getString(R.string.error_loading_please_check_your_internet), Toast.LENGTH_SHORT).show()
-//                        Log.d(TAG, "onResponse: response onFailure ")
-//
-//                    }
-//
-//                }
-//            })
-//
-//
-//        }
-//
-//    }
-//    fun clear(){
-//        wallpaperData.value = null
-//    }
 }

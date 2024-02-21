@@ -3,6 +3,7 @@ Ckotlin:S125‡"Remove this commented out code.(°‹îùÿÿÿÿ8øà–ÍÕ1
 Ckotlin:S125±"Remove this commented out code.(©ûØÿÿÿÿÿ8»¿ÎıÛ1
 9kotlin:S1128"Remove this unused import.(ï›’8Ìÿ’Ú1
 qkotlin:S1192Š"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(²¨ñÿÿÿÿÿ8Ò—“Ú1
+Hkotlin:S1874“"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8ÄÇ´Ü1
 qkotlin:S3776e"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(Ë÷€8¨á–ÍÕ1
 wkotlin:S3776„"RRefactor this method to reduce its Cognitive Complexity from 44 to the 15 allowed.(™ßî±ùÿÿÿÿ8Ö—“Ú1
 rkotlin:S3776›"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(Ê«™ú8ÅƒÎıÛ1

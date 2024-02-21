@@ -498,34 +498,37 @@ class LiveWallpaperPreviewFragment : Fragment() {
                     }
 
                     override fun onAdsShowFail(errorCode: Int) {
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "viewlistwallscr_download_item_inter",
-                            "viewlistwallscr_download_item_inter",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    if (isAdded){
-                                        Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
-                                    }
-                                }
-
-                                override fun onAdsDismiss() {
-                                    copyFiles(source, destination)
-
-                                    try {
-                                        lifecycleScope.launch {
-                                            val requestBody = mapOf("imageid" to livewallpaper?.id)
-
-                                            webApiInterface.postDownloadedLive(requestBody)
+                        if (isAdded){
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "viewlistwallscr_download_item_inter",
+                                "viewlistwallscr_download_item_inter",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        if (isAdded){
+                                            Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
                                         }
-                                    }catch (e:Exception){
-                                        e.printStackTrace()
                                     }
 
+                                    override fun onAdsDismiss() {
+                                        copyFiles(source, destination)
+
+                                        try {
+                                            lifecycleScope.launch {
+                                                val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                                                webApiInterface.postDownloadedLive(requestBody)
+                                            }
+                                        }catch (e:Exception){
+                                            e.printStackTrace()
+                                        }
+
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
+
                         Log.e("********ADS", "onAdsShowFail: ")
 
                     }
@@ -602,19 +605,22 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
 
     private fun setWallpaperOnView() {
+        if (isAdded){
+            binding.liveWallpaper.setMediaController(null)
+            binding.liveWallpaper.setVideoPath(BlurView.filePath)
+            binding.liveWallpaper.setOnCompletionListener(OnCompletionListener {
+                binding.liveWallpaper.start()
+            })
 
-        binding.liveWallpaper.setMediaController(null)
-        binding.liveWallpaper.setVideoPath(BlurView.filePath)
-        binding.liveWallpaper.setOnCompletionListener(OnCompletionListener {
+            binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->
+                // Adjust video looping here if needed
+                mediaPlayer.isLooping = true
+            }
+
             binding.liveWallpaper.start()
-        })
-
-        binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->
-            // Adjust video looping here if needed
-            mediaPlayer.isLooping = true
         }
 
-        binding.liveWallpaper.start()
+
     }
 
 

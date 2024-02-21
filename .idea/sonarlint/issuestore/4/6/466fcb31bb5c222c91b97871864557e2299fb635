@@ -1,19 +1,14 @@
 
-Ckotlin:S125™"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8»Î¦‹Û1
-:kotlin:S6310~"Avoid hardcoded dispatchers.(©ÓœW8ÀÎ¦‹Û1
-;kotlin:S6310š"Avoid hardcoded dispatchers.(©ÓœW8ÀÎ¦‹Û1
-Hkotlin:S108‡")Either remove or fill this block of code.(·Úøš8ËÎ¦‹Û1
-Gkotlin:S108‹")Either remove or fill this block of code.(›Ñû08ËÎ¦‹Û1
-Mkotlin:S108")Either remove or fill this block of code.(ñ»›Œúÿÿÿÿ8“â¥‹Û1
-Hkotlin:S108¤")Either remove or fill this block of code.(·Úøš8ËÎ¦‹Û1
-Gkotlin:S108¨")Either remove or fill this block of code.(›Ñû08ÌÎ¦‹Û1
-Mkotlin:S108«")Either remove or fill this block of code.(ñ»›Œúÿÿÿÿ8“â¥‹Û1
-Pkotlin:S1481"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8ÓÎ¦‹Û1
-Rkotlin:S1481Ñ"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8šâ¥‹Û1
-Lkotlin:S1481Ğ",Remove this unused "tabIcon" local variable.(™Î‡è8ÓÎ¦‹Û1
-Hkotlin:S1874º"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ÛÎ¦‹Û1
-Ckotlin:S1874‡"#Deprecated code should not be used.(‚Õ‡º8ÛÎ¦‹Û1
-Ckotlin:S1874—"#Deprecated code should not be used.(ê¶«Ê8ÛÎ¦‹Û1
-Ckotlin:S1874Õ"#Deprecated code should not be used.(ê¶«Ê8ÜÎ¦‹Û1
-Bkotlin:S1874Ø"#Deprecated code should not be used.(…ı£t8ÜÎ¦‹Û1
-zkotlin:S1186ª"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8àÎ¦‹Û1
+Ckotlin:S125Ø"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8áÇÁÙÜ1
+Pkotlin:S1481À"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8õÇÁÙÜ1
+Rkotlin:S1481"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8õÇÁÙÜ1
+Lkotlin:S1481",Remove this unused "tabIcon" local variable.(™Î‡è8õÇÁÙÜ1
+>kotlin:S1128"Remove this unused import.(ÙÃä¡şÿÿÿÿ8ş±ÁÙÜ1
+>kotlin:S1128*"Remove this unused import.(èãÊõûÿÿÿÿ8ş±ÁÙÜ1
+>kotlin:S1128+"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8ş±ÁÙÜ1
+Gkotlin:S1874y"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ıÇÁÙÜ1
+Ckotlin:S1874Æ"#Deprecated code should not be used.(‚Õ‡º8ıÇÁÙÜ1
+Ckotlin:S1874Ö"#Deprecated code should not be used.(ê¶«Ê8ÜÎ¦‹Û1
+Ckotlin:S1874”"#Deprecated code should not be used.(ê¶«Ê8ıÇÁÙÜ1
+Bkotlin:S1874—"#Deprecated code should not be used.(…ı£t8ıÇÁÙÜ1
+zkotlin:S1186é"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ÈÁÙÜ1

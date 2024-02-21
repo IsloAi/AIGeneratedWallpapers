@@ -279,7 +279,7 @@ class FavouriteFragment : Fragment() {
 
     fun initObservers(){
 
-        liveWallpaperViewModel.liveWallpapers.observe(viewLifecycleOwner){result->
+        liveWallpaperViewModel.liveWallsFromDB.observe(viewLifecycleOwner){result->
             when(result){
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
