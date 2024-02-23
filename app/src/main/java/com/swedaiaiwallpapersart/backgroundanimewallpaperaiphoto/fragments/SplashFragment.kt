@@ -106,11 +106,11 @@ class SplashFragment : Fragment() {
         circle4 = binding.circle4
         circle5 = binding.circle5
         viewPager2 = binding.viewPager
-        arrayList.add(SplashModel(R.drawable.splash1))
-        arrayList.add(SplashModel(R.drawable.splash2))
-        arrayList.add(SplashModel(R.drawable.splash3))
-        arrayList.add(SplashModel(R.drawable.splash4))
-        arrayList.add(SplashModel(R.drawable.splash5))
+//        arrayList.add(SplashModel(R.drawable.splash1))
+//        arrayList.add(SplashModel(R.drawable.splash2))
+//        arrayList.add(SplashModel(R.drawable.splash3))
+//        arrayList.add(SplashModel(R.drawable.splash4))
+//        arrayList.add(SplashModel(R.drawable.splash5))
         setViewPager()
     }
     override fun onResume() {

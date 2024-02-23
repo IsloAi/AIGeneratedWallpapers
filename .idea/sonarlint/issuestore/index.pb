@@ -197,3 +197,9 @@ xapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/rat
 sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ratrofit/endpoints/LikeLiveWallpaper.kt,e\e\ee1cb4e89d33da0a5ddf5724d3f671cdb086e1db
  
 papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/FavoruiteLiveWallpaperBody.kt,3\1\31b0392269d9e2ea8648e7e83fbe8e1412bce0d5
+<
+build.gradle,f\0\f07866736216be0ee2aba49e392191aeae700a35
+?
+settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
+—
+gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SplashFragment.kt,2\5\257e17601b007de0e29267125dd13b23eb6c3a1d

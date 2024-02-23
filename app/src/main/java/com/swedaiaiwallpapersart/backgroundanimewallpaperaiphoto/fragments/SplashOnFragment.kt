@@ -117,7 +117,7 @@ class SplashOnFragment : Fragment() {
 
 
         animateLoadingText()
-        animateImages()
+//        animateImages()
         lifecycleScope.launch(Dispatchers.Main) {
 
             val duration = 5000 // 5000 milliseconds = 5 seconds
@@ -189,33 +189,33 @@ class SplashOnFragment : Fragment() {
         }
     }
 
-    private fun animateImages() {
-
-        val bgImages = listOf(
-            R.drawable.splashnew_bg1,
-            R.drawable.splash_bg2,
-            R.drawable.splash_bg_3 // Add more images as needed
-        )
-
-        val mainImages = listOf(
-            R.drawable.splash_image1_new,
-            R.drawable.splash_image1_new,
-            R.drawable.splash3_image_new // Add more images as needed
-
-
-        )
-
-        var currentIndex = 0
-//        animateImages = viewLifecycleOwner.lifecycleScope.launch {
-//            while (isActive) {
-//                binding.spalshBgImage.setImageResource(bgImages[currentIndex])
-//                binding.splashMainImage.setImageResource(mainImages[currentIndex])
+//    private fun animateImages() {
 //
-//                currentIndex = (currentIndex + 1) % bgImages.size
-//                delay(1000) // Wait for 1 second before changing images
-//            }
-//        }
-    }
+//        val bgImages = listOf(
+//            R.drawable.splashnew_bg1,
+//            R.drawable.splash_bg2,
+//            R.drawable.splash_bg_3 // Add more images as needed
+//        )
+//
+//        val mainImages = listOf(
+//            R.drawable.splash_image1_new,
+//            R.drawable.splash_image1_new,
+//            R.drawable.splash3_image_new // Add more images as needed
+//
+//
+//        )
+//
+//        var currentIndex = 0
+////        animateImages = viewLifecycleOwner.lifecycleScope.launch {
+////            while (isActive) {
+////                binding.spalshBgImage.setImageResource(bgImages[currentIndex])
+////                binding.splashMainImage.setImageResource(mainImages[currentIndex])
+////
+////                currentIndex = (currentIndex + 1) % bgImages.size
+////                delay(1000) // Wait for 1 second before changing images
+////            }
+////        }
+//    }
 
 
     private var dotCount = 0
