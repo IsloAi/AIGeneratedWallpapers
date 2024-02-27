@@ -42,7 +42,6 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="@dimen/_250sdp"
-            android:src="@drawable/art"
             android:scaleType="centerCrop"
             android:id="@+id/mainImage"
             app:layout_constraintStart_toStartOf="parent"

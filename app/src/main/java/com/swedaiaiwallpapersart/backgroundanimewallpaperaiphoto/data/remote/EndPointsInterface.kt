@@ -30,6 +30,13 @@ interface EndPointsInterface {
 
     ):retrofit2.Response<ListResponse>
 
+    @GET("getupdatedwallpaper.php")
+    suspend fun getUpdatedWallpapers(
+        @Query("page") page: String,
+        @Query("record") record: String,
+        @Query("lastid") lastid:String
+    ):retrofit2.Response<ListResponse>
+
 
     @GET("totalLikes.php")
     suspend fun getAllLikes(

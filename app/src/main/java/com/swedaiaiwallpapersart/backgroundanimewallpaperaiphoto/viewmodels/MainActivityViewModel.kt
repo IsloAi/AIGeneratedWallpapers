@@ -11,6 +11,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.FetechAllWallpapersUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GenerateDeviceTokenUsecase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetMostUsedUseCase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases.GetUpdatedWallpaperUseCase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -23,7 +24,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel@Inject constructor(private val generateDeviceTokenUsecase: GenerateDeviceTokenUsecase
 ,private val fetechAllWallpapersUsecase: FetechAllWallpapersUsecase,
-    private val getMostUsedUseCase: GetMostUsedUseCase):  ViewModel()  {
+    private val getMostUsedUseCase: GetMostUsedUseCase,
+    private val getUpdatedWallpaperUseCase: GetUpdatedWallpaperUseCase
+    ):  ViewModel()  {
 
     private var _allModels= MutableLiveData<Response<ArrayList<SingleAllResponse>>>(Response.Success(null))
     val allModels: LiveData<Response<ArrayList<SingleAllResponse>>> = _allModels
@@ -45,9 +48,9 @@ class MainActivityViewModel@Inject constructor(private val generateDeviceTokenUs
         }
     }
 
-    fun getAllModels(api:String,page:String,record:String){
+    fun getAllModels(page:String,record:String,lastid:String){
         viewModelScope.launch {
-            fetechAllWallpapersUsecase.invoke(api,page,record).collect(){
+            getUpdatedWallpaperUseCase.invoke(page,record,lastid).collect(){
                 Log.e("TAG", "getAllModels: "+it )
                 _allModels.value=it
             }

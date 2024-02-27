@@ -14,6 +14,7 @@ import com.bmik.android.sdk.billing.dto.PurchaseInfo
 import com.bmik.android.sdk.listener.SDKBillingPurchaseListener
 import com.bmik.android.sdk.listener.SDKBillingValueListener
 import com.bmik.android.sdk.tracking.SDKTrackingController
+import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentIAPBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -52,6 +53,8 @@ class IAPFragment : Fragment() {
         binding.close.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        Glide.with(requireContext()).load(R.drawable.art).into(binding.mainImage)
 
 
         lifecycleScope.launch {

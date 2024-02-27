@@ -22,7 +22,7 @@ object AdConfig {
 
     var tabPositions = arrayOf("Category", "Gen AI","Popular", "Trending", "Live", "AI Wallpaper")
 
-    val BASE_URL = "https://edecator.com/wallpaperApp/V4/"
+    val BASE_URL = "https://edecator.com/wallpaperApp/V5/"
 
     val HD_ImageUrl = "https://edecator.com/wallpaperApp/images/"
     val Compressed_Image_url = "https://edecator.com/wallpaperApp/compress/"

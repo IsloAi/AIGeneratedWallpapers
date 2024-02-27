@@ -237,7 +237,9 @@ class SplashOnFragment : Fragment() {
         binding.videoView.start()
 
         binding.videoView.setOnCompletionListener {
-            binding.videoView.start()
+            if (isAdded){
+                binding.videoView.start()
+            }
         }
 
         if (isAdded){

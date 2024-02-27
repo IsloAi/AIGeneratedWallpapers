@@ -1,8 +1,8 @@
 
-<kotlin:S6310Ò"Avoid hardcoded dispatchers.(ÏÃâ8°”§²Ú1
+<kotlin:S6310Ô"Avoid hardcoded dispatchers.(ÏÃâ8°”§²Ú1
 :kotlin:S6310S"Avoid hardcoded dispatchers.(©ÓœW8¼Æª²Ú1
-;kotlin:S6310V"Avoid hardcoded dispatchers.(Í¡·Ş8°”§²Ú1
+;kotlin:S6310X"Avoid hardcoded dispatchers.(Í¡·Ş8°”§²Ú1
 9kotlin:S1128"Remove this unused import.(´Ùí8’¿Û1
 >kotlin:S1128#"Remove this unused import.(ÌëÉÚşÿÿÿÿ8¿”§²Ú1
-pkotlin:S1192à"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8·Ãƒ³Ú1
-qkotlin:S3776{"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(£ØîŠ8¹Ãƒ³Ú1
+pkotlin:S1192â"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8·Ãƒ³Ú1
+qkotlin:S3776}"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(£ØîŠ8¹Ãƒ³Ú1

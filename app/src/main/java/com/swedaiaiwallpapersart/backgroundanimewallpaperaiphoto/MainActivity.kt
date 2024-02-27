@@ -121,6 +121,29 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             liveViewModel.getMostUsed("1","500",deviceID)
         }
 
+        mainActivityViewModel.getAllModels("1","4000","4816")
+
+        mainActivityViewModel.allModels.observe(this){result->
+            when(result){
+                is Response.Success -> {
+                    Log.e(TAG, "updatedWalls: "+result.data )
+
+                }
+                is Response.Error -> {
+
+                }
+
+                is Response.Processing -> {
+
+                }
+
+                Response.Loading -> {
+
+                }
+            }
+
+        }
+
         if (!isNetworkAvailable()){
             showNoInternetDialog()
 
