@@ -127,7 +127,75 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         }
 
 
+        GlobalScope.launch {
+            val jsonFileName = "wallpapers.json"
+            val jsonString = readJsonFile(this@MainActivity, jsonFileName)
 
+            if (jsonString.isNotEmpty()) {
+                val imageList = parseJson(jsonString)
+
+                if (imageList != null) {
+                    val images = imageList.images
+                    val deferreds = images.map { item ->
+                        Log.e(TAG, "onCreate: "+item )
+                        val model = SingleDatabaseResponse(
+                            item.id,
+                            item.cat_name,
+                            item.image_name,
+                            AdConfig.HD_ImageUrl + item.url,
+                            AdConfig.Compressed_Image_url + item.url,
+                            item.likes,
+                            item.liked,
+                            item.size,
+                            item.Tags,
+                            item.capacity,
+                            true
+                        )
+
+                        CoroutineScope(Dispatchers.IO).async {
+                            appDatabase.wallpapersDao().insert(model)
+                        }
+
+                    }
+
+                    GlobalScope.launch {
+                        val fileName = "livewallpapers.json"
+                        val jsonString = readJsonFile(this@MainActivity,fileName)
+                        if (jsonString.isNotEmpty()){
+                            val imagesListLive = parseJsonLive(jsonString)
+
+                            if (imagesListLive != null){
+                                val imagesLive = imagesListLive.images
+                                val deferreds = imagesLive.map { item ->
+                                    Log.e(TAG, "onCreate: "+item )
+                                    val model = item.copy(unlocked = item.download <= 350)
+
+                                    CoroutineScope(Dispatchers.IO).async {
+                                        appDatabase.liveWallpaperDao().insert(model)
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+
+
+                    CoroutineScope(Dispatchers.Main).launch {
+                        deferreds.awaitAll()
+                        // This code will execute after all insert operations are completed
+                        // You can call your method here
+                        mainActivityViewModel.getMostUsed("1","700")
+                        initObservers()
+                    }
+
+                } else {
+
+                }
+            } else {
+
+            }
+        }
         Log.d("tracingImageId", "onCreate: id= $deviceID")
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID)
