@@ -1,14 +1,15 @@
 
-;kotlin:S6310|"Avoid hardcoded dispatchers.(ÏÃâ8ÀîÑæÙ1
-:kotlin:S6310m"Avoid hardcoded dispatchers.(©ÓœW8ü¹ÓæÙ1
-;kotlin:S6310p"Avoid hardcoded dispatchers.(Í¡·Ş8³ÏÔæÙ1
->kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8…£ÕæÙ1
-9kotlin:S1128"Remove this unused import.(ÁÈÚø8…£ÕæÙ1
->kotlin:S1128"Remove this unused import.(Øîğùÿÿÿÿ8Ä·ÉæÙ1
->kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8ÓïÈæÙ1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8ÓïÈæÙ1
->kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8†£ÕæÙ1
->kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8†£ÕæÙ1
-9kotlin:S1128"Remove this unused import.(ÒÂ¦8†£ÕæÙ1
->kotlin:S1128*"Remove this unused import.(ˆ´Ïûùÿÿÿÿ8ÓïÈæÙ1
-pkotlin:S1192‡"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8Ü¦ÒæÙ1
+<kotlin:S6310ƒ"Avoid hardcoded dispatchers.(ÏÃâ8Ïˆ¨ÈŞ1
+:kotlin:S6310o"Avoid hardcoded dispatchers.(©ÓœW8Öâ«ÈŞ1
+;kotlin:S6310r"Avoid hardcoded dispatchers.(Í¡·Ş8Ğˆ¨ÈŞ1
+;kotlin:S6310~"Avoid hardcoded dispatchers.(Í¡·Ş8÷‰¬ÈŞ1
+>kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8ö›—«Ş1
+9kotlin:S1128"Remove this unused import.(ÁÈÚø8÷›—«Ş1
+>kotlin:S1128"Remove this unused import.(Øîğùÿÿÿÿ8÷›—«Ş1
+>kotlin:S1128"Remove this unused import.(ÁÏçüÿÿÿÿ8÷›—«Ş1
+>kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8÷›—«Ş1
+>kotlin:S1128"Remove this unused import.(Õ”îøÿÿÿÿ8÷›—«Ş1
+>kotlin:S1128"Remove this unused import.(àÆºÖüÿÿÿÿ8÷›—«Ş1
+9kotlin:S1128"Remove this unused import.(ÒÂ¦8÷›—«Ş1
+>kotlin:S1128,"Remove this unused import.(ˆ´Ïûùÿÿÿÿ8çˆ¨ÈŞ1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8øâ«ÈŞ1

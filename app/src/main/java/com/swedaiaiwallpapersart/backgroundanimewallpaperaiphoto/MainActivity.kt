@@ -122,7 +122,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         }
 
         if (!isNetworkAvailable()){
-            showNoInternetDialog()
+//            showNoInternetDialog()
 
         }
 
@@ -1072,11 +1072,11 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
     override fun onNetworkAvailable() {
-        dismissNoInternetDialog()
+//        dismissNoInternetDialog()
     }
 
     override fun onNetworkLost() {
-       showNoInternetDialog()
+//       showNoInternetDialog()
     }
 
 

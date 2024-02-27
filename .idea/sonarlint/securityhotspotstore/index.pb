@@ -203,3 +203,7 @@ papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/mod
 settings.gradle,0\5\05efc8b1657769a27696d478ded1e95f38737233
 —
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SplashFragment.kt,2\5\257e17601b007de0e29267125dd13b23eb6c3a1d
+•
+eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/models/CatNameResponse.kt,e\9\e9575955d3494a2a7cc19c2aa524c80acb905118
+œ
+lapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/remote/dao/CategoriesDao.kt,a\c\acce5784f7b3fafadcc7d2ed093ed8e64d75aa77

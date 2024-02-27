@@ -13,8 +13,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 34
-        versionName "1.4.0"
+        versionCode 35
+        versionName "1.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -149,9 +149,10 @@ dependencies {
 //        exclude group: 'com.squareup.okio'
 //    }
 
-    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.512"){
+    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.513"){
         exclude group: 'com.squareup.okio'
     }
+
     //glass morphism
 
 

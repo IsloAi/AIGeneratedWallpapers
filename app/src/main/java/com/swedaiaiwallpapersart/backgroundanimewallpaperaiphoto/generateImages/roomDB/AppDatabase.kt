@@ -10,6 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.LiveWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.WallpapersDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 
@@ -20,6 +21,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun getFavouriteList(): FavouriteListIGDao
 
     abstract fun wallpapersDao():WallpapersDao
+
 
     abstract fun liveWallpaperDao():LiveWallpaperDao
 

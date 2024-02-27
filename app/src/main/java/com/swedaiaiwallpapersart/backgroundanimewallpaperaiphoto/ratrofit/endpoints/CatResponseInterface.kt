@@ -5,4 +5,5 @@ import retrofit2.http.GET
 interface CatResponseInterface {
     @GET("getcategory.php")
     fun getCategories(): Call<ArrayList<CatNameResponse>>
+
 }
