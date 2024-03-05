@@ -27,6 +27,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -75,14 +76,15 @@ class HomeTabsFragment : Fragment() {
         "Live" to R.drawable.tab_icon_live,
         "AI Wallpaper" to R.drawable.tab_icon_ai_wallpaper,
         "Category" to R.drawable.tab_icon_categories,
-        "Gen AI" to R.drawable.tab_icon_generate
+        "Gen AI" to R.drawable.tab_icon_generate,
+        "Charging Battery" to R.drawable.battery_tab
     )
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeTabsBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -260,6 +262,7 @@ class HomeTabsFragment : Fragment() {
             "AI Wallpaper" -> HomeFragment()
             "Category" -> CategoryFragment()
             "Gen AI" -> GenerateImageFragment()
+            "Charging Battery" -> ChargingAnimationFragment()
 
             else -> {HomeFragment()}
         }

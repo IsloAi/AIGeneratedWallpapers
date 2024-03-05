@@ -1,11 +1,11 @@
-package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation
 
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -14,7 +14,7 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
@@ -25,35 +25,38 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LiveWallpaperFragment : Fragment() {
-
-    private var _binding:FragmentLiveWallpaperBinding ?= null
+@AndroidEntryPoint
+class ChargingAnimationFragment : Fragment() {
+    private var _binding:FragmentChargingAnimationBinding ?= null
     private val binding get() = _binding!!
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private val myViewModel: LiveWallpaperViewModel by activityViewModels()
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var myActivity : MainActivity
-    var adapter:LiveWallpaperAdapter ?= null
+    var adapter: LiveWallpaperAdapter?= null
 
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    val TAG = "ChargingAnimation"
 
-    val TAG = "LIVE_WALL_SCREEN"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _binding = FragmentChargingAnimationBinding.inflate(inflater,container,false)
 
-        _binding = FragmentLiveWallpaperBinding.inflate(inflater,container,false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,13 +65,14 @@ class LiveWallpaperFragment : Fragment() {
         myActivity = activity as MainActivity
 
         myViewModel.getAllTrendingWallpapers()
+        val layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewAll.layoutManager = layoutManager
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
 
-        binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
-    }
 
+    }
 
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
@@ -127,7 +131,7 @@ class LiveWallpaperFragment : Fragment() {
 
                 Log.e(TAG, "getPosition: "+position )
 
-                sharedViewModel.setAdPosition(newPosition)
+                sharedViewModel.setChargingAdPosition(newPosition)
 
                 if (newPosition % 2 != 0){
                     Log.e(TAG, "getPosition:$position odd " )
@@ -141,22 +145,20 @@ class LiveWallpaperFragment : Fragment() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
                                 BlurView.filePath = ""
-                                sharedViewModel.clearLiveWallpaper()
-                                sharedViewModel.setLiveWallpaper(listOf(model))
+                                sharedViewModel.clearChargeAnimation()
+                                sharedViewModel.setchargingAnimation(listOf(model))
                                 if (isAdded){
-                                    findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                                    findNavController().navigate(R.id.downloadBatteryAnimation)
                                 }
-
-                                //do something
                             }
 
                             override fun onAdsDismiss() {
                                 Log.e("TAG", "onAdsDismiss: ", )
                                 BlurView.filePath = ""
-                                sharedViewModel.clearLiveWallpaper()
-                                sharedViewModel.setLiveWallpaper(listOf(model))
+                                sharedViewModel.clearChargeAnimation()
+                                sharedViewModel.setchargingAnimation(listOf(model))
                                 if (isAdded){
-                                    findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                                    findNavController().navigate(R.id.downloadBatteryAnimation)
                                 }
 
                             }
@@ -165,21 +167,21 @@ class LiveWallpaperFragment : Fragment() {
                                 super.onAdsShowTimeout()
                                 Log.e(TAG, "onAdsShowTimeout: " )
 
-                                sharedViewModel.clearLiveWallpaper()
-                                sharedViewModel.setLiveWallpaper(listOf(model))
+                                sharedViewModel.clearChargeAnimation()
+                                sharedViewModel.setchargingAnimation(listOf(model))
 
                                 if (isAdded){
-                                    findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                                    findNavController().navigate(R.id.downloadBatteryAnimation)
                                 }
                             }
                         }
                     )
                 }else{
                     BlurView.filePath = ""
-                    sharedViewModel.clearLiveWallpaper()
-                    sharedViewModel.setLiveWallpaper(listOf(model))
+                    sharedViewModel.clearChargeAnimation()
+                    sharedViewModel.setchargingAnimation(listOf(model))
                     if (isAdded){
-                        findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                        findNavController().navigate(R.id.downloadBatteryAnimation)
                     }
 
                     Log.e(TAG, "getPosition:$position even " )
@@ -193,7 +195,7 @@ class LiveWallpaperFragment : Fragment() {
             }
         },myActivity)
 
-        binding.liveReccyclerview.adapter = adapter
+        binding.recyclerviewAll.adapter = adapter
     }
 
 
@@ -231,17 +233,14 @@ class LiveWallpaperFragment : Fragment() {
 
 
 
-             newData
+            newData
         }
 
 
     }
 
-
-
-
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding =  null
+        _binding = null
     }
 }

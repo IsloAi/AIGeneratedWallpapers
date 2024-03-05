@@ -27,10 +27,17 @@ class SharedViewModel : ViewModel() {
     private val _liveAdPosition = MutableLiveData<Int>()
     val liveAdPosition: LiveData<Int> = _liveAdPosition
 
+    private val _chargingAdPosition = MutableLiveData<Int>()
+    val chargingAdPosition: LiveData<Int> = _chargingAdPosition
+
     private val _wallAdPosition = MutableLiveData<Int>()
     val wallAdPosition: LiveData<Int> = _wallAdPosition
 
     val selectedCat = MutableLiveData<CatResponse>()
+
+
+    private val _chargingAnimationResponseList = MutableLiveData<List<LiveWallpaperModel>>()
+    val chargingAnimationResponseList: LiveData<List<LiveWallpaperModel>> = _chargingAnimationResponseList
 
     fun setData(catResponses: List<CatResponse>, position: Int) {
         _catResponseList.value = catResponses
@@ -41,12 +48,20 @@ class SharedViewModel : ViewModel() {
         _liveWallpaperResponseList.value = catResponses
     }
 
+    fun setchargingAnimation(catResponses: List<LiveWallpaperModel>){
+        _chargingAnimationResponseList.value = catResponses
+    }
+
     fun clearData() {
         _catResponseList.value = emptyList()
     }
 
     fun clearLiveWallpaper() {
         _liveWallpaperResponseList.value = emptyList()
+    }
+
+    fun clearChargeAnimation() {
+        _chargingAnimationResponseList.value = emptyList()
     }
 
     fun selectCat(cat: CatResponse) {
@@ -66,6 +81,10 @@ class SharedViewModel : ViewModel() {
         _liveAdPosition.value = position
     }
 
+
+    fun setChargingAdPosition(position: Int){
+        _chargingAdPosition.value = position
+    }
 
     fun setWallAdPosition(position: Int){
         _wallAdPosition.value = position

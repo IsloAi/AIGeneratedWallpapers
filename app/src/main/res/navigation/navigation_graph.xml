@@ -230,5 +230,11 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.IAPFragment"
         android:label="fragment_i_a_p"
         tools:layout="@layout/fragment_i_a_p" />
+    <fragment
+        android:id="@+id/downloadBatteryAnimation"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.DownloadBatteryAnimation"
+        android:label="DownloadBatteryAnimation"
+        tools:layout="@layout/fragment_download_battery_animation"
+        />
 
 </navigation>

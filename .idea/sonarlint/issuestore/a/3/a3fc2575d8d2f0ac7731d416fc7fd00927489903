@@ -1,36 +1,36 @@
 
-Ykotlin:S1172ä"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8Ë¾È«Ş1
-Ckotlin:S125®"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8ì¾È«Ş1
-Ckotlin:S125´"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8ì¾È«Ş1
-<kotlin:S6310ë"Avoid hardcoded dispatchers.(ÏÃâ8‰¿È«Ş1
-<kotlin:S6310ø"Avoid hardcoded dispatchers.(ÏÃâ8‰¿È«Ş1
-<kotlin:S6310†"Avoid hardcoded dispatchers.(ÏÃâ8‰¿È«Ş1
-<kotlin:S6310½"Avoid hardcoded dispatchers.(©ÒÕò8‰¿È«Ş1
-<kotlin:S6310Î"Avoid hardcoded dispatchers.(©ÒÕò8Š¿È«Ş1
-;kotlin:S6310Ø"Avoid hardcoded dispatchers.(©ÓœW8Œ¿È«Ş1
-;kotlin:S6310§"Avoid hardcoded dispatchers.(©ÓœW8Œ¿È«Ş1
-;kotlin:S6310Ã"Avoid hardcoded dispatchers.(©ÓœW8Œ¿È«Ş1
-;kotlin:S6310ú"Avoid hardcoded dispatchers.(©ÓœW8¿È«Ş1
-Ykotlin:S1144»"9Remove this unused private "showNoInternetDialog" method.(«•¶è8À§õÈŞ1
-akotlin:S1144Í"<Remove this unused private "dismissNoInternetDialog" method.(¦´¤ˆøÿÿÿÿ8‡”îÈŞ1
-Hkotlin:S108Â")Either remove or fill this block of code.(å¥‡8¹¿È«Ş1
-Mkotlin:S108˜")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8¹¿È«Ş1
-Hkotlin:S108°")Either remove or fill this block of code.(·Úøš8¹¿È«Ş1
-Gkotlin:S108´")Either remove or fill this block of code.(›Ñû08º¿È«Ş1
-Mkotlin:S108·")Either remove or fill this block of code.(ñ»›Œúÿÿÿÿ8º¿È«Ş1
-Hkotlin:S108Í")Either remove or fill this block of code.(·Úøš8º¿È«Ş1
-Gkotlin:S108Ñ")Either remove or fill this block of code.(›Ñû08º¿È«Ş1
-Mkotlin:S108Ô")Either remove or fill this block of code.(ñ»›Œúÿÿÿÿ8º¿È«Ş1
-Hkotlin:S108¿")Either remove or fill this block of code.(å¥‡8º¿È«Ş1
-ykotlin:S6306"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8Á¿È«Ş1
-ykotlin:S6306 "TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8Ã¿È«Ş1
-Mkotlin:S1481¨".Remove this unused "deferreds" local variable.(«ş×v8ã¿È«Ş1
-Mkotlin:S1481´"-Remove this unused "behavior" local variable.(Ø¦š¾8å¿È«Ş1
-pkotlin:S1192‹"KDefine a constant instead of duplicating this literal "onCreate: " 3 times.(Ò®æ¦øÿÿÿÿ8‡ÀÈ«Ş1
-pkotlin:S1192«"KDefine a constant instead of duplicating this literal "onUpdate: " 5 times.(¸úşÉøÿÿÿÿ8‡ÀÈ«Ş1
-Gkotlin:S1874o"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8ÀÈ«Ş1
-Hkotlin:S1874å"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ÀÈ«Ş1
-Bkotlin:S1874æ"#Deprecated code should not be used.(àü8ÀÈ«Ş1
-vkotlin:S3776a"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(¶Á»¬şÿÿÿÿ8‘ÀÈ«Ş1
-wkotlin:S3776—"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(„ö÷àøÿÿÿÿ8’ÀÈ«Ş1
-wkotlin:S3776¥"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ÄÔìşÿÿÿÿ8“ÀÈ«Ş1
+Ykotlin:S1172é"4Remove this unused function parameter "notSelected".(şğ‹ıÿÿÿÿ8š»­çà1
+Ckotlin:S125±"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8±»­çà1
+Ckotlin:S125·"Remove this commented out code.(ŒÊ†Áıÿÿÿÿ8²»­çà1
+<kotlin:S6310ë"Avoid hardcoded dispatchers.(ÏÃâ8É»­çà1
+<kotlin:S6310ø"Avoid hardcoded dispatchers.(ÏÃâ8É»­çà1
+<kotlin:S6310†"Avoid hardcoded dispatchers.(ÏÃâ8Ê»­çà1
+<kotlin:S6310Â"Avoid hardcoded dispatchers.(©ÒÕò8Á” ÒŞ1
+<kotlin:S6310Ó"Avoid hardcoded dispatchers.(©ÒÕò8Â” ÒŞ1
+;kotlin:S6310Ø"Avoid hardcoded dispatchers.(©ÓœW8Ì»­çà1
+;kotlin:S6310§"Avoid hardcoded dispatchers.(©ÓœW8Ì»­çà1
+;kotlin:S6310Ã"Avoid hardcoded dispatchers.(©ÓœW8Ì»­çà1
+;kotlin:S6310ú"Avoid hardcoded dispatchers.(©ÓœW8Í»­çà1
+Ykotlin:S1144À"9Remove this unused private "showNoInternetDialog" method.(«•¶è8Ş»­çà1
+akotlin:S1144Ò"<Remove this unused private "dismissNoInternetDialog" method.(¦´¤ˆøÿÿÿÿ8å»­çà1
+Hkotlin:S108Â")Either remove or fill this block of code.(å¥‡8¼­çà1
+Mkotlin:S108˜")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8¼­çà1
+Hkotlin:S108°")Either remove or fill this block of code.(·Úøš8¼­çà1
+Gkotlin:S108´")Either remove or fill this block of code.(›Ñû08¼­çà1
+Mkotlin:S108·")Either remove or fill this block of code.(ñ»›Œúÿÿÿÿ8¼­çà1
+Hkotlin:S108Í")Either remove or fill this block of code.(·Úøš8‘¼­çà1
+Gkotlin:S108Ñ")Either remove or fill this block of code.(›Ñû08’¼­çà1
+Mkotlin:S108Ô")Either remove or fill this block of code.(ñ»›Œúÿÿÿÿ8“¼­çà1
+Hkotlin:S108¿")Either remove or fill this block of code.(å¥‡8“¼­çà1
+ykotlin:S6306"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8¼­çà1
+ykotlin:S6306 "TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(š£Œúÿÿÿÿ8¡¼­çà1
+Mkotlin:S1481¨".Remove this unused "deferreds" local variable.(«ş×v8Ã¼­çà1
+Mkotlin:S1481¹"-Remove this unused "behavior" local variable.(Ø¦š¾8Ã¼­çà1
+pkotlin:S1192‹"KDefine a constant instead of duplicating this literal "onCreate: " 3 times.(Ò®æ¦øÿÿÿÿ8î¼­çà1
+pkotlin:S1192«"KDefine a constant instead of duplicating this literal "onUpdate: " 5 times.(¸úşÉøÿÿÿÿ8î¼­çà1
+Gkotlin:S1874o"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8Ñ– ÒŞ1
+Hkotlin:S1874å"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ø¼­çà1
+Bkotlin:S1874æ"#Deprecated code should not be used.(àü8ù¼­çà1
+vkotlin:S3776a"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(¶Á»¬şÿÿÿÿ8Ù– ÒŞ1
+wkotlin:S3776—"RRefactor this method to reduce its Cognitive Complexity from 40 to the 15 allowed.(„ö÷àøÿÿÿÿ8ı¼­çà1
+wkotlin:S3776¥"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ÄÔìşÿÿÿÿ8€½­çà1

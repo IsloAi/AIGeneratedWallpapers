@@ -448,7 +448,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                         Log.e(TAG, "onUpdate: $positionTabs")
 
-                        val tabNamesArray: Array<String> = positionTabs
+                        var tabNamesArray: Array<String> = positionTabs
                             .replace("{", "")   // Remove the opening curly brace
                             .replace("}", "")   // Remove the closing curly brace
                             .replace("\"","")
@@ -459,6 +459,9 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
                         }
 
+                        tabNamesArray += "Charging Battery"
+
+                        AdConfig.tabPositions = tabNamesArray
 
                         AdConfig.tabPositions = tabNamesArray
 
@@ -592,7 +595,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
 
         Log.e(TAG, "onUpdate: $positionTabs")
-        val tabNamesArray: Array<String> = positionTabs
+        var tabNamesArray: Array<String> = positionTabs
             .replace("{", "")   // Remove the opening curly brace
             .replace("}", "")   // Remove the closing curly brace
             .replace("\"","")
@@ -602,6 +605,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         for (i in 0 until tabNamesArray.size){
             Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
         }
+
+        tabNamesArray += "Charging Battery"
 
         AdConfig.tabPositions = tabNamesArray
         AdConfig.showOnboarding = onboarding
