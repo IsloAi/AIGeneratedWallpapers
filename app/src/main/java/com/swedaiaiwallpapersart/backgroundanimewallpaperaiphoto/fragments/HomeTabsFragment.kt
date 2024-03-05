@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.app.Activity
+import android.content.IntentSender
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
@@ -11,7 +13,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,6 +26,11 @@ import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.google.android.material.tabs.TabLayout
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.common.IntentSenderForResultStarter
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
@@ -40,6 +50,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,6 +65,7 @@ class HomeTabsFragment : Fragment() {
     private lateinit var myActivity : MainActivity
 
     val sharedViewModel: SharedViewModel by activityViewModels()
+
 
 
     @Inject
@@ -108,6 +120,68 @@ class HomeTabsFragment : Fragment() {
             setViewPager()
             initTabs()
             setEvents()
+
+
+        lifecycleScope.launch {
+
+            SDKBaseController.getInstance().checkUpdateApp()
+
+
+            delay(3000)
+            if (isAdded){
+                val appUpdateManager = AppUpdateManagerFactory.create(requireContext())
+                val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+                appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+
+                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                    ) {
+
+                        try {
+                            appUpdateManager.startUpdateFlowForResult(
+                                // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                                appUpdateInfo,
+                                // an activity result launcher registered via registerForActivityResult
+                                updateResultStarter,
+
+                                AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+
+                                150
+                            )
+                        } catch (exception: IntentSender.SendIntentException) {
+                                Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+                }
+
+            }
+        }
+    }
+
+
+    private val updateResultStarter =
+        IntentSenderForResultStarter { intent, _, fillInIntent, flagsMask, flagsValues, _, _ ->
+            val request = IntentSenderRequest.Builder(intent)
+                .setFillInIntent(fillInIntent)
+                .setFlags(flagsValues, flagsMask)
+                .build()
+            updateLauncher.launch(request)
+        }
+
+
+    private val updateLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        // handle callback
+        if (result.data == null) return@registerForActivityResult
+        if (result.resultCode == 150) {
+            Toast.makeText(context, "Downloading stated", Toast.LENGTH_SHORT).show()
+            if (result.resultCode != Activity.RESULT_OK) {
+                Toast.makeText(context, "Downloading failed" , Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
