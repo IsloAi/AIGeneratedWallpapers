@@ -1,7 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.IntentSender
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
@@ -11,6 +14,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +30,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
+import com.bmik.android.sdk.model.dto.UpdateAppDto
 import com.google.android.material.tabs.TabLayout
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
@@ -34,6 +41,7 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.UpdateDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
@@ -120,43 +128,91 @@ class HomeTabsFragment : Fragment() {
             setViewPager()
             initTabs()
             setEvents()
-
-
         lifecycleScope.launch {
+            SDKBaseController.getInstance().checkUpdateApp(object:SDKNewVersionUpdateCallback{
+                override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
 
-            SDKBaseController.getInstance().checkUpdateApp()
+                    try {
+                        val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+                        val version = pInfo.versionName
+                        val versionCode = pInfo.versionCode
 
+                        if (versionCode < updateDto?.minVersionCode!!){
+                            if (updateDto.forceUpdateApp){
+                                getUserIdDialog()
+                            }else{
+                                launchUpdateFlow()
+                            }
 
-            delay(3000)
-            if (isAdded){
-                val appUpdateManager = AppUpdateManagerFactory.create(requireContext())
-                val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-
-                appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-
-                        && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-                    ) {
-
-                        try {
-                            appUpdateManager.startUpdateFlowForResult(
-                                // Pass the intent that is returned by 'getAppUpdateInfo()'.
-                                appUpdateInfo,
-                                // an activity result launcher registered via registerForActivityResult
-                                updateResultStarter,
-
-                                AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
-
-                                150
-                            )
-                        } catch (exception: IntentSender.SendIntentException) {
-                                Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT).show()
                         }
 
+                        Log.e("TAG", "onUpdateAvailable: "+version +versionCode )
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        e.printStackTrace()
                     }
+
                 }
 
+                override fun onUpdateFail() {
+                    Log.e("TAG", "onUpdateFail: " )
+
+                }
+
+            })
+
+        }
+    }
+
+
+    private fun getUserIdDialog() {
+        val dialogBinding = UpdateDialogBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext())
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setContentView(dialogBinding.root)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.setCancelable(false)
+
+        dialogBinding.btnYes.setOnClickListener {
+            launchUpdateFlow()
+        }
+
+        dialogBinding.btnNo.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
+    }
+
+
+    fun launchUpdateFlow(){
+        if (isAdded){
+            val appUpdateManager = AppUpdateManagerFactory.create(requireContext())
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                ) {
+
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // an activity result launcher registered via registerForActivityResult
+                            updateResultStarter,
+
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+
+                            150
+                        )
+                    } catch (exception: IntentSender.SendIntentException) {
+                        Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
             }
+
         }
     }
 
