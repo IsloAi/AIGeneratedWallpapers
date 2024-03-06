@@ -236,5 +236,15 @@
         android:label="DownloadBatteryAnimation"
         tools:layout="@layout/fragment_download_battery_animation"
         />
+    <fragment
+        android:id="@+id/chargingAnimationPermissionFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationPermissionFragment"
+        android:label="fragment_charging_animation_permission"
+        tools:layout="@layout/fragment_charging_animation_permission" />
+    <fragment
+        android:id="@+id/previewChargingAnimationFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.PreviewChargingAnimationFragment"
+        android:label="fragment_preview_charging_animation"
+        tools:layout="@layout/fragment_preview_charging_animation" />
 
 </navigation>

@@ -211,3 +211,9 @@ eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/mod
 napp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MyFirebaseMessageReceiver.kt,c\1\c17efc7338bbb8891f4a9e1ba8e9db261aab2b6f
 ≥
 Çapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/batteryanimation/DownloadBatteryAnimation.kt,4\1\411aedf8ae2334eba829919533cfdd86368d9614
+™
+zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/fragmentsIG/ViewAllCreations.kt,c\f\cf923362cc04108842d8f97efe7f75af7769359f
+ª
+äapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/batteryanimation/PreviewChargingAnimationFragment.kt,2\b\2b841098588a91317ffa17cfe3bc12436beb65dc
+æ
+çapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/batteryanimation/ChargingAnimationPermissionFragment.kt,9\3\9337a38d0d2c758c98ef14d8a2536e64e6aa10a4

@@ -119,7 +119,7 @@ class DownloadBatteryAnimation : Fragment() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
                         if (isAdded){
-                            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+                            findNavController().navigate(R.id.previewChargingAnimationFragment)
 
                         }
                         //do something
@@ -128,7 +128,7 @@ class DownloadBatteryAnimation : Fragment() {
                     override fun onAdsDismiss() {
                         Log.e(TAG, "onAdsDismiss: ", )
                         if (isAdded){
-                            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+                            findNavController().navigate(R.id.previewChargingAnimationFragment)
 
                         }
                     }
@@ -143,8 +143,6 @@ class DownloadBatteryAnimation : Fragment() {
     }
 
     private fun initObservers(){
-
-//        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
 
         val file = requireContext().filesDir
         val video = File(file,"video.mp4")
