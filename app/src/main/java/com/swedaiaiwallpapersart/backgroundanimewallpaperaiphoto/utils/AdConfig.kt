@@ -20,7 +20,13 @@ object AdConfig {
 
     var showOnboarding = true
 
+    var inAppConfig = false
+
     var tabPositions = arrayOf("Category", "Gen AI","Popular", "Trending", "Live", "AI Wallpaper")
+
+    var categoryOrder:List<String> = listOf( "Sadness", "Car", "Motor Bike", "Fantasy", "Animal","New Year", "Christmas", "Travel", "Ocean", "Nature", "Mountains", "Music", "Love", "Art", "Space", "Adstract", "Tech", "Black And White", "Architecture", "Artistic", "Pattern", "City", "Minimal", "Vintage","4K", "Anime", "Super Heros", "IOS", "Dark")
+
+
 
     val BASE_URL = "https://vps.edecator.com/wallpaper_App/V1/"
 

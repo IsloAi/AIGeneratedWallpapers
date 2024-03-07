@@ -147,7 +147,7 @@ dependencies {
 //        exclude group: 'com.squareup.okio'
 //    }
 
-    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.515") {
+    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.516") {
         exclude group: 'com.squareup.okio'
     }
 

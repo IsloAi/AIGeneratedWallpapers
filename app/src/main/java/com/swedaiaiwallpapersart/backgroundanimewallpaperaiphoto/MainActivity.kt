@@ -116,17 +116,37 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         myCatNameViewModel.fetchWallpapers()
         saveLiveWallpapersInDB()
         lifecycleScope.launch {
-
-            delay(3000)
             liveViewModel.getMostUsed("1","500",deviceID)
         }
 
-        mainActivityViewModel.getAllModels("1","4000","4816")
+        mainActivityViewModel.getAllModels("1","4000","4890")
 
         mainActivityViewModel.allModels.observe(this){result->
             when(result){
                 is Response.Success -> {
                     Log.e(TAG, "updatedWalls: "+result.data )
+
+                    result.data?.forEach {item ->
+                        val model = SingleDatabaseResponse(
+                            item.id,
+                            item.cat_name,
+                            item.image_name,
+                            AdConfig.HD_ImageUrl + item.url,
+                            AdConfig.Compressed_Image_url + item.url,
+                            item.likes,
+                            item.liked,
+                            item.size,
+                            item.Tags,
+                            item.capacity,
+                            true
+                        )
+
+                        CoroutineScope(Dispatchers.IO).async {
+                            appDatabase.wallpapersDao().insert(model)
+                        }
+                    }
+
+
 
                 }
                 is Response.Error -> {
@@ -196,8 +216,22 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                                     CoroutineScope(Dispatchers.IO).async {
                                         appDatabase.liveWallpaperDao().insert(model)
                                     }
-
                                 }
+
+                                val percent = (imagesLive.size.times(0.3)).toInt()
+                                val topDownloadedWallpapers = percent.let {
+                                    appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(
+                                        it
+                                    )
+                                }
+
+                                topDownloadedWallpapers.forEach { it.unlocked = false }
+                                topDownloadedWallpapers.let {
+                                    appDatabase.liveWallpaperDao().updateWallpapers(
+                                        it
+                                    )
+                                }
+
 
                             }
                         }
@@ -477,9 +511,41 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
                         val positionTabs = remoteConfig["tablist"].asString()
                         val iap = remoteConfig["iap_config"].asString()
+
+                        val categoryOrder = remoteConfig["category_order"].asString()
+                        Log.e(TAG, "onUpdate: $categoryOrder")
                         Log.e(TAG, "onUpdate: $iap")
 
+                        val inAppConfig = remoteConfig["in_app_config"].asString()
+
+                        Log.e(TAG, "onUpdate: $inAppConfig")
+
+                        val categoryOrderArray = categoryOrder.substring(1,categoryOrder.length-1).split(", ").toList()
+
+                        AdConfig.categoryOrder = categoryOrderArray
+
+                        Log.e(TAG, "onUpdate: $categoryOrderArray")
+
+
                         try {
+
+                            val jsonObject = JSONObject(inAppConfig)
+
+                            // Retrieve the boolean value associated with the key "languagescralwayshow"
+                            val languagescralwayshow = jsonObject.getBoolean("languagescralwayshow")
+
+                            Log.e(TAG, "onUpdate: "+languagescralwayshow )
+                            AdConfig.inAppConfig = languagescralwayshow
+
+                        }catch (e:JSONException){
+                            e.printStackTrace()
+                        }
+
+
+
+                        try {
+
+
                             val jsonObject = JSONObject(iap)
 
                             // Get the value associated with the key "IAPScreentype"
@@ -621,9 +687,36 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         val welcomeMessage = remoteConfig[first].asString()
         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
         val positionTabs = remoteConfig["tablist"].asString()
+        val categoryOrder = remoteConfig["category_order"].asString()
+        Log.e(TAG, "onUpdate: $categoryOrder")
+
+        val inAppConfig = remoteConfig["in_app_config"].asString()
+
+        Log.e(TAG, "onUpdate: "+inAppConfig )
+
+        val categoryOrderArray = categoryOrder.substring(1,categoryOrder.length-1).replace("\"","").split(", ").toList()
+
+        AdConfig.categoryOrder = categoryOrderArray
+
+        Log.e(TAG, "onUpdate: $categoryOrderArray")
 
         val iap = remoteConfig["iap_config"].asString()
         Log.e(TAG, "onUpdate: $iap")
+
+
+        try {
+
+            val jsonObject = JSONObject(inAppConfig)
+
+            // Retrieve the boolean value associated with the key "languagescralwayshow"
+            val languagescralwayshow = jsonObject.getBoolean("languagescralwayshow")
+
+            Log.e(TAG, "onUpdate: "+languagescralwayshow )
+            AdConfig.inAppConfig = languagescralwayshow
+
+        }catch (e:JSONException){
+            e.printStackTrace()
+        }
 
         try {
             val jsonObject = JSONObject(iap)

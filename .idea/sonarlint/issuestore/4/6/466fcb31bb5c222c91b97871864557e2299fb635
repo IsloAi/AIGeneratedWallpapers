@@ -1,11 +1,14 @@
 
-Ckotlin:S125Ô"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8µÙ’á1
-Pkotlin:S1481¼"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8 µÙ’á1
-Rkotlin:S1481"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8éÕÆ‘á1
-Lkotlin:S1481Œ",Remove this unused "tabIcon" local variable.(™Î‡è8©çª‘á1
-Gkotlin:S1874u"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8¨µÙ’á1
-Ckotlin:S1874Â"#Deprecated code should not be used.(‚Õ‡º8¨µÙ’á1
-Ckotlin:S1874Ò"#Deprecated code should not be used.(ê¶«Ê8ôÕÆ‘á1
-Ckotlin:S1874‘"#Deprecated code should not be used.(ê¶«Ê8õÕÆ‘á1
-Bkotlin:S1874”"#Deprecated code should not be used.(…ı£t8¨µÙ’á1
-zkotlin:S1186å"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8¬µÙ’á1
+Ckotlin:S125×"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8ˆ­¼á1
+Pkotlin:S1481¿"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8¦­¼á1
+Rkotlin:S1481"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8¦­¼á1
+Lkotlin:S1481",Remove this unused "tabIcon" local variable.(™Î‡è8©çª‘á1
+>kotlin:S1128;"Remove this unused import.(èãÊõûÿÿÿÿ8®­¼á1
+Ckotlin:S1874‡"#Deprecated code should not be used.(£À¯•8³­¼á1
+Hkotlin:S1874ø"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8µ­¼á1
+Ckotlin:S1874Å"#Deprecated code should not be used.(‚Õ‡º8·­¼á1
+Ckotlin:S1874Õ"#Deprecated code should not be used.(ê¶«Ê8·­¼á1
+Ckotlin:S1874“"#Deprecated code should not be used.(ê¶«Ê8·­¼á1
+Bkotlin:S1874–"#Deprecated code should not be used.(…ı£t8·­¼á1
+qkotlin:S3776k"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ëü«8¹­¼á1
+zkotlin:S1186è"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8¬µÙ’á1

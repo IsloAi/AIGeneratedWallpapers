@@ -1,5 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.app.Activity
+import android.app.Dialog
+import android.content.IntentSender
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
@@ -9,9 +14,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -20,10 +29,18 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
+import com.bmik.android.sdk.model.dto.UpdateAppDto
 import com.google.android.material.tabs.TabLayout
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
+import com.google.android.play.core.common.IntentSenderForResultStarter
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.UpdateDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
@@ -109,7 +126,7 @@ class HomeTabsFragment : Fragment() {
             initTabs()
             setEvents()
         lifecycleScope.launch {
-            SDKBaseController.getInstance().checkUpdateApp(object:SDKNewVersionUpdateCallback{
+            SDKBaseController.getInstance().checkUpdateApp(object: SDKNewVersionUpdateCallback {
                 override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
 
                     try {

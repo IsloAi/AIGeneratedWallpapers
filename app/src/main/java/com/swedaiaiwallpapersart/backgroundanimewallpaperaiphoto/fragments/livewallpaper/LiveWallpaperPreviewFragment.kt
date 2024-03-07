@@ -1,7 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper
 
 import android.Manifest
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.WallpaperManager
@@ -49,7 +48,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWal
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch

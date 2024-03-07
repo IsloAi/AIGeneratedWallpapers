@@ -217,3 +217,7 @@ zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/gen
 äapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/batteryanimation/PreviewChargingAnimationFragment.kt,2\b\2b841098588a91317ffa17cfe3bc12436beb65dc
 æ
 çapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/batteryanimation/ChargingAnimationPermissionFragment.kt,9\3\9337a38d0d2c758c98ef14d8a2536e64e6aa10a4
+©
+yapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetUpdatedWallpaperUseCase.kt,1\c\1c3cb7bcbe0a07bd64cf4bc57596a6f44c8692a1
+õ
+kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/LiveWallpaperService.kt,2\9\2964e4f048d27cbc5ef09cb33d4a8b45fa726a13
