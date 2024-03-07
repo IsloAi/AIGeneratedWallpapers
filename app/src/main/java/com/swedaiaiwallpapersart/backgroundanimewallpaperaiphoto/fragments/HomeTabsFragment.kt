@@ -16,6 +16,7 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
@@ -26,7 +27,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -34,8 +34,13 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -70,15 +75,14 @@ class HomeTabsFragment : Fragment() {
         "Live" to R.drawable.tab_icon_live,
         "AI Wallpaper" to R.drawable.tab_icon_ai_wallpaper,
         "Category" to R.drawable.tab_icon_categories,
-        "Gen AI" to R.drawable.tab_icon_generate,
-        "Charging Battery" to R.drawable.battery_tab
+        "Gen AI" to R.drawable.tab_icon_generate
     )
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentHomeTabsBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -104,6 +108,116 @@ class HomeTabsFragment : Fragment() {
             setViewPager()
             initTabs()
             setEvents()
+        lifecycleScope.launch {
+            SDKBaseController.getInstance().checkUpdateApp(object:SDKNewVersionUpdateCallback{
+                override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
+
+                    try {
+                        val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+                        val version = pInfo.versionName
+                        val versionCode = pInfo.versionCode
+
+                        if (versionCode < updateDto?.minVersionCode!!){
+                            if (updateDto.forceUpdateApp){
+                                getUserIdDialog()
+                            }else{
+                                launchUpdateFlow()
+                            }
+
+                        }
+
+                        Log.e("TAG", "onUpdateAvailable: "+version +versionCode )
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        e.printStackTrace()
+                    }
+
+                }
+
+                override fun onUpdateFail() {
+                    Log.e("TAG", "onUpdateFail: " )
+
+                }
+
+            })
+
+        }
+    }
+
+
+    private fun getUserIdDialog() {
+        val dialogBinding = UpdateDialogBinding.inflate(layoutInflater)
+        val dialog = Dialog(requireContext())
+        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog?.setContentView(dialogBinding.root)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog?.setCancelable(false)
+
+        dialogBinding.btnYes.setOnClickListener {
+            launchUpdateFlow()
+        }
+
+        dialogBinding.btnNo.setOnClickListener {
+            dialog?.dismiss()
+        }
+
+        dialog?.show()
+    }
+
+
+    fun launchUpdateFlow(){
+        if (isAdded){
+            val appUpdateManager = AppUpdateManagerFactory.create(requireContext())
+            val appUpdateInfoTask = appUpdateManager.appUpdateInfo
+
+            appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                ) {
+
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
+                            appUpdateInfo,
+                            // an activity result launcher registered via registerForActivityResult
+                            updateResultStarter,
+
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+
+                            150
+                        )
+                    } catch (exception: IntentSender.SendIntentException) {
+                        Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
+
+        }
+    }
+
+
+    private val updateResultStarter =
+        IntentSenderForResultStarter { intent, _, fillInIntent, flagsMask, flagsValues, _, _ ->
+            val request = IntentSenderRequest.Builder(intent)
+                .setFillInIntent(fillInIntent)
+                .setFlags(flagsValues, flagsMask)
+                .build()
+            updateLauncher.launch(request)
+        }
+
+
+    private val updateLauncher = registerForActivityResult(
+        ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
+        // handle callback
+        if (result.data == null) return@registerForActivityResult
+        if (result.resultCode == 150) {
+            Toast.makeText(context, "Downloading stated", Toast.LENGTH_SHORT).show()
+            if (result.resultCode != Activity.RESULT_OK) {
+                Toast.makeText(context, "Downloading failed" , Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
@@ -256,7 +370,6 @@ class HomeTabsFragment : Fragment() {
             "AI Wallpaper" -> HomeFragment()
             "Category" -> CategoryFragment()
             "Gen AI" -> GenerateImageFragment()
-            "Charging Battery" -> ChargingAnimationFragment()
 
             else -> {HomeFragment()}
         }

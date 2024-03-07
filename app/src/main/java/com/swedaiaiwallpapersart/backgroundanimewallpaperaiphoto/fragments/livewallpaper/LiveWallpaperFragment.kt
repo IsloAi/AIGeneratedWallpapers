@@ -76,10 +76,12 @@ class LiveWallpaperFragment : Fragment() {
             when(result){
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val list = result.data?.let { addNullValueInsideArray(it) }
+
+                        val list  = result.data?.shuffled()
+                        val listNullable = list?.let { addNullValueInsideArray(it) }
 
                         withContext(Dispatchers.Main){
-                            list?.let { adapter?.updateMoreData(it) }
+                            listNullable?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
                     }

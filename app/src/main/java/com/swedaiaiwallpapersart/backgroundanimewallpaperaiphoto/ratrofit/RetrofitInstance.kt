@@ -15,7 +15,7 @@ object RetrofitInstance {
         .build()
     fun getInstance(): Retrofit {
         val retrofit : Retrofit = Retrofit.Builder()
-            .baseUrl("https://edecator.com/wallpaperApp/V4/")
+            .baseUrl("https://vps.edecator.com/wallpaper_App/V1/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

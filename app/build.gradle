@@ -13,8 +13,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 35
-        versionName "1.4.1"
+        versionCode 102
+        versionName "1.4.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -51,7 +51,6 @@ android {
     }
 
     defaultConfig {
-        // ...
         multiDexEnabled true
     }
 }
@@ -100,8 +99,8 @@ dependencies {
     //viewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.7.4"
@@ -121,7 +120,6 @@ dependencies {
     implementation 'androidx.work:work-runtime-ktx:2.9.0'
 
 
-
     //firebase for google login
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
     // Dependency for Firebase Dynamic Links
@@ -136,10 +134,10 @@ dependencies {
     implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
 
     // swape layout
-    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
     // Activity KTX for viewModels()
-    implementation ("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.7.2")
 
     implementation 'androidx.multidex:multidex:2.0.1'
     //ads
@@ -149,7 +147,7 @@ dependencies {
 //        exclude group: 'com.squareup.okio'
 //    }
 
-    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.513"){
+    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.515") {
         exclude group: 'com.squareup.okio'
     }
 
@@ -174,14 +172,8 @@ dependencies {
     kapt("androidx.hilt:hilt-compiler:1.1.0")
     implementation("androidx.startup:startup-runtime:1.1.0")
 
-
-
-
-
-
-//
-
-
-
+    //in app update
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 
 }

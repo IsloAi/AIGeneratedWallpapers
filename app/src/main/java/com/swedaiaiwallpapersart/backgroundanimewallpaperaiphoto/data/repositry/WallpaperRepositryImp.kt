@@ -81,6 +81,37 @@ class WallpaperRepositryImp@Inject constructor(
 
     }
 
+    override fun getUpdatedWallpapers(
+        page: String,
+        record: String,
+        lastid: String
+    ): Flow<Response<ArrayList<SingleAllResponse>>> = channelFlow {
+
+        try {
+            trySend(Response.Loading)
+            Log.e("TAG", "GenerateTextToImage: I came here")
+            val resp = webApiInterface.getUpdatedWallpapers(page,record,lastid)
+            Log.e("TAG", "GenerateTextToImage: $resp")
+
+            if (resp.isSuccessful){
+
+                trySend(Response.Success(resp.body()?.images))
+            }
+
+
+
+            Log.e("TAG", "getAllWallpapers: " )
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
+
+        awaitClose()
+
+    }
+
+
     override fun getAllLikes(): Flow<Response<ArrayList<LikesResponse>>>  = channelFlow {
         try {
             trySend(Response.Loading)

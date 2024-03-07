@@ -17,6 +17,10 @@ interface WallpaperRepositry {
 
     fun getAllWallpapers(apiKey:String,page:String,record:String):Flow<Response<ArrayList<SingleAllResponse>>>
 
+    fun getUpdatedWallpapers(page:String,record:String,lastid:String):Flow<Response<ArrayList<SingleAllResponse>>>
+
+
+
     fun getAllLikes():Flow<Response<ArrayList<LikesResponse>>>
     fun getLiked(deviceId: String):Flow<Response<ArrayList<LikedResponse>>>
 

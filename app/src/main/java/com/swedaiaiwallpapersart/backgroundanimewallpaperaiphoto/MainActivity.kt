@@ -121,10 +121,34 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             liveViewModel.getMostUsed("1","500",deviceID)
         }
 
-        if (!isNetworkAvailable()){
-//            showNoInternetDialog()
+        mainActivityViewModel.getAllModels("1","4000","4816")
+
+        mainActivityViewModel.allModels.observe(this){result->
+            when(result){
+                is Response.Success -> {
+                    Log.e(TAG, "updatedWalls: "+result.data )
+
+                }
+                is Response.Error -> {
+
+                }
+
+                is Response.Processing -> {
+
+                }
+
+                Response.Loading -> {
+
+                }
+            }
 
         }
+
+        if (!isNetworkAvailable()){
+            showNoInternetDialog()
+
+        }
+
 
         GlobalScope.launch {
             val jsonFileName = "wallpapers.json"
@@ -167,7 +191,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                                 val imagesLive = imagesListLive.images
                                 val deferreds = imagesLive.map { item ->
                                     Log.e(TAG, "onCreate: "+item )
-                                    val model = item.copy(unlocked = item.download <= 350)
+                                    val model = item.copy(unlocked = true)
 
                                     CoroutineScope(Dispatchers.IO).async {
                                         appDatabase.liveWallpaperDao().insert(model)
@@ -195,7 +219,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
             }
         }
-
         Log.d("tracingImageId", "onCreate: id= $deviceID")
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID)
@@ -215,10 +238,33 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach {wallpaper->
-                            val model = wallpaper.copy(unlocked = wallpaper.download <= 350)
+                            val model = wallpaper.copy(unlocked = true)
                             appDatabase.liveWallpaperDao().insert(model)
 
                         }
+
+                        val percent = (result.data?.size?.times(0.3))?.toInt()
+                        val topDownloadedWallpapers = percent?.let {
+                            appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(
+                                it
+                            )
+                        }
+
+                        topDownloadedWallpapers?.forEach { it.unlocked = false }
+
+                        // Update the wallpapers in the database
+                        topDownloadedWallpapers?.let {
+                            appDatabase.liveWallpaperDao().updateWallpapers(
+                                it
+                            )
+                        }
+
+
+
+
+
+
+
                     }
                 }
 
@@ -1077,11 +1123,11 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
     override fun onNetworkAvailable() {
-//        dismissNoInternetDialog()
+        dismissNoInternetDialog()
     }
 
     override fun onNetworkLost() {
-//       showNoInternetDialog()
+       showNoInternetDialog()
     }
 
 
