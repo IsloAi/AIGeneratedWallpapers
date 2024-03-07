@@ -1,16 +1,13 @@
 
-Ckotlin:S125Ú"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8ÉÕÆ‘á1
-Pkotlin:S1481Â"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8éÕÆ‘á1
-Rkotlin:S1481’"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8éÕÆ‘á1
-Lkotlin:S1481‘",Remove this unused "tabIcon" local variable.(™Î‡è8©çª‘á1
->kotlin:S1128"Remove this unused import.(™¬±öúÿÿÿÿ8Ë¯Ø‘á1
->kotlin:S1128<"Remove this unused import.(èãÊõûÿÿÿÿ8ÅËª‘á1
->kotlin:S1128="Remove this unused import.(Ó¸Ñÿÿÿÿÿ8ğÕÆ‘á1
-Ckotlin:S1874Š"#Deprecated code should not be used.(£À¯•8ôÕÆ‘á1
-Hkotlin:S1874û"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ôÕÆ‘á1
-Ckotlin:S1874È"#Deprecated code should not be used.(‚Õ‡º8ôÕÆ‘á1
-Ckotlin:S1874Ø"#Deprecated code should not be used.(ê¶«Ê8ôÕÆ‘á1
-Ckotlin:S1874–"#Deprecated code should not be used.(ê¶«Ê8ôÕÆ‘á1
-Bkotlin:S1874™"#Deprecated code should not be used.(…ı£t8õÕÆ‘á1
-qkotlin:S3776n"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ëü«8öÕÆ‘á1
-zkotlin:S1186ë"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ºçª‘á1
+Ckotlin:S125Ô"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8™»Í˜á1
+Pkotlin:S1481¼"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8´»Í˜á1
+Rkotlin:S1481Œ"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8éÕÆ‘á1
+Lkotlin:S1481‹",Remove this unused "tabIcon" local variable.(™Î‡è8©çª‘á1
+Ckotlin:S1874„"#Deprecated code should not be used.(£À¯•8Æ»Í˜á1
+Hkotlin:S1874õ"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8Æ»Í˜á1
+Ckotlin:S1874Â"#Deprecated code should not be used.(‚Õ‡º8Æ»Í˜á1
+Ckotlin:S1874Ò"#Deprecated code should not be used.(ê¶«Ê8õÕÆ‘á1
+Ckotlin:S1874"#Deprecated code should not be used.(ê¶«Ê8¨µÙ’á1
+Bkotlin:S1874“"#Deprecated code should not be used.(…ı£t8Æ»Í˜á1
+qkotlin:S3776h"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ëü«8Ç»Í˜á1
+zkotlin:S1186å"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8Õ»Í˜á1

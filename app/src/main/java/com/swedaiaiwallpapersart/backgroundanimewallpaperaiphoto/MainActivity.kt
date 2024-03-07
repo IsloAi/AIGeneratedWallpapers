@@ -191,7 +191,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                                 val imagesLive = imagesListLive.images
                                 val deferreds = imagesLive.map { item ->
                                     Log.e(TAG, "onCreate: "+item )
-                                    val model = item.copy(unlocked = item.download <= 350)
+                                    val model = item.copy(unlocked = true)
 
                                     CoroutineScope(Dispatchers.IO).async {
                                         appDatabase.liveWallpaperDao().insert(model)
@@ -238,10 +238,33 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach {wallpaper->
-                            val model = wallpaper.copy(unlocked = wallpaper.download <= 350)
+                            val model = wallpaper.copy(unlocked = true)
                             appDatabase.liveWallpaperDao().insert(model)
 
                         }
+
+                        val percent = (result.data?.size?.times(0.3))?.toInt()
+                        val topDownloadedWallpapers = percent?.let {
+                            appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(
+                                it
+                            )
+                        }
+
+                        topDownloadedWallpapers?.forEach { it.unlocked = false }
+
+                        // Update the wallpapers in the database
+                        topDownloadedWallpapers?.let {
+                            appDatabase.liveWallpaperDao().updateWallpapers(
+                                it
+                            )
+                        }
+
+
+
+
+
+
+
                     }
                 }
 
