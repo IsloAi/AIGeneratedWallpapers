@@ -13,9 +13,9 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface WallpaperRepositry {
-    fun GenerateDeviceToken(deviceId: String): Flow<Response<TokenResponse>>
-
-    fun getAllWallpapers(apiKey:String,page:String,record:String):Flow<Response<ArrayList<SingleAllResponse>>>
+//    fun GenerateDeviceToken(deviceId: String): Flow<Response<TokenResponse>>
+//
+//    fun getAllWallpapers(apiKey:String,page:String,record:String):Flow<Response<ArrayList<SingleAllResponse>>>
 
     fun getUpdatedWallpapers(page:String,record:String,lastid:String):Flow<Response<ArrayList<SingleAllResponse>>>
 

@@ -36,4 +36,6 @@ object AdConfig {
     var iapScreenType = 2
 
     var ISPAIDUSER = false
+
+    var regularWallpaperFlow = 0
 }

@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 
 class FetechAllWallpapersUsecase @Inject constructor(private val textToImgRepository: WallpaperRepositry){
-    operator fun invoke(api: String,page:String,record:String): Flow<Response<ArrayList<SingleAllResponse>>> {
-        return textToImgRepository.getAllWallpapers(api,page,record)
-    }
+//    operator fun invoke(api: String,page:String,record:String): Flow<Response<ArrayList<SingleAllResponse>>> {
+//        return textToImgRepository.getAllWallpapers(api,page,record)
+//    }
 }

@@ -221,3 +221,5 @@ zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/gen
 yapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetUpdatedWallpaperUseCase.kt,1\c\1c3cb7bcbe0a07bd64cf4bc57596a6f44c8692a1
 ›
 kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/LiveWallpaperService.kt,2\9\2964e4f048d27cbc5ef09cb33d4a8b45fa726a13
+—
+gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SignUpFragment.kt,7\f\7f390740415b32dfb75b99da7c6b9c7879813460

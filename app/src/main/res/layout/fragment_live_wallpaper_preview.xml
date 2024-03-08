@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ads_widget"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
         android:visibility="visible"
         android:id="@+id/liveWallpaper"/>
 
@@ -69,7 +69,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="@dimen/_15sdp"
         android:text="Set Wallpaper"
-        app:layout_constraintBottom_toTopOf="@id/ads_widget"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
         android:shadowColor="@color/black"
         android:shadowDx="1.8"
         android:shadowDy="1.8"
@@ -94,11 +94,11 @@
         />
 
 
-    <include
-        android:id="@+id/ads_widget"
-        layout="@layout/layout_custom_handle_banner_admob"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.bmik.android.sdk.widgets.IkmWidgetAdView
+        android:id="@+id/adsView"
         android:layout_width="match_parent"
+        app:ikwad_preview_layout="@layout/shimmer_loading_banner"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content" />
 
 

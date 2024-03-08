@@ -85,23 +85,23 @@ class SearchWallpapersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
 
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "searchscr_bottom",
-                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
+        binding.adsView.loadAd(requireContext(),"searchscr_bottom",
+            " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                 }
-            )
+
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+
+                    if (isAdded){
+                        binding.adsView.reCallLoadAd(this)
+                    }
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                }
+            })
 
         initCatgories()
 

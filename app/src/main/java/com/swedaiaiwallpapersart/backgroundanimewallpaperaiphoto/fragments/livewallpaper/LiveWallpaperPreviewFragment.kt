@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.WallpaperManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.MediaPlayer.OnCompletionListener
@@ -50,6 +51,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -80,6 +83,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
     @Inject
     lateinit var appDatabase: AppDatabase
 
+    var checkWallpaper = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -92,23 +97,22 @@ class LiveWallpaperPreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myActivity = activity as MainActivity
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "searchscr_bottom",
-                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
-
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
+        binding.adsView.loadAd(requireContext(),"searchscr_bottom",
+            " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                 }
-            )
+
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+
+                    if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                    }
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                }
+            })
         initObservers()
         setWallpaperOnView()
 
@@ -345,9 +349,10 @@ class LiveWallpaperPreviewFragment : Fragment() {
             filepath.renameTo(newFile)
             BlurView.filePath = newFile.path
             LiveWallpaperService.setToWallPaper(requireContext())
+            checkWallpaper = true
 
             try {
-                lifecycleScope.launch {
+                GlobalScope.launch(Dispatchers.IO) {
                     val requestBody = mapOf("imageid" to livewallpaper?.id)
 
                     webApiInterface.postDownloadedLive(requestBody)
@@ -389,12 +394,14 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 }
             }
             BlurView.filePath = newFile.path
+
             if (filepath.renameTo(newFile)) {
                 BlurView.filePath = newFile.path
 
                 notifyFileNameChanged(requireContext(), filepath.path, newFile.path)
                 Log.e("TAG", "showSimpleDialog: renamed")
                 IkmSdkController.setEnableShowResumeAds(true)
+                checkWallpaper = true
                 LiveWallpaperService.setToWallPaper(requireContext())
                 try {
                     lifecycleScope.launch {
@@ -598,8 +605,40 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
+        if (checkWallpaper){
+
+            checkWallpaperActive()
+        }
         setWallpaperOnView()
     }
+
+    fun checkWallpaperActive(){
+
+        checkWallpaper = false
+        val wallpaperComponent = ComponentName(requireContext(), LiveWallpaperService::class.java)
+
+        val currentWallpaperComponent = WallpaperManager.getInstance(context).wallpaperInfo?.component
+
+
+        if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
+            // The live wallpaper is set successfully, perform your action here
+            Log.d("LiveWallpaper", "Live wallpaper set successfully")
+            // For example, you can navigate the user to another screen
+            // val intent = Intent(context, AnotherActivity::class.java)
+            // context.startActivity(intent)
+
+            findNavController().popBackStack(R.id.homeTabsFragment, false)
+
+            Toast.makeText(requireContext(),"Wallpaper set successfully",Toast.LENGTH_SHORT).show()
+        } else {
+            // The live wallpaper is not set successfully
+            Log.e("LiveWallpaper", "Failed to set live wallpaper")
+            Toast.makeText(context, "Failed to set live wallpaper", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
 
 
     private fun setWallpaperOnView() {

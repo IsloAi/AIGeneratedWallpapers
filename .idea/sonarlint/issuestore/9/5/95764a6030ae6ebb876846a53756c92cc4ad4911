@@ -1,10 +1,12 @@
 
-Zkotlin:S1172ı"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8Ù˜¨Æá1
-Zkotlin:S1172¤"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8Ú˜¨Æá1
-Wkotlin:S1172¾"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8Ú˜¨Æá1
-akotlin:S899Ù"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8Ü˜¨Æá1
-=kotlin:S125¦"Remove this commented out code.(§íËf8å˜¨Æá1
-qkotlin:S1192®"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(™ù£êøÿÿÿÿ8™¨Æá1
-Gkotlin:S1874`"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8¢™¨Æá1
-rkotlin:S3776™"RRefactor this method to reduce its Cognitive Complexity from 39 to the 15 allowed.(ñàõà8¥™¨Æá1
-Mkotlin:S1066‚".Merge this "if" statement with the nested one.(€¡ê8®™¨Æá1
+Zkotlin:S1172‚"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8“”›æá1
+Zkotlin:S1172«"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8“”›æá1
+Wkotlin:S1172Å"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8“”›æá1
+akotlin:S899İ"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8•”›æá1
+Bkotlin:S125o"Remove this commented out code.(ó’´Âûÿÿÿÿ8ıªãæá1
+=kotlin:S125ª"Remove this commented out code.(§íËf8›”›æá1
+<kotlin:S6310ã"Avoid hardcoded dispatchers.(á¥ €8ïÇ€çá1
+tkotlin:S6306ã"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(á¥ €8…•€çá1
+qkotlin:S1192²"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(™ù£êøÿÿÿÿ8Æ”›æá1
+rkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 39 to the 15 allowed.(ñàõà8Ê”›æá1
+Mkotlin:S1066‡".Merge this "if" statement with the nested one.(€¡ê8Ñ”›æá1

@@ -35,7 +35,6 @@ import android.widget.TextView
 import android.widget.Toast
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -53,25 +52,20 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
-import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.google.android.play.core.review.model.ReviewErrorCode
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -82,16 +76,13 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.Popul
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment.Companion.hasToNavigateHome
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerImageClick
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Counter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.SetMostDownloaded
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FullViewImagePopup
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -254,23 +245,23 @@ class WallpaperViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "viewlistwallscr_bottom",
-                " viewlistwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
+        binding.adsView.loadAd(requireContext(),"viewlistwallscr_bottom",
+            " viewlistwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                 }
-            )
+
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+
+                    if (isAdded){
+                        binding.adsView.reCallLoadAd(this)
+                    }
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                }
+            })
 
         backHandle()
     }
@@ -648,10 +639,10 @@ class WallpaperViewFragment : Fragment() {
                     binding.buttonApplyWallpaper.visibility = View.GONE
                     binding.bottomMenu.visibility = View.GONE
 
-                    binding.adsWidget.visibility = View.GONE
+                    binding.adsView.visibility = View.GONE
                 }else{
                     binding.bottomMenu.visibility = View.VISIBLE
-                    binding.adsWidget.visibility = View.VISIBLE
+                    binding.adsView.visibility = View.VISIBLE
 
                     if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
 
@@ -960,6 +951,38 @@ class WallpaperViewFragment : Fragment() {
             e.printStackTrace()
         }
         return null
+    }
+
+    private fun congratulationsDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.continueBtn.setOnClickListener {
+            dialog.dismiss()
+            if (AdConfig.regularWallpaperFlow == 1){
+                if (from == "trending"){
+                    findNavController().popBackStack(R.id.homeTabsFragment, false)
+                }else{
+                    findNavController().popBackStack(R.id.listViewFragment,false)
+                }
+            }else if (AdConfig.regularWallpaperFlow == 2){
+                //do nothing
+            }else{
+                //doniothing
+            }
+
+        }
+
+        dialog.show()
     }
     @SuppressLint("ResourceType")
     private fun openPopupMenu(model: CatResponse) {
@@ -1298,20 +1321,38 @@ class WallpaperViewFragment : Fragment() {
     }
 
    private fun showRateApp() {
-
        try {
+           Log.e(TAG, "showRateApp:  first line", )
            viewLifecycleOwner.lifecycleScope.launch {
                if (isAdded && isResumed) {
+                   Log.e(TAG, "showRateApp:  is added", )
                    val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
                    request.addOnCompleteListener { task ->
+                       Log.e(TAG, "showRateApp:  addOnCompleteListener", )
                        if (isAdded && isResumed) {
+                           Log.e(TAG, "showRateApp:  addOnCompleteListener", )
                            if (task.isSuccessful()) {
-                               val reviewInfo: ReviewInfo = task.getResult()
+                               Log.e(TAG, "showRateApp:  isSuccessful", )
+                               val reviewInfo: ReviewInfo = task.result
                                val flow: Task<Void> = reviewManager!!.launchReviewFlow(myActivity, reviewInfo)
-                               flow.addOnCompleteListener { task1 -> }
+                               flow.addOnCompleteListener { task1 ->
+                                   Log.e(TAG, "showRateApp:  addOnCompleteListener"+task1.exception +task1.result )
+                                   Log.e(TAG, "showRateApp: "+AdConfig.regularWallpaperFlow )
+
+                                   if (AdConfig.regularWallpaperFlow != 0){
+                                       congratulationsDialog()
+                                   }
+                               }
+                           }else{
+                               @ReviewErrorCode val reviewErrorCode = (task.getException() as ReviewException).errorCode
+                               Log.e(TAG, "showRateApp: "+task.exception?.localizedMessage )
+
                            }
                        }
                    }
+                       .addOnFailureListener {it ->
+                           it.printStackTrace()
+                       }
                }
            }
        }catch (e:IllegalStateException){
@@ -1319,18 +1360,6 @@ class WallpaperViewFragment : Fragment() {
        }catch (e:Exception){
            e.printStackTrace()
        }
-
-//       if(isFragmentAttached && isAdded){
-//        val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
-//        request.addOnCompleteListener { task ->
-//            if (task.isSuccessful()) {
-//                // Getting the ReviewInfo object
-//                val reviewInfo: ReviewInfo = task.getResult()
-//                val flow: Task<Void> = reviewManager!!.launchReviewFlow(myActivity, reviewInfo)
-//                flow.addOnCompleteListener { task1 -> }
-//            }
-//        }
-//       }
     }
 
     fun imageDetailsSheet() {

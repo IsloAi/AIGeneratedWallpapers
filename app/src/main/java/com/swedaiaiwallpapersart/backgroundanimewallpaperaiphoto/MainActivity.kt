@@ -532,9 +532,13 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             val jsonObject = JSONObject(inAppConfig)
 
                             // Retrieve the boolean value associated with the key "languagescralwayshow"
-                            val languagescralwayshow = jsonObject.getBoolean("languagescralwayshow")
+                            val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
+
+                            val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
                             Log.e(TAG, "onUpdate: "+languagescralwayshow )
+                            Log.e(TAG, "onUpdate: regular wallpaper "+regularWallpaperFlow )
+                            AdConfig.regularWallpaperFlow = regularWallpaperFlow
                             AdConfig.inAppConfig = languagescralwayshow
 
                         }catch (e:JSONException){
@@ -570,8 +574,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         for (i in 0 until tabNamesArray.size){
                             Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
                         }
-
-                        tabNamesArray += "Charging Battery"
+                        //in next update
+//                        tabNamesArray += "Charging Battery"
 
                         AdConfig.tabPositions = tabNamesArray
 
@@ -694,11 +698,19 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         Log.e(TAG, "onUpdate: "+inAppConfig )
 
-        val categoryOrderArray = categoryOrder.substring(1,categoryOrder.length-1).replace("\"","").split(", ").toList()
+        try {
+            val categoryOrderArray = categoryOrder.substring(1,categoryOrder.length-1).replace("\"","").split(", ").toList()
 
-        AdConfig.categoryOrder = categoryOrderArray
+            AdConfig.categoryOrder = categoryOrderArray
 
-        Log.e(TAG, "onUpdate: $categoryOrderArray")
+            Log.e(TAG, "onUpdate: $categoryOrderArray")
+        }catch (e:StringIndexOutOfBoundsException){
+            e.printStackTrace()
+        }
+
+
+
+
 
         val iap = remoteConfig["iap_config"].asString()
         Log.e(TAG, "onUpdate: $iap")
@@ -709,9 +721,12 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             val jsonObject = JSONObject(inAppConfig)
 
             // Retrieve the boolean value associated with the key "languagescralwayshow"
-            val languagescralwayshow = jsonObject.getBoolean("languagescralwayshow")
+            val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
+            val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
             Log.e(TAG, "onUpdate: "+languagescralwayshow )
+            Log.e(TAG, "onUpdate: regular wallpaper "+regularWallpaperFlow )
+            AdConfig.regularWallpaperFlow = regularWallpaperFlow
             AdConfig.inAppConfig = languagescralwayshow
 
         }catch (e:JSONException){
@@ -745,7 +760,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
         }
 
-        tabNamesArray += "Charging Battery"
+        //in next update
+//        tabNamesArray += "Charging Battery"
 
         AdConfig.tabPositions = tabNamesArray
         AdConfig.showOnboarding = onboarding

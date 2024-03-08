@@ -177,6 +177,8 @@ class LiveWallpaperService : WallpaperService() {
         fun setToWallPaper(context: Context) {
 
             try {
+
+
                 Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
                     putExtra(
                         WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,

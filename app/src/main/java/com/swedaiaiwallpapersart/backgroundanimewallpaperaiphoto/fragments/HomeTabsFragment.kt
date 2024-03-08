@@ -244,23 +244,22 @@ class HomeTabsFragment : Fragment() {
 
 
     fun loadbannerAd(){
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "mainscr_bottom",
-                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                    }
-
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                    }
+        binding.adsView.loadAd(requireContext(),"mainscr_bottom",
+            " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                 }
-            )
+
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+
+                    if (isAdded){
+                        binding.adsView.reCallLoadAd(this)
+                    }
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                }
+            })
     }
     private fun setEvents(){
         binding.settings.setOnClickListener {

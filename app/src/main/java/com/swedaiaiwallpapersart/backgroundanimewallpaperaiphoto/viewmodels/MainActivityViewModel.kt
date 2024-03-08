@@ -22,8 +22,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainActivityViewModel@Inject constructor(private val generateDeviceTokenUsecase: GenerateDeviceTokenUsecase
-,private val fetechAllWallpapersUsecase: FetechAllWallpapersUsecase,
+class MainActivityViewModel@Inject constructor(
     private val getMostUsedUseCase: GetMostUsedUseCase,
     private val getUpdatedWallpaperUseCase: GetUpdatedWallpaperUseCase
     ):  ViewModel()  {
@@ -40,13 +39,13 @@ class MainActivityViewModel@Inject constructor(private val generateDeviceTokenUs
     private var _mostUsed= MutableLiveData<Response<ArrayList<MostDownloadedResponse>>>(Response.Success(null))
     val mostUsed: LiveData<Response<ArrayList<MostDownloadedResponse>>> = _mostUsed
 
-    fun generateDeviceToken(deviceId: String){
-        viewModelScope.launch {
-            generateDeviceTokenUsecase.invoke(deviceId).collect(){
-                _devicetokenResponse.value=it
-            }
-        }
-    }
+//    fun generateDeviceToken(deviceId: String){
+//        viewModelScope.launch {
+//            generateDeviceTokenUsecase.invoke(deviceId).collect(){
+//                _devicetokenResponse.value=it
+//            }
+//        }
+//    }
 
     fun getAllModels(page:String,record:String,lastid:String){
         viewModelScope.launch {

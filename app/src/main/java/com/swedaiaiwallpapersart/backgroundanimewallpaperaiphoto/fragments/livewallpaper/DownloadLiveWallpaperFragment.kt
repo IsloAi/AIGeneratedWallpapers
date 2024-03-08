@@ -102,6 +102,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
                     super.onAdsLoaded()
                     if (isAdded && view != null) {
                         // Modify view visibility here
+                        binding.adsView.reCallLoadAd(this)
                         binding.adsView.visibility = View.VISIBLE
                     }
 

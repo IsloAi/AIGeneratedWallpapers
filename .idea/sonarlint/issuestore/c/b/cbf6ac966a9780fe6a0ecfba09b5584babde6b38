@@ -14,7 +14,6 @@ Rkotlin:S1481¯"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ïİµ
 >kotlin:S1128."Remove this unused import.(¢‡Œşÿÿÿÿ8øåÍ’Ú1
 qkotlin:S1192ª"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8ûåÍ’Ú1
 pkotlin:S1192Ğ"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8üİµÜÓ1
-Gkotlin:S1874Y"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8şåÍ’Ú1
 zkotlin:S1186ã"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8„æÍ’Ú1
 kotlin:S1186ç"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8„æÍ’Ú1
 Skotlin:S1066æ".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8‰ŞµÜÓ1

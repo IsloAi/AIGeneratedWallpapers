@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:id="@+id/content"
+        android:layout_marginHorizontal="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/congration_dialog_bg"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/con_dialog_item"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/topImage"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Congratulations!"
+            android:textColor="#D9690D"
+            android:fontFamily="@font/poppins_bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/topImage"
+            android:textSize="@dimen/_15sdp"
+            android:id="@+id/con_text"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Your wallpaper has been applied successfully.\n Enjoy your new look!"
+            app:layout_constraintTop_toBottomOf="@id/con_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:gravity="center"
+            android:textColor="#927E5B"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:id="@+id/descriptionTxt"
+            />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="@dimen/_20sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@drawable/button_bg"
+            android:text="Continue"
+            android:id="@+id/continueBtn"
+            android:textColor="@color/white"
+            android:fontFamily="@font/poppins_semibold"
+            android:padding="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionTxt"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginBottom="@dimen/_10sdp"
+            />
+
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

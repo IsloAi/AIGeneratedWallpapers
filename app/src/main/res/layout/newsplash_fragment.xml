@@ -139,24 +139,19 @@
         android:progressDrawable="@drawable/progress_drawable_new"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/ads_widget"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
         android:layout_marginBottom="@dimen/_20sdp"
         android:indeterminateDuration="5000"
         android:progress="0" />
 
 
-    <include
-        android:id="@+id/ads_widget"
-        layout="@layout/layout_custom_handle_banner_admob"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+    <com.bmik.android.sdk.widgets.IkmWidgetAdView
+        android:id="@+id/adsView"
         android:layout_width="match_parent"
+        app:ikwad_preview_layout="@layout/shimmer_loading_banner"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content" />
-
-
-    
-
-
-
 
 
 

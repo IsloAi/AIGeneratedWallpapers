@@ -76,24 +76,41 @@ class SplashOnFragment : Fragment() {
 
 
         myActivity = activity as MainActivity
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                myActivity,
-                binding.adsWidget as? ViewGroup,
-                "splashscr_bottom",
-                " splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                    }
+//        SDKBaseController.getInstance()
+//            .loadBannerAds(
+//                myActivity,
+//                binding.adsWidget as? ViewGroup,
+//                "splashscr_bottom",
+//                " splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
+//                    override fun onAdsLoaded() {
+//                        super.onAdsLoaded()
+//                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+//                    }
+//
+//                    override fun onAdsLoadFail() {
+//                        super.onAdsLoadFail()
+//
+//                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+//                    }
+//                }
+//            )
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                    }
+        binding.adsView.loadAd(requireContext(),"splashscr_bottom",
+            " splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                 }
-            )
+
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+
+                    if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                    }
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                }
+            })
 
 
         val lan = MySharePreference.getLanguage(requireContext())
@@ -142,7 +159,11 @@ class SplashOnFragment : Fragment() {
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
                         if (isAdded){
+                            if (AdConfig.inAppConfig){
+                                findNavController().navigate(R.id.localizationFragment)
+                            }else{
                                 findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
+                            }
                         }
 
                     }
@@ -157,7 +178,11 @@ class SplashOnFragment : Fragment() {
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
                         if (isAdded) {
-                            findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
+                            if (AdConfig.inAppConfig){
+                                findNavController().navigate(R.id.localizationFragment)
+                            }else{
+                                findNavController().navigate(R.id.action_splashOnFragment_to_homeTabsFragment)
+                            }
                         }
                     }
 
@@ -166,6 +191,7 @@ class SplashOnFragment : Fragment() {
                 }
 
                 override fun onAdsShowed(priority: Int) {
+                    binding.adsView.visibility = View.GONE
 
 //                progress.dismiss()
 

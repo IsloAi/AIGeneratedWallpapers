@@ -2,7 +2,6 @@
 >kotlin:S125ğ"Remove this commented out code.(ƒïÕ¦8Ê¯åÙ1
 <kotlin:S6310¯"Avoid hardcoded dispatchers.(©ÒÕò8 Ê¯åÙ1
 qkotlin:S1192¿"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8”Ë¯åÙ1
-Gkotlin:S1874v"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8œË¯åÙ1
 Hkotlin:S1874ª"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8Ë¯åÙ1
 rkotlin:S3776 "RRefactor this method to reduce its Cognitive Complexity from 64 to the 15 allowed.(şÅâÏ8¢Ë¯åÙ1
 Skotlin:S1066û".Merge this "if" statement with the nested one.(©ì¯Ğıÿÿÿÿ8³Ë¯åÙ1

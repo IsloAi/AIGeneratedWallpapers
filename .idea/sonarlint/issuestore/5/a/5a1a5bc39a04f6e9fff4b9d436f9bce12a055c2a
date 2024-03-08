@@ -1,6 +1,7 @@
 
+Bkotlin:S125"Remove this commented out code.(šñŽúÿÿÿÿ8ˆÃ¬çá1
 Mkotlin:S108")Either remove or fill this block of code.(ÍÖ¥ºÿÿÿÿÿ8é¶êÈÕ1
 Rkotlin:S1481z".Remove this unused "likesList" local variable.(è—¿ªÿÿÿÿÿ8˜˜ÅÇÕ1
 Mkotlin:S1481y")Remove this unused "list" local variable.(’”î–ýÿÿÿÿ8Ò”ÕÇÕ1
-€kotlin:S1192>"aDefine a constant instead of duplicating this literal "GenerateTextToImage: I came here" 4 times.(†óþ‘8ƒæ‰²Ú1
-wkotlin:S1192I"SDefine a constant instead of duplicating this literal "getAllWallpapers: " 4 times.(å·©öûÿÿÿÿ8ƒæ‰²Ú1
+€kotlin:S1192\"aDefine a constant instead of duplicating this literal "GenerateTextToImage: I came here" 3 times.(†óþ‘8ƒæ‰²Ú1
+wkotlin:S1192g"SDefine a constant instead of duplicating this literal "getAllWallpapers: " 3 times.(å·©öûÿÿÿÿ8ƒæ‰²Ú1

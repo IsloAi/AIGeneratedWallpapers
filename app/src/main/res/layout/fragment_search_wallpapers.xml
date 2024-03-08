@@ -248,7 +248,7 @@
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/ads_widget"        />
+        app:layout_constraintBottom_toTopOf="@id/adsView"        />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -259,17 +259,15 @@
         app:layout_constraintTop_toBottomOf="@id/toolBar"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/ads_widget"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
         />
 
-
-    <include
-        android:id="@+id/ads_widget"
-        layout="@layout/layout_custom_handle_banner_admob"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <com.bmik.android.sdk.widgets.IkmWidgetAdView
+        android:id="@+id/adsView"
         android:layout_width="match_parent"
+        app:ikwad_preview_layout="@layout/shimmer_loading_banner"
+        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content" />
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"

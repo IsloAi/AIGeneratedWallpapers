@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GenerateDeviceTokenUsecase @Inject constructor(private val textToImgRepository: WallpaperRepositry){
-    operator fun invoke(deviceId: String): Flow<Response<TokenResponse>> {
-        return textToImgRepository.GenerateDeviceToken(deviceId)
-    }
+//    operator fun invoke(deviceId: String): Flow<Response<TokenResponse>> {
+//        return textToImgRepository.GenerateDeviceToken(deviceId)
+//    }
 }

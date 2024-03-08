@@ -114,23 +114,23 @@ class MyCreationViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "createdwallscr_bottom",
-                " createdwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
+        binding.adsView.loadAd(requireContext(),"createdwallscr_bottom",
+            " createdwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                 }
-            )
+
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+
+                    if (isAdded){
+                        binding.adsView.reCallLoadAd(this)
+                    }
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                }
+            })
 
         binding.editPrompt.setOnClickListener {
             binding.prompt.isEnabled = true
