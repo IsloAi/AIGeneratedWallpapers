@@ -120,7 +120,7 @@ class SplashOnFragment : Fragment() {
         AdConfig.ISPAIDUSER = premium
 
 
-        if (lan?.isEmpty() == true){
+        if (lan?.isEmpty() == true || AdConfig.inAppConfig == true){
             Log.e("TAG", "onViewCreated: load pre", )
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
 

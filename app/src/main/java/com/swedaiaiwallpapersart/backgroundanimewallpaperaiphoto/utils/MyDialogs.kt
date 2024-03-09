@@ -125,7 +125,7 @@ class MyDialogs {
 
         title!!.text = context.getString(R.string.are_you_sure_you_want_to_exit)
         btnYes!!.setOnClickListener {
-            activity.finish()
+            activity.finishAffinity()
             bottomSheetDialog.dismiss()
         }
         btnNo!!.setOnClickListener {

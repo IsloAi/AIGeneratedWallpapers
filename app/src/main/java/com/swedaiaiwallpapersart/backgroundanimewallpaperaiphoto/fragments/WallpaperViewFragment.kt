@@ -257,7 +257,7 @@ class WallpaperViewFragment : Fragment() {
                     super.onAdsLoadFail()
 
                     if (isAdded){
-                        binding.adsView.reCallLoadAd(this)
+//                        binding.adsView.reCallLoadAd(this)
                     }
                     Log.e("*******ADS", "onAdsLoaded: Banner failed", )
                 }

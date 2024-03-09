@@ -44,6 +44,8 @@ class LocalizationFragment : Fragment() {
     var adapter: LocalizationAdapter? = null
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+    val TAG = "Localization"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -205,21 +207,30 @@ class LocalizationFragment : Fragment() {
                 configuration.setLayoutDirection(Locale(selectedItem!!.lan_code));
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
                 if (exit){
+                    Log.e(TAG, "setEvents:  exit true", )
                     if (AdConfig.showOnboarding){
+                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
                         findNavController().navigate(R.id.onBoardingFragment)
                     }else{
+                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
                         findNavController().navigate(R.id.homeTabsFragment)
                     }
                 }else{
+                    Log.e(TAG, "setEvents:  exit false", )
                     if (!onBoard){
+                        Log.e(TAG, "setEvents:  exit false, onboard false", )
                         if (AdConfig.showOnboarding){
+                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording true", )
                             findNavController().navigate(R.id.onBoardingFragment)
                         }else{
+                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording false", )
+
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
 
 
                     }else{
+                        Log.e(TAG, "setEvents:  exit false, onboard true", )
                         findNavController().navigateUp()
                     }
                 }
@@ -244,19 +255,30 @@ class LocalizationFragment : Fragment() {
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
                 if (exit){
+                    Log.e(TAG, "setEvents:  exit true", )
                     if (AdConfig.showOnboarding){
+                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
                         findNavController().navigate(R.id.onBoardingFragment)
                     }else{
+                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
                         findNavController().navigate(R.id.homeTabsFragment)
                     }
                 }else{
+                    Log.e(TAG, "setEvents:  exit false", )
                     if (!onBoard){
+                        Log.e(TAG, "setEvents:  exit false, onboard false", )
                         if (AdConfig.showOnboarding){
+                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording true", )
                             findNavController().navigate(R.id.onBoardingFragment)
                         }else{
+                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording false", )
+
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
+
+
                     }else{
+                        Log.e(TAG, "setEvents:  exit false, onboard true", )
                         findNavController().navigateUp()
                     }
                 }

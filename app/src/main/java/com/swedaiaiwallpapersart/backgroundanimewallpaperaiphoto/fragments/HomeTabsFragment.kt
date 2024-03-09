@@ -44,6 +44,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -119,6 +120,10 @@ class HomeTabsFragment : Fragment() {
             }else{
                 binding.goPremium.visibility = View.VISIBLE
             }
+        }
+
+        if (AdConfig.tabPositions.size == 0){
+            AdConfig.tabPositions = arrayOf("Category", "Gen AI","Popular", "Trending", "Live", "AI Wallpaper")
         }
             loadbannerAd()
             setGradienttext()
@@ -255,7 +260,7 @@ class HomeTabsFragment : Fragment() {
                     super.onAdsLoadFail()
 
                     if (isAdded){
-                        binding.adsView.reCallLoadAd(this)
+//                        binding.adsView.reCallLoadAd(this)
                     }
                     Log.e("*******ADS", "onAdsLoaded: Banner failed", )
                 }
@@ -288,6 +293,8 @@ class HomeTabsFragment : Fragment() {
                 if (binding.viewPager.currentItem != 0){
                     binding.viewPager.setCurrentItem(0)
                 }else{
+
+                    exit = true
                     existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
                 }
 
