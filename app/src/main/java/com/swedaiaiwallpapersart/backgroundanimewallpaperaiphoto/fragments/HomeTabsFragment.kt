@@ -91,9 +91,12 @@ class HomeTabsFragment : Fragment() {
         "Popular" to R.drawable.tab_icon_popular,
         "Trending" to R.drawable.tab_icon_trending,
         "Live" to R.drawable.tab_icon_live,
-        "AI Wallpaper" to R.drawable.tab_icon_ai_wallpaper,
+        "Anime" to R.drawable.anime_tab,
         "Category" to R.drawable.tab_icon_categories,
-        "Gen AI" to R.drawable.tab_icon_generate
+        "Gen AI" to R.drawable.tab_icon_generate,
+        "Charging" to R.drawable.battery_tab,
+        "Car" to R.drawable.car_tab
+
     )
 
 
@@ -123,7 +126,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         if (AdConfig.tabPositions.size == 0){
-            AdConfig.tabPositions = arrayOf("Category", "Gen AI","Popular", "Trending", "Live", "AI Wallpaper")
+            AdConfig.tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "Car","Trending", "Charging", "Gen AI")
         }
             loadbannerAd()
             setGradienttext()
@@ -357,6 +360,20 @@ class HomeTabsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 viewModel.setData(true)
                 updateTabAppearance(tab!!,true)
+
+                tab.let {
+                    if (it.text?.equals("Anime") == true){
+                        Log.e("HOMETABS", "onTabSelected: "+ it.text)
+
+                        viewModel.setTab(it.text.toString())
+                    }
+
+                    if (it.text?.equals("Car") == true){
+                        Log.e("HOMETABS", "onTabSelected: "+ it.text)
+                    }
+
+
+                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -390,7 +407,7 @@ class HomeTabsFragment : Fragment() {
             "Popular" -> PopularWallpaperFragment()
             "Trending" -> HomeFragment()
             "Live" -> LiveWallpaperFragment()
-            "AI Wallpaper" -> HomeFragment()
+            "Anime" -> ListViewFragment()
             "Category" -> CategoryFragment()
             "Gen AI" -> GenerateImageFragment()
 

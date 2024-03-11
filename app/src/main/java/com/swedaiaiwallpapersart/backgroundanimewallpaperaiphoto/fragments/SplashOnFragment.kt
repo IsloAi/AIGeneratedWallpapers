@@ -96,7 +96,7 @@ class SplashOnFragment : Fragment() {
 //            )
 
         binding.adsView.loadAd(requireContext(),"splashscr_bottom",
-            " splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
+            "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoaded() {
                     super.onAdsLoaded()
                     Log.e("*******ADS", "onAdsLoaded: Banner loaded", )

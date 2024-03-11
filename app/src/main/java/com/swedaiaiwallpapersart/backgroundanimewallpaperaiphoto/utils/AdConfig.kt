@@ -22,7 +22,7 @@ object AdConfig {
 
     var inAppConfig = false
 
-    var tabPositions = arrayOf("Category", "Gen AI","Popular", "Trending", "Live", "AI Wallpaper")
+    var tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "4K", "Charging", "Gen AI")
 
     var categoryOrder:List<String> = listOf( "Sadness", "Car", "Motor Bike", "Fantasy", "Animal","New Year", "Christmas", "Travel", "Ocean", "Nature", "Mountains", "Music", "Love", "Art", "Space", "Adstract", "Tech", "Black And White", "Architecture", "Artistic", "Pattern", "City", "Minimal", "Vintage","4K", "Anime", "Super Heros", "IOS", "Dark")
 

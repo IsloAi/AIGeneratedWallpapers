@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,12 +14,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -42,6 +42,8 @@ class ListViewFragment : Fragment() {
     private var from = ""
     private lateinit var myActivity : MainActivity
     var isNavigationInProgress = false
+
+    private val viewModel: SaveStateViewModel by activityViewModels()
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
@@ -94,6 +96,18 @@ class ListViewFragment : Fragment() {
          name = arguments?.getString("name").toString()
          from = arguments?.getString("from").toString()
         Log.d("tracingNameCategory", "onViewCreated: name $name")
+
+
+
+        viewModel.selectedTab.observe(viewLifecycleOwner){
+            Log.e(TAG, "onCreateViewCalling: "+name )
+            Log.e(TAG, "onCreateViewCalling: "+it )
+            if (name == ""){
+                name = it
+                loadData()
+            }
+        }
+
         binding.catTitle.text = name
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
 
@@ -209,7 +223,7 @@ class ListViewFragment : Fragment() {
         }
     }
     private fun loadData() {
-        Log.d("functionCallingTest", "onCreateCustom:  home on create")
+        Log.d(TAG, "onCreateCustom:  home on create")
 
 
         myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->

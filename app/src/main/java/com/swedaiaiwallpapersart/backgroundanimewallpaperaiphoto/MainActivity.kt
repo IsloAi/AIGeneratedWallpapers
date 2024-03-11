@@ -509,7 +509,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         val welcomeMessage = remoteConfig[first].asString()
 
                         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
-                        val positionTabs = remoteConfig["tablist"].asString()
+                        val positionTabs = remoteConfig["tablist_144"].asString()
                         val iap = remoteConfig["iap_config"].asString()
 
                         val categoryOrder = remoteConfig["category_order"].asString()
@@ -575,9 +575,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
                         }
                         //in next update
-//                        tabNamesArray += "Charging Battery"
-
-                        AdConfig.tabPositions = tabNamesArray
+                        tabNamesArray += "Trending"
 
                         AdConfig.tabPositions = tabNamesArray
 
@@ -690,7 +688,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         val welcomeMessage = remoteConfig[first].asString()
         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
-        val positionTabs = remoteConfig["tablist"].asString()
+        val positionTabs = remoteConfig["tablist_144"].asString()
         val categoryOrder = remoteConfig["category_order"].asString()
         Log.e(TAG, "onUpdate: $categoryOrder")
 
@@ -762,6 +760,9 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         //in next update
 //        tabNamesArray += "Charging Battery"
+
+        tabNamesArray += "Trending"
+
 
         AdConfig.tabPositions = tabNamesArray
         AdConfig.showOnboarding = onboarding
