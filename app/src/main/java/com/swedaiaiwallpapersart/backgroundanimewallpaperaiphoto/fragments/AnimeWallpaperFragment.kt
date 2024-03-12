@@ -1,4 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
+
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -6,16 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentAnimeWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
@@ -34,20 +33,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListViewFragment : Fragment() {
-    private var _binding: FragmentListViewBinding? = null
+class AnimeWallpaperFragment : Fragment() {
+    private var _binding:FragmentAnimeWallpaperBinding ?= null
     private val binding get() = _binding!!
-     val myViewModel: MyViewModel by activityViewModels()
-    private var name = ""
-    private var from = ""
+
     private lateinit var myActivity : MainActivity
-    var isNavigationInProgress = false
+
+    var adapter:ApiCategoriesListAdapter ?= null
 
     private val viewModel: SaveStateViewModel by activityViewModels()
 
     val sharedViewModel: SharedViewModel by activityViewModels()
-
-    var adapter:ApiCategoriesListAdapter ?= null
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
@@ -59,99 +55,76 @@ class ListViewFragment : Fragment() {
     var externalOpen = false
 
     var startIndex = 0
+    var isNavigationInProgress = false
+    val myViewModel: MyViewModel by activityViewModels()
 
-    val TAG = "LISTVIEWCAT"
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentListViewBinding.inflate(inflater,container,false)
-        onCreateViewCalling()
+    val TAG = "ANIME"
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentAnimeWallpaperBinding.inflate(inflater,container,false)
+        // Inflate the layout for this fragment
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.adsView.loadAd(requireContext(),"categoryscr_bottom",
-            "categoryscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
+        onCreateViewCalling()
 
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
-                    }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
     }
+
     private fun onCreateViewCalling(){
+        myViewModel.getAllCreations("Anime")
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-         name = arguments?.getString("name").toString()
-         from = arguments?.getString("from").toString()
-        Log.d("tracingNameCategory", "onViewCreated: name $name")
-
-
-
-        viewModel.selectedTab.observe(viewLifecycleOwner){
-            Log.e(TAG, "onCreateViewCalling: "+name )
-            Log.e(TAG, "onCreateViewCalling: "+it )
-            if (name == ""){
-                name = it
-                loadData()
-            }
-        }
-
-        binding.catTitle.text = name
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
 
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
 
         val list = ArrayList<CatResponse?>()
-         adapter = ApiCategoriesListAdapter(list, object :
+        adapter = ApiCategoriesListAdapter(list, object :
             PositionCallback {
             override fun getPosition(position: Int) {
 
                 if (!isNavigationInProgress){
 
-                    hasToNavigateList = true
+                    hasToNavigateAnime = true
 
                     isNavigationInProgress = true
-                externalOpen = true
-                val allItems = adapter?.getAllItems()
-                if (addedItems?.isNotEmpty() == true) {
-                    addedItems?.clear()
-                }
-
-
-                addedItems = allItems
-
-                oldPosition = position
-
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "categoryscr_fantasy_click_item",
-                    "categoryscr_fantasy_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            navigateToDestination(allItems!!, position)
-                            Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-//                            navigateToDestination(allItems!!, position)
-                        }
+                    externalOpen = true
+                    val allItems = adapter?.getAllItems()
+                    if (addedItems?.isNotEmpty() == true) {
+                        addedItems?.clear()
                     }
-                )
 
-            }
+
+                    addedItems = allItems
+
+                    oldPosition = position
+
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "categoryscr_fantasy_click_item",
+                        "categoryscr_fantasy_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                navigateToDestination(allItems!!, position)
+                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+//                            navigateToDestination(allItems!!, position)
+                            }
+                        }
+                    )
+
+                }
 
 
 
@@ -190,10 +163,6 @@ class ListViewFragment : Fragment() {
 
             }
         })
-
-        binding.toolbar.setOnClickListener {
-            findNavController().navigateUp()
-        }
 
         binding.swipeLayout.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.IO) {
@@ -311,7 +280,7 @@ class ListViewFragment : Fragment() {
 
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
-            if (!WallpaperViewFragment.isNavigated && hasToNavigateList){
+            if (!WallpaperViewFragment.isNavigated && hasToNavigateAnime){
                 navigateToDestination(addedItems!!,oldPosition)
             }
         }
@@ -369,7 +338,7 @@ class ListViewFragment : Fragment() {
 
 
 
-             newData
+            newData
         }
 
 
@@ -382,7 +351,7 @@ class ListViewFragment : Fragment() {
 
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         Bundle().apply {
-            putString("from",from)
+            putString("from","category")
             putInt("position",position - countOfNulls)
             findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
@@ -394,7 +363,7 @@ class ListViewFragment : Fragment() {
     }
 
     companion object{
-        var hasToNavigateList = false
+        var hasToNavigateAnime = false
     }
 
     override fun onDestroyView() {
@@ -402,5 +371,4 @@ class ListViewFragment : Fragment() {
         _binding = null
         fragmentScope.cancel()
     }
-
 }

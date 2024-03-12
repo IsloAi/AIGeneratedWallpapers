@@ -70,6 +70,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.hasToNavigateAnime
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment.Companion.hasToNavigateList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment.Companion.hasToNavigate
@@ -273,6 +274,7 @@ class WallpaperViewFragment : Fragment() {
                 isNavigated = false
                 hasToNavigate = false
                 hasToNavigateHome = false
+                hasToNavigateAnime = false
                 hasToNavigateList = false
                 navController?.popBackStack()
             }
@@ -286,6 +288,7 @@ class WallpaperViewFragment : Fragment() {
                 isNavigated = false
                 hasToNavigate = false
                 hasToNavigateList = false
+                hasToNavigateAnime = false
                 hasToNavigateHome = false
                 navController?.popBackStack()
             }
@@ -370,6 +373,7 @@ class WallpaperViewFragment : Fragment() {
            isNavigated = false
            hasToNavigate = false
            hasToNavigateHome = false
+           hasToNavigateAnime = false
            hasToNavigateList = false
            navController?.popBackStack()
        }

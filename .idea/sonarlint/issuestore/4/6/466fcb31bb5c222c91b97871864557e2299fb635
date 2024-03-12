@@ -1,15 +1,15 @@
 
-Ckotlin:S125Š"Remove this commented out code.(ó’´Âûÿÿÿÿ8ÃÂòìâ1
-Ckotlin:S125à"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8ÄÂòìâ1
-Pkotlin:S1481È"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8âÂòìâ1
-Rkotlin:S1481¦"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8âÂòìâ1
-Lkotlin:S1481¥",Remove this unused "tabIcon" local variable.(™Î‡è8âÂòìâ1
->kotlin:S1128<"Remove this unused import.(èãÊõûÿÿÿÿ8éÂòìâ1
-kkotlin:S1192`"GDefine a constant instead of duplicating this literal "Gen AI" 3 times.(Ãê¤òùÿÿÿÿ8ëÂòìâ1
-Ckotlin:S1874"#Deprecated code should not be used.(£À¯•8íÂòìâ1
-Ckotlin:S1874Î"#Deprecated code should not be used.(‚Õ‡º8íÂòìâ1
-Ckotlin:S1874Ş"#Deprecated code should not be used.(ê¶«Ê8îÂòìâ1
-Ckotlin:S1874ª"#Deprecated code should not be used.(ê¶«Ê8îÂòìâ1
-Bkotlin:S1874­"#Deprecated code should not be used.(…ı£t8îÂòìâ1
-qkotlin:S3776o"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ëü«8ïÂòìâ1
-zkotlin:S1186ÿ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ôÂòìâ1
+Ckotlin:S125Œ"Remove this commented out code.(ó’´Âûÿÿÿÿ8Å†¡‰ã1
+Ckotlin:S125ä"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8Æ†¡‰ã1
+Pkotlin:S1481Ì"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8á†¡‰ã1
+Rkotlin:S1481"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8“ó–‹ã1
+Lkotlin:S1481œ",Remove this unused "tabIcon" local variable.(™Î‡è8â†¡‰ã1
+>kotlin:S1128="Remove this unused import.(èãÊõûÿÿÿÿ8è†¡‰ã1
+kkotlin:S1192a"GDefine a constant instead of duplicating this literal "Gen AI" 3 times.(Ãê¤òùÿÿÿÿ8ê†¡‰ã1
+Ckotlin:S1874‘"#Deprecated code should not be used.(£À¯•8ì†¡‰ã1
+Ckotlin:S1874Ò"#Deprecated code should not be used.(‚Õ‡º8ì†¡‰ã1
+Ckotlin:S1874â"#Deprecated code should not be used.(ê¶«Ê8ì†¡‰ã1
+Ckotlin:S1874¡"#Deprecated code should not be used.(ê¶«Ê8ó–‹ã1
+Bkotlin:S1874¤"#Deprecated code should not be used.(…ı£t8Ÿó–‹ã1
+qkotlin:S3776q"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ëü«8î†¡‰ã1
+zkotlin:S1186õ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ó†¡‰ã1

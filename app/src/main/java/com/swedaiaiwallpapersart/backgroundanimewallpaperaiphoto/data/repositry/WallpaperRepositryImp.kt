@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
 
 import android.util.Log
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.MostDownloadedResponse
@@ -189,6 +190,28 @@ class WallpaperRepositryImp@Inject constructor(
                 trySend(Response.Success(resp.body()?.images))
             }
             Log.e("TAG", "getAllWallpapers: " )
+        } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
+
+        awaitClose()
+
+    }
+
+    override fun getChargingAnimation(): Flow<Response<ArrayList<ChargingAnimModel>>> = channelFlow {
+
+        try {
+            trySend(Response.Loading)
+            Log.e("TAG", "getChargingAnimation: I came here")
+            val resp = webApiInterface.getChargingAnimations()
+            Log.e("TAG", "getChargingAnimation: $resp")
+
+            if (resp.isSuccessful){
+
+                trySend(Response.Success(resp.body()?.images))
+            }
+            Log.e("TAG", "getChargingAnimation: " )
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))

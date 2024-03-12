@@ -1,7 +1,10 @@
 
-<kotlin:S6310”"Avoid hardcoded dispatchers.(ÏÃâ8ÍÑÄá1
-:kotlin:S6310o"Avoid hardcoded dispatchers.(©ÓœW8ÍÑÄá1
-;kotlin:S6310w"Avoid hardcoded dispatchers.(Í¡·Ş8ÍÑÄá1
+Ckotlin:S125©"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8ÛØ‚ã1
+Ckotlin:S125°"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8ôØ‚ã1
+<kotlin:S6310Õ"Avoid hardcoded dispatchers.(ÏÃâ8ÍÑÄá1
+:kotlin:S6310v"Avoid hardcoded dispatchers.(©ÓœW8øØ‚ã1
+;kotlin:S6310~"Avoid hardcoded dispatchers.(Í¡·Ş8ÍÑÄá1
+Rkotlin:S1481"-Remove this unused "allItems" local variable.(¨œ™Ëÿÿÿÿÿ8…Ù‚ã1
 >kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8ªÍÑÄá1
 9kotlin:S1128"Remove this unused import.(ÁÈÚø8ªÍÑÄá1
 >kotlin:S1128"Remove this unused import.(Øîğùÿÿÿÿ8ªÍÑÄá1
@@ -12,7 +15,6 @@
 9kotlin:S1128"Remove this unused import.(ÒÂ¦8ªÍÑÄá1
 >kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ªÍÑÄá1
 >kotlin:S1128"Remove this unused import.(¸ô¿ßùÿÿÿÿ8ªÍÑÄá1
->kotlin:S1128%"Remove this unused import.(­Î¹¿üÿÿÿÿ8Àá™Æá1
->kotlin:S1128,"Remove this unused import.(ˆ´Ïûùÿÿÿÿ8ªÍÑÄá1
-zkotlin:S1192„"ZDefine a constant instead of duplicating this literal "sortWallpaperCategories: " 3 times.(à¢şƒ8¬ÍÑÄá1
-pkotlin:S1192Ÿ"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8¬ÍÑÄá1
+>kotlin:S1128."Remove this unused import.(ˆ´Ïûùÿÿÿÿ8ªÍÑÄá1
+zkotlin:S1192Å"ZDefine a constant instead of duplicating this literal "sortWallpaperCategories: " 3 times.(à¢şƒ8‹Ù‚ã1
+pkotlin:S1192à"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8‹Ù‚ã1

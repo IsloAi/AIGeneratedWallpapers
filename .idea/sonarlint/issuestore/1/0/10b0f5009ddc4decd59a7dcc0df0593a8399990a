@@ -1,17 +1,17 @@
 
-Ckotlin:S125–"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8±èªìâ1
-<kotlin:S6310¹"Avoid hardcoded dispatchers.(©ÒÕò8·èªìâ1
-<kotlin:S6310Ó"Avoid hardcoded dispatchers.(ÏÃâ8·èªìâ1
-;kotlin:S6310È"Avoid hardcoded dispatchers.(©ÓœW8·èªìâ1
-<kotlin:S6310Ğ"Avoid hardcoded dispatchers.(Í¡·Ş8¸èªìâ1
-;kotlin:S6310ï"Avoid hardcoded dispatchers.(©ÓœW8¸èªìâ1
-<kotlin:S6310€"Avoid hardcoded dispatchers.(Í¡·Ş8¸èªìâ1
-Hkotlin:S108è")Either remove or fill this block of code.(·Úøš8Âèªìâ1
-Gkotlin:S108")Either remove or fill this block of code.(›Ñû08Âèªìâ1
-Mkotlin:S108‘")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8Âèªìâ1
+Bkotlin:S125U"Remove this commented out code.(ó’´Âûÿÿÿÿ8¥ã1
+Ckotlin:S125•"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8±èªìâ1
+<kotlin:S6310¸"Avoid hardcoded dispatchers.(©ÒÕò8·èªìâ1
+<kotlin:S6310Ò"Avoid hardcoded dispatchers.(ÏÃâ8·èªìâ1
+;kotlin:S6310Ç"Avoid hardcoded dispatchers.(©ÓœW8·èªìâ1
+<kotlin:S6310Ï"Avoid hardcoded dispatchers.(Í¡·Ş8¸èªìâ1
+;kotlin:S6310î"Avoid hardcoded dispatchers.(©ÓœW8¸èªìâ1
+<kotlin:S6310ÿ"Avoid hardcoded dispatchers.(Í¡·Ş8¸èªìâ1
+Hkotlin:S108ç")Either remove or fill this block of code.(·Úøš8Âèªìâ1
+Gkotlin:S108Œ")Either remove or fill this block of code.(›Ñû08Âèªìâ1
+Mkotlin:S108")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8Âèªìâ1
 >kotlin:S1128	"Remove this unused import.(Øîğùÿÿÿÿ8ç›áìâ1
-pkotlin:S1192ß"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8Óèªìâ1
-‡kotlin:S1192ß"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8Óèªìâ1
-Gkotlin:S1874K"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8³ÕÓìâ1
-zkotlin:S1186¡"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8Ûèªìâ1
-fkotlin:S6510™"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8Üèªìâ1
+pkotlin:S1192Ş"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8Óèªìâ1
+‡kotlin:S1192Ş"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8Óèªìâ1
+zkotlin:S1186 "ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8Ûèªìâ1
+fkotlin:S6510˜"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8Üèªìâ1

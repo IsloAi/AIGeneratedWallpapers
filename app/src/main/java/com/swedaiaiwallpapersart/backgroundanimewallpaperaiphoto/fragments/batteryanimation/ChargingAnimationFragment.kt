@@ -16,7 +16,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ChargingAnimationAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -43,8 +45,10 @@ class ChargingAnimationFragment : Fragment() {
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
+    val chargingAnimationViewmodel:ChargingAnimationViewmodel by activityViewModels()
+
     private lateinit var myActivity : MainActivity
-    var adapter: LiveWallpaperAdapter?= null
+    var adapter: ChargingAnimationAdapter?= null
 
     val TAG = "ChargingAnimation"
 
@@ -76,9 +80,11 @@ class ChargingAnimationFragment : Fragment() {
 
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        myViewModel.liveWallsFromDB.observe(viewLifecycleOwner){result->
+        chargingAnimationViewmodel.chargingAnimList.observe(viewLifecycleOwner){result->
             when(result){
                 is Response.Success -> {
+
+                    Log.e(TAG, "ChargingAnimation: "+result.data )
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data?.let { addNullValueInsideArray(it) }
 
@@ -86,6 +92,8 @@ class ChargingAnimationFragment : Fragment() {
                             list?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
+
+
                     }
                 }
 
@@ -121,8 +129,8 @@ class ChargingAnimationFragment : Fragment() {
 
     private fun updateUIWithFetchedData() {
 
-        val list = ArrayList<LiveWallpaperModel?>()
-        adapter = LiveWallpaperAdapter(list, object :
+        val list = ArrayList<ChargingAnimModel?>()
+        adapter = ChargingAnimationAdapter(list, object :
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
                 val newPosition = position + 1
@@ -202,7 +210,7 @@ class ChargingAnimationFragment : Fragment() {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-    private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?>{
+    private suspend fun addNullValueInsideArray(data: List<ChargingAnimModel?>): ArrayList<ChargingAnimModel?>{
 
         return withContext(Dispatchers.IO){
             val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
@@ -210,7 +218,7 @@ class ChargingAnimationFragment : Fragment() {
 
             val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
-            val newData = arrayListOf<LiveWallpaperModel?>()
+            val newData = arrayListOf<ChargingAnimModel?>()
 
             for (i in data.indices){
                 if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {

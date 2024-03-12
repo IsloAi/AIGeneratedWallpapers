@@ -1,0 +1,15 @@
+
+Bkotlin:S125z"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8“ó¹Šã1
+<kotlin:S6310™"Avoid hardcoded dispatchers.(©ÒÕò8—ó¹Šã1
+<kotlin:S6310³"Avoid hardcoded dispatchers.(ÏÃâ8˜ó¹Šã1
+;kotlin:S6310¨"Avoid hardcoded dispatchers.(©ÓœW8˜ó¹Šã1
+<kotlin:S6310°"Avoid hardcoded dispatchers.(Í¡·Þ8˜ó¹Šã1
+;kotlin:S6310Ï"Avoid hardcoded dispatchers.(©ÓœW8˜ó¹Šã1
+<kotlin:S6310à"Avoid hardcoded dispatchers.(Í¡·Þ8™ó¹Šã1
+Hkotlin:S108È")Either remove or fill this block of code.(·Úøš8¡ó¹Šã1
+Gkotlin:S108í")Either remove or fill this block of code.(›Ñû08¢ó¹Šã1
+Mkotlin:S108ñ")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8ªÆµŠã1
+pkotlin:S1192¿"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñþÿÿÿÿ8¯ó¹Šã1
+‡kotlin:S1192¿"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñþÿÿÿÿ8¯ó¹Šã1
+zkotlin:S1186…"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8¸ó¹Šã1
+fkotlin:S6510ù"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8¹ó¹Šã1

@@ -29,6 +29,8 @@ import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -55,6 +57,10 @@ class CategoryFragment : Fragment() {
 
 
     val catListViewmodel: MyViewModel by activityViewModels()
+
+    private var adapter: ApicategoriesListHorizontalAdapter? = null
+
+    var isNavigationInProgress = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
         _binding = FragmentCategoryBinding.inflate(inflater,container,false)
@@ -73,6 +79,7 @@ class CategoryFragment : Fragment() {
         binding.progressBar.visibility = VISIBLE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
 
+        updateUIWithFetchedData()
         binding.progressBar.visibility = View.GONE
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(),3)
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
@@ -126,6 +133,64 @@ class CategoryFragment : Fragment() {
         }
     }
 
+
+    private fun updateUIWithFetchedData() {
+
+        val list = ArrayList<CatResponse?>()
+
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+        list.add(CatResponse(0,null,null,null,null,null,null,null,null,null,null,null))
+
+        adapter =
+            ApicategoriesListHorizontalAdapter(list, object :
+                PositionCallback {
+                override fun getPosition(position: Int) {
+                    if (!isNavigationInProgress){
+                        isNavigationInProgress = true
+                        val allItems = adapter?.getAllItems()
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "mainscr_trending_tab_click_item",
+                            "mainscr_trending_tab_click_item",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
+
+                                    if (isAdded){
+//                                        navigateToDestination(allItems!!, position)
+                                    }
+                                    //do something
+                                }
+
+                                override fun onAdsDismiss() {
+                                    if (isAdded){
+//                                        navigateToDestination(allItems!!, position)
+                                    }
+                                }
+                            }
+                        )
+                    }
+
+
+
+                }
+
+                override fun getFavorites(position: Int) {
+                    //
+                }
+            }, myActivity)
+
+        binding.recyclerviewTrending.adapter = adapter
+    }
 
     fun sortWallpaperCategories(categories: List<CatNameResponse>, order: List<String>): List<CatNameResponse> {
         // Create a map to store the order of categories based on their names

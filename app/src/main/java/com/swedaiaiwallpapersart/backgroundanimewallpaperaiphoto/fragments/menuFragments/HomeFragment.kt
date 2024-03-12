@@ -30,6 +30,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -46,7 +47,7 @@ import kotlinx.coroutines.withContext
 class HomeFragment : Fragment(){
     private var _binding: FragmentHomeBinding?=null
     private val binding get() = _binding!!
-    private  val myViewModel: MyHomeViewModel by activityViewModels()
+//    private  val myViewModel: MyHomeViewModel by activityViewModels()
     private var navController: NavController? = null
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private lateinit var myActivity : MainActivity
@@ -66,6 +67,8 @@ class HomeFragment : Fragment(){
 
     var startIndex = 0
     var oldPosition = 0
+
+    val myViewModel: MyViewModel by activityViewModels()
 
     var isNavigationInProgress = false
 
@@ -164,9 +167,9 @@ class HomeFragment : Fragment(){
 
     private fun loadData() {
 
-        myViewModel.getAllTrendingWallpapers()
+        myViewModel.getAllCreations("Car")
 
-        myViewModel.trendingWallpapers.observe(viewLifecycleOwner){result ->
+        myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->
             when (result) {
                 is Response.Loading -> {
 

@@ -45,6 +45,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -95,7 +96,8 @@ class HomeTabsFragment : Fragment() {
         "Category" to R.drawable.tab_icon_categories,
         "Gen AI" to R.drawable.tab_icon_generate,
         "Charging" to R.drawable.battery_tab,
-        "Car" to R.drawable.car_tab
+        "Car" to R.drawable.car_tab,
+        "4K" to R.drawable.car_tab
 
     )
 
@@ -126,7 +128,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         if (AdConfig.tabPositions.size == 0){
-            AdConfig.tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "Car","Trending", "Charging", "Gen AI")
+            AdConfig.tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "Car", "Charging", "Gen AI")
         }
             loadbannerAd()
             setGradienttext()
@@ -323,6 +325,8 @@ class HomeTabsFragment : Fragment() {
     fun initTabs(){
 
         val images = generateImagesArray(AdConfig.tabPositions)
+        AdConfig.tabPositions = AdConfig.tabPositions.map { if (it == "4K") "Car" else it }.toTypedArray()
+
 
 
         val titles = arrayOf(getString(R.string.popular),getString(R.string.trending),
@@ -360,20 +364,6 @@ class HomeTabsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 viewModel.setData(true)
                 updateTabAppearance(tab!!,true)
-
-                tab.let {
-                    if (it.text?.equals("Anime") == true){
-                        Log.e("HOMETABS", "onTabSelected: "+ it.text)
-
-                        viewModel.setTab(it.text.toString())
-                    }
-
-                    if (it.text?.equals("Car") == true){
-                        Log.e("HOMETABS", "onTabSelected: "+ it.text)
-                    }
-
-
-                }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -405,11 +395,12 @@ class HomeTabsFragment : Fragment() {
     fun getFragmentForTab(tabName: String): Fragment {
         return when (tabName.trim()) {
             "Popular" -> PopularWallpaperFragment()
-            "Trending" -> HomeFragment()
+            "Car" -> HomeFragment()
             "Live" -> LiveWallpaperFragment()
-            "Anime" -> ListViewFragment()
+            "Anime" -> AnimeWallpaperFragment()
             "Category" -> CategoryFragment()
             "Gen AI" -> GenerateImageFragment()
+            "Charging" -> ChargingAnimationFragment()
 
             else -> {HomeFragment()}
         }

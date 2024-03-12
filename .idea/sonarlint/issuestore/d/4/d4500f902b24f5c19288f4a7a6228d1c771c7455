@@ -1,0 +1,12 @@
+
+Mkotlin:S1172’"(Remove these unused function parameters.(“„œûÿÿÿÿ8Ú”‚ã1
+=kotlin:S125—"Remove this commented out code.(Ê¬ÿ8ß”‚ã1
+>kotlin:S125Ã"Remove this commented out code.(¾¯§¡8ÅÏ„ã1
+rkotlin:S117’"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(“„œûÿÿÿÿ8¿æıã1
+Akotlin:S6310×"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Áæıã1
+Nkotlin:S1481p"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8Îæıã1
+Okotlin:S1481…"/Remove this unused "adPosition" local variable.(²úÒ8Îæıã1
+Gkotlin:S1874E"#Deprecated code should not be used.(úâç¹ùÿÿÿÿ8Öæıã1
+Hkotlin:S1874â"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8Öæıã1
+Hkotlin:S1874"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8Öæıã1
+Bkotlin:S1874"#Deprecated code should not be used.(àü8Öæıã1

@@ -41,6 +41,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetPromptDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
@@ -92,6 +93,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
     private  val myViewModel: MyHomeViewModel by viewModels()
 
+    private val chargingAnimationViewmodel : ChargingAnimationViewmodel by viewModels()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -118,6 +121,9 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         lifecycleScope.launch {
             liveViewModel.getMostUsed("1","500",deviceID)
         }
+
+
+        chargingAnimationViewmodel.getChargingAnimations()
 
         mainActivityViewModel.getAllModels("1","4000","4890")
 
@@ -575,7 +581,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
                         }
                         //in next update
-                        tabNamesArray += "Trending"
+//                        tabNamesArray += "Trending"
 
                         AdConfig.tabPositions = tabNamesArray
 
@@ -761,7 +767,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         //in next update
 //        tabNamesArray += "Charging Battery"
 
-        tabNamesArray += "Trending"
+//        tabNamesArray += "Trending"
 
 
         AdConfig.tabPositions = tabNamesArray

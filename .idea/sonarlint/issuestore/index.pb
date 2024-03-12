@@ -225,3 +225,15 @@ kapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ser
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/SignUpFragment.kt,7\f\7f390740415b32dfb75b99da7c6b9c7879813460
 é
 ^app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/MyDialogs.kt,6\6\6693e31d6b543b2adaf135b27ee65ad523af1965
+ü
+oapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/AnimeWallpaperFragment.kt,7\2\7264b742584c93e643232c4304d6ab22bc96f5cb
+≤
+Åapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/model/response/ResponseModelChargingAnimation.kt,6\a\6a33771fc30b2ef8609f03f23401db9b6a80e509
+§
+tapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/data/model/response/ChargingAnimModel.kt,b\2\b25070d3722a97d010c2591de113cbd7fa29cfe6
+´
+{app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetChargingAnimRemoteUseCase.kt,4\c\4c6ea0e65767138231f06997809a3a8f94c75d28
+µ
+Ñapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/batteryanimation/ChargingAnimationViewmodel.kt,2\2\22ad3dfb5e3c159bfb53be60f6998ec9eae371b1
+†
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/adapters/ChargingAnimationAdapter.kt,d\4\d4500f902b24f5c19288f4a7a6228d1c771c7455
