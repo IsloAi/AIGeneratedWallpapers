@@ -50,7 +50,7 @@ interface EndPointsInterface {
         @Query("record") record:String
     ):retrofit2.Response<ResponseModelListMostDownloaded>
 
-    @GET("getLiked_Wallpaper.php")
+    @GET("getLiveWallpaper.php")
     suspend fun getLiveWallpapers(
         @Query("page") page:String,
         @Query("record") record:String,

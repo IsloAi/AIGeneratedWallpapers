@@ -1,12 +1,13 @@
 
-Zkotlin:S1172‚"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8“”›æá1
-Zkotlin:S1172«"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8“”›æá1
-Wkotlin:S1172Å"2Use "_" instead of these unused lambda parameters.(ðù¼Ôûÿÿÿÿ8“”›æá1
-akotlin:S899Ý"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êþÿÿÿÿ8•”›æá1
-Bkotlin:S125o"Remove this commented out code.(ó’´Âûÿÿÿÿ8ýªãæá1
-=kotlin:S125ª"Remove this commented out code.(§íËf8›”›æá1
-<kotlin:S6310ã"Avoid hardcoded dispatchers.(á¥ €8ïÇ€çá1
-tkotlin:S6306ã"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(á¥ €8…•€çá1
-qkotlin:S1192²"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(™ù£êøÿÿÿÿ8Æ”›æá1
-rkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 39 to the 15 allowed.(ñàõà8Ê”›æá1
-Mkotlin:S1066‡".Merge this "if" statement with the nested one.(€¡ê8Ñ”›æá1
+Zkotlin:S1172Š"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ùÝã1
+Zkotlin:S1172³"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ŽùÝã1
+Wkotlin:S1172Í"2Use "_" instead of these unused lambda parameters.(ðù¼Ôûÿÿÿÿ8ŽùÝã1
+akotlin:S899å"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êþÿÿÿÿ8ùÝã1
+Bkotlin:S125o"Remove this commented out code.(ó’´Âûÿÿÿÿ8–ùÝã1
+=kotlin:S125²"Remove this commented out code.(§íËf8–ùÝã1
+Ckotlin:S125Ï"Remove this commented out code.(ð½¬öýÿÿÿÿ8—ùÝã1
+<kotlin:S6310ë"Avoid hardcoded dispatchers.(á¥ €8¡ùÝã1
+tkotlin:S6306ë"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(á¥ €8´ùÝã1
+qkotlin:S1192º"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(™ù£êøÿÿÿÿ8ÈùÝã1
+rkotlin:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from 41 to the 15 allowed.(ñàõà8ÌùÝã1
+Mkotlin:S1066".Merge this "if" statement with the nested one.(€¡ê8ÓùÝã1

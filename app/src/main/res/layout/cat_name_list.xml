@@ -54,7 +54,18 @@
                     android:fontFamily="@font/poppins_semibold"
                     android:background="@drawable/category_name_bg"
                     />
+
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/video_icon"
+                android:id="@+id/live"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

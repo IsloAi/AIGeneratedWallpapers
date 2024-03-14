@@ -14,7 +14,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameR
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 
-@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class,LiveWallpaperModel::class], version = 9)
+@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class,LiveWallpaperModel::class], version = 10)
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getResponseIGDao(): GetResponseIGDao

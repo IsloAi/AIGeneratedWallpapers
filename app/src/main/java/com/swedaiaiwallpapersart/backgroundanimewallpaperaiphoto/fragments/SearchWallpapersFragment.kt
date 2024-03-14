@@ -408,7 +408,7 @@ class SearchWallpapersFragment : Fragment() {
                 )
 
             }
-        },myActivity)
+        },myActivity,"")
         binding.recyclerviewCatgory.adapter = adapter
     }
 

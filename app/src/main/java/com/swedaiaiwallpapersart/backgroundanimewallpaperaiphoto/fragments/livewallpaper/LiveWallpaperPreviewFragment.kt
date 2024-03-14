@@ -130,9 +130,11 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 livewallpaper = wallpaper[0]
 
                 if (livewallpaper?.liked == true) {
+                    Log.e("TAG", "initObservers: liked" + livewallpaper?.liked)
                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
                 } else {
                     binding.setLiked.setImageResource(R.drawable.button_like)
+                    Log.e("TAG", "initObservers: unliked" + livewallpaper?.liked)
                 }
             }
         }
@@ -204,6 +206,12 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack(R.id.homeTabsFragment, false)
+        }
+
+        if (livewallpaper?.liked == true) {
+            binding.setLiked.setImageResource(R.drawable.button_like)
+        } else {
+            binding.setLiked.setImageResource(R.drawable.button_like_selected)
         }
 
         binding.setLiked.setOnClickListener {
@@ -579,13 +587,14 @@ class LiveWallpaperPreviewFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val message = response.body()?.string()
-                    if (message == "Liked") {
-//                        livewallpaper.id = true
-                        favouriteButton.setImageResource(R.drawable.button_like_selected)
-                    } else {
-                        favouriteButton.setImageResource(R.drawable.button_like)
-//                        arrayList[position]?.liked = false
-                    }
+                    Log.e("TAG", "onResponse: $message")
+//                    if (message == "Liked") {
+////                        livewallpaper.id = true
+//                        favouriteButton.setImageResource(R.drawable.button_like_selected)
+//                    } else {
+//                        favouriteButton.setImageResource(R.drawable.button_like)
+////                        arrayList[position]?.liked = false
+//                    }
                     favouriteButton.isEnabled = true
                 } else {
                     favouriteButton.isEnabled = true

@@ -126,15 +126,20 @@ class HomeTabsFragment : Fragment() {
                 binding.goPremium.visibility = View.VISIBLE
             }
         }
-
-        if (AdConfig.tabPositions.size == 0){
+        Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions.contentToString() )
+        if (AdConfig.tabPositions[0].isEmpty()){
+            Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions )
             AdConfig.tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "Car", "Charging", "Gen AI")
+            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
+        }else{
+            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
         }
-            loadbannerAd()
-            setGradienttext()
-            setViewPager()
-            initTabs()
-            setEvents()
+
+        loadbannerAd()
+        setGradienttext()
+        setViewPager()
+        initTabs()
+        setEvents()
         lifecycleScope.launch {
             SDKBaseController.getInstance().checkUpdateApp(object: SDKNewVersionUpdateCallback {
                 override fun onUpdateAvailable(updateDto: UpdateAppDto?) {

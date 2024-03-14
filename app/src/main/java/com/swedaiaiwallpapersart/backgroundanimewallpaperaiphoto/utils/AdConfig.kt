@@ -20,7 +20,7 @@ object AdConfig {
 
     var showOnboarding = true
 
-    var inAppConfig = false
+    var inAppConfig = true
 
     var tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "4K", "Charging", "Gen AI")
 
@@ -28,7 +28,7 @@ object AdConfig {
 
 
 
-    val BASE_URL = "https://vps.edecator.com/wallpaper_App/V1/"
+    val BASE_URL = "https://vps.edecator.com/wallpaper_App/V2/"
 
     val HD_ImageUrl = "https://edecator.com/wallpaperApp/images/"
     val Compressed_Image_url = "https://edecator.com/wallpaperApp/compress/"

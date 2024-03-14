@@ -11,6 +11,8 @@ data class LiveWallpaperModel(
     val thumnail_url:String,
     val videoSize:Float,
     var liked:Boolean,
-    val download:Int,
+    val downloads:Int,
+    var catname:String ?=  null,
+    var likes:Int,
     var unlocked:Boolean = true
 )

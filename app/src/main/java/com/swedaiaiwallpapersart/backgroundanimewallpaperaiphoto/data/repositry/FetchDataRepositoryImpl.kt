@@ -90,4 +90,22 @@ class FetchDataRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
+    override fun getLiveWallpaperbyCategory(cat: String): Flow<Response<List<LiveWallpaperModel>>> = channelFlow {
+        try {
+            trySend(Response.Loading)
+
+            val creations= appDatabase.liveWallpaperDao().getCatgoriesWallpapers(cat)
+            if (creations.isNotEmpty()){
+                trySend(Response.Success(creations))
+            }else{
+                trySend(Response.Error("No Data found"))
+            }
+
+        }
+        catch (e:Exception){
+            trySend(Response.Error("Unexpected error ${e.message}"))
+        }
+        awaitClose()
+    }
 }

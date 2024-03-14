@@ -16,5 +16,7 @@ interface FetchDataRepository {
 
     fun fetechLiveWallpapers():Flow<Response<List<LiveWallpaperModel>>>
 
+    fun getLiveWallpaperbyCategory(cat: String):Flow<Response<List<LiveWallpaperModel>>>
+
 
 }

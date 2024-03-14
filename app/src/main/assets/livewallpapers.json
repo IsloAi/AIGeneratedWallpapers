@@ -1,1124 +1,1904 @@
 {
   "images": [
     {
+      "id": 262,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_50.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2938.png",
+      "videoSize": 10,
+      "downloads": 15,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 261,
+      "catname": "Nature",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_49.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5990.png",
+      "videoSize": 5,
+      "downloads": 10,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 260,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_48.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2081.png",
+      "videoSize": 2,
+      "downloads": 16,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 259,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_47.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6304.png",
+      "videoSize": 4,
+      "downloads": 4,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 258,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_46.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8725.png",
+      "videoSize": 9,
+      "downloads": 9,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 257,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_45.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1691.png",
+      "videoSize": 5,
+      "downloads": 5,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 256,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_44.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3979.png",
+      "videoSize": 8,
+      "downloads": 7,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 255,
+      "catname": "Love",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_43.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8616.png",
+      "videoSize": 2,
+      "downloads": 5,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 254,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_42.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3619.png",
+      "videoSize": 3,
+      "downloads": 9,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 253,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_41.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5524.png",
+      "videoSize": 5,
+      "downloads": 46,
+      "likes": 4,
+      "liked": false
+    },
+    {
+      "id": 252,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_40.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5955.png",
+      "videoSize": 4,
+      "downloads": 4,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 251,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_39.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7201.png",
+      "videoSize": 9,
+      "downloads": 3,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 250,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_38.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6006.png",
+      "videoSize": 4,
+      "downloads": 12,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 249,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_37.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3091.png",
+      "videoSize": 3,
+      "downloads": 5,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 248,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_36.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3773.png",
+      "videoSize": 12,
+      "downloads": 3,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 247,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_35.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7626.png",
+      "videoSize": 6,
+      "downloads": 73,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 245,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_33.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1756.png",
+      "videoSize": 8,
+      "downloads": 121,
+      "likes": 12,
+      "liked": false
+    },
+    {
+      "id": 244,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_32.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2911.png",
+      "videoSize": 5,
+      "downloads": 11,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 243,
+      "catname": "Nature",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_31.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5093.png",
+      "videoSize": 11,
+      "downloads": 8,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 242,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_30.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4713.png",
+      "videoSize": 9,
+      "downloads": 19,
+      "likes": 3,
+      "liked": false
+    },
+    {
+      "id": 241,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_29.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5874.png",
+      "videoSize": 6,
+      "downloads": 3,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 240,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_28.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-311.png",
+      "videoSize": 7,
+      "downloads": 42,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 239,
+      "catname": "Love",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_27.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5895.png",
+      "videoSize": 7,
+      "downloads": 9,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 238,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_26.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-9316.png",
+      "videoSize": 8,
+      "downloads": 17,
+      "likes": 3,
+      "liked": false
+    },
+    {
+      "id": 237,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_25.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4643.png",
+      "videoSize": 19,
+      "downloads": 7,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 236,
+      "catname": "Anime",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_24.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7520.png",
+      "videoSize": 1,
+      "downloads": 4,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 235,
+      "catname": "Anime",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_23.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3237.png",
+      "videoSize": 1,
+      "downloads": 9,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 234,
+      "catname": "Anime",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_22.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8633.png",
+      "videoSize": 1,
+      "downloads": 10,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 233,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_21.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6764.png",
+      "videoSize": 5,
+      "downloads": 3,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 232,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_20.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8656.png",
+      "videoSize": 2,
+      "downloads": 25,
+      "likes": 3,
+      "liked": false
+    },
+    {
+      "id": 231,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_19.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-175.png",
+      "videoSize": 7,
+      "downloads": 12,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 230,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_18.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1503.png",
+      "videoSize": 5,
+      "downloads": 2,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 229,
+      "catname": "Dragon Ball Z",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_17.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6345.png",
+      "videoSize": 8,
+      "downloads": 10,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 228,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_16.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6194.png",
+      "videoSize": 13,
+      "downloads": 17,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 227,
+      "catname": "Love",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_15.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4220.png",
+      "videoSize": 4,
+      "downloads": 18,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 226,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_14.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-210.png",
+      "videoSize": 11,
+      "downloads": 3,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 225,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_13.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2276.png",
+      "videoSize": 5,
+      "downloads": 0,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 224,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_12.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-150.png",
+      "videoSize": 3,
+      "downloads": 5,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 223,
+      "catname": "Cars",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_11.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4158.png",
+      "videoSize": 10,
+      "downloads": 2,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 222,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_10.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3697.png",
+      "videoSize": 4,
+      "downloads": 4,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 221,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_09.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4186.png",
+      "videoSize": 9,
+      "downloads": 4,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 220,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_08.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-140.png",
+      "videoSize": 4,
+      "downloads": 9,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 219,
+      "catname": "Robotic",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_07.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8916.png",
+      "videoSize": 3,
+      "downloads": 13,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 218,
+      "catname": "Robotic",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_06.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2894.png",
+      "videoSize": 2,
+      "downloads": 32,
+      "likes": 3,
+      "liked": false
+    },
+    {
+      "id": 217,
+      "catname": "Tech",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_05.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-496.png",
+      "videoSize": 1,
+      "downloads": 1,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 216,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_04.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2135.png",
+      "videoSize": 3,
+      "downloads": 36,
+      "likes": 1,
+      "liked": false
+    },
+    {
+      "id": 215,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_03.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8848.png",
+      "videoSize": 5,
+      "downloads": 0,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 214,
+      "catname": "Love",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_Wallpaper_02.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7785.png",
+      "videoSize": 1,
+      "downloads": 40,
+      "likes": 3,
+      "liked": false
+    },
+    {
+      "id": 213,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live_wallpaper_01.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2734.png",
+      "videoSize": 1,
+      "downloads": 6,
+      "likes": 0,
+      "liked": false
+    },
+    {
+      "id": 212,
+      "catname": "Space",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7318745092234218757 (1).mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8114.png",
+      "videoSize": 6,
+      "downloads": 13,
+      "likes": 2,
+      "liked": false
+    },
+    {
+      "id": 211,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7341560706216561926.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-452.png",
+      "videoSize": 3,
+      "downloads": 81,
+      "likes": 7,
+      "liked": false
+    },
+    {
+      "id": 210,
+      "catname": "Heteroclite",
+      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/animation 1.mp4",
+      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6554.png",
+      "videoSize": 1,
+      "downloads": 291,
+      "likes": 34,
+      "liked": false
+    },
+    {
       "id": 209,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 10-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 10.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 435
+      "videoSize": 6,
+      "downloads": 440,
+      "likes": 114,
+      "liked": false
     },
     {
       "id": 208,
+      "catname": "Cars",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Car 2-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Car 2.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 377
+      "videoSize": 6,
+      "downloads": 460,
+      "likes": 92,
+      "liked": false
     },
     {
       "id": 207,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 7-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation 7.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 120
+      "videoSize": 6,
+      "downloads": 235,
+      "likes": 37,
+      "liked": false
     },
     {
       "id": 206,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 6-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation 6.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 270
+      "downloads": 317,
+      "likes": 83,
+      "liked": false
     },
     {
       "id": 205,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Roronoa Zoro 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Roronoa Zoro.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 474
+      "videoSize": 5,
+      "downloads": 463,
+      "likes": 286,
+      "liked": false
     },
     {
       "id": 204,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 5-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation 5.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 136
+      "videoSize": 5,
+      "downloads": 192,
+      "likes": 32,
+      "liked": false
     },
     {
       "id": 203,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 9-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 9.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 158
+      "videoSize": 6,
+      "downloads": 162,
+      "likes": 34,
+      "liked": false
     },
     {
       "id": 202,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 8-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 8.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 213
+      "videoSize": 5,
+      "downloads": 272,
+      "likes": 74,
+      "liked": false
     },
     {
       "id": 201,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 4-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation 4.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 141
+      "videoSize": 6,
+      "downloads": 166,
+      "likes": 22,
+      "liked": false
     },
     {
       "id": 200,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 3-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation 3.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 154
+      "videoSize": 6,
+      "downloads": 232,
+      "likes": 24,
+      "liked": false
     },
     {
       "id": 199,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Skull 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Skull.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 181
+      "videoSize": 6,
+      "downloads": 240,
+      "likes": 26,
+      "liked": false
     },
     {
       "id": 198,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 6-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 6.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 232
+      "videoSize": 5,
+      "downloads": 305,
+      "likes": 44,
+      "liked": false
     },
     {
       "id": 197,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 5-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 5.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 396
+      "videoSize": 5,
+      "downloads": 318,
+      "likes": 105,
+      "liked": false
     },
     {
       "id": 196,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 4-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 4.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 326
+      "videoSize": 5,
+      "downloads": 267,
+      "likes": 34,
+      "liked": false
     },
     {
       "id": 195,
+      "catname": "Tech",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Gamer 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Gamer.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 321
+      "videoSize": 5,
+      "downloads": 319,
+      "likes": 49,
+      "liked": false
     },
     {
       "id": 194,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 2-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation 2.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 205
-    },
-    {
-      "id": 193,
-      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Animation 1.mp4",
-      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Animation.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 185
+      "videoSize": 5,
+      "downloads": 266,
+      "likes": 36,
+      "liked": false
     },
     {
       "id": 192,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Sunset 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Sunset.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 323
+      "videoSize": 7,
+      "downloads": 314,
+      "likes": 46,
+      "liked": false
     },
     {
       "id": 191,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/King 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/King.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 466
+      "videoSize": 5,
+      "downloads": 396,
+      "likes": 49,
+      "liked": false
     },
     {
       "id": 190,
+      "catname": "Tech",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Tech 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Tech.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 192
+      "videoSize": 6,
+      "downloads": 244,
+      "likes": 21,
+      "liked": false
     },
     {
       "id": 189,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Naruto 1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Naruto 1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1180
+      "videoSize": 6,
+      "downloads": 804,
+      "likes": 355,
+      "liked": false
     },
     {
       "id": 188,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 2-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 2.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 248
+      "videoSize": 5,
+      "downloads": 237,
+      "likes": 41,
+      "liked": false
     },
     {
       "id": 187,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Black and Green 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Black and Green.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 610
+      "videoSize": 5,
+      "downloads": 467,
+      "likes": 78,
+      "liked": false
     },
     {
       "id": 186,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime 1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime 1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 148
+      "videoSize": 5,
+      "downloads": 151,
+      "likes": 23,
+      "liked": false
     },
     {
       "id": 185,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Warrior 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Warrior.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 111
+      "videoSize": 5,
+      "downloads": 141,
+      "likes": 20,
+      "liked": false
     },
     {
       "id": 184,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Goku 1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Goku  1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 412
+      "videoSize": 6,
+      "downloads": 405,
+      "likes": 58,
+      "liked": false
     },
     {
       "id": 183,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Goku - 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Goku.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 288
+      "videoSize": 6,
+      "downloads": 314,
+      "likes": 33,
+      "liked": false
     },
     {
       "id": 182,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Anime - 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Anime.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 135
+      "videoSize": 6,
+      "downloads": 130,
+      "likes": 15,
+      "liked": false
     },
     {
       "id": 181,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Naruto - 1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Naruto.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 723
-    },
-    {
-      "id": 180,
-      "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Monkey D-Luffy 1.mp4",
-      "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Monkey D-Luffy.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1004
+      "videoSize": 5,
+      "downloads": 496,
+      "likes": 172,
+      "liked": false
     },
     {
       "id": 177,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7290930208889130272.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4582.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 17601
+      "videoSize": 3,
+      "downloads": 17647,
+      "likes": 10307,
+      "liked": false
     },
     {
       "id": 176,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7323956257138773281.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2850.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2048
+      "videoSize": 6,
+      "downloads": 2036,
+      "likes": 2613,
+      "liked": false
     },
     {
       "id": 175,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7326264144037023008.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1287.png",
       "videoSize": 4,
-      "liked": false,
-      "download": 1563
+      "downloads": 1461,
+      "likes": 1183,
+      "liked": false
     },
     {
       "id": 173,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7283039514564627718.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5095.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1531
+      "videoSize": 1,
+      "downloads": 1484,
+      "likes": 826,
+      "liked": false
     },
     {
       "id": 172,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7241101835195419909.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-6925.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 9566
+      "videoSize": 2,
+      "downloads": 9693,
+      "likes": 5813,
+      "liked": false
     },
     {
       "id": 171,
+      "catname": "Love",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7070466034477632794.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3778.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2054
+      "videoSize": 1,
+      "downloads": 2058,
+      "likes": 3507,
+      "liked": false
     },
     {
       "id": 170,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7016152190117055770.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7717.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1217
+      "videoSize": 2,
+      "downloads": 1191,
+      "likes": 880,
+      "liked": false
     },
     {
       "id": 169,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_6873606895698005250.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1992.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1819
+      "videoSize": 1,
+      "downloads": 1823,
+      "likes": 868,
+      "liked": false
     },
     {
       "id": 168,
+      "catname": "Love",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_6881286627239677186.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2040.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2922
+      "videoSize": 1,
+      "downloads": 2947,
+      "likes": 1700,
+      "liked": false
     },
     {
       "id": 167,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7252246473172077830 (1).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7965.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 5080
+      "videoSize": 1,
+      "downloads": 5129,
+      "likes": 2709,
+      "liked": false
     },
     {
       "id": 166,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7231292282899631387.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3813.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2892
+      "videoSize": 2,
+      "downloads": 2907,
+      "likes": 1402,
+      "liked": false
     },
     {
       "id": 165,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7231344381461007643.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1855.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 704
+      "videoSize": 1,
+      "downloads": 696,
+      "likes": 409,
+      "liked": false
     },
     {
       "id": 164,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7257473040164965658.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1749.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1672
+      "videoSize": 1,
+      "downloads": 1667,
+      "likes": 1173,
+      "liked": false
     },
     {
       "id": 163,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7322599959503686944.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7986.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 3914
+      "videoSize": 3,
+      "downloads": 3910,
+      "likes": 2791,
+      "liked": false
     },
     {
       "id": 162,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7039204794816269594.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5662.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 984
+      "videoSize": 1,
+      "downloads": 953,
+      "likes": 451,
+      "liked": false
     },
     {
       "id": 161,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7012824254727114010.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-7432.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 704
+      "videoSize": 1,
+      "downloads": 652,
+      "likes": 327,
+      "liked": false
     },
     {
       "id": 160,
+      "catname": "Cars",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7012414316326423835.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5240.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 3584
+      "videoSize": 2,
+      "downloads": 3632,
+      "likes": 2303,
+      "liked": false
     },
     {
       "id": 159,
+      "catname": "Tech",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7011301803237199130.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-2791.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 674
+      "videoSize": 3,
+      "downloads": 638,
+      "likes": 267,
+      "liked": false
     },
     {
       "id": 158,
+      "catname": "Tech",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_6972359217265118465.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-3934.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1170
+      "videoSize": 1,
+      "downloads": 1122,
+      "likes": 735,
+      "liked": false
     },
     {
       "id": 157,
+      "catname": "Tech",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7025102275534245147.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-9464.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1520
+      "videoSize": 1,
+      "downloads": 1413,
+      "likes": 707,
+      "liked": false
     },
     {
       "id": 156,
+      "catname": "Cars",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7057049017649319195.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-8401.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2660
+      "videoSize": 1,
+      "downloads": 2703,
+      "likes": 1933,
+      "liked": false
     },
     {
       "id": 155,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7275890014750248197.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1612.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 3850
+      "videoSize": 1,
+      "downloads": 3876,
+      "likes": 1057,
+      "liked": false
     },
     {
       "id": 154,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7277588306987191558.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-1758.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1077
+      "videoSize": 3,
+      "downloads": 1038,
+      "likes": 421,
+      "liked": false
     },
     {
       "id": 153,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7323718808395451653 (1).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-9426.png",
       "videoSize": 4,
-      "liked": false,
-      "download": 2302
+      "downloads": 2320,
+      "likes": 1002,
+      "liked": false
     },
     {
       "id": 152,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7318762286674382086.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-5841.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1350
+      "videoSize": 2,
+      "downloads": 1288,
+      "likes": 700,
+      "liked": false
     },
     {
       "id": 151,
+      "catname": "Tech",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Snaptik.app_7330094413852527877.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/video-capture-4561.png",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1607
+      "videoSize": 1,
+      "downloads": 1505,
+      "likes": 934,
+      "liked": false
     },
     {
       "id": 150,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/53.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/53-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1902
+      "videoSize": 3,
+      "downloads": 1908,
+      "likes": 3953,
+      "liked": false
     },
     {
       "id": 149,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/49.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/49-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1600
+      "videoSize": 2,
+      "downloads": 1494,
+      "likes": 1568,
+      "liked": false
     },
     {
       "id": 148,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/47.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/47.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 3959
+      "videoSize": 3,
+      "downloads": 3968,
+      "likes": 3021,
+      "liked": false
     },
     {
       "id": 147,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/42.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/42-1.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1957
+      "downloads": 1931,
+      "likes": 2069,
+      "liked": false
     },
     {
       "id": 146,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/25.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/25-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2974
+      "videoSize": 3,
+      "downloads": 2963,
+      "likes": 2970,
+      "liked": false
     },
     {
       "id": 145,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/24.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/24-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1614
+      "videoSize": 2,
+      "downloads": 1657,
+      "likes": 1551,
+      "liked": false
     },
     {
       "id": 144,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/22.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/22-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1605
+      "videoSize": 1,
+      "downloads": 1626,
+      "likes": 1590,
+      "liked": false
     },
     {
       "id": 143,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/12.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/12-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1418
+      "videoSize": 1,
+      "downloads": 1206,
+      "likes": 1036,
+      "liked": false
     },
     {
       "id": 142,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/11.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/11-1.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1723
+      "downloads": 1731,
+      "likes": 2056,
+      "liked": false
     },
     {
       "id": 141,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/10.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/10-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1780
+      "videoSize": 3,
+      "downloads": 1792,
+      "likes": 1808,
+      "liked": false
     },
     {
       "id": 140,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/9.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/9-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2570
+      "videoSize": 2,
+      "downloads": 2551,
+      "likes": 2149,
+      "liked": false
     },
     {
       "id": 139,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/6-1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/6-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 962
+      "videoSize": 5,
+      "downloads": 902,
+      "likes": 509,
+      "liked": false
     },
     {
       "id": 138,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/3.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/3-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1125
+      "videoSize": 3,
+      "downloads": 1025,
+      "likes": 651,
+      "liked": false
     },
     {
       "id": 137,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/206-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/206.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1341
+      "downloads": 1165,
+      "likes": 707,
+      "liked": false
     },
     {
       "id": 136,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/204-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/204.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1609
+      "downloads": 1576,
+      "likes": 1247,
+      "liked": false
     },
     {
       "id": 135,
+      "catname": "Space",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/200-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/200.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1082
+      "videoSize": 6,
+      "downloads": 988,
+      "likes": 584,
+      "liked": false
     },
     {
       "id": 134,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/191-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/191.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 861
+      "videoSize": 5,
+      "downloads": 830,
+      "likes": 716,
+      "liked": false
     },
     {
       "id": 133,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/187-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/187.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1004
+      "downloads": 954,
+      "likes": 741,
+      "liked": false
     },
     {
       "id": 132,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/182.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/182.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2991
+      "videoSize": 2,
+      "downloads": 2883,
+      "likes": 1863,
+      "liked": false
     },
     {
       "id": 131,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/181.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/181.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2618
+      "videoSize": 3,
+      "downloads": 2638,
+      "likes": 1738,
+      "liked": false
     },
     {
       "id": 130,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/176.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/176.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 845
+      "videoSize": 3,
+      "downloads": 787,
+      "likes": 406,
+      "liked": false
     },
     {
       "id": 129,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/175.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/175.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1543
+      "videoSize": 5,
+      "downloads": 1394,
+      "likes": 1097,
+      "liked": false
     },
     {
       "id": 128,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/174-1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/174.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 2136
+      "downloads": 2125,
+      "likes": 831,
+      "liked": false
     },
     {
       "id": 127,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/171.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/171.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2128
+      "videoSize": 2,
+      "downloads": 2090,
+      "likes": 1111,
+      "liked": false
     },
     {
       "id": 126,
+      "catname": "Cars",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/167.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/167.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 809
+      "videoSize": 1,
+      "downloads": 746,
+      "likes": 367,
+      "liked": false
     },
     {
       "id": 125,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/155.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/3.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 688
+      "videoSize": 2,
+      "downloads": 642,
+      "likes": 382,
+      "liked": false
     },
     {
       "id": 124,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/148-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/148.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1603
+      "videoSize": 3,
+      "downloads": 1427,
+      "likes": 1256,
+      "liked": false
     },
     {
       "id": 123,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/140-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/140.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1640
+      "videoSize": 5,
+      "downloads": 1663,
+      "likes": 912,
+      "liked": false
     },
     {
       "id": 120,
+      "catname": "Cars",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/115.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/115.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1610
+      "videoSize": 5,
+      "downloads": 1525,
+      "likes": 1129,
+      "liked": false
     },
     {
       "id": 119,
+      "catname": "Cars",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/113-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/113.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2105
+      "videoSize": 5,
+      "downloads": 2141,
+      "likes": 1216,
+      "liked": false
     },
     {
       "id": 118,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/109.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/109.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2864
+      "videoSize": 5,
+      "downloads": 2897,
+      "likes": 1956,
+      "liked": false
     },
     {
       "id": 117,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/106.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/106.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1022
+      "videoSize": 3,
+      "downloads": 955,
+      "likes": 693,
+      "liked": false
     },
     {
       "id": 116,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/3-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/3.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 450
+      "videoSize": 1,
+      "downloads": 419,
+      "likes": 94,
+      "liked": false
     },
     {
       "id": 114,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/1-1.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1570
+      "downloads": 1464,
+      "likes": 863,
+      "liked": false
     },
     {
       "id": 112,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/2-2.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/2.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 500
+      "downloads": 471,
+      "likes": 121,
+      "liked": false
     },
     {
       "id": 111,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/1-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/1.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1005
+      "downloads": 541,
+      "likes": 215,
+      "liked": false
     },
     {
       "id": 108,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/62.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/62-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1606
+      "videoSize": 2,
+      "downloads": 1570,
+      "likes": 1314,
+      "liked": false
     },
     {
       "id": 107,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/61.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/61-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1608
+      "videoSize": 2,
+      "downloads": 1426,
+      "likes": 959,
+      "liked": false
     },
     {
       "id": 106,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/60.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/60-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1175
+      "videoSize": 2,
+      "downloads": 1110,
+      "likes": 675,
+      "liked": false
     },
     {
       "id": 105,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/59.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/59-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2406
+      "videoSize": 3,
+      "downloads": 2376,
+      "likes": 1143,
+      "liked": false
     },
     {
       "id": 104,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/58.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/58-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2715
+      "videoSize": 3,
+      "downloads": 2608,
+      "likes": 1158,
+      "liked": false
     },
     {
       "id": 103,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/57.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/57-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 951
+      "videoSize": 2,
+      "downloads": 835,
+      "likes": 470,
+      "liked": false
     },
     {
       "id": 102,
+      "catname": "Roro",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/56.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/56-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1498
+      "videoSize": 2,
+      "downloads": 1264,
+      "likes": 700,
+      "liked": false
     },
     {
       "id": 101,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/55.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/55.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2566
+      "videoSize": 2,
+      "downloads": 2545,
+      "likes": 1546,
+      "liked": false
     },
     {
       "id": 100,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/54.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/54-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1494
+      "videoSize": 2,
+      "downloads": 1325,
+      "likes": 817,
+      "liked": false
     },
     {
       "id": 98,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/52.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/52.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1606
+      "videoSize": 2,
+      "downloads": 1440,
+      "likes": 1018,
+      "liked": false
     },
     {
       "id": 97,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/51.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/51-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1062
+      "videoSize": 1,
+      "downloads": 970,
+      "likes": 582,
+      "liked": false
     },
     {
       "id": 95,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/48.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/48.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1630
+      "videoSize": 1,
+      "downloads": 1477,
+      "likes": 946,
+      "liked": false
     },
     {
       "id": 93,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/44.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/44-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1500
+      "videoSize": 1,
+      "downloads": 1308,
+      "likes": 1549,
+      "liked": false
     },
     {
       "id": 91,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/39.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/39.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1837
+      "videoSize": 2,
+      "downloads": 1818,
+      "likes": 626,
+      "liked": false
     },
     {
       "id": 90,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/27.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/27-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2005
+      "videoSize": 3,
+      "downloads": 1994,
+      "likes": 816,
+      "liked": false
     },
     {
       "id": 86,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/18.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/18-1.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 1298
+      "downloads": 1188,
+      "likes": 544,
+      "liked": false
     },
     {
       "id": 85,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/15.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/15-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1284
+      "videoSize": 2,
+      "downloads": 1095,
+      "likes": 595,
+      "liked": false
     },
     {
       "id": 83,
+      "catname": "Naruto",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/13.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/13-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2011
+      "videoSize": 2,
+      "downloads": 2080,
+      "likes": 1264,
+      "liked": false
     },
     {
       "id": 78,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/8.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/8-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 2186
+      "videoSize": 1,
+      "downloads": 2182,
+      "likes": 1173,
+      "liked": false
     },
     {
       "id": 77,
+      "catname": "Dragon Ball Z",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/7.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/7-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1611
+      "videoSize": 2,
+      "downloads": 1497,
+      "likes": 1145,
+      "liked": false
     },
     {
       "id": 73,
+      "catname": "Anime",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/2.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/2-1.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 996
+      "videoSize": 3,
+      "downloads": 860,
+      "likes": 512,
+      "liked": false
     },
     {
       "id": 72,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/58-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/58.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1201
+      "videoSize": 2,
+      "downloads": 1132,
+      "likes": 615,
+      "liked": false
     },
     {
       "id": 71,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/57-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/57.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1035
+      "videoSize": 3,
+      "downloads": 972,
+      "likes": 515,
+      "liked": false
     },
     {
       "id": 70,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/56-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/56.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 862
+      "downloads": 814,
+      "likes": 485,
+      "liked": false
     },
     {
       "id": 68,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/54-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/54.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 776
+      "videoSize": 3,
+      "downloads": 760,
+      "likes": 353,
+      "liked": false
     },
     {
       "id": 66,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/51-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/51.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 653
+      "videoSize": 5,
+      "downloads": 630,
+      "likes": 299,
+      "liked": false
     },
     {
       "id": 65,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/46-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/46.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 642
+      "videoSize": 5,
+      "downloads": 623,
+      "likes": 333,
+      "liked": false
     },
     {
       "id": 64,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/41-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/41.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 831
+      "videoSize": 6,
+      "downloads": 863,
+      "likes": 383,
+      "liked": false
     },
     {
       "id": 63,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/40-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/40.jpg",
       "videoSize": 4,
-      "liked": false,
-      "download": 687
+      "downloads": 670,
+      "likes": 267,
+      "liked": false
     },
     {
       "id": 61,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/37-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/37.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 675
+      "videoSize": 1,
+      "downloads": 625,
+      "likes": 288,
+      "liked": false
     },
     {
       "id": 60,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/36-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/36.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 650
+      "videoSize": 2,
+      "downloads": 630,
+      "likes": 291,
+      "liked": false
     },
     {
       "id": 59,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/35-1.mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/35.jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 768
+      "videoSize": 2,
+      "downloads": 711,
+      "likes": 372,
+      "liked": false
     },
     {
       "id": 25,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (16).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (16).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 413
+      "videoSize": 1,
+      "downloads": 391,
+      "likes": 59,
+      "liked": false
     },
     {
       "id": 24,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (15).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (15).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 475
+      "videoSize": 2,
+      "downloads": 457,
+      "likes": 226,
+      "liked": false
     },
     {
       "id": 23,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (14).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (14).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 517
+      "videoSize": 5,
+      "downloads": 491,
+      "likes": 147,
+      "liked": false
     },
     {
       "id": 22,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (13).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (13).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 586
+      "videoSize": 5,
+      "downloads": 578,
+      "likes": 165,
+      "liked": false
     },
     {
       "id": 21,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (12).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (12).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 525
+      "videoSize": 1,
+      "downloads": 483,
+      "likes": 195,
+      "liked": false
     },
     {
       "id": 20,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (11).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (11).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 636
+      "videoSize": 1,
+      "downloads": 631,
+      "likes": 321,
+      "liked": false
     },
     {
       "id": 19,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (10).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (10).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1543
+      "videoSize": 3,
+      "downloads": 1485,
+      "likes": 693,
+      "liked": false
     },
     {
       "id": 18,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (9).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (9).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 417
+      "videoSize": 1,
+      "downloads": 413,
+      "likes": 86,
+      "liked": false
     },
     {
       "id": 17,
+      "catname": "Heteroclite",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (8).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (8).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 1023
+      "videoSize": 3,
+      "downloads": 992,
+      "likes": 311,
+      "liked": false
     },
     {
       "id": 16,
+      "catname": "Robotic",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (7).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (7).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 618
+      "videoSize": 1,
+      "downloads": 583,
+      "likes": 291,
+      "liked": false
     },
     {
       "id": 15,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (6).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (6).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 604
+      "videoSize": 2,
+      "downloads": 565,
+      "likes": 306,
+      "liked": false
     },
     {
       "id": 14,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (5).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (5).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 503
+      "videoSize": 2,
+      "downloads": 461,
+      "likes": 241,
+      "liked": false
     },
     {
       "id": 13,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (4).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (4).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 741
+      "videoSize": 1,
+      "downloads": 705,
+      "likes": 399,
+      "liked": false
     },
     {
       "id": 12,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (3).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (3).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 523
+      "videoSize": 3,
+      "downloads": 515,
+      "likes": 223,
+      "liked": false
     },
     {
       "id": 11,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (2).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (2).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 446
+      "videoSize": 1,
+      "downloads": 421,
+      "likes": 204,
+      "liked": false
     },
     {
       "id": 10,
+      "catname": "Nature",
       "livewallpaper_url": "https://edecator.com/wallpaperApp/Live_Wallpaper/Live Wallpaper (1).mp4",
       "thumnail_url": "https://edecator.com/wallpaperApp/Thumnail/Live Wallpaper (1).jpg",
-      "videoSize": 4,
-      "liked": false,
-      "download": 581
+      "videoSize": 2,
+      "downloads": 531,
+      "likes": 262,
+      "liked": false
     }
   ]
 }

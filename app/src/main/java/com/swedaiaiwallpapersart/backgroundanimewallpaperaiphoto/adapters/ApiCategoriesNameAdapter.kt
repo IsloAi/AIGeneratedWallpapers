@@ -18,19 +18,18 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.CatNameListBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.CatNameListBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import java.lang.NullPointerException
 
 class ApiCategoriesNameAdapter(
     private val arrayList: ArrayList<CatNameResponse?>,
     private val stringCallback: StringCallback,
-    private val myActivity: MainActivity
+    private val myActivity: MainActivity,
+    private val from:String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
@@ -152,6 +151,12 @@ class ApiCategoriesNameAdapter(
                     }
                 })
                 .into(binding.catIconImage)
+
+            if (from == "live"){
+                binding.live.visibility = View.VISIBLE
+            }else{
+                binding.live.visibility = View.GONE
+            }
 
             binding.catIconImage.setOnClickListener {
 

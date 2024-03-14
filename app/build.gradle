@@ -151,7 +151,7 @@ dependencies {
 //        exclude group: 'com.squareup.okio'
 //    }
 
-    implementation("com.ikame.android-sdk:ikm-sdk-debug:2.6.601-beta") {
+    implementation("com.ikame.android-sdk:pub-smartzone-imagine-ai-release:2.6.521") {
         exclude group: 'com.squareup.okio'
     }
 

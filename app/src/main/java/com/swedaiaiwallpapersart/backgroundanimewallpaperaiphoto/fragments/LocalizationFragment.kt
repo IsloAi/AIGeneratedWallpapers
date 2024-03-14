@@ -208,13 +208,19 @@ class LocalizationFragment : Fragment() {
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
                 if (exit){
                     Log.e(TAG, "setEvents:  exit true", )
-                    if (AdConfig.showOnboarding){
-                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
-                        findNavController().navigate(R.id.onBoardingFragment)
-                    }else{
-                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
+
+                    if (onBoard){
                         findNavController().navigate(R.id.homeTabsFragment)
+                    }else{
+                        if (AdConfig.showOnboarding){
+                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
+                            findNavController().navigate(R.id.onBoardingFragment)
+                        }else{
+                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
+                            findNavController().navigate(R.id.homeTabsFragment)
+                        }
                     }
+
                 }else{
                     Log.e(TAG, "setEvents:  exit false", )
                     if (!onBoard){
@@ -256,12 +262,16 @@ class LocalizationFragment : Fragment() {
 
                 if (exit){
                     Log.e(TAG, "setEvents:  exit true", )
-                    if (AdConfig.showOnboarding){
-                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
-                        findNavController().navigate(R.id.onBoardingFragment)
-                    }else{
-                        Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
+                    if (onBoard){
                         findNavController().navigate(R.id.homeTabsFragment)
+                    }else{
+                        if (AdConfig.showOnboarding){
+                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
+                            findNavController().navigate(R.id.onBoardingFragment)
+                        }else{
+                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
+                            findNavController().navigate(R.id.homeTabsFragment)
+                        }
                     }
                 }else{
                     Log.e(TAG, "setEvents:  exit false", )

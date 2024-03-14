@@ -18,10 +18,14 @@ interface LiveWallpaperDao {
     fun getAllWallpapers():List<LiveWallpaperModel>
 
 
+    @Query("SELECT * FROM liveWallpaper WHERE catname =:cat ")
+    fun getCatgoriesWallpapers(cat:String):List<LiveWallpaperModel>
+
+
     @Query("UPDATE liveWallpaper SET unlocked=:liked WHERE id=:Id")
     fun updateLocked(liked:Boolean,Id: Int)
 
-    @Query("SELECT * FROM liveWallpaper ORDER BY download DESC LIMIT (:limit)")
+    @Query("SELECT * FROM liveWallpaper ORDER BY downloads DESC LIMIT (:limit)")
     suspend fun getTopDownloadedWallpapers(limit: Int): List<LiveWallpaperModel>
 
     @Update

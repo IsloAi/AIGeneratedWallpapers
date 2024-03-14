@@ -278,6 +278,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach {wallpaper->
+
+                            Log.e(TAG, "saveLiveWallpapersInDB: $wallpaper")
                             val model = wallpaper.copy(unlocked = true)
                             appDatabase.liveWallpaperDao().insert(model)
 
