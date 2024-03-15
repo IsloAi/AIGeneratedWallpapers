@@ -1,10 +1,13 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -19,11 +22,13 @@ import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
@@ -51,6 +56,8 @@ class HomeFragment : Fragment(){
     private var navController: NavController? = null
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private lateinit var myActivity : MainActivity
+
+
 
     private lateinit var adapter:ApiCategoriesListAdapter
     private val viewModel: SaveStateViewModel by viewModels()
@@ -362,6 +369,7 @@ class HomeFragment : Fragment(){
             Log.e(TAG, "navigateToDestination: inside bundle", )
 
             putString("from","trending")
+            putString("wall","home")
             putInt("position",position - countOfNulls)
             findNavController().navigate(R.id.wallpaperViewFragment,this)
             navigationInProgress = false
@@ -371,8 +379,35 @@ class HomeFragment : Fragment(){
 
     }
 
+    private fun congratulationsDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.continueBtn.setOnClickListener {
+            wallFromHome = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     override fun onResume() {
         super.onResume()
+
+        if (wallFromHome){
+            if (isAdded){
+                congratulationsDialog()
+            }
+        }
 
         loadData()
         if (dataset){
@@ -409,6 +444,7 @@ class HomeFragment : Fragment(){
 
     companion object{
         var hasToNavigateHome = false
+        var wallFromHome = false
     }
 
     override fun onPause() {

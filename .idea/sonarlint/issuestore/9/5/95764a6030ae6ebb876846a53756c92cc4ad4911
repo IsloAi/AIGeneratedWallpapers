@@ -1,13 +1,13 @@
 
-Zkotlin:S1172Š"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ùİã1
-Zkotlin:S1172³"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ùİã1
-Wkotlin:S1172Í"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8ùİã1
-akotlin:S899å"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8ùİã1
+Zkotlin:S1172"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ùİã1
+Zkotlin:S1172¶"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8ùİã1
+Wkotlin:S1172Ğ"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8ùİã1
+akotlin:S899è"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8ùİã1
 Bkotlin:S125o"Remove this commented out code.(ó’´Âûÿÿÿÿ8–ùİã1
 =kotlin:S125²"Remove this commented out code.(§íËf8–ùİã1
-Ckotlin:S125Ï"Remove this commented out code.(ğ½¬öıÿÿÿÿ8—ùİã1
-<kotlin:S6310ë"Avoid hardcoded dispatchers.(á¥ €8¡ùİã1
-tkotlin:S6306ë"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(á¥ €8´ùİã1
+Ckotlin:S125Ò"Remove this commented out code.(ğ½¬öıÿÿÿÿ8—ùİã1
+<kotlin:S6310î"Avoid hardcoded dispatchers.(á¥ €8¡ùİã1
+tkotlin:S6306î"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(á¥ €8´ùİã1
 qkotlin:S1192º"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(™ù£êøÿÿÿÿ8Èùİã1
 rkotlin:S3776Ÿ"RRefactor this method to reduce its Cognitive Complexity from 41 to the 15 allowed.(ñàõà8Ìùİã1
-Mkotlin:S1066".Merge this "if" statement with the nested one.(€¡ê8Óùİã1
+Mkotlin:S1066’".Merge this "if" statement with the nested one.(€¡ê8Óùİã1

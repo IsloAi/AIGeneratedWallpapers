@@ -1,10 +1,13 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentAnimeWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
@@ -260,6 +264,12 @@ class AnimeWallpaperFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        if (wallFromAnime){
+            if (isAdded){
+                congratulationsDialog()
+            }
+        }
+
         loadData()
 
         if (dataset){
@@ -352,6 +362,7 @@ class AnimeWallpaperFragment : Fragment() {
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         Bundle().apply {
             putString("from","category")
+            putString("wall","anime")
             putInt("position",position - countOfNulls)
             findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
@@ -362,8 +373,31 @@ class AnimeWallpaperFragment : Fragment() {
 
     }
 
+
+    private fun congratulationsDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.continueBtn.setOnClickListener {
+            wallFromAnime = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     companion object{
         var hasToNavigateAnime = false
+        var wallFromAnime =  false
     }
 
     override fun onDestroyView() {

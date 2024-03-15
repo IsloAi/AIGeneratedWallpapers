@@ -1,18 +1,20 @@
 
-=kotlin:S1252"Remove this commented out code.(¹Èƒ•8òıÜŠã1
->kotlin:S125Â"Remove this commented out code.(ÒË¢8¦Ş§‹Ü1
-Ckotlin:S125ı"Remove this commented out code.(Ò»ˆşÿÿÿÿ8Ä—ÇÕ1
-<kotlin:S6310÷"Avoid hardcoded dispatchers.(ÏÃâ8“Ä—ÇÕ1
-<kotlin:S6310‘"Avoid hardcoded dispatchers.(©ÒÕò8“Ä—ÇÕ1
-:kotlin:S6310g"Avoid hardcoded dispatchers.(©ÓœW8Ğ”åÙ1
-;kotlin:S6310j"Avoid hardcoded dispatchers.(Í¡·Ş8¸¹˜åÙ1
-;kotlin:S6310µ"Avoid hardcoded dispatchers.(©ÓœW8µ÷–åÙ1
-<kotlin:S6310Ê"Avoid hardcoded dispatchers.(Í¡·Ş8÷©£‹Ü1
-Hkotlin:S108®")Either remove or fill this block of code.(·Úøš8ĞĞ˜ÇÕ1
-Mkotlin:S108Û")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ĞĞ˜ÇÕ1
->kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÿÚŞæÙ1
->kotlin:S1128)"Remove this unused import.(ÌëÉÚşÿÿÿÿ8²ŠåÙ1
-pkotlin:S1192…"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Ûë˜åÙ1
-wkotlin:S3776¨"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8İë˜åÙ1
-Nkotlin:S1066£".Merge this "if" statement with the nested one.(šÖÉù8âë˜åÙ1
-fkotlin:S6510ç"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8âë˜åÙ1
+=kotlin:S1257"Remove this commented out code.(¹Èƒ•8¬ªØ…ä1
+>kotlin:S125É"Remove this commented out code.(ÒË¢8­ªØ…ä1
+=kotlin:S125ˆ"Remove this commented out code.(§íËf8“¨½‡ä1
+Ckotlin:S125 "Remove this commented out code.(Ò»ˆşÿÿÿÿ8®ªØ…ä1
+<kotlin:S6310ş"Avoid hardcoded dispatchers.(ÏÃâ8³ªØ…ä1
+<kotlin:S6310´"Avoid hardcoded dispatchers.(©ÒÕò8³ªØ…ä1
+:kotlin:S6310n"Avoid hardcoded dispatchers.(©ÓœW8³ªØ…ä1
+;kotlin:S6310q"Avoid hardcoded dispatchers.(Í¡·Ş8´ªØ…ä1
+;kotlin:S6310¼"Avoid hardcoded dispatchers.(©ÓœW8´ªØ…ä1
+<kotlin:S6310Ñ"Avoid hardcoded dispatchers.(Í¡·Ş8´ªØ…ä1
+Hkotlin:S108µ")Either remove or fill this block of code.(·Úøš8ÀªØ…ä1
+Mkotlin:S108â")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ÀªØ…ä1
+>kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÏªØ…ä1
+>kotlin:S1128."Remove this unused import.(ÌëÉÚşÿÿÿÿ8ĞªØ…ä1
+pkotlin:S1192Œ"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ÒªØ…ä1
+wkotlin:S3776¯"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8ÕªØ…ä1
+Skotlin:S1066–".Merge this "if" statement with the nested one.(·Ò×úüÿÿÿÿ8ÙªØ…ä1
+Nkotlin:S1066ª".Merge this "if" statement with the nested one.(šÖÉù8‡ŠÃ‡ä1
+fkotlin:S6510î"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8ÚªØ…ä1

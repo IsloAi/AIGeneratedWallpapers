@@ -58,7 +58,7 @@ class IAPFragment : Fragment() {
 
 
         lifecycleScope.launch {
-            delay(1500)
+//            delay(1500)
             BillingHelper.getInstance().getPriceSubscribe(
                 "unlock_all_premium_wallpaper_weekly_1",
                 object: SDKBillingValueListener{

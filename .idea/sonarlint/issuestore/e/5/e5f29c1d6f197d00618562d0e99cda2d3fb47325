@@ -1,28 +1,30 @@
 
-Ckotlin:S125"Remove this commented out code.(ÆİòŞøÿÿÿÿ8Ø¸¿ŠÜ1
-Ckotlin:S125Â"Remove this commented out code.(³ŞĞûÿÿÿÿ8×³ÙÜ1
-Ckotlin:S125ñ"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8ÍÔüŠÜ1
-Ckotlin:S125ø"Remove this commented out code.(æÇÆüÿÿÿÿ8Ù¸¿ŠÜ1
-<kotlin:S6310ø"Avoid hardcoded dispatchers.(ÏÃâ8á¸¿ŠÜ1
-<kotlin:S6310Ì"Avoid hardcoded dispatchers.(©ÒÕò8á¸¿ŠÜ1
-<kotlin:S6310Ò"Avoid hardcoded dispatchers.(©ÒÕò8á¸¿ŠÜ1
-<kotlin:S6310®"Avoid hardcoded dispatchers.(Í¡·Ş8â¸¿ŠÜ1
-;kotlin:S6310À"Avoid hardcoded dispatchers.(©ÓœW8â¸¿ŠÜ1
-<kotlin:S6310Ğ"Avoid hardcoded dispatchers.(Í¡·Ş8â¸¿ŠÜ1
-<kotlin:S6310Ê"Avoid hardcoded dispatchers.(©ÒÕò8ã¸¿ŠÜ1
-Hkotlin:S108­")Either remove or fill this block of code.(·Úøš8Æä¤ŠÜ1
-Mkotlin:S108Ş")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8Æä¤ŠÜ1
-Hkotlin:S108¹")Either remove or fill this block of code.(·Úøš8¼ÀªŠÜ1
-Mkotlin:S108à")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8¼ÀªŠÜ1
-Rkotlin:S1481Æ"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ÉÀªŠÜ1
->kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8Ùä¤ŠÜ1
-9kotlin:S1128"Remove this unused import.(åå8Ùä¤ŠÜ1
-9kotlin:S11280"Remove this unused import.(Ó€ùÈ8Ùä¤ŠÜ1
->kotlin:S11283"Remove this unused import.(¯“×£øÿÿÿÿ8Ùä¤ŠÜ1
-9kotlin:S11284"Remove this unused import.(†áì²8Úä¤ŠÜ1
-~kotlin:S1192°"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(é¯›•ıÿÿÿÿ8Üä¤ŠÜ1
-pkotlin:S1192Š"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8Üä¤ŠÜ1
-wkotlin:S3776È"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8àä¤ŠÜ1
-qkotlin:S3776©"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8àä¤ŠÜ1
-rkotlin:S3776´"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8ÚÀªŠÜ1
-fkotlin:S6510ê"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8çä¤ŠÜ1
+Ckotlin:S125–"Remove this commented out code.(ÆİòŞøÿÿÿÿ8†õá…ä1
+Ckotlin:S125È"Remove this commented out code.(³ŞĞûÿÿÿÿ8†õá…ä1
+Ckotlin:S125÷"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8‡õá…ä1
+Ckotlin:S125ş"Remove this commented out code.(æÇÆüÿÿÿÿ8‡õá…ä1
+=kotlin:S125î"Remove this commented out code.(§íËf8°Í˜†ä1
+<kotlin:S6310ş"Avoid hardcoded dispatchers.(ÏÃâ8õá…ä1
+<kotlin:S6310Ø"Avoid hardcoded dispatchers.(©ÒÕò8õá…ä1
+<kotlin:S6310ô"Avoid hardcoded dispatchers.(©ÒÕò8õá…ä1
+<kotlin:S6310´"Avoid hardcoded dispatchers.(Í¡·Ş8‘õá…ä1
+;kotlin:S6310â"Avoid hardcoded dispatchers.(©ÓœW8‘õá…ä1
+<kotlin:S6310ò"Avoid hardcoded dispatchers.(Í¡·Ş8‘õá…ä1
+<kotlin:S6310Ğ"Avoid hardcoded dispatchers.(©ÒÕò8‘õá…ä1
+Hkotlin:S108³")Either remove or fill this block of code.(·Úøš8¢õá…ä1
+Mkotlin:S108ä")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8¢õá…ä1
+Hkotlin:S108Û")Either remove or fill this block of code.(·Úøš8¢õá…ä1
+Mkotlin:S108‚")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8¯–˜†ä1
+Rkotlin:S1481è"2Remove this unused "arrayListJson" local variable.(àñÆÑ8¯õá…ä1
+>kotlin:S1128"Remove this unused import.(ü‘»¡ıÿÿÿÿ8¸õá…ä1
+9kotlin:S1128"Remove this unused import.(åå8¸õá…ä1
+9kotlin:S11285"Remove this unused import.(Ó€ùÈ8¹õá…ä1
+>kotlin:S11288"Remove this unused import.(¯“×£øÿÿÿÿ8¹õá…ä1
+9kotlin:S11289"Remove this unused import.(†áì²8¹õá…ä1
+~kotlin:S1192¶"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(é¯›•ıÿÿÿÿ8»õá…ä1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8¼õá…ä1
+wkotlin:S3776Î"RRefactor this method to reduce its Cognitive Complexity from 19 to the 15 allowed.(‡Şšùÿÿÿÿ8Àõá…ä1
+qkotlin:S3776¯"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ü«¯8Àõá…ä1
+rkotlin:S3776Ö"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8Áõá…ä1
+Skotlin:S1066¨".Merge this "if" statement with the nested one.(Íêªöûÿÿÿÿ8¾ì¾‡ä1
+fkotlin:S6510ğ"AMove "return" statements from all branches before "if" statement.(°Å†üÿÿÿÿ8Èõá…ä1

@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -7,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -23,12 +26,14 @@ import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPopularWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment.Companion.isNavigated
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -69,6 +74,7 @@ class PopularWallpaperFragment () : Fragment() {
 
     companion object{
         var hasToNavigate = false
+        var wallFromPopular = false
     }
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
@@ -415,6 +421,12 @@ class PopularWallpaperFragment () : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        if (wallFromPopular){
+            if (isAdded){
+                congratulationsDialog()
+            }
+        }
+
 
 
 
@@ -466,6 +478,28 @@ class PopularWallpaperFragment () : Fragment() {
 
 
 
+    }
+
+
+    private fun congratulationsDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.continueBtn.setOnClickListener {
+            wallFromPopular = false
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
 
@@ -723,6 +757,7 @@ class PopularWallpaperFragment () : Fragment() {
 
                 Bundle().apply {
                     putString("from", "trending")
+                    putString("wall","popular")
                     putInt("position", position - countOfNulls)
                     Log.e(TAG, "navigateToDestination: inside bundle", )
 

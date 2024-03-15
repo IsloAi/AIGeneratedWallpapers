@@ -327,6 +327,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: ")
+                        if (isAdded){
+                            Toast.makeText(requireContext(),"Ad not available, Try again",Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                 })
@@ -623,29 +626,29 @@ class LiveWallpaperPreviewFragment : Fragment() {
     }
 
     fun checkWallpaperActive(){
+        if (isAdded){
+            checkWallpaper = false
+            val wallpaperComponent = ComponentName(requireContext(), LiveWallpaperService::class.java)
 
-        checkWallpaper = false
-        val wallpaperComponent = ComponentName(requireContext(), LiveWallpaperService::class.java)
-
-        val currentWallpaperComponent = WallpaperManager.getInstance(context).wallpaperInfo?.component
+            val currentWallpaperComponent = WallpaperManager.getInstance(context).wallpaperInfo?.component
 
 
-        if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
-            // The live wallpaper is set successfully, perform your action here
-            Log.d("LiveWallpaper", "Live wallpaper set successfully")
-            // For example, you can navigate the user to another screen
-            // val intent = Intent(context, AnotherActivity::class.java)
-            // context.startActivity(intent)
+            if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
+                // The live wallpaper is set successfully, perform your action here
+                Log.d("LiveWallpaper", "Live wallpaper set successfully")
+                // For example, you can navigate the user to another screen
+                // val intent = Intent(context, AnotherActivity::class.java)
+                // context.startActivity(intent)
 
-            findNavController().popBackStack(R.id.homeTabsFragment, false)
+                findNavController().popBackStack(R.id.homeTabsFragment, false)
 
-            Toast.makeText(requireContext(),"Wallpaper set successfully",Toast.LENGTH_SHORT).show()
-        } else {
-            // The live wallpaper is not set successfully
-            Log.e("LiveWallpaper", "Failed to set live wallpaper")
-            Toast.makeText(context, "Failed to set live wallpaper", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"Wallpaper set successfully",Toast.LENGTH_SHORT).show()
+            } else {
+                // The live wallpaper is not set successfully
+                Log.e("LiveWallpaper", "Failed to set live wallpaper")
+                Toast.makeText(context, "Failed to set live wallpaper", Toast.LENGTH_SHORT).show()
+            }
         }
-
     }
 
 
