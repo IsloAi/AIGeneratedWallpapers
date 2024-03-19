@@ -73,7 +73,7 @@ class LocalizationFragment : Fragment() {
             Color.parseColor("#FF6726")
         )
         val paint: TextPaint = binding.applyLanguage.paint
-        val width: Float = paint.measureText("GO")
+        val width: Float = paint.measureText("Next")
 
         val shader = LinearGradient(
             0f, 0f, width, binding.applyLanguage.textSize,
