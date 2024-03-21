@@ -9,19 +9,15 @@ class Parameters {
         val enhance_prompt = "no"
         val exact_Nprompt = ""
         val guess_mode = "no"
-        val guidance_scale = 7.0
+        val guidance_scale = 20.0
         val height = "1456"
         val instance_prompt = ""
         val key = "cBAKGvs2IWAC4XztfETeUPMbKiZvHIBrzmul6VhSpAyzxxtz1oJWxni9vqBG"
         var model_id = "sdxl"
         var model_name = "SDXL"
         val multi_lingual = "yes"
-        val negative_prompt = "(((nudity))),(((nsfw))),(((nude))),(((upskirt))),(((bra))),(((nude))),(((latex))),(((boobs)))," +
-                "(((panty))),(((ass))),painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, " +
-                "deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, " +
-                "double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, " +
-                "distorted face, extra legs, anime, dual, multiple,  "
-        val num_inference_steps = "21"
+        val negative_prompt = "low quality, watermark,painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, double face, extra face,(((nudity))),(((nsfw))),(((nude))),(((upskirt))),(((bra))),(((nude))),(((latex))),(((boobs))),(((panty))),(((ass))),painting, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, deformed, ugly, blurry, bad anatomy, bad proportions, extra limbs, cloned face, skinny, glitchy, double torso, extra arms, extra hands, mangled fingers, missing lips, ugly face, distorted face, extra legs, anime, dual, multiple,"
+        val num_inference_steps = "51"
         val panorama = "no"
         val prompt = "one girl, Brown hair, Brown eyes, slim weight scarlett person holding a positive pregnancy"
         val promptsBuilder = ""

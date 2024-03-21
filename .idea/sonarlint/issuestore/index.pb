@@ -257,3 +257,7 @@ wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ada
 japp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/PositionCallback.kt,c\1\c145716a72467301ae28ccb6553536b591ebf201
 ˜
 happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/StringCallback.kt,4\2\4251bfe49b9b7493184fda69fde26dd3e484b5d5
+¬
+|app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/utilsIG/ImageGenerateViewModel.kt,8\3\83da36a9e20184ec6b770d89cbe1c6c752cf4f36
+ 
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/utilsIG/Parameters.kt,8\7\872d10d5789dad6a4484f18132c489f1be07946c
