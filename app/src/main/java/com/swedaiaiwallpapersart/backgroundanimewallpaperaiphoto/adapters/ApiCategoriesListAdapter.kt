@@ -2,7 +2,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -10,19 +9,18 @@ import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
-import androidx.navigation.NavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.airbnb.lottie.LottieAnimationView
+import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -31,30 +29,17 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.WallpaperRow2Binding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.WallpaperRowBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GetLoginDetails
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.NullPointerException
 
 class ApiCategoriesListAdapter(
     var arrayList: ArrayList<CatResponse?>,
@@ -270,6 +255,8 @@ class ApiCategoriesListAdapter(
         }
     }
 
+    var nativeAdView: IkmNativeAdView?= null
+
     fun loadad(holder: ViewHolder,binding: StaggeredNativeLayoutBinding){
 
         Log.e("TAG", "loadad: $tracking")
@@ -283,37 +270,52 @@ class ApiCategoriesListAdapter(
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
             adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+            if (binding.adsView.isAdLoaded){
+                Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
+            }else{
+                SDKBaseController.getInstance().loadIkmNativeAdView(myActivity,tracking,tracking,object :
+                    IKLoadNativeAdListener {
+                    override fun onAdFailedToLoad(errorCode: Int) {
+                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+errorCode )
 
-            binding.adsView.setCustomNativeAdLayout(
-                R.layout.shimmer_loading_native,
-                adLayout!!
-            )
+                    }
+
+                    override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                        nativeAdView = adsResult
+                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoaded: ", )
+                    }
+
+                })
+            }
 
             withContext(this.coroutineContext) {
-                binding.adsView.loadAd(myActivity,tracking,tracking,
-                    object : CustomSDKAdsListenerAdapter() {
-                        override fun onAdsLoadFail() {
-                            super.onAdsLoadFail()
-                            Log.e("TAG", "onAdsLoadFail: native failded " )
-                            if (statusAd == 0){
-                                binding.adsView.visibility = View.GONE
-                            }else{
-                                if (isNetworkAvailable()){
-                                    loadad(holder,binding)
-                                    binding.adsView.visibility = View.VISIBLE
-                                }else{
+                nativeAdView?.let {
+                    binding.adsView.loadNativeWithAdView(myActivity,R.layout.shimmer_loading_native,adLayout!!,tracking,tracking,
+                        it,
+                        object : CustomSDKAdsListenerAdapter() {
+                            override fun onAdsLoadFail() {
+                                super.onAdsLoadFail()
+                                Log.e("TAG", "onAdsLoadFail: native failded " )
+                                if (statusAd == 0){
                                     binding.adsView.visibility = View.GONE
+                                }else{
+                                    if (isNetworkAvailable()){
+                                        //                                    loadad(holder,binding)
+                                        binding.adsView.visibility = View.VISIBLE
+                                    }else{
+                                        binding.adsView.visibility = View.GONE
+                                    }
                                 }
                             }
-                        }
 
-                        override fun onAdsLoaded() {
-                            super.onAdsLoaded()
-                            binding.adsView.visibility = View.VISIBLE
-                            Log.e("TAG", "onAdsLoaded: native loaded" )
+                            override fun onAdsLoaded() {
+                                super.onAdsLoaded()
+                                binding.adsView.visibility = View.VISIBLE
+                                Log.e("TAG", "onAdsLoaded: native loaded" )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }
 

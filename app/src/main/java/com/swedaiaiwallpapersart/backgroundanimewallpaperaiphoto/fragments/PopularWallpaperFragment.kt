@@ -23,6 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -267,7 +269,26 @@ class PopularWallpaperFragment () : Fragment() {
             }
 
         }, myActivity)
+
+
         mostUsedWallpaperAdapter!!.setCoroutineScope(fragmentScope)
+
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_all_tab_scroll","mainscr_all_tab_scroll",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+                    mostUsedWallpaperAdapter?.nativeAdView = adsResult
+                    binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
+                }
+            }
+
+        })
 
         binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
 

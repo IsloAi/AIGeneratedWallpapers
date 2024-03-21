@@ -10,7 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -19,18 +18,18 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -43,7 +42,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchWallpapersFragment : Fragment() {
@@ -66,6 +64,8 @@ class SearchWallpapersFragment : Fragment() {
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
     var searched = false
+
+    val TAG = "SEARCH"
 
 
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
@@ -187,6 +187,22 @@ class SearchWallpapersFragment : Fragment() {
             }
         },myActivity,"search")
         searchAdapter!!.setCoroutineScope(fragmentScope)
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"searchscr_scroll_view","searchscr_scroll_view",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+                    searchAdapter?.nativeAdView = adsResult
+                    binding.recyclerviewAll.adapter = searchAdapter
+                }
+            }
+
+        })
         binding.recyclerviewAll.adapter = searchAdapter
 
 
@@ -409,6 +425,22 @@ class SearchWallpapersFragment : Fragment() {
 
             }
         },myActivity,"")
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_cate_tab_scroll_view","mainscr_cate_tab_scroll_view",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: $errorCode")
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+                    adapter?.nativeAdView = adsResult
+                    binding.recyclerviewCatgory.adapter = adapter
+                }
+            }
+
+        })
         binding.recyclerviewCatgory.adapter = adapter
     }
 

@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -340,6 +342,23 @@ class HomeFragment : Fragment(){
             }
         },myActivity,"trending")
         adapter.setCoroutineScope(fragmentScope)
+
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_trending_tab_scroll_view","mainscr_trending_tab_scroll_view",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+                    adapter?.nativeAdView = adsResult
+                    binding.recyclerviewAll.adapter = adapter
+                }
+            }
+
+        })
         binding.recyclerviewAll.adapter = adapter
 
 

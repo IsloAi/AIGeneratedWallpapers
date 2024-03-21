@@ -1,10 +1,10 @@
 
-mkotlin:S117—"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(™±£‹8Ø£‹æÙ1
-Akotlin:S6310Ü"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Û¿‰æÙ1
-Nkotlin:S1481u"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8è¿‰æÙ1
-Okotlin:S1481Š"/Remove this unused "adPosition" local variable.(²úÒ8è¿‰æÙ1
->kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8î¿‰æÙ1
-Gkotlin:S1874J"#Deprecated code should not be used.(úâç¹ùÿÿÿÿ8ğ¿‰æÙ1
-Hkotlin:S1874ç"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ûÌí¹á1
-Hkotlin:S1874’"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ñ¿‰æÙ1
-Bkotlin:S1874“"#Deprecated code should not be used.(àü8ñ¿‰æÙ1
+Ckotlin:S125‡"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8É¶Şüå1
+mkotlin:S117–"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(™±£‹8Í¶Şüå1
+Akotlin:S6310İ"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Í¶Şüå1
+Nkotlin:S1481t"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8Ú¶Şüå1
+Okotlin:S1481‰"/Remove this unused "adPosition" local variable.(²úÒ8Ú¶Şüå1
+Gkotlin:S1874I"#Deprecated code should not be used.(úâç¹ùÿÿÿÿ8á¶Şüå1
+Hkotlin:S1874£"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8á¶Şüå1
+Bkotlin:S1874¤"#Deprecated code should not be used.(àü8á¶Şüå1
+rkotlin:S3776Û"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡–8ÔËßüå1

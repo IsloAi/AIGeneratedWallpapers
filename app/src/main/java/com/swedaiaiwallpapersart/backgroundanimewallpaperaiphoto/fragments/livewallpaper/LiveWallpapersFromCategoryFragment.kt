@@ -13,9 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpapersFromCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
@@ -26,7 +27,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -206,6 +206,24 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
 
             }
         },myActivity)
+
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_live_tab_scroll","mainscr_live_tab_scroll",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+
+                    adapter?.nativeAdView = adsResult
+                    binding.liveReccyclerview.adapter = adapter
+                }
+            }
+
+        })
 
         binding.liveReccyclerview.adapter = adapter
     }

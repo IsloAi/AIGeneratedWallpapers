@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -178,6 +181,9 @@ class ApiCategoriesNameAdapter(
         }
     }
 
+    var nativeAdView: IkmNativeAdView?= null
+
+
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
         val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
@@ -190,34 +196,51 @@ class ApiCategoriesNameAdapter(
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-        binding.adsView.loadAd(myActivity,"onboardscr_bottom","onboardscr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
-                    if (statusAd == 0){
-                        binding.adsView.visibility = View.GONE
-                    }else{
-                        if (isNetworkAvailable()){
-                            loadad(holder,binding)
-                            binding.adsView.visibility = View.VISIBLE
-                        }else{
-                            binding.adsView.visibility = View.GONE
-                        }
-                    }
+        if (binding.adsView.isAdLoaded){
+            Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
+        }else{
+            SDKBaseController.getInstance().loadIkmNativeAdView(myActivity,"mainscr_live_tab_scroll","mainscr_live_tab_scroll",object :
+                IKLoadNativeAdListener {
+                override fun onAdFailedToLoad(errorCode: Int) {
+                    Log.e("CATEGORIES_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+errorCode )
+
                 }
 
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    binding.adsView.visibility = View.VISIBLE
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                    nativeAdView = adsResult
+                    Log.e("CATEGORIES_WALL_SCREEN_ADAPTER", "onAdLoaded: ", )
                 }
-            }
-        )
+
+            })
+        }
+
+        nativeAdView?.let {
+            binding.adsView.loadNativeWithAdView(myActivity,R.layout.shimmer_loading_native,adLayout!!,"mainscr_cate_tab_scroll_view","mainscr_cate_tab_scroll_view",
+                it,
+                object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("TAG", "onAdsLoadFail: native failded " )
+                        if (statusAd == 0){
+                            binding.adsView.visibility = View.GONE
+                        }else{
+                            if (isNetworkAvailable()){
+    //                                    loadad(holder,binding)
+                                binding.adsView.visibility = View.VISIBLE
+                            }else{
+                                binding.adsView.visibility = View.GONE
+                            }
+                        }
+                    }
+
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        binding.adsView.visibility = View.VISIBLE
+                        Log.e("TAG", "onAdsLoaded: native loaded" )
+                    }
+                }
+            )
+        }
     }
 
 

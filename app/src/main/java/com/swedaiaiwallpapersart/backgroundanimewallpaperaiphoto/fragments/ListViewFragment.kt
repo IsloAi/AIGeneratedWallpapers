@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
@@ -139,8 +141,8 @@ class ListViewFragment : Fragment() {
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
-                    "categoryscr_fantasy_click_item",
-                    "categoryscr_fantasy_click_item",
+                    "mainscr_sub_cate_tab_scroll",
+                    "mainscr_sub_cate_tab_scroll",
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {
@@ -167,6 +169,24 @@ class ListViewFragment : Fragment() {
 
 
         adapter!!.setCoroutineScope(fragmentScope)
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_live_tab_scroll","mainscr_live_tab_scroll",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+                    adapter?.nativeAdView = adsResult
+                    binding.recyclerviewAll.adapter = adapter
+                }
+            }
+
+        })
+
+
         binding.recyclerviewAll.adapter = adapter
 
 

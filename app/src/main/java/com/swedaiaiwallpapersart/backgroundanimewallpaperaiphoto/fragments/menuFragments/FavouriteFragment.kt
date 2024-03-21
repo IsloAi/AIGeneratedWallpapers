@@ -17,6 +17,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -47,7 +49,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import kotlin.random.Random
 
 class FavouriteFragment : Fragment() {
@@ -64,6 +65,9 @@ class FavouriteFragment : Fragment() {
     private val liveWallpaperViewModel: LiveWallpaperViewModel by activityViewModels()
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+
+
+    val TAG = "FAVORITES"
 
 
 
@@ -335,6 +339,19 @@ class FavouriteFragment : Fragment() {
                 findNavController().navigate(R.id.downloadLiveWallpaperFragment)
             }
         },myActivity)
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_live_tab_scroll","mainscr_live_tab_scroll",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: $errorCode")
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                adapter.nativeAdView = adsResult
+            }
+
+        })
         binding.liveRecyclerview.adapter = adapter
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }

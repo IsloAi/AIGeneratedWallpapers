@@ -1,21 +1,15 @@
 
-Tkotlin:S1172¹"/Remove this unused function parameter "holder".(ì×áùÿÿÿÿ8Ê’Ú1
->kotlin:S125¼"Remove this commented out code.(Í¥İ8•Ê’Ú1
->kotlin:S125Ç"Remove this commented out code.(ŒğìÂ8–Ê’Ú1
-rkotlin:S117¹"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ì×áùÿÿÿÿ8šÊ’Ú1
-Akotlin:S6310”"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8›Ê’Ú1
-Okotlin:S1481—"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8©Ê’Ú1
-Okotlin:S1481¬"/Remove this unused "adPosition" local variable.(²úÒ8©Ê’Ú1
-Okotlin:S1481ü"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ8©Ê’Ú1
->kotlin:S1128"Remove this unused import.(Ô¼³úÿÿÿÿÿ8­Ê’Ú1
->kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8­Ê’Ú1
-9kotlin:S1128"Remove this unused import.(´Ùí8­Ê’Ú1
-9kotlin:S1128"Remove this unused import.(³¹¦–8®Ê’Ú1
-9kotlin:S1128""Remove this unused import.(ÖàÉâ8®Ê’Ú1
->kotlin:S1128$"Remove this unused import.(¬†ÙÏşÿÿÿÿ8®Ê’Ú1
-9kotlin:S11284"Remove this unused import.(üŸÿ¥8®Ê’Ú1
-Bkotlin:S1874l"#Deprecated code should not be used.(çŒ´À8±Ê’Ú1
-Hkotlin:S1874Ÿ"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8±Ê’Ú1
-Hkotlin:S1874Ï"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8±Ê’Ú1
-Bkotlin:S1874Ğ"#Deprecated code should not be used.(àü8±Ê’Ú1
-akotlin:S6511N"=Merge chained "if" statements into a single "when" statement.(„²Ø“øÿÿÿÿ8¶Ê’Ú1
+Tkotlin:S1172ª"/Remove this unused function parameter "holder".(ì×áùÿÿÿÿ8Ê’Ú1
+>kotlin:S125­"Remove this commented out code.(Í¥İ8•Ê’Ú1
+>kotlin:S125¸"Remove this commented out code.(ŒğìÂ8–Ê’Ú1
+Ckotlin:S125¯"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8ë½Àıå1
+rkotlin:S117ª"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(ì×áùÿÿÿÿ8šÊ’Ú1
+Akotlin:S6310‡"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8›Ê’Ú1
+Okotlin:S1481ˆ"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8©Ê’Ú1
+Okotlin:S1481"/Remove this unused "adPosition" local variable.(²úÒ8©Ê’Ú1
+Okotlin:S1481í"*Remove this unused "isBuy" local variable.(‹¥Ğ¦ùÿÿÿÿ8©Ê’Ú1
+Bkotlin:S1874]"#Deprecated code should not be used.(çŒ´À8±Ê’Ú1
+Hkotlin:S1874Ñ"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8±Ê’Ú1
+Bkotlin:S1874Ò"#Deprecated code should not be used.(àü8±Ê’Ú1
+wkotlin:S3776„"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(‹ÈÜ‚üÿÿÿÿ8™¾Àıå1
+akotlin:S6511?"=Merge chained "if" statements into a single "when" statement.(„²Ø“øÿÿÿÿ8¶Ê’Ú1

@@ -1,20 +1,18 @@
 
 Bkotlin:S125d"Remove this commented out code.(ó’´Âûÿÿÿÿ8¸ïÇßã1
 =kotlin:S125}"Remove this commented out code.(ô·°Ë8ÍåÍ’Ú1
-Ckotlin:S125"Remove this commented out code.(çùò—øÿÿÿÿ8ÎåÍ’Ú1
->kotlin:S125”"Remove this commented out code.(…é8ÎåÍ’Ú1
->kotlin:S125°"Remove this commented out code.(ò’÷§8ÏåÍ’Ú1
-Ckotlin:S125Å"Remove this commented out code.(À…âÿÿÿÿÿ8ÏåÍ’Ú1
-Ckotlin:S125Ê"Remove this commented out code.(À…âÿÿÿÿÿ8ĞåÍ’Ú1
-Ckotlin:S125Ø"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8ĞåÍ’Ú1
->kotlin:S125à"Remove this commented out code.(´“§8ĞåÍ’Ú1
-;kotlin:S6310 "Avoid hardcoded dispatchers.(©ÓœW8ØåÍ’Ú1
-<kotlin:S6310©"Avoid hardcoded dispatchers.(Í¡·Ş8ØåÍ’Ú1
-Rkotlin:S1481¯"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ïİµÜÓ1
-9kotlin:S1128"Remove this unused import.(ÔËŸÀ8÷åÍ’Ú1
->kotlin:S1128."Remove this unused import.(¢‡Œşÿÿÿÿ8øåÍ’Ú1
+Ckotlin:S125‘"Remove this commented out code.(çùò—øÿÿÿÿ8ÎåÍ’Ú1
+>kotlin:S125¤"Remove this commented out code.(…é8ÎåÍ’Ú1
+>kotlin:S125À"Remove this commented out code.(ò’÷§8ÏåÍ’Ú1
+Ckotlin:S125Õ"Remove this commented out code.(À…âÿÿÿÿÿ8ÏåÍ’Ú1
+Ckotlin:S125Ú"Remove this commented out code.(À…âÿÿÿÿÿ8ĞåÍ’Ú1
+Ckotlin:S125è"Remove this commented out code.(“ÆÆ·øÿÿÿÿ8ĞåÍ’Ú1
+>kotlin:S125ğ"Remove this commented out code.(´“§8ĞåÍ’Ú1
+;kotlin:S6310°"Avoid hardcoded dispatchers.(©ÓœW8ØåÍ’Ú1
+<kotlin:S6310¹"Avoid hardcoded dispatchers.(Í¡·Ş8ØåÍ’Ú1
+Rkotlin:S1481Ï"2Remove this unused "arrayListJson" local variable.(àñÆÑ8ïİµÜÓ1
 qkotlin:S1192ª"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(à Öÿÿÿÿÿÿ8ûåÍ’Ú1
-pkotlin:S1192Ğ"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8üİµÜÓ1
-zkotlin:S1186ã"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8„æÍ’Ú1
-kotlin:S1186ç"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8„æÍ’Ú1
-Skotlin:S1066æ".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8‰ŞµÜÓ1
+pkotlin:S1192ğ"KDefine a constant instead of duplicating this literal "******NULL" 5 times.(£¬éÿÿÿÿÿ8üİµÜÓ1
+zkotlin:S1186ó"ZAdd a nested comment explaining why this function is empty or complete the implementation.(´„˜8„æÍ’Ú1
+kotlin:S1186÷"ZAdd a nested comment explaining why this function is empty or complete the implementation.(£ÖÁÌıÿÿÿÿ8„æÍ’Ú1
+Skotlin:S1066†".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8‰ŞµÜÓ1

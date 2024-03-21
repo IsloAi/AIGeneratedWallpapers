@@ -52,6 +52,8 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -594,6 +596,22 @@ class WallpaperViewFragment : Fragment() {
             }
         },myActivity)
         adapter!!.setCoroutineScope(fragmentScope)
+
+        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"viewlistwallscr_scrollview","viewlistwallscr_scrollview",object :
+            IKLoadNativeAdListener {
+            override fun onAdFailedToLoad(errorCode: Int) {
+                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
+
+            }
+
+            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+                if (isAdded){
+                    adapter?.nativeAdView = adsResult
+                    viewPager2?.adapter = adapter
+                }
+            }
+
+        })
         viewPager2?.adapter = adapter
         viewPager2?.setCurrentItem(position, false)
 
