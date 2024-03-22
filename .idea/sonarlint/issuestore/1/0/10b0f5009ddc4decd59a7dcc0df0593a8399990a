@@ -13,6 +13,7 @@ Gkotlin:S108£")Either remove or fill this block of code.(›Ñû08Âèªìâ1
 Mkotlin:S108§")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8Âèªìâ1
 pkotlin:S1192û"KDefine a constant instead of duplicating this literal "******NULL" 8 times.(Ÿ™£Ñşÿÿÿÿ8Óèªìâ1
 ‡kotlin:S1192û"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 4 times.(Ÿ™£Ñşÿÿÿÿ8Óèªìâ1
+qkotlin:S3776`"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ß›ˆğ8ßº§¬æ1
 zkotlin:S1186¥"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8Ûèªìâ1
 Skotlin:S1066½".Merge this "if" statement with the nested one.(¡çõ‹ûÿÿÿÿ8æ¦¿‡ä1
 fkotlin:S6510¯"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8Üèªìâ1

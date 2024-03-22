@@ -605,7 +605,7 @@ class WallpaperViewFragment : Fragment() {
             }
 
             override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                if (isAdded){
+                if (isAdded && view!= null){
                     adapter?.nativeAdView = adsResult
                     viewPager2?.adapter = adapter
                 }
@@ -1422,10 +1422,15 @@ class WallpaperViewFragment : Fragment() {
                                        hasToNavigateAnime = false
                                        hasToNavigateList = false
                                        if (from == "trending"){
+                                           if (isAdded){
 
-                                           findNavController().popBackStack(R.id.homeTabsFragment, false)
+                                               findNavController().popBackStack(R.id.homeTabsFragment, false)
+                                           }
+
                                        }else{
-                                           findNavController().popBackStack(R.id.listViewFragment,false)
+                                           if (isAdded){
+                                               findNavController().popBackStack(R.id.listViewFragment,false)
+                                           }
                                        }
                                    }else if (AdConfig.regularWallpaperFlow == 2){
                                        if (isAdded){

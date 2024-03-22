@@ -1,8 +1,8 @@
 
 Ckotlin:S125"Remove this commented out code.(Ζέςήψÿÿÿÿ8†υα…δ1
 Ckotlin:S125Κ"Remove this commented out code.(³ήΠϋÿÿÿÿ8†υα…δ1
-Ckotlin:S125ω"Remove this commented out code.(ΌΪ–¶ωÿÿÿÿ8‡υα…δ1
-Ckotlin:S125€"Remove this commented out code.(ζΗΖόÿÿÿÿ8‡υα…δ1
+Ckotlin:S125ω"Remove this commented out code.(ΌΪ–¶ωÿÿÿÿ8όω«ζ1
+Ckotlin:S125€"Remove this commented out code.(ζΗΖόÿÿÿÿ8όω«ζ1
 =kotlin:S125ƒ"Remove this commented out code.(§νΛf8°Ν†δ1
 <kotlin:S6310“"Avoid hardcoded dispatchers.(ΟΓβ8υα…δ1
 <kotlin:S6310ν"Avoid hardcoded dispatchers.(©ÒΥς8υα…δ1
@@ -23,7 +23,7 @@ Rkotlin:S1481ύ"2Remove this unused "arrayListJson" local variable.(ΰρΖΡ8―υα
 9kotlin:S1128;"Remove this unused import.(†αμ²8Ήυα…δ1
 ~kotlin:S1192Έ"YDefine a constant instead of duplicating this literal "initMostDownloadedData: " 4 times.(ι―›•ύÿÿÿÿ8»υα…δ1
 pkotlin:S1192¥"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬ιÿÿÿÿÿ8Όυα…δ1
-wkotlin:S3776Π"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(‡ήωÿÿÿÿ8ΐυα…δ1
+wkotlin:S3776Π"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(‡ήωÿÿÿÿ8Ψόω«ζ1
 qkotlin:S3776Δ"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(ό«―8ΐυα…δ1
 rkotlin:S3776λ"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(‡¦8Αυα…δ1
 Skotlin:S1066½".Merge this "if" statement with the nested one.(Νκªφϋÿÿÿÿ8ΎμΎ‡δ1

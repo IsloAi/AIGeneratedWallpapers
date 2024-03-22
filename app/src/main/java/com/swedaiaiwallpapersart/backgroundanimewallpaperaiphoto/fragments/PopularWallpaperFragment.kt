@@ -282,7 +282,7 @@ class PopularWallpaperFragment () : Fragment() {
             }
 
             override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                if (isAdded){
+                if (isAdded && view!= null){
                     mostUsedWallpaperAdapter?.nativeAdView = adsResult
                     binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
                 }

@@ -658,7 +658,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
             binding.liveWallpaper.setMediaController(null)
             binding.liveWallpaper.setVideoPath(BlurView.filePath)
             binding.liveWallpaper.setOnCompletionListener(OnCompletionListener {
-                binding.liveWallpaper?.start()
+                if (view != null && isAdded){
+                    binding.liveWallpaper.start()
+                }
             })
 
             binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->

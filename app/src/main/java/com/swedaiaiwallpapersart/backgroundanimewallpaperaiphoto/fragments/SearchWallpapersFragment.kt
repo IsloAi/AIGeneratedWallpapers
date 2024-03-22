@@ -196,7 +196,7 @@ class SearchWallpapersFragment : Fragment() {
             }
 
             override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                if (isAdded){
+                if (isAdded && view!= null){
                     searchAdapter?.nativeAdView = adsResult
                     binding.recyclerviewAll.adapter = searchAdapter
                 }
@@ -434,7 +434,7 @@ class SearchWallpapersFragment : Fragment() {
             }
 
             override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                if (isAdded){
+                if (isAdded && view!= null){
                     adapter?.nativeAdView = adsResult
                     binding.recyclerviewCatgory.adapter = adapter
                 }

@@ -206,9 +206,11 @@ class LiveWallpaperFragment : Fragment() {
             }
 
             override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                if (isAdded){
+                if (isAdded && view!= null){
                     adapter?.nativeAdView = adsResult
                     binding.liveReccyclerview.adapter = adapter
+                }else{
+                    Log.e(TAG, "onAdLoaded: View Null", )
                 }
             }
 

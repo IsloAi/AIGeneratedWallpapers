@@ -272,7 +272,7 @@ class GenerateImageFragment : Fragment() {
                         if(getPrompt.isNotEmpty()){
                             getUserIdDialog()
 
-                            viewModel.loadData(myContext!!,getPrompt.toString() + "highly detailed,studio lighting,professional,vivid colors, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
+                            viewModel.loadData(myContext!!,getPrompt.toString() + " highly detailed,studio lighting,professional,vivid colors, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
                             hasNavigated = false
                         }else{
                             Toast.makeText(requireContext(),
@@ -288,7 +288,7 @@ class GenerateImageFragment : Fragment() {
                                 if(getPrompt.isNotEmpty()){
                                     getUserIdDialog()
 
-                                    viewModel.loadData(myContext!!,getPrompt.toString()+ "highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
+                                    viewModel.loadData(myContext!!,getPrompt.toString()+ " highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
                                     hasNavigated = false
                                 }else{
                                     Toast.makeText(requireContext(),
@@ -327,7 +327,7 @@ class GenerateImageFragment : Fragment() {
                                                     getUserIdDialog()
                                                     viewModel.loadData(
                                                         requireContext(),
-                                                        getPrompt.toString()+ "highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K",
+                                                        getPrompt.toString()+ " highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K",
                                                         dialog!!
                                                     )
                                                 } else {

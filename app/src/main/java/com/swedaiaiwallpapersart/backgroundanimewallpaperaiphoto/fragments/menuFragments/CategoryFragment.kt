@@ -110,7 +110,7 @@ class CategoryFragment : Fragment() {
             }
 
             override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                if (isAdded){
+                if (isAdded && view!= null){
                     adapter?.nativeAdView = adsResult
                     binding.recyclerviewAll.adapter = adapter
                 }
@@ -134,7 +134,6 @@ class CategoryFragment : Fragment() {
 
                         withContext(Dispatchers.Main){
                             adapter.updateData(newData = list)
-
                         }
                     }
 

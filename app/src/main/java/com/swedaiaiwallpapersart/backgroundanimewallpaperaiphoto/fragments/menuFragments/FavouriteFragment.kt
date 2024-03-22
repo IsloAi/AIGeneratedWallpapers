@@ -433,6 +433,7 @@ class FavouriteFragment : Fragment() {
         Bundle().apply {
             putInt("position",position - countOfNulls)
             putString("from","trending")
+            putString("wall","home")
             findNavController().navigate(R.id.wallpaperViewFragment,this)
         }
         myViewModel.clear()
