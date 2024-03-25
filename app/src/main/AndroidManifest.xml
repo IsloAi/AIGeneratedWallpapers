@@ -13,8 +13,16 @@
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"/>
 
     <application
         android:allowBackup="true"
@@ -93,6 +101,20 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
         </provider>
+
+
+
+        <service
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.FOREGROUND_SERVICE" />
+            </intent-filter>
+            <meta-data
+                android:name="android:foregroundServiceType"
+                android:value="media" />
+        </service>
 
 
 

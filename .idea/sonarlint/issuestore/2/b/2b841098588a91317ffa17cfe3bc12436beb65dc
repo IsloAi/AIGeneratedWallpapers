@@ -1,17 +1,25 @@
 
-Zkotlin:S1172Ù"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8Ì×Í“á1
-Zkotlin:S1172€"5Use "_" instead of this unused lambda parameter "p1".(€ˆ–âÿÿÿÿÿ8Ì×Í“á1
-Wkotlin:S1172š"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8Ì×Í“á1
-akotlin:S899µ"=Do something with the "Boolean" value returned by "renameTo".(ÄŒ€Êşÿÿÿÿ8Í×Í“á1
-Tkotlin:S1144«"4Remove this unused private "getUserIdDialog" method.(ğçİ„8Ü×Í“á1
-Qkotlin:S1144"1Remove this unused private "addFavourite" method.(Íšúí8İ×Í“á1
-Hkotlin:S108˜")Either remove or fill this block of code.(êù€è8Áôß“á1
+Wkotlin:S1172›"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8Ì×Í“á1
+Ckotlin:S125¬"Remove this commented out code.(ÍÄŞ©øÿÿÿÿ8ô†Š©ç1
+>kotlin:S125Ó"Remove this commented out code.(·ŠÏ“8ûÊŠ©ç1
+Ckotlin:S125á"Remove this commented out code.(ñ¥ùšøÿÿÿÿ8Ìˆ‹©ç1
+Tkotlin:S1144¬"4Remove this unused private "getUserIdDialog" method.(ğçİ„8Ü×Í“á1
+Hkotlin:S108™")Either remove or fill this block of code.(êù€è8Áôß“á1
 9kotlin:S1128"Remove this unused import.(İ£—ë8ó×Í“á1
+>kotlin:S1128"Remove this unused import.(å÷÷Şüÿÿÿÿ8›ËŠ©ç1
+9kotlin:S1128"Remove this unused import.(î—·“8”‡Š©ç1
 >kotlin:S1128"Remove this unused import.(¼„÷ãûÿÿÿÿ8ó×Í“á1
 9kotlin:S1128"Remove this unused import.(Üº¸¡8ó×Í“á1
+>kotlin:S1128"Remove this unused import.(ò“ì­üÿÿÿÿ8£Û‹©ç1
 >kotlin:S1128"Remove this unused import.(¯”şÿÿÿÿ8ó×Í“á1
 8kotlin:S1128"Remove this unused import.(±ÿu8ó×Í“á1
+>kotlin:S1128"Remove this unused import.(ÙÃä¡şÿÿÿÿ8èˆ‹©ç1
+>kotlin:S1128!"Remove this unused import.(Áü¹Øûÿÿÿÿ8œËŠ©ç1
 9kotlin:S1128'"Remove this unused import.(Äàœª8ó×Í“á1
-qkotlin:S1192Ä"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8õ×Í“á1
-Gkotlin:S1874d"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8÷×Í“á1
-Mkotlin:S1066Ş".Merge this "if" statement with the nested one.(€¡ê8ı×Í“á1
+>kotlin:S11287"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8èˆ‹©ç1
+9kotlin:S11288"Remove this unused import.(Âô•Ú8¤Û‹©ç1
+9kotlin:S11289"Remove this unused import.(ßĞÕ©8¤Û‹©ç1
+>kotlin:S1128:"Remove this unused import.(öŒÎƒÿÿÿÿÿ8¤Û‹©ç1
+9kotlin:S1128;"Remove this unused import.(´â 8¤Û‹©ç1
+qkotlin:S1192Å"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8õ×Í“á1
+Gkotlin:S1874e"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8÷×Í“á1

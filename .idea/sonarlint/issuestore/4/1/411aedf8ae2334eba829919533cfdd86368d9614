@@ -1,9 +1,13 @@
 
 ]kotlin:S1172¾"8Remove this unused function parameter "destinationFile".(•§èáşÿÿÿÿ8Ì©üïà1
+>kotlin:S125š"Remove this commented out code.(É–âÜ8¢Á‡©ç1
 =kotlin:S125À"Remove this commented out code.(í‚Ò38Ñ©üïà1
 ;kotlin:S6310Í"Avoid hardcoded dispatchers.(©ÓœW8Ö©üïà1
 <kotlin:S6310ş"Avoid hardcoded dispatchers.(Í¡·Ş8Ö©üïà1
 <kotlin:S6310Ö"Avoid hardcoded dispatchers.(©ÒÕò8Ö©üïà1
 <kotlin:S6310æ"Avoid hardcoded dispatchers.(©ÒÕò8Ö©üïà1
+\kotlin:S1144©"7Remove this unused private "getBitmapFromGlide" method.(³ñşºøÿÿÿÿ8«Á‡©ç1
+Wkotlin:S1144¾"2Remove this unused private "downloadVideo" method.(•§èáşÿÿÿÿ8¬Á‡©ç1
+Jkotlin:S1481”"*Remove this unused "video" local variable.(Ú×¢Ç8¸Á‡©ç1
 Gkotlin:S1874T"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ë©üïà1
 zkotlin:S1186¸"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8î©üïà1

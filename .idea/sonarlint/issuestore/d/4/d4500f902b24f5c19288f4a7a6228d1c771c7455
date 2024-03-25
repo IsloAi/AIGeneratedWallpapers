@@ -1,12 +1,15 @@
 
-Mkotlin:S1172’"(Remove these unused function parameters.(“„œûÿÿÿÿ8Ú”‚ã1
-=kotlin:S125—"Remove this commented out code.(Ê¬ÿ8ß”‚ã1
->kotlin:S125Ã"Remove this commented out code.(¾¯§¡8ÅÏ„ã1
-rkotlin:S117’"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(“„œûÿÿÿÿ8¿æıã1
-Akotlin:S6310×"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Áæıã1
-Nkotlin:S1481p"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8Îæıã1
-Okotlin:S1481…"/Remove this unused "adPosition" local variable.(²úÒ8Îæıã1
-Gkotlin:S1874E"#Deprecated code should not be used.(úâç¹ùÿÿÿÿ8Öæıã1
-Hkotlin:S1874â"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8Öæıã1
-Hkotlin:S1874"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8Öæıã1
-Bkotlin:S1874"#Deprecated code should not be used.(àü8Öæıã1
+Lkotlin:S1172•",Remove this unused function parameter "iap".(™Ó®œ8¢Ğ°©ç1
+=kotlin:S125š"Remove this commented out code.(Ê¬ÿ8§Ğ°©ç1
+mkotlin:S117•"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(™Ó®œ8¬Ğ°©ç1
+Akotlin:S6310ä"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8­Ğ°©ç1
+Nkotlin:S1481s"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8»Ğ°©ç1
+Okotlin:S1481ˆ"/Remove this unused "adPosition" local variable.(²úÒ8»Ğ°©ç1
+9kotlin:S1128"Remove this unused import.(¦ğ¤Ê8ÀĞ°©ç1
+>kotlin:S1128"Remove this unused import.(±ğ«éşÿÿÿÿ8ÀĞ°©ç1
+wkotlin:S101¾"SRename class "downloadCallback" to match the regular expression ^[A-Z][a-zA-Z0-9]*$(½Û¹ûÿÿÿÿ8ÁĞ°©ç1
+Gkotlin:S1874H"#Deprecated code should not be used.(Í‚¬ûıÿÿÿÿ8ÅĞ°©ç1
+Hkotlin:S1874ï"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ÅĞ°©ç1
+Hkotlin:S1874š"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ÅĞ°©ç1
+Bkotlin:S1874›"#Deprecated code should not be used.(àü8ÅĞ°©ç1
+gkotlin:S6517¾"BMake this interface functional or replace it with a function type.(½Û¹ûÿÿÿÿ8ÊĞ°©ç1

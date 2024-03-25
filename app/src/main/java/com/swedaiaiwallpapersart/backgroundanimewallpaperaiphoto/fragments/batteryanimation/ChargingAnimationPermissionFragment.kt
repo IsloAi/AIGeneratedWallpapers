@@ -22,6 +22,7 @@ import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationPermissionBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -33,7 +34,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    private var livewallpaper: LiveWallpaperModel? = null
+    private var livewallpaper: ChargingAnimModel? = null
 
 
     override fun onCreateView(

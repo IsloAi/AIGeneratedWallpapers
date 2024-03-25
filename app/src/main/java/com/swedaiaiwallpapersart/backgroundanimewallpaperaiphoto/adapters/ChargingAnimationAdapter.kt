@@ -14,6 +14,8 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieListener
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
@@ -34,7 +36,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ChargingAnimationAdapter(
+
+class ChargingAnimationAdapter  (
     var arrayList: ArrayList<ChargingAnimModel?>,
     var positionCallback: downloadCallback,
     private val myActivity: MainActivity
@@ -66,7 +69,7 @@ class ChargingAnimationAdapter(
         fun bind(modela: ArrayList<ChargingAnimModel?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage,binding.iap)
+                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage,binding.iap,binding.animationView)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -143,7 +146,7 @@ class ChargingAnimationAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: ChargingAnimModel, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView, error_img: ImageView, iap: ImageView
+    private fun setAllData(model: ChargingAnimModel, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView, error_img: ImageView, iap: ImageView,imageanimationView: LottieAnimationView
     ){
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
@@ -158,41 +161,51 @@ class ChargingAnimationAdapter(
 //        }else{
 //            iap.visibility = View.GONE
 //        }
-        Glide.with(context!!).load(model.thumnail).diskCacheStrategy(DiskCacheStrategy.ALL)
-            .listener(object: RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    Log.d("onLoadFailed", "onLoadFailed: ")
-                    animationView.setAnimation(R.raw.no_data_image_found)
-                    animationView.visibility = View.VISIBLE
-                    error_img.visibility = View.VISIBLE
-                    return false
-                }
 
-                override fun onResourceReady(
-                    resource: Drawable,
-                    model: Any,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource,
-                    isFirstResource: Boolean
-                ): Boolean {
-                    animationView.visibility = View.INVISIBLE
-                    error_img.visibility = View.GONE
-                    Log.d("******loaded", "onResourceReady: ")
-                    return false
-                }
-            }).into(wallpaperMainImage)
+        if (model.extension == "json"){
+            imageanimationView.visibility = View.VISIBLE
+            imageanimationView.setAnimationFromUrl(model.hd_animation)
+            imageanimationView.playAnimation()
+            animationView.visibility = View.INVISIBLE
+            error_img.visibility = View.GONE
+        }else{
+            Glide.with(context!!).load(model.thumnail).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .listener(object: RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.d("onLoadFailed", "onLoadFailed: ")
+                        animationView.setAnimation(R.raw.no_data_image_found)
+                        animationView.visibility = View.VISIBLE
+                        error_img.visibility = View.VISIBLE
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        animationView.visibility = View.INVISIBLE
+                        error_img.visibility = View.GONE
+                        Log.d("******loaded", "onResourceReady: ")
+                        return false
+                    }
+                }).into(wallpaperMainImage)
+        }
+
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
 
             if (currentTime - lastClickTime >= debounceThreshold) {
 
 
-//                positionCallback.getPosition(position,model)
+                positionCallback.getPosition(position,model)
 
 //                    else {
 //                        if (whichClicked == 1) {
@@ -211,7 +224,7 @@ class ChargingAnimationAdapter(
     }
 
     fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
-        Log.e("TAG", "loadad: inside method", )
+        Log.e("TAG", "loadad: inside method")
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
                 R.layout.native_dialog_layout,
@@ -227,7 +240,7 @@ class ChargingAnimationAdapter(
                 R.layout.shimmer_loading_native,
                 adLayout!!
             )
-            Log.e("TAG", "loadad: inside main scope", )
+            Log.e("TAG", "loadad: inside main scope")
 
             withContext(this.coroutineContext) {
                 binding.adsView.loadAd(myActivity,"mainscr_live_tab_scroll","mainscr_live_tab_scroll",
@@ -277,7 +290,7 @@ class ChargingAnimationAdapter(
 
         for(i in 0 until list.size){
             if (arrayList.contains(list[i])){
-                Log.e("********new Data", "updateMoreData: already in list", )
+                Log.e("********new Data", "updateMoreData: already in list")
             }else{
                 arrayList.add(list[i])
             }
@@ -299,5 +312,10 @@ class ChargingAnimationAdapter(
         arrayList.clear()
         arrayList.addAll(list)
         notifyDataSetChanged()
+    }
+
+
+    interface downloadCallback {
+        fun getPosition(position:Int,model: ChargingAnimModel)
     }
 }

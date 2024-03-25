@@ -151,11 +151,11 @@ class DownloadBatteryAnimation : Fragment() {
 
                 Log.e("TAG", "initObservers: $wallpaper")
 
-                if (BlurView.filePath == ""){
-                    downloadVideo(wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
-
-                }
-                getBitmapFromGlide(wallpaper[0].thumnail_url)
+//                if (BlurView.filePath == ""){
+//                    downloadVideo(wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
+//
+//                }
+//                getBitmapFromGlide(wallpaper[0].thumnail_url)
 
 
             }

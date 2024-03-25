@@ -261,3 +261,5 @@ happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/int
 |app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/utilsIG/ImageGenerateViewModel.kt,8\3\83da36a9e20184ec6b770d89cbe1c6c752cf4f36
  
 papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/utilsIG/Parameters.kt,8\7\872d10d5789dad6a4484f18132c489f1be07946c
+Ÿ
+oapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/ChargingAnimationService.kt,7\1\71d9b24b2d7164e21d69307c0819df0f7e3cca63

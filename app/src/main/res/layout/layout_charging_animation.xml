@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/new_main_background">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:timeZone="GMT5"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:textSize="@dimen/_18sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="16:00"
+        android:fontFamily="@font/poppins_bold"
+        android:id="@+id/time"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wednesday, 28th 2024"
+        android:fontFamily="@font/poppins_medium"
+        app:layout_constraintTop_toBottomOf="@id/time"
+        app:layout_constraintStart_toStartOf="@id/time"
+        app:layout_constraintEnd_toEndOf="@id/time"
+        android:textSize="@dimen/_12sdp"
+        android:textColor="@color/white"
+        android:id="@+id/date"
+        />
+
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintTop_toBottomOf="@id/date"
+        app:layout_constraintBottom_toTopOf="@id/batteryPercentage"
+        android:id="@+id/animationView"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="69%"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:id="@+id/batteryPercentage"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

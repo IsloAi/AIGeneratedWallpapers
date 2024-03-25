@@ -130,9 +130,9 @@ class HomeTabsFragment : Fragment() {
         if (AdConfig.tabPositions[0].isEmpty()){
             Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions )
             AdConfig.tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "Car", "Charging", "Gen AI")
-            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
+
         }else{
-            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
+//            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
         }
 
         loadbannerAd()

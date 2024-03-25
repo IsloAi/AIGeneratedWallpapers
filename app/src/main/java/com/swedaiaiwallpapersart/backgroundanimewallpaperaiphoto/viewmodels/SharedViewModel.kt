@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
@@ -36,8 +37,8 @@ class SharedViewModel : ViewModel() {
     val selectedCat = MutableLiveData<CatResponse>()
 
 
-    private val _chargingAnimationResponseList = MutableLiveData<List<LiveWallpaperModel>>()
-    val chargingAnimationResponseList: LiveData<List<LiveWallpaperModel>> = _chargingAnimationResponseList
+    private val _chargingAnimationResponseList = MutableLiveData<List<ChargingAnimModel>>()
+    val chargingAnimationResponseList: LiveData<List<ChargingAnimModel>> = _chargingAnimationResponseList
 
     fun setData(catResponses: List<CatResponse>, position: Int) {
         _catResponseList.value = catResponses
@@ -48,7 +49,7 @@ class SharedViewModel : ViewModel() {
         _liveWallpaperResponseList.value = catResponses
     }
 
-    fun setchargingAnimation(catResponses: List<LiveWallpaperModel>){
+    fun setchargingAnimation(catResponses: List<ChargingAnimModel>){
         _chargingAnimationResponseList.value = catResponses
     }
 

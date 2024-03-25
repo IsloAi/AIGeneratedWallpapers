@@ -27,6 +27,14 @@
                     android:scaleType="centerCrop"
                     />
 
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/animationView"
+                    app:lottie_loop="true"
+                    android:visibility="gone"
+                    app:lottie_autoPlay="false"
+                    />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -131,8 +131,8 @@ class ChargingAnimationFragment : Fragment() {
 
         val list = ArrayList<ChargingAnimModel?>()
         adapter = ChargingAnimationAdapter(list, object :
-            downloadCallback {
-            override fun getPosition(position: Int, model: LiveWallpaperModel) {
+            ChargingAnimationAdapter.downloadCallback {
+            override fun getPosition(position: Int, model: ChargingAnimModel) {
                 val newPosition = position + 1
 
                 Log.e(TAG, "getPosition: "+model )
