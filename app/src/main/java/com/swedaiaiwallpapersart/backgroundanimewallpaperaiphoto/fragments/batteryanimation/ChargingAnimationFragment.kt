@@ -25,6 +25,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,9 +42,7 @@ class ChargingAnimationFragment : Fragment() {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private val myViewModel: LiveWallpaperViewModel by activityViewModels()
-
-    val sharedViewModel: SharedViewModel by activityViewModels()
+    val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
 
     val chargingAnimationViewmodel:ChargingAnimationViewmodel by activityViewModels()
 
@@ -68,7 +67,6 @@ class ChargingAnimationFragment : Fragment() {
 
         myActivity = activity as MainActivity
 
-        myViewModel.getAllTrendingWallpapers()
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
@@ -140,8 +138,6 @@ class ChargingAnimationFragment : Fragment() {
                 Log.e(TAG, "getPosition: "+position )
 
                 sharedViewModel.setChargingAdPosition(newPosition)
-
-                if (newPosition % 2 != 0){
                     Log.e(TAG, "getPosition:$position odd " )
 
                     SDKBaseController.getInstance().showInterstitialAds(
@@ -152,7 +148,7 @@ class ChargingAnimationFragment : Fragment() {
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                BlurView.filePath = ""
+                                BlurView.filePathBattery = ""
                                 sharedViewModel.clearChargeAnimation()
                                 sharedViewModel.setchargingAnimation(listOf(model))
                                 if (isAdded){
@@ -162,7 +158,7 @@ class ChargingAnimationFragment : Fragment() {
 
                             override fun onAdsDismiss() {
                                 Log.e("TAG", "onAdsDismiss: ", )
-                                BlurView.filePath = ""
+                                BlurView.filePathBattery = ""
                                 sharedViewModel.clearChargeAnimation()
                                 sharedViewModel.setchargingAnimation(listOf(model))
                                 if (isAdded){
@@ -174,7 +170,7 @@ class ChargingAnimationFragment : Fragment() {
                             override fun onAdsShowTimeout() {
                                 super.onAdsShowTimeout()
                                 Log.e(TAG, "onAdsShowTimeout: " )
-
+                                BlurView.filePathBattery = ""
                                 sharedViewModel.clearChargeAnimation()
                                 sharedViewModel.setchargingAnimation(listOf(model))
 
@@ -184,16 +180,7 @@ class ChargingAnimationFragment : Fragment() {
                             }
                         }
                     )
-                }else{
-                    BlurView.filePath = ""
-                    sharedViewModel.clearChargeAnimation()
-                    sharedViewModel.setchargingAnimation(listOf(model))
-                    if (isAdded){
-                        findNavController().navigate(R.id.downloadBatteryAnimation)
-                    }
 
-                    Log.e(TAG, "getPosition:$position even " )
-                }
 
 
 

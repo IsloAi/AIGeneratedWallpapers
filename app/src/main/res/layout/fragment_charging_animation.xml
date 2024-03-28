@@ -5,6 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationFragment">
 
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewAll"
         android:layout_width="match_parent"

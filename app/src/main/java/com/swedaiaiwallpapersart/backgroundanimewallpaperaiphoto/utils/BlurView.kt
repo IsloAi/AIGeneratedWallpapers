@@ -32,5 +32,8 @@ object BlurView {
     var filePath = ""
     var fileName = ""
 
+    var filePathBattery = ""
+    var fileNameBattery = ""
+
     var genFrom = "main"
 }

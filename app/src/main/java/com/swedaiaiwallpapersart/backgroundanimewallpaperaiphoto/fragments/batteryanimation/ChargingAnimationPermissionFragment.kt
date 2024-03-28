@@ -50,7 +50,6 @@ class ChargingAnimationPermissionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         loadAd()
         initObservers()
-        setWallpaperOnView()
 
         setEvents()
     }
@@ -152,25 +151,6 @@ class ChargingAnimationPermissionFragment : Fragment() {
 
     fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
         return Settings.canDrawOverlays(context)
-    }
-
-    private fun setWallpaperOnView() {
-        if (isAdded){
-            binding.liveWallpaper.setMediaController(null)
-            binding.liveWallpaper.setVideoPath(BlurView.filePath)
-            binding.liveWallpaper.setOnCompletionListener(MediaPlayer.OnCompletionListener {
-                binding.liveWallpaper.start()
-            })
-
-            binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->
-                // Adjust video looping here if needed
-                mediaPlayer.isLooping = true
-            }
-
-            binding.liveWallpaper.start()
-        }
-
-
     }
 
     override fun onDestroyView() {

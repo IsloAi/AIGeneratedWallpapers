@@ -1,25 +1,33 @@
 
-Wkotlin:S1172›"2Use "_" instead of these unused lambda parameters.(ğù¼Ôûÿÿÿÿ8Ì×Í“á1
-Ckotlin:S125¬"Remove this commented out code.(ÍÄŞ©øÿÿÿÿ8ô†Š©ç1
->kotlin:S125Ó"Remove this commented out code.(·ŠÏ“8ûÊŠ©ç1
-Ckotlin:S125á"Remove this commented out code.(ñ¥ùšøÿÿÿÿ8Ìˆ‹©ç1
-Tkotlin:S1144¬"4Remove this unused private "getUserIdDialog" method.(ğçİ„8Ü×Í“á1
-Hkotlin:S108™")Either remove or fill this block of code.(êù€è8Áôß“á1
-9kotlin:S1128"Remove this unused import.(İ£—ë8ó×Í“á1
->kotlin:S1128"Remove this unused import.(å÷÷Şüÿÿÿÿ8›ËŠ©ç1
-9kotlin:S1128"Remove this unused import.(î—·“8”‡Š©ç1
->kotlin:S1128"Remove this unused import.(¼„÷ãûÿÿÿÿ8ó×Í“á1
-9kotlin:S1128"Remove this unused import.(Üº¸¡8ó×Í“á1
->kotlin:S1128"Remove this unused import.(ò“ì­üÿÿÿÿ8£Û‹©ç1
->kotlin:S1128"Remove this unused import.(¯”şÿÿÿÿ8ó×Í“á1
-8kotlin:S1128"Remove this unused import.(±ÿu8ó×Í“á1
->kotlin:S1128"Remove this unused import.(ÙÃä¡şÿÿÿÿ8èˆ‹©ç1
->kotlin:S1128!"Remove this unused import.(Áü¹Øûÿÿÿÿ8œËŠ©ç1
-9kotlin:S1128'"Remove this unused import.(Äàœª8ó×Í“á1
->kotlin:S11287"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8èˆ‹©ç1
-9kotlin:S11288"Remove this unused import.(Âô•Ú8¤Û‹©ç1
-9kotlin:S11289"Remove this unused import.(ßĞÕ©8¤Û‹©ç1
->kotlin:S1128:"Remove this unused import.(öŒÎƒÿÿÿÿÿ8¤Û‹©ç1
-9kotlin:S1128;"Remove this unused import.(´â 8¤Û‹©ç1
-qkotlin:S1192Å"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8õ×Í“á1
-Gkotlin:S1874e"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8÷×Í“á1
+9kotlin:S1128"Remove this unused import.(İ£—ë8ëô†è1
+>kotlin:S1128"Remove this unused import.(å÷÷Şüÿÿÿÿ8ëô†è1
+9kotlin:S1128"Remove this unused import.(ıºÎà8æ‹è1
+9kotlin:S1128"Remove this unused import.(î—·“8ëô†è1
+>kotlin:S1128	"Remove this unused import.(¼„÷ãûÿÿÿÿ8ìô†è1
+9kotlin:S1128
+"Remove this unused import.(¿Äƒ§8ìô†è1
+9kotlin:S1128"Remove this unused import.(ÒæÜÔ8æ‹è1
+9kotlin:S1128"Remove this unused import.(˜»ˆ8ç‹è1
+9kotlin:S1128"Remove this unused import.(İ˜Æ‚8ç‹è1
+>kotlin:S1128"Remove this unused import.(™¬±öúÿÿÿÿ8ç‹è1
+8kotlin:S1128"Remove this unused import.(ì³(8ç‹è1
+>kotlin:S1128"Remove this unused import.(ò“ì­üÿÿÿÿ8ìô†è1
+9kotlin:S1128"Remove this unused import.(¼„¹8ç‹è1
+>kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8è‹è1
+9kotlin:S1128"Remove this unused import.(´Ùí8è‹è1
+>kotlin:S1128"Remove this unused import.(¯”şÿÿÿÿ8ìô†è1
+8kotlin:S1128"Remove this unused import.(±ÿu8ìô†è1
+>kotlin:S1128 "Remove this unused import.(ÙÃä¡şÿÿÿÿ8ìô†è1
+>kotlin:S1128""Remove this unused import.(Áü¹Øûÿÿÿÿ8ìô†è1
+>kotlin:S1128$"Remove this unused import.(üÒ†°ùÿÿÿÿ8è‹è1
+9kotlin:S1128&"Remove this unused import.(áßøµ8é‹è1
+>kotlin:S1128:"Remove this unused import.(£ñ¹¸ûÿÿÿÿ8ìô†è1
+9kotlin:S1128;"Remove this unused import.(Âô•Ú8íô†è1
+9kotlin:S1128<"Remove this unused import.(ßĞÕ©8íô†è1
+>kotlin:S1128="Remove this unused import.(öŒÎƒÿÿÿÿÿ8íô†è1
+9kotlin:S1128>"Remove this unused import.(´â 8íô†è1
+>kotlin:S1128?"Remove this unused import.( í»Òùÿÿÿÿ8é‹è1
+9kotlin:S1128@"Remove this unused import.(ãèü‡8é‹è1
+>kotlin:S1128A"Remove this unused import.(‘”ˆ’üÿÿÿÿ8ê‹è1
+>kotlin:S1128B"Remove this unused import.(ˆîáüÿÿÿÿ8œ‚ŒŸè1
+Gkotlin:S1874h"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8‚ŒŸè1

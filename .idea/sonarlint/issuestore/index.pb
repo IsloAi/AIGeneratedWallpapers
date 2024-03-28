@@ -263,3 +263,11 @@ happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/int
 papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/utilsIG/Parameters.kt,8\7\872d10d5789dad6a4484f18132c489f1be07946c
 ü
 oapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/ChargingAnimationService.kt,7\1\71d9b24b2d7164e21d69307c0819df0f7e3cca63
+£
+sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/BatteryAnimationViewmodel.kt,f\1\f169f7b2ff268d95e1a489dee53f33289a60f599
+ç
+]app/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/BlurView.kt,8\9\896f91c7dda10df90d01efdd9531e0daf08dd8e3
+ò
+happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/BroadcastReceiver.kt,a\d\ad0864d7bd5a788d589febfe0af4f1d22e2df9f8
+ó
+gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/BatteryAnimationActivity.kt,2\7\27478241fdce5741ae0ccdfad549b3ad77134393

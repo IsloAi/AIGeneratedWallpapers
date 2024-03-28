@@ -4,11 +4,11 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -28,7 +28,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -41,13 +41,17 @@ class DownloadBatteryAnimation : Fragment() {
     private var _binding:FragmentDownloadBatteryAnimationBinding ?= null
     private val binding get() = _binding!!
 
-    val sharedViewModel: SharedViewModel by activityViewModels()
+    val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
 
     private var bitmap: Bitmap? = null
 
     private var animationJob: Job? = null
 
     val TAG = "DOWNLOAD_SCREEN"
+
+    private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
+    private val intervalInMillis: Long = 100 // Update interval in milliseconds
+    private var job: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,7 +76,7 @@ class DownloadBatteryAnimation : Fragment() {
 
     fun loadAd(){
         val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.large_native_layout,
+            R.layout.new_native_language,
             null, false
         ) as? IkmWidgetAdLayout
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -149,16 +153,53 @@ class DownloadBatteryAnimation : Fragment() {
         sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner){wallpaper ->
             if (wallpaper.isNotEmpty()){
 
+                startProgressCoroutine()
                 Log.e("TAG", "initObservers: $wallpaper")
 
-//                if (BlurView.filePath == ""){
-//                    downloadVideo(wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
-//
-//                }
-//                getBitmapFromGlide(wallpaper[0].thumnail_url)
+                if (BlurView.filePathBattery == ""){
+                    downloadVideo(wallpaper[0].hd_animation,video)
+
+                }
+                getBitmapFromGlide(wallpaper[0].thumnail)
 
 
             }
+        }
+    }
+
+    private fun startProgressCoroutine() {
+        job = lifecycleScope.launch(Dispatchers.Main) {
+            var progress = 0
+            repeat((totalTimeInMillis / intervalInMillis).toInt()) {
+                progress = ((it * intervalInMillis * 100) / totalTimeInMillis).toInt()
+                if (isAdded){
+                    binding.progress.progress = progress
+                    binding.progressTxt.text =
+                        progress.toString() + "%"
+                }
+                delay(intervalInMillis)
+            }
+
+            if (isAdded){
+                binding.progress.progress = 100 // Ensure progress reaches 100% even if not exact
+                binding.progressTxt.text = "100%"
+                onProgressComplete(100)
+            }
+
+
+        }
+    }
+
+    private fun onProgressComplete(progress: Int) {
+        if (progress >= 100) {
+            if (isAdded){
+                binding.buttonApplyWallpaper.visibility =  View.VISIBLE
+
+                animationJob?.cancel()
+                binding.loadingTxt.text = "Download Successfull"
+                job?.cancel()
+            }
+
         }
     }
 
@@ -187,20 +228,19 @@ class DownloadBatteryAnimation : Fragment() {
 
 
 
-    private fun downloadVideo(url: String, destinationFile: File, size:Float) {
+    private fun downloadVideo(url: String, destinationFile: File) {
 
 //        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val file = requireContext().filesDir
-        val fileName = System.currentTimeMillis().toString() + ".mp4"
+        val fileName = System.currentTimeMillis().toString() + ".json"
 
         val filepath = File(file,fileName)
 
-        BlurView.filePath = filepath.path
-        BlurView.fileName = fileName
+        BlurView.filePathBattery = filepath.path
+        BlurView.fileNameBattery = fileName
         MySharePreference.setFileName(requireContext(),fileName)
         Log.e("TAG", "downloadVideo: "+ BlurView.fileName )
 
-        val totalSize = (size * 1048576).toLong()
         animateLoadingText()
         lifecycleScope.launch(Dispatchers.IO) {
             AndroidNetworking.download(url, file.path, fileName)
@@ -211,34 +251,9 @@ class DownloadBatteryAnimation : Fragment() {
                 .setDownloadProgressListener { bytesDownloaded, totalBytes ->
                     Log.e("TAG", "downloadVideo: $bytesDownloaded")
                     Log.e("TAG", "downloadVideo total bytes: $totalBytes")
-                    lifecycleScope.launch(Dispatchers.Main) {
-
-                        val percentage = (bytesDownloaded * 100 / totalSize).toInt()
-                        Log.e("TAG", "downloadVideo: $percentage")
-
-                        if (isAdded){
-                            binding.progress.progress =percentage
-                            binding.progressTxt.text =
-                                (bytesDownloaded * 100 / totalSize).toString() + "%"
-                        }
-
-
-                    }
                 }
                 .startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            if (isAdded){
-                                binding.progressTxt.text = "100%"
-                                binding.buttonApplyWallpaper.visibility = View.VISIBLE
-
-                                animationJob?.cancel()
-
-                                binding.loadingTxt.text = "Download Successfull"
-                            }
-
-
-                        }
                     }
 
                     override fun onError(error: ANError?) {
