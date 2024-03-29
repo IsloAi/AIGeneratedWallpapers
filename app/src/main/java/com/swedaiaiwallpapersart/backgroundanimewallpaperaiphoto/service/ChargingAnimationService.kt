@@ -12,6 +12,7 @@ import android.content.pm.ServiceInfo
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.WindowManager
@@ -60,6 +61,8 @@ class ChargingAnimationService: Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
+        Log.e("TAG", "onStartCommand: started" )
+
         return  START_STICKY;
     }
 
@@ -77,50 +80,13 @@ class ChargingAnimationService: Service() {
     }
     private fun createNotification():Notification {
         val channelId = "charging_animation_channel"
-        val notificationIntent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, notificationIntent,
-            PendingIntent.FLAG_IMMUTABLE
-        )
         val builder: NotificationCompat.Builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.app_icon)
             .setContentTitle("Charging Animation")
             .setContentText("Animation is running...")
-            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_LOW)
         return  builder.build()
     }
-
-    private fun startAnimation() {
-        val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val lay = inflater.inflate(R.layout.layout_charging_animation, null)
-        animationView = lay.findViewById(R.id.animationView)
-        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-
-        val params = WindowManager.LayoutParams(
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.MATCH_PARENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-            PixelFormat.TRANSLUCENT
-        )
-
-        windowManager.addView(lay, params)
-
-        // Start your animation logic within the custom View using techniques like:
-        // - ObjectAnimator
-        // - ViewPropertyAnimator
-        // - ValueAnimator
-    }
-
-    private fun stopAnimation() {
-        val windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        windowManager.removeView(animationView)
-    }
-
-
-
-
 
     override fun onBind(p0: Intent?): IBinder? {
         return null

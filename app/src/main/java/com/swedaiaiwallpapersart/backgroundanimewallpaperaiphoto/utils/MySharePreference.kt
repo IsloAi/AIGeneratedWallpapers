@@ -19,6 +19,19 @@ class MySharePreference {
     }
 
 
+        fun setAnimationPath(context: Context,value:String){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("battery",value)
+            myEdit.apply()
+        }
+
+        fun getAnimationPath(context: Context):String?{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getString("battery","")
+        }
+
+
         fun setFireBaseToken(context: Context,value:String){
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
@@ -163,6 +176,43 @@ class MySharePreference {
         fun getFavouriteSaveState(context: Context):Int{
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             return sp.getInt("setFavouriteSaveState",1)
+        }
+
+
+        fun firstLiveWallpaper(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("Live",value)
+            myEdit.apply()
+        }
+
+        fun getfirstLiveWallpaper(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("Live",false)
+        }
+
+        fun firstWallpaperSet(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("regular",value)
+            myEdit.apply()
+        }
+
+        fun getfirstWallpaperSet(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("regular",false)
+        }
+
+        fun artGeneratedFirst(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("art",value)
+            myEdit.apply()
+        }
+
+        fun getartGeneratedFirst(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("art",false)
         }
 
 

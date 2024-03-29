@@ -2,13 +2,16 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
 import android.text.TextPaint
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +25,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -53,14 +57,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class HomeTabsFragment : Fragment() {
@@ -173,6 +174,18 @@ class HomeTabsFragment : Fragment() {
             })
 
         }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            if (isAdded) {
+                if (NotificationManagerCompat.from(requireContext()).canUseFullScreenIntent()) {
+
+                } else {
+                    val intent = Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
+                    intent.putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
+                    requireContext().startActivity(intent)
+                }
+            }
+        }
     }
 
 
@@ -263,7 +276,7 @@ class HomeTabsFragment : Fragment() {
             " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoaded() {
                     super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                    Log.e("*******ADS", "onAdsLoaded: Banner loaded")
                 }
 
                 override fun onAdsLoadFail() {
@@ -272,7 +285,7 @@ class HomeTabsFragment : Fragment() {
                     if (isAdded){
 //                        binding.adsView.reCallLoadAd(this)
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    Log.e("*******ADS", "onAdsLoaded: Banner failed")
                 }
             })
     }

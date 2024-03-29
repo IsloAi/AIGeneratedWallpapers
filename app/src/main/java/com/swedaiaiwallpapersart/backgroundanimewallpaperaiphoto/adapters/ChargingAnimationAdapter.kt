@@ -161,14 +161,9 @@ class ChargingAnimationAdapter  (
 //        }else{
 //            iap.visibility = View.GONE
 //        }
-
-        if (model.extension == "json"){
-            imageanimationView.visibility = View.VISIBLE
-            imageanimationView.setAnimationFromUrl(model.hd_animation)
-            imageanimationView.playAnimation()
-            animationView.visibility = View.INVISIBLE
-            error_img.visibility = View.GONE
-        }else{
+//            imageanimationView.visibility = View.VISIBLE
+//            imageanimationView.setAnimationFromUrl(model.hd_animation)
+//            imageanimationView.playAnimation()
             Glide.with(context!!).load(model.thumnail).diskCacheStrategy(DiskCacheStrategy.ALL)
                 .listener(object: RequestListener<Drawable> {
                     override fun onLoadFailed(
@@ -197,7 +192,7 @@ class ChargingAnimationAdapter  (
                         return false
                     }
                 }).into(wallpaperMainImage)
-        }
+
 
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()

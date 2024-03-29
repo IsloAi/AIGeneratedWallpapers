@@ -150,14 +150,21 @@ class PreviewChargingAnimationFragment : Fragment() {
 
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
+            Log.e("TAG", "setEvents: clicked" )
             if (isDrawOverlaysPermissionGranted(requireContext())){
                 val intent = Intent(requireContext(),ChargingAnimationService::class.java)
+                MySharePreference.setAnimationPath(requireContext(),BlurView.filePathBattery)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                    Log.e("TAG", "setEvents: service start Q", )
                     requireContext().startForegroundService(intent)
 
                 }else{
-
+                    Log.e("TAG", "setEvents: service start else", )
                     requireContext().startService(intent)
+                }
+
+                if (isAdded){
+                    Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
                 }
             }else{
 

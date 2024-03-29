@@ -84,7 +84,7 @@ class ChargingAnimationFragment : Fragment() {
 
                     Log.e(TAG, "ChargingAnimation: "+result.data )
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val list = result.data?.let { addNullValueInsideArray(it) }
+                        val list = result.data?.let { addNullValueInsideArray(it.shuffled()) }
 
                         withContext(Dispatchers.Main){
                             list?.let { adapter?.updateMoreData(it) }
