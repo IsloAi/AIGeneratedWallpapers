@@ -125,6 +125,7 @@ class CategoryFragment : Fragment() {
                 if (wallpapersList?.size!! > 0){
                     Log.e("TAG", "onCustomCreateView: data exists" )
                     lifecycleScope.launch(Dispatchers.IO) {
+                        AdConfig.categoryOrder += "Neon lights"
 
                         val sortedCategories = sortWallpaperCategories(wallpapersList, AdConfig.categoryOrder)
 

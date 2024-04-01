@@ -178,11 +178,13 @@ class HomeTabsFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             if (isAdded) {
                 if (NotificationManagerCompat.from(requireContext()).canUseFullScreenIntent()) {
+                    Log.e("TAG", "onViewCreated: canUseFullScreenIntent" )
 
                 } else {
                     val intent = Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
                     intent.putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
                     requireContext().startActivity(intent)
+                    Log.e("TAG", "onViewCreated: not canUseFullScreenIntent" )
                 }
             }
         }

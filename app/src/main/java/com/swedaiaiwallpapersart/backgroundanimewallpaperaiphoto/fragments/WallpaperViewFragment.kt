@@ -1396,8 +1396,8 @@ class WallpaperViewFragment : Fragment() {
                    request.addOnCompleteListener { task ->
                        Log.e(TAG, "showRateApp:  addOnCompleteListener", )
                        if (isAdded && isResumed) {
-                           Log.e(TAG, "showRateApp:  addOnCompleteListener", )
-                           if (task.isSuccessful()) {
+                           Log.e(TAG, "showRateApp:  addOnCompleteListener" )
+                           if (task.isSuccessful) {
                                Log.e(TAG, "showRateApp:  isSuccessful", )
                                val reviewInfo: ReviewInfo = task.result
                                val flow: Task<Void> = reviewManager!!.launchReviewFlow(myActivity, reviewInfo)

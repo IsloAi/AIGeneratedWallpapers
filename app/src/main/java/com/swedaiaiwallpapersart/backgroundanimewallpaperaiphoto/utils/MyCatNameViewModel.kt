@@ -68,6 +68,10 @@ class MyCatNameViewModel: ViewModel()  {
     val categoriesJson = """
 [
     {
+        "cat_name": "Neon lights",
+        "img_url": "https://edecator.com/wallpaperApp/categoryimages/660691b647293_4.jpg"
+    },
+    {
         "cat_name": "Vintage",
         "img_url": "https://edecator.com/wallpaperApp/categoryimages/Vintage.jpg"
     },

@@ -1,0 +1,1 @@
+keytool -exportcert -alias swedai -keystore "D:\github\artbotic\SwedAi.jks" | "C:\OpenSSL\bin\openssl" sha1 -binary |"C:\OpenSSL\bin\openssl" base64

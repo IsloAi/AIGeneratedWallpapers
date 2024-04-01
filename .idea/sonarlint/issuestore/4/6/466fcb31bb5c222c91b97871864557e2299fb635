@@ -1,16 +1,15 @@
 
-Ckotlin:S125"Remove this commented out code.(ó’´Âûÿÿÿÿ8Áª”Ìè1
-Ckotlin:S125ö"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8Âª”Ìè1
-Hkotlin:S108´")Either remove or fill this block of code.(ÏŒ·ñ8¥Ê‹Íè1
-Pkotlin:S1481Ş"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8áª”Ìè1
-Rkotlin:S1481¯"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8áª”Ìè1
-Lkotlin:S1481®",Remove this unused "tabIcon" local variable.(™Î‡è8áª”Ìè1
+Ckotlin:S125 "Remove this commented out code.(ó’´Âûÿÿÿÿ8Áª”Ìè1
+Ckotlin:S125ø"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8Âª”Ìè1
+Pkotlin:S1481à"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8áª”Ìè1
+Rkotlin:S1481±"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8áª”Ìè1
+Lkotlin:S1481°",Remove this unused "tabIcon" local variable.(™Î‡è8áª”Ìè1
 kkotlin:S1192b"GDefine a constant instead of duplicating this literal "Gen AI" 3 times.(Ãê¤òùÿÿÿÿ8êª”Ìè1
 Ckotlin:S1874—"#Deprecated code should not be used.(£À¯•8ïª”Ìè1
-Ckotlin:S1874ä"#Deprecated code should not be used.(‚Õ‡º8ïª”Ìè1
-Ckotlin:S1874ô"#Deprecated code should not be used.(ê¶«Ê8ïª”Ìè1
-Ckotlin:S1874³"#Deprecated code should not be used.(ê¶«Ê8ïª”Ìè1
-Bkotlin:S1874¶"#Deprecated code should not be used.(…ı£t8ïª”Ìè1
+Ckotlin:S1874æ"#Deprecated code should not be used.(‚Õ‡º8ïª”Ìè1
+Ckotlin:S1874ö"#Deprecated code should not be used.(ê¶«Ê8ïª”Ìè1
+Ckotlin:S1874µ"#Deprecated code should not be used.(ê¶«Ê8ïª”Ìè1
+Bkotlin:S1874¸"#Deprecated code should not be used.(…ı£t8ïª”Ìè1
 qkotlin:S3776r"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ëü«8òª”Ìè1
-zkotlin:S1186‡"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ùª”Ìè1
+zkotlin:S1186‰"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8ùª”Ìè1
 Skotlin:S1066²".Merge this "if" statement with the nested one.(Ê˜™Ÿøÿÿÿÿ8ùª”Ìè1
