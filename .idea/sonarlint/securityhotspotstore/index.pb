@@ -271,3 +271,5 @@ sapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/vie
 happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/service/BroadcastReceiver.kt,a\d\ad0864d7bd5a788d589febfe0af4f1d22e2df9f8
 —
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/BatteryAnimationActivity.kt,2\7\27478241fdce5741ae0ccdfad549b3ad77134393
+•
+eapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/fragments/MainFragment.kt,c\a\caf1521978ce9ac1b0620382e302b8732a610f91

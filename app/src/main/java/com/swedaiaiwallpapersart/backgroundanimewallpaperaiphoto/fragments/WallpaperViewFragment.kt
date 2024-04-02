@@ -608,11 +608,14 @@ class WallpaperViewFragment : Fragment() {
                 if (isAdded && view!= null){
                     adapter?.nativeAdView = adsResult
                     viewPager2?.adapter = adapter
+                    viewPager2?.setCurrentItem(position, false)
+
                 }
             }
 
         })
         viewPager2?.adapter = adapter
+        Log.e(TAG, "setViewPager: "+position )
         viewPager2?.setCurrentItem(position, false)
 
 

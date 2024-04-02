@@ -2,10 +2,12 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
@@ -18,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -35,6 +38,9 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.bmik.android.sdk.model.dto.UpdateAppDto
+import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.bmik.android.sdk.widgets.IkmWidgetAdView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
@@ -43,6 +49,9 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackRateBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.UpdateDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -175,19 +184,107 @@ class HomeTabsFragment : Fragment() {
 
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (isAdded) {
-                if (NotificationManagerCompat.from(requireContext()).canUseFullScreenIntent()) {
-                    Log.e("TAG", "onViewCreated: canUseFullScreenIntent" )
+                try {
+                    if (NotificationManagerCompat.from(requireContext()).canUseFullScreenIntent()) {
+                        Log.e("TAG", "onViewCreated: canUseFullScreenIntent" )
 
-                } else {
-                    val intent = Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
-                    intent.putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
-                    requireContext().startActivity(intent)
-                    Log.e("TAG", "onViewCreated: not canUseFullScreenIntent" )
+                    } else {
+                        val intent = Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
+                        intent.putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
+                        requireContext().startActivity(intent)
+                        Log.e("TAG", "onViewCreated: not canUseFullScreenIntent" )
+                    }
+                }catch (e: ActivityNotFoundException){
+                    e.printStackTrace()
                 }
+
             }
         }
+
+        feedback1Sheet()
+    }
+
+    fun feedback1Sheet(){
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+        binding.feedbackHappy.setOnClickListener {
+            feedbackRateSheet()
+        }
+
+        binding.feedbacksad.setOnClickListener {
+            feedbackQuestionSheet()
+        }
+        bottomSheetDialog.show()
+    }
+
+
+    fun feedbackRateSheet(){
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackRateBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+        binding.simpleRatingBar.setOnRatingChangeListener { ratingBar, rating, fromUser ->
+
+        }
+
+        binding.buttonApplyWallpaper.setOnClickListener {
+            if (binding.simpleRatingBar.rating >= 4){
+
+            }else{
+                feedbackQuestionSheet()
+            }
+        }
+        bottomSheetDialog.show()
+    }
+
+    fun feedbackQuestionSheet(){
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackQuestionBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+
+        binding.probExperience.setOnClickListener {
+            binding.probExperience.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probCrash.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+
+        }
+
+        binding.probCrash.setOnClickListener {
+            binding.probExperience.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probSlow.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+        }
+
+        binding.probSlow.setOnClickListener {
+            binding.probExperience.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probSuggestion.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+        }
+
+        binding.probSuggestion.setOnClickListener {
+            binding.probExperience.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probOthers.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+        }
+
+        binding.probOthers.setOnClickListener {
+            binding.probExperience.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList = ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+        }
+        bottomSheetDialog.show()
     }
 
 

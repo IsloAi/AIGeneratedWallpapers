@@ -72,6 +72,13 @@
         <item name="android:background">@drawable/exit_bottom_bg</item>
     </style>
 
+    <style name="foodRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressDrawable">@drawable/star_rating_bar_full</item>
+        <item name="android:minHeight">25dip</item>
+        <item name="android:maxHeight">25dip</item>
+        <item name="android:numStars">5</item>
+    </style>
+
 
 
 </resources>

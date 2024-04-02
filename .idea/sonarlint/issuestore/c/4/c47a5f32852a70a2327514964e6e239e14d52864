@@ -1,55 +1,55 @@
 
-Okotlin:S6508û
+Okotlin:S6508ş
 "*Replace this usage of Void type with Unit.(êÎ—¸ıÿÿÿÿ8Å­Ù‡ä1
-Ykotlin:S899³
+Ykotlin:S899¶
 ":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8Ç­Ù‡ä1
 =kotlin:S125ô"Remove this commented out code.(ÀñÔ88•íÃ„ä1
 >kotlin:S125ú"Remove this commented out code.(éÎÂú8–íÃ„ä1
 Ckotlin:S125"Remove this commented out code.(ó’´Âûÿÿÿÿ8—íÃ„ä1
-=kotlin:S125É"Remove this commented out code.(§íËf8˜íÃ„ä1
-Ckotlin:S125¸"Remove this commented out code.(±š¡®ûÿÿÿÿ8œíÃ„ä1
->kotlin:S125½"Remove this commented out code.(Ïİş8œíÃ„ä1
-Ckotlin:S125Ü"Remove this commented out code.(«Ã«áıÿÿÿÿ8 ¯‡ä1
-Ckotlin:S125Ï"Remove this commented out code.(—şµ“üÿÿÿÿ8ÔÜÕ‡ä1
-=kotlin:S125Â"Remove this commented out code.(§íËf8ß­¥æ1
-<kotlin:S6310˜"Avoid hardcoded dispatchers.(µØ˜í8ÆíÃ„ä1
-;kotlin:S6310ª"Avoid hardcoded dispatchers.(©ÓœW8ÇíÃ„ä1
-;kotlin:S6310¸"Avoid hardcoded dispatchers.(©ÓœW8èÜÕ‡ä1
-<kotlin:S6310»"Avoid hardcoded dispatchers.(Í¡·Ş8éÜÕ‡ä1
-ukotlin:S6558¬"URemove this it parameter declaration or give this lambda parameter a meaningful name.(×€–8¨®¥æ1
-[kotlin:S1144˜";Remove this unused private "loadBitmapFromUrlAsync" method.(µØ˜í8æíÃ„ä1
-Okotlin:S1144Å"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8ğíÃ„ä1
-Vkotlin:S1144İ
+=kotlin:S125Ì"Remove this commented out code.(§íËf8˜íÃ„ä1
+Ckotlin:S125»"Remove this commented out code.(±š¡®ûÿÿÿÿ8œíÃ„ä1
+>kotlin:S125À"Remove this commented out code.(Ïİş8œíÃ„ä1
+Ckotlin:S125ß"Remove this commented out code.(«Ã«áıÿÿÿÿ8 ¯‡ä1
+Ckotlin:S125Ò"Remove this commented out code.(—şµ“üÿÿÿÿ8ÔÜÕ‡ä1
+=kotlin:S125Å"Remove this commented out code.(§íËf8ß­¥æ1
+<kotlin:S6310›"Avoid hardcoded dispatchers.(µØ˜í8ÆíÃ„ä1
+;kotlin:S6310­"Avoid hardcoded dispatchers.(©ÓœW8ÇíÃ„ä1
+;kotlin:S6310»"Avoid hardcoded dispatchers.(©ÓœW8èÜÕ‡ä1
+<kotlin:S6310¾"Avoid hardcoded dispatchers.(Í¡·Ş8éÜÕ‡ä1
+ukotlin:S6558¯"URemove this it parameter declaration or give this lambda parameter a meaningful name.(×€–8¨®¥æ1
+[kotlin:S1144›";Remove this unused private "loadBitmapFromUrlAsync" method.(µØ˜í8æíÃ„ä1
+Okotlin:S1144È"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8ğíÃ„ä1
+Vkotlin:S1144à
 "1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8É®Ù‡ä1
 >kotlin:S6531¸"Remove this useless cast.(òĞÛÉıÿÿÿÿ8¬«ó…ä1
 Okotlin:S1481"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¯«ó…ä1
 Okotlin:S1481ì"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¯«ó…ä1
-Rkotlin:S1481Ø"-Remove this unused "postData" local variable.(ƒÂêßüÿÿÿÿ8¯«ó…ä1
-Mkotlin:S1481"-Remove this unused "behavior" local variable.(Ø¦š¾8ÃÛõ…ä1
-Ykotlin:S1481¦"4Remove this unused "reviewErrorCode" local variable.(Ú›—ÿÿÿÿÿ8ß¯¥æ1
+Rkotlin:S1481Û"-Remove this unused "postData" local variable.(ƒÂêßüÿÿÿÿ8¯«ó…ä1
+Mkotlin:S1481‘"-Remove this unused "behavior" local variable.(Ø¦š¾8ÃÛõ…ä1
+Ykotlin:S1481©"4Remove this unused "reviewErrorCode" local variable.(Ú›—ÿÿÿÿÿ8ß¯¥æ1
 qkotlin:S1192Æ"LDefine a constant instead of duplicating this literal "******NULL" 15 times.(Ÿ™£Ñşÿÿÿÿ8Ü«ó…ä1
 ‡kotlin:S1192Æ"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 8 times.(Ÿ™£Ñşÿÿÿÿ8İ«ó…ä1
 rkotlin:S1192å"MDefine a constant instead of duplicating this literal "********ADS" 13 times.(™ù£êøÿÿÿÿ8İ«ó…ä1
 tkotlin:S1192å"ODefine a constant instead of duplicating this literal "onAdsDismiss: " 3 times.(™ù£êøÿÿÿÿ8Ş«ó…ä1
 ukotlin:S1192ê"PDefine a constant instead of duplicating this literal "onAdsRewarded: " 4 times.(©ÂÄ‰úÿÿÿÿ8Ş«ó…ä1
 pkotlin:S1192ü"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 6 times.(±È÷®8Ş«ó…ä1
-‰kotlin:S1192õ
+‰kotlin:S1192ø
 "dDefine a constant instead of duplicating this literal "showRateApp:  addOnCompleteListener" 3 times.(¥ıáüÿÿÿÿ8£¯Ù‡ä1
 Hkotlin:S1874¤"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8é«ó…ä1
-Hkotlin:S1874’
+Hkotlin:S1874•
 "#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8¬¯Ù‡ä1
-Hkotlin:S1874Ñ
+Hkotlin:S1874Ô
 "#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8¬¯Ù‡ä1
 rkotlin:S3776¨"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(©Àùè8ë«ó…ä1
 wkotlin:S3776¸"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(”ÔÈÎüÿÿÿÿ8ì«ó…ä1
 wkotlin:S3776ø"RRefactor this method to reduce its Cognitive Complexity from 43 to the 15 allowed.(¶÷Èïøÿÿÿÿ8í«ó…ä1
 wkotlin:S3776Ë"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(Ÿ™¸ëüÿÿÿÿ8î«ó…ä1
-skotlin:S3776…"SRefactor this method to reduce its Cognitive Complexity from 157 to the 15 allowed.(ò¡®í8êÛõ…ä1
-wkotlin:S3776í
+skotlin:S3776ˆ"SRefactor this method to reduce its Cognitive Complexity from 157 to the 15 allowed.(ò¡®í8êÛõ…ä1
+wkotlin:S3776ğ
 "RRefactor this method to reduce its Cognitive Complexity from 71 to the 15 allowed.(Ú‘Ï€ùÿÿÿÿ8±¯Ù‡ä1
-rkotlin:S3776‚"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8ñ«ó…ä1
-zkotlin:S1186ã"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ı«ó…ä1
-bkotlin:S6511"=Merge chained "if" statements into a single "when" statement.(ê³´‘øÿÿÿÿ8Â¯Ù‡ä1
-€kotlin:S3923ë"[Remove this conditional structure or edit its code blocks so that they're not all the same.(ÇÕÑüúÿÿÿÿ8…¬ó…ä1
-€kotlin:S3923‹"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8†¬ó…ä1
-€kotlin:S3923¤"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8†¬ó…ä1
+rkotlin:S3776…"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8ñ«ó…ä1
+zkotlin:S1186æ"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ı«ó…ä1
+bkotlin:S6511„"=Merge chained "if" statements into a single "when" statement.(ê³´‘øÿÿÿÿ8Â¯Ù‡ä1
+€kotlin:S3923î"[Remove this conditional structure or edit its code blocks so that they're not all the same.(ÇÕÑüúÿÿÿÿ8…¬ó…ä1
+€kotlin:S3923"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8†¬ó…ä1
+€kotlin:S3923§"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8†¬ó…ä1
