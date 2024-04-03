@@ -39,6 +39,7 @@ import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -119,6 +120,14 @@ class FullScreenImageViewFragment : DialogFragment() {
         }
     }
 
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.fullViewImage.isEnabled = false
@@ -128,8 +137,15 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetRegularWallScr_BackBt_Click"))
+            }
+
         }
 
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "SetRegularWallScr_View"))
+        }
         setEvents()
 
 
@@ -139,6 +155,9 @@ class FullScreenImageViewFragment : DialogFragment() {
 
     fun setEvents(){
         binding.favouriteButton.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetRegularWallScr_FavoriteBt_Click"))
+            }
             binding.favouriteButton.isEnabled = false
             if(responseData?.liked==true){
                 responseData?.liked = false
@@ -153,6 +172,9 @@ class FullScreenImageViewFragment : DialogFragment() {
         }
 
         binding.downloadWallpaper.setOnClickListener{
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetRegularWallScr_SaveBt_Click"))
+            }
             Log.e("TAG", "functionality: inside click", )
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2){
                 if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
@@ -169,6 +191,9 @@ class FullScreenImageViewFragment : DialogFragment() {
         }
 
         binding.buttonApplyWallpaper.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetRegularWallScr_ApplyBt_Click"))
+            }
 //           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             if(bitmap != null){
 
@@ -548,6 +573,9 @@ class FullScreenImageViewFragment : DialogFragment() {
 
     private fun interstitialAdWithToast (message: String, dialog: BottomSheetDialog){
         Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "Toast"), Pair("action_name", "SetRegularWallScr_SuccessToast_Click"))
+        }
         dialog.dismiss()
     }
     private fun mSaveMediaToStorage(bitmap: Bitmap?) {

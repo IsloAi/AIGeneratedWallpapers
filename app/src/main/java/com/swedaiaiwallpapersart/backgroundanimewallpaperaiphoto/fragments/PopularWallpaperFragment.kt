@@ -24,6 +24,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
@@ -449,7 +450,9 @@ class PopularWallpaperFragment () : Fragment() {
         }
 
 
-
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_PopTab_View"))
+        }
 
         initMostDownloadedData()
 
@@ -499,6 +502,15 @@ class PopularWallpaperFragment () : Fragment() {
 
 
 
+    }
+
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
 

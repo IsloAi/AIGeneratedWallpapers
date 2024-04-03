@@ -5,12 +5,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.FirebaseU
 class Parameters {
     companion object {
         val canvasPos = 0
-        val varendpoint = "v4/dreambooth"
+        val varendpoint = "v3/text2img"
         val enhance_prompt = "no"
         val exact_Nprompt = ""
         val guess_mode = "no"
         val guidance_scale = 20.0
-        val height = "1456"
+        val height = "1024"
         val instance_prompt = ""
         val key = "cBAKGvs2IWAC4XztfETeUPMbKiZvHIBrzmul6VhSpAyzxxtz1oJWxni9vqBG"
         var model_id = "sdxl"
@@ -31,7 +31,7 @@ class Parameters {
         val type = "a"
         val upscale = "no"
         val webhook = "https://edecator.com/wallpaperApp/api/webhook.php"
-        val width = "840"
+        val width = "740"
     }
 
 }

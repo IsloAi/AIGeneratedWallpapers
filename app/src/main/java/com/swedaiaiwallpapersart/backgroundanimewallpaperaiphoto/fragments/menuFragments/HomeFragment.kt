@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
@@ -428,6 +429,10 @@ class HomeFragment : Fragment(){
             }
         }
 
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_CarTab_View"))
+        }
+
         loadData()
         if (dataset){
 
@@ -459,6 +464,14 @@ class HomeFragment : Fragment(){
             }
         }
 
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     companion object{

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
@@ -292,6 +293,10 @@ class AnimeWallpaperFragment : Fragment() {
 
         loadData()
 
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_AnimeTab_View"))
+        }
+
         if (dataset){
 
             Log.e(TAG, "onResume: Data set $dataset")
@@ -315,6 +320,15 @@ class AnimeWallpaperFragment : Fragment() {
             }
         }
 
+    }
+
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     override fun onPause() {

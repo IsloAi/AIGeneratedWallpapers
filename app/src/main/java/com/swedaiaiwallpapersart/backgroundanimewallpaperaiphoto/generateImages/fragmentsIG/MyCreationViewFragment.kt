@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -39,10 +40,19 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.gms.tasks.Task
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.play.core.review.ReviewInfo
+import com.google.android.play.core.review.ReviewManager
+import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackRateBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentMyCreationViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.GetResponseIGEntity
@@ -50,15 +60,19 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.DummyFavorite
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.ref.WeakReference
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MyCreationViewFragment : Fragment() {
     private var _binding: FragmentMyCreationViewBinding?= null
     private val binding get() = _binding!!
@@ -72,11 +86,16 @@ class MyCreationViewFragment : Fragment() {
     private var timeDisplay = 0
     private lateinit var  viewModel:RoomViewModel
 
+    private var reviewManager: ReviewManager? = null
+
     private var mLastClickTime: Long = 0
     private var myId = 0
     private var myActivity : MainActivity? = null
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var getLargImage: String = ""
+
+    @Inject
+    lateinit var endPointsInterface: EndPointsInterface
 
     var isClickInProgress = false
 
@@ -114,7 +133,7 @@ class MyCreationViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        reviewManager = ReviewManagerFactory.create(requireContext())
         binding.adsView.loadAd(requireContext(),"createdwallscr_bottom",
             " createdwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoaded() {
@@ -615,6 +634,11 @@ class MyCreationViewFragment : Fragment() {
                     isFirstResource: Boolean
                 ): Boolean {
                     if (isAdded){
+                        if (MySharePreference.getartGeneratedFirst(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
+                            if (!MySharePreference.getReviewedSuccess(requireContext())){
+                                feedback1Sheet()
+                            }
+                        }
                         binding.editPrompt.visibility = View.VISIBLE
                         binding.loading1?.visibility = GONE
                         binding.loading2?.visibility = GONE
@@ -664,6 +688,180 @@ class MyCreationViewFragment : Fragment() {
             navigate(3, list, prompt, id)
         }
     }
+
+    fun feedback1Sheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+        binding.feedbackHappy.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            feedbackRateSheet()
+        }
+
+        binding.feedbacksad.setOnClickListener {
+            bottomSheetDialog.dismiss()
+            feedbackQuestionSheet()
+        }
+
+        binding.cancel.setOnClickListener {
+            if (isAdded){
+                MySharePreference.setUserCancelledprocess(requireContext(),true)
+            }
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
+    }
+
+    fun googleInAppRate() {
+        try {
+            viewLifecycleOwner.lifecycleScope.launch {
+                if (isAdded && isResumed) {
+                    val request: Task<ReviewInfo> = reviewManager!!.requestReviewFlow()
+                    request.addOnCompleteListener { task ->
+                        if (isAdded && isResumed) {
+                            if (task.isSuccessful) {
+                                val reviewInfo: ReviewInfo = task.result
+                                val flow: Task<Void> =
+                                    reviewManager!!.launchReviewFlow(myActivity!!, reviewInfo)
+                                flow.addOnCompleteListener { task1 ->
+
+                                }
+                            }
+                        }
+                    }.addOnFailureListener { it ->
+                        it.printStackTrace()
+                    }
+
+                }
+            }
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+
+
+    fun feedbackRateSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackRateBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+        binding.simpleRatingBar.setOnRatingChangeListener { ratingBar, rating, fromUser ->
+
+        }
+
+        binding.buttonApplyWallpaper.setOnClickListener {
+            MySharePreference.setReviewedSuccess(requireContext(),true)
+            bottomSheetDialog.dismiss()
+            if (binding.simpleRatingBar.rating >= 4) {
+                googleInAppRate()
+            } else {
+                feedbackQuestionSheet()
+            }
+        }
+
+        binding.cancel.setOnClickListener {
+            MySharePreference.setUserCancelledprocess(requireContext(),true)
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
+    }
+
+    fun feedbackQuestionSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackQuestionBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+
+        var subject = ""
+
+        binding.probExperience.setOnClickListener {
+            subject = "Experience"
+            binding.probExperience.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probCrash.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+
+        }
+
+        binding.probCrash.setOnClickListener {
+            subject = "Crash & Bugs"
+            binding.probExperience.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probSlow.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+        }
+
+        binding.probSlow.setOnClickListener {
+            subject = "Slow Performance"
+            binding.probExperience.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probSuggestion.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+        }
+
+        binding.probSuggestion.setOnClickListener {
+            subject = "Suggestion"
+            binding.probExperience.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+            binding.probOthers.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+        }
+
+        binding.probOthers.setOnClickListener {
+            subject = "Others"
+            binding.probExperience.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probCrash.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSlow.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probSuggestion.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.light))
+            binding.probOthers.backgroundTintList =
+                ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+        }
+
+
+        binding.buttonApplyWallpaper.setOnClickListener {
+            if (binding.feedbackEdt.text.isNotEmpty()){
+                lifecycleScope.launch(Dispatchers.IO) {
+                    MySharePreference.setReviewedSuccess(requireContext(),true)
+                    endPointsInterface.postData(
+                        FeedbackModel("From Review","In app review",subject,binding.feedbackEdt.text.toString(),
+                        MySharePreference.getDeviceID(requireContext())!!
+                    )
+                    )
+                }
+            }
+        }
+        bottomSheetDialog.show()
+    }
+
     private fun navigate(click: Int, list: ArrayList<String>, prompt: String?, id: Int){
 
             timeDisplay = 0

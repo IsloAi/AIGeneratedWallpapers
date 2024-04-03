@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -110,12 +111,27 @@ class LiveWallpaperFragment : Fragment() {
         super.onResume()
         loadData()
 
+        Log.e(TAG, "onResume: " )
+
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_LiveTab_View"))
+        }
+
+
         if (isAdded){
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
 

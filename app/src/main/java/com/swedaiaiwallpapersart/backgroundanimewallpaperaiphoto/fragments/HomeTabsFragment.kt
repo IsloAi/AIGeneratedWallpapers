@@ -38,6 +38,7 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.bmik.android.sdk.model.dto.UpdateAppDto
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -145,6 +146,11 @@ class HomeTabsFragment : Fragment() {
 //            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
         }
 
+
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "MainScr_View"))
+        }
+
         loadbannerAd()
         setGradienttext()
         setViewPager()
@@ -204,6 +210,14 @@ class HomeTabsFragment : Fragment() {
         }
 
         feedback1Sheet()
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     fun feedback1Sheet(){
@@ -390,19 +404,31 @@ class HomeTabsFragment : Fragment() {
     }
     private fun setEvents(){
         binding.settings.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SettingBT_Click"))
+            }
             findNavController().navigate(R.id.settingFragment)
         }
 
 
         binding.search.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SearchBT_Click"))
+            }
             findNavController().navigate(R.id.searchWallpapersFragment)
         }
 
         binding.goPremium.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_IAPBT_Click"))
+            }
             findNavController().navigate(R.id.IAPFragment)
         }
         backHandle()
     }
+
+
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -412,6 +438,9 @@ class HomeTabsFragment : Fragment() {
     private fun backHandle(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                if (isAdded){
+                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+                }
                 if (binding.viewPager.currentItem != 0){
                     binding.viewPager.setCurrentItem(0)
                 }else{
@@ -420,6 +449,7 @@ class HomeTabsFragment : Fragment() {
                     existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
                 }
 
+                Log.e("TAG", "handleOnBackPressed: ", )
             }
         })
     }
@@ -479,8 +509,53 @@ class HomeTabsFragment : Fragment() {
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                when(tab?.text){
+                    "Live" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_LiveTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                    "Popular" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_PopularTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                    "Category" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_CategoryTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                    "Anime" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_AnimeTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                    "Car" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_CarTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                    "Charging" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_ChargingTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                    "Gen AI" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_GenAITab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
+                }
                 viewModel.setData(true)
                 updateTabAppearance(tab!!,true)
+
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -21,10 +22,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.IkmSdkController
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -62,7 +65,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
@@ -74,8 +76,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),ConnectivityListener {
-
-    private lateinit var controller: NavController
     lateinit var binding: ActivityMainBinding
     private var selectedPrompt: String? = null
 
@@ -94,6 +94,10 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     private  val myViewModel: MyHomeViewModel by viewModels()
 
     private val chargingAnimationViewmodel : ChargingAnimationViewmodel by viewModels()
+
+    private var _navController: NavController? = null
+
+    private val navController get() = _navController!!
 
 
 
@@ -121,6 +125,14 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         lifecycleScope.launch {
             liveViewModel.getMostUsed("1","500",deviceID)
         }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.e(TAG, "handleOnBackPressed: " )
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+               navController.popBackStack()
+            }
+        })
 
 
         chargingAnimationViewmodel.getChargingAnimations()
@@ -264,11 +276,19 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             MySharePreference.setDeviceID(this, deviceID)
             Log.e("TAG", "onCreate: " + deviceID)
         }
-        val navHostFragment =
-            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        controller = navHostFragment.navController
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        _navController = navHostFragment.navController
         initFirebaseRemoteConfig()
 
+    }
+
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(this, eventName, *param)
     }
 
 

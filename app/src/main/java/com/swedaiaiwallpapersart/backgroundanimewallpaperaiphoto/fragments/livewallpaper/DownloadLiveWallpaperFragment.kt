@@ -19,6 +19,7 @@ import com.androidnetworking.interfaces.DownloadListener
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -72,6 +73,18 @@ class DownloadLiveWallpaperFragment : Fragment() {
         setEvents()
         initObservers()
 
+
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "Downloadscr_View"))
+        }
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     fun loadAd(){
@@ -115,6 +128,9 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Previewbt_click"))
+            }
             SDKBaseController.getInstance().showInterstitialAds(
                 requireActivity(),
                 "downloadscr_set_click",
@@ -143,6 +159,10 @@ class DownloadLiveWallpaperFragment : Fragment() {
         }
 
         binding.toolbar.setOnClickListener {
+
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Backbutton_click"))
+            }
             findNavController().popBackStack()
         }
     }
@@ -242,7 +262,14 @@ class DownloadLiveWallpaperFragment : Fragment() {
                                 animationJob?.cancel()
 
                                 binding.loadingTxt.text = "Download Successfull"
+
+
+                                if (isAdded){
+                                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Successful"))
+                                }
                             }
+
+
 
 
                         }

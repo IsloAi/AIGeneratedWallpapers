@@ -1,21 +1,20 @@
 
-=kotlin:S1259"Remove this commented out code.(¹Èƒ•8¬ªØ…ä1
->kotlin:S125Ë"Remove this commented out code.(ÒË¢8­ªØ…ä1
-=kotlin:S125›"Remove this commented out code.(§íËf8“¨½‡ä1
-Ckotlin:S125³"Remove this commented out code.(Ò»ˆşÿÿÿÿ8®ªØ…ä1
-<kotlin:S6310€"Avoid hardcoded dispatchers.(ÏÃâ8³ªØ…ä1
-<kotlin:S6310Ç"Avoid hardcoded dispatchers.(©ÒÕò8³ªØ…ä1
-:kotlin:S6310p"Avoid hardcoded dispatchers.(©ÓœW8³ªØ…ä1
-;kotlin:S6310s"Avoid hardcoded dispatchers.(Í¡·Ş8´ªØ…ä1
-;kotlin:S6310¾"Avoid hardcoded dispatchers.(©ÓœW8´ªØ…ä1
-<kotlin:S6310Ó"Avoid hardcoded dispatchers.(Í¡·Ş8´ªØ…ä1
-Hkotlin:S108·")Either remove or fill this block of code.(·Úøš8ÀªØ…ä1
-Mkotlin:S108ä")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ÀªØ…ä1
->kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÏªØ…ä1
-9kotlin:S1128!"Remove this unused import.(Æ—ï8¿òê ç1
->kotlin:S11280"Remove this unused import.(ÌëÉÚşÿÿÿÿ8ĞªØ…ä1
-pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ÒªØ…ä1
-wkotlin:S3776±"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8ÕªØ…ä1
-Skotlin:S1066©".Merge this "if" statement with the nested one.(·Ò×úüÿÿÿÿ8ÙªØ…ä1
-Nkotlin:S1066¬".Merge this "if" statement with the nested one.(šÖÉù8‡ŠÃ‡ä1
-fkotlin:S6510ğ"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8ÚªØ…ä1
+=kotlin:S125:"Remove this commented out code.(¹Èƒ•8¬ªØ…ä1
+>kotlin:S125Ì"Remove this commented out code.(ÒË¢8­ªØ…ä1
+=kotlin:S125œ"Remove this commented out code.(§íËf8“¨½‡ä1
+Ckotlin:S125¸"Remove this commented out code.(Ò»ˆşÿÿÿÿ8®ªØ…ä1
+<kotlin:S6310"Avoid hardcoded dispatchers.(ÏÃâ8³ªØ…ä1
+<kotlin:S6310Ì"Avoid hardcoded dispatchers.(©ÒÕò8³ªØ…ä1
+:kotlin:S6310q"Avoid hardcoded dispatchers.(©ÓœW8³ªØ…ä1
+;kotlin:S6310t"Avoid hardcoded dispatchers.(Í¡·Ş8´ªØ…ä1
+;kotlin:S6310¿"Avoid hardcoded dispatchers.(©ÓœW8´ªØ…ä1
+<kotlin:S6310Ô"Avoid hardcoded dispatchers.(Í¡·Ş8´ªØ…ä1
+Hkotlin:S108¸")Either remove or fill this block of code.(·Úøš8ÀªØ…ä1
+Mkotlin:S108å")Either remove or fill this block of code.(±ß–ûÿÿÿÿ8ÀªØ…ä1
+>kotlin:S1128"Remove this unused import.(’—ÄÑùÿÿÿÿ8ÏªØ…ä1
+>kotlin:S11281"Remove this unused import.(ÌëÉÚşÿÿÿÿ8ĞªØ…ä1
+pkotlin:S1192"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8ÒªØ…ä1
+wkotlin:S3776²"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(×ÿ‚ñúÿÿÿÿ8ÕªØ…ä1
+Skotlin:S1066ª".Merge this "if" statement with the nested one.(·Ò×úüÿÿÿÿ8ÙªØ…ä1
+Nkotlin:S1066­".Merge this "if" statement with the nested one.(šÖÉù8‡ŠÃ‡ä1
+fkotlin:S6510ñ"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8ÚªØ…ä1

@@ -16,6 +16,7 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.model.dto.CommonAdsAction
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.utils.IkmSdkUtils
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -70,6 +71,11 @@ class SplashOnFragment : Fragment() {
         SDKBaseController.getInstance().onDataGetSuccessListener = {
             //do something
         }
+        if (isAdded){
+
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "SplashScr_View"))
+        }
+
 
 
 
@@ -155,6 +161,9 @@ class SplashOnFragment : Fragment() {
                 }
 
                 override fun onAdsDismiss() {
+
+
+
                     if (lan?.isEmpty() == true && isAdded){
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
@@ -276,7 +285,13 @@ class SplashOnFragment : Fragment() {
         }
     }
 
-
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+    }
 
 
 

@@ -35,6 +35,7 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
@@ -118,6 +119,19 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         setEvents()
 
+
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "SetLiveWallScr_View"))
+        }
+
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     private fun initObservers() {
@@ -158,7 +172,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_SetBt_Click"))
+            }
             Log.e("TAG", "setEvents: "+livewallpaper )
 
             if (livewallpaper?.unlocked == false){
@@ -205,6 +221,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         binding.toolbar.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_BackBt_Click"))
+            }
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
 
@@ -215,6 +234,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         binding.setLiked.setOnClickListener {
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_FavoriteBt_Click"))
+            }
             binding.setLiked.isEnabled = false
             if (livewallpaper?.liked == true) {
                 livewallpaper?.liked = false
@@ -230,6 +252,10 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
 
         binding.downloadWallpaper.setOnClickListener {
+
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_SaveBt_Click"))
+            }
             val source = File(BlurView.filePath)
             val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
             val destination = File(file, BlurView.fileName)
@@ -640,7 +666,14 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 // val intent = Intent(context, AnotherActivity::class.java)
                 // context.startActivity(intent)
 
+                if (isAdded){
+                    MySharePreference.firstLiveWallpaper(requireContext(),true)
+                }
                 findNavController().popBackStack(R.id.homeTabsFragment, false)
+
+                if (isAdded){
+                    sendTracking("screen_active",Pair("action_type", "Toast"), Pair("action_name", "SetLiveWallScr_SuccessToast_Click"))
+                }
 
                 Toast.makeText(requireContext(),"Wallpaper set successfully",Toast.LENGTH_SHORT).show()
             } else {

@@ -216,5 +216,47 @@ class MySharePreference {
         }
 
 
+        fun setFeedbackSession1Completed(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("session1",value)
+            myEdit.apply()
+        }
+
+        fun getFeedbackSession1Completed(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("session1",false)
+        }
+
+        fun setReviewedSuccess(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("reviewed",value)
+            myEdit.apply()
+        }
+
+        fun getReviewedSuccess(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("reviewed",false)
+        }
+
+        fun setUserCancelledprocess(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("cancel",value)
+            myEdit.apply()
+        }
+
+        fun getUserCancelledprocess(context: Context):Boolean{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("cancel",false)
+        }
+
+
+
+
+
+
+
     }
 }

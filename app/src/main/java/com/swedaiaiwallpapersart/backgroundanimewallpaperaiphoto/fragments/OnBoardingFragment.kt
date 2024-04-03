@@ -17,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -57,42 +58,6 @@ class OnBoardingFragment : Fragment() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
-
-
-//        val nativeAd = NativeAdsPreLoading.getOnBoaringAds()
-//
-//        val adLayout = LayoutInflater.from(activity).inflate(
-//            R.layout.layout_custom_admob,
-//            null, false
-//        ) as? IkmWidgetAdLayout
-//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-//
-//        binding.adsView.setCustomNativeAdLayout(
-//            R.layout.shimmer_loading_native,
-//            adLayout!!
-//        )
-//        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-//            object : CustomSDKAdsListenerAdapter() {
-//                override fun onAdsLoadFail() {
-//                    super.onAdsLoadFail()
-//                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                    binding.adsView.visibility = View.GONE
-//                }
-//
-//                override fun onAdsLoaded() {
-//                    super.onAdsLoaded()
-//                    if (isAdded && view != null) {
-//                        // Modify view visibility here
-//                        binding.adsView.visibility = View.VISIBLE
-//                    }
-//                    Log.e("TAG", "onAdsLoaded: native loaded" )
-//                }
-//            }
-//        )
         backHandle()
 
         populateOnbaordingItems()
@@ -101,12 +66,19 @@ class OnBoardingFragment : Fragment() {
         setIndicator()
         setCurrentIndicator(0)
 
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
+        }
+
         binding.onboardingViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
                 when (position) {
                     0 -> {
+                        if (isAdded){
+                            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
+                        }
                         SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         binding.onbTxt1.text = "Transform your device into an anime haven with our stunning wallpaper collection"
@@ -148,6 +120,9 @@ class OnBoardingFragment : Fragment() {
                         )
                     }
                     1 -> {
+                        if (isAdded){
+                            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
+                        }
                         SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         val adLayout = LayoutInflater.from(activity).inflate(
@@ -188,6 +163,9 @@ class OnBoardingFragment : Fragment() {
                         binding.onbTxt2.text = "Car Canvas"
                     }
                     2 -> {
+                        if (isAdded){
+                            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
+                        }
                         val adLayout = LayoutInflater.from(activity).inflate(
                             R.layout.new_native_language,
                             null, false
@@ -241,6 +219,13 @@ class OnBoardingFragment : Fragment() {
             MySharePreference.setOnboarding(requireContext(),true)
             val currentItem = binding.onboardingViewPager.currentItem
             val lastItemIndex = (binding.onboardingViewPager.adapter?.itemCount ?: 0) - 1
+            Log.e("TAG", "onViewCreated: "+currentItem )
+
+
+                if (isAdded){
+                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "OnboardingScr1_Next_Click"))
+                }
+
 
             if (currentItem < lastItemIndex) {
                 // Move to the next item
@@ -256,6 +241,9 @@ class OnBoardingFragment : Fragment() {
     private fun backHandle(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                if (isAdded){
+                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+                }
                 when (binding.onboardingViewPager.currentItem) {
                     2 -> {
                         binding.onboardingViewPager.currentItem =1
@@ -274,6 +262,9 @@ class OnBoardingFragment : Fragment() {
             requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
+                if (isAdded){
+                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+                }
                 when (binding.onboardingViewPager.currentItem) {
                     2 -> {
                         binding.onboardingViewPager.currentItem =1
@@ -287,6 +278,15 @@ class OnBoardingFragment : Fragment() {
                 }
             }
         }
+    }
+
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     override fun onDestroyView() {

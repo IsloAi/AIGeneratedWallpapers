@@ -1,14 +1,14 @@
 
-Ykotlin:S899Â":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8îşã«Û1
-=kotlin:S125×"Remove this commented out code.(§íËf8ûöÅ«Û1
-Ckotlin:S125ß"Remove this commented out code.(±š¡®ûÿÿÿÿ8øşã«Û1
->kotlin:S125ä"Remove this commented out code.(Ïİş8ùşã«Û1
-;kotlin:S6310Ñ"Avoid hardcoded dispatchers.(©ÓœW8ÿã«Û1
-;kotlin:S6310©"Avoid hardcoded dispatchers.(©ÓœW8‚ÿã«Û1
-<kotlin:S6310¬"Avoid hardcoded dispatchers.(Í¡·Ş8‚ÿã«Û1
-Mkotlin:S1481Œ"-Remove this unused "behavior" local variable.(Ø¦š¾8¢ÿã«Û1
-qkotlin:S1192à"LDefine a constant instead of duplicating this literal "********ADS" 9 times.(™ù£êøÿÿÿÿ8±•äÎ1
-pkotlin:S1192ñ"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 5 times.(±È÷®8¬ÿã«Û1
-qkotlin:S3776Œ"RRefactor this method to reduce its Cognitive Complexity from 22 to the 15 allowed.(ò†Ê,8ô’Ã«Û1
-rkotlin:S3776„"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ò¡®í8±ÿã«Û1
-zkotlin:S1186Ú"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8·ÿã«Û1
+Ykotlin:S899Ş":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8îşã«Û1
+=kotlin:S125ğ"Remove this commented out code.(§íËf8ûöÅ«Û1
+Ckotlin:S125û"Remove this commented out code.(±š¡®ûÿÿÿÿ8øşã«Û1
+>kotlin:S125€"Remove this commented out code.(Ïİş8ùşã«Û1
+;kotlin:S6310í"Avoid hardcoded dispatchers.(©ÓœW8ÿã«Û1
+;kotlin:S6310Â"Avoid hardcoded dispatchers.(©ÓœW8‚ÿã«Û1
+<kotlin:S6310Å"Avoid hardcoded dispatchers.(Í¡·Ş8‚ÿã«Û1
+Mkotlin:S1481¥"-Remove this unused "behavior" local variable.(Ø¦š¾8¢ÿã«Û1
+qkotlin:S1192ù"LDefine a constant instead of duplicating this literal "********ADS" 9 times.(™ù£êøÿÿÿÿ8±•äÎ1
+pkotlin:S1192Š"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 5 times.(±È÷®8¬ÿã«Û1
+qkotlin:S3776œ"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(ò†Ê,8ô’Ã«Û1
+rkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ò¡®í8±ÿã«Û1
+zkotlin:S1186ó"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8·ÿã«Û1

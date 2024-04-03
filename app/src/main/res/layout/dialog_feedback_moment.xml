@@ -12,6 +12,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="@dimen/_8sdp"
+        android:id="@+id/cancel"
         app:tint="@color/button_bg" />
 
 

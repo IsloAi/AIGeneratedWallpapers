@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -59,6 +60,10 @@ class LocalizationFragment : Fragment() {
         pos = MySharePreference.getLanguageposition(requireContext())!!
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
+        if (isAdded){
+            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "LanguageScr_View"))
+        }
         setGradienttext()
 
         loadNativeAd()
@@ -80,6 +85,14 @@ class LocalizationFragment : Fragment() {
             customColors, null, Shader.TileMode.CLAMP
         )
         binding.applyLanguage.paint.shader = shader
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     fun loadNativeAd(){
@@ -195,6 +208,10 @@ class LocalizationFragment : Fragment() {
 
         binding.applyLanguage.setOnClickListener {
 
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "LanguageScr_Next_Click"))
+            }
+
             if (selectedItem != null) {
                 MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
                 MySharePreference.setLanguageposition(requireContext(),selected)
@@ -301,6 +318,9 @@ class LocalizationFragment : Fragment() {
     private fun backHandle(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
+                if (isAdded){
+                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+                }
                 if (exit){
                     requireActivity().finishAffinity()
                 }else{
