@@ -1,41 +1,45 @@
 
-Wkotlin:S1172î"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ8±°œê1
-]kotlin:S1172Ö"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8²°œê1
-Jkotlin:S6508Ô"*Replace this usage of Void type with Unit.(†×„ë8³°œê1
-Ckotlin:S125”"Remove this commented out code.(ó’´Âûÿÿÿÿ8Á°œê1
->kotlin:S125ƒ"Remove this commented out code.(ƒïÕ¦8Á°œê1
-<kotlin:S6310Â"Avoid hardcoded dispatchers.(©ÒÕò8Ï°œê1
-;kotlin:S6310Ô"Avoid hardcoded dispatchers.(©ÓœW8Ğ°œê1
-tkotlin:S6558Û"URemove this it parameter declaration or give this lambda parameter a meaningful name.(ìİŠO8Ô°œê1
-qkotlin:S1192Ò"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8œ°œê1
-Hkotlin:S1874½"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8¡°œê1
-Hkotlin:S1874"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¡°œê1
-Bkotlin:S1874"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874‘"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874“"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874•"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874œ"#Deprecated code should not be used.(¨»š8¡°œê1
-Hkotlin:S1874"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¡°œê1
-Bkotlin:S1874 "#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874¢"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874¤"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874ª"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874¬"#Deprecated code should not be used.(¨»š8¡°œê1
-Hkotlin:S1874®"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¡°œê1
-Bkotlin:S1874°"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874²"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874¸"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874º"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874¼"#Deprecated code should not be used.(¨»š8¡°œê1
-Hkotlin:S1874¾"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¡°œê1
-Bkotlin:S1874À"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874Æ"#Deprecated code should not be used.(¨»š8¡°œê1
-Bkotlin:S1874È"#Deprecated code should not be used.(¨»š8¢°œê1
-Bkotlin:S1874Ê"#Deprecated code should not be used.(¨»š8¢°œê1
-Bkotlin:S1874Ì"#Deprecated code should not be used.(¨»š8¢°œê1
-Hkotlin:S1874Î"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¢°œê1
-rkotlin:S3776³"RRefactor this method to reduce its Cognitive Complexity from 64 to the 15 allowed.(şÅâÏ8¤°œê1
-wkotlin:S3776ç"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(³‡¤•ûÿÿÿÿ8¤°œê1
-Skotlin:S1066".Merge this "if" statement with the nested one.(©ì¯Ğıÿÿÿÿ8°°œê1
-Skotlin:S1066ı".Merge this "if" statement with the nested one.(ûåŸÖşÿÿÿÿ8°°œê1
-Skotlin:S1066Ñ".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8°°œê1
+Wkotlin:S1172ƒ"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ8í¿ê1
+]kotlin:S1172ë"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8î¿ê1
+Jkotlin:S6508é"*Replace this usage of Void type with Unit.(†×„ë8ï¿ê1
+Ckotlin:S125•"Remove this commented out code.(ó’´Âûÿÿÿÿ8Á°œê1
+>kotlin:S125„"Remove this commented out code.(ƒïÕ¦8Á°œê1
+<kotlin:S6310Ã"Avoid hardcoded dispatchers.(©ÒÕò8Ï°œê1
+;kotlin:S6310î"Avoid hardcoded dispatchers.(©ÓœW8‘¿ê1
+<kotlin:S6310õ"Avoid hardcoded dispatchers.(Í¡·Ş8ó²ïÇê1
+tkotlin:S6558ğ"URemove this it parameter declaration or give this lambda parameter a meaningful name.(ìİŠO8•¿ê1
+qkotlin:S1192Ó"LDefine a constant instead of duplicating this literal "********ADS" 3 times.(™ù£êøÿÿÿÿ8œ°œê1
+Hkotlin:S1874¾"#Deprecated code should not be used.(Æ‹„Óùÿÿÿÿ8¡°œê1
+Hkotlin:S1874§"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8à¿ê1
+Bkotlin:S1874©"#Deprecated code should not be used.(¨»š8à¿ê1
+Bkotlin:S1874«"#Deprecated code should not be used.(¨»š8à¿ê1
+Bkotlin:S1874­"#Deprecated code should not be used.(¨»š8à¿ê1
+Bkotlin:S1874¯"#Deprecated code should not be used.(¨»š8à¿ê1
+Bkotlin:S1874¶"#Deprecated code should not be used.(¨»š8á¿ê1
+Hkotlin:S1874¸"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8á¿ê1
+Bkotlin:S1874º"#Deprecated code should not be used.(¨»š8á¿ê1
+Bkotlin:S1874¼"#Deprecated code should not be used.(¨»š8á¿ê1
+Bkotlin:S1874¾"#Deprecated code should not be used.(¨»š8á¿ê1
+Bkotlin:S1874Ä"#Deprecated code should not be used.(¨»š8á¿ê1
+Bkotlin:S1874Æ"#Deprecated code should not be used.(¨»š8á¿ê1
+Hkotlin:S1874È"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8â¿ê1
+Bkotlin:S1874Ê"#Deprecated code should not be used.(¨»š8â¿ê1
+Bkotlin:S1874Ì"#Deprecated code should not be used.(¨»š8â¿ê1
+Bkotlin:S1874Ò"#Deprecated code should not be used.(¨»š8â¿ê1
+Bkotlin:S1874Ô"#Deprecated code should not be used.(¨»š8â¿ê1
+Bkotlin:S1874Ö"#Deprecated code should not be used.(¨»š8â¿ê1
+Hkotlin:S1874Ø"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8ã¿ê1
+Bkotlin:S1874Ú"#Deprecated code should not be used.(¨»š8ã¿ê1
+Bkotlin:S1874à"#Deprecated code should not be used.(¨»š8ã¿ê1
+Bkotlin:S1874â"#Deprecated code should not be used.(¨»š8ã¿ê1
+Bkotlin:S1874ä"#Deprecated code should not be used.(¨»š8ã¿ê1
+Bkotlin:S1874æ"#Deprecated code should not be used.(¨»š8ã¿ê1
+Hkotlin:S1874è"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8ã¿ê1
+rkotlin:S3776´"RRefactor this method to reduce its Cognitive Complexity from 64 to the 15 allowed.(şÅâÏ8¤°œê1
+wkotlin:S3776è"RRefactor this method to reduce its Cognitive Complexity from 32 to the 15 allowed.(³‡¤•ûÿÿÿÿ8¤°œê1
+rkotlin:S3776ö"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(íÆãÁ8¯ßş¾ê1
+Skotlin:S1066Ğ".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8°°œê1
+Skotlin:S1066".Merge this "if" statement with the nested one.(©ì¯Ğıÿÿÿÿ8Î·ù¾ê1
+Nkotlin:S1066‰".Merge this "if" statement with the nested one.(º†Šä8»ßş¾ê1
+Skotlin:S1066€".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8ö¿ê1
+Skotlin:S1066æ".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8ö¿ê1

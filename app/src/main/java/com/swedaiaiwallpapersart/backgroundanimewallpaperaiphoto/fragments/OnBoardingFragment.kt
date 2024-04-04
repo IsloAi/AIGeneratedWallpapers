@@ -70,6 +70,8 @@ class OnBoardingFragment : Fragment() {
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
         }
 
+
+
         binding.onboardingViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -85,7 +87,7 @@ class OnBoardingFragment : Fragment() {
                         binding.onbTxt2.text = "Anime Essence"
 
                         val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.new_native_language,
+                            R.layout.native_onboarding_src,
                             null, false
                         ) as? IkmWidgetAdLayout
                         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -126,7 +128,7 @@ class OnBoardingFragment : Fragment() {
                         SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.new_native_language,
+                            R.layout.native_onboarding_src,
                             null, false
                         ) as? IkmWidgetAdLayout
                         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
@@ -167,7 +169,7 @@ class OnBoardingFragment : Fragment() {
                             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
                         }
                         val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.new_native_language,
+                            R.layout.native_onboarding_src,
                             null, false
                         ) as? IkmWidgetAdLayout
                         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)

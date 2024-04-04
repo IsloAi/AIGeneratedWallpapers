@@ -72,7 +72,7 @@ class ImageGenerateViewModel:ViewModel() {
             override fun onFailure(call: Call<GetResponseIG>, t: Throwable) {
                 progress.dismiss()
                 t.printStackTrace()
-                Log.d("imageLists", "error : ${t.message}")
+                Log.d("imageLists", "error : ${t.printStackTrace()}")
                 Toast.makeText(context, "Generated Error", Toast.LENGTH_SHORT).show()
             }
         })

@@ -69,6 +69,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.ref.WeakReference
 import javax.inject.Inject
 
@@ -634,8 +635,19 @@ class MyCreationViewFragment : Fragment() {
                     isFirstResource: Boolean
                 ): Boolean {
                     if (isAdded){
-                        if (MySharePreference.getartGeneratedFirst(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
-                            if (!MySharePreference.getReviewedSuccess(requireContext())){
+                        if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(requireContext()) || MySharePreference.getfirstLiveWallpaper(requireContext())){
+                            Log.e("TAG", "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                            if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
+                                if (isAdded){
+                                    Log.e("TAG", "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                                    feedback1Sheet()
+                                }
+                            }
+
+                        }
+
+                        if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(requireContext()) && !MySharePreference.getFeedbackSession2Completed(requireContext())){
+                            if (isAdded){
                                 feedback1Sheet()
                             }
                         }
@@ -694,14 +706,23 @@ class MyCreationViewFragment : Fragment() {
         val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
         binding.feedbackHappy.setOnClickListener {
+            MySharePreference.setFeedbackSession1Completed(requireContext(),true)
             bottomSheetDialog.dismiss()
             feedbackRateSheet()
         }
 
         binding.feedbacksad.setOnClickListener {
+            MySharePreference.setFeedbackSession1Completed(requireContext(),true)
             bottomSheetDialog.dismiss()
             feedbackQuestionSheet()
         }
+
+        if (isAdded){
+            if (MySharePreference.getFeedbackSession1Completed(requireContext())){
+                MySharePreference.setFeedbackSession2Completed(requireContext(),true)
+            }
+        }
+
 
         binding.cancel.setOnClickListener {
             if (isAdded){
@@ -774,6 +795,11 @@ class MyCreationViewFragment : Fragment() {
         bottomSheetDialog.setContentView(binding.root)
 
         var subject = ""
+
+        binding.exitBtn.setOnClickListener {
+            MySharePreference.setUserCancelledprocess(requireContext(),true)
+            bottomSheetDialog.dismiss()
+        }
 
         binding.probExperience.setOnClickListener {
             subject = "Experience"
@@ -853,15 +879,18 @@ class MyCreationViewFragment : Fragment() {
                     MySharePreference.setReviewedSuccess(requireContext(),true)
                     endPointsInterface.postData(
                         FeedbackModel("From Review","In app review",subject,binding.feedbackEdt.text.toString(),
-                        MySharePreference.getDeviceID(requireContext())!!
+                            MySharePreference.getDeviceID(requireContext())!!
+                        )
                     )
-                    )
+                    withContext(Dispatchers.Main){
+                        Toast.makeText(requireContext(),"Thank you!",Toast.LENGTH_SHORT).show()
+                        bottomSheetDialog.dismiss()
+                    }
                 }
             }
         }
         bottomSheetDialog.show()
     }
-
     private fun navigate(click: Int, list: ArrayList<String>, prompt: String?, id: Int){
 
             timeDisplay = 0

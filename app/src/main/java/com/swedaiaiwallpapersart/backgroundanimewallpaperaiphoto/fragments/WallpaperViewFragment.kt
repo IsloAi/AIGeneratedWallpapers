@@ -77,6 +77,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.hasToNavigateAnime
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.wallFromAnime
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
@@ -89,6 +90,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
@@ -154,6 +156,9 @@ class WallpaperViewFragment : Fragment() {
 
     var showInter = true
     val sharedViewModel: SharedViewModel by activityViewModels()
+
+    @Inject
+    lateinit var endPointsInterface: EndPointsInterface
 
     var firstTime = true
     var oldPosition = 0
@@ -1656,7 +1661,22 @@ class WallpaperViewFragment : Fragment() {
                             //do nothing
                         } else {
                             //doniothing
-                            feedback1Sheet()
+                            if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(requireContext()) || MySharePreference.getfirstLiveWallpaper(requireContext())){
+                                Log.e("TAG", "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                                if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
+                                    if (isAdded){
+                                        Log.e("TAG", "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                                        feedback1Sheet()
+                                    }
+                                }
+
+                            }
+
+                            if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(requireContext()) && !MySharePreference.getFeedbackSession2Completed(requireContext())){
+                                if (isAdded){
+                                    feedback1Sheet()
+                                }
+                            }
                         }
 //                               }
 //                           }else{
@@ -1678,6 +1698,79 @@ class WallpaperViewFragment : Fragment() {
         }
     }
 
+
+
+    private fun congratulationsDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog =
+            DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+
+
+        bindingDialog.continueBtn.setOnClickListener {
+            if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(requireContext()) || MySharePreference.getfirstLiveWallpaper(requireContext())){
+                Log.e("TAG", "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
+                    if (isAdded){
+                        Log.e("TAG", "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                        feedback1Sheet()
+                    }
+                }
+
+            }
+
+            if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(requireContext()) && !MySharePreference.getFeedbackSession2Completed(requireContext())){
+                if (isAdded){
+                    feedback1Sheet()
+                }
+            }
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+
+    fun feedback1Sheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+        binding.feedbackHappy.setOnClickListener {
+            MySharePreference.setFeedbackSession1Completed(requireContext(),true)
+            bottomSheetDialog.dismiss()
+            feedbackRateSheet()
+
+        }
+
+        binding.feedbacksad.setOnClickListener {
+            MySharePreference.setFeedbackSession1Completed(requireContext(),true)
+            bottomSheetDialog.dismiss()
+            feedbackQuestionSheet()
+        }
+
+        if (isAdded){
+            if (MySharePreference.getFeedbackSession1Completed(requireContext())){
+                MySharePreference.setFeedbackSession2Completed(requireContext(),true)
+            }
+        }
+
+
+        binding.cancel.setOnClickListener {
+            if (isAdded){
+                MySharePreference.setUserCancelledprocess(requireContext(),true)
+            }
+            bottomSheetDialog.dismiss()
+        }
+        bottomSheetDialog.show()
+    }
+
     fun googleInAppRate() {
         try {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -1688,7 +1781,7 @@ class WallpaperViewFragment : Fragment() {
                             if (task.isSuccessful) {
                                 val reviewInfo: ReviewInfo = task.result
                                 val flow: Task<Void> =
-                                    reviewManager!!.launchReviewFlow(myActivity, reviewInfo)
+                                    reviewManager!!.launchReviewFlow(myActivity!!, reviewInfo)
                                 flow.addOnCompleteListener { task1 ->
 
                                 }
@@ -1707,46 +1800,6 @@ class WallpaperViewFragment : Fragment() {
         }
     }
 
-    private fun congratulationsDialog() {
-        val dialog = Dialog(requireContext())
-        val bindingDialog =
-            DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setContentView(bindingDialog.root)
-        val width = WindowManager.LayoutParams.MATCH_PARENT
-        val height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog.window!!.setLayout(width, height)
-        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setCancelable(false)
-//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-
-
-        bindingDialog.continueBtn.setOnClickListener {
-            feedback1Sheet()
-            dialog.dismiss()
-        }
-
-        dialog.show()
-    }
-
-
-    fun feedback1Sheet() {
-        val bottomSheetDialog = BottomSheetDialog(requireContext())
-        val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
-        bottomSheetDialog.setContentView(binding.root)
-        binding.feedbackHappy.setOnClickListener {
-            feedbackRateSheet()
-        }
-
-        binding.feedbacksad.setOnClickListener {
-            feedbackQuestionSheet()
-        }
-
-        binding.cancel.setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
-        bottomSheetDialog.show()
-    }
 
 
     fun feedbackRateSheet() {
@@ -1758,6 +1811,8 @@ class WallpaperViewFragment : Fragment() {
         }
 
         binding.buttonApplyWallpaper.setOnClickListener {
+            MySharePreference.setReviewedSuccess(requireContext(),true)
+            bottomSheetDialog.dismiss()
             if (binding.simpleRatingBar.rating >= 4) {
                 googleInAppRate()
             } else {
@@ -1766,6 +1821,7 @@ class WallpaperViewFragment : Fragment() {
         }
 
         binding.cancel.setOnClickListener {
+            MySharePreference.setUserCancelledprocess(requireContext(),true)
             bottomSheetDialog.dismiss()
         }
         bottomSheetDialog.show()
@@ -1776,7 +1832,15 @@ class WallpaperViewFragment : Fragment() {
         val binding = DialogFeedbackQuestionBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
 
+        var subject = ""
+
+        binding.exitBtn.setOnClickListener {
+            MySharePreference.setUserCancelledprocess(requireContext(),true)
+            bottomSheetDialog.dismiss()
+        }
+
         binding.probExperience.setOnClickListener {
+            subject = "Experience"
             binding.probExperience.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.button_bg))
             binding.probCrash.backgroundTintList =
@@ -1791,6 +1855,7 @@ class WallpaperViewFragment : Fragment() {
         }
 
         binding.probCrash.setOnClickListener {
+            subject = "Crash & Bugs"
             binding.probExperience.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.light))
             binding.probCrash.backgroundTintList =
@@ -1804,6 +1869,7 @@ class WallpaperViewFragment : Fragment() {
         }
 
         binding.probSlow.setOnClickListener {
+            subject = "Slow Performance"
             binding.probExperience.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.light))
             binding.probCrash.backgroundTintList =
@@ -1817,6 +1883,7 @@ class WallpaperViewFragment : Fragment() {
         }
 
         binding.probSuggestion.setOnClickListener {
+            subject = "Suggestion"
             binding.probExperience.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.light))
             binding.probCrash.backgroundTintList =
@@ -1830,6 +1897,7 @@ class WallpaperViewFragment : Fragment() {
         }
 
         binding.probOthers.setOnClickListener {
+            subject = "Others"
             binding.probExperience.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.light))
             binding.probCrash.backgroundTintList =
@@ -1840,6 +1908,25 @@ class WallpaperViewFragment : Fragment() {
                 ColorStateList.valueOf(resources.getColor(R.color.light))
             binding.probOthers.backgroundTintList =
                 ColorStateList.valueOf(resources.getColor(R.color.button_bg))
+        }
+
+
+        binding.buttonApplyWallpaper.setOnClickListener {
+            if (binding.feedbackEdt.text.isNotEmpty()){
+                lifecycleScope.launch(Dispatchers.IO) {
+                    MySharePreference.setReviewedSuccess(requireContext(),true)
+                    endPointsInterface.postData(
+                        FeedbackModel("From Review","In app review",subject,binding.feedbackEdt.text.toString(),
+                            MySharePreference.getDeviceID(requireContext())!!
+                        )
+                    )
+
+                     withContext(Dispatchers.Main){
+                        Toast.makeText(requireContext(),"Thank you!",Toast.LENGTH_SHORT).show()
+                         bottomSheetDialog.dismiss()
+                    }
+                }
+            }
         }
         bottomSheetDialog.show()
     }

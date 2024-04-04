@@ -31,7 +31,7 @@ class Parameters {
         val type = "a"
         val upscale = "no"
         val webhook = "https://edecator.com/wallpaperApp/api/webhook.php"
-        val width = "740"
+        val width = "720"
     }
 
 }

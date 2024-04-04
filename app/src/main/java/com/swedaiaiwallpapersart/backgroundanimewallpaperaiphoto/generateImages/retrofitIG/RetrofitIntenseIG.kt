@@ -16,7 +16,7 @@ object RetrofitIntenseIG {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://edecator.com/wallpaperApp/api/")
+            .baseUrl("http://edecator.com/wallpaperApp/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient) // Set the OkHttpClient with timeout
             .build()
