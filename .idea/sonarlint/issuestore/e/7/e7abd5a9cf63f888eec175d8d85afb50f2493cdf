@@ -1,8 +1,8 @@
 
->kotlin:S125Æ"Remove this commented out code.(îßóı8¥™óÜã1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8¾™óÜã1
-Gkotlin:S1874m"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8´•ç›è1
-Hkotlin:S1874á"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8Â™óÜã1
-Hkotlin:S1874–"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8ú¶óÜã1
-Hkotlin:S1874Ì"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8‰·óÜã1
-rkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 58 to the 15 allowed.(ñàõà8Ä™óÜã1
+>kotlin:S125Æ"Remove this commented out code.(îßóı8ŞİŠî1
+>kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8ıİŠî1
+Gkotlin:S1874m"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8‚ŞŠî1
+Hkotlin:S1874å"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8‚ŞŠî1
+Hkotlin:S1874"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8‚ŞŠî1
+Hkotlin:S1874Ô"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8‚ŞŠî1
+rkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 64 to the 15 allowed.(ñàõà8ƒŞŠî1

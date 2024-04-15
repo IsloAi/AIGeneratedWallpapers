@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         chargingAnimationViewmodel.getChargingAnimations()
 
-        mainActivityViewModel.getAllModels("1","4000","4890")
+        mainActivityViewModel.getAllModels("1","4000","5332")
 
         mainActivityViewModel.allModels.observe(this){result->
             when(result){

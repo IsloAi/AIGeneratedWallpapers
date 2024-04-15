@@ -174,6 +174,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_SetBt_Click"))
+                sendTracking("typewallpaper_used",Pair("typewallpaper", "Live"))
+                sendTracking("category_used",Pair("category", "Live ${livewallpaper?.catname}"))
             }
             Log.e("TAG", "setEvents: "+livewallpaper )
 

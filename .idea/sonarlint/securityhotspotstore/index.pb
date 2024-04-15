@@ -285,3 +285,13 @@ zapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/gen
 wapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/generateImages/models/PostRequestModelIG.kt,f\c\fc390000258e5239a6841db363ff70a480a2ea45
 ’
 bapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/FirebaseUtils.kt,c\1\c15e2511866c5e09228970eab548cbc9e3f8bd78
+X
+(gradle/wrapper/gradle-wrapper.properties,f\b\fbe448ebfc3eb2d4e308f6b8b043666f5b57235e
+A
+gradle.properties,2\a\2afbb999f001938c88fa43fc2ef52abf0f8213e4
+¡
+qapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/MostDownloadedViewmodel.kt,4\6\46aeb3bccd82ca5b346cc8e76bffbfdc57991519
+¦
+vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetAllWallpapersUsecase.kt,b\2\b2f9cac27263d761d6dc3feaaf22ddf2a20c8799
+F
+app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9

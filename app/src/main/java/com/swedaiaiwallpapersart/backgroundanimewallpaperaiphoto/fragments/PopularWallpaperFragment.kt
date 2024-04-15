@@ -149,23 +149,6 @@ class PopularWallpaperFragment () : Fragment() {
 
         setEvents()
         initMostUsedRV()
-
-//        val timer = Timer()
-//
-//        timer.schedule(object : TimerTask() {
-//            override fun run() {
-//                lifecycleScope.launch(Dispatchers.Main) {
-//                    while (isActive) {
-//                        delay(3000)
-//                        val itemCount = binding.sliderPager.adapter?.itemCount ?: 0
-//                        val nextItem = (binding.sliderPager.currentItem + 1) % itemCount
-//                        binding.sliderPager.setCurrentItem(nextItem, true)
-//                    }
-//                }
-//            }
-//        }, 3000, 3000)
-
-
     }
 
     private fun setEvents(){
@@ -199,9 +182,6 @@ class PopularWallpaperFragment () : Fragment() {
 
         binding.more.setOnClickListener {
             (requireParentFragment() as HomeTabsFragment).navigateToTrending((requireParentFragment() as HomeTabsFragment).getHomeFragmentIndex() )
-
-//            (requireParentFragment() as HomeTabsFragment).navigateToTrending(3)
-
         }
 
     }
@@ -380,6 +360,19 @@ class PopularWallpaperFragment () : Fragment() {
                     }
                 }
             }
+
+
+//        appDatabase.wallpapersDao()?.getAllWallpapersLive()?.observe(viewLifecycleOwner) {
+//            if (it.isNotEmpty()) {
+//                it?.let { data ->
+//                    cachedMostDownloaded = arrayListOf()
+//                    data.forEachIndexed { _, genericResponseModel ->
+//                        cachedMostDownloaded.add(genericResponseModel)
+//
+//                    }
+//                }
+//            }
+//        }
 
 
 

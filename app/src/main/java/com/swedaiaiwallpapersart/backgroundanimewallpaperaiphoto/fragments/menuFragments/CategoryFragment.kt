@@ -158,6 +158,10 @@ class CategoryFragment : Fragment() {
                 override fun getStringCall(string: String) {
                     myViewModel.getMostUsed(string)
 
+                    if (isAdded){
+                        sendTracking("categorymainscr_click",Pair("categorymainscr", "$string Live"))
+                    }
+
                     SDKBaseController.getInstance().showInterstitialAds(
                         requireActivity(),
                         "mainscr_cate_tab_click_item",
@@ -282,6 +286,7 @@ class CategoryFragment : Fragment() {
 
 
     private fun setFragment(name:String){
+        sendTracking("categorymainscr_click",Pair("categorymainscr", name))
        val bundle =  Bundle().apply {
             putString("name",name)
             putString("from","category")

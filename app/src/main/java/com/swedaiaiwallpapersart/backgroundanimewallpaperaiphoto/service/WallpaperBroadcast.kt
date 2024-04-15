@@ -8,10 +8,12 @@ import android.os.Build
 internal class WallpaperBroadcast : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val service = Intent(context, LiveWallpaperService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            context.startForegroundService(service)
-        } else {
-            context.startService(service)
-        }
+        context.startService(service)
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            context.startForegroundService(service)
+//        } else {
+//
+//        }
     }
 }

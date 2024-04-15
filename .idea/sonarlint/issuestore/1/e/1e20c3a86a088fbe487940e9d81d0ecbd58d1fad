@@ -1,11 +1,7 @@
 
-Bkotlin:S125U"Remove this commented out code.(±ÌĞîıÿÿÿÿ8µÓ«ßâ1
-Bkotlin:S125s"Remove this commented out code.(ó’´Âûÿÿÿÿ8¶Ó«ßâ1
-Ckotlin:S125 "Remove this commented out code.(‚òò¦şÿÿÿÿ8ëßãŞâ1
-Ckotlin:S125Ç"Remove this commented out code.(‚òò¦şÿÿÿÿ8¶Ó«ßâ1
-Ckotlin:S125Í"Remove this commented out code.(‚òò¦şÿÿÿÿ8·Ó«ßâ1
-Ckotlin:S125ã"Remove this commented out code.(›õÒ‚ûÿÿÿÿ8õı–â1
-<kotlin:S6310"Avoid hardcoded dispatchers.(©ÒÕò8óßãŞâ1
-<kotlin:S6310Ü"Avoid hardcoded dispatchers.(Í¡·Ş8¼Ó«ßâ1
+;kotlin:S6310k"Avoid hardcoded dispatchers.(©ÒÕò8ê·‡‹î1
+<kotlin:S6310§"Avoid hardcoded dispatchers.(©ÒÕò8ê·‡‹î1
+<kotlin:S6310‡"Avoid hardcoded dispatchers.(Í¡·Ş8º¬ŒŒî1
 9kotlin:S1128"Remove this unused import.(Ö¢æ¾8†‘ı–â1
-qkotlin:S3776?"RRefactor this method to reduce its Cognitive Complexity from 37 to the 15 allowed.(ëü«8‰‘ı–â1
+wkotlin:S3776š"RRefactor this method to reduce its Cognitive Complexity from 36 to the 15 allowed.(íô¸²ÿÿÿÿÿ8®õ™‹î1
+kotlin:S1186ª"ZAdd a nested comment explaining why this function is empty or complete the implementation.(–çê–øÿÿÿÿ8›ÓŒŒî1

@@ -62,11 +62,9 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.play.core.review.ReviewException
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.google.android.play.core.review.model.ReviewErrorCode
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
@@ -1025,11 +1023,13 @@ class WallpaperViewFragment : Fragment() {
         favouriteButton: ImageView
     ) {
 
+        val id = arrayList[position]?.id.toString()
+
 
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
         val postData =
-            PostData(MySharePreference.getDeviceID(context)!!, arrayList[position]?.id.toString())
+            PostData(MySharePreference.getDeviceID(context)!!, id)
         val call = apiService.postData(postData)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -1037,9 +1037,9 @@ class WallpaperViewFragment : Fragment() {
                     val message = response.body()?.string()
                     if (message == "Liked") {
                         arrayList[position]?.liked = true
-                        favouriteButton.setImageResource(R.drawable.button_like_selected)
+                        appDatabase.wallpapersDao().updateLiked(true,id.toInt())
                     } else {
-                        favouriteButton.setImageResource(R.drawable.button_like)
+                        appDatabase.wallpapersDao().updateLiked(false,id.toInt())
                         arrayList[position]?.liked = false
                     }
                     favouriteButton.isEnabled = true
@@ -1217,6 +1217,9 @@ class WallpaperViewFragment : Fragment() {
                         Pair("action_type", "button"),
                         Pair("action_name", "SetWallpaperDlg_Homebt_Click")
                     )
+
+                    settrackingWallpaperType(model)
+
                 }
                 if (isAdded) {
                     if (showInter) {
@@ -1311,6 +1314,8 @@ class WallpaperViewFragment : Fragment() {
                         Pair("action_type", "button"),
                         Pair("action_name", "SetWallpaperDlg_Lockbt_Click")
                     )
+                    settrackingWallpaperType(model)
+
                 }
                 if (isAdded) {
                     if (showInter) {
@@ -1396,6 +1401,7 @@ class WallpaperViewFragment : Fragment() {
                         Pair("action_type", "button"),
                         Pair("action_name", "SetWallpaperDlg_Bothbt_Click")
                     )
+                    settrackingWallpaperType(model)
                 }
 
                 if (isAdded) {
@@ -1480,6 +1486,11 @@ class WallpaperViewFragment : Fragment() {
             }
         }
 
+    }
+
+    fun settrackingWallpaperType(model: CatResponse) {
+        sendTracking("typewallpaper_used",Pair("typewallpaper", "regular"))
+        sendTracking("category_used",Pair("category", model.cat_name))
     }
 
     fun resizeBitmap(originalBitmap: Bitmap): Bitmap {

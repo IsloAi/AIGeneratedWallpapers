@@ -36,6 +36,7 @@ import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPreviewChargingAnimationBinding
@@ -164,6 +165,7 @@ class PreviewChargingAnimationFragment : Fragment() {
                 }
 
                 if (isAdded){
+                    sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
                     Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
                 }
             }else{
@@ -177,6 +179,14 @@ class PreviewChargingAnimationFragment : Fragment() {
         }
 
         backHandle()
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
 
     fun isDrawOverlaysPermissionGranted(context: Context): Boolean {

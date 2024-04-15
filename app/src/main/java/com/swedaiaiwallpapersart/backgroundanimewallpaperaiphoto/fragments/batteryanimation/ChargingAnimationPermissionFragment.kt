@@ -130,7 +130,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
 
     fun requestDrawOverlaysPermission(activity: Activity) {
 
-        IkmSdkController.setEnableShowResumeAds(false)
+        IkmSdkController.setEnableShowResumeAds(true)
 
         val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
         intent.data = Uri.parse("package:${activity.packageName}")

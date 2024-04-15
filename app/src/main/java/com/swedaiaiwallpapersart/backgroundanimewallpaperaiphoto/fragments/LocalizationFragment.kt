@@ -210,9 +210,13 @@ class LocalizationFragment : Fragment() {
 
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "LanguageScr_Next_Click"))
+
             }
 
             if (selectedItem != null) {
+                if (isAdded){
+                    sendTracking("language_selected",Pair("language", selectedItem?.lan_name))
+                }
                 MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
                 MySharePreference.setLanguageposition(requireContext(),selected)
                 val context = LocaleManager.setLocale(requireContext(), selectedItem!!.lan_code)
@@ -262,6 +266,10 @@ class LocalizationFragment : Fragment() {
 
 
             } else {
+
+                if (isAdded){
+                    sendTracking("language_selected",Pair("language", "English"))
+                }
 
                 MySharePreference.setLanguage(requireContext(),"en")
                 MySharePreference.setLanguageposition(requireContext(),0)
