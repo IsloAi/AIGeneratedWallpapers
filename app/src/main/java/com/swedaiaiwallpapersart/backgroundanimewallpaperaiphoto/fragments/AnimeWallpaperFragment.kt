@@ -84,7 +84,7 @@ class AnimeWallpaperFragment : Fragment() {
     }
 
     private fun onCreateViewCalling(){
-        myViewModel.getAllCreations("Anime")
+
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
@@ -284,7 +284,7 @@ class AnimeWallpaperFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
+        myViewModel.getAllCreations("Anime")
         if (wallFromAnime){
             if (isAdded){
                 congratulationsDialog()

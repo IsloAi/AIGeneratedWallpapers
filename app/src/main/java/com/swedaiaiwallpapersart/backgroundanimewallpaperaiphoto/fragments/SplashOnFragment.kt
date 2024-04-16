@@ -37,6 +37,10 @@ class SplashOnFragment : Fragment() {
         var exit = true
     }
 
+    var moveNext = false
+
+    var hasNavigated = false
+
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var _binding: NewsplashFragmentBinding?= null
@@ -121,9 +125,63 @@ class SplashOnFragment : Fragment() {
             }
 
 
+            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
+                override fun onAdReady(priority: Int) {
+                }
+
+                override fun onAdsDismiss() {
+                    moveNext = true
+                    if (lan?.isEmpty() == true && isAdded){
+                        findNavController().navigate(R.id.localizationFragment)
+                        hasNavigated = true
+                    }else{
+                        if (isAdded){
+                            if (AdConfig.inAppConfig){
+                                hasNavigated = true
+                                findNavController().navigate(R.id.localizationFragment)
+                            }else{
+                                hasNavigated = true
+                                findNavController().navigate(R.id.homeTabsFragment)
+                            }
+                        }
+
+                    }
+
+                    IkmSdkController.setEnableShowResumeAds(true)
+
+                }
+
+                override fun onAdsShowFail(errorCode: Int) {
+                    Log.e("TAG", "onAdsShowFail: $errorCode")
+                    if (lan?.isEmpty() == true && isAdded){
+                        hasNavigated = true
+                        findNavController().navigate(R.id.localizationFragment)
+                    }else{
+                        if (isAdded) {
+                            if (AdConfig.inAppConfig){
+                                hasNavigated = true
+                                findNavController().navigate(R.id.localizationFragment)
+                            }else{
+                                hasNavigated = true
+                                findNavController().navigate(R.id.homeTabsFragment)
+                            }
+                        }
+                    }
+
+                    IkmSdkController.setEnableShowResumeAds(true)
+                }
+
+                override fun onAdsShowed(priority: Int) {
+                    if (isAdded){
+                        binding.adsView.visibility = View.GONE
+                    }
+                }
+
+            })
+
+
 
         }
-
 
 
     }
@@ -154,6 +212,8 @@ class SplashOnFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
+        Log.e("SPLASH", "onResume: ", )
+
         val videoUri: Uri = Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.splash_new)
         binding.videoView.setVideoURI(videoUri)
         binding.videoView.start()
@@ -164,55 +224,21 @@ class SplashOnFragment : Fragment() {
             }
         }
         val lan = MySharePreference.getLanguage(requireContext())
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(4000)
-            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
-                override fun onAdReady(priority: Int) {
-                }
 
-                override fun onAdsDismiss() {
-                    if (lan?.isEmpty() == true && isAdded){
+        if (moveNext && !hasNavigated){
+            if (lan?.isEmpty() == true && isAdded){
+                findNavController().navigate(R.id.localizationFragment)
+            }else{
+                if (isAdded) {
+                    if (AdConfig.inAppConfig){
                         findNavController().navigate(R.id.localizationFragment)
                     }else{
-                        if (isAdded){
-                            if (AdConfig.inAppConfig){
-                                findNavController().navigate(R.id.localizationFragment)
-                            }else{
-                                findNavController().navigate(R.id.homeTabsFragment)
-                            }
-                        }
-
-                    }
-
-                    IkmSdkController.setEnableShowResumeAds(true)
-
-                }
-
-                override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("TAG", "onAdsShowFail: $errorCode")
-                    if (lan?.isEmpty() == true && isAdded){
-                        findNavController().navigate(R.id.localizationFragment)
-                    }else{
-                        if (isAdded) {
-                            if (AdConfig.inAppConfig){
-                                findNavController().navigate(R.id.localizationFragment)
-                            }else{
-                                findNavController().navigate(R.id.homeTabsFragment)
-                            }
-                        }
-                    }
-
-                    IkmSdkController.setEnableShowResumeAds(true)
-                }
-
-                override fun onAdsShowed(priority: Int) {
-                    if (isAdded){
-                        binding.adsView.visibility = View.GONE
+                        findNavController().navigate(R.id.homeTabsFragment)
                     }
                 }
-
-            })
+            }
         }
+
 
         if (isAdded){
             val bundle = Bundle()

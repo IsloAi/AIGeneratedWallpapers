@@ -166,7 +166,7 @@ class MostUsedWallpaperAdapter(
             iapItem.visibility = View.GONE
         }
 
-        Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

@@ -1,82 +1,85 @@
 
-Wkotlin:S1172œ"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ8Æ˜Ö‹î1
-]kotlin:S1172„"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8É˜Ö‹î1
-Jkotlin:S6508‚"*Replace this usage of Void type with Unit.(†×„ë8Ë˜Ö‹î1
-Ykotlin:S899":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8Í˜Ö‹î1
+Wkotlin:S1172ª"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ8ÂÊ³î1
+]kotlin:S1172’"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8ÄÊ³î1
+Jkotlin:S6508"*Replace this usage of Void type with Unit.(†×„ë8ÆÊ³î1
+Ykotlin:S899":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8ÈÊ³î1
 =kotlin:S125ş"Remove this commented out code.(ÀñÔ88í˜Ö‹î1
 >kotlin:S125„"Remove this commented out code.(éÎÂú8í˜Ö‹î1
 Ckotlin:S125˜"Remove this commented out code.(ó’´Âûÿÿÿÿ8î˜Ö‹î1
-=kotlin:S125¿"Remove this commented out code.(§íËf8ğ˜Ö‹î1
-Ckotlin:S125Ç"Remove this commented out code.(±š¡®ûÿÿÿÿ8ó˜Ö‹î1
->kotlin:S125Í"Remove this commented out code.(Ïİş8ó˜Ö‹î1
-Ckotlin:S125í"Remove this commented out code.(«Ã«áıÿÿÿÿ8õ˜Ö‹î1
-Ckotlin:S125ı	"Remove this commented out code.(—şµ“üÿÿÿÿ8ö˜Ö‹î1
-=kotlin:S125½"Remove this commented out code.(§íËf8ù˜Ö‹î1
-<kotlin:S6310¦"Avoid hardcoded dispatchers.(Ô¥‚ü8¢™Ö‹î1
-;kotlin:S6310¸"Avoid hardcoded dispatchers.(©ÓœW8£™Ö‹î1
-;kotlin:S6310‡"Avoid hardcoded dispatchers.(©ÓœW8¦™Ö‹î1
-<kotlin:S6310"Avoid hardcoded dispatchers.(Í¡·Ş8¨™Ö‹î1
-;kotlin:S6310æ	"Avoid hardcoded dispatchers.(©ÓœW8ª™Ö‹î1
-<kotlin:S6310é	"Avoid hardcoded dispatchers.(Í¡·Ş8¬™Ö‹î1
-tkotlin:S6558‰"URemove this it parameter declaration or give this lambda parameter a meaningful name.(ìİŠO8´™Ö‹î1
-`kotlin:S1144¥";Remove this unused private "loadBitmapFromUrlAsync" method.(âğäÊıÿÿÿÿ8É™Ö‹î1
-Okotlin:S1144Õ"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8Ô™Ö‹î1
-Vkotlin:S1144Ê"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8ú™Ö‹î1
+=kotlin:S125Ì"Remove this commented out code.(§íËf8ğÊ³î1
+Ckotlin:S125"Remove this commented out code.(ğ½¬öıÿÿÿÿ8¢³•´î1
+Ckotlin:S125Õ"Remove this commented out code.(±š¡®ûÿÿÿÿ8óÊ³î1
+>kotlin:S125Û"Remove this commented out code.(Ïİş8óÊ³î1
+Ckotlin:S125û"Remove this commented out code.(«Ã«áıÿÿÿÿ8öÊ³î1
+Ckotlin:S125‹
+"Remove this commented out code.(—şµ“üÿÿÿÿ8÷Ê³î1
+=kotlin:S125Ë"Remove this commented out code.(§íËf8øÊ³î1
+<kotlin:S6310´"Avoid hardcoded dispatchers.(Ô¥‚ü8™Ê³î1
+;kotlin:S6310Æ"Avoid hardcoded dispatchers.(©ÓœW8šÊ³î1
+;kotlin:S6310•"Avoid hardcoded dispatchers.(©ÓœW8œÊ³î1
+<kotlin:S6310"Avoid hardcoded dispatchers.(Í¡·Ş8Ê³î1
+;kotlin:S6310ô	"Avoid hardcoded dispatchers.(©ÓœW8Ê³î1
+<kotlin:S6310÷	"Avoid hardcoded dispatchers.(Í¡·Ş8ŸÊ³î1
+tkotlin:S6558—"URemove this it parameter declaration or give this lambda parameter a meaningful name.(ìİŠO8¦Ê³î1
+`kotlin:S1144³";Remove this unused private "loadBitmapFromUrlAsync" method.(âğäÊıÿÿÿÿ8¹Ê³î1
+Okotlin:S1144ã"*Remove this unused private "mLoad" method.(¿Ï˜ÿÿÿÿÿ8ÁÊ³î1
+Vkotlin:S1144Ø"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8ÙÊ³î1
 >kotlin:S6531Á"Remove this useless cast.(òĞÛÉıÿÿÿÿ8ĞšÖ‹î1
-Okotlin:S1481á"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8ÔšÖ‹î1
-Okotlin:S1481º"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8ÔšÖ‹î1
-Rkotlin:S1481Ò"-Remove this unused "postData" local variable.(ƒÂêßüÿÿÿÿ8ÔšÖ‹î1
-Mkotlin:S1481Ÿ	"-Remove this unused "behavior" local variable.(Ø¦š¾8ÔšÖ‹î1
+Okotlin:S1481í"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¸Ê³î1
+Okotlin:S1481Æ"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8¹Ê³î1
+Rkotlin:S1481ß"-Remove this unused "postData" local variable.(ƒÂêßüÿÿÿÿ8ºÊ³î1
+Qkotlin:S1481",Remove this unused "message" local variable.(§¥Û‹ıÿÿÿÿ8Ù´•´î1
+Mkotlin:S1481­	"-Remove this unused "behavior" local variable.(Ø¦š¾8ºÊ³î1
 qkotlin:S1192ê"LDefine a constant instead of duplicating this literal "******NULL" 15 times.(Ÿ™£Ñşÿÿÿÿ8úšÖ‹î1
 ‡kotlin:S1192ê"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 8 times.(Ÿ™£Ñşÿÿÿÿ8úšÖ‹î1
-rkotlin:S1192³"MDefine a constant instead of duplicating this literal "********ADS" 13 times.(™ù£êøÿÿÿÿ8úšÖ‹î1
-tkotlin:S1192³"ODefine a constant instead of duplicating this literal "onAdsDismiss: " 3 times.(™ù£êøÿÿÿÿ8úšÖ‹î1
-ukotlin:S1192¸"PDefine a constant instead of duplicating this literal "onAdsRewarded: " 4 times.(©ÂÄ‰úÿÿÿÿ8úšÖ‹î1
-pkotlin:S1192Ì"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 6 times.(±È÷®8úšÖ‹î1
+rkotlin:S1192¿"MDefine a constant instead of duplicating this literal "********ADS" 13 times.(™ù£êøÿÿÿÿ8İÊ³î1
+tkotlin:S1192¿"ODefine a constant instead of duplicating this literal "onAdsDismiss: " 3 times.(™ù£êøÿÿÿÿ8İÊ³î1
+ukotlin:S1192Ä"PDefine a constant instead of duplicating this literal "onAdsRewarded: " 4 times.(©ÂÄ‰úÿÿÿÿ8ŞÊ³î1
+pkotlin:S1192Ø"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 6 times.(±È÷®8ŞÊ³î1
 Hkotlin:S1874¿"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8›Ö‹î1
-Hkotlin:S1874ß"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8›Ö‹î1
-Hkotlin:S1874²"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8›Ö‹î1
-Hkotlin:S1874À"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8›Ö‹î1
-Bkotlin:S1874Â"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Bkotlin:S1874Ä"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Bkotlin:S1874Æ"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Bkotlin:S1874È"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Bkotlin:S1874Ï"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Hkotlin:S1874Ñ"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8›Ö‹î1
-Bkotlin:S1874Ó"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Bkotlin:S1874Õ"#Deprecated code should not be used.(¨»š8›Ö‹î1
-Bkotlin:S1874×"#Deprecated code should not be used.(¨»š8‘›Ö‹î1
-Bkotlin:S1874İ"#Deprecated code should not be used.(¨»š8“›Ö‹î1
-Bkotlin:S1874ß"#Deprecated code should not be used.(¨»š8•›Ö‹î1
-Hkotlin:S1874á"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8—›Ö‹î1
-Bkotlin:S1874ã"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874å"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874ë"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874í"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874ï"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Hkotlin:S1874ñ"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8—›Ö‹î1
-Bkotlin:S1874ó"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874ù"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874û"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874ı"#Deprecated code should not be used.(¨»š8—›Ö‹î1
-Bkotlin:S1874ÿ"#Deprecated code should not be used.(¨»š8˜›Ö‹î1
-Hkotlin:S1874"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8˜›Ö‹î1
+Hkotlin:S1874í"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8éÊ³î1
+Hkotlin:S1874À"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8éÊ³î1
+Hkotlin:S1874Î"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¥˜Å³î1
+Bkotlin:S1874Ğ"#Deprecated code should not be used.(¨»š8¦˜Å³î1
+Bkotlin:S1874Ò"#Deprecated code should not be used.(¨»š8¦˜Å³î1
+Bkotlin:S1874Ô"#Deprecated code should not be used.(¨»š8éÊ³î1
+Bkotlin:S1874Ö"#Deprecated code should not be used.(¨»š8êÊ³î1
+Bkotlin:S1874İ"#Deprecated code should not be used.(¨»š8êÊ³î1
+Hkotlin:S1874ß"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8êÊ³î1
+Bkotlin:S1874á"#Deprecated code should not be used.(¨»š8êÊ³î1
+Bkotlin:S1874ã"#Deprecated code should not be used.(¨»š8ëÊ³î1
+Bkotlin:S1874å"#Deprecated code should not be used.(¨»š8ëÊ³î1
+Bkotlin:S1874ë"#Deprecated code should not be used.(¨»š8ëÊ³î1
+Bkotlin:S1874í"#Deprecated code should not be used.(¨»š8ëÊ³î1
+Hkotlin:S1874ï"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8ëÊ³î1
+Bkotlin:S1874ñ"#Deprecated code should not be used.(¨»š8ìÊ³î1
+Bkotlin:S1874ó"#Deprecated code should not be used.(¨»š8ìÊ³î1
+Bkotlin:S1874ù"#Deprecated code should not be used.(¨»š8ìÊ³î1
+Bkotlin:S1874û"#Deprecated code should not be used.(¨»š8ìÊ³î1
+Bkotlin:S1874ı"#Deprecated code should not be used.(¨»š8íÊ³î1
+Hkotlin:S1874ÿ"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8íÊ³î1
+Bkotlin:S1874"#Deprecated code should not be used.(¨»š8íÊ³î1
+Bkotlin:S1874‡"#Deprecated code should not be used.(¨»š8íÊ³î1
+Bkotlin:S1874‰"#Deprecated code should not be used.(¨»š8îÊ³î1
+Bkotlin:S1874‹"#Deprecated code should not be used.(¨»š8îÊ³î1
+Bkotlin:S1874"#Deprecated code should not be used.(¨»š8îÊ³î1
+Hkotlin:S1874"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8îÊ³î1
 rkotlin:S3776°"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(©Àùè8››Ö‹î1
 wkotlin:S3776Û"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(”ÔÈÎüÿÿÿÿ8œ›Ö‹î1
-wkotlin:S3776œ"RRefactor this method to reduce its Cognitive Complexity from 53 to the 15 allowed.(¶÷Èïøÿÿÿÿ8œ›Ö‹î1
-wkotlin:S3776²"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(Ÿ™¸ëüÿÿÿÿ8›Ö‹î1
-skotlin:S3776–	"SRefactor this method to reduce its Cognitive Complexity from 168 to the 15 allowed.(ò¡®í8›Ö‹î1
-wkotlin:S3776Ú"RRefactor this method to reduce its Cognitive Complexity from 78 to the 15 allowed.(Ú‘Ï€ùÿÿÿÿ8Ÿ›Ö‹î1
-rkotlin:S3776²"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(¿ğÇŒ8Ÿ›Ö‹î1
-rkotlin:S3776÷"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8 ›Ö‹î1
-zkotlin:S1186í"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8°›Ö‹î1
-Skotlin:S1066é".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8²›Ö‹î1
-Nkotlin:S1066Ì".Merge this "if" statement with the nested one.(º†Šä8³›Ö‹î1
-Skotlin:S1066Ã".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8³›Ö‹î1
-Skotlin:S1066ÿ".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8´›Ö‹î1
-Nkotlin:S1066–".Merge this "if" statement with the nested one.(º†Šä8´›Ö‹î1
-Skotlin:S1066".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8´›Ö‹î1
-bkotlin:S6511é"=Merge chained "if" statements into a single "when" statement.(ê³´‘øÿÿÿÿ8¹›Ö‹î1
-€kotlin:S3923à"[Remove this conditional structure or edit its code blocks so that they're not all the same.(ÇÕÑüúÿÿÿÿ8¼›Ö‹î1
-€kotlin:S3923€"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8½›Ö‹î1
-€kotlin:S3923™"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8½›Ö‹î1
+wkotlin:S3776œ"RRefactor this method to reduce its Cognitive Complexity from 57 to the 15 allowed.(¶÷Èïøÿÿÿÿ8œ›Ö‹î1
+wkotlin:S3776¾"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(Ÿ™¸ëüÿÿÿÿ8óÊ³î1
+skotlin:S3776¤	"SRefactor this method to reduce its Cognitive Complexity from 168 to the 15 allowed.(ò¡®í8ôÊ³î1
+wkotlin:S3776è"RRefactor this method to reduce its Cognitive Complexity from 78 to the 15 allowed.(Ú‘Ï€ùÿÿÿÿ8õÊ³î1
+rkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(¿ğÇŒ8õÊ³î1
+rkotlin:S3776ƒ"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(İå‚ò8öÊ³î1
+zkotlin:S1186ú"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8†Ê³î1
+Skotlin:S1066÷".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8‰Ê³î1
+Nkotlin:S1066Ú".Merge this "if" statement with the nested one.(º†Šä8‰Ê³î1
+Skotlin:S1066Ñ".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8ŠÊ³î1
+Skotlin:S1066".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8ŠÊ³î1
+Nkotlin:S1066¤".Merge this "if" statement with the nested one.(º†Šä8‹Ê³î1
+Skotlin:S1066›".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8‹Ê³î1
+bkotlin:S6511÷"=Merge chained "if" statements into a single "when" statement.(ê³´‘øÿÿÿÿ8Ê³î1
+€kotlin:S3923ì"[Remove this conditional structure or edit its code blocks so that they're not all the same.(ÇÕÑüúÿÿÿÿ8–Ê³î1
+€kotlin:S3923Œ"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8—Ê³î1
+€kotlin:S3923¥"[Remove this conditional structure or edit its code blocks so that they're not all the same.(±¨ğĞûÿÿÿÿ8˜Ê³î1

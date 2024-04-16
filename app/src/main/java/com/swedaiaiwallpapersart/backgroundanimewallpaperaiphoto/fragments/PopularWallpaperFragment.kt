@@ -766,9 +766,6 @@ class PopularWallpaperFragment () : Fragment() {
         Log.e(TAG, "navigateToDestination: " )
 
         try {
-            val gson = Gson()
-            val arrayListJson = gson.toJson(arrayList.filterNotNull())
-
             val countOfNulls = arrayList.subList(0, position).count { it == null }
             val sharedViewModel: SharedViewModel by activityViewModels()
 

@@ -497,7 +497,19 @@ class WallpaperViewFragment : Fragment() {
                         it1
                     )
                 }
+
                 binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+            }
+            adapter?.notifyItemChanged(position)
+            viewPager2?.invalidate()
+            binding.viewPager.setCurrentItem(position, true)
+            try {
+                val countOfNulls = arrayList.subList(0, position).count { it == null }
+                arrayList[position]?.let { it1 -> sharedViewModel.updateCatResponseAtIndex(it1,countOfNulls) }
+            }catch (e:IndexOutOfBoundsException){
+                e.printStackTrace()
+            }catch (e:Exception){
+                e.printStackTrace()
             }
             addFavourite(requireContext(), position, binding.favouriteButton)
 
@@ -800,8 +812,9 @@ class WallpaperViewFragment : Fragment() {
                         }
 
                     }
+                    Log.e(TAG, "onPageSelected: "+position )
 
-                    checkRedHeart(positi)
+                    checkRedHeart(position)
                     getBitmapFromGlide(getLargImage)
                 }
             }
@@ -1009,9 +1022,12 @@ class WallpaperViewFragment : Fragment() {
 
     private fun checkRedHeart(position: Int) {
         if (isAdded) {
+            Log.e(TAG, "checkRedHeart: "+arrayList[position]?.liked )
             if (arrayList[position]?.liked == true) {
+                Log.e(TAG, "checkRedHeart: liked" )
                 binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
             } else {
+                Log.e(TAG, "checkRedHeart: like" )
                 binding.favouriteButton.setImageResource(R.drawable.button_like)
             }
         }
@@ -1035,13 +1051,11 @@ class WallpaperViewFragment : Fragment() {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val message = response.body()?.string()
-                    if (message == "Liked") {
-                        arrayList[position]?.liked = true
-                        appDatabase.wallpapersDao().updateLiked(true,id.toInt())
-                    } else {
-                        appDatabase.wallpapersDao().updateLiked(false,id.toInt())
-                        arrayList[position]?.liked = false
-                    }
+//                    if (message == "Liked") {
+//                        arrayList[position]?.liked = true
+//                    } else {
+//                        arrayList[position]?.liked = false
+//                    }
                     favouriteButton.isEnabled = true
                 } else {
                     favouriteButton.isEnabled = true

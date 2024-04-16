@@ -705,7 +705,7 @@ class HomeTabsFragment : Fragment() {
             adapter.addFragment(fragment, tabName)
         }
         binding.viewPager.adapter=adapter
-        binding.viewPager.offscreenPageLimit = 1
+        binding.viewPager.offscreenPageLimit = 8
         binding.tabLayout.setupWithViewPager(binding.viewPager)
     }
 

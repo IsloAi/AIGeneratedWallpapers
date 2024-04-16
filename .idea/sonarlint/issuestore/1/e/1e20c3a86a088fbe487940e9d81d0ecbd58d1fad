@@ -1,7 +1,7 @@
 
-;kotlin:S6310k"Avoid hardcoded dispatchers.(©ÒÕò8ê·‡‹î1
-<kotlin:S6310§"Avoid hardcoded dispatchers.(©ÒÕò8ê·‡‹î1
-<kotlin:S6310‡"Avoid hardcoded dispatchers.(Í¡·Ş8º¬ŒŒî1
-9kotlin:S1128"Remove this unused import.(Ö¢æ¾8†‘ı–â1
-wkotlin:S3776š"RRefactor this method to reduce its Cognitive Complexity from 36 to the 15 allowed.(íô¸²ÿÿÿÿÿ8®õ™‹î1
-kotlin:S1186ª"ZAdd a nested comment explaining why this function is empty or complete the implementation.(–çê–øÿÿÿÿ8›ÓŒŒî1
+;kotlin:S6310o"Avoid hardcoded dispatchers.(©ÒÕò8Âİâ©î1
+<kotlin:S6310Á"Avoid hardcoded dispatchers.(Í¡·Ş8Âİâ©î1
+9kotlin:S1128"Remove this unused import.(Ö¢æ¾8Ğİâ©î1
+qkotlin:S3776C"RRefactor this method to reduce its Cognitive Complexity from 41 to the 15 allowed.(ëü«8×ã©î1
+wkotlin:S3776Ô"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(íô¸²ÿÿÿÿÿ8Ôİâ©î1
+kotlin:S1186"ZAdd a nested comment explaining why this function is empty or complete the implementation.(–çê–øÿÿÿÿ8Úã©î1

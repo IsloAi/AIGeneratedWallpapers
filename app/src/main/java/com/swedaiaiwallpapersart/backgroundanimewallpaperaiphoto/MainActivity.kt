@@ -22,12 +22,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.tracking.SDKTrackingController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.FutureTarget
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -69,10 +71,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),ConnectivityListener {
@@ -213,6 +217,13 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             true
                         )
 
+//                        Glide.with(this@MainActivity)
+//                            .load(model.compressed_image_url)
+//                            .diskCacheStrategy(DiskCacheStrategy.DATA)
+//                            .thumbnail(0.1f)
+//                            .preload()
+
+
                         CoroutineScope(Dispatchers.IO).async {
                             appDatabase.wallpapersDao().insert(model)
                         }
@@ -230,6 +241,14 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                                 val deferreds = imagesLive.map { item ->
                                     Log.e(TAG, "onCreate: "+item )
                                     val model = item.copy(unlocked = true)
+
+                                    lifecycleScope.launch {
+//                                        Glide.with(this@MainActivity)
+//                                            .load(item.thumnail_url)
+//                                            .diskCacheStrategy(DiskCacheStrategy.DATA)
+//                                            .thumbnail(0.1f)
+//                                            .preload()
+                                    }
 
                                     CoroutineScope(Dispatchers.IO).async {
                                         appDatabase.liveWallpaperDao().insert(model)
@@ -335,13 +354,13 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 }
 
                 is Response.Error -> {
-                    Log.e(TAG, "loadData: response error", )
+                    Log.e(TAG, "loadData: response error")
                     MySharePreference.getDeviceID(this)
                         ?.let { liveViewModel.getMostUsed("1","500", it) }
                 }
 
                 is Response.Processing -> {
-                    Log.e(TAG, "loadData: processing", )
+                    Log.e(TAG, "loadData: processing")
                 }
             }
 

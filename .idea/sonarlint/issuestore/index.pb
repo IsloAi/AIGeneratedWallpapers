@@ -295,3 +295,5 @@ qapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/vie
 vapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/domain/usecases/GetAllWallpapersUsecase.kt,b\2\b2f9cac27263d761d6dc3feaaf22ddf2a20c8799
 F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
+ 
+papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/AllWallpapersViewmodel.kt,f\8\f89928dd5d1a202ca33a5cb04ccda6b159068972

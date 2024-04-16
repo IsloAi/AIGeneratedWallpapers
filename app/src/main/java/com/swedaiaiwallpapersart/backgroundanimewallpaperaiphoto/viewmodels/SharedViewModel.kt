@@ -45,6 +45,15 @@ class SharedViewModel : ViewModel() {
         _currentPosition.value = position
     }
 
+
+    fun updateCatResponseAtIndex(updatedCatResponse: CatResponse, index: Int) {
+        val currentList = _catResponseList.value.orEmpty().toMutableList()
+        if (index in 0 until currentList.size) {
+            currentList[index] = updatedCatResponse
+            _catResponseList.value = currentList
+        }
+    }
+
     fun setLiveWallpaper(catResponses: List<LiveWallpaperModel>){
         _liveWallpaperResponseList.value = catResponses
     }
