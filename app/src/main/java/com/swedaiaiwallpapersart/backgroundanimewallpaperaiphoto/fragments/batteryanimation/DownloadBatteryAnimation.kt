@@ -26,6 +26,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
@@ -157,10 +158,10 @@ class DownloadBatteryAnimation : Fragment() {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePathBattery == ""){
-                    downloadVideo(wallpaper[0].hd_animation,video)
+                    downloadVideo(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].hd_animation,video)
 
                 }
-                getBitmapFromGlide(wallpaper[0].thumnail)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].thumnail)
 
 
             }
@@ -257,6 +258,7 @@ class DownloadBatteryAnimation : Fragment() {
                     }
 
                     override fun onError(error: ANError?) {
+                        Log.e(TAG, "onError: ", )
                         // handle error
                     }
                 })

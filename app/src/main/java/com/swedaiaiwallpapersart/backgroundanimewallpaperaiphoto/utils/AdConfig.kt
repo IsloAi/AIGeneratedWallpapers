@@ -28,12 +28,14 @@ object AdConfig {
 
 
 
-    val BASE_URL = "https://vps.edecator.com/wallpaper_App/V2/"
+    var BASE_URL_DATA:String = ""
 
-    val HD_ImageUrl = "http://edecator.com/wallpaperApp/images/"
-    val Compressed_Image_url = "http://edecator.com/wallpaperApp/compress/"
+    val BASE_URL = "https://vps.edecator.com/wallpaper_App/V3/"
+    val HD_ImageUrl = "${BASE_URL_DATA}/images/"
 
-    val LIVE_WALL_URL = "http://edecator.com/wallpaperApp/"
+    val Compressed_Image_url = "${BASE_URL_DATA}/compress/"
+
+    val LIVE_WALL_URL = "http://edecator.com/wallpaperApp/Live_Wallpaper/20.mp4"
 
     var iapScreenType = 2
 

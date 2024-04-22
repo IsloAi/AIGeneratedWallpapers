@@ -161,6 +161,10 @@ class HomeTabsFragment : Fragment() {
 //            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
         }
 
+        if (AdConfig.BASE_URL_DATA == ""){
+            AdConfig.BASE_URL_DATA = "http://edecator.com/wallpaperApp"
+        }
+
 
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "MainScr_View"))

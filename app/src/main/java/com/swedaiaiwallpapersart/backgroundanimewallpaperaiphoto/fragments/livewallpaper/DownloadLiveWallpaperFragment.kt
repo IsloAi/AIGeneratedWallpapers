@@ -27,6 +27,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadLiveWallpaperBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -179,10 +180,10 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePath == ""){
-                    downloadVideo(wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
+                    downloadVideo(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
 
                 }
-                getBitmapFromGlide(wallpaper[0].thumnail_url)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].thumnail_url)
 
 
             }

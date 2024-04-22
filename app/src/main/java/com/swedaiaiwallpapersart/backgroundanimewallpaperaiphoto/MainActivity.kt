@@ -14,6 +14,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -123,6 +124,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initFirebaseRemoteConfig()
+
 
         myCatNameViewModel.fetchWallpapers()
         saveLiveWallpapersInDB()
@@ -153,8 +156,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             item.id,
                             item.cat_name,
                             item.image_name,
-                            AdConfig.HD_ImageUrl + item.url,
-                            AdConfig.Compressed_Image_url + item.url,
+                            item.url,
+                            item.url,
                             item.likes,
                             item.liked,
                             item.size,
@@ -202,13 +205,13 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 if (imageList != null) {
                     val images = imageList.images
                     val deferreds = images.map { item ->
-                        Log.e(TAG, "onCreate: "+item )
+//                        Log.e(TAG, "onCreate: "+item )
                         val model = SingleDatabaseResponse(
                             item.id,
                             item.cat_name,
                             item.image_name,
-                            AdConfig.HD_ImageUrl + item.url,
-                            AdConfig.Compressed_Image_url + item.url,
+                            item.url,
+                            item.url,
                             item.likes,
                             item.liked,
                             item.size,
@@ -239,7 +242,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             if (imagesListLive != null){
                                 val imagesLive = imagesListLive.images
                                 val deferreds = imagesLive.map { item ->
-                                    Log.e(TAG, "onCreate: "+item )
+//                                    Log.e(TAG, "onCreate: "+item )
                                     val model = item.copy(unlocked = true)
 
                                     lifecycleScope.launch {
@@ -297,7 +300,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         }
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         _navController = navHostFragment.navController
-        initFirebaseRemoteConfig()
+
 
     }
 
@@ -573,6 +576,13 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                         Log.e(TAG, "onUpdate: $categoryOrderArray")
 
+                        val baseUrls = remoteConfig["ImageUrl"].asString()
+
+//                        AdConfig.BASE_URL_DATA = baseUrls
+
+                        Log.e(TAG, "initFirebaseRemoteConfig: "+baseUrls )
+
+
 
                         try {
 
@@ -741,6 +751,13 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         val inAppConfig = remoteConfig["in_app_config"].asString()
 
+        val baseUrls = remoteConfig["ImageUrl"].asString()
+
+//        AdConfig.BASE_URL_DATA = baseUrls
+
+
+        Log.e(TAG, "initFirebaseRemoteConfig: "+baseUrls )
+
         Log.e(TAG, "onUpdate: "+inAppConfig )
 
         try {
@@ -750,6 +767,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
             Log.e(TAG, "onUpdate: $categoryOrderArray")
         }catch (e:StringIndexOutOfBoundsException){
+            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
 
@@ -776,6 +794,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         }catch (e:JSONException){
             e.printStackTrace()
+            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
         }
 
         try {
@@ -785,6 +804,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         AdConfig.iapScreenType = iapScreenType
         }catch (e: JSONException) {
+            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
 
@@ -883,6 +903,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             }
         } catch (e: JSONException) {
             e.printStackTrace()
+            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
         }
 
 

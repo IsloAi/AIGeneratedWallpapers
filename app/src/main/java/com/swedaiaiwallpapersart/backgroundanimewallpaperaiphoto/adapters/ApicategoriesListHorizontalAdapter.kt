@@ -21,6 +21,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -60,7 +61,7 @@ class ApicategoriesListHorizontalAdapter(
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, image: ShapeableImageView){
 
-        Glide.with(context!!).load(model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/compress/" +model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

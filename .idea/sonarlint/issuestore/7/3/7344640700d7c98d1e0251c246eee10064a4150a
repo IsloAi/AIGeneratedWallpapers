@@ -1,10 +1,10 @@
 
-Ckotlin:S125‚"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8¯Œ¡ıå1
-mkotlin:S117—"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ã¦Ú¢8…œÜÚ1
-Akotlin:S6310Ö"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8†œÜÚ1
-Nkotlin:S1481w"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8“œÜÚ1
->kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8™œÜÚ1
-Gkotlin:S1874K"#Deprecated code should not be used.(†ÿøÿÿÿÿ8œœÜÚ1
-Hkotlin:S1874¨"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8œÜÚ1
-Bkotlin:S1874©"#Deprecated code should not be used.(àü8œÜÚ1
-rkotlin:S3776Ó"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡–8ÊŒ¡ıå1
+Ckotlin:S125„"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8Ğòœ«ğ1
+mkotlin:S117—"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(Ã¦Ú¢8Ôòœ«ğ1
+Akotlin:S6310Ø"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Õòœ«ğ1
+Nkotlin:S1481w"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8ãòœ«ğ1
+>kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8èòœ«ğ1
+Gkotlin:S1874K"#Deprecated code should not be used.(†ÿøÿÿÿÿ8ëòœ«ğ1
+Hkotlin:S1874ª"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8ëòœ«ğ1
+Bkotlin:S1874«"#Deprecated code should not be used.(àü8ëòœ«ğ1
+rkotlin:S3776Õ"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡–8ìòœ«ğ1
