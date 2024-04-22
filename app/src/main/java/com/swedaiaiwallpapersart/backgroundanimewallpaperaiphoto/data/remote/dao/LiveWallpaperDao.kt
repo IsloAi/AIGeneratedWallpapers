@@ -17,10 +17,8 @@ interface LiveWallpaperDao {
     @Query("SELECT * FROM liveWallpaper")
     fun getAllWallpapers():List<LiveWallpaperModel>
 
-
     @Query("SELECT * FROM liveWallpaper WHERE catname =:cat ")
     fun getCatgoriesWallpapers(cat:String):List<LiveWallpaperModel>
-
 
     @Query("UPDATE liveWallpaper SET unlocked=:liked WHERE id=:Id")
     fun updateLocked(liked:Boolean,Id: Int)

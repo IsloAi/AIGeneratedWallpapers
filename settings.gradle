@@ -13,6 +13,7 @@ pluginManagement {
         maven { url "https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea"}
         maven { url "https://cboost.jfrog.io/artifactory/chartboost-ads/" }
         maven { url "https://sdk.tapjoy.com" }
+        maven { url "https://artifactory.bidmachine.io/bidmachine" }
         maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
         maven {
             url 'https://repository.ikameglobal.com/api/v4/projects/1/packages/maven'
@@ -44,6 +45,7 @@ dependencyResolutionManagement {
         maven { url "https://cboost.jfrog.io/artifactory/chartboost-ads/" }
         maven { url "https://sdk.tapjoy.com" }
         maven { url "https://s3.amazonaws.com/smaato-sdk-releases/" }
+        maven { url "https://artifactory.bidmachine.io/bidmachine" }
         maven {
             url 'https://repository.ikameglobal.com/api/v4/projects/1/packages/maven'
             credentials(HttpHeaderCredentials) {

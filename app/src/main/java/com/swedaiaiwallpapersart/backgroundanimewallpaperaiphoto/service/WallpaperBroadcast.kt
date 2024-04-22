@@ -7,8 +7,7 @@ import android.os.Build
 
 internal class WallpaperBroadcast : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val service = Intent(context, LiveWallpaperService::class.java)
-        context.startService(service)
+//        LiveWallpaperService.setToWallPaper(context)
 //
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 //            context.startForegroundService(service)
