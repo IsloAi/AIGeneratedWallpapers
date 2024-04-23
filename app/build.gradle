@@ -13,8 +13,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 115
-        versionName "1.5.4"
+        versionCode 200
+        versionName "1.00"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -101,8 +101,6 @@ dependencies {
     implementation "com.github.dhaval2404:imagepicker:2.1"
     implementation "com.github.MikeOrtiz:TouchImageView:1.4.1"
 
-    implementation 'com.mindorks.android:prdownloader:0.6.0'
-
     //viewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
@@ -119,13 +117,9 @@ dependencies {
     implementation "androidx.room:room-ktx:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
 
-    //billing library
-//    implementation 'com.android.billingclient:billing:6.0.1'
-
 
     //work manager
     implementation 'androidx.work:work-runtime-ktx:2.9.0'
-
 
     //firebase for google login
     implementation(platform("com.google.firebase:firebase-bom:32.2.3"))
@@ -145,7 +139,6 @@ dependencies {
 
     // Activity KTX for viewModels()
     implementation("androidx.activity:activity-ktx:1.7.2")
-
     implementation 'androidx.multidex:multidex:2.0.1'
     //ads
 //    implementation 'com.ikame.android-sdk:ikm-sdk-debug:2.6.013'
@@ -168,12 +161,9 @@ dependencies {
 
     implementation 'com.amitshekhar.android:android-networking:1.0.2'
 
-    //pagging
-    def paging_version = "3.1.1"
-    implementation "androidx.paging:paging-runtime:$paging_version"
-
-
-    implementation 'com.google.android.exoplayer:exoplayer-core:2.19.1'
+//    //pagging
+//    def paging_version = "3.1.1"
+//    implementation "androidx.paging:paging-runtime:$paging_version"
 
 
     //Dagger - Hilt

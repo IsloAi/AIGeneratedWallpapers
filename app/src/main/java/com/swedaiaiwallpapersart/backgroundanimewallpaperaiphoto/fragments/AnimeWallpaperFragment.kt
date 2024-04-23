@@ -31,6 +31,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AnimeViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -63,7 +64,7 @@ class AnimeWallpaperFragment : Fragment() {
 
     var startIndex = 0
     var isNavigationInProgress = false
-    val myViewModel: MyViewModel by activityViewModels()
+    val myViewModel: AnimeViewmodel by activityViewModels()
 
 
     val TAG = "ANIME"
@@ -303,7 +304,7 @@ class AnimeWallpaperFragment : Fragment() {
             Log.e(TAG, "onResume: Data set ${addedItems?.size}")
 
             if (addedItems?.isEmpty() == true){
-                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+                Log.e(TAG, "onResume: empty added items"+cachedCatResponses.size )
 
 
             }

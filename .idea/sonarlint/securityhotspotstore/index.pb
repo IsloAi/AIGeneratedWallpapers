@@ -297,3 +297,5 @@ F
 app/proguard-rules.pro,9\e\9e08934d811afe28fbc77aaa3c0d747b94348db9
  
 papp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/AllWallpapersViewmodel.kt,f\8\f89928dd5d1a202ca33a5cb04ccda6b159068972
+˜
+happ/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/AnimeViewmodel.kt,4\e\4eafbde593111cdd516530ec531b6db057d37e13

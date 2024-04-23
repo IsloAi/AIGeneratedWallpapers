@@ -91,26 +91,6 @@ class MyApp : SDKBaseApplication(), Configuration.Provider {
                 Log.e("TAG", "onBillingInitialized: " )
             }
         })
-
-
-
-//        val connectivityManager =
-//            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//
-//        val networkRequest = NetworkRequest.Builder().build()
-//        connectivityManager.registerNetworkCallback(networkRequest, connectivityCallback)
-
-        val connectivityCallback = ConnectivityCallback(applicationContext,object : ConnectivityListener {
-            override fun onNetworkAvailable() {
-                // Notify the listener if set
-                connectivityListener?.onNetworkAvailable()
-            }
-
-            override fun onNetworkLost() {
-                // Notify the listener if set
-                connectivityListener?.onNetworkLost()
-            }
-        })
     }
 
     override val workManagerConfiguration: Configuration
