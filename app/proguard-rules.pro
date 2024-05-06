@@ -106,4 +106,15 @@
 # With R8 full mode generic signatures are stripped for classes that are not kept.
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
 
+-dontwarn com.bmik.android.sdk.billing.SDKBillingHandler.*
+-dontwarn com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener.*
+
+-keep class com.bmik.android.sdk.billing.** { *; }
+-keep class com.bmik.android.sdk.listener.** { *; }
+
+-keep class com.bmik.android.sdk.billing.SDKBillingHandler { *; }
+-keep class com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener { *; }
+-dontwarn com.bmik.android.sdk.billing.SDKBillingHandler$DefaultImpls
+-dontwarn com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener$DefaultImpls
+
 
