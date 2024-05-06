@@ -1,0 +1,12 @@
+
+6kotlin:S125›"Remove this commented out code.(Ê¬ÿ
+<kotlin:S125"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ
+:kotlin:S6310ò"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ
+Gkotlin:S1481v"*Remove this unused "model" local variable.(ÄÒñ×ýÿÿÿÿ
+Hkotlin:S1481‹"/Remove this unused "adPosition" local variable.(²úÒ
+7kotlin:S1128"Remove this unused import.(™’“äýÿÿÿÿ
+7kotlin:S1128"Remove this unused import.(ï† Ðþÿÿÿÿ
+;kotlin:S1874K"#Deprecated code should not be used.(ëÊ³ò
+Akotlin:S1874¹"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ
+;kotlin:S1874º"#Deprecated code should not be used.(àü
+kkotlin:S3776ð"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡Ž–

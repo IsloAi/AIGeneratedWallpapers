@@ -31,6 +31,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -41,7 +42,7 @@ import kotlinx.coroutines.withContext
 
 class DoubleWallpaperAdapter(
     var arrayList: ArrayList<DoubleWallModel?>,
-    var positionCallback: downloadCallback,
+    var positionCallback: DownloadCallbackDouble,
     private val myActivity: MainActivity
 ):
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -161,7 +162,7 @@ class DoubleWallpaperAdapter(
 //        }else{
 //            iap.visibility = View.GONE
 //        }
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/" +model.compress_url1).diskCacheStrategy(
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.compress_url1).diskCacheStrategy(
             DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -186,7 +187,7 @@ class DoubleWallpaperAdapter(
                 }
             }).into(wallpaperLockImage)
 
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/" +model.hd_url2).diskCacheStrategy(
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.compress_url2).diskCacheStrategy(
             DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -216,7 +217,7 @@ class DoubleWallpaperAdapter(
             if (currentTime - lastClickTime >= debounceThreshold) {
 
 
-//                positionCallback.getPosition(position,model)
+                positionCallback.getPosition(position,model)
 
 //                    else {
 //                        if (whichClicked == 1) {

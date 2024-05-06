@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry
 
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.MostDownloadedResponse
@@ -35,7 +36,7 @@ interface WallpaperRepositry {
     fun getChargingAnimation():Flow<Response<ArrayList<ChargingAnimModel>>>
 
 
-
+    fun getDoubleWallpapers():Flow<Response<ArrayList<DoubleWallModel>>>
 
 
 }

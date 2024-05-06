@@ -256,5 +256,15 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpapersFromCategoryFragment"
         android:label="fragment_live_wallpapers_from_category"
         tools:layout="@layout/fragment_live_wallpapers_from_category" />
+    <fragment
+        android:id="@+id/doubleWallpaperDownloadFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doublewallpaper.DoubleWallpaperDownloadFragment"
+        android:label="fragment_double_wallpaper_download"
+        tools:layout="@layout/fragment_double_wallpaper_download" />
+    <fragment
+        android:id="@+id/doubleWallpaperSliderFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doublewallpaper.DoubleWallpaperSliderFragment"
+        android:label="fragment_double_wallpaper_slider"
+        tools:layout="@layout/fragment_double_wallpaper_slider" />
 
 </navigation>

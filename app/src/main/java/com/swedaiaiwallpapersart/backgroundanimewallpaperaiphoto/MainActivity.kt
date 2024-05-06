@@ -28,9 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.request.FutureTarget
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -60,6 +57,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatName
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubeWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,7 +70,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
-import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.util.Locale
@@ -99,6 +96,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     private  val myViewModel: MyHomeViewModel by viewModels()
 
     private val chargingAnimationViewmodel : ChargingAnimationViewmodel by viewModels()
+    private val doubleWallpaperVideModel: DoubeWallpaperViewModel by viewModels()
 
     private var _navController: NavController? = null
 
@@ -143,6 +141,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
 
         chargingAnimationViewmodel.getChargingAnimations()
+
+        doubleWallpaperVideModel.getDoubleWallpapers()
 
         mainActivityViewModel.getAllModels("1","4000","5332")
 
@@ -559,7 +559,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         val welcomeMessage = remoteConfig[first].asString()
 
                         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
-                        val positionTabs = remoteConfig["tablist_144"].asString()
+                        val positionTabs = remoteConfig["tablist_156"].asString()
                         val iap = remoteConfig["iap_config"].asString()
 
                         val categoryOrder = remoteConfig["category_order"].asString()
@@ -745,7 +745,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         val welcomeMessage = remoteConfig[first].asString()
         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
-        val positionTabs = remoteConfig["tablist_144"].asString()
+        val positionTabs = remoteConfig["tablist_156"].asString()
         val categoryOrder = remoteConfig["category_order"].asString()
         Log.e(TAG, "onUpdate: $categoryOrder")
 

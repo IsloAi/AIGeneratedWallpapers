@@ -4,6 +4,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelChargingAnimation
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelDoubleWallpapers
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelListMostDownloaded
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
@@ -74,4 +75,9 @@ interface EndPointsInterface {
     @GET("getanimation.php")
     suspend fun getChargingAnimations(
     ):retrofit2.Response<ResponseModelChargingAnimation>
+
+
+    @GET("getdoublewallpaper.php")
+    suspend fun getDoubleWallpapers(
+    ):retrofit2.Response<ResponseModelDoubleWallpapers>
 }

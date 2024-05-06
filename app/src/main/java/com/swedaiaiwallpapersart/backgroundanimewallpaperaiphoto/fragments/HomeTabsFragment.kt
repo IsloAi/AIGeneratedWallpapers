@@ -65,6 +65,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPa
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doublewallpaper.DoubleWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -122,8 +123,8 @@ class HomeTabsFragment : Fragment() {
         "Gen AI" to R.drawable.tab_icon_generate,
         "Charging" to R.drawable.battery_tab,
         "Car" to R.drawable.car_tab,
-        "4K" to R.drawable.car_tab
-
+        "4K" to R.drawable.car_tab,
+        "Double" to R.drawable.tab_double_icon
     )
 
 
@@ -155,7 +156,7 @@ class HomeTabsFragment : Fragment() {
         Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions.contentToString() )
         if (AdConfig.tabPositions[0].isEmpty()){
             Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions )
-            AdConfig.tabPositions = arrayOf("Live", "Popular", "Category", "Anime", "Car", "Charging", "Gen AI")
+            AdConfig.tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging", "Gen AI")
 
         }else{
 //            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
@@ -681,6 +682,13 @@ class HomeTabsFragment : Fragment() {
                         }
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
+
+                    "Double" -> {
+                        if (isAdded){
+                            sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_DoubleTab_Click"))
+                        }
+                        Log.e("TABS", "onTabSelected: "+ tab.text)
+                    }
                 }
                 viewModel.setData(true)
                 updateTabAppearance(tab!!,true)
@@ -722,6 +730,7 @@ class HomeTabsFragment : Fragment() {
             "Category" -> CategoryFragment()
             "Gen AI" -> GenerateImageFragment()
             "Charging" -> ChargingAnimationFragment()
+            "Double" -> DoubleWallpaperFragment()
 
             else -> {HomeFragment()}
         }

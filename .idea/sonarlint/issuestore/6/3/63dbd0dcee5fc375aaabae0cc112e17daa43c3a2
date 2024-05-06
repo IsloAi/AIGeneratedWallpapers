@@ -1,0 +1,11 @@
+
+Xkotlin:S1172ç"8Remove this unused function parameter "destinationFile".(•¾ó8ıÓçåô1
+@kotlin:S6615¬" Remove this useless initializer.(Ûªø«8€Ôçåô1
+=kotlin:S125é"Remove this commented out code.(í‚Ò38‚Ôçåô1
+;kotlin:S6310õ"Avoid hardcoded dispatchers.(©ÓœW8†Ôçåô1
+Akotlin:S6310«"Avoid hardcoded dispatchers.(Åù·ªıÿÿÿÿ8†Ôçåô1
+<kotlin:S6310"Avoid hardcoded dispatchers.(Í¡·Ş8†Ôçåô1
+Gkotlin:S1874X"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8ÉŒÌğô1
+zkotlin:S1186á"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ŸÔçåô1
+zkotlin:S1186€"ZAdd a nested comment explaining why this function is empty or complete the implementation.(õøŞ‰8ŸÔçåô1
+Nkotlin:S1066Â".Merge this "if" statement with the nested one.(Ï•ƒè8 Ôçåô1

@@ -1,0 +1,18 @@
+
+>kotlin:S125ô"Remove this commented out code.(€šŸà8˜õÁğô1
+Ckotlin:S125¯"Remove this commented out code.(Ö‰Á­ùÿÿÿÿ8™õÁğô1
+>kotlin:S6531†"Remove this useless cast.(¿ÜĞàüÿÿÿÿ8±õÁğô1
+9kotlin:S1128"Remove this unused import.(İ£—ë8¸õÁğô1
+>kotlin:S1128"Remove this unused import.(¼„÷ãûÿÿÿÿ8¸õÁğô1
+9kotlin:S1128	"Remove this unused import.(Üº¸¡8¸õÁğô1
+>kotlin:S1128"Remove this unused import.(¯”şÿÿÿÿ8¸õÁğô1
+8kotlin:S1128"Remove this unused import.(±ÿu8¸õÁğô1
+>kotlin:S1128"Remove this unused import.(üÒ†°ùÿÿÿÿ8¸õÁğô1
+9kotlin:S1128"Remove this unused import.(áßøµ8¸õÁğô1
+>kotlin:S1128&"Remove this unused import.(ã°Œ©üÿÿÿÿ8¸õÁğô1
+wkotlin:S1192æ"RDefine a constant instead of duplicating this literal "/doublewallpaper/" 4 times.(Æ©Ü˜úÿÿÿÿ8»õÁğô1
+qkotlin:S1192œ"LDefine a constant instead of duplicating this literal "******NULL" 15 times.(Ÿ™£Ñşÿÿÿÿ8»õÁğô1
+‡kotlin:S1192œ"bDefine a constant instead of duplicating this literal "addNullValueInsideArray adcount: " 8 times.(Ÿ™£Ñşÿÿÿÿ8»õÁğô1
+wkotlin:S3776€"RRefactor this method to reduce its Cognitive Complexity from 21 to the 15 allowed.(ãÛß¬üÿÿÿÿ8¾õÁğô1
+wkotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 26 to the 15 allowed.(œ½€¢ûÿÿÿÿ8¿õÁğô1
+zkotlin:S1186Ë"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ÃõÁğô1

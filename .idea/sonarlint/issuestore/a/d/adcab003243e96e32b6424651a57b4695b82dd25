@@ -1,13 +1,11 @@
 
-]kotlin:S1172•"8Remove this unused function parameter "adapterPosition".(Ü‘İíşÿÿÿÿ8ÿÄËúÃ1
->kotlin:S125Æ"Remove this commented out code.(È¶ËÔ8…Î¿äÇ1
-Ckotlin:S125‹"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8„§ßıå1
-Akotlin:S6310â"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8ˆÎ¿äÇ1
-Nkotlin:S1481p"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8š«æúÃ1
->kotlin:S1128"Remove this unused import.(á»¸•úÿÿÿÿ8¢Š³æÙ1
-9kotlin:S1128"Remove this unused import.(¿îû•8Õ–¦æÙ1
-Hkotlin:S1874‹"#Deprecated code should not be used.(—è•­ıÿÿÿÿ8µÑ¹£Ë1
-Hkotlin:S1874Ú"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8›Î¿äÇ1
-Bkotlin:S1874Û"#Deprecated code should not be used.(àü8›Î¿äÇ1
-qkotlin:S3776à"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(æ­ 8›§ßıå1
-gkotlin:S6510\"CMove "return" statements from all branches before "when" statement.(èş™¸ÿÿÿÿÿ8ÅËúÃ1
+]kotlin:S1172"8Remove this unused function parameter "adapterPosition".(Ü‘İíşÿÿÿÿ8ÿÄËúÃ1
+>kotlin:S125Á"Remove this commented out code.(È¶ËÔ8…Î¿äÇ1
+Ckotlin:S125†"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8„§ßıå1
+Akotlin:S6310İ"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8ˆÎ¿äÇ1
+Nkotlin:S1481k"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8š«æúÃ1
+Hkotlin:S1874†"#Deprecated code should not be used.(—è•­ıÿÿÿÿ8µÑ¹£Ë1
+Hkotlin:S1874Õ"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8›Î¿äÇ1
+Bkotlin:S1874Ö"#Deprecated code should not be used.(àü8›Î¿äÇ1
+qkotlin:S3776Û"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(æ­ 8›§ßıå1
+gkotlin:S6510W"CMove "return" statements from all branches before "when" statement.(èş™¸ÿÿÿÿÿ8ÅËúÃ1
