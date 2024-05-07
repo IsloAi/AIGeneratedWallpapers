@@ -26,10 +26,12 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperDownloadBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubeWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubleSharedViewmodel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -46,6 +48,9 @@ class DoubleWallpaperDownloadFragment : Fragment() {
 
     val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
 
+    val doubleWallpaperViewmodel: DoubeWallpaperViewModel by activityViewModels()
+
+    var wallModel:DoubleWallModel ?= null
     private var bitmap: Bitmap? = null
 
     private var animationJob: Job? = null
@@ -90,7 +95,7 @@ class DoubleWallpaperDownloadFragment : Fragment() {
             adLayout!!
         )
 
-        binding.adsView.loadAd(requireActivity(),"downloadscr_native_bottom","downloadscr_native_bottom",
+        binding.adsView.loadAd(requireActivity(),"doublewalldownloadscr_bottom","doublewalldownloadscr_bottom",
             object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoadFail() {
                     super.onAdsLoadFail()
@@ -114,6 +119,7 @@ class DoubleWallpaperDownloadFragment : Fragment() {
 
     fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
+            wallModel?.downloaded = true
             SDKBaseController.getInstance().showInterstitialAds(
                 requireActivity(),
                 "downloadscr_set_click",
@@ -123,7 +129,16 @@ class DoubleWallpaperDownloadFragment : Fragment() {
                     override fun onAdsShowFail(errorCode: Int) {
                         Log.e("********ADS", "onAdsShowFail: "+errorCode )
                         if (isAdded){
-                            findNavController().navigate(R.id.previewChargingAnimationFragment)
+                            wallModel?.let { it1 ->
+                                sharedViewModel.updateDoubleWallById(
+                                    wallModel?.id!!,
+                                    it1
+                                )
+
+                                doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
+                                    it1)
+                            }
+                            findNavController().popBackStack()
 
                         }
                         //do something
@@ -132,7 +147,19 @@ class DoubleWallpaperDownloadFragment : Fragment() {
                     override fun onAdsDismiss() {
                         Log.e(TAG, "onAdsDismiss: ", )
                         if (isAdded){
-                            findNavController().navigate(R.id.previewChargingAnimationFragment)
+
+
+
+                            wallModel?.let { it1 ->
+                                sharedViewModel.updateDoubleWallById(
+                                    wallModel?.id!!,
+                                    it1
+                                )
+
+                                doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
+                                    it1)
+                            }
+                            findNavController().popBackStack()
 
                         }
                     }
@@ -153,6 +180,8 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner){wallpaper ->
             if (wallpaper.isNotEmpty()){
 
+                wallModel = wallpaper[0]
+
                 startProgressCoroutine()
                 Log.e("TAG", "initObservers: $wallpaper")
 
@@ -160,7 +189,7 @@ class DoubleWallpaperDownloadFragment : Fragment() {
                     downloadVideo(AdConfig.BASE_URL_DATA + "/"+wallpaper[0]?.hd_url1,video)
 
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/"+wallpaper[0]?.hd_url1)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +wallpaper[0]?.hd_url2)
 
 
             }

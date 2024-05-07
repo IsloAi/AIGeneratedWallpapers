@@ -159,8 +159,8 @@ class DoubleWallpaperFragment : Fragment() {
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
-                    "mainscr_trending_tab_click_item",
-                    "mainscr_trending_tab_click_item",
+                    "mainscr_sub_cate_tab_click_item",
+                    "mainscr_sub_cate_tab_click_item",
                     showLoading = true,
                     adsListener = object : CommonAdsListenerAdapter() {
                         override fun onAdsShowFail(errorCode: Int) {

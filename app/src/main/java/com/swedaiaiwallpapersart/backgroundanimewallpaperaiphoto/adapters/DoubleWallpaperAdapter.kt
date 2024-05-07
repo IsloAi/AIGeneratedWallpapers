@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
@@ -27,13 +26,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemDoubleWallpaperBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +68,7 @@ class DoubleWallpaperAdapter(
         fun bind(modela: ArrayList<DoubleWallModel?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.lockWallpaper,binding.homeWallpaper)
+                model!!,adapterPosition,binding.lockWallpaper,binding.homeWallpaper,itemView)
         }
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -149,7 +145,12 @@ class DoubleWallpaperAdapter(
         }
     }
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: DoubleWallModel, position:Int, wallpaperLockImage: ImageView,wallpaperHomeImage: ImageView
+    private fun setAllData(
+        model: DoubleWallModel,
+        position: Int,
+        wallpaperLockImage: ImageView,
+        wallpaperHomeImage: ImageView,
+        itemView: View
     ){
 
 //        if (!model.unlocked){
@@ -211,22 +212,10 @@ class DoubleWallpaperAdapter(
                     return false
                 }
             }).into(wallpaperHomeImage)
-        wallpaperLockImage.setOnClickListener {
+        itemView.setOnClickListener {
             val currentTime = System.currentTimeMillis()
-
             if (currentTime - lastClickTime >= debounceThreshold) {
-
-
                 positionCallback.getPosition(position,model)
-
-//                    else {
-//                        if (whichClicked == 1) {
-//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!,myActivity)
-//                        } else {
-//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView,myActivity)
-//                        }
-//                    }
-
                 lastClickTime = currentTime
             }
 

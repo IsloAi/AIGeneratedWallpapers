@@ -33,6 +33,27 @@
             app:layout_constraintEnd_toEndOf="parent"
             />
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/wallpaper_lock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageSlideLock"
+            app:layout_constraintEnd_toEndOf="@+id/imageSlideLock"
+            android:layout_marginBottom="@dimen/_10sdp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/wallpaper_unlock"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/imageSlideHome"
+            app:layout_constraintEnd_toEndOf="@+id/imageSlideHome"
+            android:layout_marginBottom="@dimen/_10sdp"
+            />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

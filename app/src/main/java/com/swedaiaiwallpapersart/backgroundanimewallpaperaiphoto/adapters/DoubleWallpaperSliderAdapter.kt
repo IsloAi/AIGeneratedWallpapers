@@ -222,7 +222,7 @@ class DoubleWallpaperSliderAdapter(
             if (binding.adsView.isAdLoaded){
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
             }else{
-                SDKBaseController.getInstance().loadIkmNativeAdView(mActivity,"viewlistwallscr_scrollview","viewlistwallscr_scrollview",object :
+                SDKBaseController.getInstance().loadIkmNativeAdView(mActivity,"viewlistdoublewallscr_scroll","viewlistdoublewallscr_scroll",object :
                     IKLoadNativeAdListener {
                     override fun onAdFailedToLoad(errorCode: Int) {
                         Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+errorCode )
@@ -239,7 +239,7 @@ class DoubleWallpaperSliderAdapter(
             withContext(this.coroutineContext) {
                 nativeAdView?.let {
                     binding.adsView.loadNativeWithAdView(mActivity,
-                        R.layout.shimmer_loading_native,adLayout!!,"viewlistwallscr_scrollview","viewlistwallscr_scrollview",
+                        R.layout.shimmer_loading_native,adLayout!!,"viewlistdoublewallscr_scroll","viewlistdoublewallscr_scroll",
                         it,
                         object : CustomSDKAdsListenerAdapter() {
                             override fun onAdsLoadFail() {

@@ -11,8 +11,6 @@ Pkotlin:S1481á"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8¥£©Éê
 Rkotlin:S1481ç"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8©­ò¾ê1
 Lkotlin:S1481æ",Remove this unused "tabIcon" local variable.(™Î‡è8¥£©Éê1
 >kotlin:S1128"Remove this unused import.(„¦š¶úÿÿÿÿ8¶­ò¾ê1
-9kotlin:S1128*"Remove this unused import.(œÓìä8ÙÝÎ…î1
->kotlin:S1128+"Remove this unused import.(â£¡µüÿÿÿÿ8ÚÝÎ…î1
 kkotlin:S1192{"GDefine a constant instead of duplicating this literal "Gen AI" 4 times.(Ãê¤òùÿÿÿÿ8º­ò¾ê1
 pkotlin:S1192‡"PDefine a constant instead of duplicating this literal "onTabSelected: " 8 times.(¢‰”Ø8µ£©Éê1
 Ckotlin:S1874º"#Deprecated code should not be used.(£À¯•8¾­ò¾ê1

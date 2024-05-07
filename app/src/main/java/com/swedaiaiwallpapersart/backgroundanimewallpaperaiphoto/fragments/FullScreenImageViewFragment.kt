@@ -113,7 +113,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                 responseData = it
                 setImageToView()
 
-                getBitmapFromGlide(responseData!!.hd_image_url!!)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/images/" +responseData?.hd_image_url)
             }
 
         }
@@ -374,7 +374,7 @@ class FullScreenImageViewFragment : DialogFragment() {
 
     private fun setImageToView(){
         Glide.with(requireContext())
-            .load(responseData!!.hd_image_url)
+            .load(AdConfig.BASE_URL_DATA + "/images/" +responseData!!.hd_image_url)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

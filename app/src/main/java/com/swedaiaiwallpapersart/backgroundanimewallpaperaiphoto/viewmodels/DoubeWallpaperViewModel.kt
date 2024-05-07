@@ -30,4 +30,19 @@ class DoubeWallpaperViewModel@Inject constructor(
         }
     }
 
+    fun updateValueById(id: Int, newValue: DoubleWallModel) {
+        val currentResponse = _doubleWallList.value
+        if (currentResponse is Response.Success) {
+            val currentList = currentResponse.data ?: return // Extract current list
+            val index = currentList.indexOfFirst { it.id == id }
+            if (index != -1) {
+                val updatedList = ArrayList(currentList) // Create a copy of the current list
+                updatedList[index] = newValue // Update the value at the found index
+                _doubleWallList.value = Response.Success(updatedList) // Update the LiveData
+            }
+        }
+    }
+
+
+
 }
