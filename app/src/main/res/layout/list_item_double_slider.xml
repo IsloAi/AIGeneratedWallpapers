@@ -23,6 +23,18 @@
             app:layout_constraintStart_toStartOf="parent"
             />
 
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/imageSlideLock"
+            app:layout_constraintBottom_toBottomOf="@id/imageSlideLock"
+            app:layout_constraintStart_toStartOf="@id/imageSlideLock"
+            app:layout_constraintEnd_toEndOf="@id/imageSlideLock"
+            android:visibility="gone"
+            android:indeterminateTint="@color/button_bg"
+            android:id="@+id/progressLock"
+            />
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSlideHome"
             android:layout_width="0dp"
@@ -31,6 +43,18 @@
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/imageSlideHome"
+            app:layout_constraintBottom_toBottomOf="@id/imageSlideHome"
+            app:layout_constraintStart_toStartOf="@id/imageSlideHome"
+            app:layout_constraintEnd_toEndOf="@id/imageSlideHome"
+            android:indeterminateTint="@color/button_bg"
+            android:visibility="gone"
+            android:id="@+id/progressHome"
             />
 
         <ImageView

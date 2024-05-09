@@ -95,6 +95,9 @@ class HomeTabsFragment : Fragment() {
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
+    private var isBottomSheetVisible = false
+
+
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -240,6 +243,10 @@ class HomeTabsFragment : Fragment() {
     }
 
     fun feedback1Sheet() {
+
+        if (isBottomSheetVisible) {
+            return
+        }
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
@@ -255,6 +262,10 @@ class HomeTabsFragment : Fragment() {
             feedbackQuestionSheet()
         }
 
+        bottomSheetDialog.setOnDismissListener {
+            isBottomSheetVisible = false // Update flag when bottom sheet is dismissed
+        }
+
         if (isAdded){
             if (MySharePreference.getFeedbackSession1Completed(requireContext())){
                 MySharePreference.setFeedbackSession2Completed(requireContext(),true)
@@ -266,9 +277,11 @@ class HomeTabsFragment : Fragment() {
             if (isAdded){
                 MySharePreference.setUserCancelledprocess(requireContext(),true)
             }
+            isBottomSheetVisible = false
             bottomSheetDialog.dismiss()
         }
         bottomSheetDialog.show()
+        isBottomSheetVisible = true
     }
 
     fun googleInAppRate() {

@@ -156,7 +156,11 @@ class CategoryFragment : Fragment() {
 
         adapter = LiveCategoriesHorizontalAdapter(categoryList, object : StringCallback {
                 override fun getStringCall(string: String) {
-                    myViewModel.getMostUsed(string)
+                    if (string == "Roro'Noa Zoro"){
+                        myViewModel.getMostUsed("Roro")
+                    }else{
+                        myViewModel.getMostUsed(string)
+                    }
 
                     if (isAdded){
                         sendTracking("categorymainscr_click",Pair("categorymainscr", "$string Live"))

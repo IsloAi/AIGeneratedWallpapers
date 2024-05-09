@@ -39,6 +39,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewManager
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperSliderBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperSliderAdapter
@@ -318,32 +319,12 @@ class DoubleWallpaperSliderFragment : Fragment() {
                 }
 
 
-
-//                if (arrayList[position]?.unlockimges == true) {
-//                    val model = arrayList[position]
-//                    openPopupMenu(model!!)
-//                } else {
-//
-//                    if (AdConfig.ISPAIDUSER) {
-//                        val model = arrayList[position]
-//                        openPopupMenu(model!!)
-//                    } else {
-//                        unlockDialog()
-//                    }
-//
-//                }
-
-
             } else {
                 Toast.makeText(
                     requireContext(),
                     getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
                 ).show()
             }
-//           }else{
-//               Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//           }
-
         }
 
         binding.shareAPp.setOnClickListener {
@@ -378,18 +359,45 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     Pair("action_name", "ViewListWallScr_InfoBT_Click")
                 )
             }
-//            if (arrayList[position]?.id != null) {
-//                imageDetailsSheet()
-//            } else {
-//                Toast.makeText(
-//                    requireContext(),
-//                    "This is Ad position,No info Available",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//            }
+            if (arrayList[position]?.id != null) {
+                imageDetailsSheet()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "This is Ad position,No info Available",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
         }
 
+    }
+
+    fun imageDetailsSheet() {
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
+        val binding = BottomSheetInfoBinding.inflate(layoutInflater)
+        bottomSheetDialog.setContentView(binding.root)
+
+        binding.btnYes.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        if (arrayList[position] != null) {
+            binding.imageName.text = "Double Wallpaper"
+            binding.imageSize.text = (arrayList[position]?.size1!! + arrayList[position]?.size2!!).toString() + " Kb"
+            binding.imageCapacity.text = "832 X 1456"
+            binding.imageTags.text = ""
+        } else {
+            Toast.makeText(
+                requireContext(),
+                "This is Ad position,No info Available",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+
+
+        bottomSheetDialog.show()
     }
     private fun interstitialAdWithToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()

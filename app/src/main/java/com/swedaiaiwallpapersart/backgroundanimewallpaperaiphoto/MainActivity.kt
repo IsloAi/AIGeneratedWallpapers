@@ -14,7 +14,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -26,6 +25,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -767,7 +770,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
             Log.e(TAG, "onUpdate: $categoryOrderArray")
         }catch (e:StringIndexOutOfBoundsException){
-            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
 
@@ -794,7 +797,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         }catch (e:JSONException){
             e.printStackTrace()
-            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
         }
 
         try {
@@ -804,7 +807,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         AdConfig.iapScreenType = iapScreenType
         }catch (e: JSONException) {
-            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
 
@@ -903,7 +906,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
         }
 
 

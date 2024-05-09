@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bmik.android.sdk.SDKBaseController
@@ -124,7 +125,7 @@ class DoubleWallpaperSliderAdapter(
 
 
             val model = arrayList[position]
-            dataSet(model!!,binding.imageSlideLock,binding.imageSlideHome)
+            dataSet(model!!,binding.imageSlideLock,binding.imageSlideHome,binding.progressLock,binding.progressHome)
         } }
 
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -133,8 +134,19 @@ class DoubleWallpaperSliderAdapter(
         }
     }
     @SuppressLint("SuspiciousIndentation")
-    private fun dataSet(model: DoubleWallModel, imageSlide: AppCompatImageView,imageSlidehome: AppCompatImageView
+    private fun dataSet(
+        model: DoubleWallModel,
+        imageSlide: AppCompatImageView,
+        imageSlidehome: AppCompatImageView,
+        progressLock: ProgressBar,
+        progressHome: ProgressBar
     ) {
+
+        progressLock.visibility = View.VISIBLE
+        progressHome.visibility = View.VISIBLE
+
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.compress_url1).into(imageSlide)
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.compress_url2).into(imageSlidehome)
         Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.hd_url1).diskCacheStrategy(
             DiskCacheStrategy.ALL)
             .listener(object:
@@ -155,6 +167,7 @@ class DoubleWallpaperSliderAdapter(
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
+                    progressLock.visibility = View.GONE
                     return false
                 }
             }).into(imageSlide)
@@ -179,6 +192,7 @@ class DoubleWallpaperSliderAdapter(
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
+                    progressHome.visibility = View.GONE
                     return false
                 }
             }).into(imageSlidehome)

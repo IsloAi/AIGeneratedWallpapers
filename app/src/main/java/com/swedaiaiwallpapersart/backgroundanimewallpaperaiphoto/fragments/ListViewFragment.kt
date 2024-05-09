@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +31,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MostDownloadedViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +69,8 @@ class ListViewFragment : Fragment() {
 
     val TAG = "LISTVIEWCAT"
 
+    private val mostDownloadedViewmodel: MostDownloadedViewmodel by activityViewModels()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentListViewBinding.inflate(inflater,container,false)
         onCreateViewCalling()
@@ -103,14 +107,19 @@ class ListViewFragment : Fragment() {
 
 
 
-        viewModel.selectedTab.observe(viewLifecycleOwner){
-            Log.e(TAG, "onCreateViewCalling: "+name )
-            Log.e(TAG, "onCreateViewCalling: "+it )
-            if (name == ""){
-                name = it
-                loadData()
+        if (name == "Trending"){
+            initTrendingData()
+        }else{
+            viewModel.selectedTab.observe(viewLifecycleOwner){
+                Log.e(TAG, "onCreateViewCalling: "+name )
+                Log.e(TAG, "onCreateViewCalling: "+it )
+                if (name == ""){
+                    name = it
+                    loadData()
+                }
             }
         }
+
 
         binding.catTitle.text = name
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
@@ -244,6 +253,59 @@ class ListViewFragment : Fragment() {
 
         }
     }
+
+    private fun initTrendingData() {
+        mostDownloadedViewmodel.trendingWallpapers.observe(viewLifecycleOwner){result ->
+            when (result) {
+                is Response.Loading -> {
+
+                }
+
+                is Response.Success -> {
+                    if (!dataset) {
+
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            var tempList = ArrayList<CatResponse>()
+
+                            result.data?.forEach {item ->
+                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
+                                if (!tempList.contains(model)){
+                                    tempList.add(model)
+                                }
+                            }
+
+                            val list = addNullValueInsideArray(tempList.shuffled())
+
+                            cachedCatResponses = list
+
+                            val initialItems = getItems(0, 30)
+
+                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                            withContext(Dispatchers.Main){
+                                adapter?.updateMoreData(initialItems)
+                                startIndex += 30
+                                dataset = true
+                            }
+
+
+                        }
+
+
+                    }
+                }
+
+                is Response.Error -> {
+                    Log.e("TAG", "error: ${result.message}")
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {
+                }
+            }
+
+        }
+    }
     private fun loadData() {
         Log.d(TAG, "onCreateCustom:  home on create")
 
@@ -320,7 +382,13 @@ class ListViewFragment : Fragment() {
             }
         }
 
-        loadData()
+
+        if (name == "Trending"){
+            initTrendingData()
+        }else{
+            loadData()
+        }
+
 
         if (dataset){
 

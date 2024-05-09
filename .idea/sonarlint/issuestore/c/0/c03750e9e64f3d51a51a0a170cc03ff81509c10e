@@ -1,8 +1,9 @@
 
-Ckotlin:S125ό"Remove this commented out code.(Υ½Μ‰όÿÿÿÿ8ηλ¤κτ1
-Akotlin:S6310Ò"Avoid hardcoded dispatchers.(ªδϊξϊÿÿÿÿ8μλ¤κτ1
-Nkotlin:S1481d"*Remove this unused "model" local variable.(ΔÒρΧύÿÿÿÿ8ϊλ¤κτ1
-Hkotlin:S1874Κ"#Deprecated code should not be used.(€™¶―ϋÿÿÿÿ8€μ¤κτ1
-Bkotlin:S1874Λ"#Deprecated code should not be used.(ΰό8€μ¤κτ1
-qkotlin:S3776Π"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ζ­ 8‚μ¤κτ1
-gkotlin:S6510P"CMove "return" statements from all branches before "when" statement.(θώ™Έÿÿÿÿÿ8†μ¤κτ1
+Ckotlin:S125"Remove this commented out code.(Υ½Μ‰όÿÿÿÿ8»µΈ³υ1
+Akotlin:S6310ΰ"Avoid hardcoded dispatchers.(ªδϊξϊÿÿÿÿ8ΏµΈ³υ1
+Nkotlin:S1481e"*Remove this unused "model" local variable.(ΔÒρΧύÿÿÿÿ8ϊλ¤κτ1
+rkotlin:S1192”"RDefine a constant instead of duplicating this literal "/doublewallpaper/" 4 times.(Φ°ωΩ8ς‰·³υ1
+Hkotlin:S1874Ψ"#Deprecated code should not be used.(€™¶―ϋÿÿÿÿ8€μ¤κτ1
+Bkotlin:S1874Ω"#Deprecated code should not be used.(ΰό8ÒµΈ³υ1
+qkotlin:S3776ή"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ζ­ 8ΣµΈ³υ1
+gkotlin:S6510Q"CMove "return" statements from all branches before "when" statement.(θώ™Έÿÿÿÿÿ8†μ¤κτ1

@@ -51,7 +51,13 @@ class LiveWallpaperCategoriesFragment : Fragment() {
         val adapter = ApiCategoriesNameAdapter(categoryList,object : StringCallback {
             override fun getStringCall(string: String) {
 //                catListViewmodel.getAllCreations(string)
-                myViewModel.getMostUsed(string)
+                if (string == "Roro'Noa Zoro"){
+                    myViewModel.getMostUsed("Roro")
+
+                }else{
+
+                    myViewModel.getMostUsed(string)
+                }
 
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),

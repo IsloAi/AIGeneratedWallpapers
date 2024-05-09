@@ -243,9 +243,11 @@ class LiveWallpaperPreviewFragment : Fragment() {
             if (livewallpaper?.liked == true) {
                 livewallpaper?.liked = false
                 binding.setLiked.setImageResource(R.drawable.button_like)
+                Toast.makeText(requireContext(),"Removed from favorites",Toast.LENGTH_SHORT).show()
             } else {
                 livewallpaper?.liked = true
                 binding.setLiked.setImageResource(R.drawable.button_like_selected)
+                Toast.makeText(requireContext(),"Added to favorites",Toast.LENGTH_SHORT).show()
             }
             addFavourite(requireContext(), binding.setLiked)
         }
