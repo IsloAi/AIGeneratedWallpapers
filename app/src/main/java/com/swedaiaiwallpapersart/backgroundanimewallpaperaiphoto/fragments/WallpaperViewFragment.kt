@@ -433,7 +433,7 @@ class WallpaperViewFragment : Fragment() {
         setViewPager()
         checkRedHeart(position)
         if (arrayList[position] != null) {
-            getLargImage = AdConfig.BASE_URL_DATA + "/images/" +arrayList[position]?.hd_image_url!!
+            getLargImage = AdConfig.BASE_URL_DATA + "/imagestest/" +arrayList[position]?.hd_image_url!!
             getSmallImage = AdConfig.BASE_URL_DATA + "/compress/" +arrayList[position]?.compressed_image_url!!
             getBitmapFromGlide(getLargImage)
 
@@ -771,7 +771,7 @@ class WallpaperViewFragment : Fragment() {
             override fun onPageSelected(positi: Int) {
                 if (positi >= 0 && positi < arrayList.size) {
                     if (arrayList[positi]?.hd_image_url != null) {
-                        getLargImage = AdConfig.BASE_URL_DATA + "/images/" +arrayList[positi]?.hd_image_url!!
+                        getLargImage = AdConfig.BASE_URL_DATA + "/imagestest/" +arrayList[positi]?.hd_image_url!!
                         getSmallImage = AdConfig.BASE_URL_DATA + "/compress/" +arrayList[positi]?.compressed_image_url!!
 
                         position = positi

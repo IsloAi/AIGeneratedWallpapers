@@ -54,6 +54,10 @@ class SplashOnFragment : Fragment() {
     private var animationJob: Job? = null
     private var animateImages: Job? = null
 
+    var lan:String = ""
+
+    var counter = 0
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,13 +100,13 @@ class SplashOnFragment : Fragment() {
             })
 
 
-        val lan = MySharePreference.getLanguage(requireContext())
+        lan = MySharePreference.getLanguage(requireContext()).toString()
 
         val premium = IkmSdkUtils.isUserIAPAvailable()
 
         AdConfig.ISPAIDUSER = premium
 
-        if (lan?.isEmpty() == true || AdConfig.inAppConfig == true){
+        if (lan.isEmpty() == true || AdConfig.inAppConfig == true){
             Log.e("TAG", "onViewCreated: load pre", )
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
 
@@ -110,7 +114,7 @@ class SplashOnFragment : Fragment() {
         animateLoadingText()
         lifecycleScope.launch(Dispatchers.Main) {
 
-            val duration = 5000 // 5000 milliseconds = 5 seconds
+            val duration = 2000 // 5000 milliseconds = 5 seconds
             val interval = 50 // Adjust the interval for smoother progress
 
             val steps = duration / interval
@@ -124,66 +128,65 @@ class SplashOnFragment : Fragment() {
                 delay(interval.toLong())
             }
 
+            if (counter == 0){
+                SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
+                    override fun onAdReady(priority: Int) {
+                    }
 
-            SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
-                override fun onAdReady(priority: Int) {
-                }
+                    override fun onAdsDismiss() {
+                        moveNext = true
+                        navigateToNextScreen()
 
-                override fun onAdsDismiss() {
-                    moveNext = true
-                    if (lan?.isEmpty() == true && isAdded){
-                        findNavController().navigate(R.id.localizationFragment)
-                        hasNavigated = true
-                    }else{
+                        IkmSdkController.setEnableShowResumeAds(true)
+
+                    }
+
+                    override fun onAdsShowFail(errorCode: Int) {
+                        Log.e("TAG", "onAdsShowFail: $errorCode")
+//
+
+                        navigateToNextScreen()
+
+                        IkmSdkController.setEnableShowResumeAds(true)
+                    }
+
+                    override fun onAdsShowed(priority: Int) {
+                        counter++
                         if (isAdded){
-                            if (AdConfig.inAppConfig){
-                                hasNavigated = true
-                                findNavController().navigate(R.id.localizationFragment)
-                            }else{
-                                hasNavigated = true
-                                findNavController().navigate(R.id.homeTabsFragment)
-                            }
-                        }
-
-                    }
-
-                    IkmSdkController.setEnableShowResumeAds(true)
-
-                }
-
-                override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("TAG", "onAdsShowFail: $errorCode")
-                    if (lan?.isEmpty() == true && isAdded){
-                        hasNavigated = true
-                        findNavController().navigate(R.id.localizationFragment)
-                    }else{
-                        if (isAdded) {
-                            if (AdConfig.inAppConfig){
-                                hasNavigated = true
-                                findNavController().navigate(R.id.localizationFragment)
-                            }else{
-                                hasNavigated = true
-                                findNavController().navigate(R.id.homeTabsFragment)
-                            }
+                            binding.adsView.visibility = View.GONE
                         }
                     }
 
-                    IkmSdkController.setEnableShowResumeAds(true)
-                }
+                })
+            }else{
+                navigateToNextScreen()
+            }
 
-                override fun onAdsShowed(priority: Int) {
-                    if (isAdded){
-                        binding.adsView.visibility = View.GONE
-                    }
-                }
 
-            })
 
 
 
         }
 
 
+    }
+
+
+    private fun navigateToNextScreen() {
+        if (lan?.isEmpty() == true && isAdded) {
+            hasNavigated = true
+            findNavController().navigate(R.id.localizationFragment)
+        } else {
+            if (isAdded) {
+                if (AdConfig.inAppConfig) {
+                    hasNavigated = true
+                    findNavController().navigate(R.id.localizationFragment)
+                } else {
+                    hasNavigated = true
+                    findNavController().navigate(R.id.homeTabsFragment)
+                }
+            }
+        }
     }
 
     private fun animateLoadingText() {
@@ -225,19 +228,10 @@ class SplashOnFragment : Fragment() {
         }
         val lan = MySharePreference.getLanguage(requireContext())
 
-        if (moveNext && !hasNavigated){
-            if (lan?.isEmpty() == true && isAdded){
-                findNavController().navigate(R.id.localizationFragment)
-            }else{
-                if (isAdded) {
-                    if (AdConfig.inAppConfig){
-                        findNavController().navigate(R.id.localizationFragment)
-                    }else{
-                        findNavController().navigate(R.id.homeTabsFragment)
-                    }
-                }
-            }
+        if (counter > 0){
+            navigateToNextScreen()
         }
+        handleAppResume()
 
 
         if (isAdded){
@@ -245,6 +239,14 @@ class SplashOnFragment : Fragment() {
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+    }
+
+    private fun handleAppResume() {
+        if (moveNext && !hasNavigated) {
+            navigateToNextScreen()
+        }else{
+            Log.e("TAG", "handleAppResume: ", )
         }
     }
 

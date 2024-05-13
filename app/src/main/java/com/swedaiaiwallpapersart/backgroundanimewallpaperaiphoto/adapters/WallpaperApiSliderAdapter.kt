@@ -162,7 +162,7 @@ class WallpaperApiSliderAdapter(
                 fullViewImage.getFullImageUrl(model)
 //            }
         }
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/images/" +model.hd_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/imagestest/" +model.hd_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object:
                 RequestListener<Drawable> {
                 override fun onLoadFailed(

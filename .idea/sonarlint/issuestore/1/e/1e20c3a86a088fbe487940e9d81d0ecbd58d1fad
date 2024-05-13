@@ -1,7 +1,6 @@
 
-;kotlin:S6310o"Avoid hardcoded dispatchers.(©ÒÕò8Âİâ©î1
-<kotlin:S6310Á"Avoid hardcoded dispatchers.(Í¡·Ş8Âİâ©î1
-9kotlin:S1128"Remove this unused import.(Ö¢æ¾8Ğİâ©î1
-qkotlin:S3776C"RRefactor this method to reduce its Cognitive Complexity from 41 to the 15 allowed.(ëü«8×ã©î1
-wkotlin:S3776Ô"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(íô¸²ÿÿÿÿÿ8Ôİâ©î1
-kotlin:S1186"ZAdd a nested comment explaining why this function is empty or complete the implementation.(–çê–øÿÿÿÿ8Úã©î1
+;kotlin:S6310s"Avoid hardcoded dispatchers.(©ÒÕò8ÅÖø÷1
+<kotlin:S6310Ä"Avoid hardcoded dispatchers.(Í¡·Ş8ÃÁÈ‘÷1
+Mkotlin:S1481å"(Remove this unused "lan" local variable.(¬üùØûÿÿÿÿ8äÁÈ‘÷1
+9kotlin:S1128"Remove this unused import.(Ö¢æ¾8¸Õ÷1
+kotlin:S1186…"ZAdd a nested comment explaining why this function is empty or complete the implementation.(–çê–øÿÿÿÿ8™–È‘÷1
