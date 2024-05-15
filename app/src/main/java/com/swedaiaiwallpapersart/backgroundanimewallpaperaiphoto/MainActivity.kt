@@ -127,77 +127,25 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         initFirebaseRemoteConfig()
 
+        handleBackPress()
+        fetchData(deviceID)
 
-        myCatNameViewModel.fetchWallpapers()
-        saveLiveWallpapersInDB()
-        lifecycleScope.launch {
-            liveViewModel.getMostUsed("1","500",deviceID)
-        }
-
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                Log.e(TAG, "handleOnBackPressed: " )
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
-               navController.popBackStack()
-            }
-        })
-
-
-        chargingAnimationViewmodel.getChargingAnimations()
-
-        doubleWallpaperVideModel.getDoubleWallpapers()
-
-        mainActivityViewModel.getAllModels("1","4000","5332")
-
-        mainActivityViewModel.allModels.observe(this){result->
-            when(result){
-                is Response.Success -> {
-                    Log.e(TAG, "updatedWalls: "+result.data )
-
-                    result.data?.forEach {item ->
-                        val model = SingleDatabaseResponse(
-                            item.id,
-                            item.cat_name,
-                            item.image_name,
-                            item.url,
-                            item.url,
-                            item.likes,
-                            item.liked,
-                            item.size,
-                            item.Tags,
-                            item.capacity,
-                            true
-                        )
-
-                        CoroutineScope(Dispatchers.IO).async {
-                            appDatabase.wallpapersDao().insert(model)
-                        }
-                    }
-
-
-
-                }
-                is Response.Error -> {
-
-                }
-
-                is Response.Processing -> {
-
-                }
-
-                Response.Loading -> {
-
-                }
-            }
-
-        }
+        observefetechedData()
 
         if (!isNetworkAvailable()){
             showNoInternetDialog()
-
         }
+        readjsonAndSaveDataToDb()
+        if (deviceID != null) {
+            MySharePreference.setDeviceID(this, deviceID)
+        }
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        _navController = navHostFragment.navController
 
 
+    }
+
+    private fun readjsonAndSaveDataToDb() {
         GlobalScope.launch {
             val jsonFileName = "wallpapers.json"
             val jsonString = readJsonFile(this@MainActivity, jsonFileName)
@@ -208,7 +156,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 if (imageList != null) {
                     val images = imageList.images
                     val deferreds = images.map { item ->
-//                        Log.e(TAG, "onCreate: "+item )
                         val model = SingleDatabaseResponse(
                             item.id,
                             item.cat_name,
@@ -222,14 +169,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             item.capacity,
                             true
                         )
-
-//                        Glide.with(this@MainActivity)
-//                            .load(model.compressed_image_url)
-//                            .diskCacheStrategy(DiskCacheStrategy.DATA)
-//                            .thumbnail(0.1f)
-//                            .preload()
-
-
                         CoroutineScope(Dispatchers.IO).async {
                             appDatabase.wallpapersDao().insert(model)
                         }
@@ -238,22 +177,16 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                     GlobalScope.launch {
                         val fileName = "livewallpapers.json"
-                        val jsonString = readJsonFile(this@MainActivity,fileName)
-                        if (jsonString.isNotEmpty()){
+                        val jsonString = readJsonFile(this@MainActivity, fileName)
+                        if (jsonString.isNotEmpty()) {
                             val imagesListLive = parseJsonLive(jsonString)
 
-                            if (imagesListLive != null){
+                            if (imagesListLive != null) {
                                 val imagesLive = imagesListLive.images
                                 val deferreds = imagesLive.map { item ->
-//                                    Log.e(TAG, "onCreate: "+item )
                                     val model = item.copy(unlocked = true)
 
                                     lifecycleScope.launch {
-//                                        Glide.with(this@MainActivity)
-//                                            .load(item.thumnail_url)
-//                                            .diskCacheStrategy(DiskCacheStrategy.DATA)
-//                                            .thumbnail(0.1f)
-//                                            .preload()
                                     }
 
                                     CoroutineScope(Dispatchers.IO).async {
@@ -285,26 +218,90 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         deferreds.awaitAll()
                         // This code will execute after all insert operations are completed
                         // You can call your method here
-                        mainActivityViewModel.getMostUsed("1","700")
+                        mainActivityViewModel.getMostUsed("1", "700")
                         initObservers()
                     }
 
                 } else {
-
+                    Log.e(TAG, "readjsonAndSaveDataToDb: IMAGElIST NULL" )
                 }
             } else {
-
+                Log.e(TAG, "readjsonAndSaveDataToDb: string null" )
             }
         }
-        Log.d("tracingImageId", "onCreate: id= $deviceID")
-        if (deviceID != null) {
-            MySharePreference.setDeviceID(this, deviceID)
-            Log.e("TAG", "onCreate: " + deviceID)
+    }
+
+    private fun observefetechedData() {
+        mainActivityViewModel.allModels.observe(this) { result ->
+            when (result) {
+                is Response.Success -> {
+                    Log.e(TAG, "updatedWalls: " + result.data)
+
+                    result.data?.forEach { item ->
+                        val model = SingleDatabaseResponse(
+                            item.id,
+                            item.cat_name,
+                            item.image_name,
+                            item.url,
+                            item.url,
+                            item.likes,
+                            item.liked,
+                            item.size,
+                            item.Tags,
+                            item.capacity,
+                            true
+                        )
+
+                        CoroutineScope(Dispatchers.IO).async {
+                            appDatabase.wallpapersDao().insert(model)
+                        }
+                    }
+
+
+                }
+
+                is Response.Error -> {
+                    Log.e(TAG, "observefetechedData: error" )
+                }
+
+                is Response.Processing -> {
+                    Log.e(TAG, "observefetechedData: Processing")
+                }
+
+                Response.Loading -> {
+                    Log.e(TAG, "observefetechedData: loading")
+                }
+            }
+
         }
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        _navController = navHostFragment.navController
+    }
 
+    private fun fetchData(deviceID: String) {
+        myCatNameViewModel.fetchWallpapers()
+        saveLiveWallpapersInDB()
+        lifecycleScope.launch {
+            liveViewModel.getMostUsed("1", "500", deviceID)
+        }
 
+        chargingAnimationViewmodel.getChargingAnimations()
+
+        doubleWallpaperVideModel.getDoubleWallpapers()
+
+        mainActivityViewModel.getAllModels("1", "4000", "5332")
+    }
+
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.e(TAG, "handleOnBackPressed: ")
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "Sytem_BackButton_Click")
+                )
+                navController.popBackStack()
+            }
+        })
     }
 
 
@@ -317,7 +314,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
 
-    fun saveLiveWallpapersInDB(){
+    private fun saveLiveWallpapersInDB(){
         liveViewModel.liveWallpapers.observe(this){result->
             when(result){
                 is Response.Success -> {
@@ -732,17 +729,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                     val updated = task.result
 
                     Log.e("TAG", "Config params updated: $updated")
-//                    Toast.makeText(
-//                        this,
-//                        "Fetch and activate succeeded",
-//                        Toast.LENGTH_SHORT,
-//                    ).show()
-                } else {
-//                    Toast.makeText(
-//                        this,
-//                        "Fetch failed",
-//                        Toast.LENGTH_SHORT,
-//                    ).show()
+
                 }
             }
 
@@ -770,7 +757,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
             Log.e(TAG, "onUpdate: $categoryOrderArray")
         }catch (e:StringIndexOutOfBoundsException){
-//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
 
@@ -797,7 +783,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         }catch (e:JSONException){
             e.printStackTrace()
-//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
         }
 
         try {
@@ -807,7 +792,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         AdConfig.iapScreenType = iapScreenType
         }catch (e: JSONException) {
-//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
             e.printStackTrace()
         }
 
@@ -817,15 +801,15 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
 
         Log.e(TAG, "onUpdate: $positionTabs")
-        var tabNamesArray: Array<String> = positionTabs
+        val tabNamesArray: Array<String> = positionTabs
             .replace("{", "")   // Remove the opening curly brace
             .replace("}", "")   // Remove the closing curly brace
             .replace("\"","")
             .split(", ")        // Split the string into an array using ", " as the delimiter
             .toTypedArray()
 
-        for (i in 0 until tabNamesArray.size){
-            Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
+        for (element in tabNamesArray){
+            Log.e(TAG, "onUpdate: "+ element)
         }
 
         //in next update
@@ -906,13 +890,11 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             }
         } catch (e: JSONException) {
             e.printStackTrace()
-//            Toast.makeText(this@MainActivity,"Remote config failed",Toast.LENGTH_SHORT).show()
         }
 
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     fun openPopupMenu(name: String, editPrompt: EditText) {
         val dialog = BottomSheetDialog(this@MainActivity)
         val view = layoutInflater.inflate(R.layout.prompt_bulider, null)
@@ -920,9 +902,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog.window!!.setLayout(width, height)
-        val params = (view.getParent() as View).layoutParams as CoordinatorLayout.LayoutParams
-        val behavior = params.behavior
-        (view.getParent() as View).setBackgroundColor(Color.TRANSPARENT)
+        val params = (view.parent as View).layoutParams as CoordinatorLayout.LayoutParams
+        (view.parent as View).setBackgroundColor(Color.TRANSPARENT)
         dialog.setCancelable(false)
         dialog.findViewById<RelativeLayout>(R.id.closeButton)
             ?.setOnClickListener { dialog.dismiss() }
@@ -936,7 +917,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun promptRecyclerView(
         promptRecyclerView: RecyclerView?,
         name: String,

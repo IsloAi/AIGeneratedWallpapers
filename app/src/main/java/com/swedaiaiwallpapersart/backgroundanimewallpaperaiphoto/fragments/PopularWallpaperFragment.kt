@@ -566,7 +566,7 @@ class PopularWallpaperFragment () : Fragment() {
                 override fun clickEvent(position: Int) {
                     when (position) {
                         0 -> {
-                            (requireParentFragment() as HomeTabsFragment).navigateToTrending(5)
+                            (requireParentFragment() as HomeTabsFragment).navigateToTrending(7)
                         }
 
                         1 -> {

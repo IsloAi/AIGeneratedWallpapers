@@ -86,6 +86,7 @@ class SplashOnFragment : Fragment() {
 
         myActivity = activity as MainActivity
 
+        // Load the banner ad
         binding.adsView.loadAd(requireContext(),"splashscr_bottom",
             "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoaded() {
@@ -99,20 +100,20 @@ class SplashOnFragment : Fragment() {
                 }
             })
 
-
+        // Get the language preference
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
+        // Check if the user is a premium user
         val premium = IkmSdkUtils.isUserIAPAvailable()
-
         AdConfig.ISPAIDUSER = premium
-
+        // Preload the native ad if necessary
         if (lan.isEmpty() == true || AdConfig.inAppConfig == true){
             Log.e("TAG", "onViewCreated: load pre", )
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
-
         }
+
         animateLoadingText()
-        lifecycleScope.launch(Dispatchers.Main) {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
             val duration = 2000 // 5000 milliseconds = 5 seconds
             val interval = 50 // Adjust the interval for smoother progress
@@ -161,11 +162,6 @@ class SplashOnFragment : Fragment() {
             }else{
                 navigateToNextScreen()
             }
-
-
-
-
-
         }
 
 
