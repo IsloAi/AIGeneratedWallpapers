@@ -1,70 +1,37 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation
 
-import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.WallpaperManager
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.media.MediaPlayer
-import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.webkit.MimeTypeMap
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.IkmSdkController
 import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
 import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPreviewChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavoruiteLiveWallpaperBody
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.IOException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -153,20 +120,38 @@ class PreviewChargingAnimationFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
             Log.e("TAG", "setEvents: clicked" )
             if (isDrawOverlaysPermissionGranted(requireContext())){
+                if (isAdded){
                 val intent = Intent(requireContext(),ChargingAnimationService::class.java)
                 MySharePreference.setAnimationPath(requireContext(),BlurView.filePathBattery)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    Log.e("TAG", "setEvents: service start Q", )
-                    requireContext().startForegroundService(intent)
+                    Log.e("TAG", "setEvents: service start Q")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE){
+                            var dialog: Dialog = AlertDialog.Builder(requireContext())
+                                .setTitle("Foreground Service Required")
+                                .setMessage("To continue playing the animation, the app needs to run in the foreground. This means that the app will continue to run even when you close it.")
+                                .setPositiveButton("Allow"
+                                ) { dialog, which -> // Start the foreground service
+                                    requireContext().startForegroundService(intent)
+                                    sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
+                                    Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
+                                }
+                                .setNegativeButton("Cancel"
+                                ) { dialog, which -> dialog.dismiss() }
+                                .show()
+
+
+                    }else{
+                        sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
+                        Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
+                        requireContext().startForegroundService(intent)
+                    }
 
                 }else{
-                    Log.e("TAG", "setEvents: service start else", )
+                    Log.e("TAG", "setEvents: service start else")
                     requireContext().startService(intent)
-                }
-
-                if (isAdded){
                     sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
                     Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
+                }
                 }
             }else{
 
