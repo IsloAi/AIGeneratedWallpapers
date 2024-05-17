@@ -1,7 +1,16 @@
 
->kotlin:S125ê"Remove this commented out code.(¢µÄÏ8éåŞ‹Ü1
-Xkotlin:S1144Ÿ"8Remove this unused private "generateSharingLink" method.(âÂû¸8ğåŞ‹Ü1
-Wkotlin:S1144¾"2Remove this unused private "shareDeepLink" method.(”±¹İûÿÿÿÿ8ñåŞ‹Ü1
-Rkotlin:S1481Õ"2Remove this unused "shortLinkTask" local variable.(Ùÿ¹×8€æŞ‹Ü1
->kotlin:S1128"Remove this unused import.(’ØÌ§ÿÿÿÿÿ8‡¯ßæÙ1
-kkotlin:S1192"KDefine a constant instead of duplicating this literal "text/plain" 3 times.(ÃÓ©Œ8…æŞ‹Ü1
+‹kotlin:S1172O"AUse "_" instead of this unused lambda parameter "compoundButton".(Š óÓúÿÿÿÿ8Şò×²ø1J$f8fb5398-a645-4db3-aeae-139e81aaba15
+dkotlin:S125–"Remove this commented out code.(¢µÄÏ8åò×²ø1J$7e1e760d-0b3f-472d-9d23-c818f3de93b0
+~kotlin:S1144Ë"8Remove this unused private "generateSharingLink" method.(âÂû¸8íò×²ø1J$d9ac1714-93e2-4887-b74b-da2d8308a875
+}kotlin:S1144ê"2Remove this unused private "shareDeepLink" method.(”±¹İûÿÿÿÿ8ïò×²ø1J$0344ebf8-873f-4177-b1b6-750579816bbe
+xkotlin:S1481"2Remove this unused "shortLinkTask" local variable.(Ùÿ¹×8ûò×²ø1J$12cf46e4-7c4e-4e99-a3f6-d89618eb4d32
+dkotlin:S1128"Remove this unused import.(å÷÷Şüÿÿÿÿ8€ó×²ø1J$6cff1583-774e-463c-bc35-1c3d545237f9
+_kotlin:S1128"Remove this unused import.(ıºÎà8ó×²ø1J$8d9c633e-24ad-47d7-906f-788104c9675f
+‘kotlin:S1192­"KDefine a constant instead of duplicating this literal "text/plain" 3 times.(ÃÓ©Œ8‚ó×²ø1J$02edb4aa-951a-4c33-9d55-e94f0f1b34aa
+ikotlin:S1874…"#Deprecated code should not be used.(Í€ˆ8…ó×²ø1J$fe1fc012-6bd5-4029-b8c9-23825dd526ea
+ikotlin:S1874Ö"#Deprecated code should not be used.(ÍÈü˜8…ó×²ø1J$49616c9d-77ab-480d-be68-910dab37821a
+ikotlin:S1874÷"#Deprecated code should not be used.(‰³ÇÆ8…ó×²ø1J$4ccc6cd8-e3b3-4deb-b246-21dc50286ec3
+nkotlin:S1874ù"#Deprecated code should not be used.(À´üÿÿÿÿ8…ó×²ø1J$ad6d9632-6ecf-4089-94fb-50a73963db70
+nkotlin:S1874ó"#Deprecated code should not be used.(‘è³Õşÿÿÿÿ8…ó×²ø1J$6f7531e0-aa56-4611-ba15-ffefcb9afc12
+ikotlin:S1874"#Deprecated code should not be used.(Ùÿ¹×8…ó×²ø1J$a6fbd7bc-35fc-40e3-82ae-b6080ab614d7
+—kotlin:S37765"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(õÈƒè8‡ó×²ø1J$9217d3b0-df5b-42b4-8688-8f9115129ac4

@@ -1,17 +1,20 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
 import android.annotation.SuppressLint
+import android.app.ActivityManager
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -25,8 +28,8 @@ import com.google.firebase.dynamiclinks.ktx.iosParameters
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.FragmentSettingBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSettingBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -54,6 +57,10 @@ class SettingFragment : Fragment() {
 
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
 
+        val isServiceRunning = isServiceRunning(requireContext(), ChargingAnimationService::class.java)
+
+        binding.mySwitch.isChecked = isServiceRunning
+
         Glide.with(requireContext())
             .asGif()
             .load(R.raw.gems_animaion)
@@ -67,6 +74,31 @@ class SettingFragment : Fragment() {
         binding.customerSupportButton.setOnClickListener {findNavController().navigate(R.id.feedbackFragment)}
         binding.shareAppButton.setOnClickListener {
            shareApp(requireContext())
+        }
+
+        binding.mySwitch.setOnCheckedChangeListener { compoundButton, b ->
+            if (b){
+                if (MySharePreference.getAnimationPath(requireContext()) != ""){
+                    val intent = Intent(requireContext(),ChargingAnimationService::class.java)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+                        requireContext().startForegroundService(intent)
+                    }else{
+                        requireContext().startService(intent)
+                    }
+                    Toast.makeText(requireContext(),"Animation Activated",Toast.LENGTH_SHORT).show()
+                }else{
+                    binding.mySwitch.isChecked = false
+                    Toast.makeText(requireContext(),"Please Set Animation first",Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                if (isServiceRunning(requireContext(), ChargingAnimationService::class.java)){
+                    val intent = Intent(requireContext(),ChargingAnimationService::class.java)
+                    requireContext().stopService(intent)
+                    Toast.makeText(requireContext(),"Animation Deactivated Successfully",Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
         }
 
         binding.privacyPolicyButton.setOnClickListener { openLink("https://bluell.net/privacy/") }
@@ -95,6 +127,18 @@ class SettingFragment : Fragment() {
         }
         }
 
+
+    fun isServiceRunning(context: Context, serviceClass: Class<ChargingAnimationService>): Boolean {
+        val serviceManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+        val runningServices = serviceManager.getRunningServices(Integer.MAX_VALUE)
+
+        for (serviceInfo in runningServices) {
+            if (serviceInfo.service.className == serviceClass.name) {
+                return true
+            }
+        }
+        return false
+    }
 
     fun openDeveloperPage(context: Context, developerId: String) {
         try {

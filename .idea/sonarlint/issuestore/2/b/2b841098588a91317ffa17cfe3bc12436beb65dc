@@ -1,8 +1,8 @@
 
-ƒkotlin:S1172‹"8Use "_" instead of this unused lambda parameter "which".(öªØ¿şÿÿÿÿ8½†‰ø1J$c143ae3a-ab99-49d8-bb28-9dd53faf65cd
-xkotlin:S1172…"2Use "_" instead of these unused lambda parameters.(‹Íâö8½†‰ø1J$430a82c1-3754-43aa-83a9-bc8b3d1be3ef
-vkotlin:S1481"+Remove this unused "dialog" local variable.( ¶å’ùÿÿÿÿ8Í†‰ø1J$b1a3f3d8-fbb2-42e4-9041-162da39cb83d
-dkotlin:S1128"Remove this unused import.(ìõ²Øıÿÿÿÿ8Ğ†‰ø1J$524d99ae-9035-47b6-b662-a5ebe38a7ab5
-ˆkotlin:S1192ˆ"hDefine a constant instead of duplicating this literal "Charging animation Applied Successfully" 3 times.(ïÓÆ·8çÎ—‰ø1
-mkotlin:S1874H"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8Ó†‰ø1J$884c2a7b-9787-443f-bef1-7b2cc1fcba98
-—kotlin:S3776w"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ñàõà8Ô†‰ø1J$4d5c9b3e-2116-440b-b01b-28251461dd35
+ƒkotlin:S1172‹"8Use "_" instead of this unused lambda parameter "which".(öªØ¿şÿÿÿÿ8½†‰ø1J$b95d51c8-cf1d-4793-83d4-744d4eb525ea
+xkotlin:S1172…"2Use "_" instead of these unused lambda parameters.(‹Íâö8½†‰ø1J$8b972908-fe10-4571-aa3d-71febf4540e7
+vkotlin:S1481"+Remove this unused "dialog" local variable.( ¶å’ùÿÿÿÿ8Í†‰ø1J$e94c364d-9b59-49c2-8b6f-b25f9df07803
+dkotlin:S1128"Remove this unused import.(ìõ²Øıÿÿÿÿ8Ğ†‰ø1J$da6f5996-25e0-4da8-937c-d59b3d99ae51
+®kotlin:S1192ˆ"hDefine a constant instead of duplicating this literal "Charging animation Applied Successfully" 3 times.(ïÓÆ·8çÎ—‰ø1J$092161a2-003f-4547-8e04-62860ba58f9b
+Gkotlin:S1874H"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ôúÍ²ø1
+—kotlin:S3776w"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ñàõà8Ô†‰ø1J$a3879116-fbe3-492d-b36e-a083a9ec50b6
