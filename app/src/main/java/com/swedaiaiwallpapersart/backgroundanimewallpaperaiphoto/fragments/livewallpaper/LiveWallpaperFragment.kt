@@ -148,8 +148,6 @@ class LiveWallpaperFragment : Fragment() {
                 Log.e(TAG, "getPosition: "+position )
 
                 sharedViewModel.setAdPosition(newPosition)
-
-                if (newPosition % 2 != 0){
                     Log.e(TAG, "getPosition:$position odd " )
 
                     SDKBaseController.getInstance().showInterstitialAds(
@@ -160,50 +158,25 @@ class LiveWallpaperFragment : Fragment() {
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                BlurView.filePath = ""
-                                sharedViewModel.clearLiveWallpaper()
-                                sharedViewModel.setLiveWallpaper(listOf(model))
-                                if (isAdded){
-                                    findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-                                }
+                                setDownloadAbleWallpaperAndNavigate(model,false)
 
                                 //do something
                             }
 
                             override fun onAdsDismiss() {
                                 Log.e("TAG", "onAdsDismiss: ", )
-                                BlurView.filePath = ""
-                                sharedViewModel.clearLiveWallpaper()
-                                sharedViewModel.setLiveWallpaper(listOf(model))
-                                if (isAdded){
-                                    findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-                                }
+                                setDownloadAbleWallpaperAndNavigate(model,true)
 
                             }
 
                             override fun onAdsShowTimeout() {
                                 super.onAdsShowTimeout()
                                 Log.e(TAG, "onAdsShowTimeout: " )
-
-                                sharedViewModel.clearLiveWallpaper()
-                                sharedViewModel.setLiveWallpaper(listOf(model))
-
-                                if (isAdded){
-                                    findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-                                }
+                                setDownloadAbleWallpaperAndNavigate(model,false)
                             }
                         }
                     )
-                }else{
-                    BlurView.filePath = ""
-                    sharedViewModel.clearLiveWallpaper()
-                    sharedViewModel.setLiveWallpaper(listOf(model))
-                    if (isAdded){
-                        findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-                    }
 
-                    Log.e(TAG, "getPosition:$position even " )
-                }
 
 
 
@@ -236,6 +209,18 @@ class LiveWallpaperFragment : Fragment() {
         binding.liveReccyclerview.adapter = adapter
     }
 
+    private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel,adShowd:Boolean) {
+        BlurView.filePath = ""
+        sharedViewModel.clearLiveWallpaper()
+        sharedViewModel.setLiveWallpaper(listOf(model))
+        if (isAdded) {
+            Bundle().apply {
+                putBoolean("adShowed",adShowd)
+                findNavController().navigate(R.id.downloadLiveWallpaperFragment,this)
+            }
+
+        }
+    }
 
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }

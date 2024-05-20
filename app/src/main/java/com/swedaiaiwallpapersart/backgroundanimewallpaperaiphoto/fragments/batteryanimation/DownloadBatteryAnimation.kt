@@ -50,6 +50,8 @@ class DownloadBatteryAnimation : Fragment() {
 
     val TAG = "DOWNLOAD_SCREEN"
 
+    var adShowed :Boolean ? =  false
+
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
     private var job: Job? = null
@@ -65,6 +67,8 @@ class DownloadBatteryAnimation : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adShowed = arguments?.getBoolean("adShowed")
 
         loadAd()
         AndroidNetworking.initialize(requireContext())
@@ -115,35 +119,41 @@ class DownloadBatteryAnimation : Fragment() {
 
     fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "downloadscr_set_click",
-                "downloadscr_set_click",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        if (isAdded){
-                            findNavController().navigate(R.id.previewChargingAnimationFragment)
-
+            if (adShowed == true){
+                navigateToNext()
+            }else{
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "downloadscr_set_click",
+                    "downloadscr_set_click",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            navigateToNext()
+                            //do something
                         }
-                        //do something
-                    }
 
-                    override fun onAdsDismiss() {
-                        Log.e(TAG, "onAdsDismiss: ", )
-                        if (isAdded){
-                            findNavController().navigate(R.id.previewChargingAnimationFragment)
-
+                        override fun onAdsDismiss() {
+                            Log.e(TAG, "onAdsDismiss: ", )
+                            navigateToNext()
                         }
                     }
-                }
-            )
+                )
+            }
+
 
         }
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
+        }
+    }
+
+    private fun navigateToNext() {
+        if (isAdded) {
+            findNavController().navigate(R.id.previewChargingAnimationFragment)
+
         }
     }
 

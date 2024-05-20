@@ -1,7 +1,6 @@
 
-Bkotlin:S125N"Remove this commented out code.(ó’´Âûÿÿÿÿ8Ì§Àƒä1
-<kotlin:S6310í"Avoid hardcoded dispatchers.(ÏÃâ8¨´õâã1
-:kotlin:S6310q"Avoid hardcoded dispatchers.(©ÓœW8žÈþâã1
-;kotlin:S6310w"Avoid hardcoded dispatchers.(Í¡·Þ8¨´õâã1
-pkotlin:S1192û"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8²Èþâã1
-rkotlin:S3776„"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(£ØîŠ8´Èþâã1
+hkotlin:S125N"Remove this commented out code.(ó’´Âûÿÿÿÿ8Ì§Àƒä1J$939b6b63-c145-4b87-9c85-8daed782d1cc
+bkotlin:S6310Ý"Avoid hardcoded dispatchers.(ÏÃâ8¨´õâã1J$73688146-1b2f-4fc8-a8a2-bb45b08c04c5
+`kotlin:S6310q"Avoid hardcoded dispatchers.(©ÓœW8žÈþâã1J$4456077f-9dd9-48de-9a02-402ccdbc73e3
+akotlin:S6310w"Avoid hardcoded dispatchers.(Í¡·Þ8¨´õâã1J$afe33f27-e301-4c9a-afca-f8c203ff403c
+–kotlin:S1192ë"KDefine a constant instead of duplicating this literal "******NULL" 4 times.(£¬éÿÿÿÿÿ8²Èþâã1J$bea49bd3-2265-4b9a-ab68-df4ee23a6e9e

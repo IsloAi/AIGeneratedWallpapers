@@ -4,5 +4,5 @@ xkotlin:S1172…"2Use "_" instead of these unused lambda parameters.(‹Íâö8½†
 vkotlin:S1481"+Remove this unused "dialog" local variable.( ¶å’ùÿÿÿÿ8Í†‰ø1J$e94c364d-9b59-49c2-8b6f-b25f9df07803
 dkotlin:S1128"Remove this unused import.(ìõ²Øıÿÿÿÿ8Ğ†‰ø1J$da6f5996-25e0-4da8-937c-d59b3d99ae51
 ®kotlin:S1192ˆ"hDefine a constant instead of duplicating this literal "Charging animation Applied Successfully" 3 times.(ïÓÆ·8çÎ—‰ø1J$092161a2-003f-4547-8e04-62860ba58f9b
-Gkotlin:S1874H"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8ôúÍ²ø1
+Gkotlin:S1874H"#Deprecated code should not be used.(¿²Ö˜ıÿÿÿÿ8¡òĞ£ù1
 —kotlin:S3776w"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(ñàõà8Ô†‰ø1J$a3879116-fbe3-492d-b36e-a083a9ec50b6

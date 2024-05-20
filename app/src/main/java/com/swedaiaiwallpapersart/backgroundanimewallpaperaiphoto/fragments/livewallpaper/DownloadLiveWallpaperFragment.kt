@@ -56,6 +56,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     val TAG = "DOWNLOAD_SCREEN"
 
+    var showAd :Boolean? = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -67,6 +69,9 @@ class DownloadLiveWallpaperFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        showAd = arguments?.getBoolean("adShowed")
+
+        Log.e(TAG, "onViewCreated: $showAd")
 
         loadAd()
         AndroidNetworking.initialize(requireContext())
@@ -132,30 +137,30 @@ class DownloadLiveWallpaperFragment : Fragment() {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Previewbt_click"))
             }
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "downloadscr_set_click",
-                "downloadscr_set_click",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        if (isAdded){
-                            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
 
+            if (showAd == true){
+                navigateToPreview()
+            }else{
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "downloadscr_set_click",
+                    "downloadscr_set_click",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            navigateToPreview()
+                            //do something
                         }
-                        //do something
-                    }
 
-                    override fun onAdsDismiss() {
-                        Log.e(TAG, "onAdsDismiss: ", )
-                        if (isAdded){
-                            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
-
+                        override fun onAdsDismiss() {
+                            Log.e(TAG, "onAdsDismiss: ", )
+                            navigateToPreview()
                         }
                     }
-                }
-            )
+                )
+            }
+
 
         }
 
@@ -165,6 +170,13 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Backbutton_click"))
             }
             findNavController().popBackStack()
+        }
+    }
+
+    private fun navigateToPreview() {
+        if (isAdded) {
+            findNavController().navigate(R.id.liveWallpaperPreviewFragment)
+
         }
     }
 

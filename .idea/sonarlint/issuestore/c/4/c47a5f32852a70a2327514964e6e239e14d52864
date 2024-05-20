@@ -3,6 +3,19 @@ Wkotlin:S1172ª"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ
 ]kotlin:S1172’"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8ÄÊ³î1
 Jkotlin:S6508"*Replace this usage of Void type with Unit.(†×„ë8ÆÊ³î1
 Ykotlin:S899":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8ÈÊ³î1
+\kotlin:S6619¾"<Remove this useless null-safe access ?., it always succeeds.(‹ÛŞ8°•™¥ù1
+\kotlin:S6619¿"<Remove this useless null-safe access ?., it always succeeds.(Ö³“Á8±•™¥ù1
+\kotlin:S6619Ä"<Remove this useless null-safe access ?., it always succeeds.(ù›Û“8²•™¥ù1
+akotlin:S6619Ï"<Remove this useless null-safe access ?., it always succeeds.(ö´À¨ıÿÿÿÿ8²•™¥ù1
+[kotlin:S6619„"<Remove this useless null-safe access ?., it always succeeds.(ÿø¦
+8³•™¥ù1
+akotlin:S6619ˆ"<Remove this useless null-safe access ?., it always succeeds.(êŒ¼“ıÿÿÿÿ8³•™¥ù1
+akotlin:S6619Œ"<Remove this useless null-safe access ?., it always succeeds.(µòÿøÿÿÿÿ8´•™¥ù1
+akotlin:S6619Â"<Remove this useless null-safe access ?., it always succeeds.(ÏÂüæÿÿÿÿÿ8¶•™¥ù1
+akotlin:S6619Ã"<Remove this useless null-safe access ?., it always succeeds.(ğ†·Öşÿÿÿÿ8¶•™¥ù1
+akotlin:S6619…"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8·•™¥ù1
+akotlin:S6619‰"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8¸•™¥ù1
+\kotlin:S6619Ê"7Remove this useless non-null check, it always succeeds.(øÍ¨¹øÿÿÿÿ8»•™¥ù1
 =kotlin:S125ş"Remove this commented out code.(ÀñÔ88í˜Ö‹î1
 >kotlin:S125„"Remove this commented out code.(éÎÂú8í˜Ö‹î1
 Ckotlin:S125˜"Remove this commented out code.(ó’´Âûÿÿÿÿ8î˜Ö‹î1

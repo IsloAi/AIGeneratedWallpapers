@@ -325,3 +325,5 @@ tapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/ada
 gapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/interfaces/FullViewImage.kt,6\d\6df921b1ad6d6ceaf8b9f5b5c47aa3379d63f049
 Ÿ
 oapp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/viewmodels/DoubleSharedViewmodel.kt,6\a\6a47bb9e88bf0e9780fcdf7039ce33dd10186b99
+“
+capp/src/main/java/com/swedaiaiwallpapersart/backgroundanimewallpaperaiphoto/utils/RvItemDecore.java,d\7\d7682a8e685638bf77b27292ddeb61dad69c7778

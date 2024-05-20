@@ -161,35 +161,19 @@ class ChargingAnimationFragment : Fragment() {
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                BlurView.filePathBattery = ""
-                                sharedViewModel.clearChargeAnimation()
-                                sharedViewModel.setchargingAnimation(listOf(model))
-                                if (isAdded){
-                                    findNavController().navigate(R.id.downloadBatteryAnimation)
-                                }
+                                setPathandNavigate(model,false)
                             }
 
                             override fun onAdsDismiss() {
                                 Log.e("TAG", "onAdsDismiss: ", )
-                                BlurView.filePathBattery = ""
-                                sharedViewModel.clearChargeAnimation()
-                                sharedViewModel.setchargingAnimation(listOf(model))
-                                if (isAdded){
-                                    findNavController().navigate(R.id.downloadBatteryAnimation)
-                                }
+                                setPathandNavigate(model,true)
 
                             }
 
                             override fun onAdsShowTimeout() {
                                 super.onAdsShowTimeout()
                                 Log.e(TAG, "onAdsShowTimeout: " )
-                                BlurView.filePathBattery = ""
-                                sharedViewModel.clearChargeAnimation()
-                                sharedViewModel.setchargingAnimation(listOf(model))
-
-                                if (isAdded){
-                                    findNavController().navigate(R.id.downloadBatteryAnimation)
-                                }
+                                setPathandNavigate(model,false)
                             }
                         }
                     )
@@ -206,6 +190,17 @@ class ChargingAnimationFragment : Fragment() {
         binding.recyclerviewAll.adapter = adapter
     }
 
+    private fun setPathandNavigate(model: ChargingAnimModel,adShowd:Boolean) {
+        BlurView.filePathBattery = ""
+        sharedViewModel.clearChargeAnimation()
+        sharedViewModel.setchargingAnimation(listOf(model))
+        if (isAdded) {
+            Bundle().apply {
+                putBoolean("adShowed",adShowd)
+                findNavController().navigate(R.id.downloadBatteryAnimation,this)
+            }
+        }
+    }
 
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
