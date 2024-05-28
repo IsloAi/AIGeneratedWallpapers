@@ -49,8 +49,6 @@ class AnimeWallpaperFragment : Fragment() {
 
     var adapter:ApiCategoriesListAdapter ?= null
 
-    private val viewModel: SaveStateViewModel by activityViewModels()
-
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
@@ -323,7 +321,6 @@ class AnimeWallpaperFragment : Fragment() {
 
     }
 
-
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
@@ -331,24 +328,22 @@ class AnimeWallpaperFragment : Fragment() {
     {
         SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
     }
-
     override fun onPause() {
         super.onPause()
-
-        if (!externalOpen){
             val allItems = adapter?.getAllItems()
-            if (addedItems?.isNotEmpty() == true){
-                addedItems?.clear()
-            }
-
+//            if (addedItems?.isNotEmpty() == true){
+//                addedItems?.clear()
+//            }
+        Log.e(TAG, "onPause: "+allItems?.size )
+        if (allItems?.isNotEmpty() == true){
             addedItems = allItems
         }
 
+        Log.e(TAG, "onPause: "+addedItems?.size )
+
+
     }
-
-
     suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
-
         return withContext(Dispatchers.IO){
             val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
             val firstLine = firstAdLineThreshold * 3
@@ -361,35 +356,29 @@ class AnimeWallpaperFragment : Fragment() {
                 if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
                     newData.add(null)
                     totalADs++
-                    Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
-                    Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
-
-                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
-
                 }else if (i == firstLine){
                     newData.add(null)
                     totalADs++
-                    Log.e("******NULL", "addNullValueInsideArray adcount: "+adcount )
-                    Log.e("******NULL", "addNullValueInsideArray adcount: "+totalADs )
-
-                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-
-
-
-
             newData
         }
-
-
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+
+        if (position >= arrayList.size) {
+            Log.e(TAG, "navigateToDestination: Position $position out of bounds ${arrayList.size} ")
+
+            addedItems?.clear()
+            addedItems = getItems(0,30)
+            adapter?.updateData(addedItems!!)
+            isNavigationInProgress = false
+            return
+        }
+
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
         sharedViewModel.clearData()
@@ -407,6 +396,15 @@ class AnimeWallpaperFragment : Fragment() {
         isNavigationInProgress = false
 
     }
+    companion object{
+        var hasToNavigateAnime = false
+        var wallFromAnime =  false
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 
     private fun congratulationsDialog() {
@@ -419,24 +417,11 @@ class AnimeWallpaperFragment : Fragment() {
         dialog.window!!.setLayout(width, height)
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCancelable(false)
-//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-
-
         bindingDialog.continueBtn.setOnClickListener {
             wallFromAnime = false
             dialog.dismiss()
         }
 
         dialog.show()
-    }
-
-    companion object{
-        var hasToNavigateAnime = false
-        var wallFromAnime =  false
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

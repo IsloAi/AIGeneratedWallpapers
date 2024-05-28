@@ -1,63 +1,63 @@
 
-}kotlin:S1172Â"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ8ç¬ò¾ê1J$8482ff0f-4c76-4e58-8f23-964ec060827a
-ƒkotlin:S1172ª"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8è¬ò¾ê1J$ff56d9c9-5288-4de6-bf04-0e4e7ff386fd
-pkotlin:S6508¨"*Replace this usage of Void type with Unit.(†×„ë8é¬ò¾ê1J$b0be3a8b-547f-4e57-9dc7-310f8f0846ee
-‚kotlin:S6619Ã"<Remove this useless null-safe access ?., it always succeeds.(‹ÛŞ8ÉšÖ÷1J$a06dd046-4867-4abf-8ea5-0de8addfb21b
-‚kotlin:S6619Ä"<Remove this useless null-safe access ?., it always succeeds.(‹Ç†Œ8ÉšÖ÷1J$e00ebe0e-5739-4185-a327-2443fc0d2905
-‚kotlin:S6619Æ"<Remove this useless null-safe access ?., it always succeeds.(ù›Û“8ÊšÖ÷1J$d6c7bc35-8500-435d-9814-ce123c55131e
-‡kotlin:S6619Ğ"<Remove this useless null-safe access ?., it always succeeds.(µòÿøÿÿÿÿ8ËšÖ÷1J$5a66270a-8416-421b-8357-69541d9d9a9c
-‡kotlin:S6619Å"<Remove this useless null-safe access ?., it always succeeds.(ƒÆÜ‰ÿÿÿÿÿ8ÌšÖ÷1J$ea3290d0-8c77-4566-a043-0f89a9fefbfa
-‡kotlin:S6619Í"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8ÎšÖ÷1J$d8443e27-b9da-47ee-bb3b-fae93e09973f
-ikotlin:S125"Remove this commented out code.(ó’´Âûÿÿÿÿ8ñ¢©Éê1J$186a9f8a-6bfb-40e6-990b-615a4d5cc6fc
-ikotlin:S125†"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8ñ¢©Éê1J$a7efa63a-05ba-41d4-90eb-2b8efaf53d5a
-akotlin:S6310­"Avoid hardcoded dispatchers.(©ÓœW8ÿ¬ò¾ê1J$036e97b6-6b68-4c24-a13f-3ddb402f8e04
-bkotlin:S6310µ"Avoid hardcoded dispatchers.(Í¡·Ş8°†óÇê1J$3cb21ea0-3a74-4072-a559-cda35b9e9762
-škotlin:S6558¯"URemove this it parameter declaration or give this lambda parameter a meaningful name.(ìİŠO8­ò¾ê1J$67f6d4a7-2112-4208-aa44-6da704a0d0a4
-vkotlin:S1481î"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8¥£©Éê1J$98167e76-4e5e-4fae-a1d3-1bc81f85af1e
-xkotlin:S1481ô"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8©­ò¾ê1J$ba0dbe93-00ac-434b-aa0f-5fd66e541c30
-rkotlin:S1481ó",Remove this unused "tabIcon" local variable.(™Î‡è8¥£©Éê1J$dabd18d1-fe62-4f43-8e47-e798a551fba7
-dkotlin:S1128"Remove this unused import.(„¦š¶úÿÿÿÿ8¶­ò¾ê1J$15934b00-1a62-42f7-989b-4237d4f26cd1
-9kotlin:S1128*"Remove this unused import.(œÓìä8ñĞ£ù1
->kotlin:S1128+"Remove this unused import.(â£¡µüÿÿÿÿ8ñĞ£ù1
-‘kotlin:S1192~"GDefine a constant instead of duplicating this literal "Gen AI" 4 times.(Ãê¤òùÿÿÿÿ8º­ò¾ê1J$0fd2a94f-b87d-44ee-833a-39ffaa9cfd50
-–kotlin:S1192”"PDefine a constant instead of duplicating this literal "onTabSelected: " 8 times.(¢‰”Ø8µ£©Éê1J$ffba1506-86d3-430c-8e7f-d0e7df52f5d8
-ikotlin:S1874½"#Deprecated code should not be used.(£À¯•8¾­ò¾ê1J$f14b2483-0dd1-4412-b8b8-827a68689c85
-nkotlin:S1874æ"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¾­ò¾ê1J$0b0945ef-c998-4a42-87fd-3c60775aa9fb
-hkotlin:S1874è"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$ea26362e-de5d-462b-91e9-30d65953b871
-hkotlin:S1874ê"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$87cdb6f3-a900-4263-9119-00f358ea5fb0
-hkotlin:S1874ì"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$c97d2a73-dbcc-4c3d-a7c1-0baed84c9f0f
-hkotlin:S1874î"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$0872210c-2d03-40c9-9afb-bf0c7b644b4d
-hkotlin:S1874õ"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$f955429f-e60a-4458-bcd4-9a729a9242a4
-nkotlin:S1874÷"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¾­ò¾ê1J$3ef2dcee-6ac2-43aa-810c-fbbdb10d9905
-hkotlin:S1874ù"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$c87c2645-c710-40e4-85dd-0e05b916f0a4
-hkotlin:S1874û"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$a146d8ca-f2c8-44a7-8269-ddacefde9d76
-hkotlin:S1874ı"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$c185303e-2dc7-4d00-8003-81d20c0ca9d3
-hkotlin:S1874ƒ"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$0b5c1a9b-ed94-4f7f-8c68-315681b3557e
-hkotlin:S1874…"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$5bff7efa-0b70-4b68-8b7b-e41fcd56408a
-nkotlin:S1874‡"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¿­ò¾ê1J$73f53e21-0a00-41fa-a241-4e9520dac7de
-hkotlin:S1874‰"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$b661b4c2-7f0e-4c03-a8f0-2bb8625ceeae
-hkotlin:S1874‹"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$9531858b-4171-4791-9fb1-7a09d4826849
-hkotlin:S1874‘"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$26d0526a-d5d4-44d3-a82e-ed4716f72a71
-hkotlin:S1874“"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$36ff7ee6-6cbc-4bb2-a463-6a212ed5a18e
-hkotlin:S1874•"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$fff81812-774a-476a-b837-ef218924d0c1
-nkotlin:S1874—"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¿­ò¾ê1J$cb17ef4f-fbf5-45b2-9812-2d95338c8755
-hkotlin:S1874™"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$13d666dd-653d-4fd2-8731-3840b8fbcb17
-hkotlin:S1874Ÿ"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$11590a63-537a-4857-a9a2-0701f95993c9
-hkotlin:S1874¡"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$10e760c2-ec9d-42b0-8b88-e793e57995b8
-hkotlin:S1874£"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$9a9210eb-4407-4779-b57b-56808fc1e027
-hkotlin:S1874¥"#Deprecated code should not be used.(¨»š8À­ò¾ê1J$c1bbb91c-f3c0-401f-b215-bd961af5a284
-nkotlin:S1874§"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8À­ò¾ê1J$716cf15c-db56-43b5-bcac-48adc651afcf
-ikotlin:S1874ô"#Deprecated code should not be used.(‚Õ‡º8»£©Éê1J$41cf63c2-227c-4630-8438-c1d10631a85f
-ikotlin:S1874„"#Deprecated code should not be used.(ê¶«Ê8»£©Éê1J$b0e72a61-ac25-420e-8f2e-91188362e973
-ikotlin:S1874ø"#Deprecated code should not be used.(ê¶«Ê8»£©Éê1J$84ce5608-2bf5-4121-872e-99e3d235a031
-hkotlin:S1874û"#Deprecated code should not be used.(…ı£t8»£©Éê1J$7ceb3841-6fa2-4549-ae34-faa5f20288f4
-˜kotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(ëü«8Á­ò¾ê1J$a0b41d6c-8f50-4d42-9b7c-00c9c9814734
-kotlin:S3776ç"RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(äŸÊ„ùÿÿÿÿ8½£©Éê1J$62d5d8f0-c84f-4764-9232-09768eeacf0a
-kotlin:S3776€"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(íô¸²ÿÿÿÿÿ8¾£©Éê1J$6bb1cd1d-352d-476b-a011-9b9b9f7a75e4
-kotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(Ğÿşğÿÿÿÿÿ8Ü¡›âô1J$0b6d89d5-0692-4c1b-a250-07028beb3a7d
- kotlin:S1186Ë"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8Å£©Éê1J$253ea14d-c60f-478b-8baa-d5688163df75
-tkotlin:S1066Ø".Merge this "if" statement with the nested one.(â¬Í¸8Ì­ò¾ê1J$89016953-f32f-44bf-8bea-88a86c6a9200
-ykotlin:S1066".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8Íàò¾ê1J$aa863fdd-010d-4b0d-a47e-a8a50934f954
-tkotlin:S1066”".Merge this "if" statement with the nested one.(º†Šä8Ç£©Éê1J$7505786b-7092-4130-b969-964d40fe1a61
-ykotlin:S1066‹".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8Ç£©Éê1J$9b232cb8-658e-41b9-b508-c14992a34c33
-ykotlin:S1066¥".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8Ñ™œ®ğ1J$a0cf58ce-d821-4234-92ec-938c778ac1e1
+}kotlin:S1172Â"2Use "_" instead of these unused lambda parameters.(ôãœİşÿÿÿÿ8ç¬ò¾ê1J$199d8d91-54c7-4337-a8cb-510dc1f7d75a
+ƒkotlin:S1172ª"8Use "_" instead of this unused lambda parameter "task1".(Ôûµúÿÿÿÿ8è¬ò¾ê1J$fae3ef8e-ace6-4220-8cf1-cf22d77f28b7
+pkotlin:S6508¨"*Replace this usage of Void type with Unit.(†×„ë8é¬ò¾ê1J$ca3fc773-5fb0-438f-a194-f32b0c42f5c9
+‚kotlin:S6619Ã"<Remove this useless null-safe access ?., it always succeeds.(‹ÛŞ8ÉšÖ÷1J$67b605d8-3d07-45b9-a6d5-41db072c91cb
+‚kotlin:S6619Ä"<Remove this useless null-safe access ?., it always succeeds.(‹Ç†Œ8ÉšÖ÷1J$07283e23-cfc4-4ed5-8962-8908d7cd758f
+‚kotlin:S6619Æ"<Remove this useless null-safe access ?., it always succeeds.(ù›Û“8ÊšÖ÷1J$e9c46897-1cd3-4e7d-a4e7-b98e8050aa49
+‡kotlin:S6619Ğ"<Remove this useless null-safe access ?., it always succeeds.(µòÿøÿÿÿÿ8ËšÖ÷1J$b244c3f6-34c5-4947-b2bc-e172157b62dd
+‡kotlin:S6619Å"<Remove this useless null-safe access ?., it always succeeds.(ƒÆÜ‰ÿÿÿÿÿ8ÌšÖ÷1J$f1a307be-4d4d-4e0d-949c-e9e20fbe241d
+‡kotlin:S6619Í"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8ÎšÖ÷1J$50db7678-d5a4-41d2-b087-e92ec5dd8113
+ikotlin:S125"Remove this commented out code.(ó’´Âûÿÿÿÿ8ñ¢©Éê1J$ad551844-55f9-4156-a2bb-682080651407
+ikotlin:S125†"Remove this commented out code.(Æôÿ«ùÿÿÿÿ8ñ¢©Éê1J$59b5377f-4bc2-4ad9-bc2b-782ae64fc35c
+akotlin:S6310­"Avoid hardcoded dispatchers.(©ÓœW8ÿ¬ò¾ê1J$c1245e8b-c282-418b-bbfb-ed00bb6f7aae
+bkotlin:S6310µ"Avoid hardcoded dispatchers.(Í¡·Ş8°†óÇê1J$69ca9d1c-2dfc-4409-94db-9e863d777089
+škotlin:S6558¯"URemove this it parameter declaration or give this lambda parameter a meaningful name.(ìİŠO8­ò¾ê1J$49888d8b-db81-45d7-9c11-1a2e294ba50b
+vkotlin:S1481î"+Remove this unused "titles" local variable.(õÒÕ¾øÿÿÿÿ8¥£©Éê1J$5c55738f-610c-4f71-8fc0-155eac024eb3
+xkotlin:S1481ô"-Remove this unused "tabtitle" local variable.(•×¼­ÿÿÿÿÿ8©­ò¾ê1J$4d8fe089-1614-42f9-99a5-6fe7c218ffb0
+rkotlin:S1481ó",Remove this unused "tabIcon" local variable.(™Î‡è8¥£©Éê1J$51e34519-59df-49eb-a5ad-a015be123bcc
+dkotlin:S1128"Remove this unused import.(„¦š¶úÿÿÿÿ8¶­ò¾ê1J$2c2a30d4-f01f-47ba-8ce5-07a916a161c2
+_kotlin:S1128*"Remove this unused import.(œÓìä8ñĞ£ù1J$8a6540f3-c412-4ac3-b1d7-7d8093b0b210
+dkotlin:S1128+"Remove this unused import.(â£¡µüÿÿÿÿ8ñĞ£ù1J$808bb98c-2ff4-4c6f-b942-9e3015780aaa
+‘kotlin:S1192~"GDefine a constant instead of duplicating this literal "Gen AI" 3 times.(Ãê¤òùÿÿÿÿ8º­ò¾ê1J$224e4916-f206-46d5-9817-615f6ef7e476
+–kotlin:S1192”"PDefine a constant instead of duplicating this literal "onTabSelected: " 8 times.(¢‰”Ø8µ£©Éê1J$733b67e6-856c-4a77-8a74-0516b2fdc06b
+ikotlin:S1874½"#Deprecated code should not be used.(£À¯•8¾­ò¾ê1J$5268a661-f915-4da0-ae67-b4cbafdbd923
+nkotlin:S1874æ"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¾­ò¾ê1J$e5368cd6-b75a-467e-b696-3ff88376a0ef
+hkotlin:S1874è"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$7df4b6bc-083c-4429-8d45-ab895db2dd49
+hkotlin:S1874ê"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$03f61aff-a3ef-47fe-b276-4d63ebbc956f
+hkotlin:S1874ì"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$39ddcad8-6e29-431c-b47f-546c64ad7424
+hkotlin:S1874î"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$396a9eb5-df9a-449d-aa01-4a1faad64531
+hkotlin:S1874õ"#Deprecated code should not be used.(¨»š8¾­ò¾ê1J$ab74ad94-59a2-4b30-b929-a5af549742cb
+nkotlin:S1874÷"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¾­ò¾ê1J$a119bfe1-f22a-433c-a024-3dc1ce64f355
+hkotlin:S1874ù"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$2e7bddd0-832c-4ea9-a9cf-50f86b037f9f
+hkotlin:S1874û"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$0a199d9f-5257-4631-b7f8-f35f602dba4d
+hkotlin:S1874ı"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$10a6ee35-c5b0-4b6a-b9a9-ed9fc4721e9a
+hkotlin:S1874ƒ"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$f6613f97-4777-4b35-8aab-d33accc16c66
+hkotlin:S1874…"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$ac0955f7-b369-404c-a94f-eb7762429061
+nkotlin:S1874‡"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¿­ò¾ê1J$ebe55182-dc55-4ac9-9558-69afc7a2cf02
+hkotlin:S1874‰"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$94d1e422-b305-4b36-baac-6c7b50f2e9b7
+hkotlin:S1874‹"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$3f547cda-6f9b-4377-938e-1d76c955e0c0
+hkotlin:S1874‘"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$c4ba50e2-f08d-428c-8aa3-d8ba9753bd57
+hkotlin:S1874“"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$89d0cfe9-0512-4de0-869c-201a361a8ce1
+hkotlin:S1874•"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$e3043f82-7209-4f75-9e99-71e4b04a8fdc
+nkotlin:S1874—"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8¿­ò¾ê1J$a1332835-8630-4357-8a40-63fd76b12e5c
+hkotlin:S1874™"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$4cc09069-8eb0-44a9-9536-9e726bb1a03f
+hkotlin:S1874Ÿ"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$185adcef-4617-49d0-910c-9b0003f86325
+hkotlin:S1874¡"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$420e7465-31df-4c36-81bd-d77fff119878
+hkotlin:S1874£"#Deprecated code should not be used.(¨»š8¿­ò¾ê1J$496a3be8-29ed-4593-b692-4a5923da411c
+hkotlin:S1874¥"#Deprecated code should not be used.(¨»š8À­ò¾ê1J$617be64e-d289-407e-bfac-7a210b31fa35
+nkotlin:S1874§"#Deprecated code should not be used.(ˆ‘ø‹ıÿÿÿÿ8À­ò¾ê1J$8766fc42-2e6e-418e-9e5f-e3b9af36984e
+ikotlin:S1874ô"#Deprecated code should not be used.(‚Õ‡º8»£©Éê1J$9cca2022-ea8f-4159-a836-29875f14097d
+ikotlin:S1874„"#Deprecated code should not be used.(ê¶«Ê8»£©Éê1J$07b2f68e-2da0-49b5-9599-bd50758da07a
+ikotlin:S1874ø"#Deprecated code should not be used.(ê¶«Ê8»£©Éê1J$710897a6-6a69-4153-83d9-f293abc4bf78
+hkotlin:S1874û"#Deprecated code should not be used.(…ı£t8»£©Éê1J$c4acf4c5-4e45-451f-8f36-0a6c09bf988a
+˜kotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 30 to the 15 allowed.(ëü«8Á­ò¾ê1J$574b6795-c330-4461-998c-30b3c15fbbed
+kotlin:S3776ç"RRefactor this method to reduce its Cognitive Complexity from 34 to the 15 allowed.(äŸÊ„ùÿÿÿÿ8½£©Éê1J$7debad71-ba91-4f80-9c35-072ef5fe0b47
+kotlin:S3776€"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(íô¸²ÿÿÿÿÿ8¾£©Éê1J$df2d4517-02e1-42fd-9eda-25a88ab864f8
+kotlin:S3776"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(Ğÿşğÿÿÿÿÿ8Ü¡›âô1J$5c2c8140-ae45-475d-9f2c-91c16b1c9ce6
+ kotlin:S1186Ë"ZAdd a nested comment explaining why this function is empty or complete the implementation.(È‘Ê‰8Å£©Éê1J$74619e49-25dd-46f9-9ef3-5f658fc32e35
+tkotlin:S1066Ø".Merge this "if" statement with the nested one.(â¬Í¸8Ì­ò¾ê1J$03849200-327b-4fb8-9e8e-411bfb72e35e
+ykotlin:S1066".Merge this "if" statement with the nested one.(ŒÚˆèÿÿÿÿÿ8Íàò¾ê1J$3abe9a67-9dd7-4bba-9c10-e663809e187a
+tkotlin:S1066”".Merge this "if" statement with the nested one.(º†Šä8Ç£©Éê1J$c4893335-2dae-4717-b93f-37015cad6361
+ykotlin:S1066‹".Merge this "if" statement with the nested one.(ˆ˜Ó±ùÿÿÿÿ8Ç£©Éê1J$6a7e5eaf-eca3-4ea4-ba44-9bbb1ce5ea7b
+ykotlin:S1066¥".Merge this "if" statement with the nested one.(äŞªâüÿÿÿÿ8Ñ™œ®ğ1J$4d4abf4b-665e-4513-9533-471ff546eaa8

@@ -343,17 +343,30 @@ class ApiCategoriesListAdapter(
     }
 
 
-    fun updateMoreData(list:ArrayList<CatResponse?>){
+    fun updateMoreData(list: ArrayList<CatResponse?>) {
         val startPosition = arrayList.size
+        val currentItems = arrayList.toHashSet()
+        val newItems = ArrayList<CatResponse?>()
 
-        for(i in 0 until list.size){
-            if (arrayList.contains(list[i])){
-                Log.e("********new Data", "updateMoreData: already in list", )
-            }else{
-                arrayList.add(list[i])
+        for (item in list) {
+            if (!currentItems.contains(item)) {
+                newItems.add(item)
+                currentItems.add(item) // Track new items to avoid duplicates within the new list
             }
         }
-        notifyItemRangeInserted(startPosition, list.size)
+
+        if (newItems.isNotEmpty()) {
+            arrayList.addAll(newItems.distinct())
+            notifyItemRangeInserted(startPosition, newItems.size)
+        } else {
+            Log.e("********new Data", "updateMoreData: no new items to add")
+        }
+    }
+
+    fun updateData(list:ArrayList<CatResponse?>){
+        arrayList.clear()
+        arrayList.addAll(list)
+        notifyDataSetChanged()
     }
 
     fun getAllItems():ArrayList<CatResponse?>{

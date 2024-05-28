@@ -159,7 +159,7 @@ class HomeTabsFragment : Fragment() {
         Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions.contentToString() )
         if (AdConfig.tabPositions[0].isEmpty()){
             Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions )
-            AdConfig.tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging", "Gen AI")
+            AdConfig.tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
 
         }else{
 //            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
