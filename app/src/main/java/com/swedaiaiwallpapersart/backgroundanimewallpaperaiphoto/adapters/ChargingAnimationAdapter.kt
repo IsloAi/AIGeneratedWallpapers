@@ -164,7 +164,7 @@ class ChargingAnimationAdapter  (
 //            imageanimationView.visibility = View.VISIBLE
 //            imageanimationView.setAnimationFromUrl(model.hd_animation)
 //            imageanimationView.playAnimation()
-            Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/" +model.thumnail).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
+            Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/animation/" +model.thumnail).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
                 .listener(object: RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,

@@ -1,6 +1,6 @@
 
-[kotlin:S1144u"7Remove this unused private "isNetworkAvailable" method.(…²àõşÿÿÿÿ8‹Œˆã1
->kotlin:S1128"Remove this unused import.(Ôê³¨ÿÿÿÿÿ8‘Œˆã1
-Bkotlin:S1874,"#Deprecated code should not be used.(ñÑî8’Œˆã1
-Gkotlin:S1874}"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8’Œˆã1
-Akotlin:S1874~"#Deprecated code should not be used.(àü8’Œˆã1
+kotlin:S1144u"7Remove this unused private "isNetworkAvailable" method.(…²àõşÿÿÿÿ8‹Œˆã1J$4de9fc05-fb66-4900-8ee9-76bed573be6a
+dkotlin:S1128"Remove this unused import.(Ôê³¨ÿÿÿÿÿ8‘Œˆã1J$3129be5f-dd1d-45d1-ad60-61f9b49e9470
+hkotlin:S1874,"#Deprecated code should not be used.(ñÑî8’Œˆã1J$e84cca40-80df-456f-861c-ae6c8933cdbb
+mkotlin:S1874}"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8’Œˆã1J$a8abdc1c-38b9-4378-abd5-7519418e314b
+gkotlin:S1874~"#Deprecated code should not be used.(àü8’Œˆã1J$5e5c2b0a-4758-4df7-a0e9-64c72e586652

@@ -192,10 +192,10 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePath == ""){
-                    downloadVideo(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
+                    downloadVideo(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
 
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].thumnail_url)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].thumnail_url)
 
 
             }

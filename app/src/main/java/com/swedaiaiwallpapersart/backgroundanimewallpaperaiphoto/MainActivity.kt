@@ -578,7 +578,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                         val baseUrls = remoteConfig["ImageUrl"].asString()
 
-                        AdConfig.BASE_URL_DATA = baseUrls
+                        AdConfig.BASE_URL_DATA = "https://4kwallpaper-zone.b-cdn.net"
 
                         Log.e(TAG, "initFirebaseRemoteConfig: "+baseUrls )
 
@@ -743,7 +743,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         val baseUrls = remoteConfig["ImageUrl"].asString()
 
-        AdConfig.BASE_URL_DATA = baseUrls
+//        AdConfig.BASE_URL_DATA = baseUrls
+        AdConfig.BASE_URL_DATA = "https://4kwallpaper-zone.b-cdn.net"
 
 
         Log.e(TAG, "initFirebaseRemoteConfig: "+baseUrls )

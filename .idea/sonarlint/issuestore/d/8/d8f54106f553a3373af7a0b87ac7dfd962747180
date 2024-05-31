@@ -1,10 +1,10 @@
 
-6kotlin:S125œ"Remove this commented out code.(Ê¬ÿ
-<kotlin:S125’"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ
-:kotlin:S6310ç"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ
-Gkotlin:S1481r"*Remove this unused "model" local variable.(ÄÒñ×ýÿÿÿÿ
-Hkotlin:S1481‡"/Remove this unused "adPosition" local variable.(²úÒ
-;kotlin:S1874G"#Deprecated code should not be used.(Ôãí¬
-Akotlin:S1874®"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ
-;kotlin:S1874¯"#Deprecated code should not be used.(àü
-kkotlin:S3776å"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡Ž–
+\kotlin:S125œ"Remove this commented out code.(Ê¬ÿJ$577bbf5b-464f-47f9-8f21-10603197377f
+bkotlin:S125’"Remove this commented out code.(Õ½Ì‰üÿÿÿÿJ$c772315e-5ea7-4841-bd7c-5ebd223cd1ea
+`kotlin:S6310ç"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿJ$17ab0b3c-7078-4d94-be50-34e0a80fa065
+mkotlin:S1481r"*Remove this unused "model" local variable.(ÄÒñ×ýÿÿÿÿJ$09104c5a-3502-4e04-b864-156c763e83dd
+nkotlin:S1481‡"/Remove this unused "adPosition" local variable.(²úÒJ$4b39a32d-2bf8-466f-a6c0-be66c00ab65a
+akotlin:S1874G"#Deprecated code should not be used.(Ôãí¬J$05312d67-b9ff-45fb-87c2-15a8b46f8cf2
+gkotlin:S1874®"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿJ$4073b503-167c-442e-bfd4-951f0cf21f36
+akotlin:S1874¯"#Deprecated code should not be used.(àüJ$2c43293c-a55c-4d6a-ab65-a9cb7bf21c4c
+‘kotlin:S3776å"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡Ž–J$583357be-e4d2-476d-814a-66a95cc46ec7

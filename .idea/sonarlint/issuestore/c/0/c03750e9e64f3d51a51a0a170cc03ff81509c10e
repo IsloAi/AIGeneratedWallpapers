@@ -1,9 +1,8 @@
 
-Ckotlin:S125"Remove this commented out code.(Υ½Μ‰όÿÿÿÿ8»µΈ³υ1
-Akotlin:S6310ΰ"Avoid hardcoded dispatchers.(ªδϊξϊÿÿÿÿ8ΏµΈ³υ1
-Nkotlin:S1481e"*Remove this unused "model" local variable.(ΔÒρΧύÿÿÿÿ8ϊλ¤κτ1
-rkotlin:S1192”"RDefine a constant instead of duplicating this literal "/doublewallpaper/" 4 times.(Φ°ωΩ8ς‰·³υ1
-Hkotlin:S1874Ψ"#Deprecated code should not be used.(€™¶―ϋÿÿÿÿ8€μ¤κτ1
-Bkotlin:S1874Ω"#Deprecated code should not be used.(ΰό8ÒµΈ³υ1
-qkotlin:S3776ή"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ζ­ 8ΣµΈ³υ1
-gkotlin:S6510Q"CMove "return" statements from all branches before "when" statement.(θώ™Έÿÿÿÿÿ8†μ¤κτ1
+ikotlin:S125"Remove this commented out code.(Υ½Μ‰όÿÿÿÿ8»µΈ³υ1J$aeef0e23-9a85-4f4d-99df-c1f1085bf023
+gkotlin:S6310ΰ"Avoid hardcoded dispatchers.(ªδϊξϊÿÿÿÿ8ΏµΈ³υ1J$6fbbc76f-9b33-48ce-9a55-5deeb34b6507
+tkotlin:S1481e"*Remove this unused "model" local variable.(ΔÒρΧύÿÿÿÿ8ϊλ¤κτ1J$8331bbf2-9db8-4f49-b5bf-bbf4f8171227
+nkotlin:S1874Ψ"#Deprecated code should not be used.(€™¶―ϋÿÿÿÿ8€μ¤κτ1J$bb1bc7fe-93b2-4d1c-851c-aa31ec46d0da
+hkotlin:S1874Ω"#Deprecated code should not be used.(ΰό8ÒµΈ³υ1J$1ad6cf4f-091d-469b-a13f-26a78a2ae1a8
+—kotlin:S3776ή"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(ζ­ 8ΣµΈ³υ1J$d3b1999d-00e4-4355-babb-9629492e4eb0
+kotlin:S6510Q"CMove "return" statements from all branches before "when" statement.(θώ™Έÿÿÿÿÿ8†μ¤κτ1J$5b452635-0039-40ef-84d4-b123285570c6

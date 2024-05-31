@@ -168,10 +168,10 @@ class DownloadBatteryAnimation : Fragment() {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePathBattery == ""){
-                    downloadVideo(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].hd_animation,video)
+                    downloadVideo(AdConfig.BASE_URL_DATA + "/animation/"+wallpaper[0].hd_animation,video)
 
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/"+wallpaper[0].thumnail)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/animation/"+wallpaper[0].thumnail)
 
 
             }

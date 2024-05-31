@@ -145,9 +145,9 @@ class DoubleWallpaperSliderAdapter(
         progressLock.visibility = View.VISIBLE
         progressHome.visibility = View.VISIBLE
 
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.compress_url1).into(imageSlide)
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.compress_url2).into(imageSlidehome)
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.hd_url1).diskCacheStrategy(
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/compress/" +model.compress_url1).into(imageSlide)
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/compress/" +model.compress_url2).into(imageSlidehome)
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +model.hd_url1).diskCacheStrategy(
             DiskCacheStrategy.ALL)
             .listener(object:
                 RequestListener<Drawable> {
@@ -172,7 +172,7 @@ class DoubleWallpaperSliderAdapter(
                 }
             }).into(imageSlide)
 
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +model.hd_url2).diskCacheStrategy(
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +model.hd_url2).diskCacheStrategy(
             DiskCacheStrategy.ALL)
             .listener(object:
                 RequestListener<Drawable> {

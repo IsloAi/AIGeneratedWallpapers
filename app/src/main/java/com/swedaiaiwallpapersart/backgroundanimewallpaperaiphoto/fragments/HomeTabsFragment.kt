@@ -166,7 +166,8 @@ class HomeTabsFragment : Fragment() {
         }
 
         if (AdConfig.BASE_URL_DATA == ""){
-            AdConfig.BASE_URL_DATA = "http://edecator.com/wallpaperApp"
+//            AdConfig.BASE_URL_DATA = "http://edecator.com/wallpaperApp"
+            AdConfig.BASE_URL_DATA = "https://4k-pullzone.b-cdn.net"
         }
 
 

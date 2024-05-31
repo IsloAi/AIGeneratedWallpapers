@@ -36,19 +36,6 @@ class LiveWallpaperService : WallpaperService() {
 
             FirebaseApp.initializeApp(applicationContext)
 
-
-//            wallpaperUpdateReceiver = object : BroadcastReceiver() {
-//                override fun onReceive(context: Context?, intent: Intent?) {
-//                        if (intent?.action == "com.yourapp.WALLPAPER_FILE_UPDATED") {
-//                            // Reload the wallpaper with the updated file
-//                           setToWallPaper(applicationContext)
-//                        }
-//                }
-//            }
-//            val filter = IntentFilter("com.yourapp.WALLPAPER_FILE_UPDATED")
-//            registerReceiver(wallpaperUpdateReceiver, filter)
-
-
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
