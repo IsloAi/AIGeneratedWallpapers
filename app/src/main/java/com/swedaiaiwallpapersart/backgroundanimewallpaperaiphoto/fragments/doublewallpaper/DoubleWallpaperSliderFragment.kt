@@ -249,8 +249,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
         }
         setViewPager()
         if (arrayList[position] != null) {
-            getLargImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +arrayList[position]?.hd_url1!!
-            getSmallImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/compress/" +arrayList[position]?.compress_url1!!
+            getLargImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[position]?.hd_url1!!
+            getSmallImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[position]?.compress_url1!!
             getBitmapFromGlide(getLargImage)
             arrayList[position]?.let { loadBitmapsAndPerformAction(it) }
         }
@@ -450,8 +450,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
             override fun onPageSelected(positi: Int) {
                 if (positi >= 0 && positi < arrayList.size) {
                     if (arrayList[positi]?.hd_url1 != null) {
-                        getLargImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +arrayList[positi]?.hd_url1!!
-                        getSmallImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/compress/" +arrayList[positi]?.compress_url1!!
+                        getLargImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[positi]?.hd_url1!!
+                        getSmallImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[positi]?.compress_url1!!
 
                         position = positi
                     } else {
@@ -492,7 +492,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
         if (isAdded){
             Glide.with(requireContext())
                 .asBitmap()
-                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +doubleWallModelList.hd_url1)
+                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +doubleWallModelList.hd_url1)
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         // Store the first bitmap and increment the counter
@@ -506,7 +506,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
             Glide.with(requireContext())
                 .asBitmap()
-                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +doubleWallModelList.hd_url2)
+                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +doubleWallModelList.hd_url2)
                 .into(object : CustomTarget<Bitmap>() {
                     override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                         // Store the second bitmap and increment the counter

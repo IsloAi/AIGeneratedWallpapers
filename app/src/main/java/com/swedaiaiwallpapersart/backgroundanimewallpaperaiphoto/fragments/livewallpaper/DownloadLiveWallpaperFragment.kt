@@ -192,6 +192,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePath == ""){
+                    Log.e(TAG, "initObservers: "+wallpaper[0] )
                     downloadVideo(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
 
                 }
@@ -228,9 +229,10 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
 
     private fun downloadVideo(url: String, destinationFile: File,size:Float) {
+        Log.e(TAG, "downloadVideo: "+url )
 
 //        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-            val file = requireContext().filesDir
+        val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".mp4"
 
         val filepath = File(file,fileName)
@@ -240,7 +242,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
         MySharePreference.setFileName(requireContext(),fileName)
         Log.e("TAG", "downloadVideo: "+BlurView.fileName )
 
-        val totalSize = (size * 1048576).toLong()
+        val totalSize = (size * 1024).toLong()
         animateLoadingText()
         lifecycleScope.launch(Dispatchers.IO) {
             AndroidNetworking.download(url, file.path, fileName)
@@ -257,9 +259,14 @@ class DownloadLiveWallpaperFragment : Fragment() {
                         Log.e("TAG", "downloadVideo: $percentage")
 
                         if (isAdded){
+                            val currentCount = (bytesDownloaded * 100 / totalSize)
+                            if (currentCount <= 100){
+                                binding.progressTxt.text =
+                                    currentCount.toString() + "%"
+                            }else{
+                                Log.e(TAG, "downloadVideo: $currentCount", )
+                            }
                             binding.progress.progress =percentage
-                            binding.progressTxt.text =
-                                (bytesDownloaded * 100 / totalSize).toString() + "%"
                         }
 
 
@@ -270,6 +277,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
                         lifecycleScope.launch(Dispatchers.Main) {
                             if (isAdded){
                                 binding.progressTxt.text = "100%"
+                                binding.progress.progress = 100
                                 binding.buttonApplyWallpaper.visibility = View.VISIBLE
 
                                 animationJob?.cancel()

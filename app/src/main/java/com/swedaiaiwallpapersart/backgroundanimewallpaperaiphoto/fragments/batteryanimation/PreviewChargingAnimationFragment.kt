@@ -187,7 +187,7 @@ class PreviewChargingAnimationFragment : Fragment() {
 
     private fun setWallpaperOnView() {
         if (isAdded){
-            binding.liveWallpaper.setAnimationFromUrl(AdConfig.BASE_URL_DATA + "/"+livewallpaper?.hd_animation)
+            binding.liveWallpaper.setAnimationFromUrl(AdConfig.BASE_URL_DATA + "/animation/"+livewallpaper?.hd_animation)
             binding.liveWallpaper.playAnimation()
         }
 

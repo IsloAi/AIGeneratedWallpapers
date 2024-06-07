@@ -113,7 +113,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                 responseData = it
                 setImageToView()
 
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/newimages/" +responseData?.hd_image_url)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +responseData?.hd_image_url)
             }
 
         }
@@ -374,7 +374,7 @@ class FullScreenImageViewFragment : DialogFragment() {
 
     private fun setImageToView(){
         Glide.with(requireContext())
-            .load(AdConfig.BASE_URL_DATA + "/newimages/" +responseData!!.hd_image_url)
+            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +responseData!!.hd_image_url)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

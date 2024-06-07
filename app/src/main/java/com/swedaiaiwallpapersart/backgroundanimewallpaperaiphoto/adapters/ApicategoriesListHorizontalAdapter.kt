@@ -61,7 +61,7 @@ class ApicategoriesListHorizontalAdapter(
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, image: ShapeableImageView){
 
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" +model.compressed_image_url).diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +model.hd_image_url+ "?class=custom").diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object: RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

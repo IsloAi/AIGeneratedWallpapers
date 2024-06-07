@@ -559,22 +559,21 @@ class PopularWallpaperFragment () : Fragment() {
         welcomeItems.add(1)
         welcomeItems.add(2)
         welcomeItems.add(3)
-        welcomeItems.add(4)
 
         welcomeAdapter =
             PopularSliderAdapter(welcomeItems, object : PopularSliderAdapter.joinButtons {
                 override fun clickEvent(position: Int) {
                     when (position) {
                         0 -> {
-                            (requireParentFragment() as HomeTabsFragment).navigateToTrending(7)
+                            (requireParentFragment() as HomeTabsFragment).navigateTOTabs("Category")
                         }
 
                         1 -> {
-                            (requireParentFragment() as HomeTabsFragment).navigateToTrending(4)
+                            (requireParentFragment() as HomeTabsFragment).navigateTOTabs("Anime")
                         }
 
                         2 -> {
-                            catListViewmodel.getAllCreations("Anime")
+                            catListViewmodel.getAllCreations("4K")
                             SDKBaseController.getInstance().showInterstitialAds(
                                 requireActivity(),
                                 "mainscr_cate_tab_click_item",
@@ -585,21 +584,17 @@ class PopularWallpaperFragment () : Fragment() {
                                         Log.e("********ADS", "onAdsShowFail: $errorCode")
 
 
-                                        setFragment("Anime")
+                                        setFragment("4K")
                                         //do something
                                     }
 
                                     override fun onAdsDismiss() {
-                                        setFragment("Anime")
+                                        setFragment("4K")
                                     }
                                 }
                             )
 
 
-                        }
-
-                        3 -> {
-                            (requireParentFragment() as HomeTabsFragment).navigateToTrending(3)
                         }
                     }
                 }

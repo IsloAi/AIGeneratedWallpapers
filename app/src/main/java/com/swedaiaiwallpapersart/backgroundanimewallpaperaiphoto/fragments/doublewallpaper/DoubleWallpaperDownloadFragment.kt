@@ -186,10 +186,10 @@ class DoubleWallpaperDownloadFragment : Fragment() {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePathBattery == ""){
-                    downloadVideo(AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/"+wallpaper[0]?.hd_url1,video)
+                    downloadVideo(AdConfig.BASE_URL_DATA + "/doublewallpaper/"+wallpaper[0]?.hd_url1,video)
 
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/doublewallpaper/hd/" +wallpaper[0]?.hd_url2)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +wallpaper[0]?.hd_url2)
 
 
             }

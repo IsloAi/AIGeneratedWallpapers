@@ -815,10 +815,28 @@ class HomeTabsFragment : Fragment() {
         return -1 // If HomeFragment is not found
     }
 
+
+    fun getTabPositionByName(tabName:String): Int {
+        for (i in 0 until binding.tabLayout.tabCount) {
+            val tab = binding.tabLayout.getTabAt(i)
+            if (tab?.text == tabName) {
+                return i
+            }
+        }
+        return -1 // Return -1 if no tab with the specified name is found
+    }
+
     fun navigateToTrending(index:Int){
         if (isAdded){
             binding.viewPager.currentItem = index
         }
 
+    }
+
+    fun navigateTOTabs(tabName: String){
+        val tabPos = getTabPositionByName(tabName)
+        if (isAdded){
+            navigateToTrending(tabPos)
+        }
     }
 }
