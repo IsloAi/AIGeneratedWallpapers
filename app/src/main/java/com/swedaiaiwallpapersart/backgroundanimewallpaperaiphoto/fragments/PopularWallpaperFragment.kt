@@ -2,8 +2,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,12 +20,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
 import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPopularWallpaperBinding
@@ -35,14 +31,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment.Companion.isNavigated
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.MostDownloadImageResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -52,12 +44,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Timer
-import java.util.TimerTask
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -211,37 +199,39 @@ class PopularWallpaperFragment () : Fragment() {
 
                     oldPosition = position
 
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "mainscr_all_tab_click_item",
-                        "mainscr_all_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e(TAG, "onAdsShowFail: " + errorCode)
-                                if (isAdded){
-                                    navigateToDestination(allItems!!, position)
-                                }
+                    navigateToDestination(allItems!!, position)
 
-                                //do something
-                            }
-
-                            override fun onAdsDismiss() {
-                                Log.e(TAG, "onAdsDismiss: " )
-                                if (isAdded){
-//                                    navigateToDestination(allItems!!, position)
-                                }
-                            }
-
-                            override fun onAdsShowed(priority: Int) {
-                                super.onAdsShowed(priority)
-                                Log.e(TAG, "onAdsShowed: ", )
+//                    SDKBaseController.getInstance().showInterstitialAds(
+//                        requireActivity(),
+//                        "mainscr_all_tab_click_item",
+//                        "mainscr_all_tab_click_item",
+//                        showLoading = true,
+//                        adsListener = object : CommonAdsListenerAdapter() {
+//                            override fun onAdsShowFail(errorCode: Int) {
+//                                Log.e(TAG, "onAdsShowFail: " + errorCode)
 //                                if (isAdded){
 //                                    navigateToDestination(allItems!!, position)
 //                                }
-                            }
-                        }
-                    )
+//
+//                                //do something
+//                            }
+//
+//                            override fun onAdsDismiss() {
+//                                Log.e(TAG, "onAdsDismiss: " )
+//                                if (isAdded){
+////                                    navigateToDestination(allItems!!, position)
+//                                }
+//                            }
+//
+//                            override fun onAdsShowed(priority: Int) {
+//                                super.onAdsShowed(priority)
+//                                Log.e(TAG, "onAdsShowed: ", )
+////                                if (isAdded){
+////                                    navigateToDestination(allItems!!, position)
+////                                }
+//                            }
+//                        }
+//                    )
                 }
 
 
@@ -488,12 +478,12 @@ class PopularWallpaperFragment () : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(1500)
-            if (!isNavigated && hasToNavigate){
-                navigateToDestination(addedItems!!,oldPosition)
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.Main) {
+//            delay(1500)
+//            if (!isNavigated && hasToNavigate){
+//                navigateToDestination(addedItems!!,oldPosition)
+//            }
+//        }
 
 
 
@@ -574,26 +564,26 @@ class PopularWallpaperFragment () : Fragment() {
 
                         2 -> {
                             catListViewmodel.getAllCreations("4K")
-                            SDKBaseController.getInstance().showInterstitialAds(
-                                requireActivity(),
-                                "mainscr_cate_tab_click_item",
-                                "mainscr_cate_tab_click_item",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        Log.e("********ADS", "onAdsShowFail: $errorCode")
-
-
-                                        setFragment("4K")
-                                        //do something
-                                    }
-
-                                    override fun onAdsDismiss() {
-                                        setFragment("4K")
-                                    }
-                                }
-                            )
-
+                            setFragment("4K")
+//                            SDKBaseController.getInstance().showInterstitialAds(
+//                                requireActivity(),
+//                                "mainscr_cate_tab_click_item",
+//                                "mainscr_cate_tab_click_item",
+//                                showLoading = true,
+//                                adsListener = object : CommonAdsListenerAdapter() {
+//                                    override fun onAdsShowFail(errorCode: Int) {
+//                                        Log.e("********ADS", "onAdsShowFail: $errorCode")
+//
+//
+//
+//                                        //do something
+//                                    }
+//
+//                                    override fun onAdsDismiss() {
+//                                        setFragment("4K")
+//                                    }
+//                                }
+//                            )
 
                         }
                     }
@@ -680,28 +670,32 @@ class PopularWallpaperFragment () : Fragment() {
                     if (!isNavigationInProgress){
                         isNavigationInProgress = true
                         val allItems = adapter?.getAllItems()
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "mainscr_trending_tab_click_item",
-                            "mainscr_trending_tab_click_item",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
 
-                                    if (isAdded){
-                                        navigateToDestination(allItems!!, position)
-                                    }
-                                    //do something
-                                }
-
-                                override fun onAdsDismiss() {
-                                    if (isAdded){
-                                        navigateToDestination(allItems!!, position)
-                                    }
-                                }
-                            }
-                        )
+                        if (isAdded){
+                            navigateToDestination(allItems!!, position)
+                        }
+//                        SDKBaseController.getInstance().showInterstitialAds(
+//                            requireActivity(),
+//                            "mainscr_trending_tab_click_item",
+//                            "mainscr_trending_tab_click_item",
+//                            showLoading = true,
+//                            adsListener = object : CommonAdsListenerAdapter() {
+//                                override fun onAdsShowFail(errorCode: Int) {
+//                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
+//
+//                                    if (isAdded){
+//                                        navigateToDestination(allItems!!, position)
+//                                    }
+//                                    //do something
+//                                }
+//
+//                                override fun onAdsDismiss() {
+//                                    if (isAdded){
+//                                        navigateToDestination(allItems!!, position)
+//                                    }
+//                                }
+//                            }
+//                        )
                     }
 
 

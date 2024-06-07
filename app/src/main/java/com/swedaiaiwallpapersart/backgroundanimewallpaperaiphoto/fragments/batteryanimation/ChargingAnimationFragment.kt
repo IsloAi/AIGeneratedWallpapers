@@ -153,30 +153,31 @@ class ChargingAnimationFragment : Fragment() {
                 sharedViewModel.setChargingAdPosition(newPosition)
                     Log.e(TAG, "getPosition:$position odd " )
 
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "mainscr_live_tab_click_item",
-                        "mainscr_live_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                setPathandNavigate(model,false)
-                            }
-
-                            override fun onAdsDismiss() {
-                                Log.e("TAG", "onAdsDismiss: ", )
-                                setPathandNavigate(model,true)
-
-                            }
-
-                            override fun onAdsShowTimeout() {
-                                super.onAdsShowTimeout()
-                                Log.e(TAG, "onAdsShowTimeout: " )
-                                setPathandNavigate(model,false)
-                            }
-                        }
-                    )
+                setPathandNavigate(model,false)
+//                    SDKBaseController.getInstance().showInterstitialAds(
+//                        requireActivity(),
+//                        "mainscr_live_tab_click_item",
+//                        "mainscr_live_tab_click_item",
+//                        showLoading = true,
+//                        adsListener = object : CommonAdsListenerAdapter() {
+//                            override fun onAdsShowFail(errorCode: Int) {
+//                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
+//                                setPathandNavigate(model,false)
+//                            }
+//
+//                            override fun onAdsDismiss() {
+//                                Log.e("TAG", "onAdsDismiss: ", )
+//                                setPathandNavigate(model,true)
+//
+//                            }
+//
+//                            override fun onAdsShowTimeout() {
+//                                super.onAdsShowTimeout()
+//                                Log.e(TAG, "onAdsShowTimeout: " )
+//                                setPathandNavigate(model,false)
+//                            }
+//                        }
+//                    )
 
 
 

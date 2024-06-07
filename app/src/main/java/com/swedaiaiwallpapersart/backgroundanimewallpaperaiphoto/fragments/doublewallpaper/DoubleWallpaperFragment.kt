@@ -157,27 +157,29 @@ class DoubleWallpaperFragment : Fragment() {
 //                sharedViewModel.setChargingAdPosition(newPosition)
                 Log.e(TAG, "getPosition:$position odd " )
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_sub_cate_tab_click_item",
-                    "mainscr_sub_cate_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(allItems!!,position)
-                            //do something
-                        }
+                navigateToDestination(allItems!!,position)
 
-                        override fun onAdsDismiss() {
-                            Log.e("********ADS", "onAdsDismiss: " )
-                            navigateToDestination(allItems!!,position)
-
-//                                    navigateToDestination(allItems,position)
-                        }
-
-                    }
-                )
+//                SDKBaseController.getInstance().showInterstitialAds(
+//                    requireActivity(),
+//                    "mainscr_sub_cate_tab_click_item",
+//                    "mainscr_sub_cate_tab_click_item",
+//                    showLoading = true,
+//                    adsListener = object : CommonAdsListenerAdapter() {
+//                        override fun onAdsShowFail(errorCode: Int) {
+//                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+//                            navigateToDestination(allItems!!,position)
+//                            //do something
+//                        }
+//
+//                        override fun onAdsDismiss() {
+//                            Log.e("********ADS", "onAdsDismiss: " )
+//                            navigateToDestination(allItems!!,position)
+//
+////                                    navigateToDestination(allItems,position)
+//                        }
+//
+//                    }
+//                )
             }
         },myActivity)
 

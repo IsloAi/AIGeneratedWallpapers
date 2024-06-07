@@ -81,85 +81,85 @@ class OnBoardingFragment : Fragment() {
                         if (isAdded){
                             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
                         }
-                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
+//                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
                         binding.onbTxt1.text = "Transform your device into an anime haven with our stunning wallpaper collection"
                         binding.onbTxt2.text = "Anime Essence"
 
-                        val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.native_onboarding_src,
-                            null, false
-                        ) as? IkmWidgetAdLayout
-                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-                        binding.adsView.setCustomNativeAdLayout(
-                            R.layout.shimmer_loading_native,
-                            adLayout!!
-                        )
-
-                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-                            object : CustomSDKAdsListenerAdapter() {
-                                override fun onAdsLoadFail() {
-                                    super.onAdsLoadFail()
-                                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
-                                }
-
-                                override fun onAdsLoaded() {
-                                    super.onAdsLoaded()
-                                    if (isAdded && view != null) {
-                                        // Modify view visibility here
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }
-
-                                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                                }
-                            }
-                        )
+//                        val adLayout = LayoutInflater.from(activity).inflate(
+//                            R.layout.native_onboarding_src,
+//                            null, false
+//                        ) as? IkmWidgetAdLayout
+//                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//
+//                        binding.adsView.setCustomNativeAdLayout(
+//                            R.layout.shimmer_loading_native,
+//                            adLayout!!
+//                        )
+//
+//                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+//                            object : CustomSDKAdsListenerAdapter() {
+//                                override fun onAdsLoadFail() {
+//                                    super.onAdsLoadFail()
+//                                    Log.e("TAG", "onAdsLoadFail: native failded " )
+////                                    binding.adsView.visibility = View.GONE
+//                                }
+//
+//                                override fun onAdsLoaded() {
+//                                    super.onAdsLoaded()
+//                                    if (isAdded && view != null) {
+//                                        // Modify view visibility here
+//                                        binding.adsView.visibility = View.VISIBLE
+//                                    }
+//
+//                                    Log.e("TAG", "onAdsLoaded: native loaded" )
+//                                }
+//                            }
+//                        )
                     }
                     1 -> {
                         if (isAdded){
                             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
                         }
-                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
+//                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
                         binding.skipBtn.visibility = View.VISIBLE
-                        val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.native_onboarding_src,
-                            null, false
-                        ) as? IkmWidgetAdLayout
-                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-                        binding.adsView.setCustomNativeAdLayout(
-                            R.layout.shimmer_loading_native,
-                            adLayout!!
-                        )
-
-                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-                            object : CustomSDKAdsListenerAdapter() {
-                                override fun onAdsLoadFail() {
-                                    super.onAdsLoadFail()
-                                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
-                                }
-
-                                override fun onAdsLoaded() {
-                                    super.onAdsLoaded()
-                                    if (isAdded && view != null) {
-                                        // Modify view visibility here
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }
-                                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                                }
-                            }
-                        )
+//                        val adLayout = LayoutInflater.from(activity).inflate(
+//                            R.layout.native_onboarding_src,
+//                            null, false
+//                        ) as? IkmWidgetAdLayout
+//                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//
+//                        binding.adsView.setCustomNativeAdLayout(
+//                            R.layout.shimmer_loading_native,
+//                            adLayout!!
+//                        )
+//
+//                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+//                            object : CustomSDKAdsListenerAdapter() {
+//                                override fun onAdsLoadFail() {
+//                                    super.onAdsLoadFail()
+//                                    Log.e("TAG", "onAdsLoadFail: native failded " )
+////                                    binding.adsView.visibility = View.GONE
+//                                }
+//
+//                                override fun onAdsLoaded() {
+//                                    super.onAdsLoaded()
+//                                    if (isAdded && view != null) {
+//                                        // Modify view visibility here
+//                                        binding.adsView.visibility = View.VISIBLE
+//                                    }
+//                                    Log.e("TAG", "onAdsLoaded: native loaded" )
+//                                }
+//                            }
+//                        )
 
                         binding.onbTxt1.text = "Adorn your screen with the sleek lines and power of car-inspired wallpapers"
                         binding.onbTxt2.text = "Car Canvas"
@@ -168,39 +168,39 @@ class OnBoardingFragment : Fragment() {
                         if (isAdded){
                             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
                         }
-                        val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.native_onboarding_src,
-                            null, false
-                        ) as? IkmWidgetAdLayout
-                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-                        binding.adsView.setCustomNativeAdLayout(
-                            R.layout.shimmer_loading_native,
-                            adLayout!!
-                        )
-
-                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-                            object : CustomSDKAdsListenerAdapter() {
-                                override fun onAdsLoadFail() {
-                                    super.onAdsLoadFail()
-                                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
-                                }
-
-                                override fun onAdsLoaded() {
-                                    super.onAdsLoaded()
-                                    if (isAdded && view != null) {
-                                        // Modify view visibility here
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }
-                                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                                }
-                            }
-                        )
+//                        val adLayout = LayoutInflater.from(activity).inflate(
+//                            R.layout.native_onboarding_src,
+//                            null, false
+//                        ) as? IkmWidgetAdLayout
+//                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//
+//                        binding.adsView.setCustomNativeAdLayout(
+//                            R.layout.shimmer_loading_native,
+//                            adLayout!!
+//                        )
+//
+//                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+//                            object : CustomSDKAdsListenerAdapter() {
+//                                override fun onAdsLoadFail() {
+//                                    super.onAdsLoadFail()
+//                                    Log.e("TAG", "onAdsLoadFail: native failded " )
+////                                    binding.adsView.visibility = View.GONE
+//                                }
+//
+//                                override fun onAdsLoaded() {
+//                                    super.onAdsLoaded()
+//                                    if (isAdded && view != null) {
+//                                        // Modify view visibility here
+//                                        binding.adsView.visibility = View.VISIBLE
+//                                    }
+//                                    Log.e("TAG", "onAdsLoaded: native loaded" )
+//                                }
+//                            }
+//                        )
                         binding.skipBtn.visibility = View.GONE
                         binding.onbTxt1.text = "Immerse yourself in the world of football through dynamic and captivating wallpapers"
                         binding.onbTxt2.text = "Football Fusion"

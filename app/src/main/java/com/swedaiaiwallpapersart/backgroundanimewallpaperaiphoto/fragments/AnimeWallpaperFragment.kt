@@ -112,23 +112,25 @@ class AnimeWallpaperFragment : Fragment() {
 
                     oldPosition = position
 
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "categoryscr_fantasy_click_item",
-                        "categoryscr_fantasy_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                navigateToDestination(allItems!!, position)
-                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                //do something
-                            }
+                    navigateToDestination(allItems!!, position)
 
-                            override fun onAdsDismiss() {
-//                            navigateToDestination(allItems!!, position)
-                            }
-                        }
-                    )
+//                    SDKBaseController.getInstance().showInterstitialAds(
+//                        requireActivity(),
+//                        "categoryscr_fantasy_click_item",
+//                        "categoryscr_fantasy_click_item",
+//                        showLoading = true,
+//                        adsListener = object : CommonAdsListenerAdapter() {
+//                            override fun onAdsShowFail(errorCode: Int) {
+//                                navigateToDestination(allItems!!, position)
+//                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
+//                                //do something
+//                            }
+//
+//                            override fun onAdsDismiss() {
+////                            navigateToDestination(allItems!!, position)
+//                            }
+//                        }
+//                    )
 
                 }
 
@@ -312,12 +314,12 @@ class AnimeWallpaperFragment : Fragment() {
 
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(1500)
-            if (!WallpaperViewFragment.isNavigated && hasToNavigateAnime){
-                navigateToDestination(addedItems!!,oldPosition)
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.Main) {
+//            delay(1500)
+//            if (!WallpaperViewFragment.isNavigated && hasToNavigateAnime){
+//                navigateToDestination(addedItems!!,oldPosition)
+//            }
+//        }
 
     }
 

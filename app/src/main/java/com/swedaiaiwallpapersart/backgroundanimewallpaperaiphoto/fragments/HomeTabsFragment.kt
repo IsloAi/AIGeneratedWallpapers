@@ -175,7 +175,7 @@ class HomeTabsFragment : Fragment() {
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "MainScr_View"))
         }
 
-        loadbannerAd()
+//        loadbannerAd()
         setGradienttext()
         setViewPager()
         initTabs()

@@ -87,18 +87,18 @@ class SplashOnFragment : Fragment() {
         myActivity = activity as MainActivity
 
         // Load the banner ad
-        binding.adsView.loadAd(requireContext(),"splashscr_bottom",
-            "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
+//        binding.adsView.loadAd(requireContext(),"splashscr_bottom",
+//            "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+//                }
+//
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+//                }
+//            })
 
         // Get the language preference
         lan = MySharePreference.getLanguage(requireContext()).toString()
@@ -107,10 +107,10 @@ class SplashOnFragment : Fragment() {
         val premium = IkmSdkUtils.isUserIAPAvailable()
         AdConfig.ISPAIDUSER = premium
         // Preload the native ad if necessary
-        if (lan.isEmpty() == true || AdConfig.inAppConfig == true){
-            Log.e("TAG", "onViewCreated: load pre", )
-            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
-        }
+//        if (lan.isEmpty() == true || AdConfig.inAppConfig == true){
+//            Log.e("TAG", "onViewCreated: load pre", )
+//            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
+//        }
 
         animateLoadingText()
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
@@ -129,39 +129,42 @@ class SplashOnFragment : Fragment() {
                 delay(interval.toLong())
             }
 
-            if (counter == 0){
-                SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
-                    override fun onAdReady(priority: Int) {
-                    }
-
-                    override fun onAdsDismiss() {
-                        moveNext = true
-                        navigateToNextScreen()
-
-                        IkmSdkController.setEnableShowResumeAds(true)
-
-                    }
-
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("TAG", "onAdsShowFail: $errorCode")
+            //ads remove
+//            if (counter == 0){
+//                SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
+//                    override fun onAdReady(priority: Int) {
+//                    }
 //
+//                    override fun onAdsDismiss() {
+//                        moveNext = true
+//                        navigateToNextScreen()
+//
+//                        IkmSdkController.setEnableShowResumeAds(true)
+//
+//                    }
+//
+//                    override fun onAdsShowFail(errorCode: Int) {
+//                        Log.e("TAG", "onAdsShowFail: $errorCode")
+////
+//
+//                        navigateToNextScreen()
+//
+//                        IkmSdkController.setEnableShowResumeAds(true)
+//                    }
+//
+//                    override fun onAdsShowed(priority: Int) {
+//                        counter++
+//                        if (isAdded){
+//                            binding.adsView.visibility = View.GONE
+//                        }
+//                    }
+//
+//                })
+//            }else{
+//                navigateToNextScreen()
+//            }
 
-                        navigateToNextScreen()
-
-                        IkmSdkController.setEnableShowResumeAds(true)
-                    }
-
-                    override fun onAdsShowed(priority: Int) {
-                        counter++
-                        if (isAdded){
-                            binding.adsView.visibility = View.GONE
-                        }
-                    }
-
-                })
-            }else{
-                navigateToNextScreen()
-            }
+            navigateToNextScreen()
         }
 
 

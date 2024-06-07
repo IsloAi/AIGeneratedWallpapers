@@ -66,7 +66,7 @@ class LocalizationFragment : Fragment() {
         }
         setGradienttext()
 
-        loadNativeAd()
+//        loadNativeAd()
         setEvents()
         initLanguages()
         backHandle()
@@ -191,10 +191,10 @@ class LocalizationFragment : Fragment() {
 
     private fun setEvents() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
-
-        if (!onBoard){
-            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
-        }
+//
+//        if (!onBoard){
+//            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
+//        }
 //        binding.backButton.setOnClickListener {
 //            if (exit){
 //                requireActivity().finishAffinity()

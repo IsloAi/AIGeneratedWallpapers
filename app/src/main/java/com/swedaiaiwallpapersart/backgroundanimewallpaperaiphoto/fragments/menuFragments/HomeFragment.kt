@@ -315,25 +315,27 @@ class HomeFragment : Fragment(){
 
                         oldPosition = position
 
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "mainscr_trending_tab_click_item",
-                            "mainscr_trending_tab_click_item",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                    navigateToDestination(allItems,position)
-                                    //do something
-                                }
+                        navigateToDestination(allItems,position)
 
-                                override fun onAdsDismiss() {
-                                    Log.e("********ADS", "onAdsDismiss: " )
+//                        SDKBaseController.getInstance().showInterstitialAds(
+//                            requireActivity(),
+//                            "mainscr_trending_tab_click_item",
+//                            "mainscr_trending_tab_click_item",
+//                            showLoading = true,
+//                            adsListener = object : CommonAdsListenerAdapter() {
+//                                override fun onAdsShowFail(errorCode: Int) {
+//                                    Log.e("********ADS", "onAdsShowFail: "+errorCode )
 //                                    navigateToDestination(allItems,position)
-                                }
-
-                            }
-                        )
+//                                    //do something
+//                                }
+//
+//                                override fun onAdsDismiss() {
+//                                    Log.e("********ADS", "onAdsDismiss: " )
+////                                    navigateToDestination(allItems,position)
+//                                }
+//
+//                            }
+//                        )
                     }
                 }
             }
@@ -457,12 +459,12 @@ class HomeFragment : Fragment(){
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(1500)
-            if (!WallpaperViewFragment.isNavigated && hasToNavigateHome){
-                navigateToDestination(addedItems!!,oldPosition)
-            }
-        }
+//        lifecycleScope.launch(Dispatchers.Main) {
+//            delay(1500)
+//            if (!WallpaperViewFragment.isNavigated && hasToNavigateHome){
+//                navigateToDestination(addedItems!!,oldPosition)
+//            }
+//        }
 
     }
 

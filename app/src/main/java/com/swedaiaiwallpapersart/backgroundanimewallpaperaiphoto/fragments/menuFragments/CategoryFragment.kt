@@ -79,26 +79,26 @@ class CategoryFragment : Fragment() {
         val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
                 catListViewmodel.getAllCreations(string)
-
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_cate_tab_click_item",
-                    "mainscr_cate_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: $errorCode")
-
-
-                            setFragment(string)
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-                            setFragment(string)
-                        }
-                    }
-                )
+                setFragment(string)
+//                SDKBaseController.getInstance().showInterstitialAds(
+//                    requireActivity(),
+//                    "mainscr_cate_tab_click_item",
+//                    "mainscr_cate_tab_click_item",
+//                    showLoading = true,
+//                    adsListener = object : CommonAdsListenerAdapter() {
+//                        override fun onAdsShowFail(errorCode: Int) {
+//                            Log.e("********ADS", "onAdsShowFail: $errorCode")
+//
+//
+//                            setFragment(string)
+//                            //do something
+//                        }
+//
+//                        override fun onAdsDismiss() {
+//                            setFragment(string)
+//                        }
+//                    }
+//                )
 
             }
         },myActivity,"")
@@ -166,25 +166,26 @@ class CategoryFragment : Fragment() {
                         sendTracking("categorymainscr_click",Pair("categorymainscr", "$string Live"))
                     }
 
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "mainscr_cate_tab_click_item",
-                        "mainscr_cate_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: $errorCode")
-
-//                                setFragment(string)
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                //do something
-                            }
-
-                            override fun onAdsDismiss() {
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            }
-                        }
-                    )
+                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+//                    SDKBaseController.getInstance().showInterstitialAds(
+//                        requireActivity(),
+//                        "mainscr_cate_tab_click_item",
+//                        "mainscr_cate_tab_click_item",
+//                        showLoading = true,
+//                        adsListener = object : CommonAdsListenerAdapter() {
+//                            override fun onAdsShowFail(errorCode: Int) {
+//                                Log.e("********ADS", "onAdsShowFail: $errorCode")
+//
+////                                setFragment(string)
+//                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+//                                //do something
+//                            }
+//
+//                            override fun onAdsDismiss() {
+//                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+//                            }
+//                        }
+//                    )
 
                 }
             }, myActivity)
