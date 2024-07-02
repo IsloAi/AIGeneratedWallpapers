@@ -80,7 +80,7 @@ import javax.inject.Inject
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),ConnectivityListener {
+class MainActivity : AppCompatActivity(), ConnectivityListener {
     lateinit var binding: ActivityMainBinding
     private var selectedPrompt: String? = null
 
@@ -91,20 +91,19 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
 
-    val mainActivityViewModel:MainActivityViewModel by viewModels()
+    val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
 
-    private  val myViewModel: MyHomeViewModel by viewModels()
+    private val myViewModel: MyHomeViewModel by viewModels()
 
-    private val chargingAnimationViewmodel : ChargingAnimationViewmodel by viewModels()
+    private val chargingAnimationViewmodel: ChargingAnimationViewmodel by viewModels()
     private val doubleWallpaperVideModel: DoubeWallpaperViewModel by viewModels()
 
     private var _navController: NavController? = null
 
     private val navController get() = _navController!!
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -132,14 +131,15 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         observefetechedData()
 
-        if (!isNetworkAvailable()){
+        if (!isNetworkAvailable()) {
             showNoInternetDialog()
         }
         readjsonAndSaveDataToDb()
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID)
         }
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         _navController = navHostFragment.navController
 
 
@@ -223,10 +223,10 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                     }
 
                 } else {
-                    Log.e(TAG, "readjsonAndSaveDataToDb: IMAGElIST NULL" )
+                    Log.e(TAG, "readjsonAndSaveDataToDb: IMAGElIST NULL")
                 }
             } else {
-                Log.e(TAG, "readjsonAndSaveDataToDb: string null" )
+                Log.e(TAG, "readjsonAndSaveDataToDb: string null")
             }
         }
     }
@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 }
 
                 is Response.Error -> {
-                    Log.e(TAG, "observefetechedData: error" )
+                    Log.e(TAG, "observefetechedData: error")
                 }
 
                 is Response.Processing -> {
@@ -308,18 +308,17 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
+    ) {
         SDKTrackingController.trackingAllApp(this, eventName, *param)
     }
 
 
-    private fun saveLiveWallpapersInDB(){
-        liveViewModel.liveWallpapers.observe(this){result->
-            when(result){
+    private fun saveLiveWallpapersInDB() {
+        liveViewModel.liveWallpapers.observe(this) { result ->
+            when (result) {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
-                        result.data?.forEach {wallpaper->
+                        result.data?.forEach { wallpaper ->
 
                             Log.e(TAG, "saveLiveWallpapersInDB: $wallpaper")
                             val model = wallpaper.copy(unlocked = true)
@@ -344,22 +343,17 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         }
 
 
-
-
-
-
-
                     }
                 }
 
                 is Response.Loading -> {
-                    Log.e(TAG, "loadData: Loading" )
+                    Log.e(TAG, "loadData: Loading")
                 }
 
                 is Response.Error -> {
                     Log.e(TAG, "loadData: response error")
                     MySharePreference.getDeviceID(this)
-                        ?.let { liveViewModel.getMostUsed("1","500", it) }
+                        ?.let { liveViewModel.getMostUsed("1", "500", it) }
                 }
 
                 is Response.Processing -> {
@@ -370,41 +364,34 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         }
     }
 
-    fun initObservers(){
-        mainActivityViewModel.mostUsed.observe(this){result ->
-            when(result){
+    fun initObservers() {
+        mainActivityViewModel.mostUsed.observe(this) { result ->
+            when (result) {
                 is Response.Success -> {
-                    result.data?.forEach { item->
+                    result.data?.forEach { item ->
                         Log.e(TAG, "initObservers: $item")
 
                         lifecycleScope.launch(Dispatchers.IO) {
-                            appDatabase.wallpapersDao().updateLocked(false,item.image_id.toInt())
+                            appDatabase.wallpapersDao().updateLocked(false, item.image_id.toInt())
                         }
-                        if (item == result.data.last()){
+                        if (item == result.data.last()) {
                             getSetTotallikes()
                         }
 
 
-
-
-
-
-
-
                     }
-
 
 
                 }
 
                 is Response.Processing -> {
 
-                    Log.e(TAG, "initObservers: processing" )
+                    Log.e(TAG, "initObservers: processing")
 
                 }
 
                 is Response.Error -> {
-                    Log.e(TAG, "initObservers: error" )
+                    Log.e(TAG, "initObservers: error")
                 }
 
                 else -> {}
@@ -413,18 +400,18 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         }
     }
 
-    fun getSetTotallikes(){
+    fun getSetTotallikes() {
         myViewModel.getAllLikes()
 
         MySharePreference.getDeviceID(this@MainActivity)?.let { myViewModel.getAllLiked(it) }
 
-        myViewModel.allLikes.observe(this@MainActivity){result->
-            when(result){
+        myViewModel.allLikes.observe(this@MainActivity) { result ->
+            when (result) {
                 is Response.Success -> {
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        result.data?.forEach {item->
-                            appDatabase.wallpapersDao().updateLikes(item.likes,item.id.toInt())
+                        result.data?.forEach { item ->
+                            appDatabase.wallpapersDao().updateLikes(item.likes, item.id.toInt())
 
                         }
                     }
@@ -438,6 +425,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 is Response.Error -> {
 
                 }
+
                 is Response.Processing -> {
 
                 }
@@ -446,15 +434,15 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
         }
 
-        myViewModel.allLiked.observe(this@MainActivity){result->
-            when(result){
+        myViewModel.allLiked.observe(this@MainActivity) { result ->
+            when (result) {
                 is Response.Success -> {
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        result.data?.forEach {item->
+                        result.data?.forEach { item ->
 
-                            Log.e("TAG", "getSetTotallikes: "+item )
-                            appDatabase.wallpapersDao().updateLiked(true,item.imageid.toInt())
+                            Log.e("TAG", "getSetTotallikes: " + item)
+                            appDatabase.wallpapersDao().updateLiked(true, item.imageid.toInt())
                         }
                     }
 
@@ -467,6 +455,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                 is Response.Error -> {
 
                 }
+
                 is Response.Processing -> {
 
                 }
@@ -477,7 +466,8 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
@@ -490,7 +480,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
     suspend fun parseJson(jsonString: String): ListResponse? {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             try {
                 val gson = Gson()
                 gson.fromJson(jsonString, ListResponse::class.java)
@@ -503,7 +493,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
     suspend fun parseJsonLive(jsonString: String): LiveImagesResponse? {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             try {
                 val gson = Gson()
                 gson.fromJson(jsonString, LiveImagesResponse::class.java)
@@ -517,7 +507,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
 
     suspend fun readJsonFile(context: Context, fileName: String): String {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             try {
                 val inputStream: InputStream = context.assets.open(fileName)
                 val size: Int = inputStream.available()
@@ -570,17 +560,39 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
 
                         Log.e(TAG, "onUpdate: $inAppConfig")
 
-                        val categoryOrderArray = categoryOrder.substring(1,categoryOrder.length-1).split(", ").toList()
+                        val categoryOrderArray =
+                            categoryOrder.substring(1, categoryOrder.length - 1).split(", ")
+                                .toList()
 
                         AdConfig.categoryOrder = categoryOrderArray
 
+                        val languagesOrder = remoteConfig["languages"].asString()
+                        val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
+
+                        Log.e(TAG, "initFirebaseRemoteConfig: "+languagesOrderArray )
+                        AdConfig.languagesOrder = languagesOrderArray
+                        val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
+                        AdConfig.languageLogicShowNative = languageShowNative.toInt()
+                        val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
+                        AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
+
+
+                        Log.e(
+                            TAG,
+                            "initFirebaseRemoteConfig: " + languageShowNative + "full native$onboardingFullNative"
+                        )
+
+
+
+
+
                         Log.e(TAG, "onUpdate: $categoryOrderArray")
 
-                        val baseUrls = remoteConfig["ImageUrl"].asString()
+                        val baseUrls = remoteConfig["dataUrl"].asString()
 
-                        AdConfig.BASE_URL_DATA = "https://4kwallpaper-zone.b-cdn.net"
+                        AdConfig.BASE_URL_DATA = baseUrls
 
-                        Log.e(TAG, "initFirebaseRemoteConfig: "+baseUrls )
+                        Log.e(TAG, "initFirebaseRemoteConfig: " + baseUrls)
 
 
 
@@ -589,16 +601,17 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             val jsonObject = JSONObject(inAppConfig)
 
                             // Retrieve the boolean value associated with the key "languagescralwayshow"
-                            val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
+                            val languagescralwayshow =
+                                jsonObject.getBoolean("language_scr_alway_show")
 
                             val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
-                            Log.e(TAG, "onUpdate: "+languagescralwayshow )
-                            Log.e(TAG, "onUpdate: regular wallpaper "+regularWallpaperFlow )
+                            Log.e(TAG, "onUpdate: " + languagescralwayshow)
+                            Log.e(TAG, "onUpdate: regular wallpaper " + regularWallpaperFlow)
                             AdConfig.regularWallpaperFlow = regularWallpaperFlow
                             AdConfig.inAppConfig = languagescralwayshow
 
-                        }catch (e:JSONException){
+                        } catch (e: JSONException) {
                             e.printStackTrace()
                         }
 
@@ -614,7 +627,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                             Log.e(TAG, "onUpdate: $iapScreenType")
 
                             AdConfig.iapScreenType = iapScreenType
-                        }catch (e:JSONException){
+                        } catch (e: JSONException) {
                             e.printStackTrace()
                         }
 
@@ -624,19 +637,19 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
                         var tabNamesArray: Array<String> = positionTabs
                             .replace("{", "")   // Remove the opening curly brace
                             .replace("}", "")   // Remove the closing curly brace
-                            .replace("\"","")
+                            .replace("\"", "")
                             .split(", ")        // Split the string into an array using ", " as the delimiter
                             .toTypedArray()
 
-                        for (i in 0 until tabNamesArray.size){
-                            Log.e(TAG, "onUpdate: "+tabNamesArray[i] )
+                        for (i in 0 until tabNamesArray.size) {
+                            Log.e(TAG, "onUpdate: " + tabNamesArray[i])
                         }
                         //in next update
 //                        tabNamesArray += "Trending"
 
                         AdConfig.tabPositions = tabNamesArray
 
-                        Log.e(TAG, "onUpdate: "+positionTabs )
+                        Log.e(TAG, "onUpdate: " + positionTabs)
 
                         AdConfig.showOnboarding = onboarding
                         Log.e(TAG, "onUpdate: " + onboarding)
@@ -738,31 +751,44 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         val positionTabs = remoteConfig["tablist_156"].asString()
         val categoryOrder = remoteConfig["category_order"].asString()
         Log.e(TAG, "onUpdate: $categoryOrder")
-
+        val languagesOrder = remoteConfig["languages"].asString()
         val inAppConfig = remoteConfig["in_app_config"].asString()
 
-        val baseUrls = remoteConfig["ImageUrl"].asString()
+        val baseUrls = remoteConfig["dataUrl"].asString()
 
-//        AdConfig.BASE_URL_DATA = baseUrls
-        AdConfig.BASE_URL_DATA = "https://4kwallpaper-zone.b-cdn.net"
+        AdConfig.BASE_URL_DATA = baseUrls
+//        AdConfig.BASE_URL_DATA = "https://4kwallpaper-zone.b-cdn.net"
 
 
-        Log.e(TAG, "initFirebaseRemoteConfig: "+baseUrls )
+        Log.e(TAG, "initFirebaseRemoteConfig: " + baseUrls)
 
-        Log.e(TAG, "onUpdate: "+inAppConfig )
+        Log.e(TAG, "onUpdate: " + inAppConfig)
 
         try {
-            val categoryOrderArray = categoryOrder.substring(1,categoryOrder.length-1).replace("\"","").split(", ").toList()
+            val categoryOrderArray =
+                categoryOrder.substring(1, categoryOrder.length - 1).replace("\"", "").split(", ")
+                    .toList()
 
             AdConfig.categoryOrder = categoryOrderArray
 
             Log.e(TAG, "onUpdate: $categoryOrderArray")
-        }catch (e:StringIndexOutOfBoundsException){
+        } catch (e: StringIndexOutOfBoundsException) {
             e.printStackTrace()
         }
 
+        try {
+
+            val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
+
+            Log.e(TAG, "initFirebaseRemoteConfig: "+languagesOrderArray )
+
+            AdConfig.languagesOrder = languagesOrderArray
 
 
+
+        } catch (e: StringIndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
 
 
         val iap = remoteConfig["iap_config"].asString()
@@ -777,12 +803,12 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
             val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
-            Log.e(TAG, "onUpdate: "+languagescralwayshow )
-            Log.e(TAG, "onUpdate: regular wallpaper "+regularWallpaperFlow )
+            Log.e(TAG, "onUpdate: " + languagescralwayshow)
+            Log.e(TAG, "onUpdate: regular wallpaper " + regularWallpaperFlow)
             AdConfig.regularWallpaperFlow = regularWallpaperFlow
             AdConfig.inAppConfig = languagescralwayshow
 
-        }catch (e:JSONException){
+        } catch (e: JSONException) {
             e.printStackTrace()
         }
 
@@ -791,11 +817,21 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             val iapScreenType = jsonObject.optInt("IAPScreentype")
             Log.e(TAG, "onUpdate: $iapScreenType")
 
-        AdConfig.iapScreenType = iapScreenType
-        }catch (e: JSONException) {
+            AdConfig.iapScreenType = iapScreenType
+        } catch (e: JSONException) {
             e.printStackTrace()
         }
 
+
+        val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
+        AdConfig.languageLogicShowNative = languageShowNative.toInt()
+        val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
+        AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
+
+        Log.e(
+            TAG,
+            "initFirebaseRemoteConfig: " + languageShowNative + "full native$onboardingFullNative"
+        )
 
 
         // Get the value associated with the key "IAPScreentype"
@@ -805,12 +841,12 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
         val tabNamesArray: Array<String> = positionTabs
             .replace("{", "")   // Remove the opening curly brace
             .replace("}", "")   // Remove the closing curly brace
-            .replace("\"","")
+            .replace("\"", "")
             .split(", ")        // Split the string into an array using ", " as the delimiter
             .toTypedArray()
 
-        for (element in tabNamesArray){
-            Log.e(TAG, "onUpdate: "+ element)
+        for (element in tabNamesArray) {
+            Log.e(TAG, "onUpdate: " + element)
         }
 
         //in next update
@@ -947,9 +983,9 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             dialog.dismiss()
 
 
-
         }
     }
+
     private fun prompts(name: String, notSelected: Boolean): ArrayList<Prompts> {
         val list = ArrayList<Prompts>()
         when (name) {
@@ -1289,7 +1325,7 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
     }
 
     override fun onNetworkLost() {
-       showNoInternetDialog()
+        showNoInternetDialog()
     }
 
 
@@ -1306,7 +1342,6 @@ class MainActivity : AppCompatActivity(),ConnectivityListener {
             // Check if the activity is still running before showing the dialog
             alertDialog?.show()
         }
-
 
 
     }

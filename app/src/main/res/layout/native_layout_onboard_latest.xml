@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.bmik.android.sdk.widgets.IkmWidgetAdLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/language_native_bg"
+    tools:ignore="MissingDefaultResource,SpUsage">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_1sdp"
+        android:background="@drawable/language_foreground_native"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/custom_containerAds"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            app:layout_constraintWidth_percent="0.48"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/custom_media"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginBottom="@dimen/_7sdp"
+            app:layout_constraintBottom_toTopOf="@id/custom_call_to_action"
+            >
+
+            <ImageView
+                android:id="@+id/custom_app_icon"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_centerVertical="true"
+                android:adjustViewBounds="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/custom_headline"
+                app:layout_constraintBottom_toBottomOf="@id/custom_headline"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/custom_headline"
+                android:background="@drawable/ad_txt_background_language"
+                app:layout_constraintStart_toStartOf="parent"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/_5sdp"
+                android:layout_marginVertical="@dimen/_5sdp"
+                android:text="@string/txt_ad"
+                android:id="@+id/ad_txt"
+                android:textColor="@color/color_white_ads"
+                android:textSize="@dimen/_13sdp" />
+
+            <TextView
+                android:id="@+id/custom_headline"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/ads_padding"
+                app:layout_goneMarginStart="@dimen/ads_margin_gone"
+                android:ellipsize="end"
+                android:fontFamily="@font/roboto_medium"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/_12sdp"
+                app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="abv" />
+
+            <TextView
+                android:id="@+id/custom_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="3"
+                android:maxLines="3"
+                android:textColor="#99FFFFFF"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toBottomOf="@id/ad_txt"
+                app:layout_constraintStart_toStartOf="@id/ad_txt"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/_15sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                tools:text="Lorem Ipsum is simply dummy text of the printing and typesetting industry - Lorem Ipsum" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+        <com.bmik.android.sdk.widgets.IkmWidgetMediaView
+            android:id="@+id/custom_media"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_120sdp"
+            android:layout_centerHorizontal="true"
+            app:layout_constraintWidth_percent="0.45"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_marginHorizontal="@dimen/_10sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/custom_call_to_action"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.48"
+            android:layout_height="@dimen/_36sdp"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/rounded"
+            android:backgroundTint="@color/button_bg"
+            android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
+            android:minWidth="50dp"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/white"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/custom_media"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:layout_marginBottom="@dimen/_5sdp"
+            tools:text="install" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</com.bmik.android.sdk.widgets.IkmWidgetAdLayout>

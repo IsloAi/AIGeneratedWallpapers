@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 import android.app.Activity
 import android.app.Dialog
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageInfo
@@ -20,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -35,10 +37,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bmik.android.sdk.SDKBaseController
+import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.bmik.android.sdk.model.dto.UpdateAppDto
 import com.bmik.android.sdk.tracking.SDKTrackingController
+import com.bmik.android.sdk.utils.IkmSdkUtils
 import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.google.android.gms.tasks.Task
@@ -54,9 +58,11 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackRateBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogThankYouBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeTabsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.UpdateDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -78,6 +84,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -253,18 +260,22 @@ class HomeTabsFragment : Fragment() {
         bottomSheetDialog.setContentView(binding.root)
         binding.feedbackHappy.setOnClickListener {
             MySharePreference.setFeedbackSession1Completed(requireContext(),true)
+            MySharePreference.setLastDismissedTime(requireContext(), System.currentTimeMillis())
             bottomSheetDialog.dismiss()
             feedbackRateSheet()
         }
 
         binding.feedbacksad.setOnClickListener {
             MySharePreference.setFeedbackSession1Completed(requireContext(),true)
+            MySharePreference.setLastDismissedTime(requireContext(), System.currentTimeMillis())
             bottomSheetDialog.dismiss()
             feedbackQuestionSheet()
         }
 
         bottomSheetDialog.setOnDismissListener {
             isBottomSheetVisible = false // Update flag when bottom sheet is dismissed
+            MySharePreference.setLastDismissedTime(requireContext(), System.currentTimeMillis())
+
         }
 
         if (isAdded){
@@ -277,6 +288,7 @@ class HomeTabsFragment : Fragment() {
         binding.cancel.setOnClickListener {
             if (isAdded){
                 MySharePreference.setUserCancelledprocess(requireContext(),true)
+                MySharePreference.setLastDismissedTime(requireContext(), System.currentTimeMillis())
             }
             isBottomSheetVisible = false
             bottomSheetDialog.dismiss()
@@ -548,6 +560,7 @@ class HomeTabsFragment : Fragment() {
     }
     private fun setEvents(){
         binding.settings.setOnClickListener {
+            IkmSdkUtils.closeOldCollapse()
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SettingBT_Click"))
             }
@@ -556,6 +569,7 @@ class HomeTabsFragment : Fragment() {
 
 
         binding.search.setOnClickListener {
+            IkmSdkUtils.closeOldCollapse()
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SearchBT_Click"))
             }
@@ -563,6 +577,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         binding.goPremium.setOnClickListener {
+            IkmSdkUtils.closeOldCollapse()
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_IAPBT_Click"))
             }
@@ -588,14 +603,54 @@ class HomeTabsFragment : Fragment() {
                 if (binding.viewPager.currentItem != 0){
                     binding.viewPager.setCurrentItem(0)
                 }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "exitapp_inter",
+                        "exitapp_inter",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                exit = true
+                                existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                                //do something
+                            }
 
-                    exit = true
-                    existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                            override fun onAdsDismiss() {
+                                exit = true
+                                if (isAdded){
+                                    thankyouDialog()
+                                }
+
+//                            navigateToDestination(allItems!!, position)
+                            }
+                        }
+                    )
+
                 }
 
                 Log.e("TAG", "handleOnBackPressed: ", )
             }
         })
+    }
+
+    private fun thankyouDialog() {
+        val dialog = Dialog(requireContext())
+        val bindingDialog = DialogThankYouBinding.inflate(LayoutInflater.from(requireContext()))
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+        val width = WindowManager.LayoutParams.MATCH_PARENT
+        val height = WindowManager.LayoutParams.WRAP_CONTENT
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+
+        lifecycleScope.launch {
+            delay(3000)
+            dialog.dismiss()
+            myActivity.finishAffinity()
+        }
+        dialog.show()
     }
 
     private fun setGradienttext(){
@@ -775,22 +830,25 @@ class HomeTabsFragment : Fragment() {
             }
         }
 
-        if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(requireContext()) || MySharePreference.getfirstLiveWallpaper(requireContext())){
-            Log.e("TAG", "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper", )
-            if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
+        if (shouldShowReviewDialog(requireContext())){
+            if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(requireContext()) || MySharePreference.getfirstLiveWallpaper(requireContext())){
+                Log.e("TAG", "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
+                    if (isAdded){
+                        Log.e("TAG", "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                        feedback1Sheet()
+                    }
+                }
+
+            }
+
+            if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(requireContext()) && !MySharePreference.getFeedbackSession2Completed(requireContext())){
                 if (isAdded){
-                    Log.e("TAG", "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper", )
                     feedback1Sheet()
                 }
             }
-
         }
 
-        if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(requireContext()) && !MySharePreference.getFeedbackSession2Completed(requireContext())){
-            if (isAdded){
-                feedback1Sheet()
-            }
-        }
 
 
 
@@ -801,6 +859,16 @@ class HomeTabsFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
+
+    fun shouldShowReviewDialog(context: Context): Boolean {
+        val lastDismissedTime = MySharePreference.getLastDismissedTime(context)
+        val currentTime = System.currentTimeMillis()
+        val twoMinutesInMillis = 4 * 60 * 1000
+
+        return (currentTime - lastDismissedTime) > twoMinutesInMillis
+    }
+
+
 
     fun getHomeFragmentIndex(): Int {
         val tabLayout = binding.tabLayout

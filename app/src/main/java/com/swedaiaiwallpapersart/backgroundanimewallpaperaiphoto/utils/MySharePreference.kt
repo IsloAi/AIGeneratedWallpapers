@@ -6,7 +6,9 @@ import android.content.SharedPreferences
 
 class MySharePreference {
     companion object{
-    fun setDeviceID(context: Context,value:String){
+        private const val LAST_DISMISSED_TIME = "lastDismissedTime"
+
+        fun setDeviceID(context: Context,value:String){
         val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
         val myEdit = sharedPreferences.edit()
         myEdit.putString("key",value)
@@ -264,11 +266,15 @@ class MySharePreference {
             return sp.getBoolean("cancel",false)
         }
 
+        fun setLastDismissedTime(context: Context, time: Long) {
+            val sharedPreferences = context.getSharedPreferences("MySpValue",MODE_PRIVATE)
+            sharedPreferences.edit().putLong(LAST_DISMISSED_TIME, time).apply()
+        }
 
-
-
-
-
+        fun getLastDismissedTime(context: Context): Long {
+            val sharedPreferences = context.getSharedPreferences("MySpValue", Context.MODE_PRIVATE)
+            return sharedPreferences.getLong(LAST_DISMISSED_TIME, 0L)
+        }
 
     }
 }

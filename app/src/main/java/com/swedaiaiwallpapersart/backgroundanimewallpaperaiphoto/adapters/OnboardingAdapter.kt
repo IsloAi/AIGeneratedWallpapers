@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
 .ListItemOnboadingBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
 
 class OnboardingAdapter(welcomeItems: List<Int>) :
@@ -20,6 +21,7 @@ class OnboardingAdapter(welcomeItems: List<Int>) :
         val binding = ListItemOnboadingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return OnboardingViewHolder(binding)
     }
+
 
     override fun onBindViewHolder(holder: OnboardingViewHolder, position: Int) {
         val item = welcomeItems[position]

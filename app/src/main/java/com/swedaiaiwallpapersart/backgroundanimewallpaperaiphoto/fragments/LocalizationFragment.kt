@@ -13,9 +13,9 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.tracking.SDKTrackingController
@@ -30,6 +30,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class LocalizationFragment : Fragment() {
@@ -41,11 +43,12 @@ class LocalizationFragment : Fragment() {
     var sel: String = "en"
     var selected = -1
 
-    var pos = 0
+    var posnew = 0
     var adapter: LocalizationAdapter? = null
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
+    var adnext = false
     val TAG = "Localization"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,12 +60,17 @@ class LocalizationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        pos = MySharePreference.getLanguageposition(requireContext())!!
+        posnew = MySharePreference.getLanguageposition(requireContext())!!
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "LanguageScr_View"))
+        }
+
+        lifecycleScope.launch {
+            delay(2000)
+            Log.e(TAG, "getLanguageList: "+getDefaultLocaleInfo())
         }
         setGradienttext()
 
@@ -110,6 +118,41 @@ class LocalizationFragment : Fragment() {
             R.layout.shimmer_loading_native,
             adLayout!!
         )
+
+        binding.adsView.loadAd(requireActivity(),"languagescr_bottom","languagescr_bottom",
+            object : CustomSDKAdsListenerAdapter() {
+                override fun onAdsLoadFail() {
+                    super.onAdsLoadFail()
+                    if (AdConfig.ISPAIDUSER){
+                        binding.adsView.visibility = View.GONE
+                    }
+                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                }
+
+                override fun onAdsLoaded() {
+                    super.onAdsLoaded()
+                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                }
+            }
+        )
+    }
+
+    fun loadNextAd(){
+        val adLayout = LayoutInflater.from(activity).inflate(
+            R.layout.new_native_language,
+            null, false
+        ) as? IkmWidgetAdLayout
+        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+
+        binding.adsView.setCustomNativeAdLayout(
+            R.layout.shimmer_loading_native,
+            adLayout!!
+        )
+
         binding.adsView.loadAd(requireActivity(),"languagescr_bottom","languagescr_bottom",
             object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoadFail() {
@@ -146,11 +189,29 @@ class LocalizationFragment : Fragment() {
     fun initLanguages(){
         binding.rvLanguages.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvLanguages.addItemDecoration(RvItemDecore(2,20,false,10000))
+
+        sel = getDefaultLocaleInfo()
+        val list = getLanguageList(sel)
+
+
+        Log.e(TAG, "initLanguages: "+AdConfig.languagesOrder )
+        val sortedList = sortLanguages(list, AdConfig.languagesOrder)
+
+
+        val arrayList: ArrayList<DummyModelLanguages> = sortedList.toCollection(ArrayList())
         adapter =
-            LocalizationAdapter(getLanguageList(sel)!!,  pos, object :
+            LocalizationAdapter(arrayList,  getSelectedLanguagePosition(arrayList), object :
                 LocalizationAdapter.OnLanguageChangeListener {
 
                 override fun onLanguageItemClick(language: DummyModelLanguages?, position: Int) {
+
+                    if (AdConfig.languageLogicShowNative == 1){
+                        if (!adnext){
+                            adnext = true
+                            loadNativeAd()
+                        }
+                    }
+
                     selectedItem = language
                     selected = position
                 }
@@ -160,20 +221,33 @@ class LocalizationFragment : Fragment() {
     }
 
 
+    fun getDefaultLocaleInfo(): String {
+        val locale = Locale.getDefault()
+        val name = locale.displayName
+        Log.e(TAG, "getLanguageList: $name")
+        val language = locale.language
+        Log.e(TAG, "getLanguageList: $language" )
+        return language
+    }
+
+    fun getSelectedLanguagePosition(sortedLanguages: ArrayList<DummyModelLanguages>): Int {
+        return sortedLanguages.indexOfFirst { it.isSelected_lan }
+    }
+
     fun getLanguageList(pos:String): ArrayList<DummyModelLanguages> {
         val languagesList = ArrayList<DummyModelLanguages>()
-        languagesList.add(DummyModelLanguages("English (US)", "en", R.drawable.flag_en, false))
-        languagesList.add(DummyModelLanguages("English (UK)", "en-rGB", R.drawable.flag_uk, false))
-        languagesList.add(DummyModelLanguages("French", "fr", R.drawable.flag_fr, false))
         languagesList.add(DummyModelLanguages("German", "de", R.drawable.flag_gr, false))
         languagesList.add(DummyModelLanguages("Japanese ", "ja", R.drawable.flag_japan, false))
+        languagesList.add(DummyModelLanguages("Chinese", "zh", R.drawable.flag_cn, false))
+        languagesList.add(DummyModelLanguages("Italian", "it", R.drawable.flag_itly, false))
+        languagesList.add(DummyModelLanguages("Russian", "ru", R.drawable.flag_russia, false))
+        languagesList.add(DummyModelLanguages("English (US)", "en", R.drawable.flag_en, false))
         languagesList.add(DummyModelLanguages("Korean", "ko", R.drawable.flag_korean, false))
         languagesList.add(DummyModelLanguages("Portuguese", "pt", R.drawable.flag_pr, false))
         languagesList.add(DummyModelLanguages("Spanish", "es", R.drawable.flag_sp, false))
         languagesList.add(DummyModelLanguages("Arabic", "ar", R.drawable.flag_ar, false))
-        languagesList.add(DummyModelLanguages("Chinese", "zh", R.drawable.flag_cn, false))
-        languagesList.add(DummyModelLanguages("Italian", "it", R.drawable.flag_itly, false))
-        languagesList.add(DummyModelLanguages("Russian", "ru", R.drawable.flag_russia, false))
+        languagesList.add(DummyModelLanguages("English (UK)", "en-rGB", R.drawable.flag_uk, false))
+        languagesList.add(DummyModelLanguages("French", "fr", R.drawable.flag_fr, false))
         languagesList.add(DummyModelLanguages("Thai", "th", R.drawable.flag_thai, false))
         languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
         languagesList.add(DummyModelLanguages("Vietnamese ", "vi", R.drawable.flag_vietnamese, false))
@@ -182,11 +256,26 @@ class LocalizationFragment : Fragment() {
         languagesList.add(DummyModelLanguages("Indonesian", "in", R.drawable.flag_indona, false))
         for (item in languagesList) {
             if (item.lan_code == pos) {
-                item.isSelected_lan =true
+                item.isSelected_lan = true
                 break
             }
         }
+
+        if (posnew == 0 && pos.isNotEmpty()) {
+            posnew = languagesList.indexOfFirst { it.lan_code == pos }
+            if (posnew == -1) {
+                posnew = 0 // Default to the first language if the device language is not found
+            }
+        }
+        Log.e(TAG, "getLanguageList: $posnew")
         return languagesList
+    }
+
+    fun sortLanguages(languages: ArrayList<DummyModelLanguages>, order: List<String>): List<DummyModelLanguages> {
+        val orderMap = order.withIndex().associate { it.value.trim() to it.index }
+
+        // Sort the languages based on the order specified in the map
+        return languages.sortedWith(compareBy { orderMap[it.lan_name.trim()] ?: Int.MAX_VALUE })
     }
 
     private fun setEvents() {
@@ -330,7 +419,7 @@ class LocalizationFragment : Fragment() {
                     sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
                 }
                 if (exit){
-                    requireActivity().finishAffinity()
+                    findNavController().navigate(R.id.onBoardingFragment)
                 }else{
                     findNavController().navigateUp()
                 }
@@ -342,12 +431,15 @@ class LocalizationFragment : Fragment() {
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
                 if (exit){
-                    requireActivity().finishAffinity()
+                    findNavController().navigate(R.id.onBoardingFragment)
                 }else{
                     findNavController().navigateUp()
                 }
             }
         }
     }
+
+
+
 
 }

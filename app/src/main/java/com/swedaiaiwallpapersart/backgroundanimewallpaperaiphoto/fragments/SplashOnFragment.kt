@@ -107,10 +107,13 @@ class SplashOnFragment : Fragment() {
         val premium = IkmSdkUtils.isUserIAPAvailable()
         AdConfig.ISPAIDUSER = premium
         // Preload the native ad if necessary
-        if (lan.isEmpty() == true || AdConfig.inAppConfig == true){
             Log.e("TAG", "onViewCreated: load pre", )
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
-        }
+            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom2","languagescr_bottom2")
+
+
+
+        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_fullscreen","onboardscr_fullscreen")
 
         animateLoadingText()
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {

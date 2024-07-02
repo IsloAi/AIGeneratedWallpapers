@@ -68,124 +68,112 @@ class MyCatNameViewModel: ViewModel()  {
     val categoriesJson = """
 [
     {
-        "cat_name": "Neon lights",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/660691b647293_4.jpg"
+        "cat_name": "Robots",
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/666bf75bf2bfc_robot.jpg"
     },
     {
-        "cat_name": "Vintage",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Vintage.jpg"
+        "cat_name": "Colorful",
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/666bf3166b8f7_colorfull.jpg"
+    },
+    {
+        "cat_name": "Sports",
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/66696eb471ebb_thumbnail.jpg"
+    },
+    {
+        "cat_name": "Neon lights",
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/660691b647293_4.jpg"
     },
     {
         "cat_name": "Tech",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Tech.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Tech.jpg"
     },
     {
         "cat_name": "Dark",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Dark.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Dark.jpg"
     },
     {
         "cat_name": "Black And White",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/white.jpg"
-    },
-    {
-        "cat_name": "Architecture",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Architecture.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/white.jpg"
     },
     {
         "cat_name": "Minimal",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Minimal.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Minimal.jpg"
     },
     {
         "cat_name": "Abstract",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Abstract.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Abstract.jpg"
     },
     {
         "cat_name": "Motor Bike",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/bike.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/bike.jpg"
     },
     {
         "cat_name": "Car",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Cars.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Cars.jpg"
     },
     {
         "cat_name": "4K",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/4K.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/4K.jpg"
     },
     {
         "cat_name": "Anime",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Anime.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Anime.jpg"
     },
     {
         "cat_name": "IOS",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/IOS.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/IOS.jpg"
     },
     {
         "cat_name": "New Year",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/New-Year.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/New-Year.jpg"
     },
     {
         "cat_name": "Christmas",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Christmas.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Christmas.jpg"
     },
     {
         "cat_name": "Fantasy",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Fantasy.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Fantasy.jpg"
     },
     {
         "cat_name": "Artistic",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/artistic.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/artistic.jpg"
     },
     {
         "cat_name": "Pattern",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/64e4616cbd8e7_p3.png"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/64e4616cbd8e7_p3.png"
     },
     {
         "cat_name": "Space",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Space.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Space.jpg"
     },
     {
         "cat_name": "Super Heros",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Super-Heros.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Super-Heros.jpg"
     },
     {
         "cat_name": "Art",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Art.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Art.jpg"
     },
     {
         "cat_name": "Animals",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/64e460663ed90_animals.png"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/64e460663ed90_animals.png"
     },
     {
         "cat_name": "City",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/City.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/City.jpg"
     },
     {
         "cat_name": "Nature",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Nature.jpg"
-    },
-    {
-        "cat_name": "Ocean",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/ocean.jpg"
-    },
-    {
-        "cat_name": "Travel",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Travel.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Nature.jpg"
     },
     {
         "cat_name": "Love",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Love.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/Love.jpg"
     },
     {
         "cat_name": "Sadness",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/sad.jpg"
-    },
-    {
-        "cat_name": "Mountains",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Mountians.jpg"
-    },
-    {
-        "cat_name": "Music",
-        "img_url": "http://edecator.com/wallpaperApp/categoryimages/Music.jpg"
+        "img_url": "https://4kwallpaper-zone.b-cdn.net/categoryimages/sad.jpg"
     }
 ]
 """

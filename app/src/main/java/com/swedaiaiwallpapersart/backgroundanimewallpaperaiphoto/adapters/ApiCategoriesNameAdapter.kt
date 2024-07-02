@@ -136,7 +136,7 @@ class ApiCategoriesNameAdapter(
                         target: Target<Drawable>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        Log.d("onLoadFailed", "onLoadFailed: ")
+                        Log.d("onLoadFailed", "onLoadFailed: "+e?.message )
                         binding.loading.setAnimation(R.raw.no_data_image_found)
                         return false
                     }

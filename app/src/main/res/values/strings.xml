@@ -86,7 +86,7 @@
     <string name="almost_there_customizing_your_background">Almost there, customizing your background.</string>
     <string name="your_wallpaper_is_on_its_way">Your wallpaper is on its way.</string>
     <string name="crafting_your_unique_backdrop">Crafting your unique backdrop.</string>
-    <string name="skip">Skip</string>
+    <string name="skip"><u>Skip</u></string>
     <string name="re_generate">Re-generate</string>
     <string name="new_generation">New Generation</string>
     <string name="navigate_back">Navigate Back</string>
@@ -112,5 +112,7 @@
     <string name="premium_upgrade">Premium Upgrade</string>
     <string name="unlock_all_wallpapers">Unlock All Wallpapers</string>
     <string name="completely_ad_free">Completely Ad-Free</string>
+    <string name="next_txt"><u>Next</u></string>
+    <string name="skip_txt"><u>Skip</u></string>
 
 </resources>

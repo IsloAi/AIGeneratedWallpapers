@@ -15,6 +15,7 @@ import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.bmik.android.sdk.SDKBaseApplication
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.tracking.SDKTrackingController
@@ -22,7 +23,15 @@ import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentOnBoardingBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingPagerAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment3
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment4
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.welcomeFragment2
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import java.util.Locale
@@ -32,7 +41,7 @@ class OnBoardingFragment : Fragment() {
     private var _binding: FragmentOnBoardingBinding?= null
     private val binding get() = _binding!!
 
-    lateinit var welcomeAdapter: OnboardingAdapter
+    lateinit var welcomeAdapter: OnboardingPagerAdapter
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -61,10 +70,8 @@ class OnBoardingFragment : Fragment() {
         backHandle()
 
         populateOnbaordingItems()
-        binding.onboardingViewPager.adapter = welcomeAdapter
 
-        setIndicator()
-        setCurrentIndicator(0)
+
 
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
@@ -75,145 +82,71 @@ class OnBoardingFragment : Fragment() {
         binding.onboardingViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                setCurrentIndicator(position)
-                when (position) {
-                    0 -> {
-                        if (isAdded){
-                            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
-                        }
-                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
-                        binding.skipBtn.visibility = View.VISIBLE
-                        binding.onbTxt1.text = "Transform your device into an anime haven with our stunning wallpaper collection"
-                        binding.onbTxt2.text = "Anime Essence"
-
-                        val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.native_onboarding_src,
-                            null, false
-                        ) as? IkmWidgetAdLayout
-                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-                        binding.adsView.setCustomNativeAdLayout(
-                            R.layout.shimmer_loading_native,
-                            adLayout!!
-                        )
-
-                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-                            object : CustomSDKAdsListenerAdapter() {
-                                override fun onAdsLoadFail() {
-                                    super.onAdsLoadFail()
-                                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
-                                }
-
-                                override fun onAdsLoaded() {
-                                    super.onAdsLoaded()
-                                    if (isAdded && view != null) {
-                                        // Modify view visibility here
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }
-
-                                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                                }
+//                setCurrentIndicator(position)
+                if (AdConfig.onboarding_Full_Native != 1){
+                    when (position) {
+                        0 -> {
+                            if (isAdded){
+                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
                             }
-                        )
+                            binding.skipBtn.visibility = View.VISIBLE
+                        }
+                        1 -> {
+                            if (isAdded){
+                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
+                            }
+
+                            binding.skipBtn.visibility = View.VISIBLE
+
+                        }
+                        2 -> {
+
+                            binding.skipBtn.visibility = View.GONE
+                        }
                     }
-                    1 -> {
-                        if (isAdded){
-                            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
-                        }
-                        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
-                        binding.skipBtn.visibility = View.VISIBLE
-                        val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.native_onboarding_src,
-                            null, false
-                        ) as? IkmWidgetAdLayout
-                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-                        binding.adsView.setCustomNativeAdLayout(
-                            R.layout.shimmer_loading_native,
-                            adLayout!!
-                        )
-
-                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-                            object : CustomSDKAdsListenerAdapter() {
-                                override fun onAdsLoadFail() {
-                                    super.onAdsLoadFail()
-                                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
-                                }
-
-                                override fun onAdsLoaded() {
-                                    super.onAdsLoaded()
-                                    if (isAdded && view != null) {
-                                        // Modify view visibility here
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }
-                                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                                }
+                }else{
+                    when (position) {
+                        0 -> {
+                            if (isAdded){
+                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
                             }
-                        )
-
-                        binding.onbTxt1.text = "Adorn your screen with the sleek lines and power of car-inspired wallpapers"
-                        binding.onbTxt2.text = "Car Canvas"
-                    }
-                    2 -> {
-                        if (isAdded){
-                            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
+                            binding.nextBtn.visibility = View.VISIBLE
+                            binding.skipBtn.visibility = View.VISIBLE
+                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
                         }
-                        val adLayout = LayoutInflater.from(activity).inflate(
-                            R.layout.native_onboarding_src,
-                            null, false
-                        ) as? IkmWidgetAdLayout
-                        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-                        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-                        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-                        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-                        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-                        binding.adsView.setCustomNativeAdLayout(
-                            R.layout.shimmer_loading_native,
-                            adLayout!!
-                        )
-
-                        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-                            object : CustomSDKAdsListenerAdapter() {
-                                override fun onAdsLoadFail() {
-                                    super.onAdsLoadFail()
-                                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
-                                }
-
-                                override fun onAdsLoaded() {
-                                    super.onAdsLoaded()
-                                    if (isAdded && view != null) {
-                                        // Modify view visibility here
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }
-                                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                                }
+                        1 -> {
+                            if (isAdded){
+                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
                             }
-                        )
-                        binding.skipBtn.visibility = View.GONE
-                        binding.onbTxt1.text = "Immerse yourself in the world of football through dynamic and captivating wallpapers"
-                        binding.onbTxt2.text = "Football Fusion"
+                            binding.nextBtn.visibility = View.VISIBLE
+                            binding.skipBtn.visibility = View.VISIBLE
+                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+
+                        }
+                        2 -> {
+                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(false)
+                            binding.nextBtn.visibility = View.GONE
+                            binding.skipBtn.visibility = View.GONE
+                        }
+
+                        3 -> {
+                            binding.nextBtn.visibility = View.VISIBLE
+                            binding.skipBtn.visibility = View.GONE
+                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                        }
                     }
                 }
+
             }
         })
 
         binding.skipBtn.setOnClickListener {
             MySharePreference.setOnboarding(requireContext(),true)
-            if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
-                findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
-            }
+//            if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
+//                findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+//            }
+
+            binding.onboardingViewPager.setCurrentItem(welcomeAdapter.itemCount-1, true)
         }
 
 
@@ -247,6 +180,9 @@ class OnBoardingFragment : Fragment() {
                     sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
                 }
                 when (binding.onboardingViewPager.currentItem) {
+                    3 -> {
+                        binding.onboardingViewPager.currentItem =2
+                    }
                     2 -> {
                         binding.onboardingViewPager.currentItem =1
                     }
@@ -254,7 +190,7 @@ class OnBoardingFragment : Fragment() {
                         binding.onboardingViewPager.currentItem =0
                     }
                     0 -> {
-                        findNavController().navigateUp()
+                        findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
                     }
                 }
             }
@@ -268,6 +204,9 @@ class OnBoardingFragment : Fragment() {
                     sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
                 }
                 when (binding.onboardingViewPager.currentItem) {
+                    3 -> {
+                        binding.onboardingViewPager.currentItem =2
+                    }
                     2 -> {
                         binding.onboardingViewPager.currentItem =1
                     }
@@ -275,7 +214,7 @@ class OnBoardingFragment : Fragment() {
                         binding.onboardingViewPager.currentItem =0
                     }
                     0 -> {
-                        findNavController().navigateUp()
+                        findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
                     }
                 }
             }
@@ -310,55 +249,20 @@ class OnBoardingFragment : Fragment() {
 
 
     private fun populateOnbaordingItems() {
-        val welcomeItems: MutableList<Int> = ArrayList<Int>()
-        welcomeItems.add(1)
-        welcomeItems.add(2)
-        welcomeItems.add(3)
+        welcomeAdapter= OnboardingPagerAdapter(activity as MainActivity)
 
-        welcomeAdapter = OnboardingAdapter(welcomeItems)
-    }
+        welcomeAdapter.addFragment(WelcomeFragment(),"1")
+        welcomeAdapter.addFragment(welcomeFragment2(),"2")
+        if (AdConfig.onboarding_Full_Native == 1){
 
-    private fun setIndicator() {
-        val welcomeIndicators = arrayOfNulls<ImageView>(welcomeAdapter.itemCount)
-        val layoutParams = LinearLayout.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        layoutParams.setMargins(8, 0, 8, 0)
-        for (i in welcomeIndicators.indices) {
-            welcomeIndicators[i] = ImageView(requireContext())
-            welcomeIndicators[i]!!.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(), R.drawable.onboarding_indicator
-                )
-            )
-            welcomeIndicators[i]!!.layoutParams = layoutParams
-            binding.layoutOnboardingIndicators.addView(welcomeIndicators[i])
+            welcomeAdapter.addFragment(WelcomeFragment3(),"4")
         }
+
+        welcomeAdapter.addFragment(WelcomeFragment4(),"3")
+
+        binding.onboardingViewPager.adapter=welcomeAdapter
+        binding.onboardingViewPager.offscreenPageLimit = 1
     }
 
-    private fun setCurrentIndicator(index: Int) {
-        val childCount = binding.layoutOnboardingIndicators.childCount
-        val isDarkMode = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
-                Configuration.UI_MODE_NIGHT_YES
 
-        for (i in 0 until childCount) {
-            val imageView = binding.layoutOnboardingIndicators.getChildAt(i) as ImageView
-
-            if (i == index) {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.onboarding_inactive
-                    )
-                )
-            } else {
-                imageView.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.onboarding_indicator
-                    )
-                )
-            }
-        }
-    }
 }

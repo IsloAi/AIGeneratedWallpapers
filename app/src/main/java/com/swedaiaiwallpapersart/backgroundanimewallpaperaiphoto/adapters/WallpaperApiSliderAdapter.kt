@@ -17,6 +17,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.bmik.android.sdk.SDKBaseApplication
 import com.bmik.android.sdk.SDKBaseController
 import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
@@ -107,6 +108,7 @@ class WallpaperApiSliderAdapter(
         val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
+                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(false)
                 val viewHolderContainer1 = holder as ViewHolderContainer1
                 try {
                     viewHolderContainer1.bind(arrayList,position)
@@ -116,6 +118,7 @@ class WallpaperApiSliderAdapter(
 
             }
             VIEW_TYPE_NATIVE_AD -> {
+                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(false)
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind(viewHolderContainer3)
             }

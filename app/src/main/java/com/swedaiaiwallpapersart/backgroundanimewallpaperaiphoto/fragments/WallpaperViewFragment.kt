@@ -289,7 +289,13 @@ class WallpaperViewFragment : Fragment() {
                 Pair("action_type", "screen"),
                 Pair("action_name", "ViewListWallScr_View")
             )
+
+            if (!SDKBaseController.getInstance().isRewardAdReady(requireActivity())){
+                SDKBaseController.getInstance().loadRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward")
+            }
         }
+
+
 
         backHandle()
     }

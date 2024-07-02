@@ -98,6 +98,10 @@ class LiveWallpaperPreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myActivity = activity as MainActivity
+
+        if (!SDKBaseController.getInstance().isRewardAdReady(myActivity)){
+            SDKBaseController.getInstance().loadRewardedAds(myActivity,"viewlistwallscr_item_vip_reward")
+        }
         binding.adsView.loadAd(requireContext(),"searchscr_bottom",
             " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
                 override fun onAdsLoaded() {

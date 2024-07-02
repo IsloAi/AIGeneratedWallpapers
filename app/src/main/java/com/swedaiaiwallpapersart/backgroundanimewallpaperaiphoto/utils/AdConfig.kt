@@ -30,16 +30,19 @@ object AdConfig {
 
     var BASE_URL_DATA:String = ""
 
-    val BASE_URL = "http://vps.edecator.com/wallpaper_App/V4/"
+    val BASE_URL = "https://vps.edecator.com/wallpaper_App/V4/"
     val HD_ImageUrl = "${BASE_URL_DATA}/images/"
 
     val Compressed_Image_url = "${BASE_URL_DATA}/compress/"
-
-    val LIVE_WALL_URL = "http://edecator.com/wallpaperApp/Live_Wallpaper/20.mp4"
-
     var iapScreenType = 2
 
     var ISPAIDUSER = false
 
     var regularWallpaperFlow = 0
+
+    var languagesOrder:List<String> = listOf("Spanish","English (US)","English (UK)","French","German","Japanese","Korean","Portuguese","Arabic","Chinese","Italian","Russian","Thai","Turkish","Vietnamese","Hindi","Dutch","Indonesian")
+
+    var languageLogicShowNative = 1
+
+    var onboarding_Full_Native = 1
 }
