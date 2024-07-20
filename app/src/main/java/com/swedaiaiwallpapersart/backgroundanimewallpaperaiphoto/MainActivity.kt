@@ -187,15 +187,15 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     private fun readjsonAndSaveDataToDb() {
         GlobalScope.launch {
-            val jsonFileName = "wallpapers.json"
-            val jsonString = readJsonFile(this@MainActivity, jsonFileName)
+            // Step 1: Read and insert wallpapers.json
+            val jsonFileName1 = "wallpapers.json"
+            val jsonString1 = readJsonFile(this@MainActivity, jsonFileName1)
 
-            if (jsonString.isNotEmpty()) {
-                val imageList = parseJson(jsonString)
-
-                if (imageList != null) {
-                    val images = imageList.images
-                    val deferreds = images.map { item ->
+            if (jsonString1.isNotEmpty()) {
+                val imageList1 = parseJson(jsonString1)
+                if (imageList1 != null) {
+                    val images1 = imageList1.images
+                    val deferreds1 = images1.map { item ->
                         val model = SingleDatabaseResponse(
                             item.id,
                             item.cat_name,
@@ -212,64 +212,131 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         CoroutineScope(Dispatchers.IO).async {
                             appDatabase.wallpapersDao().insert(model)
                         }
-
                     }
 
-                    GlobalScope.launch {
-                        val fileName = "livewallpapers.json"
-                        val jsonString = readJsonFile(this@MainActivity, fileName)
-                        if (jsonString.isNotEmpty()) {
-                            val imagesListLive = parseJsonLive(jsonString)
+                    // Wait for all insertions of wallpapers.json to complete
+                    deferreds1.awaitAll()
 
-                            if (imagesListLive != null) {
-                                val imagesLive = imagesListLive.images
-                                val deferreds = imagesLive.map { item ->
-                                    val model = item.copy(unlocked = true)
+                    // Start the API task after the first JSON insertion completes
+                    withContext(Dispatchers.Main) {
+                        mainActivityViewModel.updates.observe(this@MainActivity){result ->
+                            when (result) {
+                                is Response.Success -> {
+                                    Log.e(TAG, "updatedWalls: " + result.data)
 
-                                    lifecycleScope.launch {
+                                    result.data?.forEach { item ->
+                                        val model = SingleDatabaseResponse(
+                                            item.id,
+                                            item.cat_name,
+                                            item.image_name,
+                                            item.url,
+                                            item.url,
+                                            item.likes,
+                                            item.liked,
+                                            item.size,
+                                            item.Tags,
+                                            item.capacity,
+                                            true
+                                        )
+
+                                        CoroutineScope(Dispatchers.IO).async {
+                                            appDatabase.wallpapersDao().update(model)
+                                        }
                                     }
 
-                                    CoroutineScope(Dispatchers.IO).async {
-                                        appDatabase.liveWallpaperDao().insert(model)
+
+                                }
+
+                                is Response.Error -> {
+                                    Log.e(TAG, "observefetechedData: error")
+                                }
+
+                                is Response.Processing -> {
+                                    Log.e(TAG, "observefetechedData: Processing")
+                                }
+
+                                Response.Loading -> {
+                                    Log.e(TAG, "observefetechedData: loading")
+                                }
+                            }
+                        }
+
+                        mainActivityViewModel.deletedIds.observe(this@MainActivity){result->
+                            when(result){
+                                is Response.Success -> {
+                                    Log.e(TAG, "updatedWalls: " + result.data)
+
+                                    result.data?.forEach { item ->
+
+                                        Log.e(TAG, "readjsonAndSaveDataToDb: "+item )
+
+
+                                        CoroutineScope(Dispatchers.IO).async {
+                                            appDatabase.wallpapersDao().deleteById(item.imgid.toInt())
+                                        }
                                     }
+
+
                                 }
 
-                                val percent = (imagesLive.size.times(0.3)).toInt()
-                                val topDownloadedWallpapers = percent.let {
-                                    appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(
-                                        it
-                                    )
+                                is Response.Error -> {
+                                    Log.e(TAG, "observefetechedData: error")
                                 }
 
-                                topDownloadedWallpapers.forEach { it.unlocked = false }
-                                topDownloadedWallpapers.let {
-                                    appDatabase.liveWallpaperDao().updateWallpapers(
-                                        it
-                                    )
+                                is Response.Processing -> {
+                                    Log.e(TAG, "observefetechedData: Processing")
                                 }
 
-
+                                Response.Loading -> {
+                                    Log.e(TAG, "observefetechedData: loading")
+                                }
                             }
                         }
                     }
-
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        deferreds.awaitAll()
-                        // This code will execute after all insert operations are completed
-                        // You can call your method here
-                        mainActivityViewModel.getMostUsed("1", "700")
-                        initObservers()
-                    }
-
                 } else {
-                    Log.e(TAG, "readjsonAndSaveDataToDb: IMAGElIST NULL")
+                    Log.e(TAG, "readJsonAndSaveDataToDb: IMAGELIST NULL")
+                    return@launch
                 }
             } else {
-                Log.e(TAG, "readjsonAndSaveDataToDb: string null")
+                Log.e(TAG, "readJsonAndSaveDataToDb: string null")
+                return@launch
+            }
+
+            // Step 2: Read and insert livewallpapers.json (concurrently)
+            val jsonFileName2 = "livewallpapers.json"
+            val jsonString2 = readJsonFile(this@MainActivity, jsonFileName2)
+
+            if (jsonString2.isNotEmpty()) {
+                val imageList2 = parseJsonLive(jsonString2)
+                if (imageList2 != null) {
+                    val images2 = imageList2.images
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val deferreds2 = images2.map { item ->
+                            val model = item.copy(unlocked = true)
+                            CoroutineScope(Dispatchers.IO).async {
+                                appDatabase.liveWallpaperDao().insert(model)
+                            }
+                        }
+
+                        val percent = (images2.size * 0.3).toInt()
+                        val topDownloadedWallpapers = appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(percent)
+
+                        topDownloadedWallpapers.forEach { it.unlocked = false }
+                        appDatabase.liveWallpaperDao().updateWallpapers(topDownloadedWallpapers)
+
+                        deferreds2.awaitAll()
+                    }
+                } else {
+                    Log.e(TAG, "readJsonAndSaveDataToDb: IMAGELIST NULL")
+                    return@launch
+                }
+            } else {
+                Log.e(TAG, "readJsonAndSaveDataToDb: string null")
+                return@launch
             }
         }
     }
+
 
     private fun observefetechedData() {
         mainActivityViewModel.allModels.observe(this) { result ->
@@ -317,6 +384,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
     private fun fetchData(deviceID: String) {
+        mainActivityViewModel.getDeletedImagesID()
+        mainActivityViewModel.getStaticWallpaperUpdates()
         myCatNameViewModel.fetchWallpapers()
         saveLiveWallpapersInDB()
         lifecycleScope.launch {
@@ -328,6 +397,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         doubleWallpaperVideModel.getDoubleWallpapers()
 
         mainActivityViewModel.getAllModels("1", "4000", "5332")
+
     }
 
     private fun handleBackPress() {

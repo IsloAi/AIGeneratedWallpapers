@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote
 
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DeletedImagesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
@@ -80,4 +81,10 @@ interface EndPointsInterface {
     @GET("getdoublewallpaper.php")
     suspend fun getDoubleWallpapers(
     ):retrofit2.Response<ResponseModelDoubleWallpapers>
+
+    @GET("getStaticUpdates.php")
+    suspend fun getStaticWallpaperUpdates():retrofit2.Response<ListResponse>
+
+    @GET("getdeletedimages.php")
+    suspend fun getDeletedImagesIDs():retrofit2.Response<ArrayList<DeletedImagesResponse>>
 }

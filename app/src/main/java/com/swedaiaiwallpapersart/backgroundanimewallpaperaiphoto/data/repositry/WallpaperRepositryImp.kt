@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry
 
 import android.util.Log
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DeletedImagesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
@@ -23,65 +24,6 @@ import javax.inject.Inject
 class WallpaperRepositryImp@Inject constructor(
     private val webApiInterface: EndPointsInterface,
 ):WallpaperRepositry {
-
-//    override fun GenerateDeviceToken(deviceId: String): Flow<Response<TokenResponse>> = channelFlow {
-//        try {
-//            trySend(Response.Loading)
-//            val resp = webApiInterface.generateDeviceToken(deviceId = deviceId)
-//
-//
-//            if (resp.isSuccessful){
-//                val header = resp.headers()
-//
-//
-//
-//                val apiKey: String? = header["x-api-key"]
-//                trySend(Response.Success(TokenResponse(apiKey!!)))
-//
-//
-//
-//                Log.e("TAG", "GenerateDeviceToken: $apiKey")
-//
-//            }else{
-//                Log.e("TAG", "GenerateDeviceToken: not success", )
-//            }
-//
-//
-//        } catch (e: Exception) {
-//            Log.e("TAG", "GenerateDeviceToken: "+e.message )
-//        }
-//        awaitClose()
-//    }
-//
-//    override fun getAllWallpapers(
-//        apiKey: String,
-//        page: String,
-//        record: String
-//    ): Flow<Response<ArrayList<SingleAllResponse>>> = channelFlow {
-//
-//        try {
-//            trySend(Response.Loading)
-//            Log.e("TAG", "GenerateTextToImage: I came here")
-//            val resp = webApiInterface.getAllWallpapers(apiKey,page,record)
-//            Log.e("TAG", "GenerateTextToImage: $resp")
-//
-//            if (resp.isSuccessful){
-//
-//                trySend(Response.Success(resp.body()?.images))
-//            }
-//
-//
-//
-//            Log.e("TAG", "getAllWallpapers: " )
-//
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            trySend(Response.Error("unexpected error occoured ${e.message}"))
-//        }
-//
-//        awaitClose()
-//
-//    }
 
     override fun getUpdatedWallpapers(
         page: String,
@@ -244,6 +186,47 @@ class WallpaperRepositryImp@Inject constructor(
 
     }
 
+    override fun getStaticWallpaperUpdates(): Flow<Response<ArrayList<SingleAllResponse>>> = channelFlow {
+
+        try {
+            trySend(Response.Loading)
+            Log.e("TAG", "GenerateTextToImage: I came here")
+            val resp = webApiInterface.getStaticWallpaperUpdates()
+            Log.e("TAG", "GenerateTextToImage: $resp")
+
+            if (resp.isSuccessful){
+
+                trySend(Response.Success(resp.body()?.images))
+            }
+
+
+
+            Log.e("TAG", "getAllWallpapers: " )
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }
+
+        awaitClose()
+
+    }
+
+    override fun getDeletedImages(): Flow<Response<ArrayList<DeletedImagesResponse>>> = channelFlow {
+        try {
+            trySend(Response.Loading)
+
+            val resp = webApiInterface.getDeletedImagesIDs()
+            if (resp.isSuccessful){
+                trySend(Response.Success(resp.body()))
+                Log.e("TAG", "getDeletedImages: "+resp.body())
+            }else{
+                Log.e("TAG", "getDeletedImages: failed"+resp.message() )
+            }
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+    }
 
 
 }

@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.GetResponseIGEntity
 
@@ -32,6 +33,13 @@ interface WallpapersDao {
 
     @Query("UPDATE allWallpapers SET liked=:liked WHERE id=:Id")
     fun updateLiked(liked:Boolean,Id: Int)
+
+    @Update
+    suspend fun update(singleDatabaseResponse: SingleDatabaseResponse)
+
+
+    @Query("DELETE FROM allWallpapers WHERE id = :id")
+    suspend fun deleteById(id: Int)
 
 
     @Query("UPDATE allWallpapers SET unlocked=:liked WHERE id=:Id")
