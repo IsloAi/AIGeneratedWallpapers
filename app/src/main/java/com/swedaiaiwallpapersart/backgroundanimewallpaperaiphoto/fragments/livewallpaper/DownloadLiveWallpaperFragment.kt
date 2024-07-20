@@ -73,7 +73,11 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
         Log.e(TAG, "onViewCreated: $showAd")
 
-        loadAd()
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            loadAd()
+        }
         AndroidNetworking.initialize(requireContext())
 
         setEvents()
@@ -138,30 +142,32 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Previewbt_click"))
             }
 
-            if (showAd == true){
+            if (AdConfig.ISPAIDUSER){
                 navigateToPreview()
             }else{
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "downloadscr_set_click",
-                    "downloadscr_set_click",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToPreview()
-                            //do something
-                        }
+                if (showAd == true){
+                    navigateToPreview()
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "downloadscr_set_click",
+                        "downloadscr_set_click",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                navigateToPreview()
+                                //do something
+                            }
 
-                        override fun onAdsDismiss() {
-                            Log.e(TAG, "onAdsDismiss: ", )
-                            navigateToPreview()
+                            override fun onAdsDismiss() {
+                                Log.e(TAG, "onAdsDismiss: ", )
+                                navigateToPreview()
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
-
-
         }
 
         binding.toolbar.setOnClickListener {

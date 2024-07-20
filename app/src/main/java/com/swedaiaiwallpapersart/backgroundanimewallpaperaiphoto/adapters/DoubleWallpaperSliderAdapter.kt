@@ -75,7 +75,10 @@ class DoubleWallpaperSliderAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (!isNetworkAvailable() && statusAd == 0) {
+
+        return if (AdConfig.ISPAIDUSER){
+            VIEW_TYPE_CONTAINER1
+        } else if (!isNetworkAvailable() && statusAd == 0) {
             VIEW_TYPE_CONTAINER1
         } else {
             when {

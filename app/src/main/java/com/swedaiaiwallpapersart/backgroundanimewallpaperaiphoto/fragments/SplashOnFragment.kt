@@ -87,18 +87,6 @@ class SplashOnFragment : Fragment() {
         myActivity = activity as MainActivity
 
         // Load the banner ad
-        binding.adsView.loadAd(requireContext(),"splashscr_bottom",
-            "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
 
         // Get the language preference
         lan = MySharePreference.getLanguage(requireContext()).toString()
@@ -106,8 +94,26 @@ class SplashOnFragment : Fragment() {
         // Check if the user is a premium user
         val premium = IkmSdkUtils.isUserIAPAvailable()
         AdConfig.ISPAIDUSER = premium
+
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(),"splashscr_bottom",
+                "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                    }
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                })
+        }
         // Preload the native ad if necessary
             Log.e("TAG", "onViewCreated: load pre", )
+
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
             SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom2","languagescr_bottom2")
 
@@ -116,6 +122,7 @@ class SplashOnFragment : Fragment() {
         SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_fullscreen","onboardscr_fullscreen")
 
         animateLoadingText()
+
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
             val duration = 2000 // 5000 milliseconds = 5 seconds
@@ -132,7 +139,9 @@ class SplashOnFragment : Fragment() {
                 delay(interval.toLong())
             }
 
-            if (counter == 0){
+
+
+            if (counter == 0 && !AdConfig.ISPAIDUSER){
                 SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
                     override fun onAdReady(priority: Int) {
                     }
@@ -163,6 +172,9 @@ class SplashOnFragment : Fragment() {
 
                 })
             }else{
+                if (AdConfig.ISPAIDUSER){
+                    delay(3000)
+                }
                 navigateToNextScreen()
             }
         }

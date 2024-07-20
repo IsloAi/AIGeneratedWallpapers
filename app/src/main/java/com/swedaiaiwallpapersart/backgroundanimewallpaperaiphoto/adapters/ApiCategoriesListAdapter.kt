@@ -152,19 +152,24 @@ class ApiCategoriesListAdapter(
         }
     }
     override fun getItemViewType(position: Int): Int {
-         row = position / 2
-        Log.e("TAG", "getItemViewType: "+row )
-        val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
-//        (position + 1) % (firstline + 1) == 0
-        return if ((position + 1) == (firstline + 1)){
+        if (AdConfig.ISPAIDUSER){
+            return VIEW_TYPE_CONTAINER1
+        }else{
+            row = position / 2
             Log.e("TAG", "getItemViewType: "+row )
-            lastAdShownPosition = row
-            VIEW_TYPE_NATIVE_AD
-        }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
-            VIEW_TYPE_NATIVE_AD
-        }  else {
-            VIEW_TYPE_CONTAINER1
+            val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
+//        (position + 1) % (firstline + 1) == 0
+            return if ((position + 1) == (firstline + 1)){
+                Log.e("TAG", "getItemViewType: "+row )
+                lastAdShownPosition = row
+                VIEW_TYPE_NATIVE_AD
+            }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
+                VIEW_TYPE_NATIVE_AD
+            }  else {
+                VIEW_TYPE_CONTAINER1
+            }
         }
+
     }
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView,iapItem:ImageView){

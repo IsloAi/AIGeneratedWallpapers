@@ -9,17 +9,23 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.view.View
+import android.view.Window
+import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -124,6 +130,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         initFirebaseRemoteConfig()
 
         handleBackPress()
@@ -143,6 +151,38 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         _navController = navHostFragment.navController
 
 
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.liveWallpaperPreviewFragment -> {
+                    enableEdgeToEdge()
+                    val windowInsetsController =
+                        WindowCompat.getInsetsController(window, window.decorView)
+                    windowInsetsController.systemBarsBehavior =
+                        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+// Hide the system bars.
+                    windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
+                }
+                else -> {
+                   disableEdgeToEdge(window)
+                    val windowInsetsController =
+                        WindowCompat.getInsetsController(window, window.decorView)
+                    windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+                }
+            }
+
+        }
+
+
+    }
+
+    fun disableEdgeToEdge(window: Window) {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.insetsController?.apply {
+                show(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+            }
+        }
     }
 
     private fun readjsonAndSaveDataToDb() {

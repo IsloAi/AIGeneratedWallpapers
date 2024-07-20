@@ -112,12 +112,16 @@ class ApiCategoriesNameAdapter(
 
 
     override fun getItemViewType(position: Int): Int {
-        return if ((position + 1) == (firstLine + 1)){
-            VIEW_TYPE_NATIVE_AD
-        }else if (position + 1 > firstLine +1 && ((position +1) - (firstLine+1)) % (lineC+1) == 0){
-            VIEW_TYPE_NATIVE_AD
-        }  else {
-            VIEW_TYPE_CONTAINER1
+        if (AdConfig.ISPAIDUSER){
+            return VIEW_TYPE_CONTAINER1
+        }else{
+            return if ((position + 1) == (firstLine + 1)){
+                VIEW_TYPE_NATIVE_AD
+            }else if (position + 1 > firstLine +1 && ((position +1) - (firstLine+1)) % (lineC+1) == 0){
+                VIEW_TYPE_NATIVE_AD
+            }  else {
+                VIEW_TYPE_CONTAINER1
+            }
         }
     }
 

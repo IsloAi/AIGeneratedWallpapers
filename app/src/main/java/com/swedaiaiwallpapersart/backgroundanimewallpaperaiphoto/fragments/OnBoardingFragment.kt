@@ -1,32 +1,23 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.core.content.ContextCompat
 import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.bmik.android.sdk.SDKBaseApplication
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
 import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentOnBoardingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.OnboardingPagerAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ViewPagerAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment3
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment4
@@ -83,7 +74,7 @@ class OnBoardingFragment : Fragment() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
 //                setCurrentIndicator(position)
-                if (AdConfig.onboarding_Full_Native != 1){
+                if (AdConfig.ISPAIDUSER){
                     when (position) {
                         0 -> {
                             if (isAdded){
@@ -105,37 +96,61 @@ class OnBoardingFragment : Fragment() {
                         }
                     }
                 }else{
-                    when (position) {
-                        0 -> {
-                            if (isAdded){
-                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
+                    if (AdConfig.onboarding_Full_Native != 1){
+                        when (position) {
+                            0 -> {
+                                if (isAdded){
+                                    sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
+                                }
+                                binding.skipBtn.visibility = View.VISIBLE
                             }
-                            binding.nextBtn.visibility = View.VISIBLE
-                            binding.skipBtn.visibility = View.VISIBLE
-                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
-                        }
-                        1 -> {
-                            if (isAdded){
-                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
+                            1 -> {
+                                if (isAdded){
+                                    sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
+                                }
+
+                                binding.skipBtn.visibility = View.VISIBLE
+
                             }
-                            binding.nextBtn.visibility = View.VISIBLE
-                            binding.skipBtn.visibility = View.VISIBLE
-                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                            2 -> {
 
+                                binding.skipBtn.visibility = View.GONE
+                            }
                         }
-                        2 -> {
-                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(false)
-                            binding.nextBtn.visibility = View.GONE
-                            binding.skipBtn.visibility = View.GONE
-                        }
+                    }else{
+                        when (position) {
+                            0 -> {
+                                if (isAdded){
+                                    sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
+                                }
+                                binding.nextBtn.visibility = View.VISIBLE
+                                binding.skipBtn.visibility = View.VISIBLE
+                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                            }
+                            1 -> {
+                                if (isAdded){
+                                    sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
+                                }
+                                binding.nextBtn.visibility = View.VISIBLE
+                                binding.skipBtn.visibility = View.VISIBLE
+                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
 
-                        3 -> {
-                            binding.nextBtn.visibility = View.VISIBLE
-                            binding.skipBtn.visibility = View.GONE
-                            SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                            }
+                            2 -> {
+                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(false)
+                                binding.nextBtn.visibility = View.GONE
+                                binding.skipBtn.visibility = View.GONE
+                            }
+
+                            3 -> {
+                                binding.nextBtn.visibility = View.VISIBLE
+                                binding.skipBtn.visibility = View.GONE
+                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                            }
                         }
                     }
                 }
+
 
             }
         })
@@ -253,7 +268,7 @@ class OnBoardingFragment : Fragment() {
 
         welcomeAdapter.addFragment(WelcomeFragment(),"1")
         welcomeAdapter.addFragment(welcomeFragment2(),"2")
-        if (AdConfig.onboarding_Full_Native == 1){
+        if (AdConfig.onboarding_Full_Native == 1 && !AdConfig.ISPAIDUSER){
 
             welcomeAdapter.addFragment(WelcomeFragment3(),"4")
         }

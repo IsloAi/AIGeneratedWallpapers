@@ -68,23 +68,28 @@ class PreviewChargingAnimationFragment : Fragment() {
 
 
         myActivity = activity as MainActivity
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "searchscr_bottom",
-                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
+        if (AdConfig.ISPAIDUSER){
+            binding.adsWidget.visibility = View.GONE
+        }else{
+            SDKBaseController.getInstance()
+                .loadBannerAds(
+                    requireActivity(),
+                    binding.adsWidget as? ViewGroup,
+                    "searchscr_bottom",
+                    " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                        override fun onAdsLoaded() {
+                            super.onAdsLoaded()
+                            Log.e("*******ADS", "onAdsLoaded: Banner loaded")
+                        }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                        override fun onAdsLoadFail() {
+                            super.onAdsLoadFail()
+                            Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                        }
                     }
-                }
-            )
+                )
+        }
+
         initObservers()
         setWallpaperOnView()
 

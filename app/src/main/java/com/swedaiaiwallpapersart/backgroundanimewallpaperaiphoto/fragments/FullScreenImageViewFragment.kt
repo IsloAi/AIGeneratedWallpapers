@@ -181,10 +181,19 @@ class FullScreenImageViewFragment : DialogFragment() {
                     ActivityCompat.requestPermissions(myActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                 }else{
                     Log.e("TAG", "functionality: inside click dialog", )
-                    getUserIdDialog()
+                    if (AdConfig.ISPAIDUSER){
+                        mSaveMediaToStorage(bitmap)
+                    }else{
+
+                        getUserIdDialog()
+                    }
                 }
             }else{
-                getUserIdDialog()
+                if (AdConfig.ISPAIDUSER){
+                    mSaveMediaToStorage(bitmap)
+                }else{
+                    getUserIdDialog()
+                }
             }
 
         }
@@ -428,6 +437,29 @@ class FullScreenImageViewFragment : DialogFragment() {
             dialog.dismiss()
         }
         buttonHome.setOnClickListener {
+            if (AdConfig.ISPAIDUSER){
+                lifecycleScope.launch(Dispatchers.IO) {
+                    try {
+                        myWallpaperManager.homeScreen(bitmap!!)
+                        withContext(Dispatchers.Main) {
+                            if (isAdded) {
+                                interstitialAdWithToast(
+                                    getString(R.string.set_successfully_on_home_screen),
+                                    dialog
+                                )
+                            }
+
+
+                        }
+
+                        setDownloaded(model)
+
+
+                    }catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }else{
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
                     "viewlistwallscr_setdilog_set_button",
@@ -437,9 +469,9 @@ class FullScreenImageViewFragment : DialogFragment() {
                         override fun onAdsShowFail(errorCode: Int) {
                             myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
                             interstitialAdWithToast(
-                                        getString(R.string.set_successfully_on_home_screen),
-                                        dialog
-                                    )
+                                getString(R.string.set_successfully_on_home_screen),
+                                dialog
+                            )
                             setDownloaded(model)
                             Log.e("********ADS", "onAdsShowFail: "+errorCode )
                             //do something
@@ -450,12 +482,12 @@ class FullScreenImageViewFragment : DialogFragment() {
                                 try {
                                     myWallpaperManager.homeScreen(bitmap!!)
                                     withContext(Dispatchers.Main) {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    getString(R.string.set_successfully_on_home_screen),
-                                                    dialog
-                                                )
-                                            }
+                                        if (isAdded) {
+                                            interstitialAdWithToast(
+                                                getString(R.string.set_successfully_on_home_screen),
+                                                dialog
+                                            )
+                                        }
 
 
                                     }
@@ -470,63 +502,83 @@ class FullScreenImageViewFragment : DialogFragment() {
                         }
                     }
                 )
-
-
+            }
 
         }
         buttonLock.setOnClickListener {
             if (isAdded){
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "viewlistwallscr_setdilog_set_button",
-                    "viewlistwallscr_setdilog_set_button",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            myExecutor.execute {
-                                myWallpaperManager.lockScreen(bitmap!!)
-                            }
-                            if (isAdded) {
-                                interstitialAdWithToast(
-                                    getString(R.string.set_successfully_on_lock_screen),
-                                    dialog
-                                )
-                            }
-
-
-
-
-                            setDownloaded(model)
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-                            myExecutor.execute {
-                                myWallpaperManager.lockScreen(bitmap!!)
-                            }
-
-                            if (isAdded) {
-                                interstitialAdWithToast(
-                                    getString(R.string.set_successfully_on_lock_screen),
-                                    dialog
-                                )
-                            }
-                            setDownloaded(model)
-
-                        }
+                if (AdConfig.ISPAIDUSER){
+                    myExecutor.execute {
+                        myWallpaperManager.lockScreen(bitmap!!)
                     }
-                )
+
+                    if (isAdded) {
+                        interstitialAdWithToast(
+                            getString(R.string.set_successfully_on_lock_screen),
+                            dialog
+                        )
+                    }
+                    setDownloaded(model)
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "viewlistwallscr_setdilog_set_button",
+                        "viewlistwallscr_setdilog_set_button",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                myExecutor.execute {
+                                    myWallpaperManager.lockScreen(bitmap!!)
+                                }
+                                if (isAdded) {
+                                    interstitialAdWithToast(
+                                        getString(R.string.set_successfully_on_lock_screen),
+                                        dialog
+                                    )
+                                }
+
+
+
+
+                                setDownloaded(model)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                myExecutor.execute {
+                                    myWallpaperManager.lockScreen(bitmap!!)
+                                }
+
+                                if (isAdded) {
+                                    interstitialAdWithToast(
+                                        getString(R.string.set_successfully_on_lock_screen),
+                                        dialog
+                                    )
+                                }
+                                setDownloaded(model)
+
+                            }
+                        }
+                    )
+                }
+
             }
-
-
-
-
-
-
-
         }
         buttonBothScreen.setOnClickListener {
+            if (AdConfig.ISPAIDUSER){
+                myExecutor.execute {
+                    myWallpaperManager.homeAndLockScreen(bitmap!!)
+                }
+                myHandler.post {
+
+                    if (isAdded){
+                        interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+                    }
+
+                }
+                setDownloaded(model)
+            }else{
                 SDKBaseController.getInstance().showInterstitialAds(
                     requireActivity(),
                     "viewlistwallscr_setdilog_set_button",
@@ -554,18 +606,16 @@ class FullScreenImageViewFragment : DialogFragment() {
                             }
                             myHandler.post {
 
-                                    if (isAdded){
-                                        interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
-                                    }
+                                if (isAdded){
+                                    interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+                                }
 
                             }
                             setDownloaded(model)
                         }
                     }
                 )
-
-
-
+            }
         }
         dialog.show()
     }

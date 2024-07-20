@@ -24,6 +24,7 @@ import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.GemsTextUpdate
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import retrofit2.Retrofit
@@ -90,38 +91,43 @@ class MyDialogs {
         val btnYes = bottomSheetDialog.findViewById<Button>(R.id.btnYes)
         val adsView = bottomSheetDialog.findViewById<IkmWidgetAdView>(R.id.adsView)
 
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.native_dialog_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+        if (AdConfig.ISPAIDUSER){
+            adsView?.visibility = View.GONE
+        }else{
+            val adLayout = LayoutInflater.from(activity).inflate(
+                R.layout.native_dialog_layout,
+                null, false
+            ) as? IkmWidgetAdLayout
+            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        adsView?.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
+            adsView?.setCustomNativeAdLayout(
+                R.layout.shimmer_loading_native,
+                adLayout!!
+            )
 
-        adsView?.loadAd(
-            activity,
-            "exitapp_bottom",
-            "exitapp_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failed ")
-                    adsView.visibility = View.GONE
+            adsView?.loadAd(
+                activity,
+                "exitapp_bottom",
+                "exitapp_bottom",
+                object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("TAG", "onAdsLoadFail: native failed ")
+                        adsView.visibility = View.GONE
+                    }
+
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("TAG", "onAdsLoaded: native loaded")
+                    }
                 }
+            )
+        }
 
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("TAG", "onAdsLoaded: native loaded")
-                }
-            }
-        )
 
         title!!.text = context.getString(R.string.are_you_sure_you_want_to_exit)
         btnYes!!.setOnClickListener {
@@ -130,6 +136,7 @@ class MyDialogs {
         }
         btnNo!!.setOnClickListener {
             bottomSheetDialog.dismiss()
+            exit = false
         }
         bottomSheetDialog.show()
     }

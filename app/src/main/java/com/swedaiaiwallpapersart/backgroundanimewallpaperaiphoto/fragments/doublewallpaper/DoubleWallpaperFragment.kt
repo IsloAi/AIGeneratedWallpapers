@@ -87,10 +87,16 @@ class DoubleWallpaperFragment : Fragment() {
 
                     Log.e(TAG, "ChargingAnimation: "+result.data )
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val list = result.data?.let { addNullValueInsideArray(it.shuffled()) }
+                        val list = result.data
+
+                        val data = if (AdConfig.ISPAIDUSER){
+                            list as ArrayList<DoubleWallModel?>
+                        }else{
+                            list?.let { addNullValueInsideArray(it) }
+                        }
 
                         withContext(Dispatchers.Main){
-                            list?.let { adapter?.updateMoreData(it) }
+                            data?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
 
@@ -146,6 +152,7 @@ class DoubleWallpaperFragment : Fragment() {
         adapter = DoubleWallpaperAdapter(list, object :
             DownloadCallbackDouble {
             override fun getPosition(position: Int, model: DoubleWallModel) {
+
                 val newPosition = position + 1
 
                 Log.e(TAG, "getPosition: "+model )
@@ -157,27 +164,34 @@ class DoubleWallpaperFragment : Fragment() {
 //                sharedViewModel.setChargingAdPosition(newPosition)
                 Log.e(TAG, "getPosition:$position odd " )
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_sub_cate_tab_click_item",
-                    "mainscr_sub_cate_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(allItems!!,position)
-                            //do something
-                        }
+                if (AdConfig.ISPAIDUSER){
+                    navigateToDestination(allItems!!,position)
 
-                        override fun onAdsDismiss() {
-                            Log.e("********ADS", "onAdsDismiss: " )
-                            navigateToDestination(allItems!!,position)
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_sub_cate_tab_click_item",
+                        "mainscr_sub_cate_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                navigateToDestination(allItems!!,position)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                Log.e("********ADS", "onAdsDismiss: " )
+                                navigateToDestination(allItems!!,position)
 
 //                                    navigateToDestination(allItems,position)
-                        }
+                            }
 
-                    }
-                )
+                        }
+                    )
+                }
+
+
             }
         },myActivity)
 

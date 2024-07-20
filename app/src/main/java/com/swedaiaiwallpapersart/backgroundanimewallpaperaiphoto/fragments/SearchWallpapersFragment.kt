@@ -85,23 +85,27 @@ class SearchWallpapersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
 
-
-        binding.adsView.loadAd(requireContext(),"searchscr_bottom",
-            " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(),"searchscr_bottom",
+                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                })
+        }
+
 
         initCatgories()
 
@@ -160,24 +164,30 @@ class SearchWallpapersFragment : Fragment() {
 
                 catgories = false
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_trending_tab_click_item",
-                    "mainscr_trending_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(items!!,position)
-                            //do something
-                        }
+                if (AdConfig.ISPAIDUSER){
+                    navigateToDestination(items!!,position)
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_trending_tab_click_item",
+                        "mainscr_trending_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                navigateToDestination(items!!,position)
+                                //do something
+                            }
 
-                        override fun onAdsDismiss() {
-                            Log.e("********ADS", "onAdsDismiss: " )
-                            navigateToDestination(items!!,position)
+                            override fun onAdsDismiss() {
+                                Log.e("********ADS", "onAdsDismiss: " )
+                                navigateToDestination(items!!,position)
+                            }
                         }
-                    }
-                )
+                    )
+                }
+
+
 
 
             }
@@ -405,23 +415,28 @@ class SearchWallpapersFragment : Fragment() {
 
                 catListViewmodel.getAllCreations(string)
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_cate_tab_click_item",
-                    "mainscr_cate_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: $errorCode")
-                            setFragment(string)
-                            //do something
-                        }
+                if (AdConfig.ISPAIDUSER){
+                    setFragment(string)
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_cate_tab_click_item",
+                        "mainscr_cate_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: $errorCode")
+                                setFragment(string)
+                                //do something
+                            }
 
-                        override fun onAdsDismiss() {
-                            setFragment(string)
+                            override fun onAdsDismiss() {
+                                setFragment(string)
+                            }
                         }
-                    }
-                )
+                    )
+                }
+
 
             }
         },myActivity,"")
@@ -449,7 +464,11 @@ class SearchWallpapersFragment : Fragment() {
             Log.e("TAG", "onCustomCreateView: no data exists" )
             if (wallpapersList?.size!! > 0){
                 Log.e("TAG", "onCustomCreateView: data exists" )
-                val list = addNullValueInsideArray(wallpapersList)
+                val list = if (AdConfig.ISPAIDUSER){
+                    wallpapersList
+                }else{
+                    addNullValueInsideArray(wallpapersList)
+                }
                 adapter?.updateData(newData = list)
             }
         }

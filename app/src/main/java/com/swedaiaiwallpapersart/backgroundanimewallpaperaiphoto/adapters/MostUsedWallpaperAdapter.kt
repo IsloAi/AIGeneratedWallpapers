@@ -135,17 +135,22 @@ class MostUsedWallpaperAdapter(
         }
     }
     override fun getItemViewType(position: Int): Int {
-        row = position / 2
-        Log.e("TAG", "getItemViewType: "+row )
-        return if ((position + 1) == (firstline + 1)){
+        if (AdConfig.ISPAIDUSER){
+            return VIEW_TYPE_CONTAINER1
+        }else{
+            row = position / 2
             Log.e("TAG", "getItemViewType: "+row )
-            lastAdShownPosition = row
-            VIEW_TYPE_NATIVE_AD
-        }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
-            VIEW_TYPE_NATIVE_AD
-        }  else {
-            VIEW_TYPE_CONTAINER1
+            return if ((position + 1) == (firstline + 1)){
+                Log.e("TAG", "getItemViewType: "+row )
+                lastAdShownPosition = row
+                VIEW_TYPE_NATIVE_AD
+            }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
+                VIEW_TYPE_NATIVE_AD
+            }  else {
+                VIEW_TYPE_CONTAINER1
+            }
         }
+
     }
     @SuppressLint("SetTextI18n")
     private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView,  error_img: ImageView,iapItem:ImageView

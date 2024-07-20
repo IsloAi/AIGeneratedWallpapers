@@ -81,7 +81,11 @@ class LiveWallpaperFragment : Fragment() {
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         val list  = result.data?.shuffled()
-                        val listNullable = list?.let { addNullValueInsideArray(it) }
+                        val listNullable = if (!AdConfig.ISPAIDUSER){
+                              list?.let { addNullValueInsideArray(it) }
+                        }else{
+                            list as ArrayList<LiveWallpaperModel?>
+                        }
 
                         withContext(Dispatchers.Main){
                             listNullable?.let { adapter?.updateMoreData(it) }
@@ -150,6 +154,9 @@ class LiveWallpaperFragment : Fragment() {
                 sharedViewModel.setAdPosition(newPosition)
                     Log.e(TAG, "getPosition:$position odd " )
 
+                if (AdConfig.ISPAIDUSER){
+                    setDownloadAbleWallpaperAndNavigate(model,false)
+                }else{
                     SDKBaseController.getInstance().showInterstitialAds(
                         requireActivity(),
                         "mainscr_live_tab_click_item",
@@ -176,6 +183,8 @@ class LiveWallpaperFragment : Fragment() {
                             }
                         }
                     )
+                }
+
 
 
 

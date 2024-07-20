@@ -24,8 +24,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -50,6 +53,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWal
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.UIUtils
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -99,25 +103,30 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         myActivity = activity as MainActivity
 
-        if (!SDKBaseController.getInstance().isRewardAdReady(myActivity)){
-            SDKBaseController.getInstance().loadRewardedAds(myActivity,"viewlistwallscr_item_vip_reward")
-        }
-        binding.adsView.loadAd(requireContext(),"searchscr_bottom",
-            " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
+        if (!AdConfig.ISPAIDUSER){
+            if (!SDKBaseController.getInstance().isRewardAdReady(myActivity)){
+                SDKBaseController.getInstance().loadRewardedAds(myActivity,"viewlistwallscr_item_vip_reward")
+            }
+            binding.adsView.loadAd(requireContext(),"searchscr_bottom",
+                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                })
+        }else{
+            binding.adsView.visibility = View.GONE
+        }
+
         initObservers()
         setWallpaperOnView()
 
@@ -656,6 +665,16 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
             checkWallpaperActive()
         }
+
+//        try {
+//            if (isAdded){
+//            myActivity.window.statusBarColor = requireContext().getColor(
+//                    com.bmik.android.sdk.R.color.tt_transparent)
+//            }
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            // Handle the exception, e.g., show a Toast or log the error
+//        }
         setWallpaperOnView()
     }
 
@@ -705,7 +724,6 @@ class LiveWallpaperPreviewFragment : Fragment() {
             })
 
             binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->
-                // Adjust video looping here if needed
                 mediaPlayer.isLooping = true
             }
 

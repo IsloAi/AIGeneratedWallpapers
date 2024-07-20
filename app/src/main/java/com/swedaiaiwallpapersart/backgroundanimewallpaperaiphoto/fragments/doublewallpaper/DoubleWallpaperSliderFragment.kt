@@ -130,22 +130,27 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
         navController = findNavController()
 
-        binding.adsView.loadAd(requireContext(), "viewlistdoublewallscr_bottom",
-            " viewlistdoublewallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded) {
-//                        binding.adsView.reCallLoadAd(this)
+        if(AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(), "viewlistdoublewallscr_bottom",
+                " viewlistdoublewallscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded) {
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                    }
+                })
+        }
+
 
         getWallpapers()
     }
@@ -173,7 +178,11 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     Log.e(TAG, "onCreate: " + arrayListOfImages.size)
                     Log.e(TAG, "onCreate: " + arrayListOfImages)
 
-                    arrayList = addNullValueInsideArray(arrayListOfImages)
+                    arrayList = if (AdConfig.ISPAIDUSER){
+                        arrayListOfImages as ArrayList<DoubleWallModel?>
+                    }else{
+                        addNullValueInsideArray(arrayListOfImages)
+                    }
 
                     val firstAdLineThreshold =
                         if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
@@ -182,13 +191,18 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     // Calculate the adjusted position by considering the null ads in the array
                     if (firstTime) {
                         position = 0
-                        position = if (pos == firstAdLineThreshold) {
-                            pos + totalADs
-                        } else if (pos < firstAdLineThreshold) {
+                        position = if (AdConfig.ISPAIDUSER){
                             pos
-                        } else {
-                            pos + totalADs
+                        }else{
+                             if (pos == firstAdLineThreshold) {
+                                pos + totalADs
+                            } else if (pos < firstAdLineThreshold) {
+                                pos
+                            } else {
+                                pos + totalADs
+                            }
                         }
+
 
                         firstTime = false
                     }
@@ -272,48 +286,65 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     findNavController().navigate(R.id.doubleWallpaperDownloadFragment)
                 }else{
                     if (homeScreenBitmap != null && lockScreenBitmap != null){
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "downloadscr_set_click",
-                            "downloadscr_set_click",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                    if (isAdded){
-                                        myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
-                                            homeScreenBitmap!!
-                                        ) }
-                                        myHandler.post {
+                        if (AdConfig.ISPAIDUSER){
+                            if (isAdded){
+                                myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
+                                    homeScreenBitmap!!
+                                ) }
+
+                                myHandler.post {
+                                    if (isAdded) {
+                                        interstitialAdWithToast(
+                                            "Double Wallpaper applied successfully"
+                                        )
+                                    }
+                                }
+                            }
+                        }else{
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "downloadscr_set_click",
+                                "downloadscr_set_click",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                        if (isAdded){
+                                            myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
+                                                homeScreenBitmap!!
+                                            ) }
+                                            myHandler.post {
                                                 if (isAdded) {
                                                     interstitialAdWithToast(
                                                         "Double Wallpaper applied successfully"
                                                     )
                                                 }
+                                            }
+
                                         }
 
                                     }
 
-                                }
+                                    override fun onAdsDismiss() {
+                                        Log.e(TAG, "onAdsDismiss: ", )
+                                        if (isAdded){
+                                            myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
+                                                homeScreenBitmap!!
+                                            ) }
 
-                                override fun onAdsDismiss() {
-                                    Log.e(TAG, "onAdsDismiss: ", )
-                                    if (isAdded){
-                                        myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
-                                            homeScreenBitmap!!
-                                        ) }
-
-                                        myHandler.post {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    "Double Wallpaper applied successfully"
-                                                )
+                                            myHandler.post {
+                                                if (isAdded) {
+                                                    interstitialAdWithToast(
+                                                        "Double Wallpaper applied successfully"
+                                                    )
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        )
+                            )
+                        }
+
 
                     }
                 }
@@ -469,7 +500,13 @@ class DoubleWallpaperSliderFragment : Fragment() {
                         binding.adsView.visibility = View.GONE
                     } else {
                         binding.bottomMenu.visibility = View.VISIBLE
-                        binding.adsView.visibility = View.VISIBLE
+                        if (AdConfig.ISPAIDUSER){
+
+                            binding.adsView.visibility = View.GONE
+                        }else{
+                            binding.adsView.visibility = View.VISIBLE
+
+                        }
                         binding.buttonApplyWallpaper.visibility = View.VISIBLE
 
                     }

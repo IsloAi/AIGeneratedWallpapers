@@ -22,7 +22,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -43,8 +42,6 @@ import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.bmik.android.sdk.model.dto.UpdateAppDto
 import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bmik.android.sdk.utils.IkmSdkUtils
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
-import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
@@ -58,7 +55,6 @@ import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackRateBinding
@@ -541,22 +537,27 @@ class HomeTabsFragment : Fragment() {
 
 
     fun loadbannerAd(){
-        binding.adsView.loadAd(requireContext(),"mainscr_bottom",
-            " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(),"mainscr_bottom",
+                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                    }
+                })
+        }
+
     }
     private fun setEvents(){
         binding.settings.setOnClickListener {
@@ -603,29 +604,35 @@ class HomeTabsFragment : Fragment() {
                 if (binding.viewPager.currentItem != 0){
                     binding.viewPager.setCurrentItem(0)
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "exitapp_inter",
-                        "exitapp_inter",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                exit = true
-                                existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
-                                //do something
-                            }
-
-                            override fun onAdsDismiss() {
-                                exit = true
-                                if (isAdded){
-                                    thankyouDialog()
+                    if (AdConfig.ISPAIDUSER){
+                        exit = true
+                        existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                    }else{
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "exitapp_inter",
+                            "exitapp_inter",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                    exit = true
+                                    existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                                    //do something
                                 }
 
+                                override fun onAdsDismiss() {
+                                    exit = true
+                                    if (isAdded){
+                                        thankyouDialog()
+                                    }
+
 //                            navigateToDestination(allItems!!, position)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
+
 
                 }
 

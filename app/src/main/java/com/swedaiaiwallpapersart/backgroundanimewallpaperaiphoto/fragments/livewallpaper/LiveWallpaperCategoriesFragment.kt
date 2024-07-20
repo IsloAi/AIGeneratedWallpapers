@@ -19,6 +19,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
 
@@ -59,24 +60,32 @@ class LiveWallpaperCategoriesFragment : Fragment() {
                     myViewModel.getMostUsed(string)
                 }
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_cate_tab_click_item",
-                    "mainscr_cate_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: $errorCode")
-                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            //do something
-                        }
-
-                        override fun onAdsDismiss() {
-//                            setFragment(string)
-                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                        }
+                if (AdConfig.ISPAIDUSER){
+                    if (isAdded){
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
-                )
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_cate_tab_click_item",
+                        "mainscr_cate_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: $errorCode")
+                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+//                            setFragment(string)
+                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                            }
+                        }
+                    )
+                }
+
+
 
             }
         },myActivity,"live")

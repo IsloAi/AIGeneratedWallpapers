@@ -80,25 +80,31 @@ class CategoryFragment : Fragment() {
             override fun getStringCall(string: String) {
                 catListViewmodel.getAllCreations(string)
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_cate_tab_click_item",
-                    "mainscr_cate_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: $errorCode")
+                if (AdConfig.ISPAIDUSER){
+                    setFragment(string)
+                }else{
+                    SDKBaseController.getInstance().showInterstitialAds(
+                        requireActivity(),
+                        "mainscr_cate_tab_click_item",
+                        "mainscr_cate_tab_click_item",
+                        showLoading = true,
+                        adsListener = object : CommonAdsListenerAdapter() {
+                            override fun onAdsShowFail(errorCode: Int) {
+                                Log.e("********ADS", "onAdsShowFail: $errorCode")
 
 
-                            setFragment(string)
-                            //do something
+                                setFragment(string)
+                                //do something
+                            }
+
+                            override fun onAdsDismiss() {
+                                setFragment(string)
+                            }
                         }
+                    )
+                }
 
-                        override fun onAdsDismiss() {
-                            setFragment(string)
-                        }
-                    }
-                )
+
 
             }
         },myActivity,"")
@@ -126,13 +132,15 @@ class CategoryFragment : Fragment() {
                 if (wallpapersList?.size!! > 0){
                     Log.e("TAG", "onCustomCreateView: data exists" )
                     lifecycleScope.launch(Dispatchers.IO) {
-                        AdConfig.categoryOrder += "Neon lights"
 
-                        val sortedCategories = sortWallpaperCategories(wallpapersList, AdConfig.categoryOrder)
 
-                        Log.e("TAG", "onCustomCreateView: "+sortedCategories )
+                        Log.e("TAG", "onCustomCreateView: "+wallpapersList )
 
-                        val list = addNullValueInsideArray(sortedCategories)
+                        val list = if (!AdConfig.ISPAIDUSER){
+                            wallpapersList.shuffled()
+                        }else{
+                            addNullValueInsideArray(wallpapersList.shuffled())
+                        }
 
                         withContext(Dispatchers.Main){
                             adapter.updateData(newData = list)
@@ -166,25 +174,31 @@ class CategoryFragment : Fragment() {
                         sendTracking("categorymainscr_click",Pair("categorymainscr", "$string Live"))
                     }
 
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "mainscr_cate_tab_click_item",
-                        "mainscr_cate_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: $errorCode")
+                    if (AdConfig.ISPAIDUSER){
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                    }else{
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "mainscr_cate_tab_click_item",
+                            "mainscr_cate_tab_click_item",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    Log.e("********ADS", "onAdsShowFail: $errorCode")
 
 //                                setFragment(string)
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                //do something
-                            }
+                                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                    //do something
+                                }
 
-                            override fun onAdsDismiss() {
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                override fun onAdsDismiss() {
+                                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
+
+
 
                 }
             }, myActivity)

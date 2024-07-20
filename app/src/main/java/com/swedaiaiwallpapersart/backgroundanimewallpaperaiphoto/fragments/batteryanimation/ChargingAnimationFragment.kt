@@ -85,10 +85,16 @@ class ChargingAnimationFragment : Fragment() {
 
                     Log.e(TAG, "ChargingAnimation: "+result.data )
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val list = result.data?.let { addNullValueInsideArray(it.shuffled()) }
+                        val list = result.data
+
+                        val data = if (AdConfig.ISPAIDUSER){
+                            list as ArrayList<ChargingAnimModel?>
+                        }else{
+                            list?.let { addNullValueInsideArray(it.shuffled()) }
+                        }
 
                         withContext(Dispatchers.Main){
-                            list?.let { adapter?.updateMoreData(it) }
+                            data?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
 
@@ -153,6 +159,9 @@ class ChargingAnimationFragment : Fragment() {
                 sharedViewModel.setChargingAdPosition(newPosition)
                     Log.e(TAG, "getPosition:$position odd " )
 
+                if (AdConfig.ISPAIDUSER){
+                    setPathandNavigate(model,false)
+                }else{
                     SDKBaseController.getInstance().showInterstitialAds(
                         requireActivity(),
                         "mainscr_live_tab_click_item",
@@ -177,12 +186,7 @@ class ChargingAnimationFragment : Fragment() {
                             }
                         }
                     )
-
-
-
-
-
-
+                }
 
             }
         },myActivity)

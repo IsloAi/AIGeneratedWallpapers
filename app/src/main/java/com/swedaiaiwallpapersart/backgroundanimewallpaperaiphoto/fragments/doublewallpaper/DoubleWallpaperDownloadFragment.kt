@@ -72,7 +72,11 @@ class DoubleWallpaperDownloadFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        loadAd()
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            loadAd()
+        }
         AndroidNetworking.initialize(requireContext())
 
         setEvents()
@@ -120,51 +124,68 @@ class DoubleWallpaperDownloadFragment : Fragment() {
     fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
             wallModel?.downloaded = true
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "downloadscr_set_click",
-                "downloadscr_set_click",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        if (isAdded){
-                            wallModel?.let { it1 ->
-                                sharedViewModel.updateDoubleWallById(
-                                    wallModel?.id!!,
-                                    it1
-                                )
+            if (AdConfig.ISPAIDUSER){
+                if (isAdded){
+                    wallModel?.let { it1 ->
+                        sharedViewModel.updateDoubleWallById(
+                            wallModel?.id!!,
+                            it1
+                        )
 
-                                doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
-                                    it1)
-                            }
-                            findNavController().popBackStack()
-
-                        }
-                        //do something
+                        doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
+                            it1)
                     }
+                    findNavController().popBackStack()
 
-                    override fun onAdsDismiss() {
-                        Log.e(TAG, "onAdsDismiss: ", )
-                        if (isAdded){
-
-
-
-                            wallModel?.let { it1 ->
-                                sharedViewModel.updateDoubleWallById(
-                                    wallModel?.id!!,
-                                    it1
-                                )
-
-                                doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
-                                    it1)
-                            }
-                            findNavController().popBackStack()
-
-                        }
-                    }
                 }
-            )
+            }else{
+                SDKBaseController.getInstance().showInterstitialAds(
+                    requireActivity(),
+                    "downloadscr_set_click",
+                    "downloadscr_set_click",
+                    showLoading = true,
+                    adsListener = object : CommonAdsListenerAdapter() {
+                        override fun onAdsShowFail(errorCode: Int) {
+                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                            if (isAdded){
+                                wallModel?.let { it1 ->
+                                    sharedViewModel.updateDoubleWallById(
+                                        wallModel?.id!!,
+                                        it1
+                                    )
+
+                                    doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
+                                        it1)
+                                }
+                                findNavController().popBackStack()
+
+                            }
+                            //do something
+                        }
+
+                        override fun onAdsDismiss() {
+                            Log.e(TAG, "onAdsDismiss: ", )
+                            if (isAdded){
+
+
+
+                                wallModel?.let { it1 ->
+                                    sharedViewModel.updateDoubleWallById(
+                                        wallModel?.id!!,
+                                        it1
+                                    )
+
+                                    doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
+                                        it1)
+                                }
+                                findNavController().popBackStack()
+
+                            }
+                        }
+                    }
+                )
+            }
+
 
         }
 

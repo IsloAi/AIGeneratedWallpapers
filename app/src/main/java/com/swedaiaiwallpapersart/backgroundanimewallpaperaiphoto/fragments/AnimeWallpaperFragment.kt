@@ -112,23 +112,29 @@ class AnimeWallpaperFragment : Fragment() {
 
                     oldPosition = position
 
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "categoryscr_fantasy_click_item",
-                        "categoryscr_fantasy_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                navigateToDestination(allItems!!, position)
-                                Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                //do something
-                            }
+                    if (AdConfig.ISPAIDUSER){
+                        navigateToDestination(allItems!!, position)
+                    }else{
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "categoryscr_fantasy_click_item",
+                            "categoryscr_fantasy_click_item",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    navigateToDestination(allItems!!, position)
+                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                    //do something
+                                }
 
-                            override fun onAdsDismiss() {
+                                override fun onAdsDismiss() {
 //                            navigateToDestination(allItems!!, position)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
+
+
 
                 }
 
@@ -190,9 +196,12 @@ class AnimeWallpaperFragment : Fragment() {
 
         binding.swipeLayout.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                val newData = cachedCatResponses.filterNotNull()
-                val nullAdd = addNullValueInsideArray(newData.shuffled())
-
+                val newData = cachedCatResponses.filterNotNull().shuffled()
+                val nullAdd = if (AdConfig.ISPAIDUSER){
+                    newData as ArrayList<CatResponse?>
+                }else{
+                    addNullValueInsideArray(newData.shuffled())
+                }
                 cachedCatResponses.clear()
                 cachedCatResponses = nullAdd
                 val initialItems = getItems(0, 30)
@@ -238,7 +247,11 @@ class AnimeWallpaperFragment : Fragment() {
                                 }
                             }
 
-                            val list = addNullValueInsideArray(tempList.shuffled())
+                            val list = if (AdConfig.ISPAIDUSER){
+                                tempList.shuffled() as ArrayList<CatResponse?>
+                            }else{
+                                addNullValueInsideArray(tempList.shuffled())
+                            }
 
                             cachedCatResponses = list
 

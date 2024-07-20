@@ -109,9 +109,13 @@ class HomeFragment : Fragment(){
 
         binding.swipeLayout.setOnRefreshListener {
 
-            val newData = cachedCatResponses.filterNotNull()
+            val newData = cachedCatResponses.filterNotNull().shuffled()
             lifecycleScope.launch(Dispatchers.IO) {
-                val nullAdd = addNullValueInsideArray(newData.shuffled())
+                val nullAdd = if (AdConfig.ISPAIDUSER){
+                    newData as ArrayList<CatResponse?>
+                }else{
+                    addNullValueInsideArray(newData.shuffled())
+                }
 
                 withContext(Dispatchers.Main){
                     cachedCatResponses.clear()
@@ -201,7 +205,11 @@ class HomeFragment : Fragment(){
                                     }
                                 }
 
-                                val list = addNullValueInsideArray(tempList.shuffled())
+                                val list = if (AdConfig.ISPAIDUSER){
+                                    tempList.shuffled() as ArrayList<CatResponse?>
+                                }else{
+                                    addNullValueInsideArray(tempList.shuffled())
+                                }
 
                                 cachedCatResponses = list
 
@@ -314,26 +322,31 @@ class HomeFragment : Fragment(){
                         addedItems = allItems
 
                         oldPosition = position
+                        if (AdConfig.ISPAIDUSER){
+                            navigateToDestination(allItems,position)
+                        }else{
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "mainscr_trending_tab_click_item",
+                                "mainscr_trending_tab_click_item",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                        navigateToDestination(allItems,position)
+                                        //do something
+                                    }
 
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "mainscr_trending_tab_click_item",
-                            "mainscr_trending_tab_click_item",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                    navigateToDestination(allItems,position)
-                                    //do something
-                                }
-
-                                override fun onAdsDismiss() {
-                                    Log.e("********ADS", "onAdsDismiss: " )
+                                    override fun onAdsDismiss() {
+                                        Log.e("********ADS", "onAdsDismiss: " )
 //                                    navigateToDestination(allItems,position)
-                                }
+                                    }
 
-                            }
-                        )
+                                }
+                            )
+                        }
+
+
                     }
                 }
             }

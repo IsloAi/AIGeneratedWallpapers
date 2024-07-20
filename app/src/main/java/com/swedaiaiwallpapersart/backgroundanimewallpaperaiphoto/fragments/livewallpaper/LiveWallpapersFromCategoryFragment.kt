@@ -63,23 +63,26 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.adsView.loadAd(requireContext(),"mainscr_bottom",
-            "mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(),"mainscr_bottom",
+                "mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                })
+        }
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
@@ -114,7 +117,11 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
                         Log.e(TAG, "initObservers: "+result.data )
 
                         val list  = result.data?.shuffled()
-                        val listNullable = list?.let { addNullValueInsideArray(it) }
+                        val listNullable = if (!AdConfig.ISPAIDUSER){
+                            list?.let { addNullValueInsideArray(it) }
+                        }else{
+                            list as ArrayList<LiveWallpaperModel?>
+                        }
 
                         withContext(Dispatchers.Main){
                             listNullable?.let { adapter?.updateMoreData(it) }
@@ -143,7 +150,9 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
 
                 sharedViewModel.setAdPosition(newPosition)
                     Log.e(TAG, "getPosition:$position odd " )
-
+                if (AdConfig.ISPAIDUSER){
+                    setDownloadAbleWallpaperAndNavigate(model,true)
+                }else{
                     SDKBaseController.getInstance().showInterstitialAds(
                         requireActivity(),
                         "mainscr_live_tab_click_item",
@@ -152,7 +161,7 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
                         adsListener = object : CommonAdsListenerAdapter() {
                             override fun onAdsShowFail(errorCode: Int) {
                                 Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                               setDownloadAbleWallpaperAndNavigate(model,false)
+                                setDownloadAbleWallpaperAndNavigate(model,false)
 
                                 //do something
                             }
@@ -168,13 +177,7 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
                             }
                         }
                     )
-
-
-
-
-
-
-
+                }
             }
         },myActivity)
 

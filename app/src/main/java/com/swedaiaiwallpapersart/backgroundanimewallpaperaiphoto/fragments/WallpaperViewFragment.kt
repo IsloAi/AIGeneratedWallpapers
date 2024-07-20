@@ -75,6 +75,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.hasToNavigateAnime
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.wallFromAnime
@@ -205,7 +206,11 @@ class WallpaperViewFragment : Fragment() {
 
                     Log.e(TAG, "onCreate: " + arrayListOfImages.size)
 
-                    arrayList = addNullValueInsideArray(arrayListOfImages)
+                    arrayList = if (AdConfig.ISPAIDUSER){
+                        arrayListOfImages as ArrayList<CatResponse?>
+                    }else{
+                        addNullValueInsideArray(arrayListOfImages)
+                    }
 
                     val firstAdLineThreshold =
                         if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
@@ -214,13 +219,18 @@ class WallpaperViewFragment : Fragment() {
                     // Calculate the adjusted position by considering the null ads in the array
                     if (firstTime) {
                         position = 0
-                        position = if (pos == firstAdLineThreshold) {
-                            pos + totalADs
-                        } else if (pos < firstAdLineThreshold) {
+                        position = if (AdConfig.ISPAIDUSER) {
                             pos
-                        } else {
-                            pos + totalADs
+                        }else{
+                             if (pos == firstAdLineThreshold) {
+                                pos + totalADs
+                            } else if (pos < firstAdLineThreshold) {
+                                pos
+                            } else {
+                                pos + totalADs
+                            }
                         }
+
 
                         firstTime = false
                     }
@@ -266,22 +276,27 @@ class WallpaperViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.adsView.loadAd(requireContext(), "viewlistwallscr_bottom",
-            " viewlistwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded) {
-//                        binding.adsView.reCallLoadAd(this)
+        if(AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(), "viewlistwallscr_bottom",
+                " viewlistwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded) {
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
+                    }
+                })
+        }
+
 
         if (isAdded) {
             sendTracking(
@@ -806,7 +821,13 @@ class WallpaperViewFragment : Fragment() {
                         binding.adsView.visibility = View.GONE
                     } else {
                         binding.bottomMenu.visibility = View.VISIBLE
-                        binding.adsView.visibility = View.VISIBLE
+                        if (AdConfig.ISPAIDUSER){
+                            binding.adsView.visibility = View.GONE
+
+                        }else{
+
+                            binding.adsView.visibility = View.VISIBLE
+                        }
 
                         if (arrayList[position]?.gems == 0 || arrayList[position]?.unlockimges == true) {
 
@@ -1243,67 +1264,87 @@ class WallpaperViewFragment : Fragment() {
                 }
                 if (isAdded) {
                     if (showInter) {
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "viewlistwallscr_setdilog_set_button",
-                            "viewlistwallscr_setdilog_set_button",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    myExecutor.execute { myWallpaperManager.homeScreen(bitmap!!) }
-                                    myHandler.post {
-                                        if (state) {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    getString(R.string.set_successfully_on_home_screen),
-                                                    dialog
-                                                )
-                                            }
-                                            state = false
-                                            postDelay()
-                                        }
+                        if (AdConfig.ISPAIDUSER){
+                            myExecutor.execute { myWallpaperManager.homeScreen(bitmap!!) }
+                            myHandler.post {
+                                if (state) {
+                                    if (isAdded) {
+                                        interstitialAdWithToast(
+                                            getString(R.string.set_successfully_on_home_screen),
+                                            dialog
+                                        )
                                     }
-
-                                    setDownloaded(model)
-                                    showRateApp()
-                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                    //do something
+                                    state = false
+                                    postDelay()
                                 }
+                            }
 
-                                override fun onAdsDismiss() {
-                                    lifecycleScope.launch(Dispatchers.IO) {
-                                        try {
-                                            myWallpaperManager.homeScreen(bitmap!!)
-                                            withContext(Dispatchers.Main) {
-                                                if (state) {
-                                                    if (isAdded) {
-                                                        interstitialAdWithToast(
-                                                            getString(R.string.set_successfully_on_home_screen),
-                                                            dialog
-                                                        )
-                                                    }
-                                                    state = false
-                                                    postDelay()
+                            setDownloaded(model)
+                            showRateApp()
+                        }else{
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "viewlistwallscr_setdilog_set_button",
+                                "viewlistwallscr_setdilog_set_button",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        myExecutor.execute { myWallpaperManager.homeScreen(bitmap!!) }
+                                        myHandler.post {
+                                            if (state) {
+                                                if (isAdded) {
+                                                    interstitialAdWithToast(
+                                                        getString(R.string.set_successfully_on_home_screen),
+                                                        dialog
+                                                    )
                                                 }
+                                                state = false
+                                                postDelay()
                                             }
-
-                                            setDownloaded(model)
-
-
-                                        } catch (e: Exception) {
-                                            e.printStackTrace()
                                         }
+
+                                        setDownloaded(model)
+                                        showRateApp()
+                                        Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                        //do something
                                     }
+
+                                    override fun onAdsDismiss() {
+                                        lifecycleScope.launch(Dispatchers.IO) {
+                                            try {
+                                                myWallpaperManager.homeScreen(bitmap!!)
+                                                withContext(Dispatchers.Main) {
+                                                    if (state) {
+                                                        if (isAdded) {
+                                                            interstitialAdWithToast(
+                                                                getString(R.string.set_successfully_on_home_screen),
+                                                                dialog
+                                                            )
+                                                        }
+                                                        state = false
+                                                        postDelay()
+                                                    }
+                                                }
+
+                                                setDownloaded(model)
+
+
+                                            } catch (e: Exception) {
+                                                e.printStackTrace()
+                                            }
+                                        }
 //                            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
 //                            myHandler.post { if(state){
 //                                interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
 //                                state = false
 //                                postDelay()
 //                            } }
-                                    showRateApp()
+                                        showRateApp()
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
+
                     } else {
                         myExecutor.execute { myWallpaperManager.homeScreen(bitmap!!) }
                         myHandler.post {
@@ -1339,58 +1380,80 @@ class WallpaperViewFragment : Fragment() {
                 }
                 if (isAdded) {
                     if (showInter) {
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "viewlistwallscr_setdilog_set_button",
-                            "viewlistwallscr_setdilog_set_button",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                    myExecutor.execute {
-                                        bitmap?.let { it1 -> myWallpaperManager.lockScreen(it1) }
+                        if (AdConfig.ISPAIDUSER){
+                            myExecutor.execute {
+                                bitmap?.let { it1 -> myWallpaperManager.lockScreen(it1) }
+                            }
+                            myHandler.post {
+                                if (state) {
+                                    if (isAdded) {
+                                        interstitialAdWithToast(
+                                            getString(R.string.set_successfully_on_lock_screen),
+                                            dialog
+                                        )
                                     }
-                                    myHandler.post {
-                                        if (state) {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    getString(R.string.set_successfully_on_lock_screen),
-                                                    dialog
-                                                )
-                                            }
-                                            state = false
-                                            postDelay()
-                                        }
-                                    }
-
-                                    setDownloaded(model)
-                                    showRateApp()
-                                    //do something
-                                }
-
-                                override fun onAdsDismiss() {
-                                    myExecutor.execute {
-                                        myWallpaperManager.lockScreen(bitmap!!)
-                                    }
-                                    myHandler.post {
-                                        if (state) {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    getString(R.string.set_successfully_on_lock_screen),
-                                                    dialog
-                                                )
-                                            }
-                                            state = false
-                                            postDelay()
-                                        }
-                                    }
-
-                                    setDownloaded(model)
-                                    showRateApp()
-
+                                    state = false
+                                    postDelay()
                                 }
                             }
-                        )
+
+                            setDownloaded(model)
+                            showRateApp()
+                        }else{
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "viewlistwallscr_setdilog_set_button",
+                                "viewlistwallscr_setdilog_set_button",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                        myExecutor.execute {
+                                            bitmap?.let { it1 -> myWallpaperManager.lockScreen(it1) }
+                                        }
+                                        myHandler.post {
+                                            if (state) {
+                                                if (isAdded) {
+                                                    interstitialAdWithToast(
+                                                        getString(R.string.set_successfully_on_lock_screen),
+                                                        dialog
+                                                    )
+                                                }
+                                                state = false
+                                                postDelay()
+                                            }
+                                        }
+
+                                        setDownloaded(model)
+                                        showRateApp()
+                                        //do something
+                                    }
+
+                                    override fun onAdsDismiss() {
+                                        myExecutor.execute {
+                                            myWallpaperManager.lockScreen(bitmap!!)
+                                        }
+                                        myHandler.post {
+                                            if (state) {
+                                                if (isAdded) {
+                                                    interstitialAdWithToast(
+                                                        getString(R.string.set_successfully_on_lock_screen),
+                                                        dialog
+                                                    )
+                                                }
+                                                state = false
+                                                postDelay()
+                                            }
+                                        }
+
+                                        setDownloaded(model)
+                                        showRateApp()
+
+                                    }
+                                }
+                            )
+                        }
+
                     } else {
                         myExecutor.execute {
                             myWallpaperManager.lockScreen(bitmap!!)
@@ -1426,56 +1489,78 @@ class WallpaperViewFragment : Fragment() {
 
                 if (isAdded) {
                     if (showInter) {
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "viewlistwallscr_setdilog_set_button",
-                            "viewlistwallscr_setdilog_set_button",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                    myExecutor.execute {
-                                        myWallpaperManager.homeAndLockScreen(bitmap!!)
-                                    }
-                                    myHandler.post {
-                                        if (state) {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    getString(R.string.set_successfully_on_both),
-                                                    dialog
-                                                )
+                        if (AdConfig.ISPAIDUSER){
+                            myExecutor.execute {
+                                myWallpaperManager.homeAndLockScreen(bitmap!!)
+                            }
+                            myHandler.post {
+                                if (state) {
+                                    if (isAdded) {
+                                        interstitialAdWithToast(
+                                            getString(R.string.set_successfully_on_both),
+                                            dialog
+                                        )
 
-                                            }
-                                            state = false
-                                            postDelay()
-                                        }
                                     }
-                                    setDownloaded(model)
-                                    showRateApp()
-                                    //do something
-                                }
-
-                                override fun onAdsDismiss() {
-                                    myExecutor.execute {
-                                        myWallpaperManager.homeAndLockScreen(bitmap!!)
-                                    }
-                                    myHandler.post {
-                                        if (state) {
-                                            if (isAdded) {
-                                                interstitialAdWithToast(
-                                                    getString(R.string.set_successfully_on_both),
-                                                    dialog
-                                                )
-                                            }
-                                            state = false
-                                            postDelay()
-                                        }
-                                    }
-                                    setDownloaded(model)
-                                    showRateApp()
+                                    state = false
+                                    postDelay()
                                 }
                             }
-                        )
+                            setDownloaded(model)
+                            showRateApp()
+                        }else{
+                            SDKBaseController.getInstance().showInterstitialAds(
+                                requireActivity(),
+                                "viewlistwallscr_setdilog_set_button",
+                                "viewlistwallscr_setdilog_set_button",
+                                showLoading = true,
+                                adsListener = object : CommonAdsListenerAdapter() {
+                                    override fun onAdsShowFail(errorCode: Int) {
+                                        Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                        myExecutor.execute {
+                                            myWallpaperManager.homeAndLockScreen(bitmap!!)
+                                        }
+                                        myHandler.post {
+                                            if (state) {
+                                                if (isAdded) {
+                                                    interstitialAdWithToast(
+                                                        getString(R.string.set_successfully_on_both),
+                                                        dialog
+                                                    )
+
+                                                }
+                                                state = false
+                                                postDelay()
+                                            }
+                                        }
+                                        setDownloaded(model)
+                                        showRateApp()
+                                        //do something
+                                    }
+
+                                    override fun onAdsDismiss() {
+                                        myExecutor.execute {
+                                            myWallpaperManager.homeAndLockScreen(bitmap!!)
+                                        }
+                                        myHandler.post {
+                                            if (state) {
+                                                if (isAdded) {
+                                                    interstitialAdWithToast(
+                                                        getString(R.string.set_successfully_on_both),
+                                                        dialog
+                                                    )
+                                                }
+                                                state = false
+                                                postDelay()
+                                            }
+                                        }
+                                        setDownloaded(model)
+                                        showRateApp()
+                                    }
+                                }
+                            )
+                        }
+
                     } else {
                         myExecutor.execute {
                             myWallpaperManager.homeAndLockScreen(bitmap!!)

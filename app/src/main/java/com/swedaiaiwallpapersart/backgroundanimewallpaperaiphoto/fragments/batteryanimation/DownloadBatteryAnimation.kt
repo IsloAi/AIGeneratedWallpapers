@@ -69,8 +69,12 @@ class DownloadBatteryAnimation : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         adShowed = arguments?.getBoolean("adShowed")
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            loadAd()
+        }
 
-        loadAd()
         AndroidNetworking.initialize(requireContext())
 
         setEvents()
@@ -119,7 +123,9 @@ class DownloadBatteryAnimation : Fragment() {
 
     fun setEvents(){
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (adShowed == true){
+            if (AdConfig.ISPAIDUSER){
+                navigateToNext()
+            }else if (adShowed == true){
                 navigateToNext()
             }else{
                 SDKBaseController.getInstance().showInterstitialAds(

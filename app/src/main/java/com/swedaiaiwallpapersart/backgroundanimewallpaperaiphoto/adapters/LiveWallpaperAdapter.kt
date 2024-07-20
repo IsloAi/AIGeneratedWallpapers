@@ -132,6 +132,12 @@ class LiveWallpaperAdapter(
         }
     }
     override fun getItemViewType(position: Int): Int {
+
+        if (AdConfig.ISPAIDUSER) {
+            return VIEW_TYPE_CONTAINER1
+        }else{
+
+
         row = position / 2
         Log.e("TAG", "getItemViewType: "+row )
         val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
@@ -144,6 +150,7 @@ class LiveWallpaperAdapter(
             VIEW_TYPE_NATIVE_AD
         }  else {
             VIEW_TYPE_CONTAINER1
+        }
         }
     }
     @SuppressLint("SetTextI18n")

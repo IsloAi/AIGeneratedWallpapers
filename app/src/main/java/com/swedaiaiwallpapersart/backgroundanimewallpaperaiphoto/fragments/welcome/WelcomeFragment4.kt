@@ -16,6 +16,7 @@ import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWelcome4Binding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
 class WelcomeFragment4 : Fragment() {
     private var _binding: FragmentWelcome4Binding? = null
@@ -36,40 +37,44 @@ class WelcomeFragment4 : Fragment() {
 
         setIndicator()
         setCurrentIndicator(2)
-        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.native_layout_onboard_latest,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+        if (!AdConfig.ISPAIDUSER){
+            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
+            val adLayout = LayoutInflater.from(activity).inflate(
+                R.layout.native_layout_onboard_latest,
+                null, false
+            ) as? IkmWidgetAdLayout
+            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
+            binding.adsView.setCustomNativeAdLayout(
+                R.layout.shimmer_loading_native,
+                adLayout!!
+            )
 
-        binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
+            binding.adsView.loadAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom",
+                object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("TAG", "onAdsLoadFail: native failded " )
 //                                    binding.adsView.visibility = View.GONE
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    if (isAdded && view != null) {
-                        // Modify view visibility here
-                        binding.adsView.visibility = View.VISIBLE
                     }
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
+
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        if (isAdded && view != null) {
+                            // Modify view visibility here
+                            binding.adsView.visibility = View.VISIBLE
+                        }
+                        Log.e("TAG", "onAdsLoaded: native loaded" )
+                    }
                 }
-            }
-        )
+            )
+        }else{
+            binding.adsView.visibility = View.GONE
+        }
     }
 
     private fun setIndicator() {

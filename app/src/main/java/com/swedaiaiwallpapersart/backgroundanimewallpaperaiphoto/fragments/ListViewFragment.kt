@@ -80,22 +80,27 @@ class ListViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.adsView.loadAd(requireContext(),"mainscr_bottom",
-            "mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.loadAd(requireContext(),"mainscr_bottom",
+                "mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
                     }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
+
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+
+                        if (isAdded){
+//                        binding.adsView.reCallLoadAd(this)
+                        }
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                })
+        }
+
     }
     private fun onCreateViewCalling(){
         myActivity = activity as MainActivity
@@ -147,23 +152,29 @@ class ListViewFragment : Fragment() {
 
                 oldPosition = position
 
-                SDKBaseController.getInstance().showInterstitialAds(
-                    requireActivity(),
-                    "mainscr_sub_cate_tab_scroll",
-                    "mainscr_sub_cate_tab_scroll",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            navigateToDestination(allItems!!, position)
-                            Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                            //do something
-                        }
+                    if (AdConfig.ISPAIDUSER){
+                        navigateToDestination(allItems!!, position)
+                    }else{
+                        SDKBaseController.getInstance().showInterstitialAds(
+                            requireActivity(),
+                            "mainscr_sub_cate_tab_scroll",
+                            "mainscr_sub_cate_tab_scroll",
+                            showLoading = true,
+                            adsListener = object : CommonAdsListenerAdapter() {
+                                override fun onAdsShowFail(errorCode: Int) {
+                                    navigateToDestination(allItems!!, position)
+                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                    //do something
+                                }
 
-                        override fun onAdsDismiss() {
+                                override fun onAdsDismiss() {
 //                            navigateToDestination(allItems!!, position)
-                        }
+                                }
+                            }
+                        )
                     }
-                )
+
+
 
             }
 
@@ -229,8 +240,12 @@ class ListViewFragment : Fragment() {
 
         binding.swipeLayout.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                val newData = cachedCatResponses.filterNotNull()
-                val nullAdd = addNullValueInsideArray(newData.shuffled())
+                val newData = cachedCatResponses.filterNotNull().shuffled()
+                val nullAdd = if (AdConfig.ISPAIDUSER){
+                    newData as ArrayList<CatResponse?>
+                }else{
+                    addNullValueInsideArray(newData.shuffled())
+                }
 
                 cachedCatResponses.clear()
                 cachedCatResponses = nullAdd
@@ -274,7 +289,12 @@ class ListViewFragment : Fragment() {
                                 }
                             }
 
-                            val list = addNullValueInsideArray(tempList.shuffled())
+
+                            val list = if (AdConfig.ISPAIDUSER){
+                                tempList.shuffled() as ArrayList<CatResponse?>
+                            }else{
+                                addNullValueInsideArray(tempList.shuffled())
+                            }
 
                             cachedCatResponses = list
 
@@ -330,7 +350,11 @@ class ListViewFragment : Fragment() {
                                 }
                             }
 
-                            val list = addNullValueInsideArray(tempList.shuffled())
+                            val list = if (AdConfig.ISPAIDUSER){
+                                tempList.shuffled() as ArrayList<CatResponse?>
+                            }else{
+                                addNullValueInsideArray(tempList.shuffled())
+                            }
 
                             cachedCatResponses = list
 
@@ -418,15 +442,14 @@ class ListViewFragment : Fragment() {
     override fun onPause() {
         super.onPause()
 
-        if (!externalOpen){
-            val allItems = adapter?.getAllItems()
-            if (addedItems?.isNotEmpty() == true){
-                addedItems?.clear()
-            }
-
+        val allItems = adapter?.getAllItems()
+//            if (addedItems?.isNotEmpty() == true){
+//                addedItems?.clear()
+//            }
+        Log.e(TAG, "onPause: "+allItems?.size )
+        if (allItems?.isNotEmpty() == true){
             addedItems = allItems
         }
-
     }
 
 
@@ -473,6 +496,16 @@ class ListViewFragment : Fragment() {
     }
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+
+        if (position >= arrayList.size) {
+            Log.e(TAG, "navigateToDestination: Position $position out of bounds ${arrayList.size} ")
+
+            addedItems?.clear()
+            addedItems = getItems(0,30)
+            adapter?.updateData(addedItems!!)
+            isNavigationInProgress = false
+            return
+        }
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
         sharedViewModel.clearData()

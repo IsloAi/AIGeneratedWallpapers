@@ -72,9 +72,14 @@ class LocalizationFragment : Fragment() {
             delay(2000)
             Log.e(TAG, "getLanguageList: "+getDefaultLocaleInfo())
         }
-        setGradienttext()
 
-        loadNativeAd()
+        setGradienttext()
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            loadNativeAd()
+        }
+
         setEvents()
         initLanguages()
         backHandle()
@@ -205,7 +210,7 @@ class LocalizationFragment : Fragment() {
 
                 override fun onLanguageItemClick(language: DummyModelLanguages?, position: Int) {
 
-                    if (AdConfig.languageLogicShowNative == 1){
+                    if (AdConfig.languageLogicShowNative == 1 && !AdConfig.ISPAIDUSER){
                         if (!adnext){
                             adnext = true
                             loadNativeAd()
