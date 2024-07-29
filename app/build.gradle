@@ -13,8 +13,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 130
-        versionName "1.6.9"
+        versionCode 131
+        versionName "1.7.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -53,6 +53,10 @@ android {
     defaultConfig {
         multiDexEnabled true
 
+    }
+    // Allow references to generated code
+    kapt {
+        correctErrorTypes = true
     }
 }
 dependencies {
@@ -106,6 +110,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation 'androidx.multidex:multidex:2.0.1'
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.7.4"
@@ -151,7 +156,7 @@ dependencies {
 //        exclude group: 'com.squareup.okio'
 //    }
 
-    implementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:2.6.690-beta") {
+    releaseImplementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:3.0.272") {
         exclude group: 'com.squareup.okio'
     }
 
@@ -167,11 +172,8 @@ dependencies {
 
 
     //Dagger - Hilt
-    implementation "com.google.dagger:hilt-android:2.46.1"
-    kapt "com.google.dagger:hilt-android-compiler:2.46.1"
-    implementation 'androidx.hilt:hilt-common:1.1.0'
-    implementation 'androidx.hilt:hilt-work:1.1.0'
-    kapt("androidx.hilt:hilt-compiler:1.1.0")
+    implementation "com.google.dagger:hilt-android:2.50"
+    kapt "com.google.dagger:hilt-android-compiler:2.50"
     implementation("androidx.startup:startup-runtime:1.1.0")
 
     //in app update

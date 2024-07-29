@@ -17,8 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSplashBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.SplashSliderAdapter
@@ -62,35 +61,35 @@ class SplashFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.layout_custom_admob,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        binding.adsView.loadAd(requireActivity(),"home_native","home_native",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
-                    binding.adsView.visibility = View.GONE
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                }
-            }
-        )
+//        val adLayout = LayoutInflater.from(activity).inflate(
+//            R.layout.layout_custom_admob,
+//            null, false
+//        ) as? IkmWidgetAdLayout
+//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//
+//        binding.adsView.setCustomNativeAdLayout(
+//            R.layout.shimmer_loading_native,
+//            adLayout!!
+//        )
+//
+//        binding.adsView.loadAd(requireActivity(),"home_native","home_native",
+//            object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//                    Log.e("TAG", "onAdsLoadFail: native failded " )
+//                    binding.adsView.visibility = View.GONE
+//                }
+//
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    Log.e("TAG", "onAdsLoaded: native loaded" )
+//                }
+//            }
+//        )
         allOnCreateCalling()
 
 

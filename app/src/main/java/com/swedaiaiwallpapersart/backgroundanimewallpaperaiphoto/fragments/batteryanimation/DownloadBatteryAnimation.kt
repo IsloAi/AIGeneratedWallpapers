@@ -16,14 +16,17 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -56,6 +59,8 @@ class DownloadBatteryAnimation : Fragment() {
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
     private var job: Job? = null
 
+    val interAd = IKInterstitialAd()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -74,6 +79,17 @@ class DownloadBatteryAnimation : Fragment() {
         }else{
             loadAd()
         }
+
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
 
         AndroidNetworking.initialize(requireContext())
 
@@ -94,27 +110,20 @@ class DownloadBatteryAnimation : Fragment() {
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        binding.adsView.loadAd(requireActivity(),"downloadscr_native_bottom","downloadscr_native_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"downloadscr_native_bottom",
+            object : IKShowWidgetAdListener {
+                override fun onAdShowFail(error: IKAdError) {
+                    if (AdConfig.ISPAIDUSER){
+                        binding.adsView.visibility = View.GONE
+                    }
                     Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
                 }
 
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    if (isAdded && view != null) {
+                override fun onAdShowed() {
+                    if (isAdded && view != null && !AdConfig.ISPAIDUSER) {
                         // Modify view visibility here
                         binding.adsView.visibility = View.VISIBLE
                     }
-
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
                 }
             }
         )
@@ -128,20 +137,17 @@ class DownloadBatteryAnimation : Fragment() {
             }else if (adShowed == true){
                 navigateToNext()
             }else{
-                SDKBaseController.getInstance().showInterstitialAds(
+
+                interAd.showAd(
                     requireActivity(),
                     "downloadscr_set_click",
-                    "downloadscr_set_click",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToNext()
-                            //do something
+                    adListener = object : IKShowAdListener {
+                        override fun onAdsShowFail(error: IKAdError) {
+                            if (isAdded){
+                                navigateToNext()
+                            }
                         }
-
                         override fun onAdsDismiss() {
-                            Log.e(TAG, "onAdsDismiss: ", )
                             navigateToNext()
                         }
                     }

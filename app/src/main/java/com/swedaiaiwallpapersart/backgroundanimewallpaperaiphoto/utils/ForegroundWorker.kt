@@ -7,7 +7,6 @@ import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
@@ -18,7 +17,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
-@HiltWorker
 class ForegroundWorker @AssistedInject constructor(
      @Assisted appContext : Context,
      @Assisted params : WorkerParameters

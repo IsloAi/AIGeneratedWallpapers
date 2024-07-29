@@ -2,36 +2,34 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doub
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ChargingAnimationAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubeWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubleSharedViewmodel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -53,6 +51,8 @@ class DoubleWallpaperFragment : Fragment() {
 
     val TAG = "DoubleWallpaper"
 
+    val interAd = IKInterstitialAd()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,6 +69,17 @@ class DoubleWallpaperFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         myActivity = activity as MainActivity
+
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("mainscr_sub_cate_tab_click_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
 
         val layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvDouble.layoutManager = layoutManager
@@ -142,7 +153,7 @@ class DoubleWallpaperFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
 
@@ -168,25 +179,19 @@ class DoubleWallpaperFragment : Fragment() {
                     navigateToDestination(allItems!!,position)
 
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "mainscr_sub_cate_tab_click_item",
-                        "mainscr_sub_cate_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                navigateToDestination(allItems!!,position)
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    navigateToDestination(allItems!!,position)
+                                }
                             }
-
                             override fun onAdsDismiss() {
-                                Log.e("********ADS", "onAdsDismiss: " )
                                 navigateToDestination(allItems!!,position)
-
-//                                    navigateToDestination(allItems,position)
                             }
-
                         }
                     )
                 }
@@ -194,6 +199,20 @@ class DoubleWallpaperFragment : Fragment() {
 
             }
         },myActivity)
+
+        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                if (isAdded && view!= null){
+                    adapter?.nativeAdView = adObject
+                    binding.rvDouble.adapter = adapter
+                }
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
+        })
 
         binding.rvDouble.adapter = adapter
     }

@@ -2,12 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.bmik.android.sdk.widgets.IkmWidgetAdView
+    <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
-        app:ikwad_preview_layout="@layout/shimmer_loading_native"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_height="match_parent" />
 

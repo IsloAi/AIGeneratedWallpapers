@@ -1,30 +1,20 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkRequest
 import android.util.Log
-import androidx.hilt.work.HiltWorkerFactory
-import androidx.work.Configuration
-import com.bmik.android.sdk.SDKBaseApplication
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.billing.BillingHelper
-import com.bmik.android.sdk.billing.SDKBillingHandler
-import com.bmik.android.sdk.billing.dto.PurchaseInfo
-import com.bmik.android.sdk.listener.keep.SDKIAPProductIDProvider
 import com.google.firebase.FirebaseApp
+import com.ikame.android.sdk.IKBaseApplication
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.billing.IKBillingController
+import com.ikame.android.sdk.data.dto.pub.IKBillingError
+import com.ikame.android.sdk.listener.keep.SDKIAPProductIDProvider
+import com.ikame.android.sdk.listener.pub.IKBillingHandlerListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ConnectivityCallback
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
 @HiltAndroidApp
-class MyApp : SDKBaseApplication(), Configuration.Provider {
-
-    @Inject
-    lateinit var workerFactory: HiltWorkerFactory
+class MyApp : IKBaseApplication() {
 
 
     override fun enableRewardAd(): Boolean {
@@ -69,13 +59,13 @@ class MyApp : SDKBaseApplication(), Configuration.Provider {
         super.onCreate()
 
         FirebaseApp.initializeApp(applicationContext)
-        addActivityEnableShowResumeAd(MainActivity::class.java)
-        setEnableShowResumeAds(true)
-        SDKBaseController.getInstance().setAutoReloadRewarded(true)
-        setEnableShowLoadingResumeAds(true)
+        IKSdkController.addActivityEnableShowResumeAd(MainActivity::class.java)
+        IKSdkController.setEnableShowResumeAds(true)
+//        IKSdkController.setAutoReloadRewarded(true)
+        IKSdkController.setEnableShowLoadingResumeAds(true)
 
-        BillingHelper.getInstance().setBillingListener(object : SDKBillingHandler {
-            override fun onProductPurchased(productId: String, details: PurchaseInfo?) {
+        IKBillingController.setBillingListener(object : IKBillingHandlerListener {
+            override fun onProductPurchased(productId: String,  orderId: String?) {
                 //do some thing
             }
 
@@ -83,8 +73,8 @@ class MyApp : SDKBaseApplication(), Configuration.Provider {
                 //do some thing
             }
 
-            override fun onBillingError(errorCode: Int, error: Throwable?) {
-                Log.e("TAG", "onBillingError: $errorCode$error" )
+            override fun onBillingError(error: IKBillingError) {
+                Log.e("TAG", "onBillingError: $error" )
             }
 
             override fun onBillingInitialized() {
@@ -92,11 +82,6 @@ class MyApp : SDKBaseApplication(), Configuration.Provider {
             }
         })
     }
-
-    override val workManagerConfiguration: Configuration
-        get() =  Configuration.Builder()
-            .setWorkerFactory(workerFactory)
-            .build()
 
 }
 

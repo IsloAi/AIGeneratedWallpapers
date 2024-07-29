@@ -49,13 +49,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmNativeAdView
+import com.ikame.android.sdk.IKSdkController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -65,6 +59,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.format.rewarded.IKRewardAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
@@ -166,6 +170,9 @@ class WallpaperViewFragment : Fragment() {
 
     @Inject
     lateinit var appDatabase: AppDatabase
+
+    val rewardAd = IKRewardAd()
+    val interAd = IKInterstitialAd()
 
 
     companion object {
@@ -272,6 +279,30 @@ class WallpaperViewFragment : Fragment() {
 //        binding.viewPager.setCurrentItem(currentItem, false)
     }
 
+    private fun loadRewardAd() {
+        rewardAd.attachLifecycle(this.lifecycle)
+        // Load ad with a specific screen ID, considered as a unitId
+        rewardAd.loadAd("viewlistwallscr_item_vip_reward", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
+
+        rewardAd.loadAd("viewlistwallscr_download_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -279,22 +310,36 @@ class WallpaperViewFragment : Fragment() {
         if(AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE
         }else{
-            binding.adsView.loadAd(requireContext(), "viewlistwallscr_bottom",
-                " viewlistwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
+            loadRewardAd()
 
-                        if (isAdded) {
-//                        binding.adsView.reCallLoadAd(this)
-                        }
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
-                })
+            interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+            interAd.loadAd("viewlistwallscr_item_vip_inter", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
+
+            interAd.loadAd("viewlistwallscr_setdilog_set_button", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("viewlistwallscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+//                    binding.adsView?.visibility = View.GONE
+                }
+
+            })
         }
 
 
@@ -304,10 +349,6 @@ class WallpaperViewFragment : Fragment() {
                 Pair("action_type", "screen"),
                 Pair("action_name", "ViewListWallScr_View")
             )
-
-            if (!SDKBaseController.getInstance().isRewardAdReady(requireActivity())){
-                SDKBaseController.getInstance().loadRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward")
-            }
         }
 
 
@@ -586,17 +627,11 @@ class WallpaperViewFragment : Fragment() {
         binding.unlockWallpaper.setOnClickListener {
 
             if (bitmap != null) {
-                SDKBaseController.getInstance().showRewardedAds(
+
+                rewardAd.showAd(
                     requireActivity(),
                     "viewlistwallscr_item_vip_reward",
-                    "viewlistwallscr_item_vip_reward",
-                    object :
-                        CustomSDKRewardedAdsListener {
-                        override fun onAdsDismiss() {
-                            Log.e("********ADS", "onAdsDismiss: ")
-
-                        }
-
+                    adListener = object : IKShowRewardAdListener {
                         override fun onAdsRewarded() {
                             Log.e("********ADS", "onAdsRewarded: ")
                             val postData = PostDataOnServer()
@@ -616,52 +651,44 @@ class WallpaperViewFragment : Fragment() {
                             viewPager2?.invalidate()
                             binding.viewPager.setCurrentItem(position, true)
                         }
+                        override fun onAdsShowFail(error: IKAdError) {
+                            if (isAdded){
+                                interAd.showAd(
+                                    requireActivity(),
+                                    "viewlistwallscr_item_vip_inter",
+                                    adListener = object : IKShowAdListener {
+                                        override fun onAdsShowFail(error: IKAdError) {
+                                            if (isAdded){
+                                                Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+                                            }
+                                        }
+                                        override fun onAdsDismiss() {
+                                            val postData = PostDataOnServer()
+                                            val model = arrayList[position]
+                                            arrayList[position]?.unlockimges = true
+                                            arrayList[position]?.gems = 0
 
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: ")
-
-                            SDKBaseController.getInstance().showInterstitialAds(
-                                requireActivity(),
-                                "viewlistwallscr_item_vip_inter",
-                                "viewlistwallscr_item_vip_inter",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        if (isAdded) {
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Ad not available, Please try again later",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
+                                            val model1 = arrayList[position]
+                                            postData.unLocking(
+                                                MySharePreference.getDeviceID(requireContext())!!,
+                                                model1!!, requireContext(), 0
+                                            )
+                                            showInter = false
+                                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                                            binding.unlockWallpaper.visibility = View.GONE
+                                            adapter?.notifyItemChanged(position)
+                                            viewPager2?.invalidate()
+                                            binding.viewPager.setCurrentItem(position, true)
                                         }
                                     }
-
-                                    override fun onAdsDismiss() {
-                                        Log.e("********ADS", "onAdsRewarded: ")
-                                        val postData = PostDataOnServer()
-                                        val model = arrayList[position]
-                                        arrayList[position]?.unlockimges = true
-                                        arrayList[position]?.gems = 0
-
-                                        val model1 = arrayList[position]
-                                        postData.unLocking(
-                                            MySharePreference.getDeviceID(requireContext())!!,
-                                            model1!!, requireContext(), 0
-                                        )
-                                        showInter = false
-                                        binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                                        binding.unlockWallpaper.visibility = View.GONE
-                                        adapter?.notifyItemChanged(position)
-                                        viewPager2?.invalidate()
-                                        binding.viewPager.setCurrentItem(position, true)
-                                    }
-                                }
-                            )
-
-
+                                )
+                            }
                         }
-
-                    })
+                        override fun onAdsDismiss() {
+                            loadRewardAd()
+                        }
+                    }
+                )
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -740,27 +767,20 @@ class WallpaperViewFragment : Fragment() {
         }, myActivity)
         adapter!!.setCoroutineScope(fragmentScope)
 
-        SDKBaseController.getInstance().loadIkmNativeAdView(
-            requireContext(),
-            "viewlistwallscr_scrollview",
-            "viewlistwallscr_scrollview",
-            object :
-                IKLoadNativeAdListener {
-                override fun onAdFailedToLoad(errorCode: Int) {
-                    Log.e(TAG, "onAdFailedToLoad: " + errorCode)
-
+        IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                if (isAdded && view!= null){
+                    adapter?.nativeAdView = adObject
+                    viewPager2?.adapter = adapter
+                    viewPager2?.setCurrentItem(position, false)
                 }
+            }
 
-                override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                    if (isAdded && view != null) {
-                        adapter?.nativeAdView = adsResult
-                        viewPager2?.adapter = adapter
-                        viewPager2?.setCurrentItem(position, false)
-
-                    }
-                }
-
-            })
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
+        })
         viewPager2?.adapter = adapter
         Log.e(TAG, "setViewPager: " + position)
         viewPager2?.setCurrentItem(position, false)
@@ -874,19 +894,13 @@ class WallpaperViewFragment : Fragment() {
         bindingDialog.watchAds?.setOnClickListener {
             dialog.dismiss()
             if (bitmap != null) {
-                SDKBaseController.getInstance().showRewardedAds(
+
+
+                rewardAd.showAd(
                     requireActivity(),
                     "viewlistwallscr_item_vip_reward",
-                    "viewlistwallscr_item_vip_reward",
-                    object :
-                        CustomSDKRewardedAdsListener {
-                        override fun onAdsDismiss() {
-                            Log.e("********ADS", "onAdsDismiss: ")
-
-                        }
-
+                    adListener = object : IKShowRewardAdListener {
                         override fun onAdsRewarded() {
-                            Log.e("********ADS", "onAdsRewarded: ")
                             val postData = PostDataOnServer()
                             val model = arrayList[position]
                             arrayList[position]?.unlockimges = true
@@ -903,19 +917,22 @@ class WallpaperViewFragment : Fragment() {
                             binding.viewPager.setCurrentItem(position, true)
                             openPopupMenu(model!!)
                         }
-
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: ")
-                            if (isAdded) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Ad not available, Try again",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                        override fun onAdsShowFail(error: IKAdError) {
+                            if (isAdded){
+                                if (isAdded) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Ad not available, Try again",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         }
-
-                    })
+                        override fun onAdsDismiss() {
+                            loadRewardAd()
+                        }
+                    }
+                )
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -950,74 +967,40 @@ class WallpaperViewFragment : Fragment() {
 
         getReward?.setOnClickListener {
             dialog?.dismiss()
-            SDKBaseController.getInstance().showRewardedAds(
+
+            rewardAd.showAd(
                 requireActivity(),
                 "viewlistwallscr_download_item",
-                "viewlistwallscr_download_item",
-                object :
-                    CustomSDKRewardedAdsListener {
-                    override fun onAdsDismiss() {
-                        Log.e("********ADS", "onAdsDismiss: ")
-                    }
-
+                adListener = object : IKShowRewardAdListener {
                     override fun onAdsRewarded() {
-                        Log.e("********ADS", "onAdsRewarded: ")
-//                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                         mSaveMediaToStorage(bitmap)
                         val model = arrayList[position]
 
                         model?.let { it1 -> setDownloaded(it1) }
-
-
-//                    openPopupMenu(model!!)
-//                    }else{
-//                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//
-//                    }
-
-
                     }
-
-                    override fun onAdsShowFail(errorCode: Int) {
-                        SDKBaseController.getInstance().showInterstitialAds(
+                    override fun onAdsShowFail(error: IKAdError) {
+                        interAd.showAd(
                             requireActivity(),
                             "viewlistwallscr_download_item_inter",
-                            "viewlistwallscr_download_item_inter",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-//                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-                                    if (isAdded) {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Ad not available, Please try again later",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                            adListener = object : IKShowAdListener {
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    if (isAdded){
+                                        Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
                                     }
-//                                }else{
-//                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//
-//                                }
-                                    //do something
                                 }
-
                                 override fun onAdsDismiss() {
-//                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
                                     mSaveMediaToStorage(bitmap)
                                     val model = arrayList[position]
                                     model?.let { it1 -> setDownloaded(it1) }
-//                                }else{
-//                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//
-//                                }
                                 }
                             }
                         )
-                        Log.e("********ADS", "onAdsShowFail: ")
-
                     }
-
-                })
+                    override fun onAdsDismiss() {
+                        loadRewardAd()
+                    }
+                }
+            )
         }
 
         dismiss?.setOnClickListener {
@@ -1282,13 +1265,11 @@ class WallpaperViewFragment : Fragment() {
                             setDownloaded(model)
                             showRateApp()
                         }else{
-                            SDKBaseController.getInstance().showInterstitialAds(
+                            interAd.showAd(
                                 requireActivity(),
                                 "viewlistwallscr_setdilog_set_button",
-                                "viewlistwallscr_setdilog_set_button",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
+                                adListener = object : IKShowAdListener {
+                                    override fun onAdsShowFail(error: IKAdError) {
                                         myExecutor.execute { myWallpaperManager.homeScreen(bitmap!!) }
                                         myHandler.post {
                                             if (state) {
@@ -1305,10 +1286,8 @@ class WallpaperViewFragment : Fragment() {
 
                                         setDownloaded(model)
                                         showRateApp()
-                                        Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                        //do something
+                                        Log.e("********ADS", "onAdsShowFail: " + error)
                                     }
-
                                     override fun onAdsDismiss() {
                                         lifecycleScope.launch(Dispatchers.IO) {
                                             try {
@@ -1333,12 +1312,7 @@ class WallpaperViewFragment : Fragment() {
                                                 e.printStackTrace()
                                             }
                                         }
-//                            myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
-//                            myHandler.post { if(state){
-//                                interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
-//                                state = false
-//                                postDelay()
-//                            } }
+//
                                         showRateApp()
                                     }
                                 }
@@ -1400,14 +1374,13 @@ class WallpaperViewFragment : Fragment() {
                             setDownloaded(model)
                             showRateApp()
                         }else{
-                            SDKBaseController.getInstance().showInterstitialAds(
+
+                            interAd.showAd(
                                 requireActivity(),
                                 "viewlistwallscr_setdilog_set_button",
-                                "viewlistwallscr_setdilog_set_button",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                adListener = object : IKShowAdListener {
+                                    override fun onAdsShowFail(error: IKAdError) {
+                                        Log.e("********ADS", "onAdsShowFail: " + error)
                                         myExecutor.execute {
                                             bitmap?.let { it1 -> myWallpaperManager.lockScreen(it1) }
                                         }
@@ -1426,9 +1399,7 @@ class WallpaperViewFragment : Fragment() {
 
                                         setDownloaded(model)
                                         showRateApp()
-                                        //do something
                                     }
-
                                     override fun onAdsDismiss() {
                                         myExecutor.execute {
                                             myWallpaperManager.lockScreen(bitmap!!)
@@ -1448,7 +1419,6 @@ class WallpaperViewFragment : Fragment() {
 
                                         setDownloaded(model)
                                         showRateApp()
-
                                     }
                                 }
                             )
@@ -1509,14 +1479,12 @@ class WallpaperViewFragment : Fragment() {
                             setDownloaded(model)
                             showRateApp()
                         }else{
-                            SDKBaseController.getInstance().showInterstitialAds(
+
+                            interAd.showAd(
                                 requireActivity(),
                                 "viewlistwallscr_setdilog_set_button",
-                                "viewlistwallscr_setdilog_set_button",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        Log.e("********ADS", "onAdsShowFail: " + errorCode)
+                                adListener = object : IKShowAdListener {
+                                    override fun onAdsShowFail(error: IKAdError) {
                                         myExecutor.execute {
                                             myWallpaperManager.homeAndLockScreen(bitmap!!)
                                         }
@@ -1535,9 +1503,7 @@ class WallpaperViewFragment : Fragment() {
                                         }
                                         setDownloaded(model)
                                         showRateApp()
-                                        //do something
                                     }
-
                                     override fun onAdsDismiss() {
                                         myExecutor.execute {
                                             myWallpaperManager.homeAndLockScreen(bitmap!!)
@@ -1709,7 +1675,7 @@ class WallpaperViewFragment : Fragment() {
         eventName: String,
         vararg param: Pair<String, String?>
     ) {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     private fun loadingPopup() {

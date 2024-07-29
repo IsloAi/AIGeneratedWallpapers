@@ -24,21 +24,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.enableEdgeToEdge
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.IkmSdkController
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.format.rewarded.IKRewardAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
@@ -53,7 +53,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWal
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.UIUtils
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -90,6 +89,10 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     var checkWallpaper = false
 
+    val rewardAd = IKRewardAd()
+    val interAd = IKInterstitialAd()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -104,25 +107,28 @@ class LiveWallpaperPreviewFragment : Fragment() {
         myActivity = activity as MainActivity
 
         if (!AdConfig.ISPAIDUSER){
-            if (!SDKBaseController.getInstance().isRewardAdReady(myActivity)){
-                SDKBaseController.getInstance().loadRewardedAds(myActivity,"viewlistwallscr_item_vip_reward")
-            }
-            binding.adsView.loadAd(requireContext(),"searchscr_bottom",
-                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
+            loadRewardAd()
 
-                        if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
-                        }
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                    }
-                })
+            interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+            interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
+
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+//                    binding.adsView?.visibility = View.GONE
+                }
+
+            })
         }else{
             binding.adsView.visibility = View.GONE
         }
@@ -139,12 +145,26 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
     }
 
+    private fun loadRewardAd() {
+        rewardAd.attachLifecycle(this.lifecycle)
+        // Load ad with a specific screen ID, considered as a unitId
+        rewardAd.loadAd("viewlistwallscr_item_vip_reward", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
+    }
+
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     private fun initObservers() {
@@ -202,24 +222,16 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 if (adPosition % 2 != 0){
                     setWallpaper()
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+                    interAd.showAd(
                         requireActivity(),
                         "mainscr_live_tab_click_item",
-                        "mainscr_live_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                setWallpaper()
-
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    setWallpaper()
+                                }
                             }
-
                             override fun onAdsDismiss() {
-                                setWallpaper()
-
-                            }
-
-                            override fun onAdsShowTimeout() {
                                 setWallpaper()
                             }
                         }
@@ -351,15 +363,12 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         bindingDialog.watchAds?.setOnClickListener {
             dialog.dismiss()
-                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
-                    CustomSDKRewardedAdsListener {
-                    override fun onAdsDismiss() {
-                        Log.e("********ADS", "onAdsDismiss: ")
 
-                    }
-
+            rewardAd.showAd(
+                requireActivity(),
+                "viewlistwallscr_item_vip_reward",
+                adListener = object : IKShowRewardAdListener {
                     override fun onAdsRewarded() {
-                        Log.e("********ADS", "onAdsRewarded: ")
                         livewallpaper?.unlocked = true
                         livewallpaper?.id?.let { it1 ->
                             appDatabase.liveWallpaperDao().updateLocked(true,
@@ -367,15 +376,16 @@ class LiveWallpaperPreviewFragment : Fragment() {
                             )
                         }
                     }
-
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: ")
+                    override fun onAdsShowFail(error: IKAdError) {
                         if (isAdded){
                             Toast.makeText(requireContext(),"Ad not available, Try again",Toast.LENGTH_SHORT).show()
                         }
                     }
-
-                })
+                    override fun onAdsDismiss() {
+                        loadRewardAd()
+                    }
+                }
+            )
 
         }
 
@@ -399,7 +409,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         val info = WallpaperManager.getInstance(requireContext().applicationContext).wallpaperInfo
         if (info == null || info.packageName != requireContext().packageName) {
-            IkmSdkController.setEnableShowResumeAds(true)
+            IKSdkController.setEnableShowResumeAds(true)
             filepath.renameTo(newFile)
             BlurView.filePath = newFile.path
             LiveWallpaperService.setToWallPaper(requireContext())
@@ -454,7 +464,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
                 notifyFileNameChanged(requireContext(), filepath.path, newFile.path)
                 Log.e("TAG", "showSimpleDialog: renamed")
-                IkmSdkController.setEnableShowResumeAds(true)
+                IKSdkController.setEnableShowResumeAds(true)
                 checkWallpaper = true
                 LiveWallpaperService.setToWallPaper(requireContext())
                 try {
@@ -537,63 +547,49 @@ class LiveWallpaperPreviewFragment : Fragment() {
         val getReward = dialog.findViewById<LinearLayout>(R.id.buttonGetReward)
         val dismiss = dialog.findViewById<TextView>(R.id.noThanks)
 
-        getReward?.setOnClickListener {
-            dialog.dismiss()
-            SDKBaseController.getInstance().showRewardedAds(
-                requireActivity(),
-                "viewlistwallscr_download_item",
-                "viewlistwallscr_download_item",
-                object :
-                    CustomSDKRewardedAdsListener {
-                    override fun onAdsDismiss() {
-                        Log.e("********ADS", "onAdsDismiss: ")
-                    }
 
-                    override fun onAdsRewarded() {
-                        Log.e("********ADS", "onAdsRewarded: ")
+        rewardAd.showAd(
+            requireActivity(),
+            "viewlistwallscr_item_vip_reward",
+            adListener = object : IKShowRewardAdListener {
+                override fun onAdsRewarded() {
+                    copyFiles(source, destination)
+                }
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded){
 
-                        copyFiles(source, destination)
-
-                    }
-
-                    override fun onAdsShowFail(errorCode: Int) {
-                        if (isAdded){
-                            SDKBaseController.getInstance().showInterstitialAds(
-                                requireActivity(),
-                                "viewlistwallscr_download_item_inter",
-                                "viewlistwallscr_download_item_inter",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        if (isAdded){
-                                            Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
-                                        }
-                                    }
-
-                                    override fun onAdsDismiss() {
-                                        copyFiles(source, destination)
-
-                                        try {
-                                            lifecycleScope.launch {
-                                                val requestBody = mapOf("imageid" to livewallpaper?.id)
-
-                                                webApiInterface.postDownloadedLive(requestBody)
-                                            }
-                                        }catch (e:Exception){
-                                            e.printStackTrace()
-                                        }
-
+                        interAd.showAd(
+                            requireActivity(),
+                            "mainscr_live_tab_click_item",
+                            adListener = object : IKShowAdListener {
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    if (isAdded){
+                                        Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
                                     }
                                 }
-                            )
-                        }
+                                override fun onAdsDismiss() {
+                                    copyFiles(source, destination)
 
-                        Log.e("********ADS", "onAdsShowFail: ")
+                                    try {
+                                        lifecycleScope.launch {
+                                            val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                                            webApiInterface.postDownloadedLive(requestBody)
+                                        }
+                                    }catch (e:Exception){
+                                        e.printStackTrace()
+                                    }
+                                }
+                            }
+                        )
 
                     }
-
-                })
-        }
+                }
+                override fun onAdsDismiss() {
+                    loadRewardAd()
+                }
+            }
+        )
 
         dismiss?.setOnClickListener {
             dialog.dismiss()
@@ -669,7 +665,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
 //        try {
 //            if (isAdded){
 //            myActivity.window.statusBarColor = requireContext().getColor(
-//                    com.bmik.android.sdk.R.color.tt_transparent)
+//                    com.ikame.android.sdk.R.color.tt_transparent)
 //            }
 //        } catch (e: Exception) {
 //            e.printStackTrace()

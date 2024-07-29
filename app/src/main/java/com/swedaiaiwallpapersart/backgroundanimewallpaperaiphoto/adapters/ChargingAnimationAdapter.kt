@@ -14,16 +14,15 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.LottieListener
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
@@ -235,19 +234,13 @@ class ChargingAnimationAdapter  (
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
             adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-            binding.adsView.setCustomNativeAdLayout(
-                R.layout.shimmer_loading_native,
-                adLayout!!
-            )
             Log.e("TAG", "loadad: inside main scope")
 
             withContext(this.coroutineContext) {
-                binding.adsView.loadAd(myActivity,"mainscr_live_tab_scroll","mainscr_live_tab_scroll",
-                    object : CustomSDKAdsListenerAdapter() {
-                        override fun onAdsLoadFail() {
-                            super.onAdsLoadFail()
-                            Log.e("TAG", "onAdsLoadFail: native failded " )
+
+                binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"mainscr_live_tab_scroll",
+                    object : IKShowWidgetAdListener {
+                        override fun onAdShowFail(error: IKAdError) {
                             if (statusAd == 0){
                                 binding.adsView.visibility = View.GONE
                             }else{
@@ -258,16 +251,17 @@ class ChargingAnimationAdapter  (
                                     binding.adsView.visibility = View.GONE
                                 }
                             }
+                            Log.e("TAG", "onAdsLoadFail: native failded " )
                         }
 
-                        override fun onAdsLoaded() {
-                            super.onAdsLoaded()
+                        override fun onAdShowed() {
                             binding.adsView.visibility = View.VISIBLE
-                            Log.e("TAG", "onAdsLoaded: native loaded" )
                         }
                     }
                 )
             }
+
+
         }
 
     }

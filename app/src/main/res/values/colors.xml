@@ -2,6 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="color_shimmer">#cccccc</color>
+    <color name="color_ads_text_bg">#0979FD</color>
 
 
     <color name="background">#000000</color>
@@ -10,6 +12,7 @@
     <color name="button_bg">#FC9502</color>
     <color name="select_button_bg">#303845</color>
     <color name="gray">#535353</color>
+    <color name="color_text_ads_des">#838383</color>
     <color name="gems_color">#FC9502</color>
     <color name="card_selector_pre">#FF8A00</color>
 

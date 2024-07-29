@@ -269,10 +269,9 @@
         </RelativeLayout>
 
 
-        <com.bmik.android.sdk.widgets.IkmWidgetAdView
+        <com.ikame.android.sdk.widgets.IkmWidgetAdView
             android:id="@+id/adsView"
             android:layout_width="match_parent"
-            app:ikwad_preview_layout="@layout/shimmer_loading_banner"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_height="wrap_content" />
 

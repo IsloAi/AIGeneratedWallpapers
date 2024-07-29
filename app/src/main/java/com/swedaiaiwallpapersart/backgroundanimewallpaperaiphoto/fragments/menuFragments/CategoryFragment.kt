@@ -12,14 +12,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmNativeAdView
+import com.ikame.android.sdk.IKSdkController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -53,6 +56,9 @@ class CategoryFragment : Fragment() {
 
     var isNavigationInProgress = false
 
+    val interAd = IKInterstitialAd()
+
+
     val TAG = "CATEGORIES"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
@@ -63,7 +69,16 @@ class CategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
         onCustomCreateView()
     }
     @SuppressLint("SuspiciousIndentation")
@@ -83,22 +98,20 @@ class CategoryFragment : Fragment() {
                 if (AdConfig.ISPAIDUSER){
                     setFragment(string)
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "mainscr_cate_tab_click_item",
-                        "mainscr_cate_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: $errorCode")
-
-
-                                setFragment(string)
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    setFragment(string)
+                                }
                             }
-
                             override fun onAdsDismiss() {
-                                setFragment(string)
+                                if (isAdded){
+                                    setFragment(string)
+                                }
                             }
                         }
                     )
@@ -109,21 +122,18 @@ class CategoryFragment : Fragment() {
             }
         },myActivity,"")
 
-        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_cate_tab_scroll_view","mainscr_cate_tab_scroll_view",object :
-            IKLoadNativeAdListener {
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
-
-            }
-
-            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+        IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
-                    adapter?.nativeAdView = adsResult
+                    adapter?.nativeAdView = adObject
                     binding.recyclerviewAll.adapter = adapter
                 }
-
             }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
         })
         binding.recyclerviewAll.adapter = adapter
 
@@ -177,22 +187,20 @@ class CategoryFragment : Fragment() {
                     if (AdConfig.ISPAIDUSER){
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }else{
-                        SDKBaseController.getInstance().showInterstitialAds(
+
+                        interAd.showAd(
                             requireActivity(),
                             "mainscr_cate_tab_click_item",
-                            "mainscr_cate_tab_click_item",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: $errorCode")
-
-//                                setFragment(string)
-                                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                    //do something
+                            adListener = object : IKShowAdListener {
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    if (isAdded){
+                                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                    }
                                 }
-
                                 override fun onAdsDismiss() {
-                                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                    if (isAdded){
+                                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                    }
                                 }
                             }
                         )
@@ -336,7 +344,7 @@ class CategoryFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     override fun onDestroyView() {

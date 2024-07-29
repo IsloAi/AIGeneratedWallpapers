@@ -56,11 +56,11 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-        <com.bmik.android.sdk.widgets.IkmWidgetAdView
+        <com.ikame.android.sdk.widgets.IkmWidgetAdView
             android:id="@+id/adsView"
             android:layout_width="match_parent"
             app:layout_constraintTop_toBottomOf="@id/mainContentLayout"
-            app:ikwad_preview_layout="@layout/shimmer_loading_native"
+
             android:layout_height="0dp"
             android:paddingHorizontal="@dimen/_15sdp"
             android:paddingVertical="@dimen/_5sdp"

@@ -35,13 +35,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.SDKNewVersionUpdateCallback
-import com.bmik.android.sdk.model.dto.UpdateAppDto
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.utils.IkmSdkUtils
+import com.ikame.android.sdk.IKSdkController
+
+import com.ikame.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
@@ -54,6 +50,14 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.data.dto.pub.UpdateAppDto
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.utils.IKUtils
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
@@ -118,6 +122,9 @@ class HomeTabsFragment : Fragment() {
         var navigationInProgress = false
     }
 
+    val interAd = IKInterstitialAd(lifecycle)
+
+
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
     private val tabIconMap = mapOf(
@@ -159,6 +166,16 @@ class HomeTabsFragment : Fragment() {
                 binding.goPremium.visibility = View.VISIBLE
             }
         }
+
+        interAd.loadAd("exitapp_inter", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
+
         Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions.contentToString() )
         if (AdConfig.tabPositions[0].isEmpty()){
             Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions )
@@ -184,7 +201,7 @@ class HomeTabsFragment : Fragment() {
         initTabs()
         setEvents()
         lifecycleScope.launch {
-            SDKBaseController.getInstance().checkUpdateApp(object: SDKNewVersionUpdateCallback {
+            IKSdkController.checkUpdateApp(object: SDKNewVersionUpdateCallback {
                 override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
 
                     try {
@@ -243,7 +260,7 @@ class HomeTabsFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     fun feedback1Sheet() {
@@ -540,28 +557,20 @@ class HomeTabsFragment : Fragment() {
         if (AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE
         }else{
-            binding.adsView.loadAd(requireContext(),"mainscr_bottom",
-                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+                }
 
-                        if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
-                        }
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
-                })
+            })
         }
 
     }
     private fun setEvents(){
         binding.settings.setOnClickListener {
-            IkmSdkUtils.closeOldCollapse()
+            IKUtils.closeOldCollapse()
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SettingBT_Click"))
             }
@@ -570,7 +579,7 @@ class HomeTabsFragment : Fragment() {
 
 
         binding.search.setOnClickListener {
-            IkmSdkUtils.closeOldCollapse()
+            IKUtils.closeOldCollapse()
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SearchBT_Click"))
             }
@@ -578,7 +587,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         binding.goPremium.setOnClickListener {
-            IkmSdkUtils.closeOldCollapse()
+            IKUtils.closeOldCollapse()
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_IAPBT_Click"))
             }
@@ -608,29 +617,20 @@ class HomeTabsFragment : Fragment() {
                         exit = true
                         existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
                     }else{
-                        SDKBaseController.getInstance().showInterstitialAds(
-                            requireActivity(),
-                            "exitapp_inter",
-                            "exitapp_inter",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                    exit = true
-                                    existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
-                                    //do something
-                                }
-
-                                override fun onAdsDismiss() {
-                                    exit = true
-                                    if (isAdded){
-                                        thankyouDialog()
-                                    }
-
-//                            navigateToDestination(allItems!!, position)
+                        interAd.showAdBackApp(requireActivity(),object :IKShowAdListener{
+                            override fun onAdsDismiss() {
+                                exit = true
+                                if (isAdded){
+                                    thankyouDialog()
                                 }
                             }
-                        )
+
+                            override fun onAdsShowFail(error: IKAdError) {
+                                exit = true
+                                existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                            }
+
+                        })
                     }
 
 

@@ -106,15 +106,32 @@
 # With R8 full mode generic signatures are stripped for classes that are not kept.
 -keep,allowobfuscation,allowshrinking class retrofit2.Response
 
--dontwarn com.bmik.android.sdk.billing.SDKBillingHandler.*
--dontwarn com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener.*
+-dontwarn com.ikame.android.sdk.billing.SDKBillingHandler.*
+-dontwarn com.ikame.android.sdk.listener.CustomSDKRewardedAdsListener.*
 
--keep class com.bmik.android.sdk.billing.** { *; }
--keep class com.bmik.android.sdk.listener.** { *; }
+-keep class com.ikame.android.sdk.billing.** { *; }
+-keep class com.ikame.android.sdk.listener.** { *; }
 
--keep class com.bmik.android.sdk.billing.SDKBillingHandler { *; }
--keep class com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener { *; }
--dontwarn com.bmik.android.sdk.billing.SDKBillingHandler$DefaultImpls
--dontwarn com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener$DefaultImpls
+-keep class com.ikame.android.sdk.billing.SDKBillingHandler { *; }
+-keep class com.ikame.android.sdk.listener.CustomSDKRewardedAdsListener { *; }
+-dontwarn com.ikame.android.sdk.billing.SDKBillingHandler$DefaultImpls
+-dontwarn com.ikame.android.sdk.listener.CustomSDKRewardedAdsListener$DefaultImpls
+
+#-keep class com.example.projectone.*Hilt* {
+#    *;
+#}
+#
+#-keep class com.example.projectone.Hilt_* {*;}
+#-keep,allowobfuscation,allowshrinking @dagger.hilt.EntryPoint class *
+#-keep,allowobfuscation,allowshrinking @dagger.hilt.android.EarlyEntryPoint class *
+#
+#
+## Hilt
+#-keep class dagger.hilt.** { *; }
+#-keep class androidx.hilt.** { *; }
+#-keep class * extends dagger.hilt.internal.GeneratedComponentManager { *; }
+#-keep class * extends dagger.hilt.internal.GeneratedComponent { *; }
+#-keep class * implements dagger.hilt.internal.GeneratedComponentManager { *; }
+#-keep class * implements dagger.hilt.internal.GeneratedComponent { *; }
 
 

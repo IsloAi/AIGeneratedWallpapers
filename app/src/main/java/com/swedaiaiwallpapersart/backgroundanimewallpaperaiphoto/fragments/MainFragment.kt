@@ -18,9 +18,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.FavouriteFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
@@ -91,23 +88,23 @@ class MainFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        SDKBaseController.getInstance()
-            .loadBannerAds(
-                requireActivity(),
-                binding.adsWidget as? ViewGroup,
-                "mainscr_bottom",
-                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                    }
-
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                    }
-                }
-            )
+//        IKSdkController.getInstance()
+//            .loadBannerAds(
+//                requireActivity(),
+//                binding.adsWidget as? ViewGroup,
+//                "mainscr_bottom",
+//                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+//                    override fun onAdsLoaded() {
+//                        super.onAdsLoaded()
+//                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+//                    }
+//
+//                    override fun onAdsLoadFail() {
+//                        super.onAdsLoadFail()
+//                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+//                    }
+//                }
+//            )
 
         backHandle()
         onViewCreatingCalling()

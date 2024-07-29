@@ -39,9 +39,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
+import com.ikame.android.sdk.IKSdkController
+
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -251,93 +250,93 @@ class CreationSliderViewFragment : Fragment() {
             dialog.dismiss()
         }
         buttonHome.setOnClickListener {
-
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "viewlistwallscr_setdilog_set_button",
-                "viewlistwallscr_setdilog_set_button",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
-                        //do something
-                    }
-
-                    override fun onAdsDismiss() {
-                        myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
-                        myHandler.post { if(state){
-                            interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
-                            state = false
-                            postDelay()
-                        } }
-                        showRateApp()
-                    }
-                }
-            )
+//
+//            IKSdkController.getInstance().showInterstitialAds(
+//                requireActivity(),
+//                "viewlistwallscr_setdilog_set_button",
+//                "viewlistwallscr_setdilog_set_button",
+//                showLoading = true,
+//                adsListener = object : CommonAdsListenerAdapter() {
+//                    override fun onAdsShowFail(errorCode: Int) {
+//                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+//                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
+//                        //do something
+//                    }
+//
+//                    override fun onAdsDismiss() {
+//                        myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
+//                        myHandler.post { if(state){
+//                            interstitialAdWithToast(getString(R.string.set_successfully_on_home_screen), dialog)
+//                            state = false
+//                            postDelay()
+//                        } }
+//                        showRateApp()
+//                    }
+//                }
+//            )
         }
         buttonLock.setOnClickListener {
 
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "viewlistwallscr_setdilog_set_button",
-                "viewlistwallscr_setdilog_set_button",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
-                        //do something
-                    }
-
-                    override fun onAdsDismiss() {
-                        myExecutor.execute {
-                            myWallpaperManager.lockScreen(bitmap!!)
-                        }
-                        myHandler.post {
-                            if(state){
-                                interstitialAdWithToast(getString(R.string.set_successfully_on_lock_screen), dialog)
-                                state = false
-                                postDelay()
-                            }
-                        }
-                        showRateApp()
-                        binding.viewPager.setCurrentItem(position+1,true)
-                    }
-                }
-            )
+//            IKSdkController.getInstance().showInterstitialAds(
+//                requireActivity(),
+//                "viewlistwallscr_setdilog_set_button",
+//                "viewlistwallscr_setdilog_set_button",
+//                showLoading = true,
+//                adsListener = object : CommonAdsListenerAdapter() {
+//                    override fun onAdsShowFail(errorCode: Int) {
+//                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+//                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
+//                        //do something
+//                    }
+//
+//                    override fun onAdsDismiss() {
+//                        myExecutor.execute {
+//                            myWallpaperManager.lockScreen(bitmap!!)
+//                        }
+//                        myHandler.post {
+//                            if(state){
+//                                interstitialAdWithToast(getString(R.string.set_successfully_on_lock_screen), dialog)
+//                                state = false
+//                                postDelay()
+//                            }
+//                        }
+//                        showRateApp()
+//                        binding.viewPager.setCurrentItem(position+1,true)
+//                    }
+//                }
+//            )
         }
         buttonBothScreen.setOnClickListener {
 
 
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "viewlistwallscr_setdilog_set_button",
-                "viewlistwallscr_setdilog_set_button",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
-                        //do something
-                    }
-
-                    override fun onAdsDismiss() {
-                        myExecutor.execute {
-                            myWallpaperManager.homeAndLockScreen(bitmap!!)
-                        }
-                        myHandler.post {
-                            if(state){
-                                interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
-                                state = false
-                                postDelay()
-                            }
-                        }
-                        showRateApp()
-                        binding.viewPager.setCurrentItem(position+1,true)
-                    }
-                }
-            )
+//            IKSdkController.getInstance().showInterstitialAds(
+//                requireActivity(),
+//                "viewlistwallscr_setdilog_set_button",
+//                "viewlistwallscr_setdilog_set_button",
+//                showLoading = true,
+//                adsListener = object : CommonAdsListenerAdapter() {
+//                    override fun onAdsShowFail(errorCode: Int) {
+//                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+//                        Toast.makeText(requireContext(),"Ad not available,Please try again...",Toast.LENGTH_SHORT).show()
+//                        //do something
+//                    }
+//
+//                    override fun onAdsDismiss() {
+//                        myExecutor.execute {
+//                            myWallpaperManager.homeAndLockScreen(bitmap!!)
+//                        }
+//                        myHandler.post {
+//                            if(state){
+//                                interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
+//                                state = false
+//                                postDelay()
+//                            }
+//                        }
+//                        showRateApp()
+//                        binding.viewPager.setCurrentItem(position+1,true)
+//                    }
+//                }
+//            )
         }
         dialog.show()
     }
@@ -416,43 +415,43 @@ class CreationSliderViewFragment : Fragment() {
 
         getReward?.setOnClickListener {
             dialog?.dismiss()
-            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
-                CustomSDKRewardedAdsListener {
-                override fun onAdsDismiss() {
-                    Log.e("********ADS", "onAdsDismiss: ")
-                }
-
-                override fun onAdsRewarded() {
-                    Log.e("********ADS", "onAdsRewarded: ")
-                        mSaveMediaToStorage(bitmap)
-
-
-
-                }
-
-                override fun onAdsShowFail(errorCode: Int) {
-                    Log.e("********ADS", "onAdsShowFail: ")
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "viewlistwallscr_download_item_inter",
-                        "viewlistwallscr_download_item_inter",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                if (isAdded){
-                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            override fun onAdsDismiss() {
-                                mSaveMediaToStorage(bitmap)
-                            }
-                        }
-                    )
-
-                }
-
-            })
+//            IKSdkController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
+//                CustomSDKRewardedAdsListener {
+//                override fun onAdsDismiss() {
+//                    Log.e("********ADS", "onAdsDismiss: ")
+//                }
+//
+//                override fun onAdsRewarded() {
+//                    Log.e("********ADS", "onAdsRewarded: ")
+//                        mSaveMediaToStorage(bitmap)
+//
+//
+//
+//                }
+//
+//                override fun onAdsShowFail(errorCode: Int) {
+//                    Log.e("********ADS", "onAdsShowFail: ")
+//                    IKSdkController.getInstance().showInterstitialAds(
+//                        requireActivity(),
+//                        "viewlistwallscr_download_item_inter",
+//                        "viewlistwallscr_download_item_inter",
+//                        showLoading = true,
+//                        adsListener = object : CommonAdsListenerAdapter() {
+//                            override fun onAdsShowFail(errorCode: Int) {
+//                                if (isAdded){
+//                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+//
+//                            override fun onAdsDismiss() {
+//                                mSaveMediaToStorage(bitmap)
+//                            }
+//                        }
+//                    )
+//
+//                }
+//
+//            })
         }
 
         dismiss?.setOnClickListener {

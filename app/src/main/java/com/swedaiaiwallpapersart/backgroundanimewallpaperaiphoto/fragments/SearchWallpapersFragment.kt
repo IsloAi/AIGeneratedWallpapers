@@ -15,12 +15,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.widgets.IkmNativeAdView
+import com.ikame.android.sdk.IKSdkController
 import com.google.gson.Gson
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -71,6 +74,8 @@ class SearchWallpapersFragment : Fragment() {
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private  val myViewModel: AllWallpapersViewmodel by viewModels()
 
+    val interAd = IKInterstitialAd()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -88,22 +93,38 @@ class SearchWallpapersFragment : Fragment() {
         if (AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE
         }else{
-            binding.adsView.loadAd(requireContext(),"searchscr_bottom",
-                " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+//                    binding.adsView?.visibility = View.GONE
+                }
 
-                        if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
-                        }
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                    }
-                })
+            })
+
+            interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+            interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
+
+            interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
+
+
+
         }
 
 
@@ -167,20 +188,17 @@ class SearchWallpapersFragment : Fragment() {
                 if (AdConfig.ISPAIDUSER){
                     navigateToDestination(items!!,position)
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "mainscr_trending_tab_click_item",
-                        "mainscr_trending_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                navigateToDestination(items!!,position)
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    navigateToDestination(items!!,position)
+                                }
                             }
-
                             override fun onAdsDismiss() {
-                                Log.e("********ADS", "onAdsDismiss: " )
                                 navigateToDestination(items!!,position)
                             }
                         }
@@ -198,20 +216,18 @@ class SearchWallpapersFragment : Fragment() {
         },myActivity,"search")
         searchAdapter!!.setCoroutineScope(fragmentScope)
 
-        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"searchscr_scroll_view","searchscr_scroll_view",object :
-            IKLoadNativeAdListener {
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
-
-            }
-
-            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+        IKSdkController.loadNativeDisplayAd("searchscr_scroll_view", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
-                    searchAdapter?.nativeAdView = adsResult
+                    searchAdapter?.nativeAdView = adObject
                     binding.recyclerviewAll.adapter = searchAdapter
                 }
             }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
         })
         binding.recyclerviewAll.adapter = searchAdapter
 
@@ -418,18 +434,16 @@ class SearchWallpapersFragment : Fragment() {
                 if (AdConfig.ISPAIDUSER){
                     setFragment(string)
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "mainscr_cate_tab_click_item",
-                        "mainscr_cate_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: $errorCode")
-                                setFragment(string)
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    setFragment(string)
+                                }
                             }
-
                             override fun onAdsDismiss() {
                                 setFragment(string)
                             }
@@ -441,21 +455,20 @@ class SearchWallpapersFragment : Fragment() {
             }
         },myActivity,"")
 
-        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_cate_tab_scroll_view","mainscr_cate_tab_scroll_view",object :
-            IKLoadNativeAdListener {
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.e(TAG, "onAdFailedToLoad: $errorCode")
-
-            }
-
-            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+        IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
-                    adapter?.nativeAdView = adsResult
+                    adapter?.nativeAdView = adObject
                     binding.recyclerviewCatgory.adapter = adapter
                 }
             }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
         })
+
         binding.recyclerviewCatgory.adapter = adapter
     }
 

@@ -11,9 +11,9 @@ import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
-import com.bmik.android.sdk.SDKBaseApplication
-import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentOnBoardingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -125,7 +125,8 @@ class OnBoardingFragment : Fragment() {
                                 }
                                 binding.nextBtn.visibility = View.VISIBLE
                                 binding.skipBtn.visibility = View.VISIBLE
-                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                                IKSdkController.setEnableShowResumeAds(true)
+                                IKSdkController.setEnableShowResumeAds(true)
                             }
                             1 -> {
                                 if (isAdded){
@@ -133,11 +134,11 @@ class OnBoardingFragment : Fragment() {
                                 }
                                 binding.nextBtn.visibility = View.VISIBLE
                                 binding.skipBtn.visibility = View.VISIBLE
-                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                                IKSdkController.setEnableShowResumeAds(true)
 
                             }
                             2 -> {
-                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(false)
+                                IKSdkController.setEnableShowResumeAds(false)
                                 binding.nextBtn.visibility = View.GONE
                                 binding.skipBtn.visibility = View.GONE
                             }
@@ -145,7 +146,7 @@ class OnBoardingFragment : Fragment() {
                             3 -> {
                                 binding.nextBtn.visibility = View.VISIBLE
                                 binding.skipBtn.visibility = View.GONE
-                                SDKBaseApplication.getInstance()?.setEnableShowResumeAds(true)
+                                IKSdkController.setEnableShowResumeAds(true)
                             }
                         }
                     }
@@ -242,7 +243,7 @@ class OnBoardingFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     override fun onDestroyView() {

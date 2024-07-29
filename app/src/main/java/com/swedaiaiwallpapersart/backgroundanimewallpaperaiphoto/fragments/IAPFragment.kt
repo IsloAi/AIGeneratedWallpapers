@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.billing.BillingHelper
-import com.bmik.android.sdk.billing.SDKBillingHandler
-import com.bmik.android.sdk.billing.dto.PurchaseInfo
-import com.bmik.android.sdk.listener.SDKBillingPurchaseListener
-import com.bmik.android.sdk.listener.SDKBillingValueListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.bumptech.glide.Glide
+import com.ikame.android.sdk.billing.IKBillingController
+import com.ikame.android.sdk.data.dto.pub.IKBillingError
+import com.ikame.android.sdk.listener.pub.IKBillingPurchaseListener
+import com.ikame.android.sdk.listener.pub.IKBillingValueListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentIAPBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -45,10 +43,10 @@ class IAPFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val isavailable = BillingHelper.getInstance().isIabServiceAvailable(requireContext())
+        val isavailable = IKBillingController.isIabServiceAvailable(requireContext())
         Log.e("TAG", "onViewCreated: "+isavailable )
 
-        BillingHelper.getInstance().initBilling(requireContext())
+        IKBillingController.initBilling(requireContext())
 
         binding.close.setOnClickListener {
             findNavController().popBackStack()
@@ -59,9 +57,9 @@ class IAPFragment : Fragment() {
 
         lifecycleScope.launch {
             delay(1000)
-            BillingHelper.getInstance().getPriceSubscribe(
+            IKBillingController.getPriceSubscribe(
                 "unlock_all_premium_wallpaper_weekly_1",
-                object: SDKBillingValueListener{
+                object: IKBillingValueListener {
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
@@ -81,9 +79,9 @@ class IAPFragment : Fragment() {
                 }
             )
 
-            BillingHelper.getInstance().getPriceSubscribe(
+            IKBillingController.getPriceSubscribe(
                 "unlock_all_premium_wallpaper_monthly_1",
-                object: SDKBillingValueListener{
+                object: IKBillingValueListener{
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
@@ -97,9 +95,9 @@ class IAPFragment : Fragment() {
                 }
             )
 
-            BillingHelper.getInstance().getPriceSubscribe(
+            IKBillingController.getPriceSubscribe(
                 "unlock_all_premium_wallpaper_yearly_2",
-                object: SDKBillingValueListener{
+                object: IKBillingValueListener{
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
@@ -116,9 +114,9 @@ class IAPFragment : Fragment() {
                 }
             )
 
-            BillingHelper.getInstance().getPricePurchase(
+            IKBillingController.getPricePurchase(
                 "unlock_all_premium_lifetime",
-                object: SDKBillingValueListener{
+                object: IKBillingValueListener{
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
@@ -160,17 +158,17 @@ class IAPFragment : Fragment() {
 
 
         binding.iapYearlyCard.setOnClickListener {
-            val billingHelper = BillingHelper.getInstance()
+            val billingHelper = IKBillingController
             startPay(billingHelper,"unlock_all_premium_wallpaper_yearly_2","sub")
         }
 
         binding.iapLifeCard.setOnClickListener {
-            val billingHelper = BillingHelper.getInstance()
+            val billingHelper = IKBillingController
             startPay(billingHelper,"unlock_all_premium_lifetime","pur")
         }
 
         binding.upgradeButton.setOnClickListener {
-            val billingHelper = BillingHelper.getInstance()
+            val billingHelper = IKBillingController
             startPay(billingHelper,"unlock_all_premium_wallpaper_weekly_1","sub")
         }
 
@@ -185,13 +183,14 @@ class IAPFragment : Fragment() {
 
     }
 
-    private fun startPay(billingHelper: BillingHelper,id:String,type:String) {
+    private fun startPay(billingHelper: IKBillingController,id:String,type:String) {
 
         if (type == "sub"){
             billingHelper.subscribe(requireActivity(),id, object :
-                SDKBillingPurchaseListener {
-                override fun onProductIsBilling(productId: String) {
-                    Log.e("TAG", "onProductIsBilling: $productId", )
+                IKBillingPurchaseListener {
+
+                override fun onBillingFail(productId: String, error: IKBillingError) {
+                    Log.e("TAG", "onBillingFail: "+productId )
                 }
 
                 override fun onBillingSuccess(productId: String) {
@@ -200,27 +199,26 @@ class IAPFragment : Fragment() {
                     AdConfig.ISPAIDUSER = true
                 }
 
-                override fun onBillingFail(productId: String, errorCode: Int) {
-                    Log.e("TAG", "onBillingFail: $productId$errorCode")
+                override fun onProductAlreadyPurchased(productId: String) {
+                    Log.e("TAG", "onProductAlreadyPurchased: ", )
                 }
 
             })
 
         }else{
             billingHelper.purchase(requireActivity(),id, object :
-                SDKBillingPurchaseListener {
-                override fun onProductIsBilling(productId: String) {
-                    Log.e("TAG", "onProductIsBilling: $productId", )
-
+                IKBillingPurchaseListener {
+                override fun onBillingFail(productId: String, error: IKBillingError) {
+                    Log.e("TAG", "onBillingFail: ", )
                 }
 
-                override fun onBillingFail(productId: String, errorCode: Int) {
-                    Log.e("TAG", "onBillingFail: $productId$errorCode", )
-
-                }
                 override fun onBillingSuccess(productId: String) {
                     AdConfig.ISPAIDUSER = true
                     Log.e("TAG", "onBillingSuccess: $productId" )
+                }
+
+                override fun onProductAlreadyPurchased(productId: String) {
+                    Log.e("TAG", "onProductAlreadyPurchased: ", )
                 }
 
             })

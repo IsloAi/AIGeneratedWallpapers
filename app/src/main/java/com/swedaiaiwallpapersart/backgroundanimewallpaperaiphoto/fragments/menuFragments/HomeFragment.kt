@@ -17,13 +17,15 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.gson.Gson
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
@@ -31,13 +33,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -46,7 +45,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -88,6 +86,9 @@ class HomeFragment : Fragment(){
 
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
+    val interAd = IKInterstitialAd()
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
@@ -98,8 +99,16 @@ class HomeFragment : Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
-        SDKBaseController.getInstance(). loadInterstitialAds(myActivity, "mainscr_trending_tab_click_item","mainscr_trending_tab_click_item")
-
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
         onCreatingCalling()
         setEvents()
     }
@@ -325,23 +334,19 @@ class HomeFragment : Fragment(){
                         if (AdConfig.ISPAIDUSER){
                             navigateToDestination(allItems,position)
                         }else{
-                            SDKBaseController.getInstance().showInterstitialAds(
+
+                            interAd.showAd(
                                 requireActivity(),
                                 "mainscr_trending_tab_click_item",
-                                "mainscr_trending_tab_click_item",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                        navigateToDestination(allItems,position)
-                                        //do something
+                                adListener = object : IKShowAdListener {
+                                    override fun onAdsShowFail(error: IKAdError) {
+                                        if (isAdded){
+                                            navigateToDestination(allItems!!, position)
+                                        }
                                     }
-
                                     override fun onAdsDismiss() {
-                                        Log.e("********ADS", "onAdsDismiss: " )
-//                                    navigateToDestination(allItems,position)
+                                        // Handle ad dismissal
                                     }
-
                                 }
                             )
                         }
@@ -357,21 +362,18 @@ class HomeFragment : Fragment(){
         },myActivity,"trending")
         adapter.setCoroutineScope(fragmentScope)
 
-
-        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_trending_tab_scroll_view","mainscr_trending_tab_scroll_view",object :
-            IKLoadNativeAdListener {
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
-
-            }
-
-            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+        IKSdkController.loadNativeDisplayAd("mainscr_trending_tab_scroll_view", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
-                    adapter?.nativeAdView = adsResult
+                    adapter?.nativeAdView = adObject
                     binding.recyclerviewAll.adapter = adapter
                 }
             }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
         })
         binding.recyclerviewAll.adapter = adapter
 
@@ -484,7 +486,7 @@ class HomeFragment : Fragment(){
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     companion object{

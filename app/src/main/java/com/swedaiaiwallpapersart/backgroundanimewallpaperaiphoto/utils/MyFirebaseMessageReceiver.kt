@@ -10,7 +10,7 @@ import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.bmik.android.sdk.core.fcm.BaseIkFirebaseMessagingService
+import com.ikame.android.sdk.core.fcm.BaseIkFirebaseMessagingService
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson

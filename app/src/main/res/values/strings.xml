@@ -6,6 +6,7 @@
     <string name="default_web_client_id">AIzaSyAkGtIzLCvBZg9FHrMw_DVqblkNBOc2AFI</string>
     <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit..!</string>
 
+    <string name="txt_ad">AD</string>
     <string name="fgs_description" translatable="false">We are utilizing a specialized type for the foreground service because our use case does not fit within the predefined categories of foreground service types. We are registering a broadcast receiver within the battery animation service. Whenever the device connects to a charger, we initiate an activity where charging animations are displayed. This process cannot be paused; doing so would compromise the user experience. Users have downloaded the app specifically for uninterrupted battery animations.</string>
 
     <string name="categories">Categories</string>

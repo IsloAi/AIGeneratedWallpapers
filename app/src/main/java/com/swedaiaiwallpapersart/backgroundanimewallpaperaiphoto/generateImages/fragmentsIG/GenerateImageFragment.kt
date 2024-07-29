@@ -1,10 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -26,27 +24,17 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
-import com.bmik.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
-import com.google.android.gms.tasks.Task
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.widgets.IkmWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackRateBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGenerateImageBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ImageGenerationDialogBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -61,8 +49,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
@@ -116,7 +102,7 @@ class GenerateImageFragment : Fragment() {
         reviewManager = ReviewManagerFactory.create(requireContext())
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
-        SDKBaseController.getInstance().loadRewardedAds(requireActivity(), "mainscr_generate_tab_reward")
+//        IKSdkController.getInstance().loadRewardedAds(requireActivity(), "mainscr_generate_tab_reward")
     }
     private fun customOnCreateCalling() {
 
@@ -221,7 +207,7 @@ class GenerateImageFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
 
@@ -304,96 +290,96 @@ class GenerateImageFragment : Fragment() {
         binding.generateButton.setOnClickListener {
             if (binding.edtPrompt.text.isNotEmpty()){
                 BlurView.genFrom = "main"
-                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"mainscr_generate_tab_reward","mainscr_generate_tab_reward",object:CustomSDKRewardedAdsListener{
-                    override fun onAdsDismiss() {
-                        Log.e("********ADS", "onAdsDismiss: ", )
-                    }
-
-                    override fun onAdsRewarded() {
-                        Log.e("********ADS", "onAdsRewarded: ", )
-                        val getPrompt = binding.edtPrompt.text
-                        if(getPrompt.isNotEmpty()){
-                            getUserIdDialog()
-
-                            viewModel.loadData(myContext!!,getPrompt.toString() + " highly detailed,studio lighting,professional,vivid colors, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
-                            hasNavigated = false
-                        }else{
-                            Toast.makeText(requireContext(),
-                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onAdsShowFail(errorCode: Int) {
-
-                        if (isAdded && activity != null) {
-                            if (AdConfig.ISPAIDUSER){
-                                val getPrompt = binding.edtPrompt.text
-                                if(getPrompt.isNotEmpty()){
-                                    getUserIdDialog()
-
-                                    viewModel.loadData(myContext!!,getPrompt.toString()+ " highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
-                                    hasNavigated = false
-                                }else{
-                                    Toast.makeText(requireContext(),
-                                        getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                                }
-                            }else{
-                                SDKBaseController.getInstance().showInterstitialAds(
-                                    requireActivity(),
-                                    "mainscr_generate_tab_reward_inter",
-                                    "mainscr_generate_tab_reward_inter",
-                                    showLoading = true,
-                                    adsListener = object : CommonAdsListenerAdapter() {
-                                        override fun onAdsShowFail(errorCode: Int) {
-//                                        val getPrompt = binding.edtPrompt.text
-//                                        if(getPrompt.isNotEmpty()){
-//                                            getUserIdDialog()
-//                                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-//                                        }else{
-//                                            Toast.makeText(requireContext(),
-//                                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+//                IKSdkController.getInstance().showRewardedAds(requireActivity(),"mainscr_generate_tab_reward","mainscr_generate_tab_reward",object:CustomSDKRewardedAdsListener{
+//                    override fun onAdsDismiss() {
+//                        Log.e("********ADS", "onAdsDismiss: ", )
+//                    }
+//
+//                    override fun onAdsRewarded() {
+//                        Log.e("********ADS", "onAdsRewarded: ", )
+//                        val getPrompt = binding.edtPrompt.text
+//                        if(getPrompt.isNotEmpty()){
+//                            getUserIdDialog()
+//
+//                            viewModel.loadData(myContext!!,getPrompt.toString() + " highly detailed,studio lighting,professional,vivid colors, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
+//                            hasNavigated = false
+//                        }else{
+//                            Toast.makeText(requireContext(),
+//                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+//                        }
+//                    }
+//
+//                    override fun onAdsShowFail(errorCode: Int) {
+//
+//                        if (isAdded && activity != null) {
+//                            if (AdConfig.ISPAIDUSER){
+//                                val getPrompt = binding.edtPrompt.text
+//                                if(getPrompt.isNotEmpty()){
+//                                    getUserIdDialog()
+//
+//                                    viewModel.loadData(myContext!!,getPrompt.toString()+ " highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K", dialog!!)
+//                                    hasNavigated = false
+//                                }else{
+//                                    Toast.makeText(requireContext(),
+//                                        getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+//                                }
+//                            }else{
+//                                IKSdkController.getInstance().showInterstitialAds(
+//                                    requireActivity(),
+//                                    "mainscr_generate_tab_reward_inter",
+//                                    "mainscr_generate_tab_reward_inter",
+//                                    showLoading = true,
+//                                    adsListener = object : CommonAdsListenerAdapter() {
+//                                        override fun onAdsShowFail(errorCode: Int) {
+////                                        val getPrompt = binding.edtPrompt.text
+////                                        if(getPrompt.isNotEmpty()){
+////                                            getUserIdDialog()
+////                                            viewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+////                                        }else{
+////                                            Toast.makeText(requireContext(),
+////                                                getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+////                                        }
+//
+//
+//                                            Toast.makeText(
+//                                                requireContext(),
+//                                                "Ad not available,Please try again...",
+//                                                Toast.LENGTH_SHORT
+//                                            ).show()
+//                                            Log.e("TAG", "onAdsShowFail: inter",)
 //                                        }
-
-
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Ad not available,Please try again...",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                            Log.e("TAG", "onAdsShowFail: inter",)
-                                        }
-
-                                        override fun onAdsDismiss() {
-                                            if (isAdded && activity != null) {
-                                                val getPrompt = binding.edtPrompt.text
-                                                if (getPrompt.isNotEmpty()) {
-                                                    getUserIdDialog()
-                                                    viewModel.loadData(
-                                                        requireContext(),
-                                                        getPrompt.toString()+ " highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K",
-                                                        dialog!!
-                                                    )
-                                                } else {
-                                                    Toast.makeText(
-                                                        requireContext(),
-                                                        getString(R.string.enter_your_prompt),
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                            }
-                                        }
-                                    }
-                                )
-                            }
-
-                        }else{
-                            Log.e("TAG", "Fragment not attached to an activity in onAdsShowFail")
-                        }
-                        Log.e("********ADS", "onAdsShowFail: ", )
-
-                    }
-
-                })
+//
+//                                        override fun onAdsDismiss() {
+//                                            if (isAdded && activity != null) {
+//                                                val getPrompt = binding.edtPrompt.text
+//                                                if (getPrompt.isNotEmpty()) {
+//                                                    getUserIdDialog()
+//                                                    viewModel.loadData(
+//                                                        requireContext(),
+//                                                        getPrompt.toString()+ " highly detailed,studio lighting,professional,vivid colors,bokeh, cinematic lighting, HDR, UHD, 4K, 8k, 64K",
+//                                                        dialog!!
+//                                                    )
+//                                                } else {
+//                                                    Toast.makeText(
+//                                                        requireContext(),
+//                                                        getString(R.string.enter_your_prompt),
+//                                                        Toast.LENGTH_SHORT
+//                                                    ).show()
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                )
+//                            }
+//
+//                        }else{
+//                            Log.e("TAG", "Fragment not attached to an activity in onAdsShowFail")
+//                        }
+//                        Log.e("********ADS", "onAdsShowFail: ", )
+//
+//                    }
+//
+//                })
             } else{
                 Toast.makeText(requireContext(), getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
 
@@ -434,36 +420,36 @@ class GenerateImageFragment : Fragment() {
         dialog?.setCancelable(false)
         val adsView = dialog?.findViewById<IkmWidgetAdView>(R.id.adsView)
 
-        val adLayout = LayoutInflater.from(dialog?.context).inflate(
-            R.layout.native_dialog_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-        adsView?.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        adsView?.loadAd(requireActivity(),
-            "generate_renderdialog_bottom",
-            "generate_renderdialog_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("**********ADS", "onAdsLoadFail: ", )
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("**********ADS", "onAdsLoaded: ", )
-                }
-            }
-
-        )
+//        val adLayout = LayoutInflater.from(dialog?.context).inflate(
+//            R.layout.native_dialog_layout,
+//            null, false
+//        ) as? IkmWidgetAdLayout
+//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//        adsView?.setCustomNativeAdLayout(
+//            R.layout.shimmer_loading_native,
+//            adLayout!!
+//        )
+//
+//        adsView?.loadAd(requireActivity(),
+//            "generate_renderdialog_bottom",
+//            "generate_renderdialog_bottom",
+//            object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//                    Log.e("**********ADS", "onAdsLoadFail: ", )
+//                }
+//
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    Log.e("**********ADS", "onAdsLoaded: ", )
+//                }
+//            }
+//
+//        )
 
 
 

@@ -36,10 +36,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
+import com.ikame.android.sdk.IKSdkController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -49,6 +46,13 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.format.rewarded.IKRewardAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFullScreenImageViewBinding
@@ -97,6 +101,8 @@ class FullScreenImageViewFragment : DialogFragment() {
 
     private lateinit var myWallpaperManager : MyWallpaperManager
 
+    val rewardAd = IKRewardAd()
+    val interAd = IKInterstitialAd()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -124,13 +130,35 @@ class FullScreenImageViewFragment : DialogFragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.fullViewImage.isEnabled = false
         myActivity = activity as MainActivity
+        loadRewardAd()
+
+
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("viewlistwallscr_item_vip_inter", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
+
+        interAd.loadAd("viewlistwallscr_setdilog_set_button", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
         initDataObservers()
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
 
@@ -149,6 +177,30 @@ class FullScreenImageViewFragment : DialogFragment() {
 
 
 
+    }
+
+    private fun loadRewardAd() {
+        rewardAd.attachLifecycle(this.lifecycle)
+        // Load ad with a specific screen ID, considered as a unitId
+        rewardAd.loadAd("viewlistwallscr_item_vip_reward", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
+
+        rewardAd.loadAd("viewlistwallscr_download_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
     }
 
 
@@ -251,30 +303,33 @@ class FullScreenImageViewFragment : DialogFragment() {
         bindingDialog.watchAds?.setOnClickListener {
             dialog.dismiss()
             if(bitmap != null){
-                SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_item_vip_reward","viewlistwallscr_item_vip_reward",object:
-                    CustomSDKRewardedAdsListener {
-                    override fun onAdsDismiss() {
-                        Log.e("********ADS", "onAdsDismiss: ")
 
-                    }
+                rewardAd.showAd(
+                    requireActivity(),
+                    "viewlistwallscr_item_vip_reward",
+                    adListener = object : IKShowRewardAdListener {
+                        override fun onAdsRewarded() {
+                            responseData?.unlockimges = true
 
-                    override fun onAdsRewarded() {
-                        Log.e("********ADS", "onAdsRewarded: ")
-                        responseData?.unlockimges = true
-
-                        responseData?.id?.let { it1 ->
-                            appDatabase.wallpapersDao().updateLocked(true,
-                                it1
-                            )
+                            responseData?.id?.let { it1 ->
+                                appDatabase.wallpapersDao().updateLocked(true,
+                                    it1
+                                )
+                            }
+                            openPopupMenu(responseData!!)
                         }
-                        openPopupMenu(responseData!!)
+                        override fun onAdsShowFail(error: IKAdError) {
+                            if (isAdded){
+                                Toast.makeText(requireContext(),"Ad not available, Try again",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                        override fun onAdsDismiss() {
+                            loadRewardAd()
+                        }
                     }
+                )
 
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: ")
-                    }
 
-                })
             }else{
                 Toast.makeText(requireContext(),
                     getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
@@ -306,60 +361,35 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         getReward?.setOnClickListener {
             dialog?.dismiss()
-            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"viewlistwallscr_download_item","viewlistwallscr_download_item",object:
-                CustomSDKRewardedAdsListener {
-                override fun onAdsDismiss() {
-                    Log.e("********ADS", "onAdsDismiss: ")
-                }
 
-                override fun onAdsRewarded() {
-                    Log.e("********ADS", "onAdsRewarded: ")
-//                    if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-                    mSaveMediaToStorage(bitmap)
-//                    }else{
-//                        Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//
-//                    }
-
-
-                }
-
-                override fun onAdsShowFail(errorCode: Int) {
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "viewlistwallscr_download_item_inter",
-                        "viewlistwallscr_download_item_inter",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-
-                                if (isAdded){
-                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+            rewardAd.showAd(
+                requireActivity(),
+                "viewlistwallscr_download_item",
+                adListener = object : IKShowRewardAdListener {
+                    override fun onAdsRewarded() {
+                        mSaveMediaToStorage(bitmap)
+                    }
+                    override fun onAdsShowFail(error: IKAdError) {
+                        interAd.showAd(
+                            requireActivity(),
+                            "viewlistwallscr_download_item_inter",
+                            adListener = object : IKShowAdListener {
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    if (isAdded){
+                                        Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+                                    }
                                 }
-//                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-//                                mSaveMediaToStorage(bitmap)
-//                                }else{
-//                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//
-//                                }
-                                //do something
+                                override fun onAdsDismiss() {
+                                    mSaveMediaToStorage(bitmap)
+                                }
                             }
-
-                            override fun onAdsDismiss() {
-//                                if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
-                                mSaveMediaToStorage(bitmap)
-//                                }else{
-//                                    Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//
-//                                }
-                            }
-                        }
-                    )
-                    Log.e("********ADS", "onAdsShowFail: ")
-
+                        )
+                    }
+                    override fun onAdsDismiss() {
+                        loadRewardAd()
+                    }
                 }
-
-            })
+            )
         }
 
         dismiss?.setOnClickListener {
@@ -460,23 +490,19 @@ class FullScreenImageViewFragment : DialogFragment() {
                     }
                 }
             }else{
-                SDKBaseController.getInstance().showInterstitialAds(
+
+                interAd.showAd(
                     requireActivity(),
                     "viewlistwallscr_setdilog_set_button",
-                    "viewlistwallscr_setdilog_set_button",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
+                    adListener = object : IKShowAdListener {
+                        override fun onAdsShowFail(error: IKAdError) {
                             myExecutor.execute {myWallpaperManager.homeScreen(bitmap!!)}
                             interstitialAdWithToast(
                                 getString(R.string.set_successfully_on_home_screen),
                                 dialog
                             )
                             setDownloaded(model)
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            //do something
                         }
-
                         override fun onAdsDismiss() {
                             lifecycleScope.launch(Dispatchers.IO) {
                                 try {
@@ -520,14 +546,13 @@ class FullScreenImageViewFragment : DialogFragment() {
                     }
                     setDownloaded(model)
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "viewlistwallscr_setdilog_set_button",
-                        "viewlistwallscr_setdilog_set_button",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                Log.e("********ADS", "onAdsShowFail: " + error)
                                 myExecutor.execute {
                                     myWallpaperManager.lockScreen(bitmap!!)
                                 }
@@ -542,9 +567,7 @@ class FullScreenImageViewFragment : DialogFragment() {
 
 
                                 setDownloaded(model)
-                                //do something
                             }
-
                             override fun onAdsDismiss() {
                                 myExecutor.execute {
                                     myWallpaperManager.lockScreen(bitmap!!)
@@ -557,7 +580,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                                     )
                                 }
                                 setDownloaded(model)
-
                             }
                         }
                     )
@@ -579,14 +601,12 @@ class FullScreenImageViewFragment : DialogFragment() {
                 }
                 setDownloaded(model)
             }else{
-                SDKBaseController.getInstance().showInterstitialAds(
+
+                interAd.showAd(
                     requireActivity(),
                     "viewlistwallscr_setdilog_set_button",
-                    "viewlistwallscr_setdilog_set_button",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                    adListener = object : IKShowAdListener {
+                        override fun onAdsShowFail(error: IKAdError) {
                             myExecutor.execute {
                                 myWallpaperManager.homeAndLockScreen(bitmap!!)
                             }
@@ -597,9 +617,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                                 }
                             }
                             setDownloaded(model)
-                            //do something
                         }
-
                         override fun onAdsDismiss() {
                             myExecutor.execute {
                                 myWallpaperManager.homeAndLockScreen(bitmap!!)
@@ -615,6 +633,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                         }
                     }
                 )
+
             }
         }
         dialog.show()

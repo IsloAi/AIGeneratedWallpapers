@@ -19,7 +19,6 @@ import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -31,12 +30,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.work.Constraints
-import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import com.bmik.android.sdk.IkmSdkController
-import com.bmik.android.sdk.tracking.SDKTrackingController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
@@ -48,6 +41,8 @@ import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
@@ -164,7 +159,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
                 }
                 else -> {
-                   disableEdgeToEdge(window)
+                    disableEdgeToEdge(window)
                     val windowInsetsController =
                         WindowCompat.getInsetsController(window, window.decorView)
                     windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
@@ -419,7 +414,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         eventName: String,
         vararg param: Pair<String, String?>
     ) {
-        SDKTrackingController.trackingAllApp(this, eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
 
@@ -1427,7 +1422,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     override fun onResume() {
         super.onResume()
-        IkmSdkController.setEnableShowResumeAds(true)
+        IKSdkController.setEnableShowResumeAds(true)
     }
 
     override fun onNetworkAvailable() {

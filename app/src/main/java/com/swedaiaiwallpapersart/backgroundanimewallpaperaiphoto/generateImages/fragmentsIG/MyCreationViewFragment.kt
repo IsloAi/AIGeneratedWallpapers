@@ -29,12 +29,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
-import com.bmik.android.sdk.widgets.IkmWidgetAdView
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -135,22 +132,22 @@ class MyCreationViewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         reviewManager = ReviewManagerFactory.create(requireContext())
-        binding.adsView.loadAd(requireContext(),"createdwallscr_bottom",
-            " createdwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                }
-
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-
-                    if (isAdded){
-//                        binding.adsView.reCallLoadAd(this)
-                    }
-                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                }
-            })
+//        binding.adsView.loadAd(requireContext(),"createdwallscr_bottom",
+//            " createdwallscr_bottom", object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+//                }
+//
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//
+//                    if (isAdded){
+////                        binding.adsView.reCallLoadAd(this)
+//                    }
+//                    Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+//                }
+//            })
 
         binding.editPrompt.setOnClickListener {
             binding.prompt.isEnabled = true
@@ -333,58 +330,58 @@ class MyCreationViewFragment : Fragment() {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            SDKBaseController.getInstance().showRewardedAds(requireActivity(),"createdwallscr_regen_click","createdwallscr_regen_click",object:
-                CustomSDKRewardedAdsListener {
-                override fun onAdsDismiss() {
-                    Log.e("********ADS", "onAdsDismiss: ")
-                }
-
-                override fun onAdsRewarded() {
-                    Log.e("********ADS", "onAdsRewarded: ")
-                    val getPrompt = binding.prompt.text
-                    if(getPrompt.isNotEmpty()){
-
-                        getUserIdDialog()
-                        imageGenerateViewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                    }else{
-                        Toast.makeText(requireContext(),
-                            getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onAdsShowFail(errorCode: Int) {
-
-                    SDKBaseController.getInstance().showInterstitialAds(
-                        requireActivity(),
-                        "createdwallscr_regen_click_inter",
-                        "createdwallscr_regen_click_inter",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                if (isAdded){
-                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
-                                }
-                            }
-
-                            override fun onAdsDismiss() {
-                                val getPrompt = binding.prompt.text
-                                if(getPrompt.isNotEmpty()){
-
-                                    getUserIdDialog()
-                                    imageGenerateViewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
-                                }else{
-                                    Toast.makeText(requireContext(),
-                                        getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
-                                }
-                            }
-                        }
-                    )
-
-
-
-                }
-
-            })
+//            IKSdkController.getInstance().showRewardedAds(requireActivity(),"createdwallscr_regen_click","createdwallscr_regen_click",object:
+//                CustomSDKRewardedAdsListener {
+//                override fun onAdsDismiss() {
+//                    Log.e("********ADS", "onAdsDismiss: ")
+//                }
+//
+//                override fun onAdsRewarded() {
+//                    Log.e("********ADS", "onAdsRewarded: ")
+//                    val getPrompt = binding.prompt.text
+//                    if(getPrompt.isNotEmpty()){
+//
+//                        getUserIdDialog()
+//                        imageGenerateViewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+//                    }else{
+//                        Toast.makeText(requireContext(),
+//                            getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//
+//                override fun onAdsShowFail(errorCode: Int) {
+//
+//                    IKSdkController.getInstance().showInterstitialAds(
+//                        requireActivity(),
+//                        "createdwallscr_regen_click_inter",
+//                        "createdwallscr_regen_click_inter",
+//                        showLoading = true,
+//                        adsListener = object : CommonAdsListenerAdapter() {
+//                            override fun onAdsShowFail(errorCode: Int) {
+//                                if (isAdded){
+//                                    Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+//
+//                            override fun onAdsDismiss() {
+//                                val getPrompt = binding.prompt.text
+//                                if(getPrompt.isNotEmpty()){
+//
+//                                    getUserIdDialog()
+//                                    imageGenerateViewModel.loadData(myContext!!,getPrompt.toString(), dialog!!)
+//                                }else{
+//                                    Toast.makeText(requireContext(),
+//                                        getString(R.string.enter_your_prompt), Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+//                        }
+//                    )
+//
+//
+//
+//                }
+//
+//            })
         }
 
         binding.newGenerate.setOnClickListener {
@@ -392,33 +389,33 @@ class MyCreationViewFragment : Fragment() {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
-            SDKBaseController.getInstance().showInterstitialAds(
-                requireActivity(),
-                "createdwallscr_newgen_click",
-                "createdwallscr_newgen_click",
-                showLoading = true,
-                adsListener = object : CommonAdsListenerAdapter() {
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
-
-                        if (BlurView.genFrom == "main"){
-                            findNavController().navigateUp()
-                        }else{
-                            findNavController().popBackStack(R.id.homeTabsFragment,false)
-                        }
-
-                        //do something
-                    }
-
-                    override fun onAdsDismiss() {
-                        if (BlurView.genFrom == "main"){
-                            findNavController().navigateUp()
-                        }else{
-                            findNavController().popBackStack(R.id.homeTabsFragment,false)
-                        }
-                    }
-                }
-            )
+//            IKSdkController.getInstance().showInterstitialAds(
+//                requireActivity(),
+//                "createdwallscr_newgen_click",
+//                "createdwallscr_newgen_click",
+//                showLoading = true,
+//                adsListener = object : CommonAdsListenerAdapter() {
+//                    override fun onAdsShowFail(errorCode: Int) {
+//                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+//
+//                        if (BlurView.genFrom == "main"){
+//                            findNavController().navigateUp()
+//                        }else{
+//                            findNavController().popBackStack(R.id.homeTabsFragment,false)
+//                        }
+//
+//                        //do something
+//                    }
+//
+//                    override fun onAdsDismiss() {
+//                        if (BlurView.genFrom == "main"){
+//                            findNavController().navigateUp()
+//                        }else{
+//                            findNavController().popBackStack(R.id.homeTabsFragment,false)
+//                        }
+//                    }
+//                }
+//            )
         }
     }
 
@@ -434,36 +431,36 @@ class MyCreationViewFragment : Fragment() {
         dialog?.setCancelable(false)
         val adsView = dialog?.findViewById<IkmWidgetAdView>(R.id.adsView)
 
-        val adLayout = LayoutInflater.from(dialog?.context).inflate(
-            R.layout.native_dialog_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-        adsView?.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        adsView?.loadAd(requireActivity(),
-            "generate_renderdialog_bottom",
-            "generate_renderdialog_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    Log.e("**********ADS", "onAdsLoadFail: ")
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("**********ADS", "onAdsLoaded: ")
-                }
-            }
-
-        )
+//        val adLayout = LayoutInflater.from(dialog?.context).inflate(
+//            R.layout.native_dialog_layout,
+//            null, false
+//        ) as? IkmWidgetAdLayout
+//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//        adsView?.setCustomNativeAdLayout(
+//            R.layout.shimmer_loading_native,
+//            adLayout!!
+//        )
+//
+//        adsView?.loadAd(requireActivity(),
+//            "generate_renderdialog_bottom",
+//            "generate_renderdialog_bottom",
+//            object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//                    Log.e("**********ADS", "onAdsLoadFail: ")
+//                }
+//
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    Log.e("**********ADS", "onAdsLoaded: ")
+//                }
+//            }
+//
+//        )
 
 
 

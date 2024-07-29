@@ -2,7 +2,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.net.Uri
 import android.os.Bundle
-import android.os.CountDownTimer
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,14 +10,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.IkmSdkController
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.model.dto.CommonAdsAction
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.utils.IkmSdkUtils
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.utils.IKUtils
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -33,9 +32,11 @@ import kotlinx.coroutines.withContext
 
 class SplashOnFragment : Fragment() {
 
-    companion object{
+    companion object {
         var exit = true
     }
+
+    val TAG = "SPLASH"
 
     var moveNext = false
 
@@ -43,18 +44,18 @@ class SplashOnFragment : Fragment() {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    private var _binding: NewsplashFragmentBinding?= null
+    private var _binding: NewsplashFragmentBinding? = null
     private val binding get() = _binding!!
 
     private var currentPosition = 0
     private var isVideoPrepared = false
 
-    private lateinit var myActivity : MainActivity
+    private lateinit var myActivity: MainActivity
 
     private var animationJob: Job? = null
     private var animateImages: Job? = null
 
-    var lan:String = ""
+    var lan: String = ""
 
     var counter = 0
 
@@ -63,7 +64,7 @@ class SplashOnFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = NewsplashFragmentBinding.inflate(inflater,container,false)
+        _binding = NewsplashFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -71,17 +72,21 @@ class SplashOnFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        IkmSdkController.setEnableShowResumeAds(false)
+        IKSdkController.setEnableShowResumeAds(false)
 
-        SDKBaseController.getInstance().onDataInitSuccessListener = CommonAdsAction {
-            //do something
-        }
-        SDKBaseController.getInstance().onDataGetSuccessListener = {
-            //do something
-        }
-        if (isAdded){
+//        IKSdkController.getInstance().onDataInitSuccessListener = CommonAdsAction {
+//            //do something
+//        }
+//        IKSdkController.getInstance().onDataGetSuccessListener = {
+//            //do something
+//        }
+        if (isAdded) {
 
-            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "SplashScr_View"))
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "screen"),
+                Pair("action_name", "SplashScr_View")
+            )
         }
 
         myActivity = activity as MainActivity
@@ -92,35 +97,53 @@ class SplashOnFragment : Fragment() {
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
         // Check if the user is a premium user
-        val premium = IkmSdkUtils.isUserIAPAvailable()
+        val premium = IKUtils.isUserIAPAvailable()
         AdConfig.ISPAIDUSER = premium
 
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
-        }else{
-            binding.adsView.loadAd(requireContext(),"splashscr_bottom",
-                "splashscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-                    }
+        } else {
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+//                    binding.adsView?.visibility = View.GONE
+                }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-                    }
-                })
+            })
         }
         // Preload the native ad if necessary
-            Log.e("TAG", "onViewCreated: load pre", )
+        Log.e("TAG", "onViewCreated: load pre")
 
-            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom","languagescr_bottom")
-            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"languagescr_bottom2","languagescr_bottom2")
+        IKSdkController.preloadNativeAd("languagescr_bottom", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                Log.e(TAG, "onAdLoadFail: ")
+            }
+        })
 
+        IKSdkController.preloadNativeAd("languagescr_bottom2", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
 
-        SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_fullscreen","onboardscr_fullscreen")
+            override fun onAdLoadFail(error: IKAdError) {
+                Log.e(TAG, "onAdLoadFail: ")
+            }
+        })
 
+        IKSdkController.preloadNativeAd("onboardscr_fullscreen", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+
+            override fun onAdLoadFail(error: IKAdError) {
+                Log.e(TAG, "onAdLoadFail: ")
+            }
+        })
         animateLoadingText()
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
@@ -132,7 +155,7 @@ class SplashOnFragment : Fragment() {
             val progressIncrement = 100 / steps
 
             for (currentProgress in 0..100 step progressIncrement) {
-                if (isAdded){
+                if (isAdded) {
 
                     binding.activeProgress.progress = currentProgress
                 }
@@ -141,38 +164,36 @@ class SplashOnFragment : Fragment() {
 
 
 
-            if (counter == 0 && !AdConfig.ISPAIDUSER){
-                SDKBaseController.getInstance().showFirstOpenAppAds(myActivity,object:CommonAdsListenerAdapter(){
-                    override fun onAdReady(priority: Int) {
-                    }
+            if (counter == 0 && !AdConfig.ISPAIDUSER) {
+                IKSdkController
+                    .loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
+                        override fun onAdsDismiss() {
+                            moveNext = true
+                            navigateToNextScreen()
 
-                    override fun onAdsDismiss() {
-                        moveNext = true
-                        navigateToNextScreen()
+                            IKSdkController.setEnableShowResumeAds(true)
 
-                        IkmSdkController.setEnableShowResumeAds(true)
+                        }
 
-                    }
-
-                    override fun onAdsShowFail(errorCode: Int) {
-                        Log.e("TAG", "onAdsShowFail: $errorCode")
+                        override fun onAdsShowFail(error: IKAdError) {
+                            Log.e(TAG, "onAdsShowFail: $error")
 //
 
-                        navigateToNextScreen()
+                            navigateToNextScreen()
 
-                        IkmSdkController.setEnableShowResumeAds(true)
-                    }
-
-                    override fun onAdsShowed(priority: Int) {
-                        counter++
-                        if (isAdded){
-                            binding.adsView.visibility = View.GONE
+                            IKSdkController.setEnableShowResumeAds(true)
                         }
-                    }
 
-                })
-            }else{
-                if (AdConfig.ISPAIDUSER){
+                        override fun onAdsShowed() {
+                            counter++
+                            if (isAdded) {
+                                binding.adsView.visibility = View.GONE
+                            }
+                        }
+
+                    })
+            } else {
+                if (AdConfig.ISPAIDUSER) {
                     delay(3000)
                 }
                 navigateToNextScreen()
@@ -219,6 +240,7 @@ class SplashOnFragment : Fragment() {
         val dots = ".".repeat(dotCount)
         textView.text = "Loading$dots"
     }
+
     override fun onPause() {
         super.onPause()
     }
@@ -226,26 +248,27 @@ class SplashOnFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        Log.e("SPLASH", "onResume: ", )
+        Log.e("SPLASH", "onResume: ")
 
-        val videoUri: Uri = Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.splash_new)
+        val videoUri: Uri =
+            Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.splash_new)
         binding.videoView.setVideoURI(videoUri)
         binding.videoView.start()
 
         binding.videoView.setOnCompletionListener {
-            if (isAdded){
+            if (isAdded) {
                 binding.videoView.start()
             }
         }
         val lan = MySharePreference.getLanguage(requireContext())
 
-        if (counter > 0){
+        if (counter > 0) {
             navigateToNextScreen()
         }
         handleAppResume()
 
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -256,19 +279,17 @@ class SplashOnFragment : Fragment() {
     private fun handleAppResume() {
         if (moveNext && !hasNavigated) {
             navigateToNextScreen()
-        }else{
-            Log.e("TAG", "handleAppResume: ", )
+        } else {
+            Log.e("TAG", "handleAppResume: ")
         }
     }
 
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
-
 
 
     override fun onDestroyView() {

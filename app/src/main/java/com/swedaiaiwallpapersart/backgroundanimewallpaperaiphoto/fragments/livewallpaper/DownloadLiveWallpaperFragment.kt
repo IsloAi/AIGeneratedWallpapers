@@ -16,15 +16,18 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -58,6 +61,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     var showAd :Boolean? = false
 
+    val interAd = IKInterstitialAd()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -77,6 +81,16 @@ class DownloadLiveWallpaperFragment : Fragment() {
             binding.adsView.visibility = View.GONE
         }else{
             loadAd()
+            interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+            interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
         }
         AndroidNetworking.initialize(requireContext())
 
@@ -94,7 +108,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     fun loadAd(){
@@ -108,28 +122,21 @@ class DownloadLiveWallpaperFragment : Fragment() {
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        binding.adsView.loadAd(requireActivity(),"downloadscr_native_bottom","downloadscr_native_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"downloadscr_native_bottom",
+            object : IKShowWidgetAdListener {
+                override fun onAdShowFail(error: IKAdError) {
+                    if (AdConfig.ISPAIDUSER){
+                        binding.adsView.visibility = View.GONE
+                    }
                     Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
                 }
 
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
+                override fun onAdShowed() {
                     if (isAdded && view != null) {
                         // Modify view visibility here
 //                        binding.adsView.reCallLoadAd(this)
                         binding.adsView.visibility = View.VISIBLE
                     }
-
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
                 }
             }
         )
@@ -148,20 +155,17 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 if (showAd == true){
                     navigateToPreview()
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "downloadscr_set_click",
-                        "downloadscr_set_click",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                                navigateToPreview()
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    navigateToPreview()
+                                }
                             }
-
                             override fun onAdsDismiss() {
-                                Log.e(TAG, "onAdsDismiss: ", )
                                 navigateToPreview()
                             }
                         }

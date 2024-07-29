@@ -16,11 +16,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLocalizationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
@@ -105,10 +107,11 @@ class LocalizationFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     fun loadNativeAd(){
+        binding.adsView.attachLifecycle(this.lifecycle)
         val adLayout = LayoutInflater.from(activity).inflate(
             R.layout.new_native_language,
             null, false
@@ -118,63 +121,55 @@ class LocalizationFragment : Fragment() {
         adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        binding.adsView.loadAd(requireActivity(),"languagescr_bottom","languagescr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"languagescr_bottom",
+            object : IKShowWidgetAdListener {
+                override fun onAdShowFail(error: IKAdError) {
                     if (AdConfig.ISPAIDUSER){
                         binding.adsView.visibility = View.GONE
                     }
                     Log.e("TAG", "onAdsLoadFail: native failded " )
                 }
 
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
+                override fun onAdShowed() {
+
                 }
             }
         )
     }
 
-    fun loadNextAd(){
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.new_native_language,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        binding.adsView.loadAd(requireActivity(),"languagescr_bottom","languagescr_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
-                    if (AdConfig.ISPAIDUSER){
-                        binding.adsView.visibility = View.GONE
-                    }
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
-                }
-
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
-                }
-            }
-        )
-    }
+//    fun loadNextAd(){
+//        val adLayout = LayoutInflater.from(activity).inflate(
+//            R.layout.new_native_language,
+//            null, false
+//        ) as? IkmWidgetAdLayout
+//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
+//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
+//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
+//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
+//
+//        binding.adsView.setCustomNativeAdLayout(
+//            R.layout.shimmer_loading_native,
+//            adLayout!!
+//        )
+//
+//        binding.adsView.loadAd(requireActivity(),"languagescr_bottom","languagescr_bottom",
+//            object : CustomSDKAdsListenerAdapter() {
+//                override fun onAdsLoadFail() {
+//                    super.onAdsLoadFail()
+//                    if (AdConfig.ISPAIDUSER){
+//                        binding.adsView.visibility = View.GONE
+//                    }
+//                    Log.e("TAG", "onAdsLoadFail: native failded " )
+//                }
+//
+//                override fun onAdsLoaded() {
+//                    super.onAdsLoaded()
+//                    Log.e("TAG", "onAdsLoaded: native loaded" )
+//                }
+//            }
+//        )
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -287,7 +282,15 @@ class LocalizationFragment : Fragment() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
 
         if (!onBoard){
-            SDKBaseController.getInstance().preloadNativeAd(requireActivity(),"onboardscr_bottom","onboardscr_bottom")
+            IKSdkController.preloadNativeAd("onboardscr_bottom", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+
+                override fun onAdLoadFail(error: IKAdError) {
+                    Log.e(TAG, "onAdLoadFail: ")
+                }
+            })
         }
 //        binding.backButton.setOnClickListener {
 //            if (exit){

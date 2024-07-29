@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="@dimen/ads_padding"
-        android:layout_marginBottom="@dimen/ads_padding">
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
 
         <View
             android:id="@+id/shimmer_adNativeIcon"
@@ -61,7 +61,7 @@
         android:gravity="center"
         android:minWidth="15dp"
         android:text="@string/txt_ad"
-        android:textColor="@color/color_white_ads"
+        android:textColor="@color/white"
         android:textSize="10dp" />
 </RelativeLayout>
 

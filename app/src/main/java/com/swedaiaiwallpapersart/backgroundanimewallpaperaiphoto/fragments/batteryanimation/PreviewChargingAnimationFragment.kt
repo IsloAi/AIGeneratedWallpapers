@@ -17,9 +17,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.tracking.SDKTrackingController
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPreviewChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -69,25 +70,17 @@ class PreviewChargingAnimationFragment : Fragment() {
 
         myActivity = activity as MainActivity
         if (AdConfig.ISPAIDUSER){
-            binding.adsWidget.visibility = View.GONE
+            binding.adsView.visibility = View.GONE
         }else{
-            SDKBaseController.getInstance()
-                .loadBannerAds(
-                    requireActivity(),
-                    binding.adsWidget as? ViewGroup,
-                    "searchscr_bottom",
-                    " searchscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                        override fun onAdsLoaded() {
-                            super.onAdsLoaded()
-                            Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                        }
 
-                        override fun onAdsLoadFail() {
-                            super.onAdsLoadFail()
-                            Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                        }
-                    }
-                )
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+//                    binding.adsView?.visibility = View.GONE
+                }
+
+            })
         }
 
         initObservers()
@@ -176,7 +169,7 @@ class PreviewChargingAnimationFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     fun isDrawOverlaysPermissionGranted(context: Context): Boolean {

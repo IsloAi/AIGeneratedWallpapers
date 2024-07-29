@@ -14,21 +14,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmNativeAdView
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentAnimeWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.AnimeViewmodel
@@ -36,7 +37,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.Shar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -67,6 +67,8 @@ class AnimeWallpaperFragment : Fragment() {
 
     val TAG = "ANIME"
 
+    val interAd = IKInterstitialAd()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -78,6 +80,17 @@ class AnimeWallpaperFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("categoryscr_fantasy_click_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
         onCreateViewCalling()
 
     }
@@ -115,31 +128,23 @@ class AnimeWallpaperFragment : Fragment() {
                     if (AdConfig.ISPAIDUSER){
                         navigateToDestination(allItems!!, position)
                     }else{
-                        SDKBaseController.getInstance().showInterstitialAds(
+
+                        interAd.showAd(
                             requireActivity(),
                             "categoryscr_fantasy_click_item",
-                            "categoryscr_fantasy_click_item",
-                            showLoading = true,
-                            adsListener = object : CommonAdsListenerAdapter() {
-                                override fun onAdsShowFail(errorCode: Int) {
-                                    navigateToDestination(allItems!!, position)
-                                    Log.e("********ADS", "onAdsShowFail: " + errorCode)
-                                    //do something
+                            adListener = object : IKShowAdListener {
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    if (isAdded){
+                                        navigateToDestination(allItems!!, position)
+                                    }
                                 }
-
                                 override fun onAdsDismiss() {
-//                            navigateToDestination(allItems!!, position)
+                                    // Handle ad dismissal
                                 }
                             }
                         )
                     }
-
-
-
                 }
-
-
-
             }
 
             override fun getFavorites(position: Int) {
@@ -150,21 +155,18 @@ class AnimeWallpaperFragment : Fragment() {
         adapter!!.setCoroutineScope(fragmentScope)
 
 
-
-        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_sub_cate_tab_scroll","mainscr_sub_cate_tab_scroll",object :
-            IKLoadNativeAdListener {
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.e(TAG, "onAdFailedToLoad: "+errorCode )
-
-            }
-
-            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
+        IKSdkController.loadNativeDisplayAd("mainscr_sub_cate_tab_scroll", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
-                    adapter?.nativeAdView = adsResult
+                    adapter?.nativeAdView = adObject
                     binding.recyclerviewAll.adapter = adapter
                 }
             }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
         })
         binding.recyclerviewAll.adapter = adapter
 
@@ -339,7 +341,7 @@ class AnimeWallpaperFragment : Fragment() {
         vararg param: Pair<String, String?>
     )
     {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
     override fun onPause() {
         super.onPause()

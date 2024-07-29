@@ -15,9 +15,10 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.bmik.android.sdk.IkmSdkController
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationPermissionBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
@@ -65,28 +66,20 @@ class ChargingAnimationPermissionFragment : Fragment() {
         adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        binding.adsView.setCustomNativeAdLayout(
-            R.layout.shimmer_loading_native,
-            adLayout!!
-        )
-
-        binding.adsView.loadAd(requireActivity(),"downloadscr_native_bottom","downloadscr_native_bottom",
-            object : CustomSDKAdsListenerAdapter() {
-                override fun onAdsLoadFail() {
-                    super.onAdsLoadFail()
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"downloadscr_native_bottom",
+            object : IKShowWidgetAdListener {
+                override fun onAdShowFail(error: IKAdError) {
+                    if (AdConfig.ISPAIDUSER){
+                        binding.adsView.visibility = View.GONE
+                    }
                     Log.e("TAG", "onAdsLoadFail: native failded " )
-//                                    binding.adsView.visibility = View.GONE
                 }
 
-                override fun onAdsLoaded() {
-                    super.onAdsLoaded()
+                override fun onAdShowed() {
                     if (isAdded && view != null) {
                         // Modify view visibility here
                         binding.adsView.visibility = View.VISIBLE
                     }
-
-                    Log.e("TAG", "onAdsLoaded: native loaded" )
                 }
             }
         )
@@ -131,7 +124,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
 
     fun requestDrawOverlaysPermission(activity: Activity) {
 
-        IkmSdkController.setEnableShowResumeAds(true)
+        IKSdkController.setEnableShowResumeAds(true)
 
         val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
         intent.data = Uri.parse("package:${activity.packageName}")

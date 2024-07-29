@@ -10,10 +10,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
+import com.ikame.android.sdk.IKSdkController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperCategoriesBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -32,6 +35,8 @@ class LiveWallpaperCategoriesFragment : Fragment() {
 
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
 
+    val interAd = IKInterstitialAd()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,6 +52,16 @@ class LiveWallpaperCategoriesFragment : Fragment() {
         val gson = Gson()
         val categoryList: ArrayList<CatNameResponse?> = gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
 
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(),3)
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
         val adapter = ApiCategoriesNameAdapter(categoryList,object : StringCallback {
@@ -65,20 +80,17 @@ class LiveWallpaperCategoriesFragment : Fragment() {
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
                 }else{
-                    SDKBaseController.getInstance().showInterstitialAds(
+
+                    interAd.showAd(
                         requireActivity(),
                         "mainscr_cate_tab_click_item",
-                        "mainscr_cate_tab_click_item",
-                        showLoading = true,
-                        adsListener = object : CommonAdsListenerAdapter() {
-                            override fun onAdsShowFail(errorCode: Int) {
-                                Log.e("********ADS", "onAdsShowFail: $errorCode")
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                //do something
+                        adListener = object : IKShowAdListener {
+                            override fun onAdsShowFail(error: IKAdError) {
+                                if (isAdded){
+                                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                }
                             }
-
                             override fun onAdsDismiss() {
-//                            setFragment(string)
                                 findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                             }
                         }

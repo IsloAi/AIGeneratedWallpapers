@@ -13,17 +13,18 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.recyclerview.widget.RecyclerView
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.widgets.IkmNativeAdView
-import com.bmik.android.sdk.widgets.IkmWidgetAdLayout
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemDoubleSliderBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
@@ -221,7 +222,7 @@ class DoubleWallpaperSliderAdapter(
         }
     }
 
-    var nativeAdView: IkmNativeAdView?= null
+    var nativeAdView: IkmDisplayWidgetAdView?= null
     fun loadad(holder: RecyclerView.ViewHolder, binding: NativeSliderLayoutBinding){
 
         coroutineScope?.launch(Dispatchers.Main) {
@@ -239,28 +240,24 @@ class DoubleWallpaperSliderAdapter(
             if (binding.adsView.isAdLoaded){
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
             }else{
-                SDKBaseController.getInstance().loadIkmNativeAdView(mActivity,"viewlistdoublewallscr_scroll","viewlistdoublewallscr_scroll",object :
-                    IKLoadNativeAdListener {
-                    override fun onAdFailedToLoad(errorCode: Int) {
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+errorCode )
 
+                IKSdkController.loadNativeDisplayAd("viewlistdoublewallscr_scroll", object :
+                    IKLoadDisplayAdViewListener {
+                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                        nativeAdView = adObject
                     }
 
-                    override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                        nativeAdView = adsResult
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoaded: ", )
-                    }
-
+                    override fun onAdLoadFail(error: IKAdError) {
+                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+error )                    }
                 })
             }
             withContext(this.coroutineContext) {
                 nativeAdView?.let {
-                    binding.adsView.loadNativeWithAdView(mActivity,
-                        R.layout.shimmer_loading_native,adLayout!!,"viewlistdoublewallscr_scroll","viewlistdoublewallscr_scroll",
+
+                    binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,adLayout!!,"viewlistdoublewallscr_scroll",
                         it,
-                        object : CustomSDKAdsListenerAdapter() {
-                            override fun onAdsLoadFail() {
-                                super.onAdsLoadFail()
+                        object : IKShowWidgetAdListener {
+                            override fun onAdShowFail(error: IKAdError) {
                                 Log.e("TAG", "onAdsLoadFail: native failded " )
                                 if (statusAd == 0){
                                     binding.adsView.visibility = View.GONE
@@ -274,8 +271,7 @@ class DoubleWallpaperSliderAdapter(
                                 }
                             }
 
-                            override fun onAdsLoaded() {
-                                super.onAdsLoaded()
+                            override fun onAdShowed() {
                                 binding.adsView.visibility = View.VISIBLE
                                 Log.e("TAG", "onAdsLoaded: native loaded" )
                             }

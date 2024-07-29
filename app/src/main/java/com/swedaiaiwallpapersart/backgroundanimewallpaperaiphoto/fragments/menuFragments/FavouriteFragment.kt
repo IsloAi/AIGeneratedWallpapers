@@ -15,12 +15,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.widgets.IkmNativeAdView
+import com.ikame.android.sdk.IKSdkController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFavouriteBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -69,6 +72,9 @@ class FavouriteFragment : Fragment() {
 
     val TAG = "FAVORITES"
 
+    val interAd = IKInterstitialAd()
+
+
 
 
     val sharedViewModel: SharedViewModel by activityViewModels()
@@ -83,6 +89,16 @@ class FavouriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
+        interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+        interAd.loadAd("mainscr_favorite_tab_click_item", object : IKLoadAdListener {
+            override fun onAdLoaded() {
+                // Ad loaded successfully
+            }
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
         onCreateViewCalling()
 
     }
@@ -340,17 +356,18 @@ class FavouriteFragment : Fragment() {
             }
         },myActivity)
 
-        SDKBaseController.getInstance().loadIkmNativeAdView(requireContext(),"mainscr_live_tab_scroll","mainscr_live_tab_scroll",object :
-            IKLoadNativeAdListener {
-            override fun onAdFailedToLoad(errorCode: Int) {
-                Log.e(TAG, "onAdFailedToLoad: $errorCode")
-
+        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                if (isAdded && view!= null){
+                    adapter?.nativeAdView = adObject
+                    binding.liveRecyclerview.adapter = adapter
+                }
             }
 
-            override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                adapter.nativeAdView = adsResult
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
             }
-
         })
         binding.liveRecyclerview.adapter = adapter
     }
@@ -361,18 +378,15 @@ class FavouriteFragment : Fragment() {
             PositionCallback {
             override fun getPosition(position: Int) {
 
-                SDKBaseController.getInstance().showInterstitialAds(
+                interAd.showAd(
                     requireActivity(),
                     "mainscr_favorite_tab_click_item",
-                    "mainscr_favorite_tab_click_item",
-                    showLoading = true,
-                    adsListener = object : CommonAdsListenerAdapter() {
-                        override fun onAdsShowFail(errorCode: Int) {
-                            Log.e("********ADS", "onAdsShowFail: "+errorCode )
-                            navigateToDestination(list,position)
-                            //do something
+                    adListener = object : IKShowAdListener {
+                        override fun onAdsShowFail(error: IKAdError) {
+                            if (isAdded){
+                                navigateToDestination(list,position)
+                            }
                         }
-
                         override fun onAdsDismiss() {
                             navigateToDestination(list,position)
                         }

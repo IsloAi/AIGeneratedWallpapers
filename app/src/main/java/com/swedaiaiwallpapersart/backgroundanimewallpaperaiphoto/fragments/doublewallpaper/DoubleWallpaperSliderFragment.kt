@@ -1,23 +1,18 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doublewallpaper
 
-import android.Manifest
 import android.app.Dialog
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -25,49 +20,40 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.bmik.android.sdk.SDKBaseController
-import com.bmik.android.sdk.listener.CommonAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKAdsListenerAdapter
-import com.bmik.android.sdk.listener.CustomSDKRewardedAdsListener
-import com.bmik.android.sdk.listener.keep.IKLoadNativeAdListener
-import com.bmik.android.sdk.tracking.SDKTrackingController
-import com.bmik.android.sdk.widgets.IkmNativeAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.play.core.review.ReviewManager
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.format.rewarded.IKRewardAd
+import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperSliderBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperSliderAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubleSharedViewmodel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import java.util.concurrent.Executors
 import javax.inject.Inject
+
 @AndroidEntryPoint
 class DoubleWallpaperSliderFragment : Fragment() {
 
@@ -113,6 +99,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
     var homeScreenBitmap:Bitmap ?= null
     var lockScreenBitmap:Bitmap ?= null
 
+    val interAd = IKInterstitialAd()
+
 
 
     override fun onCreateView(
@@ -133,22 +121,26 @@ class DoubleWallpaperSliderFragment : Fragment() {
         if(AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE
         }else{
-            binding.adsView.loadAd(requireContext(), "viewlistdoublewallscr_bottom",
-                " viewlistdoublewallscr_bottom", object : CustomSDKAdsListenerAdapter() {
-                    override fun onAdsLoaded() {
-                        super.onAdsLoaded()
-                        Log.e("*******ADS", "onAdsLoaded: Banner loaded")
-                    }
 
-                    override fun onAdsLoadFail() {
-                        super.onAdsLoadFail()
+            interAd.attachLifecycle(this.lifecycle)
+// Load ad with a specific screen ID, considered as a unitId
+            interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
+                override fun onAdLoaded() {
+                    // Ad loaded successfully
+                }
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
 
-                        if (isAdded) {
-//                        binding.adsView.reCallLoadAd(this)
-                        }
-                        Log.e("*******ADS", "onAdsLoaded: Banner failed")
-                    }
-                })
+            binding.adsView.attachLifecycle(lifecycle)
+            binding.adsView.loadAd("viewlistdoublewallscr_bottom", object : IKShowWidgetAdListener {
+                override fun onAdShowed() {}
+                override fun onAdShowFail(error: IKAdError) {
+//                    binding.adsView?.visibility = View.GONE
+                }
+
+            })
         }
 
 
@@ -301,14 +293,12 @@ class DoubleWallpaperSliderFragment : Fragment() {
                                 }
                             }
                         }else{
-                            SDKBaseController.getInstance().showInterstitialAds(
+
+                            interAd.showAd(
                                 requireActivity(),
                                 "downloadscr_set_click",
-                                "downloadscr_set_click",
-                                showLoading = true,
-                                adsListener = object : CommonAdsListenerAdapter() {
-                                    override fun onAdsShowFail(errorCode: Int) {
-                                        Log.e("********ADS", "onAdsShowFail: "+errorCode )
+                                adListener = object : IKShowAdListener {
+                                    override fun onAdsShowFail(error: IKAdError) {
                                         if (isAdded){
                                             myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
                                                 homeScreenBitmap!!
@@ -322,11 +312,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
                                             }
 
                                         }
-
                                     }
-
                                     override fun onAdsDismiss() {
-                                        Log.e(TAG, "onAdsDismiss: ", )
                                         if (isAdded){
                                             myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
                                                 homeScreenBitmap!!
@@ -438,27 +425,20 @@ class DoubleWallpaperSliderFragment : Fragment() {
         adapter = DoubleWallpaperSliderAdapter(arrayList, myActivity)
         adapter!!.setCoroutineScope(fragmentScope)
 
-        SDKBaseController.getInstance().loadIkmNativeAdView(
-            requireContext(),
-            "viewlistdoublewallscr_scroll",
-            "viewlistdoublewallscr_scroll",
-            object :
-                IKLoadNativeAdListener {
-                override fun onAdFailedToLoad(errorCode: Int) {
-                    Log.e(TAG, "onAdFailedToLoad: " + errorCode)
-
+        IKSdkController.loadNativeDisplayAd("viewlistdoublewallscr_scroll", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                if (isAdded && view!= null){
+                    adapter?.nativeAdView = adObject
+                    viewPager2?.adapter = adapter
+                    viewPager2?.setCurrentItem(position, false)
                 }
+            }
 
-                override fun onAdLoaded(adsResult: IkmNativeAdView?) {
-                    if (isAdded && view != null) {
-                        adapter?.nativeAdView = adsResult
-                        viewPager2?.adapter = adapter
-                        viewPager2?.setCurrentItem(position, false)
-
-                    }
-                }
-
-            })
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure with view object
+            }
+        })
         viewPager2?.adapter = adapter
         Log.e(TAG, "setViewPager: " + position)
         viewPager2?.setCurrentItem(position, false)
@@ -632,7 +612,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
         eventName: String,
         vararg param: Pair<String, String?>
     ) {
-        SDKTrackingController.trackingAllApp(requireContext(), eventName, *param)
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     override fun onDestroyView() {
