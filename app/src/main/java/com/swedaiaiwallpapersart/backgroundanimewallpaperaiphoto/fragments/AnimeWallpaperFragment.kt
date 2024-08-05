@@ -27,6 +27,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentAnimeWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -41,7 +43,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AnimeWallpaperFragment : Fragment() {
+class AnimeWallpaperFragment : Fragment() , AdEventListener {
     private var _binding:FragmentAnimeWallpaperBinding ?= null
     private val binding get() = _binding!!
 
@@ -68,6 +70,8 @@ class AnimeWallpaperFragment : Fragment() {
     val TAG = "ANIME"
 
     val interAd = IKInterstitialAd()
+
+    var checkAppOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -129,20 +133,17 @@ class AnimeWallpaperFragment : Fragment() {
                         navigateToDestination(allItems!!, position)
                     }else{
 
-                        interAd.showAd(
-                            requireActivity(),
-                            "categoryscr_fantasy_click_item",
-                            adListener = object : IKShowAdListener {
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded){
-                                        navigateToDestination(allItems!!, position)
-                                    }
-                                }
-                                override fun onAdsDismiss() {
-                                    // Handle ad dismissal
-                                }
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                            if (isAdded){
+                                checkAppOpen = false
+                                navigateToDestination(allItems!!, position)
+                                Log.e(TAG, "app open showed: ", )
                             }
-                        )
+                        }else{
+                            showInterAd(allItems, position)
+                        }
+
+
                     }
                 }
             }
@@ -225,6 +226,34 @@ class AnimeWallpaperFragment : Fragment() {
 
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
+    }
+
+    private fun showInterAd(
+        allItems: ArrayList<CatResponse?>?,
+        position: Int
+    ) {
+        interAd.showAd(
+            requireActivity(),
+            "categoryscr_fantasy_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    // Handle ad dismissal
+                }
+            }
+        )
+    }
+
     private fun loadData() {
         Log.d(TAG, "onCreateCustom:  home on create")
 
@@ -438,5 +467,27 @@ class AnimeWallpaperFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

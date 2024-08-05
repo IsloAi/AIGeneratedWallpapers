@@ -35,6 +35,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApicategoriesListHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment.Companion.isNavigated
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
@@ -55,7 +57,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PopularWallpaperFragment () : Fragment() {
+class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
     private var _binding: FragmentPopularWallpaperBinding? = null
     private val binding get() = _binding!!
@@ -73,6 +75,8 @@ class PopularWallpaperFragment () : Fragment() {
         var hasToNavigate = false
         var wallFromPopular = false
     }
+
+    var checkAppOpen = false
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
@@ -117,6 +121,12 @@ class PopularWallpaperFragment () : Fragment() {
         _binding = FragmentPopularWallpaperBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
     }
 
 
@@ -246,21 +256,15 @@ class PopularWallpaperFragment () : Fragment() {
                             navigateToDestination(allItems!!, position)
                         }
                     }else{
-
-                        interAd.showAd(
-                            requireActivity(),
-                            "mainscr_all_tab_click_item",
-                            adListener = object : IKShowAdListener {
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded){
-                                        navigateToDestination(allItems!!, position)
-                                    }
-                                }
-                                override fun onAdsDismiss() {
-                                    // Handle ad dismissal
-                                }
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                            if (isAdded){
+                                checkAppOpen = false
+                                navigateToDestination(allItems!!, position)
+                                Log.e(TAG, "app open showed: ", )
                             }
-                        )
+                        }else{
+                            showInterAdForAllItems(allItems, position)
+                        }
                     }
 
 
@@ -319,6 +323,27 @@ class PopularWallpaperFragment () : Fragment() {
 
             }
         })
+    }
+
+    private fun showInterAdForAllItems(
+        allItems: ArrayList<CatResponse?>?,
+        position: Int
+    ) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_all_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    // Handle ad dismissal
+                }
+            }
+        )
     }
 
 
@@ -706,25 +731,16 @@ class PopularWallpaperFragment () : Fragment() {
                                 navigateToDestination(allItems!!, position)
                             }
                         }else{
+                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                                    if (isAdded){
+                                        checkAppOpen = false
+                                        navigateToDestination(allItems!!, position)
+                                        Log.e(TAG, "app open showed: ", )
+                                    }
 
-                            interAd.showAd(
-                                requireActivity(),
-                                "mainscr_trending_tab_click_item",
-                                adListener = object : IKShowAdListener {
-                                    override fun onAdsShowFail(error: IKAdError) {
-                                        if (isAdded){
-                                            if (isAdded){
-                                                navigateToDestination(allItems!!, position)
-                                            }
-                                        }
-                                    }
-                                    override fun onAdsDismiss() {
-                                        if (isAdded){
-                                            navigateToDestination(allItems!!, position)
-                                        }
-                                    }
-                                }
-                            )
+                            }else{
+                                showInterAdForHorizontalList(allItems, position)
+                            }
                         }
 
                     }
@@ -739,6 +755,31 @@ class PopularWallpaperFragment () : Fragment() {
             }, myActivity)
 
         binding.recyclerviewTrending.adapter = adapter
+    }
+
+    private fun showInterAdForHorizontalList(
+        allItems: ArrayList<CatResponse?>?,
+        position: Int
+    ) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_trending_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        if (isAdded) {
+                            navigateToDestination(allItems!!, position)
+                        }
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
+                    }
+                }
+            }
+        )
     }
 
     private fun setIndicator() {
@@ -825,6 +866,27 @@ class PopularWallpaperFragment () : Fragment() {
         super.onDestroyView()
 
         _binding = null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 
 

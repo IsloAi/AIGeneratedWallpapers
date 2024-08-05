@@ -30,6 +30,8 @@ import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadLiveWallpaperBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -45,7 +47,7 @@ import java.io.FileOutputStream
 import java.io.InputStream
 
 
-class DownloadLiveWallpaperFragment : Fragment() {
+class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     private var _binding: FragmentDownloadLiveWallpaperBinding?= null
 
@@ -60,6 +62,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
     val TAG = "DOWNLOAD_SCREEN"
 
     var showAd :Boolean? = false
+    var checkAppOpen = false
+
 
     val interAd = IKInterstitialAd()
     override fun onCreateView(
@@ -101,6 +105,12 @@ class DownloadLiveWallpaperFragment : Fragment() {
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "Downloadscr_View"))
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (requireActivity().application as MyApp).registerAdEventListener(this)
+
     }
 
     private fun sendTracking(
@@ -155,21 +165,17 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 if (showAd == true){
                     navigateToPreview()
                 }else{
-
-                    interAd.showAd(
-                        requireActivity(),
-                        "downloadscr_set_click",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    navigateToPreview()
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                navigateToPreview()
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            navigateToPreview()
+                            Log.e(TAG, "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd()
+                    }
+
+
                 }
             }
         }
@@ -181,6 +187,24 @@ class DownloadLiveWallpaperFragment : Fragment() {
             }
             findNavController().popBackStack()
         }
+    }
+
+    private fun showInterAd() {
+        interAd.showAd(
+            requireActivity(),
+            "downloadscr_set_click",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToPreview()
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    navigateToPreview()
+                }
+            }
+        )
     }
 
     private fun navigateToPreview() {
@@ -350,5 +374,26 @@ class DownloadLiveWallpaperFragment : Fragment() {
         }
 
         _binding =  null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

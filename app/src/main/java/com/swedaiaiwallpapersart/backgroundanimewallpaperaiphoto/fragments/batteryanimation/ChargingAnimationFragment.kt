@@ -21,6 +21,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ChargingAnimationAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -35,7 +37,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class ChargingAnimationFragment : Fragment() {
+class ChargingAnimationFragment : Fragment(), AdEventListener {
     private var _binding:FragmentChargingAnimationBinding ?= null
     private val binding get() = _binding!!
 
@@ -51,6 +53,7 @@ class ChargingAnimationFragment : Fragment() {
     val TAG = "ChargingAnimation"
 
     val interAd = IKInterstitialAd()
+    var checkAppOpen = false
 
 
 
@@ -131,6 +134,12 @@ class ChargingAnimationFragment : Fragment() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
+    }
+
     override fun onResume() {
         super.onResume()
         loadData()
@@ -175,20 +184,16 @@ class ChargingAnimationFragment : Fragment() {
                     setPathandNavigate(model,false)
                 }else{
 
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_live_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    setPathandNavigate(model,false)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                setPathandNavigate(model,true)
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            setPathandNavigate(model, false)
+                            Log.e(TAG, "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd(model)
+                    }
+
 
                 }
 
@@ -196,6 +201,24 @@ class ChargingAnimationFragment : Fragment() {
         },myActivity)
 
         binding.recyclerviewAll.adapter = adapter
+    }
+
+    private fun showInterAd(model: ChargingAnimModel) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_live_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        setPathandNavigate(model, false)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    setPathandNavigate(model, true)
+                }
+            }
+        )
     }
 
     private fun setPathandNavigate(model: ChargingAnimModel,adShowd:Boolean) {
@@ -253,5 +276,26 @@ class ChargingAnimationFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

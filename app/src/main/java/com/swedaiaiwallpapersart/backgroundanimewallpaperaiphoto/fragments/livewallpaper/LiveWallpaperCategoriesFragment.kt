@@ -20,13 +20,15 @@ import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperCategoriesBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
 
-class LiveWallpaperCategoriesFragment : Fragment() {
+class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
 
     private var _binding:FragmentLiveWallpaperCategoriesBinding ?= null
     private val binding get() = _binding!!
@@ -36,6 +38,8 @@ class LiveWallpaperCategoriesFragment : Fragment() {
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
 
     val interAd = IKInterstitialAd()
+
+    var checkAppOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,21 +84,17 @@ class LiveWallpaperCategoriesFragment : Fragment() {
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
                 }else{
-
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_cate_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                            Log.e("TAG", "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd()
+                    }
+
+                    showInterAd()
                 }
 
 
@@ -107,6 +107,30 @@ class LiveWallpaperCategoriesFragment : Fragment() {
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun showInterAd() {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_cate_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                }
+            }
+        )
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
     }
 
     val categoriesJson = """
@@ -161,6 +185,28 @@ class LiveWallpaperCategoriesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e("TAG", "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 
 }

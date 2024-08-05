@@ -18,6 +18,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 
@@ -49,6 +50,9 @@ class WallpaperRepositryImp@Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
+        } catch (e:UnknownHostException){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
 
         awaitClose()
@@ -72,6 +76,9 @@ class WallpaperRepositryImp@Inject constructor(
             }
         }catch (e:Exception){
 
+        }catch (e:UnknownHostException){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
     }
 
@@ -86,6 +93,9 @@ class WallpaperRepositryImp@Inject constructor(
 
 
         }catch (e:Exception){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }catch (e:UnknownHostException){
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
@@ -108,6 +118,9 @@ class WallpaperRepositryImp@Inject constructor(
             }
             Log.e("TAG", "getAllWallpapers: " )
         } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }catch (e:UnknownHostException){
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
@@ -136,6 +149,9 @@ class WallpaperRepositryImp@Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }catch (e:UnknownHostException){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
 
         awaitClose()
@@ -158,6 +174,9 @@ class WallpaperRepositryImp@Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }catch (e:UnknownHostException){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
 
         awaitClose()
@@ -178,6 +197,9 @@ class WallpaperRepositryImp@Inject constructor(
             }
             Log.e("TAG", "getChargingAnimation: " )
         } catch (e: Exception) {
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }catch (e:UnknownHostException){
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
@@ -206,6 +228,9 @@ class WallpaperRepositryImp@Inject constructor(
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))
+        }catch (e:UnknownHostException){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
 
         awaitClose()
@@ -225,6 +250,9 @@ class WallpaperRepositryImp@Inject constructor(
             }
         }catch (e:Exception){
             e.printStackTrace()
+        }catch (e:UnknownHostException){
+            e.printStackTrace()
+            trySend(Response.Error("unexpected error occoured ${e.message}"))
         }
     }
 

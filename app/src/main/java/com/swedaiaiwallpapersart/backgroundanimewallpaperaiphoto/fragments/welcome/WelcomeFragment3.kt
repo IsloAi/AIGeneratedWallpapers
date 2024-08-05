@@ -50,12 +50,13 @@ class WelcomeFragment3 : Fragment() {
         adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"onboardscr_bottom",
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"onboardscr_fullscreen",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
                     if (AdConfig.ISPAIDUSER){
                         binding.adsView.visibility = View.GONE
                     }
+
                     Log.e("TAG", "onAdsLoadFail: native failded " )
                 }
 

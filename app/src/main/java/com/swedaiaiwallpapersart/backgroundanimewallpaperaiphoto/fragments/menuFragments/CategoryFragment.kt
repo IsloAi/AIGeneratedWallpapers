@@ -27,6 +27,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveCategoriesHorizontalAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -37,7 +39,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CategoryFragment : Fragment() {
+class CategoryFragment : Fragment(), AdEventListener {
    private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
 
@@ -57,6 +59,8 @@ class CategoryFragment : Fragment() {
     var isNavigationInProgress = false
 
     val interAd = IKInterstitialAd()
+
+    var checkAppOpen = false
 
 
     val TAG = "CATEGORIES"
@@ -81,6 +85,12 @@ class CategoryFragment : Fragment() {
         })
         onCustomCreateView()
     }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
+    }
     @SuppressLint("SuspiciousIndentation")
     private fun onCustomCreateView() {
         myActivity = activity as MainActivity
@@ -99,22 +109,17 @@ class CategoryFragment : Fragment() {
                     setFragment(string)
                 }else{
 
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_cate_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    setFragment(string)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                if (isAdded){
-                                    setFragment(string)
-                                }
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            setFragment(string)
+                            Log.e(TAG, "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd(string)
+                    }
+
+
                 }
 
 
@@ -166,6 +171,26 @@ class CategoryFragment : Fragment() {
         }
     }
 
+    private fun showInterAd(string: String) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_cate_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        setFragment(string)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    if (isAdded) {
+                        setFragment(string)
+                    }
+                }
+            }
+        )
+    }
+
 
     private fun updateUIWithFetchedData() {
         val gson = Gson()
@@ -188,22 +213,17 @@ class CategoryFragment : Fragment() {
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }else{
 
-                        interAd.showAd(
-                            requireActivity(),
-                            "mainscr_cate_tab_click_item",
-                            adListener = object : IKShowAdListener {
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded){
-                                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                    }
-                                }
-                                override fun onAdsDismiss() {
-                                    if (isAdded){
-                                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                    }
-                                }
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                            if (isAdded){
+                                checkAppOpen = false
+                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                Log.e(TAG, "app open showed: ", )
                             }
-                        )
+                        }else{
+                            showIntersAd()
+                        }
+
+
                     }
 
 
@@ -212,6 +232,26 @@ class CategoryFragment : Fragment() {
             }, myActivity)
 
         binding.recyclerviewTrending.adapter = adapter
+    }
+
+    private fun showIntersAd() {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_cate_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    if (isAdded) {
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                    }
+                }
+            }
+        )
     }
 
     val categoriesJson = """
@@ -350,6 +390,28 @@ class CategoryFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }
 

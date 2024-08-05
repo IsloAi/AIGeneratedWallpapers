@@ -23,6 +23,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -37,7 +39,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class LiveWallpaperFragment : Fragment() {
+class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     private var _binding:FragmentLiveWallpaperBinding ?= null
     private val binding get() = _binding!!
@@ -51,6 +53,7 @@ class LiveWallpaperFragment : Fragment() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val interAd = IKInterstitialAd()
+    var checkAppOpen = false
 
     val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(
@@ -86,6 +89,12 @@ class LiveWallpaperFragment : Fragment() {
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
     }
 
 
@@ -174,20 +183,16 @@ class LiveWallpaperFragment : Fragment() {
                     setDownloadAbleWallpaperAndNavigate(model,false)
                 }else{
 
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_live_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    setDownloadAbleWallpaperAndNavigate(model,false)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                setDownloadAbleWallpaperAndNavigate(model,true)
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            setDownloadAbleWallpaperAndNavigate(model,false)
+                            Log.e(TAG, "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd(model)
+                    }
+
                 }
 
 
@@ -216,6 +221,24 @@ class LiveWallpaperFragment : Fragment() {
         })
 
         binding.liveReccyclerview.adapter = adapter
+    }
+
+    private fun showInterAd(model: LiveWallpaperModel) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_live_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        setDownloadAbleWallpaperAndNavigate(model, false)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    setDownloadAbleWallpaperAndNavigate(model, true)
+                }
+            }
+        )
     }
 
     private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel,adShowd:Boolean) {
@@ -277,5 +300,26 @@ class LiveWallpaperFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding =  null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

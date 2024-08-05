@@ -32,6 +32,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment.Companion.navigationInProgress
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
@@ -50,7 +52,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(){
+class HomeFragment : Fragment(), AdEventListener {
     private var _binding: FragmentHomeBinding?=null
     private val binding get() = _binding!!
 //    private  val myViewModel: MyHomeViewModel by activityViewModels()
@@ -88,6 +90,7 @@ class HomeFragment : Fragment(){
 
     val interAd = IKInterstitialAd()
 
+    var checkAppOpen = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
         _binding = FragmentHomeBinding.inflate(inflater,container,false)
@@ -95,6 +98,11 @@ class HomeFragment : Fragment(){
         return binding.root
     }
 
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -335,20 +343,17 @@ class HomeFragment : Fragment(){
                             navigateToDestination(allItems,position)
                         }else{
 
-                            interAd.showAd(
-                                requireActivity(),
-                                "mainscr_trending_tab_click_item",
-                                adListener = object : IKShowAdListener {
-                                    override fun onAdsShowFail(error: IKAdError) {
-                                        if (isAdded){
-                                            navigateToDestination(allItems!!, position)
-                                        }
-                                    }
-                                    override fun onAdsDismiss() {
-                                        // Handle ad dismissal
-                                    }
+                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                                if (isAdded){
+                                    checkAppOpen = false
+                                    navigateToDestination(allItems,position)
+                                    Log.e(TAG, "app open showed: ", )
                                 }
-                            )
+                            }else{
+                                showInterAd(allItems, position)
+                            }
+
+
                         }
 
 
@@ -381,6 +386,26 @@ class HomeFragment : Fragment(){
 
     }
 
+    private fun showInterAd(
+        allItems: ArrayList<CatResponse?>,
+        position: Int
+    ) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_trending_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    // Handle ad dismissal
+                }
+            }
+        )
+    }
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
@@ -513,6 +538,27 @@ class HomeFragment : Fragment(){
         super.onDestroyView()
         isFirstLoad = true
         _binding =null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 
 }

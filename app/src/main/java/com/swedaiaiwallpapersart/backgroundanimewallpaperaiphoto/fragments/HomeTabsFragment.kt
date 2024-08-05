@@ -87,6 +87,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 
@@ -452,19 +453,27 @@ class HomeTabsFragment : Fragment() {
 
         binding.buttonApplyWallpaper.setOnClickListener {
             if (binding.feedbackEdt.text.isNotEmpty()){
-                lifecycleScope.launch(Dispatchers.IO) {
-                    MySharePreference.setReviewedSuccess(requireContext(),true)
-                    endPointsInterface.postData(
-                        FeedbackModel("From Review","In app review",subject,binding.feedbackEdt.text.toString(),
-                            MySharePreference.getDeviceID(requireContext())!!
-                        )
-                    )
 
-                     withContext(Dispatchers.Main){
-                        Toast.makeText(requireContext(),"Thank you!",Toast.LENGTH_SHORT).show()
-                         bottomSheetDialog.dismiss()
+                try {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        MySharePreference.setReviewedSuccess(requireContext(),true)
+                        endPointsInterface.postData(
+                            FeedbackModel("From Review","In app review",subject,binding.feedbackEdt.text.toString(),
+                                MySharePreference.getDeviceID(requireContext())!!
+                            )
+                        )
+
+                        withContext(Dispatchers.Main){
+                            Toast.makeText(requireContext(),"Thank you!",Toast.LENGTH_SHORT).show()
+                            bottomSheetDialog.dismiss()
+                        }
                     }
+                }catch (e:Exception){
+
+                }catch (e: UnknownHostException){
+                    e.printStackTrace()
                 }
+
             }
         }
         bottomSheetDialog.show()

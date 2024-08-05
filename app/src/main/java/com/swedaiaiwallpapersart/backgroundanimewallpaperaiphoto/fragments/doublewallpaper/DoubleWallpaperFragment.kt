@@ -23,6 +23,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -38,7 +40,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class DoubleWallpaperFragment : Fragment() {
+class DoubleWallpaperFragment : Fragment(), AdEventListener {
     private var _binding:FragmentDoubleWallpaperBinding ?= null
 
     val doubleWallpaperViewmodel: DoubeWallpaperViewModel by activityViewModels()
@@ -52,6 +54,8 @@ class DoubleWallpaperFragment : Fragment() {
     val TAG = "DoubleWallpaper"
 
     val interAd = IKInterstitialAd()
+    var checkAppOpen = false
+
 
 
     override fun onCreateView(
@@ -87,6 +91,12 @@ class DoubleWallpaperFragment : Fragment() {
 
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
 
     }
 
@@ -180,20 +190,16 @@ class DoubleWallpaperFragment : Fragment() {
 
                 }else{
 
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_sub_cate_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    navigateToDestination(allItems!!,position)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                navigateToDestination(allItems!!,position)
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            navigateToDestination(allItems!!, position)
+                            Log.e(TAG, "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd(allItems, position)
+                    }
+
                 }
 
 
@@ -217,6 +223,26 @@ class DoubleWallpaperFragment : Fragment() {
         binding.rvDouble.adapter = adapter
     }
 
+    private fun showInterAd(
+        allItems: ArrayList<DoubleWallModel?>?,
+        position: Int
+    ) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_sub_cate_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    navigateToDestination(allItems!!, position)
+                }
+            }
+        )
+    }
 
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
@@ -285,6 +311,27 @@ class DoubleWallpaperFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 
 }

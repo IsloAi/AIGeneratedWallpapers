@@ -29,6 +29,8 @@ import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -41,7 +43,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class DownloadBatteryAnimation : Fragment() {
+class DownloadBatteryAnimation : Fragment(), AdEventListener {
     private var _binding:FragmentDownloadBatteryAnimationBinding ?= null
     private val binding get() = _binding!!
 
@@ -54,6 +56,8 @@ class DownloadBatteryAnimation : Fragment() {
     val TAG = "DOWNLOAD_SCREEN"
 
     var adShowed :Boolean ? =  false
+
+    var checkAppOpen = false
 
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
@@ -98,6 +102,11 @@ class DownloadBatteryAnimation : Fragment() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        (requireActivity().application as MyApp).registerAdEventListener(this)
+
+    }
 
     fun loadAd(){
         val adLayout = LayoutInflater.from(activity).inflate(
@@ -138,20 +147,17 @@ class DownloadBatteryAnimation : Fragment() {
                 navigateToNext()
             }else{
 
-                interAd.showAd(
-                    requireActivity(),
-                    "downloadscr_set_click",
-                    adListener = object : IKShowAdListener {
-                        override fun onAdsShowFail(error: IKAdError) {
-                            if (isAdded){
-                                navigateToNext()
-                            }
-                        }
-                        override fun onAdsDismiss() {
-                            navigateToNext()
-                        }
+                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                    if (isAdded){
+                        checkAppOpen = false
+                        navigateToNext()
+                        Log.e(TAG, "app open showed: ", )
                     }
-                )
+                }else{
+                    showInterAd()
+                }
+
+
             }
 
 
@@ -160,6 +166,24 @@ class DownloadBatteryAnimation : Fragment() {
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun showInterAd() {
+        interAd.showAd(
+            requireActivity(),
+            "downloadscr_set_click",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToNext()
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    navigateToNext()
+                }
+            }
+        )
     }
 
     private fun navigateToNext() {
@@ -313,5 +337,27 @@ class DownloadBatteryAnimation : Fragment() {
         }
 
         _binding = null
+    }
+
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

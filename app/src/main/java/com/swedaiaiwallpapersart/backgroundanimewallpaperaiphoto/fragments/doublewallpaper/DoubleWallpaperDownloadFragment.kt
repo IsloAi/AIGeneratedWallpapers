@@ -29,6 +29,8 @@ import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperDownloadBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -44,7 +46,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class DoubleWallpaperDownloadFragment : Fragment() {
+class DoubleWallpaperDownloadFragment : Fragment(), AdEventListener {
 
     private var _binding:FragmentDoubleWallpaperDownloadBinding ?= null
     private val binding get() = _binding!!
@@ -65,6 +67,9 @@ class DoubleWallpaperDownloadFragment : Fragment() {
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
     private var job: Job? = null
+
+    var checkAppOpen = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,6 +103,11 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         initObservers()
     }
 
+    override fun onStart() {
+        super.onStart()
+        (requireActivity().application as MyApp).registerAdEventListener(this)
+
+    }
     fun loadAd(){
         val adLayout = LayoutInflater.from(activity).inflate(
             R.layout.new_native_language,
@@ -130,60 +140,20 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
             wallModel?.downloaded = true
             if (AdConfig.ISPAIDUSER){
-                if (isAdded){
-                    wallModel?.let { it1 ->
-                        sharedViewModel.updateDoubleWallById(
-                            wallModel?.id!!,
-                            it1
-                        )
-
-                        doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
-                            it1)
-                    }
-                    findNavController().popBackStack()
-
-                }
+                setDownloadedAndPopBack()
             }else{
 
-                interAd.showAd(
-                    requireActivity(),
-                    "downloadscr_set_click",
-                    adListener = object : IKShowAdListener {
-                        override fun onAdsShowFail(error: IKAdError) {
-                            if (isAdded){
-                                wallModel?.let { it1 ->
-                                    sharedViewModel.updateDoubleWallById(
-                                        wallModel?.id!!,
-                                        it1
-                                    )
-
-                                    doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
-                                        it1)
-                                }
-                                findNavController().popBackStack()
-
-                            }
-                        }
-                        override fun onAdsDismiss() {
-                            if (isAdded){
-
-
-
-                                wallModel?.let { it1 ->
-                                    sharedViewModel.updateDoubleWallById(
-                                        wallModel?.id!!,
-                                        it1
-                                    )
-
-                                    doubleWallpaperViewmodel.updateValueById(  wallModel?.id!!,
-                                        it1)
-                                }
-                                findNavController().popBackStack()
-
-                            }
-                        }
+                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                    if (isAdded){
+                        checkAppOpen = false
+                        setDownloadedAndPopBack()
+                        Log.e(TAG, "app open showed: ", )
                     }
-                )
+                }else{
+                    showInterAd()
+                }
+
+
             }
 
 
@@ -191,6 +161,40 @@ class DoubleWallpaperDownloadFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
+        }
+    }
+
+    private fun showInterAd() {
+        interAd.showAd(
+            requireActivity(),
+            "downloadscr_set_click",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    setDownloadedAndPopBack()
+                }
+
+                override fun onAdsDismiss() {
+                    setDownloadedAndPopBack()
+                }
+            }
+        )
+    }
+
+    private fun setDownloadedAndPopBack() {
+        if (isAdded) {
+            wallModel?.let { it1 ->
+                sharedViewModel.updateDoubleWallById(
+                    wallModel?.id!!,
+                    it1
+                )
+
+                doubleWallpaperViewmodel.updateValueById(
+                    wallModel?.id!!,
+                    it1
+                )
+            }
+            findNavController().popBackStack()
+
         }
     }
 
@@ -340,5 +344,26 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         }
 
         _binding = null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

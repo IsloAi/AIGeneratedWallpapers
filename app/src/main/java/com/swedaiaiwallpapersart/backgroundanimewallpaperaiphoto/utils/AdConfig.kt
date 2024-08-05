@@ -45,4 +45,7 @@ object AdConfig {
     var languageLogicShowNative = 1
 
     var onboarding_Full_Native = 1
+
+    var avoidPolicyOpenAdInter = 0
+    var avoidPolicyRepeatingInter = 0
 }

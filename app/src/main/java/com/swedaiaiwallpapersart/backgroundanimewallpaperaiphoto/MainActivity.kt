@@ -681,6 +681,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
                         AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
 
+                        val policyOpenAd = remoteConfig["avoid_policy_openad_inter"].asLong()
+                        AdConfig.avoidPolicyOpenAdInter = policyOpenAd.toInt()
+
+                        val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
+                        AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
+
 
                         Log.e(
                             TAG,
@@ -932,6 +938,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         AdConfig.languageLogicShowNative = languageShowNative.toInt()
         val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
         AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
+
+        val policyOpenAd = remoteConfig["avoid_policy_openad_inter"].asLong()
+        AdConfig.avoidPolicyOpenAdInter = policyOpenAd.toInt()
+
+        val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
+        AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
 
         Log.e(
             TAG,

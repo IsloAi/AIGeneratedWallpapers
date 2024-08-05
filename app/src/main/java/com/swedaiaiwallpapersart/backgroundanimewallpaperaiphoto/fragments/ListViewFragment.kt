@@ -28,6 +28,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -44,7 +46,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListViewFragment : Fragment() {
+class ListViewFragment : Fragment(), AdEventListener {
     private var _binding: FragmentListViewBinding? = null
     private val binding get() = _binding!!
      val myViewModel: MyViewModel by activityViewModels()
@@ -75,6 +77,8 @@ class ListViewFragment : Fragment() {
     private val mostDownloadedViewmodel: MostDownloadedViewmodel by activityViewModels()
 
     val interAd = IKInterstitialAd()
+
+    var checkAppOpen = false
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -109,6 +113,12 @@ class ListViewFragment : Fragment() {
 
             })
         }
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
 
     }
     private fun onCreateViewCalling(){
@@ -164,21 +174,17 @@ class ListViewFragment : Fragment() {
                     if (AdConfig.ISPAIDUSER){
                         navigateToDestination(allItems!!, position)
                     }else{
-
-                        interAd.showAd(
-                            requireActivity(),
-                            "mainscr_sub_cate_tab_scroll",
-                            adListener = object : IKShowAdListener {
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded){
-                                        navigateToDestination(allItems!!, position)
-                                    }
-                                }
-                                override fun onAdsDismiss() {
-                                    // Handle ad dismissal
-                                }
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                            if (isAdded){
+                                checkAppOpen = false
+                                navigateToDestination(allItems!!, position)
+                                Log.e(TAG, "app open showed: ", )
                             }
-                        )
+                        }else{
+                            showInterAd(allItems, position)
+                        }
+
+
 
                     }
 
@@ -273,6 +279,27 @@ class ListViewFragment : Fragment() {
 
 
         }
+    }
+
+    private fun showInterAd(
+        allItems: ArrayList<CatResponse?>?,
+        position: Int
+    ) {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_sub_cate_tab_scroll",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    // Handle ad dismissal
+                }
+            }
+        )
     }
 
     private fun initTrendingData() {
@@ -560,6 +587,27 @@ class ListViewFragment : Fragment() {
         super.onDestroyView()
         _binding = null
         fragmentScope.cancel()
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e(TAG, "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 
 }

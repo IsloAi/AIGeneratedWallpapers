@@ -43,6 +43,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavoruiteLiveWallpaperBody
@@ -66,10 +68,11 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LiveWallpaperPreviewFragment : Fragment() {
+class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private var _binding: FragmentLiveWallpaperPreviewBinding? = null
     private val binding get() = _binding!!
@@ -92,6 +95,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
     val rewardAd = IKRewardAd()
     val interAd = IKInterstitialAd()
 
+    var checkAppOpen = false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,6 +104,12 @@ class LiveWallpaperPreviewFragment : Fragment() {
     ): View? {
         _binding = FragmentLiveWallpaperPreviewBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        (myActivity.application as MyApp).registerAdEventListener(this)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -222,20 +233,17 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 if (adPosition % 2 != 0){
                     setWallpaper()
                 }else{
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_live_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    setWallpaper()
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                setWallpaper()
-                            }
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                        if (isAdded){
+                            checkAppOpen = false
+                            setWallpaper()
+                            Log.e("TAG", "app open showed: ", )
                         }
-                    )
+                    }else{
+                        showInterAd()
+                    }
+
+
                 }
             }
 
@@ -313,6 +321,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                             }
                         }catch (e:Exception){
                             e.printStackTrace()
+                        }catch (e:UnknownHostException){
+                            e.printStackTrace()
                         }
                     }else{
 
@@ -331,6 +341,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                         }
                     }catch (e:Exception){
                         e.printStackTrace()
+                    }catch (e:UnknownHostException){
+                        e.printStackTrace()
                     }
                 }else{
 
@@ -339,6 +351,24 @@ class LiveWallpaperPreviewFragment : Fragment() {
             }
 
         }
+    }
+
+    private fun showInterAd() {
+        interAd.showAd(
+            requireActivity(),
+            "mainscr_live_tab_click_item",
+            adListener = object : IKShowAdListener {
+                override fun onAdsShowFail(error: IKAdError) {
+                    if (isAdded) {
+                        setWallpaper()
+                    }
+                }
+
+                override fun onAdsDismiss() {
+                    setWallpaper()
+                }
+            }
+        )
     }
 
     private fun unlockDialog() {
@@ -423,6 +453,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 }
             }catch (e:Exception){
                 e.printStackTrace()
+            }catch (e:UnknownHostException){
+                e.printStackTrace()
             }
 
 
@@ -474,6 +506,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                         webApiInterface.postDownloadedLive(requestBody)
                     }
                 }catch (e:Exception){
+                    e.printStackTrace()
+                }catch (e:UnknownHostException){
                     e.printStackTrace()
                 }
 
@@ -577,6 +611,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                                             webApiInterface.postDownloadedLive(requestBody)
                                         }
                                     }catch (e:Exception){
+                                        e.printStackTrace()
+                                    }catch (e:UnknownHostException){
                                         e.printStackTrace()
                                     }
                                 }
@@ -733,5 +769,26 @@ class LiveWallpaperPreviewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onAdDismiss() {
+        checkAppOpen = true
+        Log.e("TAG", "app open dismissed: ", )
+    }
+
+    override fun onAdLoading() {
+
+    }
+
+    override fun onAdsShowTimeout() {
+
+    }
+
+    override fun onShowAdComplete() {
+
+    }
+
+    override fun onShowAdFail() {
+
     }
 }

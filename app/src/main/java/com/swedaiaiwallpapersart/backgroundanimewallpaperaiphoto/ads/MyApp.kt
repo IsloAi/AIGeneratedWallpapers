@@ -7,6 +7,7 @@ import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.billing.IKBillingController
 import com.ikame.android.sdk.data.dto.pub.IKBillingError
 import com.ikame.android.sdk.listener.keep.SDKIAPProductIDProvider
+import com.ikame.android.sdk.listener.pub.IKAppOpenAdCallback
 import com.ikame.android.sdk.listener.pub.IKBillingHandlerListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
@@ -31,19 +32,19 @@ class MyApp : IKBaseApplication() {
                 get() = true
 
             override fun listProductIDsSubscription(): ArrayList<String> {
-                return arrayListOf()
+                return arrayListOf("unlock_all_premium_wallpaper_weekly_1","unlock_all_premium_wallpaper_yearly_2")
             }
 
             override fun listProductIDsPurchase(): ArrayList<String> {
-                return arrayListOf()
+                return arrayListOf("unlock_all_premium_lifetime")
             }
 
             override fun listProductIDsRemoveAd(): ArrayList<String> {
-                return arrayListOf()
+                return arrayListOf("unlock_all_premium_wallpaper_weekly_1","unlock_all_premium_wallpaper_yearly_2","unlock_all_premium_lifetime")
             }
 
             override fun listProductIDsCanPurchaseMultiTime(): ArrayList<String> {
-                return arrayListOf()
+                return arrayListOf("unlock_all_premium_wallpaper_weekly_1","unlock_all_premium_wallpaper_yearly_2")
             }
 
         }
@@ -64,8 +65,34 @@ class MyApp : IKBaseApplication() {
 //        IKSdkController.setAutoReloadRewarded(true)
         IKSdkController.setEnableShowLoadingResumeAds(true)
 
+        IKSdkController.setAppOpenAdsCallback(object:IKAppOpenAdCallback{
+            override fun onAdDismiss() {
+                adEventListener?.onAdDismiss()
+            }
+
+            override fun onAdLoading() {
+                adEventListener?.onAdLoading()
+            }
+
+            override fun onAdsShowTimeout() {
+                adEventListener?.onAdsShowTimeout()
+            }
+
+            override fun onShowAdComplete() {
+                adEventListener?.onAdsShowTimeout()
+            }
+
+            override fun onShowAdFail() {
+                adEventListener?.onShowAdFail()
+            }
+
+        })
+
+
+
         IKBillingController.setBillingListener(object : IKBillingHandlerListener {
             override fun onProductPurchased(productId: String,  orderId: String?) {
+                Log.e("SPLASH", "onProductPurchased: $productId", )
                 //do some thing
             }
 
@@ -81,6 +108,17 @@ class MyApp : IKBaseApplication() {
                 Log.e("TAG", "onBillingInitialized: " )
             }
         })
+    }
+
+
+    private var adEventListener: AdEventListener? = null
+
+    fun registerAdEventListener(listener: AdEventListener) {
+        adEventListener = listener
+    }
+
+    fun unregisterAdEventListener() {
+        adEventListener = null
     }
 
 }

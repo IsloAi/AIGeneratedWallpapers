@@ -13,7 +13,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.data.dto.pub.IKRemoteConfigValue
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
+import com.ikame.android.sdk.listener.pub.IKRemoteConfigCallback
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
@@ -80,6 +82,17 @@ class SplashOnFragment : Fragment() {
 //        IKSdkController.getInstance().onDataGetSuccessListener = {
 //            //do something
 //        }
+
+        IKSdkController.setOnRemoteConfigDataListener(object : IKRemoteConfigCallback {
+            override fun onSuccess(data: HashMap<String, IKRemoteConfigValue>) {
+
+            }
+
+            override fun onFail() {
+
+            }
+
+        })
         if (isAdded) {
 
             sendTracking(
@@ -97,8 +110,12 @@ class SplashOnFragment : Fragment() {
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
         // Check if the user is a premium user
-        val premium = IKUtils.isUserIAPAvailable()
-        AdConfig.ISPAIDUSER = premium
+        lifecycleScope.launch {
+            val premium = IKUtils.isUserIAPAvailableAsync()
+            AdConfig.ISPAIDUSER = premium
+            Log.e(TAG, "onViewCreated: "+premium )
+        }
+
 
         if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE

@@ -22,6 +22,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataO
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -74,12 +75,19 @@ class FeedbackFragment : Fragment() {
                     subject?.error = getString(R.string.must_required_your_subject)
                     subject?.requestFocus()
                 }else{
+                    try {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            endPointsInterface.postData(FeedbackModel(getMail,getName,getSubject,getMessage,
+                                MySharePreference.getDeviceID(requireContext())!!
+                            ))
+                        }
+                    }catch (e:Exception){
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        endPointsInterface.postData(FeedbackModel(getMail,getName,getSubject,getMessage,
-                            MySharePreference.getDeviceID(requireContext())!!
-                        ))
+                    }catch (e:UnknownHostException){
+                        e.printStackTrace()
                     }
+
+
 
 
 //                    postDataOnServer.sendFeedback(requireContext(),getMail,getName,getSubject,getMessage,
