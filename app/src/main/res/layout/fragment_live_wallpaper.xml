@@ -10,5 +10,4 @@
         android:id="@+id/liveReccyclerview"
         />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>

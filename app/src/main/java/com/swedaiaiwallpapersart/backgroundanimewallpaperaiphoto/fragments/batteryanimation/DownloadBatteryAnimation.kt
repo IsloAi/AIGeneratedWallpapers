@@ -33,6 +33,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
 import kotlinx.coroutines.Dispatchers
@@ -57,7 +58,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     var adShowed :Boolean ? =  false
 
-    var checkAppOpen = false
+//    var checkAppOpen = false
 
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds

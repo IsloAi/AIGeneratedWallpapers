@@ -11,6 +11,7 @@ import com.ikame.android.sdk.listener.pub.IKAppOpenAdCallback
 import com.ikame.android.sdk.listener.pub.IKBillingHandlerListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 
@@ -67,7 +68,9 @@ class MyApp : IKBaseApplication() {
 
         IKSdkController.setAppOpenAdsCallback(object:IKAppOpenAdCallback{
             override fun onAdDismiss() {
+                Log.d("MyApp", "Ad dismissed in MyApp")
                 adEventListener?.onAdDismiss()
+                checkAppOpen = true
             }
 
             override fun onAdLoading() {

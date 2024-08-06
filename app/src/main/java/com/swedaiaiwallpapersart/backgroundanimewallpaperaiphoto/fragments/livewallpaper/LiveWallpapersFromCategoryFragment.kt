@@ -29,6 +29,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.down
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
@@ -60,7 +61,7 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
 
     val interAd = IKInterstitialAd()
 
-    var checkAppOpen = false
+//    var checkAppOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

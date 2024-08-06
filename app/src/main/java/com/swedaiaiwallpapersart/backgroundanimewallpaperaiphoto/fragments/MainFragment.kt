@@ -74,11 +74,11 @@ class MainFragment : Fragment(){
         val lan = MySharePreference.getLanguage(requireContext())
         val context = LocaleManager.setLocale(requireContext(), lan!!)
         val resources = context.resources
-        val newLocale = Locale(lan!!)
+        val newLocale = Locale(lan)
         val resources1 = getResources()
         val configuration = resources1.configuration
         configuration.setLocale(newLocale)
-        configuration.setLayoutDirection(Locale(lan!!));
+        configuration.setLayoutDirection(Locale(lan));
         resources1.updateConfiguration(configuration, resources.displayMetrics)
       _binding = FragmentMainBinding.inflate(inflater, container, false)
         exit = false

@@ -203,7 +203,6 @@ class LiveWallpaperAdapter(
 
             if (currentTime - lastClickTime >= debounceThreshold) {
 
-
                 positionCallback.getPosition(position,model)
 
 //                    else {
@@ -216,8 +215,6 @@ class LiveWallpaperAdapter(
 
                 lastClickTime = currentTime
             }
-
-
         }
 
     }

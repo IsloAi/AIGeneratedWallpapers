@@ -24,6 +24,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -180,14 +181,13 @@ class SplashOnFragment : Fragment() {
             }
 
 
-
             if (counter == 0 && !AdConfig.ISPAIDUSER) {
                 IKSdkController
                     .loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
                         override fun onAdsDismiss() {
                             moveNext = true
+                            Constants.checkAppOpen = true
                             navigateToNextScreen()
-
                             IKSdkController.setEnableShowResumeAds(true)
 
                         }

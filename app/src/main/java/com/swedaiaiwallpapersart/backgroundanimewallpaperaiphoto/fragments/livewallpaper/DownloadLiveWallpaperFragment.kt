@@ -34,6 +34,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +63,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     val TAG = "DOWNLOAD_SCREEN"
 
     var showAd :Boolean? = false
-    var checkAppOpen = false
+//    var checkAppOpen = false
 
 
     val interAd = IKInterstitialAd()

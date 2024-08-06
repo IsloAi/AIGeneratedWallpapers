@@ -29,6 +29,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.down
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
@@ -53,7 +55,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val interAd = IKInterstitialAd()
-    var checkAppOpen = false
+//    var checkAppOpen = false
 
     val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(
@@ -183,6 +185,29 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     setDownloadAbleWallpaperAndNavigate(model,false)
                 }else{
 
+//                    var shouldShowInterAd = true
+//
+//                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+//                        if (isAdded) {
+//                            Constants.checkInter = false
+//                            setDownloadAbleWallpaperAndNavigate(model, false)
+//                            shouldShowInterAd = false // Skip showing the ad for this action
+//                        }
+//                    }
+//
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+//                        if (isAdded) {
+//                            checkAppOpen = false
+//                            setDownloadAbleWallpaperAndNavigate(model, false)
+//                            Log.e(TAG, "app open showed")
+//                            shouldShowInterAd = false // Skip showing the ad for this action
+//                        }
+//                    }
+//
+//                    if (shouldShowInterAd) {
+//                        showInterAd(model) // Show the interstitial ad if no conditions were met
+//                    }
+
                     if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
                         if (isAdded){
                             checkAppOpen = false
@@ -299,12 +324,13 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        (myActivity.application as MyApp).unregisterAdEventListener()
         _binding =  null
     }
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

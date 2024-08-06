@@ -54,6 +54,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -95,7 +96,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     val rewardAd = IKRewardAd()
     val interAd = IKInterstitialAd()
 
-    var checkAppOpen = false
+//    var checkAppOpen = false
 
 
     override fun onCreateView(

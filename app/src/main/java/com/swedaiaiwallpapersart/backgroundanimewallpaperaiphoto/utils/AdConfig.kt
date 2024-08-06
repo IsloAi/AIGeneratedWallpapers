@@ -49,3 +49,20 @@ object AdConfig {
     var avoidPolicyOpenAdInter = 0
     var avoidPolicyRepeatingInter = 0
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

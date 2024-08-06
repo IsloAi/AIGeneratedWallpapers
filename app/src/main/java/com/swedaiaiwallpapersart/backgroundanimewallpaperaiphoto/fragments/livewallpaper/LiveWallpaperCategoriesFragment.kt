@@ -25,6 +25,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
 
@@ -39,7 +40,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
 
     val interAd = IKInterstitialAd()
 
-    var checkAppOpen = false
+//    var checkAppOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
