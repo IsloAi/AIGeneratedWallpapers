@@ -32,6 +32,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -109,16 +110,37 @@ class CategoryFragment : Fragment(), AdEventListener {
                 if (AdConfig.ISPAIDUSER){
                     setFragment(string)
                 }else{
+                    var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            setFragment(string)
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
                             checkAppOpen = false
                             setFragment(string)
-                            Log.e(TAG, "app open showed: ", )
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
-                        showInterAd(string)
                     }
+
+                    if (shouldShowInterAd) {
+                        showInterAd(string) // Show the interstitial ad if no conditions were met
+                    }
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            setFragment(string)
+//                            Log.e(TAG, "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd(string)
+//                    }
 
 
                 }
@@ -185,6 +207,7 @@ class CategoryFragment : Fragment(), AdEventListener {
 
                 override fun onAdsDismiss() {
                     if (isAdded) {
+                        Constants.checkInter = true
                         setFragment(string)
                     }
                 }
@@ -213,16 +236,37 @@ class CategoryFragment : Fragment(), AdEventListener {
                     if (AdConfig.ISPAIDUSER){
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }else{
+                        var shouldShowInterAd = true
 
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                            if (isAdded){
+                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                            if (isAdded) {
+                                Constants.checkInter = false
+                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                                shouldShowInterAd = false // Skip showing the ad for this action
+                            }
+                        }
+
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                            if (isAdded) {
                                 checkAppOpen = false
                                 findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                Log.e(TAG, "app open showed: ", )
+                                Log.e(TAG, "app open showed")
+                                shouldShowInterAd = false // Skip showing the ad for this action
                             }
-                        }else{
-                            showIntersAd()
                         }
+
+                        if (shouldShowInterAd) {
+                            showIntersAd() // Show the interstitial ad if no conditions were met
+                        }
+//                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                            if (isAdded){
+//                                checkAppOpen = false
+//                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+//                                Log.e(TAG, "app open showed: ", )
+//                            }
+//                        }else{
+//                            showIntersAd()
+//                        }
 
 
                     }
@@ -248,6 +292,7 @@ class CategoryFragment : Fragment(), AdEventListener {
 
                 override fun onAdsDismiss() {
                     if (isAdded) {
+                        Constants.checkInter = true
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
                 }

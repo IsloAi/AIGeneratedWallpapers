@@ -54,7 +54,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -124,7 +126,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
             interAd.attachLifecycle(this.lifecycle)
 // Load ad with a specific screen ID, considered as a unitId
-            interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
+            interAd.loadAd("viewlivewallscr_click_set", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
                 }
@@ -134,9 +136,11 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             })
 
             binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
+            binding.adsView.loadAd("viewlivewallscr_bottom", object : IKShowWidgetAdListener {
                 override fun onAdShowed() {}
                 override fun onAdShowFail(error: IKAdError) {
+
+                    Log.d(TAG, "onAdsShowFailLivePreviewBanner: $error")
 //                    binding.adsView?.visibility = View.GONE
                 }
 
@@ -222,7 +226,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 sendTracking("typewallpaper_used",Pair("typewallpaper", "Live"))
                 sendTracking("category_used",Pair("category", "Live ${livewallpaper?.catname}"))
             }
-            Log.e("TAG", "setEvents: "+livewallpaper )
+            Log.e("TAG", "setEvents: $livewallpaper")
 
             if (livewallpaper?.unlocked == false){
                 if (AdConfig.ISPAIDUSER){
@@ -234,15 +238,37 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 if (adPosition % 2 != 0){
                     setWallpaper()
                 }else{
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
+                    var shouldShowInterAd = true
+
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            setWallpaper()
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
                             checkAppOpen = false
                             setWallpaper()
-                            Log.e("TAG", "app open showed: ", )
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
-                        showInterAd()
                     }
+
+                    if (shouldShowInterAd) {
+                        showInterAd() // Show the interstitial ad if no conditions were met
+                    }
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            setWallpaper()
+//                            Log.e("TAG", "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd()
+//                    }
 
 
                 }
@@ -357,15 +383,17 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private fun showInterAd() {
         interAd.showAd(
             requireActivity(),
-            "mainscr_live_tab_click_item",
+            "viewlivewallscr_click_set",
             adListener = object : IKShowAdListener {
                 override fun onAdsShowFail(error: IKAdError) {
                     if (isAdded) {
+                        Log.d(TAG, "onAdsShowFailLivePreview: $error")
                         setWallpaper()
                     }
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     setWallpaper()
                 }
             }

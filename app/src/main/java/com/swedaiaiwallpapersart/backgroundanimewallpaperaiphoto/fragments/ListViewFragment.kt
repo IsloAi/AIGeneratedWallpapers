@@ -33,6 +33,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -50,7 +51,7 @@ import kotlinx.coroutines.withContext
 class ListViewFragment : Fragment(), AdEventListener {
     private var _binding: FragmentListViewBinding? = null
     private val binding get() = _binding!!
-     val myViewModel: MyViewModel by activityViewModels()
+    val myViewModel: MyViewModel by activityViewModels()
     private var name = ""
     private var from = ""
     private lateinit var myActivity : MainActivity
@@ -96,19 +97,22 @@ class ListViewFragment : Fragment(), AdEventListener {
         }else{
             interAd.attachLifecycle(this.lifecycle)
 // Load ad with a specific screen ID, considered as a unitId
-            interAd.loadAd("mainscr_sub_cate_tab_scroll", object : IKLoadAdListener {
+            interAd.loadAd("categoryscr_click_item", object : IKLoadAdListener {
                 override fun onAdLoaded() {
+                    Log.d(TAG, "onAdLoaded: ")
                     // Ad loaded successfully
                 }
                 override fun onAdLoadFail(error: IKAdError) {
+                    Log.d(TAG, "onAdLoadFail1: $error")
                     // Handle ad load failure
                 }
             })
 
             binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("mainscr_bottom", object : IKShowWidgetAdListener {
+            binding.adsView.loadAd("categoryscr_bottom", object : IKShowWidgetAdListener {
                 override fun onAdShowed() {}
                 override fun onAdShowFail(error: IKAdError) {
+                    Log.d(TAG, "onAdLoadFail2: $error")
 //                    binding.adsView?.visibility = View.GONE
                 }
 
@@ -126,8 +130,8 @@ class ListViewFragment : Fragment(), AdEventListener {
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-         name = arguments?.getString("name").toString()
-         from = arguments?.getString("from").toString()
+        name = arguments?.getString("name").toString()
+        from = arguments?.getString("from").toString()
         Log.d("tracingNameCategory", "onViewCreated: name $name")
 
 
@@ -136,8 +140,8 @@ class ListViewFragment : Fragment(), AdEventListener {
             initTrendingData()
         }else{
             viewModel.selectedTab.observe(viewLifecycleOwner){
-                Log.e(TAG, "onCreateViewCalling: "+name )
-                Log.e(TAG, "onCreateViewCalling: "+it )
+                Log.e(TAG, "onCreateViewCalling: $name")
+                Log.e(TAG, "onCreateViewCalling: $it")
                 if (name == ""){
                     name = it
                     loadData()
@@ -152,7 +156,7 @@ class ListViewFragment : Fragment(), AdEventListener {
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
 
         val list = ArrayList<CatResponse?>()
-         adapter = ApiCategoriesListAdapter(list, object :
+        adapter = ApiCategoriesListAdapter(list, object :
             PositionCallback {
             override fun getPosition(position: Int) {
 
@@ -161,37 +165,58 @@ class ListViewFragment : Fragment(), AdEventListener {
                     hasToNavigateList = true
 
                     isNavigationInProgress = true
-                externalOpen = true
-                val allItems = adapter?.getAllItems()
-                if (addedItems?.isNotEmpty() == true) {
-                    addedItems?.clear()
-                }
+                    externalOpen = true
+                    val allItems = adapter?.getAllItems()
+                    if (addedItems?.isNotEmpty() == true) {
+                        addedItems?.clear()
+                    }
 
 
-                addedItems = allItems
-
-                oldPosition = position
+                    addedItems = allItems
+                    oldPosition = position
 
                     if (AdConfig.ISPAIDUSER){
                         navigateToDestination(allItems!!, position)
                     }else{
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                            if (isAdded){
-                                checkAppOpen = false
+                        var shouldShowInterAd = true
+
+                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                            if (isAdded) {
+                                Constants.checkInter = false
                                 navigateToDestination(allItems!!, position)
-                                Log.e(TAG, "app open showed: ", )
+                                shouldShowInterAd = false // Skip showing the ad for this action
                             }
-                        }else{
-                            showInterAd(allItems, position)
                         }
 
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                            if (isAdded) {
+                                checkAppOpen = false
+                                navigateToDestination(allItems!!, position)
+                                Log.e(TAG, "app open showed")
+                                shouldShowInterAd = false // Skip showing the ad for this action
+                            }
+                        }
 
+                        if (shouldShowInterAd) {
+                            showInterAd(allItems, position)
+                        }
+//                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                            if (isAdded){
+//                                checkAppOpen = false
+//                                navigateToDestination(allItems!!, position)
+//                                Log.e(TAG, "app open showed: ", )
+//                            }
+//                        }else{
+//                            showInterAd(allItems, position)
+//                        }
+//
+//
 
                     }
 
 
 
-            }
+                }
 
 
 
@@ -204,7 +229,7 @@ class ListViewFragment : Fragment(), AdEventListener {
 
         adapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
+        IKSdkController.loadNativeDisplayAd("categoryscr_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
@@ -288,15 +313,18 @@ class ListViewFragment : Fragment(), AdEventListener {
     ) {
         interAd.showAd(
             requireActivity(),
-            "mainscr_sub_cate_tab_scroll",
+            "categoryscr_click_item",
             adListener = object : IKShowAdListener {
                 override fun onAdsShowFail(error: IKAdError) {
                     if (isAdded) {
+                        //IKAdError(code=8018, message=No screen ID associated with the ad.)
+                        Log.d(TAG, "onAdsShowFail: $error")
                         navigateToDestination(allItems!!, position)
                     }
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     // Handle ad dismissal
                 }
             }
@@ -523,7 +551,7 @@ class ListViewFragment : Fragment(), AdEventListener {
 
 
 
-             newData
+            newData
         }
 
 

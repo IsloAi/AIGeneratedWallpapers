@@ -560,8 +560,6 @@ class HomeTabsFragment : Fragment() {
 
 
 
-
-
     fun loadbannerAd(){
         if (AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE

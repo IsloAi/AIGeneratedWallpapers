@@ -28,6 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -190,16 +191,37 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                     navigateToDestination(allItems!!,position)
 
                 }else{
+                    var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            navigateToDestination(allItems!!, position)
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
                             checkAppOpen = false
                             navigateToDestination(allItems!!, position)
-                            Log.e(TAG, "app open showed: ", )
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
+                    }
+
+                    if (shouldShowInterAd) {
                         showInterAd(allItems, position)
                     }
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            navigateToDestination(allItems!!, position)
+//                            Log.e(TAG, "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd(allItems, position)
+//                    }
 
                 }
 
@@ -239,6 +261,7 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     navigateToDestination(allItems!!, position)
                 }
             }

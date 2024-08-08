@@ -29,6 +29,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.down
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -166,16 +167,37 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
                 if (AdConfig.ISPAIDUSER){
                     setDownloadAbleWallpaperAndNavigate(model,true)
                 }else{
+                    var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
-                            checkAppOpen = false
-                            setDownloadAbleWallpaperAndNavigate(model,true)
-                            Log.e(TAG, "app open showed: ", )
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            setDownloadAbleWallpaperAndNavigate(model, false)
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
-                        showInterAd(model)
                     }
+
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
+                            checkAppOpen = false
+                            setDownloadAbleWallpaperAndNavigate(model, false)
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (shouldShowInterAd) {
+                        showInterAd(model) // Show the interstitial ad if no conditions were met
+                    }
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            setDownloadAbleWallpaperAndNavigate(model,true)
+//                            Log.e(TAG, "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd(model)
+//                    }
                 }
             }
         },myActivity)
@@ -209,6 +231,7 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     setDownloadAbleWallpaperAndNavigate(model, true)
                 }
             }

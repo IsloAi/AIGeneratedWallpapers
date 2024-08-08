@@ -185,38 +185,38 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     setDownloadAbleWallpaperAndNavigate(model,false)
                 }else{
 
-//                    var shouldShowInterAd = true
-//
-//                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-//                        if (isAdded) {
-//                            Constants.checkInter = false
-//                            setDownloadAbleWallpaperAndNavigate(model, false)
-//                            shouldShowInterAd = false // Skip showing the ad for this action
-//                        }
-//                    }
-//
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-//                        if (isAdded) {
-//                            checkAppOpen = false
-//                            setDownloadAbleWallpaperAndNavigate(model, false)
-//                            Log.e(TAG, "app open showed")
-//                            shouldShowInterAd = false // Skip showing the ad for this action
-//                        }
-//                    }
-//
-//                    if (shouldShowInterAd) {
-//                        showInterAd(model) // Show the interstitial ad if no conditions were met
-//                    }
+                    var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
-                            checkAppOpen = false
-                            setDownloadAbleWallpaperAndNavigate(model,false)
-                            Log.e(TAG, "app open showed: ", )
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            setDownloadAbleWallpaperAndNavigate(model, false)
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
-                        showInterAd(model)
                     }
+
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
+                            checkAppOpen = false
+                            setDownloadAbleWallpaperAndNavigate(model, false)
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (shouldShowInterAd) {
+                        showInterAd(model) // Show the interstitial ad if no conditions were met
+                    }
+
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            setDownloadAbleWallpaperAndNavigate(model,false)
+//                            Log.e(TAG, "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd(model)
+//                    }
 
                 }
 
@@ -260,6 +260,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     setDownloadAbleWallpaperAndNavigate(model, true)
                 }
             }

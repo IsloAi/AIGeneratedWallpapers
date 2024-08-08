@@ -64,7 +64,7 @@ class ApiCategoriesListAdapter(
     val tracking = if (from == "trending"){
         "mainscr_trending_tab_scroll_view"
     }else if (from == "category"){
-        "mainscr_sub_cate_tab_scroll"
+        "categoryscr_scroll_view"
 
     }else if (from == "search"){
         "searchscr_scroll_view"

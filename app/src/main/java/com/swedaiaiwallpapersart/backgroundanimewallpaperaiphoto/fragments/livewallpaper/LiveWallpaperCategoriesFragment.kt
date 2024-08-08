@@ -25,7 +25,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
 
@@ -85,21 +87,38 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
                 }else{
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
-                            checkAppOpen = false
+                    var shouldShowInterAd = true
+
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
                             findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            Log.e("TAG", "app open showed: ", )
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
-                        showInterAd()
                     }
 
-                    showInterAd()
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
+                            checkAppOpen = false
+                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (shouldShowInterAd) {
+                        showInterAd()
+                    }
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+//                            Log.e("TAG", "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd()
+//                    }
                 }
-
-
-
             }
         },myActivity,"live")
         binding.recyclerviewAll.adapter = adapter
@@ -122,6 +141,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                 }
             }

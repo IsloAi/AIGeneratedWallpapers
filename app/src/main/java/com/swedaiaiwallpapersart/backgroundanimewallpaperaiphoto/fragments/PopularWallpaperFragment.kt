@@ -42,6 +42,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -257,15 +258,37 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
                             navigateToDestination(allItems!!, position)
                         }
                     }else{
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                            if (isAdded){
+                        var shouldShowInterAd = true
+
+                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                            if (isAdded) {
+                                Constants.checkInter = false
+                                navigateToDestination(allItems!!, position)
+                                shouldShowInterAd = false // Skip showing the ad for this action
+                            }
+                        }
+
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                            if (isAdded) {
                                 checkAppOpen = false
                                 navigateToDestination(allItems!!, position)
-                                Log.e(TAG, "app open showed: ", )
+                                Log.e(TAG, "app open showed")
+                                shouldShowInterAd = false // Skip showing the ad for this action
                             }
-                        }else{
+                        }
+
+                        if (shouldShowInterAd) {
                             showInterAdForAllItems(allItems, position)
                         }
+//                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                            if (isAdded){
+//                                checkAppOpen = false
+//                                navigateToDestination(allItems!!, position)
+//                                Log.e(TAG, "app open showed: ", )
+//                            }
+//                        }else{
+//                            showInterAdForAllItems(allItems, position)
+//                        }
                     }
 
 
@@ -341,6 +364,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     // Handle ad dismissal
                 }
             }
@@ -732,16 +756,38 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
                                 navigateToDestination(allItems!!, position)
                             }
                         }else{
-                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                                    if (isAdded){
-                                        checkAppOpen = false
-                                        navigateToDestination(allItems!!, position)
-                                        Log.e(TAG, "app open showed: ", )
-                                    }
+                            var shouldShowInterAd = true
 
-                            }else{
+                            if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                                if (isAdded) {
+                                    Constants.checkInter = false
+                                    navigateToDestination(allItems!!, position)
+                                    shouldShowInterAd = false // Skip showing the ad for this action
+                                }
+                            }
+
+                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                                if (isAdded) {
+                                    checkAppOpen = false
+                                    navigateToDestination(allItems!!, position)
+                                    Log.e(TAG, "app open showed")
+                                    shouldShowInterAd = false // Skip showing the ad for this action
+                                }
+                            }
+
+                            if (shouldShowInterAd) {
                                 showInterAdForHorizontalList(allItems, position)
                             }
+//                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                                    if (isAdded){
+//                                        checkAppOpen = false
+//                                        navigateToDestination(allItems!!, position)
+//                                        Log.e(TAG, "app open showed: ", )
+//                                    }
+//
+//                            }else{
+//                                showInterAdForHorizontalList(allItems, position)
+//                            }
                         }
 
                     }
@@ -776,6 +822,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
                 override fun onAdsDismiss() {
                     if (isAdded) {
+                        Constants.checkInter = true
                         navigateToDestination(allItems!!, position)
                     }
                 }

@@ -34,6 +34,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -166,15 +167,37 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 if (showAd == true){
                     navigateToPreview()
                 }else{
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                        if (isAdded){
+                    var shouldShowInterAd = true
+
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            navigateToPreview()
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
+                    }
+
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
                             checkAppOpen = false
                             navigateToPreview()
-                            Log.e(TAG, "app open showed: ", )
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
                         }
-                    }else{
+                    }
+
+                    if (shouldShowInterAd) {
                         showInterAd()
                     }
+//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                        if (isAdded){
+//                            checkAppOpen = false
+//                            navigateToPreview()
+//                            Log.e(TAG, "app open showed: ", )
+//                        }
+//                    }else{
+//                        showInterAd()
+//                    }
 
 
                 }
@@ -202,8 +225,10 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     navigateToPreview()
                 }
+
             }
         )
     }

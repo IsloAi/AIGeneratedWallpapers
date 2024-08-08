@@ -33,6 +33,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
@@ -147,16 +148,37 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
             }else if (adShowed == true){
                 navigateToNext()
             }else{
+                var shouldShowInterAd = true
 
-                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                    if (isAdded){
+                if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                    if (isAdded) {
+                        Constants.checkInter = false
+                        navigateToNext()
+                        shouldShowInterAd = false // Skip showing the ad for this action
+                    }
+                }
+
+                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                    if (isAdded) {
                         checkAppOpen = false
                         navigateToNext()
-                        Log.e(TAG, "app open showed: ", )
+                        Log.e(TAG, "app open showed")
+                        shouldShowInterAd = false // Skip showing the ad for this action
                     }
-                }else{
+                }
+
+                if (shouldShowInterAd) {
                     showInterAd()
                 }
+//                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                    if (isAdded){
+//                        checkAppOpen = false
+//                        navigateToNext()
+//                        Log.e(TAG, "app open showed: ", )
+//                    }
+//                }else{
+//                    showInterAd()
+//                }
 
 
             }
@@ -181,6 +203,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     navigateToNext()
                 }
             }

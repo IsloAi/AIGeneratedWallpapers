@@ -34,6 +34,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
@@ -143,16 +144,37 @@ class DoubleWallpaperDownloadFragment : Fragment(), AdEventListener {
             if (AdConfig.ISPAIDUSER){
                 setDownloadedAndPopBack()
             }else{
+                var shouldShowInterAd = true
 
-                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                    if (isAdded){
+                if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                    if (isAdded) {
+                        Constants.checkInter = false
+                        setDownloadedAndPopBack()
+                        shouldShowInterAd = false // Skip showing the ad for this action
+                    }
+                }
+
+                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                    if (isAdded) {
                         checkAppOpen = false
                         setDownloadedAndPopBack()
-                        Log.e(TAG, "app open showed: ", )
+                        Log.e(TAG, "app open showed")
+                        shouldShowInterAd = false // Skip showing the ad for this action
                     }
-                }else{
+                }
+
+                if (shouldShowInterAd) {
                     showInterAd()
                 }
+//                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+//                    if (isAdded){
+//                        checkAppOpen = false
+//                        setDownloadedAndPopBack()
+//                        Log.e(TAG, "app open showed: ", )
+//                    }
+//                }else{
+//                    showInterAd()
+//                }
 
 
             }
@@ -175,6 +197,7 @@ class DoubleWallpaperDownloadFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
+                    Constants.checkInter = true
                     setDownloadedAndPopBack()
                 }
             }
