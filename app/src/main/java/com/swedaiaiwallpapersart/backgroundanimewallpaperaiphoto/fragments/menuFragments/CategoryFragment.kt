@@ -1,5 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
-import ApiCategoriesNameAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log

@@ -26,7 +26,7 @@ class GetLiveWallpaperByCategoryViewmodel@Inject constructor(private val getLive
     fun getMostUsed(page:String){
         viewModelScope.launch {
             getLiveWallpaperByCategoryUseCase.invoke(page).collect(){
-                Log.e("TAG", "getAllModels: "+it )
+                Log.e("TAG", "getAllModels: $it")
                 _liveWallpapers.value=it
             }
         }

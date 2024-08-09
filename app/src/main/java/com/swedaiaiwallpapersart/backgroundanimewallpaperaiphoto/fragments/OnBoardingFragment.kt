@@ -86,12 +86,13 @@ class OnBoardingFragment : Fragment() {
                             if (isAdded){
                                 sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
                             }
-
                             binding.skipBtn.visibility = View.VISIBLE
 
                         }
                         2 -> {
-
+                            if (isAdded){
+                                sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
+                            }
                             binding.skipBtn.visibility = View.GONE
                         }
                     }
@@ -108,12 +109,13 @@ class OnBoardingFragment : Fragment() {
                                 if (isAdded){
                                     sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr2_View"))
                                 }
-
                                 binding.skipBtn.visibility = View.VISIBLE
 
                             }
                             2 -> {
-
+                                if (isAdded){
+                                    sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
+                                }
                                 binding.skipBtn.visibility = View.GONE
                             }
                         }
@@ -125,7 +127,6 @@ class OnBoardingFragment : Fragment() {
                                 }
                                 binding.nextBtn.visibility = View.VISIBLE
                                 binding.skipBtn.visibility = View.VISIBLE
-                                IKSdkController.setEnableShowResumeAds(true)
                                 IKSdkController.setEnableShowResumeAds(true)
                             }
                             1 -> {
@@ -144,6 +145,9 @@ class OnBoardingFragment : Fragment() {
                             }
 
                             3 -> {
+                                if (isAdded){
+                                    sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr3_View"))
+                                }
                                 binding.nextBtn.visibility = View.VISIBLE
                                 binding.skipBtn.visibility = View.GONE
                                 IKSdkController.setEnableShowResumeAds(true)

@@ -337,6 +337,7 @@ class WallpaperViewFragment : Fragment() {
             binding.adsView.loadAd("viewlistwallscr_bottom", object : IKShowWidgetAdListener {
                 override fun onAdShowed() {}
                 override fun onAdShowFail(error: IKAdError) {
+                    Log.d(TAG, "onAdShowFailWallpaperViewPagerFragment: $error")
 //                    binding.adsView?.visibility = View.GONE
                 }
 

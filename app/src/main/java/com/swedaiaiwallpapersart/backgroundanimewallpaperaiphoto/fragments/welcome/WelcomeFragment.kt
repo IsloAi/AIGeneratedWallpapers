@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWelcomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -82,7 +83,6 @@ class WelcomeFragment : Fragment() {
         }else{
             binding.adsView.visibility = View.GONE
         }
-
 
     }
 

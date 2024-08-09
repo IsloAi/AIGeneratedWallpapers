@@ -63,6 +63,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -459,49 +460,58 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         dialog?.show()
     }
 
-    fun setWallpaper(){
+    fun setWallpaper() {
+        if (isAdded) {
+            val context = requireContext()
+            val file = context.filesDir
+            val filepath = File(file, BlurView.fileName)
+            val newFile = File(file, "video.mp4")
 
-        if (isAdded){
-        val file = requireContext().filesDir
-        val filepath = File(file, BlurView.fileName)
-        val newFile = File(file, "video.mp4")
+            val info = WallpaperManager.getInstance(context.applicationContext).wallpaperInfo
 
-        val info = WallpaperManager.getInstance(requireContext().applicationContext).wallpaperInfo
-        if (info == null || info.packageName != requireContext().packageName) {
-            IKSdkController.setEnableShowResumeAds(true)
-            filepath.renameTo(newFile)
-            BlurView.filePath = newFile.path
-            LiveWallpaperService.setToWallPaper(requireContext())
-            checkWallpaper = true
+            if (info == null || info.packageName != context.packageName) {
+                // Enabling ads
+                IKSdkController.setEnableShowResumeAds(true)
 
-            try {
-                GlobalScope.launch(Dispatchers.IO) {
-                    val requestBody = mapOf("imageid" to livewallpaper?.id)
+                // Show ProgressBar
+                binding.progressBar.visibility = View.VISIBLE
 
-                    webApiInterface.postDownloadedLive(requestBody)
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                    // Rename the file in the background
+                    filepath.renameTo(newFile)
+                    BlurView.filePath = newFile.path
+
+                    // Set wallpaper in background
+                    LiveWallpaperService.setToWallPaper(context)
+                    checkWallpaper = true
+
+                    // Post download info
+                    try {
+                        val requestBody = mapOf("imageid" to livewallpaper?.id)
+                        webApiInterface.postDownloadedLive(requestBody)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    } catch (e: UnknownHostException) {
+                        e.printStackTrace()
+                    }
+
+                    // Hide ProgressBar on the main thread
+                    withContext(Dispatchers.Main) {
+                        binding.progressBar.visibility = View.GONE
+                    }
                 }
-            }catch (e:Exception){
-                e.printStackTrace()
-            }catch (e:UnknownHostException){
-                e.printStackTrace()
+            } else {
+                showSimpleDialog(
+                    context,
+                    "Do you want to change the live wallpaper? The applied wallpaper will be removed",
+                    ""
+                )
             }
-
-
-        } else {
-            showSimpleDialog(
-                requireContext(),
-                "Do you want to change the live wallpaper? The applied wallpaper will be removed",
-                ""
-            )
-
-
-        }
-
         }
     }
 
 
-    fun showSimpleDialog(context: Context, title: String, message: String) {
+    private fun showSimpleDialog(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
             .setMessage(message)

@@ -36,6 +36,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -116,6 +117,7 @@ class ApiCategoriesListAdapter(
     }
 
     override fun getItemCount() = arrayList.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
            context = parent.context
@@ -367,6 +369,7 @@ class ApiCategoriesListAdapter(
     fun updateData(list:ArrayList<CatResponse?>){
         arrayList.clear()
         arrayList.addAll(list)
+        Log.d(TAG, "updateData123: ${list.size}")
         notifyDataSetChanged()
     }
 

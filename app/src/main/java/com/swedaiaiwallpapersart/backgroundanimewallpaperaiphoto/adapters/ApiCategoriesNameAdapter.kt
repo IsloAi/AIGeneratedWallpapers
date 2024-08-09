@@ -1,3 +1,5 @@
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
+
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
@@ -28,6 +30,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 
 class ApiCategoriesNameAdapter(
     private val arrayList: ArrayList<CatNameResponse?>,
@@ -87,44 +90,63 @@ class ApiCategoriesNameAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val model = arrayList[position]
+        val adjustedPosition = if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
+            // Adjust position for ad items
+            position - ((position - firstLine) / (lineC + 1) + 1)
+        } else {
+            // No adjustment needed for normal items
+            position - (position / (lineC + 1))
+        }
+
+        val model = arrayList[adjustedPosition]
 
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
                 try {
-                    Log.e("TAG", "onBindViewHolder: "+model )
+                    Log.e("TAG", "onBindViewHolder: $model")
                     val viewHolderContainer1 = holder as ViewHolderContainerItem
                     viewHolderContainer1.bind(model!!)
-                }catch (e: NullPointerException){
+                } catch (e: NullPointerException) {
                     e.printStackTrace()
                 }
-
             }
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind(viewHolderContainer3)
             }
         }
-
     }
 
-    override fun getItemCount(): Int = arrayList.size
+    override fun getItemCount(): Int {
+        if (AdConfig.ISPAIDUSER) {
+            return arrayList.size
+        } else {
+            // Calculate total items including ads
+            val adsCount = ((arrayList.size - firstLine - 1) / lineC) + 1 // number of ads
+            return arrayList.size + adsCount
+        }
+    }
+
 
 
 
     override fun getItemViewType(position: Int): Int {
-        if (AdConfig.ISPAIDUSER){
-            return VIEW_TYPE_CONTAINER1
-        }else{
-            return if ((position + 1) == (firstLine + 1)){
+        return if (AdConfig.ISPAIDUSER) {
+            VIEW_TYPE_CONTAINER1
+        } else {
+            val actualPosition = position + 1
+
+            // Determine if the position is an ad position
+            if (actualPosition == firstLine + 1) {
                 VIEW_TYPE_NATIVE_AD
-            }else if (position + 1 > firstLine +1 && ((position +1) - (firstLine+1)) % (lineC+1) == 0){
+            } else if (actualPosition > firstLine + 1 && (actualPosition - (firstLine + 1)) % (lineC + 1) == 0) {
                 VIEW_TYPE_NATIVE_AD
-            }  else {
+            } else {
                 VIEW_TYPE_CONTAINER1
             }
         }
     }
+
 
     inner class ViewHolderContainerItem(private val binding: CatNameListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatNameResponse) {
@@ -260,6 +282,7 @@ class ApiCategoriesNameAdapter(
     fun updateData(newData:List<CatNameResponse?>){
         arrayList.clear()
         arrayList.addAll(newData)
+        Log.d(TAG, "updateData1223: ${newData.size}")
         notifyDataSetChanged()
 
     }

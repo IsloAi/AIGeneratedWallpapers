@@ -1,6 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
-import ApiCategoriesNameAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -57,7 +57,7 @@ class SearchWallpapersFragment : Fragment() {
 
 
     val catlist = ArrayList<CatNameResponse?>()
-    var adapter:ApiCategoriesNameAdapter ?= null
+    var adapter: ApiCategoriesNameAdapter?= null
     var searchAdapter:ApiCategoriesListAdapter ?= null
 
     val catListViewmodel: MyViewModel by activityViewModels()

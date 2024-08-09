@@ -1,6 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper
 
-import ApiCategoriesNameAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ikame.android.sdk.IKSdkController
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ikame.android.sdk.data.dto.pub.IKAdError

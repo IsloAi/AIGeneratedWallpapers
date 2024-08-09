@@ -96,6 +96,7 @@ class LiveWallpaperAdapter(
     }
 
     override fun getItemCount() = arrayList.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
@@ -140,11 +141,11 @@ class LiveWallpaperAdapter(
 
 
         row = position / 2
-        Log.e("TAG", "getItemViewType: "+row )
+        Log.e("TAG", "getItemViewType: $row")
         val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
 //        (position + 1) % (firstline + 1) == 0
         return if ((position + 1) == (firstline + 1)){
-            Log.e("TAG", "getItemViewType: "+row )
+            Log.e("TAG", "getItemViewType: $row")
             lastAdShownPosition = row
             VIEW_TYPE_NATIVE_AD
         }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){

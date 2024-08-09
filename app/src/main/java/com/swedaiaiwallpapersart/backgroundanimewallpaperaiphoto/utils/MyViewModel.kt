@@ -15,6 +15,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.Retrof
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ListResponseInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ListResponseInterfaceNoUid
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Call

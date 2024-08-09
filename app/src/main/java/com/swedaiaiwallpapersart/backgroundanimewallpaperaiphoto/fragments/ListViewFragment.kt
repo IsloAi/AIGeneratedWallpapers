@@ -239,6 +239,7 @@ class ListViewFragment : Fragment(), AdEventListener {
             }
 
             override fun onAdLoadFail(error: IKAdError) {
+                Log.d(TAG, "onAdLoadFail: $error")
                 // Handle ad load failure with view object
             }
         })
