@@ -1300,7 +1300,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private fun interstitialAdWithToast(message: String, dialog: BottomSheetDialog) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
         dialog.dismiss()
     }
 
@@ -1308,7 +1308,7 @@ class WallpaperViewFragment : Fragment() {
         val filename = "${System.currentTimeMillis()}.jpg"
         var fos: OutputStream? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requireContext().contentResolver?.also { resolver ->
+            requireActivity().contentResolver?.also { resolver ->
                 val contentValues = ContentValues().apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/jpg")
@@ -1320,7 +1320,7 @@ class WallpaperViewFragment : Fragment() {
                 val imageUri: Uri? =
                     resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
                 MediaScannerConnection.scanFile(
-                    requireContext(),
+                    requireActivity(),
                     arrayOf(imageUri?.path),
                     arrayOf("image/jpeg"), // Adjust the MIME type as per your image type
                     null
@@ -1329,12 +1329,12 @@ class WallpaperViewFragment : Fragment() {
             }
         } else {
             if (ContextCompat.checkSelfPermission(
-                    requireContext(),
+                    requireActivity(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_DENIED
             ) {
                 ActivityCompat.requestPermissions(
-                    requireContext() as Activity,
+                    requireActivity(),
                     arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
                     STORAGE_PERMISSION_CODE
                 )
