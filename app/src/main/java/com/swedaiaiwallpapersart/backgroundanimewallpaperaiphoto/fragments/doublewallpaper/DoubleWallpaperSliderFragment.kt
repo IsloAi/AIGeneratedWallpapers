@@ -45,6 +45,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.End
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.DoubleSharedViewmodel
@@ -252,6 +253,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
             }
             firstTime = true
             navController?.popBackStack()
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
         setViewPager()
         if (arrayList[position] != null) {
@@ -366,6 +369,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
             val chooser = Intent.createChooser(shareIntent, "Share $appName via")
             chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             requireContext().startActivity(chooser)
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
 
 
@@ -386,6 +391,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
 
         }
 

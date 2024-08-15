@@ -125,6 +125,8 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
     }
 

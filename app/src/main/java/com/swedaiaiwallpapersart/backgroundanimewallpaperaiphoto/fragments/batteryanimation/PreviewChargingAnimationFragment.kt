@@ -30,6 +30,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.BatteryAnimationViewmodel
 import dagger.hilt.android.AndroidEntryPoint
@@ -159,6 +160,8 @@ class PreviewChargingAnimationFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack(R.id.homeTabsFragment, false)
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
 
         backHandle()

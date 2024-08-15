@@ -91,9 +91,11 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("categoryscr_fantasy_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
+                Log.d(TAG, "onAdLoadedLoaded: categoryscr_fantasy_click_item")
                 // Ad loaded successfully
             }
             override fun onAdLoadFail(error: IKAdError) {
+                Log.d(TAG, "onAdLoadedFailed: categoryscr_fantasy_click_item")
                 // Handle ad load failure
             }
         })
@@ -154,7 +156,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
                         }
 
                         if (shouldShowInterAd) {
-                            showInterAd(allItems, position)
+                        showInterAd(allItems, position)
                         }
 
 //                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
@@ -397,7 +399,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
     }
     override fun onPause() {
         super.onPause()
-            val allItems = adapter?.getAllItems()
+        val allItems = adapter?.getAllItems()
 //            if (addedItems?.isNotEmpty() == true){
 //                addedItems?.clear()
 //            }

@@ -247,10 +247,11 @@ class ListViewFragment : Fragment(), AdEventListener {
 
         binding.recyclerviewAll.adapter = adapter
 
-
         binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                Constants.checkInter = false
+                checkAppOpen = false
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
@@ -275,6 +276,8 @@ class ListViewFragment : Fragment(), AdEventListener {
 
         binding.toolbar.setOnClickListener {
             findNavController().navigateUp()
+            Constants.checkInter = false
+            checkAppOpen = false
         }
 
         binding.swipeLayout.setOnRefreshListener {

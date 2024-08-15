@@ -188,6 +188,8 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
+            Constants.checkInter = false
+            checkAppOpen = false
         }
     }
 

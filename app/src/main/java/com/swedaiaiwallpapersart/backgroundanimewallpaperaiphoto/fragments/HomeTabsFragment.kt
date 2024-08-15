@@ -79,6 +79,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
@@ -581,6 +582,8 @@ class HomeTabsFragment : Fragment() {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SettingBT_Click"))
             }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
             findNavController().navigate(R.id.settingFragment)
         }
 
@@ -590,6 +593,8 @@ class HomeTabsFragment : Fragment() {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_SearchBT_Click"))
             }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
             findNavController().navigate(R.id.searchWallpapersFragment)
         }
 
@@ -727,42 +732,57 @@ class HomeTabsFragment : Fragment() {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_LiveTab_Click"))
                         }
+
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Popular" -> {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_PopularTab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Category" -> {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_CategoryTab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Anime" -> {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_AnimeTab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Car" -> {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_CarTab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Charging" -> {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_ChargingTab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Gen AI" -> {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_GenAITab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
 
@@ -770,6 +790,8 @@ class HomeTabsFragment : Fragment() {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_DoubleTab_Click"))
                         }
+                        Constants.checkInter = false
+                        Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                 }

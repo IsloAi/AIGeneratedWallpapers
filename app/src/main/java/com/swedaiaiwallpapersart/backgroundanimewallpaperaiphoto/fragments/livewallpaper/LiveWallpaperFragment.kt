@@ -10,8 +10,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ikame.android.sdk.IKSdkController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
@@ -31,6 +32,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
@@ -43,14 +45,14 @@ import kotlinx.coroutines.withContext
 
 class LiveWallpaperFragment : Fragment(), AdEventListener {
 
-    private var _binding:FragmentLiveWallpaperBinding ?= null
+    private var _binding: FragmentLiveWallpaperBinding? = null
     private val binding get() = _binding!!
     private val myViewModel: LiveWallpaperViewModel by activityViewModels()
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    private lateinit var myActivity : MainActivity
-    var adapter:LiveWallpaperAdapter ?= null
+    private lateinit var myActivity: MainActivity
+    var adapter: LiveWallpaperAdapter? = null
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
@@ -63,7 +65,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentLiveWallpaperBinding.inflate(inflater,container,false)
+        _binding = FragmentLiveWallpaperBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -77,18 +79,19 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         myViewModel.getAllTrendingWallpapers()
 
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
         })
 
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.liveReccyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
     }
@@ -102,19 +105,19 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        myViewModel.liveWallsFromDB.observe(viewLifecycleOwner){result->
-            when(result){
+        myViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
+            when (result) {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
 
-                        val list  = result.data?.shuffled()
-                        val listNullable = if (!AdConfig.ISPAIDUSER){
-                              list?.let { addNullValueInsideArray(it) }
-                        }else{
+                        val list = result.data?.shuffled()
+                        val listNullable = if (!AdConfig.ISPAIDUSER) {
+                            list?.let { addNullValueInsideArray(it) }
+                        } else {
                             list as ArrayList<LiveWallpaperModel?>
                         }
 
-                        withContext(Dispatchers.Main){
+                        withContext(Dispatchers.Main) {
                             listNullable?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
@@ -122,16 +125,16 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 is Response.Loading -> {
-                    Log.e(TAG, "loadData: Loading" )
+                    Log.e(TAG, "loadData: Loading")
                 }
 
                 is Response.Error -> {
-                    Log.e(TAG, "loadData: response error", )
+                    Log.e(TAG, "loadData: response error")
 
                 }
 
                 is Response.Processing -> {
-                    Log.e(TAG, "loadData: processing", )
+                    Log.e(TAG, "loadData: processing")
                 }
             }
 
@@ -142,14 +145,18 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         super.onResume()
         loadData()
 
-        Log.e(TAG, "onResume: " )
+        Log.e(TAG, "onResume: ")
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_LiveTab_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "Tab"),
+                Pair("action_name", "MainScr_LiveTab_View")
+            )
         }
 
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -160,9 +167,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
 
@@ -174,39 +180,40 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
                 val newPosition = position + 1
 
-                Log.e(TAG, "getPosition: "+model )
+                Log.e(TAG, "getPosition: " + model)
 
-                Log.e(TAG, "getPosition: "+position )
+                Log.e(TAG, "getPosition: " + position)
 
                 sharedViewModel.setAdPosition(newPosition)
-                    Log.e(TAG, "getPosition:$position odd " )
+                Log.e(TAG, "getPosition:$position odd ")
 
-                if (AdConfig.ISPAIDUSER){
-                    setDownloadAbleWallpaperAndNavigate(model,false)
-                }else{
-
+                if (AdConfig.ISPAIDUSER) {
+                    setDownloadAbleWallpaperAndNavigate(model, false)
+                } else {
+//
                     var shouldShowInterAd = true
-
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            setDownloadAbleWallpaperAndNavigate(model, false)
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
 
                     if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
                         if (isAdded) {
                             checkAppOpen = false
                             setDownloadAbleWallpaperAndNavigate(model, false)
-                            Log.e(TAG, "app open showed")
+                            Log.e(TAG, "App open condition handled, skipping ad")
                             shouldShowInterAd = false // Skip showing the ad for this action
                         }
                     }
 
-                    if (shouldShowInterAd) {
-                        showInterAd(model) // Show the interstitial ad if no conditions were met
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            setDownloadAbleWallpaperAndNavigate(model, false)
+                            shouldShowInterAd = false
+                        }
                     }
+
+                    if (shouldShowInterAd) {
+                        showInterAd(model)
+                    }
+
 
 //                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
 //                        if (isAdded){
@@ -221,20 +228,14 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
 
-
-
-
-
-
-
             }
-        },myActivity)
+        }, myActivity)
 
 
         IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
+                if (isAdded && view != null) {
                     adapter?.nativeAdView = adObject
                     binding.liveReccyclerview.adapter = adapter
                 }
@@ -246,9 +247,21 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         })
 
         binding.liveReccyclerview.adapter = adapter
+        binding.liveReccyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // Set the boolean to true when the RecyclerView is scrolled
+                if (dy != 0 || dx != 0) {
+                    checkInter = false
+                    checkAppOpen = false
+                }
+            }
+        })
     }
 
     private fun showInterAd(model: LiveWallpaperModel) {
+
         interAd.showAd(
             requireActivity(),
             "mainscr_live_tab_click_item",
@@ -267,14 +280,14 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         )
     }
 
-    private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel,adShowd:Boolean) {
+    private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel, adShowd: Boolean) {
         BlurView.filePath = ""
         sharedViewModel.clearLiveWallpaper()
         sharedViewModel.setLiveWallpaper(listOf(model))
         if (isAdded) {
             Bundle().apply {
-                putBoolean("adShowed",adShowd)
-                findNavController().navigate(R.id.downloadLiveWallpaperFragment,this)
+                putBoolean("adShowed", adShowd)
+                findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
             }
 
         }
@@ -283,50 +296,50 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-    private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?>{
+    private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
 
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        return withContext(Dispatchers.IO) {
+            val firstAdLineThreshold =
+                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
             val firstLine = firstAdLineThreshold * 3
 
-            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineCount =
+                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
             val newData = arrayListOf<LiveWallpaperModel?>()
 
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+            for (i in data.indices) {
+                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
 
 
 
-                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
 
-                }else if (i == firstLine){
+                } else if (i == firstLine) {
                     newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
 
 
 
 
-             newData
+            newData
         }
 
 
     }
 
 
-
-
     override fun onDestroyView() {
         super.onDestroyView()
         (myActivity.application as MyApp).unregisterAdEventListener()
-        _binding =  null
+        _binding = null
     }
 
     override fun onAdDismiss() {

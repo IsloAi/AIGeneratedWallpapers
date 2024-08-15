@@ -324,6 +324,8 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         binding.recyclerviewMostUsed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
+                Constants.checkInter = false
+                checkAppOpen = false
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
@@ -802,6 +804,17 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
             }, myActivity)
 
         binding.recyclerviewTrending.adapter = adapter
+        binding.recyclerviewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // Set the boolean to true when the RecyclerView is scrolled
+                if (dy != 0 || dx != 0) {
+                    Constants.checkInter = false
+                    checkAppOpen = false
+                }
+            }
+        })
     }
 
     private fun showInterAdForHorizontalList(

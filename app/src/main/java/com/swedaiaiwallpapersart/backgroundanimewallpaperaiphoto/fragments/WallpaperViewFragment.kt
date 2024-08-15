@@ -100,6 +100,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.SetMostDownloaded
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -493,6 +494,8 @@ class WallpaperViewFragment : Fragment() {
             hasToNavigateAnime = false
             hasToNavigateList = false
             navController?.popBackStack()
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
         setViewPager()
         checkRedHeart(position)
@@ -576,6 +579,8 @@ class WallpaperViewFragment : Fragment() {
                 e.printStackTrace()
             }
             addFavourite(requireContext(), position, binding.favouriteButton)
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
 
 
         }
@@ -599,6 +604,8 @@ class WallpaperViewFragment : Fragment() {
                 "Check out $appName! Get it from the Play Store:\nhttps://play.google.com/store/apps/details?id=$appPackageName"
             )
 
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
             val chooser = Intent.createChooser(shareIntent, "Share $appName via")
             chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             requireContext().startActivity(chooser)
@@ -622,6 +629,8 @@ class WallpaperViewFragment : Fragment() {
                     Toast.LENGTH_SHORT
                 ).show()
             }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
 
         }
 
@@ -698,6 +707,8 @@ class WallpaperViewFragment : Fragment() {
                 ).show()
             }
 
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
 
         }
         binding.downloadWallpaper.setOnClickListener {
@@ -744,6 +755,8 @@ class WallpaperViewFragment : Fragment() {
                     getUserIdDialog()
                 }
             }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
 
         }
     }

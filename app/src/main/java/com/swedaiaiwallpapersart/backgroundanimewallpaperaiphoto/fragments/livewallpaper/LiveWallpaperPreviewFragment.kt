@@ -287,6 +287,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_BackBt_Click"))
             }
+            Constants.checkInter = false
+            checkAppOpen = false
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
 
@@ -310,6 +312,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 binding.setLiked.setImageResource(R.drawable.button_like_selected)
                 Toast.makeText(requireContext(),"Added to favorites",Toast.LENGTH_SHORT).show()
             }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
             addFavourite(requireContext(), binding.setLiked)
         }
 
@@ -377,7 +381,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     getUserIdDialog()
                 }
             }
-
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
     }
 

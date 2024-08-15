@@ -41,6 +41,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyFavouriteViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -113,6 +114,8 @@ class FavouriteFragment : Fragment() {
 
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
         }
     }
     private fun viewVisible(){

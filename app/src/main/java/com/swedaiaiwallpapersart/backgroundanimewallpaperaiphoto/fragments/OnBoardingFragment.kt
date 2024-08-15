@@ -9,6 +9,7 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -25,6 +26,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welco
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class OnBoardingFragment : Fragment() {
@@ -186,8 +189,11 @@ class OnBoardingFragment : Fragment() {
                 // Move to the next item
                 binding.onboardingViewPager.setCurrentItem(currentItem + 1, true)
             } else {
-                if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
-                    findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                lifecycleScope.launch {
+                    delay(100)  // Short delay before navigating
+                    if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
+                        findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                    }
                 }
             }
         }

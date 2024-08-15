@@ -209,6 +209,9 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Backbutton_click"))
             }
+
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
             findNavController().popBackStack()
         }
     }

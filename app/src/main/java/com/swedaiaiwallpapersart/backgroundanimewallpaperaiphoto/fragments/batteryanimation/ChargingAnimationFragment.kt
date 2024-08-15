@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
@@ -224,6 +225,17 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         },myActivity)
 
         binding.recyclerviewAll.adapter = adapter
+        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                // Set the boolean to true when the RecyclerView is scrolled
+                if (dy != 0 || dx != 0) {
+                    Constants.checkInter = false
+                    checkAppOpen = false
+                }
+            }
+        })
     }
 
     private fun showInterAd(model: ChargingAnimModel) {
