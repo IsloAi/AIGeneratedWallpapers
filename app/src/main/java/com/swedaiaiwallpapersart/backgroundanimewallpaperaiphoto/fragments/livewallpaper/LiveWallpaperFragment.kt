@@ -111,10 +111,15 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         val list = result.data?.shuffled()
+
                         val listNullable = if (!AdConfig.ISPAIDUSER) {
                             list?.let { addNullValueInsideArray(it) }
                         } else {
-                            list as ArrayList<LiveWallpaperModel?>
+                            if (list != null) {
+                                ArrayList(list)
+                            } else {
+                                ArrayList<LiveWallpaperModel?>()
+                            }
                         }
 
                         withContext(Dispatchers.Main) {
@@ -136,6 +141,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 is Response.Processing -> {
                     Log.e(TAG, "loadData: processing")
                 }
+
+                else -> {}
             }
 
         }
@@ -178,19 +185,21 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         adapter = LiveWallpaperAdapter(list, object :
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
+
+                if (isAdded) {
+                    sendTracking(
+                        "click_item",
+                        Pair("action_type", "ITEM"),
+                        Pair("action_name", "MainScr_LiveTab_LiveItem_Click")
+                    )
+                }
                 val newPosition = position + 1
 
-                Log.e(TAG, "getPosition: " + model)
-
-                Log.e(TAG, "getPosition: " + position)
-
                 sharedViewModel.setAdPosition(newPosition)
-                Log.e(TAG, "getPosition:$position odd ")
 
                 if (AdConfig.ISPAIDUSER) {
                     setDownloadAbleWallpaperAndNavigate(model, false)
                 } else {
-//
                     var shouldShowInterAd = true
 
                     if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
@@ -198,13 +207,13 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                             checkAppOpen = false
                             setDownloadAbleWallpaperAndNavigate(model, false)
                             Log.e(TAG, "App open condition handled, skipping ad")
-                            shouldShowInterAd = false // Skip showing the ad for this action
+                            shouldShowInterAd = false
                         }
                     }
 
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && checkInter) {
                         if (isAdded) {
-                            Constants.checkInter = false
+                            checkInter = false
                             setDownloadAbleWallpaperAndNavigate(model, false)
                             shouldShowInterAd = false
                         }
@@ -213,21 +222,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     if (shouldShowInterAd) {
                         showInterAd(model)
                     }
-
-
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            setDownloadAbleWallpaperAndNavigate(model,false)
-//                            Log.e(TAG, "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd(model)
-//                    }
-
                 }
-
-
             }
         }, myActivity)
 

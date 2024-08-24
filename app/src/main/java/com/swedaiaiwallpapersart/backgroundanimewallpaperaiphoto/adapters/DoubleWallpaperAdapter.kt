@@ -246,7 +246,7 @@ class DoubleWallpaperAdapter(
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
             Log.e("TAG", "loadad: inside main scope", )
 
-            if (binding.adsView.isAdLoaded){
+            if (nativeAdView!=null){
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
             }else{
                 IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :

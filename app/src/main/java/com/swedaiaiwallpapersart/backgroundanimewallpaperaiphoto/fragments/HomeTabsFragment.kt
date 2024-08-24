@@ -859,6 +859,15 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (AdConfig.iapScreenType == 0){
+            binding.goPremium.visibility = View.GONE
+        }else{
+            if (AdConfig.ISPAIDUSER){
+                binding.goPremium.visibility = View.GONE
+            }else{
+                binding.goPremium.visibility = View.VISIBLE
+            }
+        }
         sharedViewModel.selectTab.observe(viewLifecycleOwner){
             if (it !=  null && it != 0){
                 navigateToTrending(it)

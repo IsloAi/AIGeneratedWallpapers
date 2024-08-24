@@ -23,14 +23,16 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welco
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment3
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.WelcomeFragment4
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welcome.welcomeFragment2
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ViewPagerCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class OnBoardingFragment : Fragment() {
+class OnBoardingFragment : Fragment(), ViewPagerCallback {
 
     private var _binding: FragmentOnBoardingBinding?= null
     private val binding get() = _binding!!
@@ -165,10 +167,6 @@ class OnBoardingFragment : Fragment() {
 
         binding.skipBtn.setOnClickListener {
             MySharePreference.setOnboarding(requireContext(),true)
-//            if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
-//                findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
-//            }
-
             binding.onboardingViewPager.setCurrentItem(welcomeAdapter.itemCount-1, true)
         }
 
@@ -180,9 +178,9 @@ class OnBoardingFragment : Fragment() {
             Log.e("TAG", "onViewCreated: "+currentItem )
 
 
-                if (isAdded){
-                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "OnboardingScr1_Next_Click"))
-                }
+            if (isAdded){
+                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "OnboardingScr1_Next_Click"))
+            }
 
 
             if (currentItem < lastItemIndex) {
@@ -275,12 +273,11 @@ class OnBoardingFragment : Fragment() {
 
 
     private fun populateOnbaordingItems() {
-        welcomeAdapter= OnboardingPagerAdapter(activity as MainActivity)
+        welcomeAdapter= OnboardingPagerAdapter(activity as MainActivity, this)
 
         welcomeAdapter.addFragment(WelcomeFragment(),"1")
         welcomeAdapter.addFragment(welcomeFragment2(),"2")
         if (AdConfig.onboarding_Full_Native == 1 && !AdConfig.ISPAIDUSER){
-
             welcomeAdapter.addFragment(WelcomeFragment3(),"4")
         }
 
@@ -290,5 +287,11 @@ class OnBoardingFragment : Fragment() {
         binding.onboardingViewPager.offscreenPageLimit = 1
     }
 
-
+    override fun swipe() {
+        if (isAdded && AdConfig.onboarding_Full_Native == 1 && !AdConfig.ISPAIDUSER && binding.onboardingViewPager.currentItem==2) {
+            binding.onboardingViewPager.currentItem++
+        } else {
+            Log.e("OnBoardingFragment", "Fragment is not added, cannot swipe.")
+        }
+    }
 }

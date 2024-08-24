@@ -35,8 +35,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
     private var _binding:FragmentLiveWallpaperCategoriesBinding ?= null
     private val binding get() = _binding!!
     private lateinit var myActivity : MainActivity
-
-
+    private var categoriesJson = ""
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
 
     val interAd = IKInterstitialAd()
@@ -56,6 +55,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
         val gson = Gson()
+        populateLiveCat()
         val categoryList: ArrayList<CatNameResponse?> = gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
 
         interAd.attachLifecycle(this.lifecycle)
@@ -120,6 +120,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
                 }
             }
         },myActivity,"live")
+        adapter.updateData(categoryList)
         binding.recyclerviewAll.adapter = adapter
 
 
@@ -155,7 +156,8 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
 
     }
 
-    val categoriesJson = """
+    private fun populateLiveCat(){
+        categoriesJson = """
 [
     {
         "cat_name": "Heteroclite",
@@ -203,6 +205,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
     }
 ]
 """
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

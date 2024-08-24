@@ -66,6 +66,9 @@ class LocalizationFragment : Fragment() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "LanguageScr_View"))
         }
@@ -76,11 +79,6 @@ class LocalizationFragment : Fragment() {
         }
 
         setGradienttext()
-        if (AdConfig.ISPAIDUSER){
-            binding.adsView.visibility = View.GONE
-        }else{
-            loadNativeAd()
-        }
 
         setEvents()
         initLanguages()
@@ -124,10 +122,7 @@ class LocalizationFragment : Fragment() {
         binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"languagescr_bottom",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
-                    if (AdConfig.ISPAIDUSER){
-                        binding.adsView.visibility = View.GONE
-                    }
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                    binding.adsView.visibility = View.GONE
                 }
 
                 override fun onAdShowed() {
@@ -178,6 +173,13 @@ class LocalizationFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        if (AdConfig.ISPAIDUSER){
+            binding.adsView.visibility = View.GONE
+        }else{
+            binding.adsView.visibility = View.VISIBLE
+            loadNativeAd()
+        }
+
         if (isAdded){
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Language Screen")

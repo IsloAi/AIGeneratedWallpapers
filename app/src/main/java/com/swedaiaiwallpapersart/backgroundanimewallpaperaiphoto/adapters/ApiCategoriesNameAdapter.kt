@@ -118,13 +118,16 @@ class ApiCategoriesNameAdapter(
     }
 
     override fun getItemCount(): Int {
-        if (AdConfig.ISPAIDUSER) {
-            return arrayList.size
-        } else {
-            // Calculate total items including ads
-            val adsCount = ((arrayList.size - firstLine - 1) / lineC) + 1 // number of ads
-            return arrayList.size + adsCount
-        }
+       if (arrayList.size!=0){
+           if (AdConfig.ISPAIDUSER) {
+               return arrayList.size
+           } else {
+               // Calculate total items including ads
+               val adsCount = ((arrayList.size - firstLine - 1) / lineC) + 1 // number of ads
+               return arrayList.size + adsCount
+           }
+       }
+        return 0
     }
 
 

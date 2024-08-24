@@ -105,6 +105,15 @@ class CategoryFragment : Fragment(), AdEventListener {
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
         val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
             override fun getStringCall(string: String) {
+
+                if (isAdded) {
+                    sendTracking(
+                        "click_item",
+                        Pair("action_type", "ITEM"),
+                        Pair("action_name", "MainScr_CategoryTab_Item_Click")
+                    )
+                }
+
                 catListViewmodel.getAllCreations(string)
 
                 if (AdConfig.ISPAIDUSER){

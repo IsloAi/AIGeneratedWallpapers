@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LiveWallpaperDao {
@@ -15,7 +16,7 @@ interface LiveWallpaperDao {
     suspend fun insert(databaseResponse: LiveWallpaperModel)
 
     @Query("SELECT * FROM liveWallpaper")
-    fun getAllWallpapers():List<LiveWallpaperModel>
+    fun getAllWallpapers(): Flow<List<LiveWallpaperModel>>
 
     @Query("SELECT * FROM liveWallpaper WHERE catname =:cat ")
     fun getCatgoriesWallpapers(cat:String):List<LiveWallpaperModel>

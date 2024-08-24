@@ -110,13 +110,23 @@ class LiveWallpaperService : WallpaperService() {
 
         override fun onVisibilityChanged(visible: Boolean) {
             if (visible) {
-                myMediaPlayer?.start()
+                try {
+                    myMediaPlayer?.start()
+                } catch (e: IllegalStateException) {
+                    Log.e("LiveWallpaperService", "MediaPlayer is in an illegal state", e)
+                    restartMediaPlayer()
+                }
             } else {
                 myMediaPlayer?.pause()
             }
         }
 
-
+        private fun restartMediaPlayer() {
+            myMediaPlayer?.release()
+            myMediaPlayer = MediaPlayer()
+            myMediaPlayer?.setSurface(surfaceHolder.surface)
+            startPlayer()
+        }
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
             super.onSurfaceDestroyed(holder)
@@ -133,8 +143,6 @@ class LiveWallpaperService : WallpaperService() {
                 unregisterReceiver(liveWallBroadcastReceiver)
                 isReceiverRegistered = false
             }
-
-//            unregisterReceiver(wallpaperUpdateReceiver)
         }
     }
 

@@ -12,23 +12,21 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.airbnb.lottie.LottieAnimationView
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
@@ -37,7 +35,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,57 +44,45 @@ class ApiCategoriesListAdapter(
     var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
     private val myActivity: MainActivity,
-    from:String
-):
+    from: String
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastClickTime = 0L
     private val debounceThreshold = 2000L // 1 second
-         var context:Context? = null
-        private val VIEW_TYPE_CONTAINER1 = 0
+    private val context: Context? get() = myActivity.applicationContext
+    private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    private var lastAdShownPosition = -1
 
     var row = 0
 
-    private var firstUrl:String = ""
-
-    val tracking = if (from == "trending"){
-        "mainscr_trending_tab_scroll_view"
-    }else if (from == "category"){
-        "categoryscr_scroll_view"
-
-    }else if (from == "search"){
-        "searchscr_scroll_view"
-    }else{
-        "mainscr_sub_cate_tab_click_item"
+    private val tracking = when (from) {
+        "trending" -> "mainscr_trending_tab_scroll_view"
+        "category" -> "categoryscr_scroll_view"
+        "search" -> "searchscr_scroll_view"
+        else -> "mainscr_sub_cate_tab_click_item"
     }
-
-//    private val NATIVE_AD_INTERVAL = 10
-
-    private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-
-    val firstline = firstAdLineThreshold *3
-    private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-    val lineC = lineCount*3
-    private val statusAd =  AdConfig.adStatusViewListWallSRC
-       private val myDialogs = MyDialogs()
+    private val firstAdLineThreshold = AdConfig.firstAdLineViewListWallSRC.takeIf { it != 0 } ?: 4
+    private val firstline = firstAdLineThreshold * 3
+    private val lineCount = AdConfig.lineCountViewListWallSRC.takeIf { it != 0 } ?: 5
+    private val lineC = lineCount * 3
+    private val statusAd = AdConfig.adStatusViewListWallSRC
 
     private var coroutineScope: CoroutineScope? = null
 
     fun setCoroutineScope(scope: CoroutineScope) {
         coroutineScope = scope
     }
+
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(modela: ArrayList<CatResponse?>,holder: ViewHolder,position: Int) {
-            val model = modela[position]
-            setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,holder,binding.errorImage,binding.iapInd)
+        fun bind(model: CatResponse) {
+            setAllData(adapterPosition, model, binding)
         }
     }
+
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: ViewHolder){
-            loadad(holder,binding)
+        fun bind() {
+            loadad(binding)
         }
     }
 
@@ -120,96 +105,73 @@ class ApiCategoriesListAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-           context = parent.context
         return when (viewType) {
             VIEW_TYPE_CONTAINER1 -> {
                 val binding = WallpaperRowBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
             VIEW_TYPE_NATIVE_AD -> {
-                val binding = StaggeredNativeLayoutBinding.inflate(inflater,parent,false)
+                val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
-
             }
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
+
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                try {
-                    val viewHolderContainer1 = holder as ViewHolderContainer1
-                    viewHolderContainer1.bind(arrayList,viewHolderContainer1,position)
-                }catch (e:NullPointerException){
-                    e.printStackTrace()
-                }
-
+                val viewHolderContainer1 = holder as ViewHolderContainer1
+                arrayList[position]?.let { viewHolderContainer1.bind(it) }
             }
             VIEW_TYPE_NATIVE_AD -> {
-
                 val viewHolderContainer3 = holder as ViewHolderContainer3
-                viewHolderContainer3.bind(viewHolderContainer3)
+                viewHolderContainer3.bind()
             }
         }
     }
+
     override fun getItemViewType(position: Int): Int {
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             return VIEW_TYPE_CONTAINER1
-        }else{
+        } else {
             row = position / 2
-            Log.e("TAG", "getItemViewType: "+row )
-            val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
-//        (position + 1) % (firstline + 1) == 0
-            return if ((position + 1) == (firstline + 1)){
-                Log.e("TAG", "getItemViewType: "+row )
-                lastAdShownPosition = row
+            return if ((position + 1) == (firstline + 1) || (position + 1) > firstline + 1 && (position + 1 - (firstline + 1)) % (lineC + 1) == 0) {
                 VIEW_TYPE_NATIVE_AD
-            }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
-                VIEW_TYPE_NATIVE_AD
-            }  else {
+            } else {
                 VIEW_TYPE_CONTAINER1
             }
         }
-
     }
+
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage:ImageView,holder: ViewHolder,error_img:ImageView,iapItem:ImageView){
+    private fun setAllData(
+        adapterPosition: Int, model: CatResponse, binding: WallpaperRowBinding
+    ) {
+        val animationView = binding.loading
+        val wallpaperMainImage = binding.wallpaper
+        val errorImg = binding.errorImage
+        val iapItem = binding.iapInd
+
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
-//        if (model.likes!! > 0){
-//            likes.text = model.likes.toString()
-//        }else{
-//            if (model.liked ==  true){
-//                likes.text = 1.toString()
-//            }else{
-//                likes.text = 0.toString()
-//            }
-//
-//        }
 
-//        if(model.liked==true){
-//            favouriteButton.setImageResource(R.drawable.heart_red)
-//        }else{
-//            favouriteButton.setImageResource(R.drawable.heart_unsel)
-//        }
-
-
-        if (model.unlockimges == false){
-            if (AdConfig.ISPAIDUSER){
+        if (model.unlockimges == false) {
+            if (AdConfig.ISPAIDUSER) {
                 iapItem.visibility = View.GONE
-            }else{
+            } else {
                 iapItem.visibility = View.VISIBLE
             }
-        }else{
+        } else {
             iapItem.visibility = View.GONE
         }
 
-//
 
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +model.hd_image_url + "?class=custom").diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
-            .listener(object:RequestListener<Drawable> {
+        Glide.with(context!!)
+            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")
+            .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -219,7 +181,7 @@ class ApiCategoriesListAdapter(
                     Log.d("onLoadFailed", "onLoadFailed: ")
                     animationView.setAnimation(R.raw.no_data_image_found)
                     animationView.visibility = View.VISIBLE
-                    error_img.visibility = View.VISIBLE
+                    errorImg.visibility = View.VISIBLE
                     return false
                 }
 
@@ -231,44 +193,28 @@ class ApiCategoriesListAdapter(
                     isFirstResource: Boolean
                 ): Boolean {
                     animationView.visibility = INVISIBLE
-                    error_img.visibility = View.GONE
+                    errorImg.visibility = View.GONE
                     Log.d("onLoadFailed", "onResourceReady: ")
                     return false
                 }
             }).into(wallpaperMainImage)
+
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
-
             if (currentTime - lastClickTime >= debounceThreshold) {
-                val gems = model.gems
-                val isBuy = model.unlockimges
-                Log.d("gems", "onBindViewHolder: $gems")
-
-
-                        positionCallback.getPosition(position)
-
-//                    else {
-//                        if (whichClicked == 1) {
-//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!,myActivity)
-//                        } else {
-//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView,myActivity)
-//                        }
-//                    }
-                
+                positionCallback.getPosition(adapterPosition)
                 lastClickTime = currentTime
             }
-
-
         }
     }
 
-    var nativeAdView: IkmDisplayWidgetAdView?= null
+    var nativeAdView: IkmDisplayWidgetAdView? = null
 
-    fun loadad(holder: ViewHolder,binding: StaggeredNativeLayoutBinding){
+    fun loadad(binding: StaggeredNativeLayoutBinding) {
 
         Log.e("TAG", "loadad: $tracking")
         coroutineScope?.launch(Dispatchers.Main) {
-            val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
+            val adLayout = LayoutInflater.from(context).inflate(
                 R.layout.native_dialog_layout,
                 null, false
             ) as? IkmWidgetAdLayout
@@ -277,9 +223,9 @@ class ApiCategoriesListAdapter(
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
             adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-            if (binding.adsView.isAdLoaded){
-                Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
-            }else{
+            if (nativeAdView != null) {
+                Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ")
+            } else {
 
                 IKSdkController.loadNativeDisplayAd(tracking, object :
                     IKLoadDisplayAdViewListener {
@@ -288,24 +234,27 @@ class ApiCategoriesListAdapter(
                     }
 
                     override fun onAdLoadFail(error: IKAdError) {
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+error )                    }
+                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: " + error)
+                    }
                 })
             }
 
             withContext(this.coroutineContext) {
                 nativeAdView?.let {
-                    binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,adLayout!!,tracking,
+                    binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,
+                        adLayout!!,
+                        tracking,
                         it,
                         object : IKShowWidgetAdListener {
                             override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failded " )
-                                if (statusAd == 0){
+                                Log.e("TAG", "onAdsLoadFail: native failded ")
+                                if (statusAd == 0) {
                                     binding.adsView.visibility = View.GONE
-                                }else{
-                                    if (isNetworkAvailable()){
+                                } else {
+                                    if (isNetworkAvailable()) {
                                         //                                    loadad(holder,binding)
                                         binding.adsView.visibility = View.VISIBLE
-                                    }else{
+                                    } else {
                                         binding.adsView.visibility = View.GONE
                                     }
                                 }
@@ -313,7 +262,7 @@ class ApiCategoriesListAdapter(
 
                             override fun onAdShowed() {
                                 binding.adsView.visibility = View.VISIBLE
-                                Log.e("TAG", "onAdsLoaded: native loaded" )
+                                Log.e("TAG", "onAdsLoaded: native loaded")
                             }
                         }
                     )
@@ -322,14 +271,11 @@ class ApiCategoriesListAdapter(
         }
 
 
-
-
-
-
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
@@ -341,7 +287,7 @@ class ApiCategoriesListAdapter(
         }
     }
 
-    fun getFirstImageUrl():String{
+    fun getFirstImageUrl(): String {
         return arrayList[0]?.hd_image_url!!
     }
 
@@ -366,23 +312,22 @@ class ApiCategoriesListAdapter(
         }
     }
 
-    fun updateData(list:ArrayList<CatResponse?>){
+    fun updateData(list: ArrayList<CatResponse?>) {
         arrayList.clear()
         arrayList.addAll(list)
         Log.d(TAG, "updateData123: ${list.size}")
         notifyDataSetChanged()
     }
 
-    fun getAllItems():ArrayList<CatResponse?>{
+    fun getAllItems(): ArrayList<CatResponse?> {
         return arrayList
     }
 
-    fun addNewData(){
+    fun addNewData() {
         arrayList.clear()
         notifyDataSetChanged()
 
     }
-
 
 
 }

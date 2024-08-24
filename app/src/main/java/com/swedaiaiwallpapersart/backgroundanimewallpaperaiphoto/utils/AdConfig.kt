@@ -43,6 +43,8 @@ object AdConfig {
     var languagesOrder:List<String> = listOf("Spanish","English (US)","English (UK)","French","German","Japanese","Korean","Portuguese","Arabic","Chinese","Italian","Russian","Thai","Turkish","Vietnamese","Hindi","Dutch","Indonesian")
 
     var languageLogicShowNative = 1
+    var autoNext = false
+    var timeNext  = 5000L
 
     var onboarding_Full_Native = 1
 

@@ -62,6 +62,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.Shar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
@@ -485,7 +486,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     // Rename the file in the background
                     filepath.renameTo(newFile)
                     BlurView.filePath = newFile.path
-
+                    Log.d(TAG, "setWallpaper: ${newFile.path}")
                     // Set wallpaper in background
                     LiveWallpaperService.setToWallPaper(context)
                     checkWallpaper = true
@@ -533,8 +534,10 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     Log.e("TAG", "showSimpleDialog:fileDelete ")
                 }
             }
+            Log.d(TAG, "showSimpleDialog123: ${newFile.path}")
             BlurView.filePath = newFile.path
 
+            Log.d(TAG, "showSimpleDialog: ${newFile.exists()}")
             if (filepath.renameTo(newFile)) {
                 BlurView.filePath = newFile.path
 
@@ -738,8 +741,10 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         super.onResume()
 
         if (checkWallpaper){
-
-            checkWallpaperActive()
+            lifecycleScope.launch {
+                delay(1000)
+                checkWallpaperActive()
+            }
         }
 
 //        try {
@@ -754,45 +759,48 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         setWallpaperOnView()
     }
 
-    fun checkWallpaperActive(){
-        if (isAdded){
-            checkWallpaper = false
+    fun checkWallpaperActive() {
+        if (isAdded) {
             val wallpaperComponent = ComponentName(requireContext(), LiveWallpaperService::class.java)
+            val wallpaperManager = WallpaperManager.getInstance(requireContext())
 
-            val currentWallpaperComponent = WallpaperManager.getInstance(context).wallpaperInfo?.component
+            lifecycleScope.launch {
+//                delay(1000) // Wait for the system to process the wallpaper change
+                val currentWallpaperComponent = wallpaperManager.wallpaperInfo?.component
 
+                Log.d("LiveWallpaper", "Current wallpaper component: $currentWallpaperComponent")
+                Log.d("LiveWallpaper", "Expected wallpaper component: $wallpaperComponent")
 
-            if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
-                // The live wallpaper is set successfully, perform your action here
-                Log.d("LiveWallpaper", "Live wallpaper set successfully")
-                // For example, you can navigate the user to another screen
-                // val intent = Intent(context, AnotherActivity::class.java)
-                // context.startActivity(intent)
+                if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
+                    // The live wallpaper is set successfully, perform your action here
 
-                if (isAdded){
-                    MySharePreference.firstLiveWallpaper(requireContext(),true)
+                    checkWallpaper = false
+                    Log.d("LiveWallpaper", "Live wallpaper set successfully")
+                    if (isAdded) {
+                        MySharePreference.firstLiveWallpaper(requireContext(), true)
+                    }
+                    findNavController().popBackStack(R.id.homeTabsFragment, false)
+
+                    if (isAdded) {
+                        sendTracking("screen_active", Pair("action_type", "Toast"), Pair("action_name", "SetLiveWallScr_SuccessToast_Click"))
+                    }
+
+                    Toast.makeText(requireContext(), "Wallpaper set successfully", Toast.LENGTH_SHORT).show()
+                } else {
+                    // The live wallpaper is not set successfully
+                    Log.e("LiveWallpaper", "Failed to set live wallpaper")
+                    Toast.makeText(requireContext(), "Failed to set live wallpaper", Toast.LENGTH_SHORT).show()
                 }
-                findNavController().popBackStack(R.id.homeTabsFragment, false)
-
-                if (isAdded){
-                    sendTracking("screen_active",Pair("action_type", "Toast"), Pair("action_name", "SetLiveWallScr_SuccessToast_Click"))
-                }
-
-                Toast.makeText(requireContext(),"Wallpaper set successfully",Toast.LENGTH_SHORT).show()
-            } else {
-                // The live wallpaper is not set successfully
-                Log.e("LiveWallpaper", "Failed to set live wallpaper")
-                Toast.makeText(context, "Failed to set live wallpaper", Toast.LENGTH_SHORT).show()
             }
         }
     }
-
 
 
     private fun setWallpaperOnView() {
         if (isAdded){
             binding.liveWallpaper.setMediaController(null)
             binding.liveWallpaper.setVideoPath(BlurView.filePath)
+
             binding.liveWallpaper.setOnCompletionListener(OnCompletionListener {
                 if (view != null && isAdded){
                     binding.liveWallpaper.start()

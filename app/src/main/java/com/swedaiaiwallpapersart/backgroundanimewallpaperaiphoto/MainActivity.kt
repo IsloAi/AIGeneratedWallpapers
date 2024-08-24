@@ -43,6 +43,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.utils.IKUtils
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
@@ -56,6 +57,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig.autoNext
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig.timeNext
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
@@ -72,6 +75,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -112,7 +116,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         val lan = MySharePreference.getLanguage(this)
         (application as? MyApp)?.setConnectivityListener(this)
-
 
         val context = LocaleManager.setLocale(this, lan!!)
         val resources = context.resources
@@ -629,7 +632,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
 
-    fun initFirebaseRemoteConfig() {
+    private fun initFirebaseRemoteConfig() {
         val first = "position_ads"
 
         var remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
@@ -670,6 +673,18 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 .toList()
 
                         AdConfig.categoryOrder = categoryOrderArray
+
+                        val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
+                        Log.e("RemoteConfig123", fullOnboardingAutoNext)
+                        if (fullOnboardingAutoNext.isEmpty()) {
+                            Log.e("RemoteConfig123", "Remote Config value for fullonboarding_auto_next is null or empty")
+                        } else {
+
+                            val jsonArray = JSONArray(fullOnboardingAutoNext)
+                            val jsonObject = jsonArray.getJSONObject(0)
+                            autoNext = jsonObject.getBoolean("auto_next")
+                            timeNext = jsonObject.getLong("time_next")
+                        }
 
                         val languagesOrder = remoteConfig["languages"].asString()
                         val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
@@ -865,6 +880,17 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val languagesOrder = remoteConfig["languages"].asString()
         val inAppConfig = remoteConfig["in_app_config"].asString()
 
+        val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
+        Log.e("RemoteConfig123", fullOnboardingAutoNext)
+        if (fullOnboardingAutoNext.isEmpty()) {
+            Log.e("RemoteConfig123", "Remote Config value for fullonboarding_auto_next is null or empty")
+        } else {
+
+            val jsonArray = JSONArray(fullOnboardingAutoNext)
+            val jsonObject = jsonArray.getJSONObject(0)
+            autoNext = jsonObject.getBoolean("auto_next")
+            timeNext = jsonObject.getLong("time_next")
+        }
         val baseUrls = remoteConfig["dataUrl"].asString()
 
         AdConfig.BASE_URL_DATA = baseUrls
@@ -1434,6 +1460,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     override fun onResume() {
         super.onResume()
+        lifecycleScope.launch {
+            val premium = IKUtils.isUserIAPAvailableAsync()
+            AdConfig.ISPAIDUSER = premium
+            Log.e(TAG, "InAppPurchase12: $premium")
+        }
         IKSdkController.setEnableShowResumeAds(true)
     }
 

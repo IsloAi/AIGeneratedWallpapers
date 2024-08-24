@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -85,7 +86,6 @@ class IAPFragment : Fragment() {
                     override fun onResult(price: String, salePrice: String) {
                         lifecycleScope.launch(Dispatchers.Main){
                             price.let {
-//                                binding.priceYearly.text = it
                                 priceMonthly = it
                             }
                         }
@@ -171,16 +171,6 @@ class IAPFragment : Fragment() {
             val billingHelper = IKBillingController
             startPay(billingHelper,"unlock_all_premium_wallpaper_weekly_1","sub")
         }
-
-
-
-
-
-
-
-
-
-
     }
 
     private fun startPay(billingHelper: IKBillingController,id:String,type:String) {
@@ -190,17 +180,25 @@ class IAPFragment : Fragment() {
                 IKBillingPurchaseListener {
 
                 override fun onBillingFail(productId: String, error: IKBillingError) {
-                    Log.e("TAG", "onBillingFail: "+productId )
+                    Log.e("TAG", "onBillingFail: $productId")
+                    if (isAdded){
+                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onBillingSuccess(productId: String) {
                     Log.e("TAG", "onBillingSuccess: $productId")
-
                     AdConfig.ISPAIDUSER = true
+                    if (isAdded){
+                        findNavController().popBackStack()
+                    }
                 }
 
                 override fun onProductAlreadyPurchased(productId: String) {
                     Log.e("TAG", "onProductAlreadyPurchased: ", )
+                    if (isAdded){
+                        Toast.makeText(requireContext(), "Already Purchased", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
             })
@@ -210,51 +208,29 @@ class IAPFragment : Fragment() {
                 IKBillingPurchaseListener {
                 override fun onBillingFail(productId: String, error: IKBillingError) {
                     Log.e("TAG", "onBillingFail: ", )
+                    if (isAdded){
+                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 override fun onBillingSuccess(productId: String) {
                     AdConfig.ISPAIDUSER = true
+                    if (isAdded){
+                        findNavController().popBackStack()
+                    }
                     Log.e("TAG", "onBillingSuccess: $productId" )
                 }
 
                 override fun onProductAlreadyPurchased(productId: String) {
                     Log.e("TAG", "onProductAlreadyPurchased: ", )
+                    if (isAdded){
+                        Toast.makeText(requireContext(), "Already Purchased", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
             })
         }
-
-
-
     }
-
-
-//    val mListener = object : SDKBillingHandler {
-//        override fun onProductPurchased(productId: String, details: PurchaseInfo?) {
-//            //do something
-//        }
-//
-//        override fun onPurchaseHistoryRestored() {
-//            //do something
-//        }
-//
-//        override fun onBillingError(errorCode: Int, error: Throwable?) {
-//            Log.e("TAG", "onBillingError: $errorCode$error" )
-//            //do something
-//        }
-//
-//        override fun onBillingInitialized() {
-//            Log.e("TAG", "onBillingInitialized: " )
-//            //do something
-//        }
-//
-//        override fun onBillingDataSave(isPaySuccess: Boolean){
-//
-//        }
-//
-//    }
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()

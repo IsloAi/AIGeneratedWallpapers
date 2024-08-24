@@ -232,7 +232,7 @@ class MostUsedWallpaperAdapter(
 
             Log.e(TAG, "loadad: inside layout set" )
 
-            if (binding.adsView.isAdLoaded){
+            if (nativeAdView!=null){
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
             }else{
 

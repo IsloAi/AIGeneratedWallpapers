@@ -114,22 +114,22 @@ class SplashOnFragment : Fragment() {
         lifecycleScope.launch {
             val premium = IKUtils.isUserIAPAvailableAsync()
             AdConfig.ISPAIDUSER = premium
-            Log.e(TAG, "onViewCreated: "+premium )
+            Log.e(TAG, "InAppPurchase123: $premium")
+            if (AdConfig.ISPAIDUSER) {
+                binding.adsView.visibility = View.GONE
+            } else {
+                binding.adsView.attachLifecycle(lifecycle)
+                binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
+                    override fun onAdShowed() {}
+                    override fun onAdShowFail(error: IKAdError) {
+                    binding.adsView?.visibility = View.GONE
+                    }
+
+                })
+            }
         }
 
 
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-//                    binding.adsView?.visibility = View.GONE
-                }
-
-            })
-        }
         // Preload the native ad if necessary
         Log.e("TAG", "onViewCreated: load pre")
 

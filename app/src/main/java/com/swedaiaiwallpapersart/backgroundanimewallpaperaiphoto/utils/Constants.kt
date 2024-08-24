@@ -12,9 +12,4 @@ class Constants {
          var checkAppOpen:Boolean = false
          var checkInter:Boolean = false
     }
-
-
-
-
-
 }

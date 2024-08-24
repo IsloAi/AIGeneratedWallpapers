@@ -4,13 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#9A9A9A">
+    android:background="@color/background">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#9A9A9A"
-        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -21,21 +16,67 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/custom_containerAds"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.2"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_15sdp"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:textAlignment="center"
+                android:fontFamily="@font/poppins_medium"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_12sdp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:text="Tap button to continue experiencing" />
+
+            <ImageView
+                android:id="@+id/next_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_continue"
+                android:adjustViewBounds="true"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintBottom_toTopOf="@id/custom_app_icon"
+                tools:ignore="ContentDescription" />
 
             <ImageView
                 android:id="@+id/custom_app_icon"
                 android:layout_width="@dimen/_60sdp"
                 android:layout_height="@dimen/_60sdp"
+                android:layout_marginTop="@dimen/_15sdp"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="16dp"
                 android:adjustViewBounds="true"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/next_btn"
+                app:layout_constraintBottom_toTopOf="@id/custom_call_to_action"
                 tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/ad_txt"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="1dp"
+                android:background="@drawable/ads_txt_bg"
+                android:backgroundTint="@color/button_bg"
+                android:gravity="center"
+                android:paddingHorizontal="2dp"
+                android:text="@string/txt_ad"
+                android:textColor="@color/white"
+                android:layout_marginTop="@dimen/_15sdp"
+                app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
+                app:layout_constraintTop_toBottomOf="@+id/next_btn"
+                android:textSize="10dp" />
 
             <TextView
                 android:id="@+id/custom_headline"
@@ -46,12 +87,12 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_medium"
                 android:maxLines="1"
-
+                android:layout_marginTop="@dimen/_15sdp"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_15sdp"
+                android:textSize="@dimen/_12sdp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ad_txt"
+                app:layout_constraintTop_toBottomOf="@+id/next_btn"
                 tools:text="abv" />
 
             <TextView
@@ -62,54 +103,43 @@
                 android:lines="2"
                 android:maxLines="2"
                 android:textColor="@color/white"
-                android:textSize="@dimen/_12sdp"
+                android:textSize="@dimen/_10sdp"
                 app:layout_constraintEnd_toEndOf="@+id/custom_headline"
                 app:layout_constraintStart_toStartOf="@+id/custom_headline"
                 app:layout_constraintTop_toBottomOf="@+id/custom_headline"
 
                 tools:text="adadad" />
+
+            <TextView
+                android:id="@+id/custom_call_to_action"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/bg_btn_ads_round"
+                android:backgroundTint="@color/button_bg"
+                android:fontFamily="@font/poppins_medium"
+                android:gravity="center"
+                android:minWidth="50dp"
+                android:paddingHorizontal="16dp"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/custom_app_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="install" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.ikame.android.sdk.widgets.IkmWidgetMediaView
             android:id="@+id/custom_media"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/_300sdp"
-
-            app:layout_constraintBottom_toTopOf="@id/custom_call_to_action"
-            app:layout_constraintTop_toBottomOf="@+id/custom_containerAds" />
-
-        <TextView
-            android:id="@+id/custom_call_to_action"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_40sdp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/bg_btn_ads_round"
-            android:backgroundTint="@color/button_bg"
-            android:fontFamily="@font/poppins_medium"
-            android:gravity="center"
-            android:minWidth="50dp"
-            android:paddingHorizontal="16dp"
-            android:textColor="@color/white"
-            android:textSize="12dp"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="install" />
+            app:layout_constraintBottom_toTopOf="@id/custom_containerAds"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/ad_txt"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginStart="1dp"
-        android:background="@drawable/ads_txt_bg"
-        android:backgroundTint="@color/button_bg"
-        android:gravity="center"
-        android:paddingHorizontal="2dp"
-        android:text="@string/txt_ad"
-        android:textColor="@color/white"
-        android:textSize="10dp" />
 
 </com.ikame.android.sdk.widgets.IkmWidgetAdLayout>
