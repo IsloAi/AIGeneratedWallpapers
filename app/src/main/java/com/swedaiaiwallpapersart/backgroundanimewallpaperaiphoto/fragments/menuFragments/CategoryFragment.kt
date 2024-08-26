@@ -183,11 +183,7 @@ class CategoryFragment : Fragment(), AdEventListener {
 
                         Log.e("TAG", "onCustomCreateView: "+wallpapersList )
 
-                        val list = if (!AdConfig.ISPAIDUSER){
-                            wallpapersList.shuffled()
-                        }else{
-                            addNullValueInsideArray(wallpapersList.shuffled())
-                        }
+                        val list =wallpapersList.shuffled()
 
                         withContext(Dispatchers.Main){
                             adapter.updateData(newData = list)
@@ -375,35 +371,35 @@ class CategoryFragment : Fragment(), AdEventListener {
 
 
 
-    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-            val firstLine = firstAdLineThreshold * 3
+//    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+//        return withContext(Dispatchers.IO){
+//            val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+//            val firstLine = firstAdLineThreshold * 3
+//
+//            val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+//            val lineC = lineCount * 3
+//            val newData = arrayListOf<CatNameResponse?>()
+//
+//            for (i in data.indices){
+//                if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
+//                    newData.add(null)
+//                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+//
+//                }else if (i == firstLine){
+//                    newData.add(null)
+//                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+//                }
+//                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+//                Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
+//                newData.add(data[i])
+//
+//            }
+//            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+//             newData
+//        }
 
-            val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-            val lineC = lineCount * 3
-            val newData = arrayListOf<CatNameResponse?>()
 
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
-
-                }else if (i == firstLine){
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
-                }
-                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-                Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
-                newData.add(data[i])
-
-            }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-             newData
-        }
-
-
-    }
+//    }
 
 
     private fun setFragment(name:String){

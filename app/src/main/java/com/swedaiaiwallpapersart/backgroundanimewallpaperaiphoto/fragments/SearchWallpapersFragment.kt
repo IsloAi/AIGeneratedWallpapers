@@ -23,6 +23,7 @@ import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
@@ -283,6 +284,7 @@ class SearchWallpapersFragment : Fragment() {
                             binding.emptySupport.visibility = View.GONE
                         } else {
                             if (!searched){
+                                sendTracking("search_keyword",Pair("search_keyword", p0.toString()))
                                 searchInList(p0.toString(), cachedCatResponses) { filteredList ->
 
                                     Log.e("TAG", "afterTextChanged: " + filteredList)
@@ -320,6 +322,14 @@ class SearchWallpapersFragment : Fragment() {
 
             })
 
+    }
+
+    private fun sendTracking(
+        eventName: String,
+        vararg param: Pair<String, String?>
+    )
+    {
+        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     fun searchInList(

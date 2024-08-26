@@ -7,7 +7,7 @@ import android.util.Log
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.BatteryAnimationActivity
 
 
-class BroadcastReceiver: BroadcastReceiver() {
+open class BroadcastReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         val action = intent.action
         if (action == Intent.ACTION_POWER_CONNECTED) {

@@ -12,8 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.billing.IKBillingController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.data.dto.pub.IKRemoteConfigValue
+import com.ikame.android.sdk.listener.pub.IKBillingListener
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKRemoteConfigCallback
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
@@ -112,6 +114,20 @@ class SplashOnFragment : Fragment() {
 
         // Check if the user is a premium user
         lifecycleScope.launch {
+//            var premium = false
+//            IKBillingController.reCheckIAP(object :IKBillingListener{
+//                override fun onBillingFail() {
+//
+//                    Log.e(TAG, "InAppPurchase13: $premium")
+//                    premium = false
+//                }
+//
+//                override fun onBillingSuccess() {
+//
+//                    Log.e(TAG, "InAppPurchase15: $premium")
+//                    premium = true
+//                }
+//            },false)
             val premium = IKUtils.isUserIAPAvailableAsync()
             AdConfig.ISPAIDUSER = premium
             Log.e(TAG, "InAppPurchase123: $premium")
@@ -122,9 +138,10 @@ class SplashOnFragment : Fragment() {
                 binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
                     override fun onAdShowed() {}
                     override fun onAdShowFail(error: IKAdError) {
-                    binding.adsView?.visibility = View.GONE
+                        if (isAdded){
+                            binding.adsView.visibility = View.GONE
+                        }
                     }
-
                 })
             }
         }

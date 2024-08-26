@@ -14,55 +14,64 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
 import com.google.firebase.FirebaseApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import java.io.File
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.WallpaperChangeListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import java.io.IOException
 
 class LiveWallpaperService : WallpaperService() {
 
+    private var engineInstance: WallpaperVideoEngine? = null
+
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(applicationContext)
+
     }
+
     internal inner class WallpaperVideoEngine : Engine() {
+
+        init {
+            engineInstance = this
+        }
+
         private var myMediaPlayer: MediaPlayer? = null
         private var liveWallBroadcastReceiver: BroadcastReceiver? = null
         private var liveVideoFilePath: String? = null
         private var isReceiverRegistered = false
-        private val context: Context? = null
+
         override fun onCreate(surfaceHolder: SurfaceHolder) {
             super.onCreate(surfaceHolder)
 
             FirebaseApp.initializeApp(applicationContext)
 
             val intentFilter = IntentFilter(VIDEO_PARAMS_CONTROL_ACTION)
+            intentFilter.addAction(ACTION_UPDATE_WALLPAPER)
+
+            val broadcastReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    when (intent.action) {
+                        KEY_ACTION -> {
+                            val action = intent.getBooleanExtra(KEY_ACTION, false)
+                            myMediaPlayer?.setVolume(
+                                if (action) 0f else 1.0f,
+                                if (action) 0f else 1.0f
+                            )
+                        }
+
+                        ACTION_UPDATE_WALLPAPER -> {
+                            restartMediaPlayer()
+                        }
+                    }
+                }
+            }
+            liveWallBroadcastReceiver = broadcastReceiver
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                registerReceiver(object : BroadcastReceiver() {
-                    override fun onReceive(context: Context, intent: Intent) {
-                        val action = intent.getBooleanExtra(KEY_ACTION, false)
-                        if (action) {
-                            myMediaPlayer!!.setVolume(0f, 0f)
-                        } else {
-                            myMediaPlayer!!.setVolume(1.0f, 1.0f)
-                        }
-                        isReceiverRegistered = true
-                    }
-                }.also { liveWallBroadcastReceiver = it }, intentFilter, RECEIVER_EXPORTED)
-            }else{
-                registerReceiver(object : BroadcastReceiver() {
-                    override fun onReceive(context: Context, intent: Intent) {
-                        val action = intent.getBooleanExtra(KEY_ACTION, false)
-                        if (action) {
-                            myMediaPlayer!!.setVolume(0f, 0f)
-                        } else {
-                            myMediaPlayer!!.setVolume(1.0f, 1.0f)
-                        }
-                        isReceiverRegistered = true
-                    }
-                }.also { liveWallBroadcastReceiver = it }, intentFilter)
+                registerReceiver(broadcastReceiver, intentFilter, RECEIVER_EXPORTED)
+            } else {
+                registerReceiver(broadcastReceiver, intentFilter)
             }
+            isReceiverRegistered = true
         }
 
         override fun onSurfaceCreated(holder: SurfaceHolder) {
@@ -73,38 +82,24 @@ class LiveWallpaperService : WallpaperService() {
             startPlayer()
         }
 
-        fun startPlayer(){
+        private fun startPlayer() {
             try {
-            val file = applicationContext.filesDir
+                val file = applicationContext.filesDir
+                val video = file.path + "/" + "video.mp4"
+                Log.e("TAG", "onCreate: $video")
+                liveVideoFilePath = video
 
-//
-            val video =  file.path + "/" + "video.mp4"
-
-            Log.e("TAG", "onCreate: $video")
-
-            liveVideoFilePath = video
-
-
-            myMediaPlayer?.apply {
-                setDataSource(liveVideoFilePath)
-                isLooping = true
-                setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
-                prepare()
-                start()
-            }
-
-//                val file1 = File("$filesDir/unmute")
-//                if (file1.exists()) myMediaPlayer!!.setVolume(1.0f, 1.0f) else myMediaPlayer!!.setVolume(
-//                    0f,
-//                    0f
-//                )
+                myMediaPlayer?.apply {
+                    setDataSource(liveVideoFilePath)
+                    isLooping = true
+                    setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
+                    prepare()
+                    start()
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
-            }
-            catch (e: IllegalStateException) {
-                // Log the exception for debugging
+            } catch (e: IllegalStateException) {
                 Log.e("TAG", "IllegalStateException occurred", e)
-
             }
         }
 
@@ -139,7 +134,7 @@ class LiveWallpaperService : WallpaperService() {
             super.onDestroy()
             myMediaPlayer?.release()
             myMediaPlayer = null
-            if (isReceiverRegistered){
+            if (isReceiverRegistered) {
                 unregisterReceiver(liveWallBroadcastReceiver)
                 isReceiverRegistered = false
             }
@@ -151,62 +146,50 @@ class LiveWallpaperService : WallpaperService() {
     }
 
     companion object {
-        const val VIDEO_PARAMS_CONTROL_ACTION = "com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto"
+
+        const val ACTION_WALLPAPER_SET_SUCCESS = "com.swedaiaiwallpapersart.WALLPAPER_SET_SUCCESS"
+        const val ACTION_WALLPAPER_SET_FAILURE = "com.swedaiaiwallpapersart.WALLPAPER_SET_FAILURE"
+        const val VIDEO_PARAMS_CONTROL_ACTION =
+            "com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto"
         private const val KEY_ACTION = "music"
-        private const val ACTION_MUSIC_UNMUTE = false
-        private const val ACTION_MUSIC_MUTE = true
-        fun muteMusic(context: Context) {
-            Intent(VIDEO_PARAMS_CONTROL_ACTION).apply {
-                putExtra(KEY_ACTION, ACTION_MUSIC_MUTE)
-            }.also { context.sendBroadcast(it) }
-        }
+        const val ACTION_UPDATE_WALLPAPER = "com.swedaiaiwallpapersart.UPDATE_WALLPAPER"
 
-        fun unmuteMusic(context: Context) {
-            Intent(VIDEO_PARAMS_CONTROL_ACTION).apply {
-                putExtra(KEY_ACTION, ACTION_MUSIC_UNMUTE)
-            }.also {
-                context.sendBroadcast(it)
+        private fun updateWallpaper(context: Context) {
+            Log.d(TAG, "updateWallpaper: SendBroadcast")
+            Intent(ACTION_WALLPAPER_SET_SUCCESS).apply { context.sendBroadcast(this) }
+            Intent(ACTION_UPDATE_WALLPAPER).apply {
+                context.sendBroadcast(this)
             }
         }
 
-        fun setToWallPaper(context: Context) {
-
-            try {
-
-
-                Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
-                    putExtra(
-                        WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
-                        ComponentName(context, LiveWallpaperService::class.java)
-                    )
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-
-
-                }.also {
-//                if (it.resolveActivity(context.packageManager) != null) {
-                    context.startActivity(it)
-//                }else{
-//                    Toast.makeText(context,"this device don't support Live Wallpaper",Toast.LENGTH_SHORT).show()
-//                }
-
-                }
+        fun setToWallPaper(context: Context, isFirst: Boolean) {
+            if (isFirst) {
                 try {
-                    WallpaperManager.getInstance(context).clear()
-                } catch (e: IOException) {
+                    Intent(WallpaperManager.ACTION_CHANGE_LIVE_WALLPAPER).apply {
+                        putExtra(
+                            WallpaperManager.EXTRA_LIVE_WALLPAPER_COMPONENT,
+                            ComponentName(context, LiveWallpaperService::class.java)
+                        )
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                    }.also { context.startActivity(it) }
+
+                    // Send success broadcast
+                    Intent(ACTION_WALLPAPER_SET_SUCCESS).apply { context.sendBroadcast(this) }
+                } catch (e: ActivityNotFoundException) {
                     e.printStackTrace()
+                    Toast.makeText(
+                        context,
+                        "This device doesn't support Live Wallpaper",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+                    // Send failure broadcast
+                    Intent(ACTION_WALLPAPER_SET_FAILURE).apply { context.sendBroadcast(this) }
                 }
-            }catch (e:ActivityNotFoundException){
-                e.printStackTrace()
-                Toast.makeText(context,"this device don't support Live Wallpaper",Toast.LENGTH_SHORT).show()
+            } else {
+                updateWallpaper(context)
             }
-
-
-
         }
 
-        fun notifyWallpaperFileUpdated(context: Context) {
-            val updateIntent = Intent("com.yourapp.WALLPAPER_FILE_UPDATED")
-            context.sendBroadcast(updateIntent)
-        }
     }
 }

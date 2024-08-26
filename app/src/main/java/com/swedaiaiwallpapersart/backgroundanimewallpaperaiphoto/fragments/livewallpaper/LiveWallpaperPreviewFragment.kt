@@ -6,12 +6,16 @@ import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.media.MediaPlayer
 import android.media.MediaPlayer.OnCompletionListener
 import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -51,6 +55,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Favoruit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.BroadcastReceiver
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -61,7 +66,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -79,15 +83,36 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
+//    private val wallpaperSetReceiver = object : BroadcastReceiver() {
+//        override fun onReceive(context: Context?, intent: Intent) {
+//            Log.d("WallpaperSetReceiver", "Broadcast received: ${intent.action}")
+//            when (intent.action) {
+//                LiveWallpaperService.ACTION_WALLPAPER_SET_SUCCESS -> {
+//                    lifecycleScope.launch {
+//                        checkWallpaperActive()
+//                    }
+//                }
+//
+//                LiveWallpaperService.ACTION_WALLPAPER_SET_FAILURE -> {
+//                    Toast.makeText(
+//                        requireContext(),
+//                        "Failed to set live wallpaper",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
+//                }
+//            }
+//        }
+//    }
+
     private var _binding: FragmentLiveWallpaperPreviewBinding? = null
     private val binding get() = _binding!!
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var livewallpaper: LiveWallpaperModel? = null
-    var adPosition = 0
+    private var adPosition = 0
 
-    private lateinit var myActivity : MainActivity
+    private lateinit var myActivity: MainActivity
 
     @Inject
     lateinit var webApiInterface: EndPointsInterface
@@ -95,18 +120,15 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     @Inject
     lateinit var appDatabase: AppDatabase
 
-    var checkWallpaper = false
+    private var checkWallpaper = false
 
-    val rewardAd = IKRewardAd()
+    private val rewardAd = IKRewardAd()
     val interAd = IKInterstitialAd()
-
-//    var checkAppOpen = false
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLiveWallpaperPreviewBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -115,6 +137,16 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
 
+//        val intentFilter = IntentFilter().apply {
+//            addAction(LiveWallpaperService.ACTION_WALLPAPER_SET_SUCCESS)
+//            addAction(LiveWallpaperService.ACTION_WALLPAPER_SET_FAILURE)
+//        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//            requireContext().registerReceiver(wallpaperSetReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+//        } else {
+//            requireContext().registerReceiver(wallpaperSetReceiver, intentFilter)
+//        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -122,7 +154,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         myActivity = activity as MainActivity
 
-        if (!AdConfig.ISPAIDUSER){
+        if (!AdConfig.ISPAIDUSER) {
 
             loadRewardAd()
 
@@ -132,6 +164,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
                 }
+
                 override fun onAdLoadFail(error: IKAdError) {
                     // Handle ad load failure
                 }
@@ -147,7 +180,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 }
 
             })
-        }else{
+        } else {
             binding.adsView.visibility = View.GONE
         }
 
@@ -157,8 +190,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         setEvents()
 
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "SetLiveWallScr_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "screen"),
+                Pair("action_name", "SetLiveWallScr_View")
+            )
         }
 
     }
@@ -180,9 +217,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun initObservers() {
@@ -223,23 +259,27 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_SetBt_Click"))
-                sendTracking("typewallpaper_used",Pair("typewallpaper", "Live"))
-                sendTracking("category_used",Pair("category", "Live ${livewallpaper?.catname}"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "SetLiveWallScr_SetBt_Click")
+                )
+                sendTracking("typewallpaper_used", Pair("typewallpaper", "Live"))
+                sendTracking("category_used", Pair("category", "Live ${livewallpaper?.catname}"))
             }
             Log.e("TAG", "setEvents: $livewallpaper")
 
-            if (livewallpaper?.unlocked == false){
-                if (AdConfig.ISPAIDUSER){
+            if (livewallpaper?.unlocked == false) {
+                if (AdConfig.ISPAIDUSER) {
                     setWallpaper()
-                }else{
+                } else {
                     unlockDialog()
                 }
-            }else{
-                if (adPosition % 2 != 0){
+            } else {
+                if (adPosition % 2 != 0) {
                     setWallpaper()
-                }else{
+                } else {
                     var shouldShowInterAd = true
 
                     if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
@@ -277,16 +317,15 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             }
 
 
-
-
-
-
-
         }
 
         binding.toolbar.setOnClickListener {
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_BackBt_Click"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "SetLiveWallScr_BackBt_Click")
+                )
             }
             Constants.checkInter = false
             checkAppOpen = false
@@ -300,18 +339,23 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         binding.setLiked.setOnClickListener {
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_FavoriteBt_Click"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "SetLiveWallScr_FavoriteBt_Click")
+                )
             }
             binding.setLiked.isEnabled = false
             if (livewallpaper?.liked == true) {
                 livewallpaper?.liked = false
                 binding.setLiked.setImageResource(R.drawable.button_like)
-                Toast.makeText(requireContext(),"Removed from favorites",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                    .show()
             } else {
                 livewallpaper?.liked = true
                 binding.setLiked.setImageResource(R.drawable.button_like_selected)
-                Toast.makeText(requireContext(),"Added to favorites",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
             }
             Constants.checkInter = false
             Constants.checkAppOpen = false
@@ -323,8 +367,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         binding.downloadWallpaper.setOnClickListener {
 
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetLiveWallScr_SaveBt_Click"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "SetLiveWallScr_SaveBt_Click")
+                )
             }
             val source = File(BlurView.filePath)
             val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
@@ -343,7 +391,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     )
                 } else {
                     Log.e("TAG", "functionality: inside click dialog")
-                    if (AdConfig.ISPAIDUSER){
+                    if (AdConfig.ISPAIDUSER) {
                         copyFiles(source, destination)
 
                         try {
@@ -352,18 +400,18 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
                                 webApiInterface.postDownloadedLive(requestBody)
                             }
-                        }catch (e:Exception){
+                        } catch (e: Exception) {
                             e.printStackTrace()
-                        }catch (e:UnknownHostException){
+                        } catch (e: UnknownHostException) {
                             e.printStackTrace()
                         }
-                    }else{
+                    } else {
 
                         getUserIdDialog()
                     }
                 }
             } else {
-                if (AdConfig.ISPAIDUSER){
+                if (AdConfig.ISPAIDUSER) {
                     copyFiles(source, destination)
 
                     try {
@@ -372,12 +420,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
                             webApiInterface.postDownloadedLive(requestBody)
                         }
-                    }catch (e:Exception){
+                    } catch (e: Exception) {
                         e.printStackTrace()
-                    }catch (e:UnknownHostException){
+                    } catch (e: UnknownHostException) {
                         e.printStackTrace()
                     }
-                }else{
+                } else {
 
                     getUserIdDialog()
                 }
@@ -409,7 +457,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private fun unlockDialog() {
         val dialog = Dialog(requireContext())
-        val bindingDialog = DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
+        val bindingDialog =
+            DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
@@ -418,9 +467,9 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.setCancelable(false)
 
-        if (AdConfig.iapScreenType == 0){
+        if (AdConfig.iapScreenType == 0) {
             bindingDialog.upgradeButton.visibility = View.GONE
-            bindingDialog.orTxt.visibility =  View.INVISIBLE
+            bindingDialog.orTxt.visibility = View.INVISIBLE
             bindingDialog.dividerEnd.visibility = View.INVISIBLE
             bindingDialog.dividerStart.visibility = View.INVISIBLE
         }
@@ -437,16 +486,23 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     override fun onAdsRewarded() {
                         livewallpaper?.unlocked = true
                         livewallpaper?.id?.let { it1 ->
-                            appDatabase.liveWallpaperDao().updateLocked(true,
+                            appDatabase.liveWallpaperDao().updateLocked(
+                                true,
                                 it1.toInt()
                             )
                         }
                     }
+
                     override fun onAdsShowFail(error: IKAdError) {
-                        if (isAdded){
-                            Toast.makeText(requireContext(),"Ad not available, Try again",Toast.LENGTH_SHORT).show()
+                        if (isAdded) {
+                            Toast.makeText(
+                                requireContext(),
+                                "Ad not available, Try again",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
+
                     override fun onAdsDismiss() {
                         loadRewardAd()
                     }
@@ -488,7 +544,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     BlurView.filePath = newFile.path
                     Log.d(TAG, "setWallpaper: ${newFile.path}")
                     // Set wallpaper in background
-                    LiveWallpaperService.setToWallPaper(context)
+                    LiveWallpaperService.setToWallPaper(context, true)
                     checkWallpaper = true
 
                     // Post download info
@@ -544,17 +600,20 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 notifyFileNameChanged(requireContext(), filepath.path, newFile.path)
                 Log.e("TAG", "showSimpleDialog: renamed")
                 IKSdkController.setEnableShowResumeAds(true)
+                LiveWallpaperService.setToWallPaper(requireContext(), false)
                 checkWallpaper = true
-                LiveWallpaperService.setToWallPaper(requireContext())
+                lifecycleScope.launch {
+                    checkWallpaperActive()
+                }
                 try {
                     lifecycleScope.launch {
                         val requestBody = mapOf("imageid" to livewallpaper?.id)
 
                         webApiInterface.postDownloadedLive(requestBody)
                     }
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
-                }catch (e:UnknownHostException){
+                } catch (e: UnknownHostException) {
                     e.printStackTrace()
                 }
 
@@ -580,8 +639,11 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         dialog.show()
     }
 
-
-    fun notifyFileNameChanged(context: Context?, oldFilePath: String?, newFilePath: String?) {
+    private fun notifyFileNameChanged(
+        context: Context?,
+        oldFilePath: String?,
+        newFilePath: String?
+    ) {
         val oldFile = File(oldFilePath)
         val newFile = File(newFilePath)
 
@@ -636,18 +698,24 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 override fun onAdsRewarded() {
                     copyFiles(source, destination)
                 }
+
                 override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded){
+                    if (isAdded) {
 
                         interAd.showAd(
                             requireActivity(),
                             "mainscr_live_tab_click_item",
                             adListener = object : IKShowAdListener {
                                 override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded){
-                                        Toast.makeText(requireContext(),"Ad not available, Please try again later",Toast.LENGTH_SHORT).show()
+                                    if (isAdded) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Ad not available, Please try again later",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
                                 }
+
                                 override fun onAdsDismiss() {
                                     copyFiles(source, destination)
 
@@ -657,9 +725,9 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
                                             webApiInterface.postDownloadedLive(requestBody)
                                         }
-                                    }catch (e:Exception){
+                                    } catch (e: Exception) {
                                         e.printStackTrace()
-                                    }catch (e:UnknownHostException){
+                                    } catch (e: UnknownHostException) {
                                         e.printStackTrace()
                                     }
                                 }
@@ -668,6 +736,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
                     }
                 }
+
                 override fun onAdsDismiss() {
                     loadRewardAd()
                 }
@@ -742,38 +811,26 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         if (checkWallpaper){
             lifecycleScope.launch {
-                delay(1000)
                 checkWallpaperActive()
             }
         }
-
-//        try {
-//            if (isAdded){
-//            myActivity.window.statusBarColor = requireContext().getColor(
-//                    com.ikame.android.sdk.R.color.tt_transparent)
-//            }
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            // Handle the exception, e.g., show a Toast or log the error
-//        }
         setWallpaperOnView()
     }
 
-    fun checkWallpaperActive() {
+    private fun checkWallpaperActive() {
         if (isAdded) {
-            val wallpaperComponent = ComponentName(requireContext(), LiveWallpaperService::class.java)
+            val wallpaperComponent =
+                ComponentName(requireContext(), LiveWallpaperService::class.java)
             val wallpaperManager = WallpaperManager.getInstance(requireContext())
 
             lifecycleScope.launch {
-//                delay(1000) // Wait for the system to process the wallpaper change
                 val currentWallpaperComponent = wallpaperManager.wallpaperInfo?.component
 
                 Log.d("LiveWallpaper", "Current wallpaper component: $currentWallpaperComponent")
                 Log.d("LiveWallpaper", "Expected wallpaper component: $wallpaperComponent")
 
-                if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
-                    // The live wallpaper is set successfully, perform your action here
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    // Implement the if statement directly without checking the component
                     checkWallpaper = false
                     Log.d("LiveWallpaper", "Live wallpaper set successfully")
                     if (isAdded) {
@@ -782,33 +839,68 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     findNavController().popBackStack(R.id.homeTabsFragment, false)
 
                     if (isAdded) {
-                        sendTracking("screen_active", Pair("action_type", "Toast"), Pair("action_name", "SetLiveWallScr_SuccessToast_Click"))
+                        sendTracking(
+                            "screen_active",
+                            Pair("action_type", "Toast"),
+                            Pair("action_name", "SetLiveWallScr_SuccessToast_Click")
+                        )
                     }
 
-                    Toast.makeText(requireContext(), "Wallpaper set successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Wallpaper set successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
-                    // The live wallpaper is not set successfully
-                    Log.e("LiveWallpaper", "Failed to set live wallpaper")
-                    Toast.makeText(requireContext(), "Failed to set live wallpaper", Toast.LENGTH_SHORT).show()
+                    // For other Android versions, check the component as before
+                    if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
+                        checkWallpaper = false
+                        Log.d("LiveWallpaper", "Live wallpaper set successfully")
+                        if (isAdded) {
+                            MySharePreference.firstLiveWallpaper(requireContext(), true)
+                        }
+                        findNavController().popBackStack(R.id.homeTabsFragment, false)
+
+                        if (isAdded) {
+                            sendTracking(
+                                "screen_active",
+                                Pair("action_type", "Toast"),
+                                Pair("action_name", "SetLiveWallScr_SuccessToast_Click")
+                            )
+                        }
+
+                        Toast.makeText(
+                            requireContext(),
+                            "Wallpaper set successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Log.e("LiveWallpaper", "Failed to set live wallpaper")
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to set live wallpaper",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
     }
 
-
     private fun setWallpaperOnView() {
-        if (isAdded){
+        if (isAdded) {
             binding.liveWallpaper.setMediaController(null)
             binding.liveWallpaper.setVideoPath(BlurView.filePath)
 
             binding.liveWallpaper.setOnCompletionListener(OnCompletionListener {
-                if (view != null && isAdded){
+                if (view != null && isAdded) {
                     binding.liveWallpaper.start()
                 }
             })
 
             binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->
                 mediaPlayer.isLooping = true
+                mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
             }
 
             binding.liveWallpaper.start()
@@ -821,11 +913,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+//        requireContext().unregisterReceiver(wallpaperSetReceiver)
     }
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e("TAG", "app open dismissed: ", )
+        Log.e("TAG", "app open dismissed: ")
     }
 
     override fun onAdLoading() {
@@ -843,4 +936,5 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     override fun onShowAdFail() {
 
     }
+
 }

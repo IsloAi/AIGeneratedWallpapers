@@ -36,25 +36,24 @@ class ApiCategoriesNameAdapter(
     private val arrayList: ArrayList<CatNameResponse?>,
     private val stringCallback: StringCallback,
     private val myActivity: MainActivity,
-    private val from:String
+    private val from: String
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
 
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    var context: Context? = null
-
-    private var lastClickTime = 0L
-    private val debounceThreshold = 2000L // 1 second
-
+    private val debounceThreshold = 2000L // 2 seconds
 
     private val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-    val firstLine = firstAdLineThreshold * 3
+    private val firstLine = firstAdLineThreshold * 3
 
     private val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-    val lineC = lineCount * 3
-    private val statusAd =  AdConfig.adStatusCategoryArt
+    private val lineC = lineCount * 3
+    private val statusAd = AdConfig.adStatusCategoryArt
 
+    private var lastClickTime = 0L
+    private var context: Context? = null
+
+    var nativeAdView: IkmDisplayWidgetAdView? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -70,95 +69,80 @@ class ApiCategoriesNameAdapter(
         }
     }
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-        val inflater = LayoutInflater.from(parent.context)
         context = parent.context
+        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_CONTAINER1 -> {
-                val binding =  CatNameListBinding.inflate(inflater, parent, false)
-                ViewHolderContainerItem(binding)
-            }
-            VIEW_TYPE_NATIVE_AD -> {
-                val binding = StaggeredNativeLayoutBinding.inflate(inflater,parent,false)
-                ViewHolderContainer3(binding)
-
-            }
+            VIEW_TYPE_CONTAINER1 -> ViewHolderContainerItem(CatNameListBinding.inflate(inflater, parent, false))
+            VIEW_TYPE_NATIVE_AD -> ViewHolderContainer3(StaggeredNativeLayoutBinding.inflate(inflater, parent, false))
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val adjustedPosition = if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
-            // Adjust position for ad items
-            position - ((position - firstLine) / (lineC + 1) + 1)
-        } else {
-            // No adjustment needed for normal items
-            position - (position / (lineC + 1))
-        }
-
-        val model = arrayList[adjustedPosition]
+        val adjustedPosition = calculateAdjustedPosition(position)
 
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                try {
-                    Log.e("TAG", "onBindViewHolder: $model")
-                    val viewHolderContainer1 = holder as ViewHolderContainerItem
-                    viewHolderContainer1.bind(model!!)
-                } catch (e: NullPointerException) {
-                    e.printStackTrace()
+                val model = arrayList[adjustedPosition]
+                if (model != null) {
+                    (holder as ViewHolderContainerItem).bind(model)
+                } else {
+                    // Handle null model case (e.g., show a placeholder or do nothing)
+                    Log.e("ApiCategoriesNameAdapter", "Null model at position: $adjustedPosition")
                 }
             }
             VIEW_TYPE_NATIVE_AD -> {
-                val viewHolderContainer3 = holder as ViewHolderContainer3
-                viewHolderContainer3.bind(viewHolderContainer3)
+                (holder as ViewHolderContainer3).bind()
             }
         }
     }
 
     override fun getItemCount(): Int {
-       if (arrayList.size!=0){
-           if (AdConfig.ISPAIDUSER) {
-               return arrayList.size
-           } else {
-               // Calculate total items including ads
-               val adsCount = ((arrayList.size - firstLine - 1) / lineC) + 1 // number of ads
-               return arrayList.size + adsCount
-           }
-       }
+        if (arrayList.isNotEmpty()) {
+            return if (AdConfig.ISPAIDUSER) {
+                arrayList.size
+            } else {
+                // Calculate total items including ads
+                val adsCount = ((arrayList.size - firstLine - 1) / lineC) + 1
+                arrayList.size + adsCount
+            }
+        }
         return 0
     }
-
-
-
 
     override fun getItemViewType(position: Int): Int {
         return if (AdConfig.ISPAIDUSER) {
             VIEW_TYPE_CONTAINER1
         } else {
             val actualPosition = position + 1
-
-            // Determine if the position is an ad position
-            if (actualPosition == firstLine + 1) {
-                VIEW_TYPE_NATIVE_AD
-            } else if (actualPosition > firstLine + 1 && (actualPosition - (firstLine + 1)) % (lineC + 1) == 0) {
-                VIEW_TYPE_NATIVE_AD
-            } else {
-                VIEW_TYPE_CONTAINER1
-            }
+            if (isAdPosition(actualPosition)) VIEW_TYPE_NATIVE_AD else VIEW_TYPE_CONTAINER1
         }
     }
 
+    private fun isAdPosition(actualPosition: Int): Boolean {
+        return actualPosition == firstLine + 1 || (actualPosition > firstLine + 1 && (actualPosition - (firstLine + 1)) % (lineC + 1) == 0)
+    }
+
+    private fun calculateAdjustedPosition(position: Int): Int {
+        return if (!AdConfig.ISPAIDUSER && getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
+            position - ((position - firstLine) / (lineC + 1) + 1)
+        } else if (!AdConfig.ISPAIDUSER) {
+            position - (position / (lineC + 1))
+        } else {
+            position
+        }
+    }
 
     inner class ViewHolderContainerItem(private val binding: CatNameListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatNameResponse) {
             binding.loading.visibility = View.VISIBLE
             binding.loading.setAnimation(R.raw.main_loading_animation)
             binding.catName.text = model.cat_name
+
             Glide.with(context!!)
                 .load(model.img_url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
                         e: GlideException?,
@@ -166,7 +150,7 @@ class ApiCategoriesNameAdapter(
                         target: Target<Drawable>,
                         isFirstResource: Boolean
                     ): Boolean {
-                        Log.d("onLoadFailed", "onLoadFailed: "+e?.message )
+                        Log.d("onLoadFailed", "onLoadFailed: " + e?.message)
                         binding.loading.setAnimation(R.raw.no_data_image_found)
                         return false
                     }
@@ -179,95 +163,75 @@ class ApiCategoriesNameAdapter(
                         isFirstResource: Boolean
                     ): Boolean {
                         binding.loading.visibility = View.INVISIBLE
-                        Log.d("onLoadFailed", "onResourceReady: ")
                         return false
                     }
                 })
                 .into(binding.catIconImage)
 
-            if (from == "live"){
-                binding.live.visibility = View.VISIBLE
-            }else{
-                binding.live.visibility = View.GONE
-            }
+            binding.live.visibility = if (from == "live") View.VISIBLE else View.GONE
 
             binding.catIconImage.setOnClickListener {
-
                 val currentTime = System.currentTimeMillis()
-
                 if (currentTime - lastClickTime >= debounceThreshold) {
                     stringCallback.getStringCall(model.cat_name!!)
                     lastClickTime = currentTime
                 }
-
             }
         }
     }
 
-
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: RecyclerView.ViewHolder){
-            loadad(holder,binding)
+        fun bind() {
+            if (!binding.adsView.isAdLoaded) {
+                loadAd(binding)
+            }
         }
     }
 
-    var nativeAdView: IkmDisplayWidgetAdView?= null
-
-
-
-    fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
-        val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
+    private fun loadAd(binding: StaggeredNativeLayoutBinding) {
+        val adLayout = LayoutInflater.from(context).inflate(
             R.layout.native_dialog_layout,
             null, false
         ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        if (binding.adsView.isAdLoaded){
-            Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
-        }else{
-
-            IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
-                IKLoadDisplayAdViewListener {
-                override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                    nativeAdView = adObject
-                }
-
-                override fun onAdLoadFail(error: IKAdError) {
-                    Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+error )                    }
-            })
+        adLayout?.apply {
+            titleView = findViewById(R.id.custom_headline)
+            bodyView = findViewById(R.id.custom_body)
+            callToActionView = findViewById(R.id.custom_call_to_action)
+            iconView = findViewById(R.id.custom_app_icon)
+            mediaView = findViewById(R.id.custom_media)
         }
 
-        nativeAdView?.let {
-            binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,adLayout!!,"mainscr_cate_tab_scroll_view",
-                it,
-                object : IKShowWidgetAdListener {
-                    override fun onAdShowFail(error: IKAdError) {
-                        Log.e("TAG", "onAdsLoadFail: native failded " )
-                        if (statusAd == 0){
-                            binding.adsView.visibility = View.GONE
-                        }else{
-                            if (isNetworkAvailable()){
-                                //                                    loadad(holder,binding)
+        IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
+            IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                nativeAdView = adObject
+                nativeAdView?.let {
+                    binding.adsView.showWithDisplayAdView(
+                        R.layout.shimmer_loading_native,
+                        adLayout!!,
+                        "mainscr_cate_tab_scroll_view",
+                        it,
+                        object : IKShowWidgetAdListener {
+                            override fun onAdShowFail(error: IKAdError) {
+                                Log.e("TAG", "onAdsLoadFail: native failed ")
+                                binding.adsView.visibility = if (statusAd == 0) View.GONE else View.VISIBLE
+                            }
+
+                            override fun onAdShowed() {
                                 binding.adsView.visibility = View.VISIBLE
-                            }else{
-                                binding.adsView.visibility = View.GONE
+                                Log.e("TAG", "onAdsLoaded: native loaded")
                             }
                         }
-                    }
-
-                    override fun onAdShowed() {
-                        binding.adsView.visibility = View.VISIBLE
-                        Log.e("TAG", "onAdsLoaded: native loaded" )
-                    }
+                    )
                 }
-            )
-        }
-    }
+            }
 
+            override fun onAdLoadFail(error: IKAdError) {
+                Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
+                if (statusAd == 0) binding.adsView.visibility = View.GONE
+            }
+        })
+    }
 
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

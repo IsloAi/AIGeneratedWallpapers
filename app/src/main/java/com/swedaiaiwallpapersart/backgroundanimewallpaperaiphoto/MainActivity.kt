@@ -1460,11 +1460,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            val premium = IKUtils.isUserIAPAvailableAsync()
-            AdConfig.ISPAIDUSER = premium
-            Log.e(TAG, "InAppPurchase12: $premium")
-        }
+//        lifecycleScope.launch {
+//            val premium = IKUtils.isUserIAPAvailableAsync()
+//            AdConfig.ISPAIDUSER = premium
+//            Log.e(TAG, "InAppPurchase12: $premium")
+//        }
         IKSdkController.setEnableShowResumeAds(true)
     }
 
