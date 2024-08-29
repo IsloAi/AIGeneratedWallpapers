@@ -14,7 +14,6 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
 import com.google.firebase.FirebaseApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.WallpaperChangeListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import java.io.IOException
 
@@ -80,6 +79,12 @@ class LiveWallpaperService : WallpaperService() {
             myMediaPlayer = MediaPlayer()
             myMediaPlayer?.setSurface(holder.surface)
             startPlayer()
+        }
+
+        private fun resetWallpaper() {
+            stopSelf() // Stop the service
+            val intent = Intent(applicationContext, LiveWallpaperService::class.java)
+            applicationContext.startService(intent) // Restart the service
         }
 
         private fun startPlayer() {

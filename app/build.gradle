@@ -13,8 +13,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 141
-        versionName "1.8.0"
+        versionCode 142
+        versionName "1.8.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -186,8 +186,5 @@ dependencies {
 
     //rating bar
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
-
-
-
 
 }

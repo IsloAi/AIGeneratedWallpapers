@@ -83,27 +83,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
-//    private val wallpaperSetReceiver = object : BroadcastReceiver() {
-//        override fun onReceive(context: Context?, intent: Intent) {
-//            Log.d("WallpaperSetReceiver", "Broadcast received: ${intent.action}")
-//            when (intent.action) {
-//                LiveWallpaperService.ACTION_WALLPAPER_SET_SUCCESS -> {
-//                    lifecycleScope.launch {
-//                        checkWallpaperActive()
-//                    }
-//                }
-//
-//                LiveWallpaperService.ACTION_WALLPAPER_SET_FAILURE -> {
-//                    Toast.makeText(
-//                        requireContext(),
-//                        "Failed to set live wallpaper",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
-//                }
-//            }
-//        }
-//    }
-
     private var _binding: FragmentLiveWallpaperPreviewBinding? = null
     private val binding get() = _binding!!
 
@@ -829,8 +808,9 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 Log.d("LiveWallpaper", "Current wallpaper component: $currentWallpaperComponent")
                 Log.d("LiveWallpaper", "Expected wallpaper component: $wallpaperComponent")
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    // Implement the if statement directly without checking the component
+                if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
+                    // The live wallpaper is set successfully, perform your action here
+
                     checkWallpaper = false
                     Log.d("LiveWallpaper", "Live wallpaper set successfully")
                     if (isAdded) {
@@ -852,40 +832,18 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    // For other Android versions, check the component as before
-                    if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
-                        checkWallpaper = false
-                        Log.d("LiveWallpaper", "Live wallpaper set successfully")
-                        if (isAdded) {
-                            MySharePreference.firstLiveWallpaper(requireContext(), true)
-                        }
-                        findNavController().popBackStack(R.id.homeTabsFragment, false)
-
-                        if (isAdded) {
-                            sendTracking(
-                                "screen_active",
-                                Pair("action_type", "Toast"),
-                                Pair("action_name", "SetLiveWallScr_SuccessToast_Click")
-                            )
-                        }
-
-                        Toast.makeText(
-                            requireContext(),
-                            "Wallpaper set successfully",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Log.e("LiveWallpaper", "Failed to set live wallpaper")
-                        Toast.makeText(
-                            requireContext(),
-                            "Failed to set live wallpaper",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    // The live wallpaper is not set successfully
+                    Log.e("LiveWallpaper", "Failed to set live wallpaper")
+                    Toast.makeText(
+                        requireContext(),
+                        "Failed to set live wallpaper",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
+
 
     private fun setWallpaperOnView() {
         if (isAdded) {
