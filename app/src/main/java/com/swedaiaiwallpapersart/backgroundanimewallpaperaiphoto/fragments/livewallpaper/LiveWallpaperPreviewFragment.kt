@@ -6,8 +6,6 @@ import android.app.Dialog
 import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaPlayer.OnCompletionListener
@@ -15,7 +13,6 @@ import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -55,18 +52,17 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Favoruit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.BroadcastReceiver
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
@@ -115,17 +111,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     override fun onStart() {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
-
-//        val intentFilter = IntentFilter().apply {
-//            addAction(LiveWallpaperService.ACTION_WALLPAPER_SET_SUCCESS)
-//            addAction(LiveWallpaperService.ACTION_WALLPAPER_SET_FAILURE)
-//        }
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-//            requireContext().registerReceiver(wallpaperSetReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
-//        } else {
-//            requireContext().registerReceiver(wallpaperSetReceiver, intentFilter)
-//        }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -138,7 +123,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             loadRewardAd()
 
             interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
             interAd.loadAd("viewlivewallscr_click_set", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
@@ -153,9 +137,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             binding.adsView.loadAd("viewlivewallscr_bottom", object : IKShowWidgetAdListener {
                 override fun onAdShowed() {}
                 override fun onAdShowFail(error: IKAdError) {
-
                     Log.d(TAG, "onAdsShowFailLivePreviewBanner: $error")
-//                    binding.adsView?.visibility = View.GONE
                 }
 
             })
@@ -256,42 +238,35 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     unlockDialog()
                 }
             } else {
-                if (adPosition % 2 != 0) {
+                if (AdConfig.ISPAIDUSER) {
                     setWallpaper()
                 } else {
-                    var shouldShowInterAd = true
+                    if (adPosition % 2 != 0) {
+                        setWallpaper()
+                    } else {
+                        var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            setWallpaper()
-                            shouldShowInterAd = false // Skip showing the ad for this action
+                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                            if (isAdded) {
+                                checkInter = false
+                                setWallpaper()
+                                shouldShowInterAd = false // Skip showing the ad for this action
+                            }
+                        }
+
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                            if (isAdded) {
+                                checkAppOpen = false
+                                setWallpaper()
+                                Log.e(TAG, "app open showed")
+                                shouldShowInterAd = false // Skip showing the ad for this action
+                            }
+                        }
+
+                        if (shouldShowInterAd) {
+                            showInterAd() // Show the interstitial ad if no conditions were met
                         }
                     }
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            setWallpaper()
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showInterAd() // Show the interstitial ad if no conditions were met
-                    }
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            setWallpaper()
-//                            Log.e("TAG", "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd()
-//                    }
-
-
                 }
             }
 
@@ -306,7 +281,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     Pair("action_name", "SetLiveWallScr_BackBt_Click")
                 )
             }
-            Constants.checkInter = false
+            checkInter = false
             checkAppOpen = false
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
@@ -336,8 +311,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 binding.setLiked.setImageResource(R.drawable.button_like_selected)
                 Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
             }
-            Constants.checkInter = false
-            Constants.checkAppOpen = false
+            checkInter = false
+            checkAppOpen = false
             addFavourite(requireContext(), binding.setLiked)
         }
 
@@ -409,8 +384,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     getUserIdDialog()
                 }
             }
-            Constants.checkInter = false
-            Constants.checkAppOpen = false
+            checkInter = false
+            checkAppOpen = false
         }
     }
 
@@ -438,13 +413,13 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         val dialog = Dialog(requireContext())
         val bindingDialog =
             DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(bindingDialog.root)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(width, height)
-        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog?.setCancelable(false)
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
 
         if (AdConfig.iapScreenType == 0) {
             bindingDialog.upgradeButton.visibility = View.GONE
@@ -452,10 +427,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             bindingDialog.dividerEnd.visibility = View.INVISIBLE
             bindingDialog.dividerStart.visibility = View.INVISIBLE
         }
-//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
 
-
-        bindingDialog.watchAds?.setOnClickListener {
+        bindingDialog.watchAds.setOnClickListener {
             dialog.dismiss()
 
             rewardAd.showAd(
@@ -490,15 +463,15 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         }
 
-        bindingDialog.upgradeButton?.setOnClickListener {
+        bindingDialog.upgradeButton.setOnClickListener {
             dialog.dismiss()
             findNavController().navigate(R.id.IAPFragment)
         }
-        bindingDialog.cancelDialog?.setOnClickListener {
-            dialog?.dismiss()
+        bindingDialog.cancelDialog.setOnClickListener {
+            dialog.dismiss()
         }
 
-        dialog?.show()
+        dialog.show()
     }
 
     fun setWallpaper() {
@@ -623,21 +596,20 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         oldFilePath: String?,
         newFilePath: String?
     ) {
-        val oldFile = File(oldFilePath)
-        val newFile = File(newFilePath)
+        val oldFile = File(oldFilePath!!)
+        val newFile = File(newFilePath!!)
 
         // Make sure both old and new files exist before proceeding
         if (oldFile.exists() && newFile.exists()) {
             // Get the MIME type of the file
-            val mimeType = getMimeType(newFilePath!!)
+            val mimeType = getMimeType(newFilePath)
 
             // Notify the system about the file name change
             MediaScannerConnection.scanFile(
                 context,
                 arrayOf(oldFile.absolutePath, newFile.absolutePath),
                 arrayOf(mimeType, mimeType)
-            ) { path, uri ->
-                // File scan completed
+            ) { _, _ ->
 
                 Toast.makeText(
                     context,
@@ -741,7 +713,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             Toast.makeText(requireContext(), "Wallpaper downloaded", Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
             Toast.makeText(requireContext(), "Download failed", Toast.LENGTH_SHORT).show()
-            // Handle error
         }
     }
 
@@ -759,15 +730,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    val message = response.body()?.string()
-                    Log.e("TAG", "onResponse: $message")
-//                    if (message == "Liked") {
-////                        livewallpaper.id = true
-//                        favouriteButton.setImageResource(R.drawable.button_like_selected)
-//                    } else {
-//                        favouriteButton.setImageResource(R.drawable.button_like)
-////                        arrayList[position]?.liked = false
-//                    }
                     favouriteButton.isEnabled = true
                 } else {
                     favouriteButton.isEnabled = true
@@ -788,7 +750,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     override fun onResume() {
         super.onResume()
 
-        if (checkWallpaper){
+        if (checkWallpaper) {
             lifecycleScope.launch {
                 checkWallpaperActive()
             }
@@ -871,7 +833,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-//        requireContext().unregisterReceiver(wallpaperSetReceiver)
     }
 
     override fun onAdDismiss() {

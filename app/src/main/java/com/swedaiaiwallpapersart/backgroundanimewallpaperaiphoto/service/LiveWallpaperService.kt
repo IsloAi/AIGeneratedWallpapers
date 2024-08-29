@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.media.MediaPlayer
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.service.wallpaper.WallpaperService
 import android.util.Log
 import android.view.SurfaceHolder
@@ -81,12 +83,6 @@ class LiveWallpaperService : WallpaperService() {
             startPlayer()
         }
 
-        private fun resetWallpaper() {
-            stopSelf() // Stop the service
-            val intent = Intent(applicationContext, LiveWallpaperService::class.java)
-            applicationContext.startService(intent) // Restart the service
-        }
-
         private fun startPlayer() {
             try {
                 val file = applicationContext.filesDir
@@ -152,8 +148,8 @@ class LiveWallpaperService : WallpaperService() {
 
     companion object {
 
-        const val ACTION_WALLPAPER_SET_SUCCESS = "com.swedaiaiwallpapersart.WALLPAPER_SET_SUCCESS"
-        const val ACTION_WALLPAPER_SET_FAILURE = "com.swedaiaiwallpapersart.WALLPAPER_SET_FAILURE"
+        private const val ACTION_WALLPAPER_SET_SUCCESS = "com.swedaiaiwallpapersart.WALLPAPER_SET_SUCCESS"
+        private const val ACTION_WALLPAPER_SET_FAILURE = "com.swedaiaiwallpapersart.WALLPAPER_SET_FAILURE"
         const val VIDEO_PARAMS_CONTROL_ACTION =
             "com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto"
         private const val KEY_ACTION = "music"
@@ -182,12 +178,10 @@ class LiveWallpaperService : WallpaperService() {
                     Intent(ACTION_WALLPAPER_SET_SUCCESS).apply { context.sendBroadcast(this) }
                 } catch (e: ActivityNotFoundException) {
                     e.printStackTrace()
-                    Toast.makeText(
-                        context,
-                        "This device doesn't support Live Wallpaper",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                    val handler = Handler(Looper.getMainLooper())
+                    handler.post {
+                        Toast.makeText(context, "This device doesn't support Live Wallpaper", Toast.LENGTH_SHORT).show()
+                    }
                     // Send failure broadcast
                     Intent(ACTION_WALLPAPER_SET_FAILURE).apply { context.sendBroadcast(this) }
                 }

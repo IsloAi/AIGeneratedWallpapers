@@ -42,6 +42,8 @@ import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.billing.IKBillingController
+import com.ikame.android.sdk.listener.pub.IKBillingListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.ikame.android.sdk.utils.IKUtils
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -1460,12 +1462,21 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     override fun onResume() {
         super.onResume()
-//        lifecycleScope.launch {
-//            val premium = IKUtils.isUserIAPAvailableAsync()
-//            AdConfig.ISPAIDUSER = premium
-//            Log.e(TAG, "InAppPurchase12: $premium")
-//        }
-        IKSdkController.setEnableShowResumeAds(true)
+        lifecycleScope.launch {
+            IKBillingController.reCheckIAP(object : IKBillingListener {
+                override fun onBillingFail() {
+                    AdConfig.ISPAIDUSER = false
+                    IKSdkController.setEnableShowResumeAds(false)
+                    Log.e(TAG, "InAppPurchase15: false")
+                }
+
+                override fun onBillingSuccess() {
+                    AdConfig.ISPAIDUSER = true
+                    IKSdkController.setEnableShowResumeAds(true)
+                    Log.e(TAG, "InAppPurchase15: true")
+                }
+            },false)
+        }
     }
 
     override fun onNetworkAvailable() {

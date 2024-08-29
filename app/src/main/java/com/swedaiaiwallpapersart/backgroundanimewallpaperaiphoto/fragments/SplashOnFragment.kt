@@ -114,23 +114,20 @@ class SplashOnFragment : Fragment() {
 
         // Check if the user is a premium user
         lifecycleScope.launch {
-//            var premium = false
-//            IKBillingController.reCheckIAP(object :IKBillingListener{
-//                override fun onBillingFail() {
-//
-//                    Log.e(TAG, "InAppPurchase13: $premium")
-//                    premium = false
-//                }
-//
-//                override fun onBillingSuccess() {
-//
-//                    Log.e(TAG, "InAppPurchase15: $premium")
-//                    premium = true
-//                }
-//            },false)
-            val premium = IKUtils.isUserIAPAvailableAsync()
-            AdConfig.ISPAIDUSER = premium
-            Log.e(TAG, "InAppPurchase123: $premium")
+
+//            val premium = IKUtils.isUserIAPAvailableAsync()
+            IKBillingController.reCheckIAP(object :IKBillingListener{
+                override fun onBillingFail() {
+                    AdConfig.ISPAIDUSER = false
+                    Log.e(TAG, "InAppPurchase13: false")
+
+                }
+
+                override fun onBillingSuccess() {
+                    AdConfig.ISPAIDUSER = true
+                    Log.e(TAG, "InAppPurchase13: true")
+                }
+            },false)
             if (AdConfig.ISPAIDUSER) {
                 binding.adsView.visibility = View.GONE
             } else {

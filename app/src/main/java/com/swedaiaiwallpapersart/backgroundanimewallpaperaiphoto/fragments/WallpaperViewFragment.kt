@@ -1313,8 +1313,10 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private fun interstitialAdWithToast(message: String, dialog: BottomSheetDialog) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-        dialog.dismiss()
+        if (isAdded){
+            Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
     }
 
     private fun mSaveMediaToStorage(bitmap: Bitmap?) {
