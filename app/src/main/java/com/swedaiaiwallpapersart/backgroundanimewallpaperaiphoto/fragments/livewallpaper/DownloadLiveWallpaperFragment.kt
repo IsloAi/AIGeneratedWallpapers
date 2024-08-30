@@ -16,7 +16,6 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
-import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -36,6 +35,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.Dispatchers
@@ -45,9 +45,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.io.FileOutputStream
-import java.io.InputStream
-
 
 class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
@@ -64,8 +61,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     val TAG = "DOWNLOAD_SCREEN"
 
     var showAd :Boolean? = false
-//    var checkAppOpen = false
-
 
     val interAd = IKInterstitialAd()
     override fun onCreateView(
@@ -88,7 +83,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         }else{
             loadAd()
             interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
             interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
@@ -145,8 +139,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
                 override fun onAdShowed() {
                     if (isAdded && view != null) {
-                        // Modify view visibility here
-//                        binding.adsView.reCallLoadAd(this)
                         binding.adsView.visibility = View.VISIBLE
                     }
                 }
@@ -169,9 +161,9 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 }else{
                     var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && checkInter) {
                         if (isAdded) {
-                            Constants.checkInter = false
+                            checkInter = false
                             navigateToPreview()
                             shouldShowInterAd = false // Skip showing the ad for this action
                         }
@@ -189,17 +181,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                     if (shouldShowInterAd) {
                         showInterAd()
                     }
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            navigateToPreview()
-//                            Log.e(TAG, "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd()
-//                    }
-
-
                 }
             }
         }
@@ -210,8 +191,8 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Backbutton_click"))
             }
 
-            Constants.checkInter = false
-            Constants.checkAppOpen = false
+            checkInter = false
+            checkAppOpen = false
             findNavController().popBackStack()
         }
     }
@@ -244,11 +225,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     }
 
     private fun initObservers(){
-
-//        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
-
-        val file = requireContext().filesDir
-        val video = File(file,"video.mp4")
         sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner){wallpaper ->
             if (wallpaper.isNotEmpty()){
 
@@ -256,12 +232,9 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
                 if (BlurView.filePath == ""){
                     Log.e(TAG, "initObservers: "+wallpaper[0] )
-                    downloadVideo(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].livewallpaper_url,video,wallpaper[0].videoSize)
-
+                    downloadVideo(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].livewallpaper_url,wallpaper[0].videoSize)
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].thumnail_url)
-
-
             }
         }
     }
@@ -281,9 +254,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
-
-
-
                 }
                 override fun onLoadCleared(placeholder: Drawable?) {
                 } })
@@ -291,10 +261,9 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
 
 
-    private fun downloadVideo(url: String, destinationFile: File,size:Float) {
-        Log.e(TAG, "downloadVideo: "+url )
+    private fun downloadVideo(url: String,size:Float) {
+        Log.e(TAG, "downloadVideo: $url")
 
-//        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".mp4"
 
@@ -381,19 +350,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     private fun animateDots(textView: TextView) {
         dotCount = (dotCount + 1) % 4
         val dots = ".".repeat(dotCount)
-        textView.text = "Downloading$dots"
-    }
-
-
-
-    // Function for saving video file directly to the destination file
-    private fun saveVideoToFile(inputStream: InputStream, destinationFile: File) {
-        val outputStream = FileOutputStream(destinationFile)
-        inputStream.use { input ->
-            outputStream.use { output ->
-                input.copyTo(output)
-            }
-        }
+        textView.text = "Downloading $dots"
     }
 
     override fun onDestroyView() {

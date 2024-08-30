@@ -21,9 +21,6 @@ class SaveStateViewModel:ViewModel() {
         catList.addAll(list)
     }
 
-
-
-
     fun getCatList(): ArrayList<CatResponse> {
         return catList
     }

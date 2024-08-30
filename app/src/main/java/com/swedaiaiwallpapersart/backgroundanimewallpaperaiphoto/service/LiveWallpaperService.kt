@@ -26,7 +26,6 @@ class LiveWallpaperService : WallpaperService() {
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(applicationContext)
-
     }
 
     internal inner class WallpaperVideoEngine : Engine() {
