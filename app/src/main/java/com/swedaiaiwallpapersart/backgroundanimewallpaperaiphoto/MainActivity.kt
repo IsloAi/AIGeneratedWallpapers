@@ -720,7 +720,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         AdConfig.BASE_URL_DATA = baseUrls
 
-                        Log.e(TAG, "initFirebaseRemoteConfig: " + baseUrls)
+                        Log.e(TAG, "initFirebaseRemoteConfig: $baseUrls")
 
 
 
@@ -734,8 +734,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                             val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
-                            Log.e(TAG, "onUpdate: " + languagescralwayshow)
-                            Log.e(TAG, "onUpdate: regular wallpaper " + regularWallpaperFlow)
+                            Log.e(TAG, "onUpdate: $languagescralwayshow")
+                            Log.e(TAG, "onUpdate: regular wallpaper $regularWallpaperFlow")
                             AdConfig.regularWallpaperFlow = regularWallpaperFlow
                             AdConfig.inAppConfig = languagescralwayshow
 
@@ -769,18 +769,18 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             .split(", ")        // Split the string into an array using ", " as the delimiter
                             .toTypedArray()
 
-                        for (i in 0 until tabNamesArray.size) {
-                            Log.e(TAG, "onUpdate: " + tabNamesArray[i])
+                        for (element in tabNamesArray) {
+                            Log.e(TAG, "onUpdate: $element")
                         }
                         //in next update
 //                        tabNamesArray += "Trending"
 
                         AdConfig.tabPositions = tabNamesArray
 
-                        Log.e(TAG, "onUpdate: " + positionTabs)
+                        Log.e(TAG, "onUpdate: $positionTabs")
 
                         AdConfig.showOnboarding = onboarding
-                        Log.e(TAG, "onUpdate: " + onboarding)
+                        Log.e(TAG, "onUpdate: $onboarding")
                         Log.e("TAG update", "initFirebaseRemoteConfig: $welcomeMessage")
 
                         try {
@@ -896,12 +896,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val baseUrls = remoteConfig["dataUrl"].asString()
 
         AdConfig.BASE_URL_DATA = baseUrls
-//        AdConfig.BASE_URL_DATA = "https://4kwallpaper-zone.b-cdn.net"
 
+        Log.e(TAG, "initFirebaseRemoteConfig: $baseUrls")
 
-        Log.e(TAG, "initFirebaseRemoteConfig: " + baseUrls)
-
-        Log.e(TAG, "onUpdate: " + inAppConfig)
+        Log.e(TAG, "onUpdate: $inAppConfig")
 
         try {
             val categoryOrderArray =
@@ -919,7 +917,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
             val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
 
-            Log.e(TAG, "initFirebaseRemoteConfig: "+languagesOrderArray )
+            Log.e(TAG, "initFirebaseRemoteConfig: $languagesOrderArray")
 
             AdConfig.languagesOrder = languagesOrderArray
 
@@ -942,8 +940,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
             val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
-            Log.e(TAG, "onUpdate: " + languagescralwayshow)
-            Log.e(TAG, "onUpdate: regular wallpaper " + regularWallpaperFlow)
+            Log.e(TAG, "onUpdate: $languagescralwayshow")
+            Log.e(TAG, "onUpdate: regular wallpaper $regularWallpaperFlow")
             AdConfig.regularWallpaperFlow = regularWallpaperFlow
             AdConfig.inAppConfig = languagescralwayshow
 
@@ -991,14 +989,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             .toTypedArray()
 
         for (element in tabNamesArray) {
-            Log.e(TAG, "onUpdate: " + element)
+            Log.e(TAG, "onUpdate: $element")
         }
-
-        //in next update
-//        tabNamesArray += "Charging Battery"
-
-//        tabNamesArray += "Trending"
-
 
         AdConfig.tabPositions = tabNamesArray
         AdConfig.showOnboarding = onboarding
@@ -1092,7 +1084,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         dialog.findViewById<TextView>(R.id.titleOfPromptsCat)?.text = "$name prompts"
         val promptRecyclerView = dialog.findViewById<RecyclerView>(R.id.promptsRecyclerView)
         val applyButton: Button = dialog.findViewById(R.id.applButton)!!
-        //styleRecyclerView(styleRecyclerView)
         promptRecyclerView(promptRecyclerView, name, applyButton, editPrompt, dialog)
         dialog.show()
 
@@ -1498,7 +1489,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
             alertDialog = builder.create()
 
-            // Check if the activity is still running before showing the dialog
             alertDialog?.show()
         }
 
@@ -1508,7 +1498,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     private fun dismissNoInternetDialog() {
         lifecycleScope.launch(Dispatchers.Main) {
             alertDialog?.dismiss()
-
         }
     }
 }

@@ -3,8 +3,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import androidx.fragment.app.FragmentStatePagerAdapter
-
 
 class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm!!,
     BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
@@ -18,7 +16,7 @@ class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm!!,
         return mFragmentList.size
     }
 
-    override fun getPageTitle(position: Int): CharSequence? {
+    override fun getPageTitle(position: Int): CharSequence {
         return mFragmentTitleList[position]
     }
 

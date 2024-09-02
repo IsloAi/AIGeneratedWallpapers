@@ -115,7 +115,6 @@ class SplashOnFragment : Fragment() {
         // Check if the user is a premium user
         lifecycleScope.launch {
 
-//            val premium = IKUtils.isUserIAPAvailableAsync()
             IKBillingController.reCheckIAP(object :IKBillingListener{
                 override fun onBillingFail() {
                     AdConfig.ISPAIDUSER = false
@@ -128,6 +127,7 @@ class SplashOnFragment : Fragment() {
                     Log.e(TAG, "InAppPurchase13: true")
                 }
             },false)
+
             if (AdConfig.ISPAIDUSER) {
                 binding.adsView.visibility = View.GONE
             } else {
@@ -199,20 +199,22 @@ class SplashOnFragment : Fragment() {
                 IKSdkController
                     .loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
                         override fun onAdsDismiss() {
-                            moveNext = true
-                            Constants.checkAppOpen = true
-                            navigateToNextScreen()
-                            IKSdkController.setEnableShowResumeAds(true)
+                            if (isAdded){
+                                moveNext = true
+                                Constants.checkAppOpen = true
+                                navigateToNextScreen()
+                                IKSdkController.setEnableShowResumeAds(true)
+                            }
 
                         }
 
                         override fun onAdsShowFail(error: IKAdError) {
                             Log.e(TAG, "onAdsShowFail: $error")
-//
+                            if (isAdded){
+                                navigateToNextScreen()
 
-                            navigateToNextScreen()
-
-                            IKSdkController.setEnableShowResumeAds(true)
+                                IKSdkController.setEnableShowResumeAds(true)
+                            }
                         }
 
                         override fun onAdsShowed() {
@@ -227,7 +229,9 @@ class SplashOnFragment : Fragment() {
                 if (AdConfig.ISPAIDUSER) {
                     delay(3000)
                 }
-                navigateToNextScreen()
+                if (isAdded){
+                    navigateToNextScreen()
+                }
             }
         }
 
@@ -236,7 +240,7 @@ class SplashOnFragment : Fragment() {
 
 
     private fun navigateToNextScreen() {
-        if (lan?.isEmpty() == true && isAdded) {
+        if (lan.isEmpty() && isAdded) {
             hasNavigated = true
             findNavController().navigate(R.id.localizationFragment)
         } else {
@@ -294,7 +298,9 @@ class SplashOnFragment : Fragment() {
         val lan = MySharePreference.getLanguage(requireContext())
 
         if (counter > 0) {
-            navigateToNextScreen()
+            if (isAdded){
+                navigateToNextScreen()
+            }
         }
         handleAppResume()
 
@@ -309,7 +315,9 @@ class SplashOnFragment : Fragment() {
 
     private fun handleAppResume() {
         if (moveNext && !hasNavigated) {
-            navigateToNextScreen()
+            if (isAdded){
+                navigateToNextScreen()
+            }
         } else {
             Log.e("TAG", "handleAppResume: ")
         }

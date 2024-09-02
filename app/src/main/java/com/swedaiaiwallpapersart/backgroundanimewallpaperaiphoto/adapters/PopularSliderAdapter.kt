@@ -31,18 +31,6 @@ class PopularSliderAdapter(welcomeItems: List<Int>,var positionCallback: joinBut
         val item = welcomeItems[position] // Caches both original & resized image
 
         when (position) {
-//            0 -> {
-//                holder.binding.bannerInfoleft.visibility = View.GONE
-//                holder.binding.bannerInforight.visibility = View.VISIBLE
-//
-//                holder.binding.heading.text = "Generative AI"
-//
-//                holder.binding.foregroundImage.setImageResource(R.drawable.banner_gen_ai_foreground)
-//                Glide.with(holder.itemView.context)
-//                    .load(R.drawable.banner_gen_ai_image)
-//                    .into(holder.binding.onBoardImg)
-//
-//            }
             0 -> {
                 holder.binding.bannerInfoleft.visibility = View.VISIBLE
                 holder.binding.bannerInforight.visibility = View.GONE

@@ -35,6 +35,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager.widget.ViewPager
 import com.ikame.android.sdk.IKSdkController
 
 import com.ikame.android.sdk.listener.keep.SDKNewVersionUpdateCallback
@@ -200,8 +201,8 @@ class HomeTabsFragment : Fragment() {
         loadbannerAd()
         setGradienttext()
         setViewPager()
-        initTabs()
         setEvents()
+
         lifecycleScope.launch {
             IKSdkController.checkUpdateApp(object: SDKNewVersionUpdateCallback {
                 override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
@@ -220,7 +221,7 @@ class HomeTabsFragment : Fragment() {
 
                         }
 
-                        Log.e("TAG", "onUpdateAvailable: "+version +versionCode )
+                        Log.e("TAG", "onUpdateAvailable: $version$versionCode")
                     } catch (e: PackageManager.NameNotFoundException) {
                         e.printStackTrace()
                     }
@@ -265,7 +266,7 @@ class HomeTabsFragment : Fragment() {
         IKTrackingHelper.sendTracking( eventName, *param)
     }
 
-    fun feedback1Sheet() {
+    private fun feedback1Sheet() {
 
         if (isBottomSheetVisible) {
             return
@@ -312,7 +313,7 @@ class HomeTabsFragment : Fragment() {
         isBottomSheetVisible = true
     }
 
-    fun googleInAppRate() {
+    private fun googleInAppRate() {
         try {
             viewLifecycleOwner.lifecycleScope.launch {
                 if (isAdded && isResumed) {
@@ -343,7 +344,7 @@ class HomeTabsFragment : Fragment() {
 
 
 
-    fun feedbackRateSheet() {
+    private fun feedbackRateSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackRateBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
@@ -368,7 +369,7 @@ class HomeTabsFragment : Fragment() {
         bottomSheetDialog.show()
     }
 
-    fun feedbackQuestionSheet() {
+    private fun feedbackQuestionSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackQuestionBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
@@ -484,20 +485,20 @@ class HomeTabsFragment : Fragment() {
     private fun getUserIdDialog() {
         val dialogBinding = UpdateDialogBinding.inflate(layoutInflater)
         val dialog = Dialog(requireContext())
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(dialogBinding.root)
-        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog?.setCancelable(false)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(dialogBinding.root)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
 
         dialogBinding.btnYes.setOnClickListener {
             launchUpdateFlow()
         }
 
         dialogBinding.btnNo.setOnClickListener {
-            dialog?.dismiss()
+            dialog.dismiss()
         }
 
-        dialog?.show()
+        dialog.show()
     }
 
 
@@ -557,11 +558,7 @@ class HomeTabsFragment : Fragment() {
         }
     }
 
-
-
-
-
-    fun loadbannerAd(){
+    private fun loadbannerAd(){
         if (AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE
         }else{
@@ -626,8 +623,10 @@ class HomeTabsFragment : Fragment() {
                     binding.viewPager.setCurrentItem(0)
                 }else{
                     if (AdConfig.ISPAIDUSER){
-                        exit = true
-                        existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                        if (isAdded){
+                            exit = true
+                            existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                        }
                     }else{
                         interAd.showAdBackApp(requireActivity(),object :IKShowAdListener{
                             override fun onAdsDismiss() {
@@ -638,8 +637,10 @@ class HomeTabsFragment : Fragment() {
                             }
 
                             override fun onAdsShowFail(error: IKAdError) {
-                                exit = true
-                                existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                                if (isAdded){
+                                    exit = true
+                                    existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
+                                }
                             }
 
                         })
@@ -687,7 +688,7 @@ class HomeTabsFragment : Fragment() {
         binding.toolTxt.paint.shader = shader
     }
 
-    fun initTabs(){
+    private fun initTabs(){
 
         val images = generateImagesArray(AdConfig.tabPositions)
         AdConfig.tabPositions = AdConfig.tabPositions.map { if (it == "4K") "Car" else it }.toTypedArray()
@@ -814,19 +815,40 @@ class HomeTabsFragment : Fragment() {
         return tabNames.map { tabIconMap[it.trim()] ?: R.drawable.tab_icon_popular }.toTypedArray()
     }
 
-    fun setViewPager(){
+    private fun setViewPager(){
         val adapter= ViewPagerAdapter(childFragmentManager)
 
         for (tabName in AdConfig.tabPositions) {
             val fragment = getFragmentForTab(tabName)
             adapter.addFragment(fragment, tabName)
         }
-        binding.viewPager.adapter=adapter
+        binding.viewPager.adapter= adapter
         binding.viewPager.offscreenPageLimit = 8
+        binding.viewPager.isSaveEnabled = false
         binding.tabLayout.setupWithViewPager(binding.viewPager)
+
+        initTabs()
+        binding.viewPager.setCurrentItem(viewModel.getTab(), false)
+        updateTabAppearance(binding.tabLayout.getTabAt(viewModel.getTab())!!,true)
+
+        binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                // No need to implement
+            }
+
+            override fun onPageSelected(position: Int) {
+                if (isAdded){
+                    viewModel.setTab(position)
+                }
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+                // No need to implement
+            }
+        })
     }
 
-    fun getFragmentForTab(tabName: String): Fragment {
+    private fun getFragmentForTab(tabName: String): Fragment {
         return when (tabName.trim()) {
             "Popular" -> PopularWallpaperFragment()
             "Car" -> HomeFragment()

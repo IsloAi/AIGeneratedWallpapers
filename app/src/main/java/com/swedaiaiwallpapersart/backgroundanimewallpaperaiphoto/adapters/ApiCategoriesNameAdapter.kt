@@ -82,21 +82,26 @@ class ApiCategoriesNameAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val adjustedPosition = calculateAdjustedPosition(position)
 
-        when (holder.itemViewType) {
-            VIEW_TYPE_CONTAINER1 -> {
-                val model = arrayList[adjustedPosition]
-                if (model != null) {
-                    (holder as ViewHolderContainerItem).bind(model)
-                } else {
-                    // Handle null model case (e.g., show a placeholder or do nothing)
-                    Log.e("ApiCategoriesNameAdapter", "Null model at position: $adjustedPosition")
+        if (adjustedPosition >= 0 && adjustedPosition < arrayList.size) {
+            when (holder.itemViewType) {
+                VIEW_TYPE_CONTAINER1 -> {
+                    val model = arrayList[adjustedPosition]
+                    if (model != null) {
+                        (holder as ViewHolderContainerItem).bind(model)
+                    } else {
+                        // Handle null model case (e.g., show a placeholder or do nothing)
+                        Log.e("ApiCategoriesNameAdapter", "Null model at position: $adjustedPosition")
+                    }
+                }
+                VIEW_TYPE_NATIVE_AD -> {
+                    (holder as ViewHolderContainer3).bind()
                 }
             }
-            VIEW_TYPE_NATIVE_AD -> {
-                (holder as ViewHolderContainer3).bind()
-            }
+        } else {
+            Log.e("ApiCategoriesNameAdapter", "Adjusted position out of bounds: $adjustedPosition")
         }
     }
+
 
     override fun getItemCount(): Int {
         if (arrayList.isNotEmpty()) {

@@ -76,11 +76,12 @@ class SearchWallpapersFragment : Fragment() {
     private  val myViewModel: AllWallpapersViewmodel by viewModels()
 
     val interAd = IKInterstitialAd()
+    private val lock = Any()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentSearchWallpapersBinding.inflate(inflater,container,false)
 
@@ -99,13 +100,11 @@ class SearchWallpapersFragment : Fragment() {
             binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
                 override fun onAdShowed() {}
                 override fun onAdShowFail(error: IKAdError) {
-//                    binding.adsView?.visibility = View.GONE
                 }
 
             })
 
             interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
             interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
@@ -151,25 +150,24 @@ class SearchWallpapersFragment : Fragment() {
 //            searchAdapter?.updateData(addedItems!!)
         }
 
-        if (catgories){
-            binding.searchSuggestions.visibility = View.GONE
-            binding.recyclerviewCatgory.visibility = View.VISIBLE
-            binding.recyclerviewAll.visibility = View.GONE
-            editTextLayoutsFocus()
-        }else{
-
-            if (addedItems?.isNotEmpty() == true){
+        if (isAdded){
+            if (catgories){
                 binding.searchSuggestions.visibility = View.GONE
+                binding.recyclerviewCatgory.visibility = View.VISIBLE
+                binding.recyclerviewAll.visibility = View.GONE
+                editTextLayoutsFocus()
             }else{
-                binding.searchSuggestions.visibility = View.VISIBLE
+
+                if (addedItems?.isNotEmpty() == true){
+                    binding.searchSuggestions.visibility = View.GONE
+                }else{
+                    binding.searchSuggestions.visibility = View.VISIBLE
+                }
+                binding.recyclerviewCatgory.visibility = View.GONE
+                binding.recyclerviewAll.visibility = View.VISIBLE
+                editTextLayoutsFocus()
             }
-            binding.recyclerviewCatgory.visibility = View.GONE
-            binding.recyclerviewAll.visibility = View.VISIBLE
-            editTextLayoutsFocus()
         }
-
-
-
     }
 
     private fun initSearchRv(){
@@ -187,7 +185,9 @@ class SearchWallpapersFragment : Fragment() {
                 catgories = false
 
                 if (AdConfig.ISPAIDUSER){
-                    navigateToDestination(items!!,position)
+                    if (isAdded){
+                        navigateToDestination(items!!,position)
+                    }
                 }else{
 
                     interAd.showAd(
@@ -200,7 +200,9 @@ class SearchWallpapersFragment : Fragment() {
                                 }
                             }
                             override fun onAdsDismiss() {
-                                navigateToDestination(items!!,position)
+                                if (isAdded){
+                                    navigateToDestination(items!!,position)
+                                }
                             }
                         }
                     )
@@ -227,7 +229,6 @@ class SearchWallpapersFragment : Fragment() {
             }
 
             override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
             }
         })
         binding.recyclerviewAll.adapter = searchAdapter
@@ -314,10 +315,6 @@ class SearchWallpapersFragment : Fragment() {
 
 
                         }
-
-
-
-//                Log.e("TAG", "afterTextChanged: "+searchInList("Car",cachedCatResponses) )
                 }
 
             })
@@ -338,13 +335,20 @@ class SearchWallpapersFragment : Fragment() {
         callback: (ArrayList<CatResponse?>) -> Unit
     ) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val filteredList = catResponses?.filter { catResponse ->
-                catResponse.Tags?.let { tags ->
-                    tags.split(", ").any { tag ->
-                        tag.contains(searchString, ignoreCase = true)
-                    }
-                } ?: false
+            val filteredList: List<CatResponse?>?
+
+            synchronized(lock) {
+                // Synchronize access to catResponses
+                val localCatResponses = catResponses?.toList()
+                filteredList = localCatResponses?.filter { catResponse ->
+                    catResponse.Tags?.let { tags ->
+                        tags.split(", ").any { tag ->
+                            tag.contains(searchString, ignoreCase = true)
+                        }
+                    } ?: false
+                }
             }
+
             val resultList = ArrayList(filteredList ?: listOf())
             withContext(Dispatchers.Main) {
                 callback(resultList)
@@ -353,34 +357,12 @@ class SearchWallpapersFragment : Fragment() {
     }
 
     private fun initSearchData(){
-//        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-//            if (catResponses != null) {
-//                if (!cachedCatResponses.isNullOrEmpty()){
-//                    cachedCatResponses?.clear()
-//                }
-//                cachedCatResponses?.addAll(catResponses)
-////
-//
-//                Log.e("TAG", "initSearchData: "+catResponses.size )
-//
-//
-//            }else{
-//
-//                Log.e("TAG", "initSearchData: no data" )
-//            }
-//        }
-
-
         myViewModel.allCreations.observe(viewLifecycleOwner){result ->
             when (result) {
                 is Response.Loading -> {
-//                    binding.tvNoData.visibility=View.GONE
-//                    customProgressBar.show(requireContext())
                 }
 
                 is Response.Success -> {
-//                    binding.tvNoData.visibility=View.GONE
-//                    customProgressBar.getDialog()?.dismiss()
                     if (!result.data.isNullOrEmpty()) {
                         result.data.forEach { item ->
                             val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
@@ -393,16 +375,12 @@ class SearchWallpapersFragment : Fragment() {
                 }
 
                 is Response.Error -> {
-//                    binding.tvNoData.visibility=View.VISIBLE
-//                    customProgressBar.getDialog()?.dismiss()
                     Log.e("TAG", "error: ${result.message}")
                     Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
 
                 else -> {
-//                    customProgressBar.getDialog()?.dismiss()
-//                    binding.tvNoData.visibility=View.GONE
                 }
             }
         }

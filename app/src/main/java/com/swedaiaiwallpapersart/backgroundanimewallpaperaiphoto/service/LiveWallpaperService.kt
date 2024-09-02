@@ -132,13 +132,21 @@ class LiveWallpaperService : WallpaperService() {
 
         override fun onDestroy() {
             super.onDestroy()
-            myMediaPlayer?.release()
-            myMediaPlayer = null
-            if (isReceiverRegistered) {
-                unregisterReceiver(liveWallBroadcastReceiver)
-                isReceiverRegistered = false
+            try {
+                myMediaPlayer?.release()
+                myMediaPlayer = null
+
+                if (isReceiverRegistered) {
+                    unregisterReceiver(liveWallBroadcastReceiver)
+                    isReceiverRegistered = false
+                }
+
+                engineInstance = null
+            } catch (e: Exception) {
+                Log.e("LiveWallpaperService", "Error during onDestroy", e)
             }
         }
+
     }
 
     override fun onCreateEngine(): Engine {
@@ -177,8 +185,7 @@ class LiveWallpaperService : WallpaperService() {
                     Intent(ACTION_WALLPAPER_SET_SUCCESS).apply { context.sendBroadcast(this) }
                 } catch (e: ActivityNotFoundException) {
                     e.printStackTrace()
-                    val handler = Handler(Looper.getMainLooper())
-                    handler.post {
+                    Handler(Looper.getMainLooper()).post {
                         Toast.makeText(context, "This device doesn't support Live Wallpaper", Toast.LENGTH_SHORT).show()
                     }
                     // Send failure broadcast

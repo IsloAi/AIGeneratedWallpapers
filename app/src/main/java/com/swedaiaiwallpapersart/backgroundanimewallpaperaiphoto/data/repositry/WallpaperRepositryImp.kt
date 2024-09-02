@@ -187,15 +187,15 @@ class WallpaperRepositryImp@Inject constructor(
 
         try {
             trySend(Response.Loading)
-            Log.e("TAG", "getChargingAnimation: I came here")
+            Log.e("TAG", "getDoubleWallpapers: I came here")
             val resp = webApiInterface.getDoubleWallpapers()
-            Log.e("TAG", "getChargingAnimation: $resp")
+            Log.e("TAG", "getDoubleWallpapers: $resp")
 
             if (resp.isSuccessful){
 
                 trySend(Response.Success(resp.body()?.images))
             }
-            Log.e("TAG", "getChargingAnimation: " )
+            Log.e("TAG", "getDoubleWallpapers: " )
         } catch (e: Exception) {
             e.printStackTrace()
             trySend(Response.Error("unexpected error occoured ${e.message}"))

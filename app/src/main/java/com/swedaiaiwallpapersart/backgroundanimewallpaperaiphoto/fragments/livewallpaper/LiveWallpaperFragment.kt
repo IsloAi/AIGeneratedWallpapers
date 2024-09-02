@@ -268,8 +268,10 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    setDownloadAbleWallpaperAndNavigate(model, true)
+                    if (isAdded){
+                        checkInter = true
+                        setDownloadAbleWallpaperAndNavigate(model, true)
+                    }
                 }
             }
         )

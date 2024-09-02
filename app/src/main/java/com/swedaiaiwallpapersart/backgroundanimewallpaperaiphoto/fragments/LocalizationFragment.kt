@@ -122,7 +122,9 @@ class LocalizationFragment : Fragment() {
         binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"languagescr_bottom",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
-                    binding.adsView.visibility = View.GONE
+                    if (isAdded){
+                        binding.adsView.visibility = View.GONE
+                    }
                 }
 
                 override fun onAdShowed() {
@@ -131,40 +133,6 @@ class LocalizationFragment : Fragment() {
             }
         )
     }
-
-//    fun loadNextAd(){
-//        val adLayout = LayoutInflater.from(activity).inflate(
-//            R.layout.new_native_language,
-//            null, false
-//        ) as? IkmWidgetAdLayout
-//        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-//        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-//        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-//        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-//        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-//
-//        binding.adsView.setCustomNativeAdLayout(
-//            R.layout.shimmer_loading_native,
-//            adLayout!!
-//        )
-//
-//        binding.adsView.loadAd(requireActivity(),"languagescr_bottom","languagescr_bottom",
-//            object : CustomSDKAdsListenerAdapter() {
-//                override fun onAdsLoadFail() {
-//                    super.onAdsLoadFail()
-//                    if (AdConfig.ISPAIDUSER){
-//                        binding.adsView.visibility = View.GONE
-//                    }
-//                    Log.e("TAG", "onAdsLoadFail: native failded " )
-//                }
-//
-//                override fun onAdsLoaded() {
-//                    super.onAdsLoaded()
-//                    Log.e("TAG", "onAdsLoaded: native loaded" )
-//                }
-//            }
-//        )
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -188,7 +156,7 @@ class LocalizationFragment : Fragment() {
         }
     }
 
-    fun initLanguages(){
+    private fun initLanguages(){
         binding.rvLanguages.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.rvLanguages.addItemDecoration(RvItemDecore(2,20,false,10000))
 
@@ -223,7 +191,7 @@ class LocalizationFragment : Fragment() {
     }
 
 
-    fun getDefaultLocaleInfo(): String {
+    private fun getDefaultLocaleInfo(): String {
         val locale = Locale.getDefault()
         val name = locale.displayName
         Log.e(TAG, "getLanguageList: $name")
@@ -232,11 +200,11 @@ class LocalizationFragment : Fragment() {
         return language
     }
 
-    fun getSelectedLanguagePosition(sortedLanguages: ArrayList<DummyModelLanguages>): Int {
+    private fun getSelectedLanguagePosition(sortedLanguages: ArrayList<DummyModelLanguages>): Int {
         return sortedLanguages.indexOfFirst { it.isSelected_lan }
     }
 
-    fun getLanguageList(pos:String): ArrayList<DummyModelLanguages> {
+    private fun getLanguageList(pos:String): ArrayList<DummyModelLanguages> {
         val languagesList = ArrayList<DummyModelLanguages>()
         languagesList.add(DummyModelLanguages("German", "de", R.drawable.flag_gr, false))
         languagesList.add(DummyModelLanguages("Japanese ", "ja", R.drawable.flag_japan, false))
@@ -273,7 +241,7 @@ class LocalizationFragment : Fragment() {
         return languagesList
     }
 
-    fun sortLanguages(languages: ArrayList<DummyModelLanguages>, order: List<String>): List<DummyModelLanguages> {
+    private fun sortLanguages(languages: ArrayList<DummyModelLanguages>, order: List<String>): List<DummyModelLanguages> {
         val orderMap = order.withIndex().associate { it.value.trim() to it.index }
 
         // Sort the languages based on the order specified in the map
@@ -294,16 +262,6 @@ class LocalizationFragment : Fragment() {
                 }
             })
         }
-//        binding.backButton.setOnClickListener {
-//            if (exit){
-//                requireActivity().finishAffinity()
-//            }else{
-//                    findNavController().navigateUp()
-//
-//            }
-//
-//        }
-
 
         binding.applyLanguage.setOnClickListener {
 

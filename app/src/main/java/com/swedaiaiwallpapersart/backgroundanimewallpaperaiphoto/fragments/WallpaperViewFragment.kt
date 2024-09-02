@@ -377,7 +377,7 @@ class WallpaperViewFragment : Fragment() {
                     hasToNavigateHome = false
                     hasToNavigateAnime = false
                     hasToNavigateList = false
-                    navController?.popBackStack()
+                    navController?.navigateUp()
                 }
             })
 
@@ -644,23 +644,25 @@ class WallpaperViewFragment : Fragment() {
                     "viewlistwallscr_item_vip_reward",
                     adListener = object : IKShowRewardAdListener {
                         override fun onAdsRewarded() {
-                            Log.e("********ADS", "onAdsRewarded: ")
-                            val postData = PostDataOnServer()
-                            val model = arrayList[position]
-                            arrayList[position]?.unlockimges = true
-                            arrayList[position]?.gems = 0
+                            if (isAdded){
+                                Log.e("********ADS", "onAdsRewarded: ")
+                                val postData = PostDataOnServer()
+                                val model = arrayList[position]
+                                arrayList[position]?.unlockimges = true
+                                arrayList[position]?.gems = 0
 
-                            val model1 = arrayList[position]
-                            postData.unLocking(
-                                MySharePreference.getDeviceID(requireContext())!!,
-                                model1!!, requireContext(), 0
-                            )
-                            showInter = false
-                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                            binding.unlockWallpaper.visibility = View.GONE
-                            adapter?.notifyItemChanged(position)
-                            viewPager2?.invalidate()
-                            binding.viewPager.setCurrentItem(position, true)
+                                val model1 = arrayList[position]
+                                postData.unLocking(
+                                    MySharePreference.getDeviceID(requireContext())!!,
+                                    model1!!, requireContext(), 0
+                                )
+                                showInter = false
+                                binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                                binding.unlockWallpaper.visibility = View.GONE
+                                adapter?.notifyItemChanged(position)
+                                viewPager2?.invalidate()
+                                binding.viewPager.setCurrentItem(position, true)
+                            }
                         }
                         override fun onAdsShowFail(error: IKAdError) {
                             if (isAdded){
@@ -1126,18 +1128,14 @@ class WallpaperViewFragment : Fragment() {
                     response: Response<ResponseBody>
                 ) {
                     if (response.isSuccessful) {
-
-
                         Log.e("TAG", "onResponse: success" + response.body().toString())
                     } else {
                         Log.e("TAG", "onResponse: not success")
-//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                     }
                 }
 
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.e("TAG", "onResponse: failed")
-//                    Toast.makeText(requireContext(), "onFailure error", Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -1169,46 +1167,6 @@ class WallpaperViewFragment : Fragment() {
         return null
     }
 
-    //    private fun congratulationsDialog() {
-//        val dialog = Dialog(requireContext())
-//        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
-//        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-//        dialog.setContentView(bindingDialog.root)
-//        val width = WindowManager.LayoutParams.MATCH_PARENT
-//        val height = WindowManager.LayoutParams.WRAP_CONTENT
-//        dialog.window!!.setLayout(width, height)
-//        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-//        dialog.setCancelable(false)
-////        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-//
-//
-//        bindingDialog.continueBtn.setOnClickListener {
-//            dialog.dismiss()
-//            if (AdConfig.regularWallpaperFlow == 1){
-//                if (wall == "home"){
-//                    wallFromHome = true
-//                }else if (wall == "popular"){
-//                    wallFromPopular = true
-//                }else if (wall == "anime"){
-//                    wallFromAnime = true
-//                }else{
-//                   wallFromList = true
-//                }
-//                if (from == "trending"){
-//                    findNavController().popBackStack(R.id.homeTabsFragment, false)
-//                }else{
-//                    findNavController().popBackStack(R.id.listViewFragment,false)
-//                }
-//            }else if (AdConfig.regularWallpaperFlow == 2){
-//                //do nothing
-//            }else{
-//                //doniothing
-//            }
-//
-//        }
-//
-//        dialog.show()
-//    }
     @SuppressLint("ResourceType")
     private fun openPopupMenu(model: CatResponse) {
         if (!isAdded) return

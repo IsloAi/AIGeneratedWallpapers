@@ -24,6 +24,7 @@
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/sliderImagreviewCorners"
             android:id="@+id/trendingImage"
+            app:strokeColor="@null"
             />
 
 

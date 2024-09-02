@@ -10,7 +10,7 @@ class SaveStateViewModel:ViewModel() {
     private var myData: Boolean = true
 
 
-    private var currentTab:String = ""
+    private var currentTab:Int = 0
     private val catList: ArrayList<CatResponse> = ArrayList()
 
     private val _selectedTab = MutableLiveData<String>()
@@ -35,8 +35,12 @@ class SaveStateViewModel:ViewModel() {
     }
 
 
-    fun getTab():String{
+    fun getTab():Int{
         return currentTab
+    }
+
+    fun setTab(tab:Int){
+        currentTab = tab
     }
 
     fun getData(): Boolean {

@@ -25,6 +25,7 @@
                 android:src="@drawable/sign_up_image"
                 android:id="@+id/topImage"
                 android:adjustViewBounds="true"
+                app:strokeColor="@null"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/customRoundedImageView"
                 app:layout_constraintHeight_percent=".3"

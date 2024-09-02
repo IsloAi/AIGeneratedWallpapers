@@ -189,7 +189,9 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 Log.e(TAG, "getPosition:$position odd " )
 
                 if (AdConfig.ISPAIDUSER){
-                    navigateToDestination(allItems!!,position)
+                    if (isAdded){
+                        navigateToDestination(allItems!!,position)
+                    }
 
                 }else{
                     var shouldShowInterAd = true
@@ -214,16 +216,6 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                     if (shouldShowInterAd) {
                         showInterAd(allItems, position)
                     }
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            navigateToDestination(allItems!!, position)
-//                            Log.e(TAG, "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd(allItems, position)
-//                    }
-
                 }
 
 
@@ -273,8 +265,10 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    navigateToDestination(allItems!!, position)
+                    if (isAdded) {
+                        Constants.checkInter = true
+                        navigateToDestination(allItems!!, position)
+                    }
                 }
             }
         )

@@ -239,14 +239,7 @@ class FavouriteFragment : Fragment() {
             if (catResponses != null) {
                 if (MySharePreference.getFavouriteSaveState(requireContext())==1){
                     binding.emptySupport.visibility = View.GONE
-                    binding.aiRecyclerView.visibility = View.VISIBLE
-//                    val randomNumber = if (catResponses.size > 1) {
-//                        Random.nextInt(0, catResponses.size - 1)
-//                    } else {
-//                        0
-//                    }
-
-//                    getBitmapFromGlide(catResponses[randomNumber].compressed_image_url!!)
+                    binding.aiRecyclerView.visibility = VISIBLE
                 }
                 isLoadedData = true
                 cachedCatResponses = catResponses as ArrayList
@@ -258,7 +251,7 @@ class FavouriteFragment : Fragment() {
             }else{
                 if (MySharePreference.getFavouriteSaveState(requireContext())==1){
                     isLoadedData = true
-                    binding.emptySupport.visibility = View.VISIBLE
+                    binding.emptySupport.visibility = VISIBLE
                     binding.aiRecyclerView.visibility = View.GONE
                 }
 
@@ -279,23 +272,12 @@ class FavouriteFragment : Fragment() {
         for (i in data.indices){
             if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
                 newData.add(null)
-
-
-
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
-
             }else if (i == firstLine){
                 newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
             newData.add(data[i])
 
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-
-
-
 
         return newData
     }
@@ -329,21 +311,6 @@ class FavouriteFragment : Fragment() {
             }
 
         }
-//        liveWallpaperViewModel.wallpaperData.observe(viewLifecycleOwner) { catResponses ->
-//            if (catResponses != null) {
-//                Log.e("TAG", "loadData: "+catResponses )
-//                if (view != null) {
-//                    // If the view is available, update the UI
-//
-//                    val filtered = catResponses.filter { it.liked }
-////
-//                    val list = addNullValueInsideArrayLive(filtered)
-//                    updateUIWithFetchedDataLive(list)
-//                }
-//            }else{
-//
-//            }
-//        }
     }
 
     private fun updateUIWithFetchedDataLive(catResponses: ArrayList<LiveWallpaperModel?>) {
@@ -363,7 +330,7 @@ class FavouriteFragment : Fragment() {
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
-                    adapter?.nativeAdView = adObject
+                    adapter.nativeAdView = adObject
                     binding.liveRecyclerview.adapter = adapter
                 }
             }
@@ -391,7 +358,9 @@ class FavouriteFragment : Fragment() {
                             }
                         }
                         override fun onAdsDismiss() {
-                            navigateToDestination(list,position)
+                            if (isAdded){
+                                navigateToDestination(list,position)
+                            }
                         }
                     }
                 )

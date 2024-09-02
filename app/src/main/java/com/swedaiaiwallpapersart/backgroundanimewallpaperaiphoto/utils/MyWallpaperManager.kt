@@ -116,25 +116,25 @@ class MyWallpaperManager(var context: Context, var activity: Activity) {
         }
     }
 
-    fun doubleWallpaper(bitLock:Bitmap,bitHome:Bitmap) {
-        var bitmapLock = bitLock
-        var bitmapHome = bitHome
+    fun doubleWallpaper(bitLock: Bitmap, bitHome: Bitmap) {
         val wallpaperManager = WallpaperManager.getInstance(context)
-        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+
+        val metrics = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             val metrics = DisplayMetrics()
             activity.windowManager.defaultDisplay.getMetrics(metrics)
-            val heigh = metrics.heightPixels
-            val widt = metrics.widthPixels
-            bitmapLock = Bitmap.createScaledBitmap(bitmapLock, widt, heigh, true)
-            bitmapHome = Bitmap.createScaledBitmap(bitHome, widt, heigh, true)
+            metrics
         } else {
             val size = Point()
-            activity.getWindowManager().getDefaultDisplay().getRealSize(size)
-            val w: Int = size.x
-            val h: Int = size.y
-            bitmapLock = Bitmap.createScaledBitmap(bitmapLock, w, h, true)
-            bitmapHome = Bitmap.createScaledBitmap(bitmapHome, w, h, true)
+            activity.windowManager.defaultDisplay.getRealSize(size)
+            DisplayMetrics().apply {
+                widthPixels = size.x
+                heightPixels = size.y
+            }
         }
+
+        val bitmapLock = Bitmap.createScaledBitmap(bitLock, metrics.widthPixels, metrics.heightPixels, true)
+        val bitmapHome = Bitmap.createScaledBitmap(bitHome, metrics.widthPixels, metrics.heightPixels, true)
+
         try {
             wallpaperManager.setBitmap(bitmapHome, null, true, WallpaperManager.FLAG_SYSTEM)
             wallpaperManager.setBitmap(bitmapLock, null, true, WallpaperManager.FLAG_LOCK)

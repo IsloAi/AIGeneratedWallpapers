@@ -25,6 +25,7 @@
                 android:src="@drawable/sign_in_image"
                 app:layout_constraintHeight_percent=".3"
                 app:layout_constraintTop_toTopOf="parent"
+                app:strokeColor="@null"
                 app:shapeAppearanceOverlay="@style/customRoundedImageView2"
                 tools:layout_editor_absoluteX="0dp" />
             <TextView

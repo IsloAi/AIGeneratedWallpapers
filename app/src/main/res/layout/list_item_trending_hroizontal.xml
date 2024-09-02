@@ -23,6 +23,7 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             app:shapeAppearanceOverlay="@style/sliderImagreviewCorners"
+            app:strokeColor="@null"
             android:id="@+id/trendingImage"
             />
 

@@ -342,7 +342,9 @@ class HomeFragment : Fragment(), AdEventListener {
 
                         oldPosition = position
                         if (AdConfig.ISPAIDUSER){
-                            navigateToDestination(allItems,position)
+                            if (isAdded){
+                                navigateToDestination(allItems,position)
+                            }
                         }else{
                             var shouldShowInterAd = true
 
@@ -366,17 +368,6 @@ class HomeFragment : Fragment(), AdEventListener {
                             if (shouldShowInterAd) {
                                 showInterAd(allItems, position) // Show the interstitial ad if no conditions were met
                             }
-//                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                                if (isAdded){
-//                                    checkAppOpen = false
-//                                    navigateToDestination(allItems,position)
-//                                    Log.e(TAG, "app open showed: ", )
-//                                }
-//                            }else{
-//                                showInterAd(allItems, position)
-//                            }
-
-
                         }
 
 
@@ -524,7 +515,9 @@ class HomeFragment : Fragment(), AdEventListener {
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
             if (!WallpaperViewFragment.isNavigated && hasToNavigateHome){
-                navigateToDestination(addedItems!!,oldPosition)
+                if (isAdded){
+                    navigateToDestination(addedItems!!,oldPosition)
+                }
             }
         }
 

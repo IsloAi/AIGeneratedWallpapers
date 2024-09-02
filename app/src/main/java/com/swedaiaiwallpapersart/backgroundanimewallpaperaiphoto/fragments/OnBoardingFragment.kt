@@ -197,54 +197,51 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
         }
     }
 
-    private fun backHandle(){
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+    private fun backHandle() {
+        val navController = findNavController()
+
+        val backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (isAdded){
-                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+                if (isAdded) {
+                    sendTracking("click_button", Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
                 }
+
                 when (binding.onboardingViewPager.currentItem) {
-                    3 -> {
-                        binding.onboardingViewPager.currentItem =2
-                    }
-                    2 -> {
-                        binding.onboardingViewPager.currentItem =1
-                    }
-                    1 -> {
-                        binding.onboardingViewPager.currentItem =0
-                    }
+                    3 -> binding.onboardingViewPager.currentItem = 2
+                    2 -> binding.onboardingViewPager.currentItem = 1
+                    1 -> binding.onboardingViewPager.currentItem = 0
                     0 -> {
-                        findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                        if (navController.currentDestination?.id == R.id.onBoardingFragment) {
+                            navController.navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                        }
                     }
                 }
             }
-        })
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, backPressedCallback)
 
         if (BuildCompat.isAtLeastT()) {
             requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
-                if (isAdded){
-                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+                if (isAdded) {
+                    sendTracking("click_button", Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
                 }
+
                 when (binding.onboardingViewPager.currentItem) {
-                    3 -> {
-                        binding.onboardingViewPager.currentItem =2
-                    }
-                    2 -> {
-                        binding.onboardingViewPager.currentItem =1
-                    }
-                    1 -> {
-                        binding.onboardingViewPager.currentItem =0
-                    }
+                    3 -> binding.onboardingViewPager.currentItem = 2
+                    2 -> binding.onboardingViewPager.currentItem = 1
+                    1 -> binding.onboardingViewPager.currentItem = 0
                     0 -> {
-                        findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                        if (navController.currentDestination?.id == R.id.onBoardingFragment) {
+                            navController.navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                        }
                     }
                 }
             }
         }
     }
-
 
     private fun sendTracking(
         eventName: String,

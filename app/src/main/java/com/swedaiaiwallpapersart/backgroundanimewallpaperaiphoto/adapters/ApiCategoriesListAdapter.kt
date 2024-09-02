@@ -12,6 +12,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -120,6 +121,8 @@ class ApiCategoriesListAdapter(
 
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (position >= arrayList.size) return
+
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
                 val viewHolderContainer1 = holder as ViewHolderContainer1
@@ -211,8 +214,6 @@ class ApiCategoriesListAdapter(
     var nativeAdView: IkmDisplayWidgetAdView? = null
 
     fun loadad(binding: StaggeredNativeLayoutBinding) {
-
-        Log.e("TAG", "loadad: $tracking")
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(context).inflate(
                 R.layout.native_dialog_layout,
@@ -223,53 +224,46 @@ class ApiCategoriesListAdapter(
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
             adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-            if (nativeAdView != null) {
-                Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ")
-            } else {
 
-                IKSdkController.loadNativeDisplayAd(tracking, object :
-                    IKLoadDisplayAdViewListener {
-                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                        nativeAdView = adObject
-                    }
-
-                    override fun onAdLoadFail(error: IKAdError) {
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: " + error)
-                    }
-                })
-            }
-
-            withContext(this.coroutineContext) {
-                nativeAdView?.let {
-                    binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,
-                        adLayout!!,
-                        tracking,
-                        it,
-                        object : IKShowWidgetAdListener {
-                            override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failded ")
-                                if (statusAd == 0) {
-                                    binding.adsView.visibility = View.GONE
-                                } else {
-                                    if (isNetworkAvailable()) {
-                                        //                                    loadad(holder,binding)
-                                        binding.adsView.visibility = View.VISIBLE
-                                    } else {
-                                        binding.adsView.visibility = View.GONE
-                                    }
-                                }
-                            }
-
-                            override fun onAdShowed() {
-                                binding.adsView.visibility = View.VISIBLE
-                                Log.e("TAG", "onAdsLoaded: native loaded")
-                            }
+            if (nativeAdView == null) {
+                withContext(Dispatchers.IO) {  // Load ad on a background thread
+                    IKSdkController.loadNativeDisplayAd(tracking, object :
+                        IKLoadDisplayAdViewListener {
+                        override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                            nativeAdView = adObject
                         }
-                    )
+
+                        override fun onAdLoadFail(error: IKAdError) {
+                            Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
+                        }
+                    })
                 }
             }
-        }
 
+            nativeAdView?.let {
+                binding.adsView.showWithDisplayAdView(
+                    R.layout.shimmer_loading_native,
+                    adLayout!!,
+                    tracking,
+                    it,
+                    object : IKShowWidgetAdListener {
+                        override fun onAdShowFail(error: IKAdError) {
+                            Log.e("TAG", "onAdsLoadFail: native failed")
+                            binding.adsView.visibility = if (statusAd == 0 || !isNetworkAvailable()) {
+                                View.GONE
+                            } else {
+                                View.VISIBLE
+                            }
+                        }
+
+                        override fun onAdShowed() {
+                            binding.adsView.visibility = View.VISIBLE
+                            Log.e("TAG", "onAdsLoaded: native loaded")
+                        }
+                    }
+                )
+            }
+        }
 
     }
 
@@ -313,11 +307,26 @@ class ApiCategoriesListAdapter(
     }
 
     fun updateData(list: ArrayList<CatResponse?>) {
+        val diffCallback = CatResponseDiffCallback(arrayList, list)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         arrayList.clear()
         arrayList.addAll(list)
-        Log.d(TAG, "updateData123: ${list.size}")
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
+
+    class CatResponseDiffCallback(
+        private val oldList: List<CatResponse?>,
+        private val newList: List<CatResponse?>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize() = oldList.size
+        override fun getNewListSize() = newList.size
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition]?.id == newList[newItemPosition]?.id  // Adjust comparison based on your data
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition] == newList[newItemPosition]
+    }
+
 
     fun getAllItems(): ArrayList<CatResponse?> {
         return arrayList
