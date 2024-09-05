@@ -245,8 +245,6 @@ class FavouriteFragment : Fragment() {
                 cachedCatResponses = catResponses as ArrayList
                 if (view != null) {
                     updateUIWithFetchedData(catResponses)
-
-
                 }
             }else{
                 if (MySharePreference.getFavouriteSaveState(requireContext())==1){
@@ -314,7 +312,6 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun updateUIWithFetchedDataLive(catResponses: ArrayList<LiveWallpaperModel?>) {
-
 
         val adapter = LiveWallpaperAdapter(catResponses, object :
             downloadCallback {

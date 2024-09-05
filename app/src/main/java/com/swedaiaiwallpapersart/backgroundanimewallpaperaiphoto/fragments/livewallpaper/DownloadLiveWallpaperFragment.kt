@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -231,7 +232,8 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePath == ""){
-                    Log.e(TAG, "initObservers: "+wallpaper[0] )
+                    Log.e(TAG, "initObservers123: "+wallpaper[0] )
+                    Log.e(TAG, "initObservers123: "+AdConfig.BASE_URL_DATA)
                     downloadVideo(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].livewallpaper_url,wallpaper[0].videoSize)
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].thumnail_url)
@@ -321,15 +323,17 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                                     sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Successful"))
                                 }
                             }
-
-
-
-
                         }
                     }
 
                     override fun onError(error: ANError?) {
-                        // handle error
+                        if (isAdded){
+                            checkInter = true
+                            checkAppOpen = true
+                            Log.d(TAG, "onErrorVideoDownloadFailed $error")
+                            Toast.makeText(requireContext(), "Server down. Please try again later!", Toast.LENGTH_SHORT).show()
+                            findNavController().navigateUp()
+                        }
                     }
                 })
         }

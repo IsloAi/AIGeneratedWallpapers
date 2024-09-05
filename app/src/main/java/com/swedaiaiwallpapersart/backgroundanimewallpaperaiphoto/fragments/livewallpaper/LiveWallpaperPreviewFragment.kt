@@ -30,6 +30,15 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.C
+import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.exoplayer.DefaultRenderersFactory
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.navigation.fragment.findNavController
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
@@ -146,7 +155,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         initObservers()
-        setWallpaperOnView()
 
         setEvents()
 
@@ -747,15 +755,17 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
 
+    @UnstableApi
     override fun onResume() {
         super.onResume()
+
+        setWallpaperOnView()
 
         if (checkWallpaper) {
             lifecycleScope.launch {
                 checkWallpaperActive()
             }
         }
-        setWallpaperOnView()
     }
 
     private fun checkWallpaperActive() {
@@ -807,31 +817,82 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
 
+    @UnstableApi
     private fun setWallpaperOnView() {
         if (isAdded) {
-            binding.liveWallpaper.setMediaController(null)
-            binding.liveWallpaper.setVideoPath(BlurView.filePath)
+            val renderersFactory = DefaultRenderersFactory(requireContext())
+                .setEnableDecoderFallback(true) // Fallback to software decoding if hardware fails
 
-            binding.liveWallpaper.setOnCompletionListener(OnCompletionListener {
-                if (view != null && isAdded) {
-                    binding.liveWallpaper.start()
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                renderersFactory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF)
+            }else{
+                renderersFactory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
+            }
+            val loadControl = DefaultLoadControl.Builder()
+                .setBufferDurationsMs(
+                    DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
+                    DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
+                    DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+                    DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+                )
+                .setPrioritizeTimeOverSizeThresholds(true)
+                .build()
+
+            val trackSelector = DefaultTrackSelector(requireContext())
+            trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd())
+
+            val exoPlayer = ExoPlayer
+                .Builder(requireContext(),
+                    renderersFactory)
+                .setLoadControl(loadControl)
+                .setTrackSelector(trackSelector)
+                .setUseLazyPreparation(true)
+                .build()
+
+            // Bind the player to the PlayerView (your binding.liveWallpaper)
+            binding.liveWallpaper.player = exoPlayer
+
+            // Prepare the media item
+            val mediaItem = MediaItem.fromUri(BlurView.filePath)
+            exoPlayer.setMediaItem(mediaItem)
+
+            // Set event listeners for playback and error handling
+            exoPlayer.addListener(object : Player.Listener {
+                override fun onPlayerError(error: PlaybackException) {
+                    val errorMessage = when (error.errorCode) {
+                        PlaybackException.ERROR_CODE_DECODING_FAILED -> "The video is malformed."
+                        PlaybackException.ERROR_CODE_REMOTE_ERROR -> "Remote playback error."
+                        else -> "An unknown error occurred. Error code: ${error.errorCode}"
+                    }
+                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onPlaybackStateChanged(playbackState: Int) {
+                    if (playbackState == Player.STATE_ENDED) {
+                        exoPlayer.seekTo(0) // Restart the video when it ends
+                        exoPlayer.playWhenReady = true
+                    }
                 }
             })
 
-            binding.liveWallpaper.setOnPreparedListener { mediaPlayer ->
-                mediaPlayer.isLooping = true
-                mediaPlayer.setVideoScalingMode(MediaPlayer.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING)
+            // Enable looping and scale mode
+            exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
+            exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
+
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
+                // Adjust other parameters if necessary to force lower resolution video rendering
             }
-
-            binding.liveWallpaper.start()
+            // Prepare and start playback
+            exoPlayer.prepare()
+            exoPlayer.playWhenReady = true
         }
-
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.liveWallpaper.player?.release() // Release the player
+        binding.liveWallpaper.player = null
         _binding = null
     }
 

@@ -13,11 +13,19 @@
         android:layout_marginHorizontal="@dimen/_8sdp"
         android:layout_marginVertical="@dimen/_10sdp">
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@color/black"/>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/custom_containerAds"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_15sdp"
             app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
@@ -107,7 +115,6 @@
                 app:layout_constraintEnd_toEndOf="@+id/custom_headline"
                 app:layout_constraintStart_toStartOf="@+id/custom_headline"
                 app:layout_constraintTop_toBottomOf="@+id/custom_headline"
-
                 tools:text="adadad" />
 
             <TextView
@@ -124,7 +131,7 @@
                 android:minWidth="50dp"
                 android:paddingHorizontal="16dp"
                 android:textColor="@color/white"
-                android:textSize="12dp"
+                android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/custom_app_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -135,6 +142,7 @@
             android:id="@+id/custom_media"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_150sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

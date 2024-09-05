@@ -136,9 +136,11 @@ class LiveWallpaperService : WallpaperService() {
                 myMediaPlayer?.release()
                 myMediaPlayer = null
 
-                if (isReceiverRegistered) {
+                // Unregister the receiver only if it is registered
+                if (isReceiverRegistered && liveWallBroadcastReceiver != null) {
                     unregisterReceiver(liveWallBroadcastReceiver)
                     isReceiverRegistered = false
+                    liveWallBroadcastReceiver = null
                 }
 
                 engineInstance = null
@@ -146,6 +148,7 @@ class LiveWallpaperService : WallpaperService() {
                 Log.e("LiveWallpaperService", "Error during onDestroy", e)
             }
         }
+
 
     }
 

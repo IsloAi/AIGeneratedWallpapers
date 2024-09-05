@@ -50,7 +50,8 @@ class LiveWallpaperAdapter(
     private val debounceThreshold = 2000L // 2 seconds
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    private var lastAdShownPosition = -1
+    private val loadedAds = mutableMapOf<Int, IkmDisplayWidgetAdView?>()
+
 
     private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
     private val firstline = firstAdLineThreshold * 3
@@ -116,6 +117,10 @@ class LiveWallpaperAdapter(
             }
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
+                // Preload ad based on position
+                if (position >= 0 && position <= arrayList.size - 3) {
+                    preloadAd()
+                }
                 viewHolderContainer3.bind()
             }
         }
@@ -148,7 +153,7 @@ class LiveWallpaperAdapter(
         Glide.with(context)
             .load("${AdConfig.BASE_URL_DATA}/livewallpaper/${model.thumnail_url}")
             .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .thumbnail(0.1f)
+            .thumbnail(0.1f)     // Use lower resolution for faster load while scrolling
             .listener(object : RequestListener<Drawable> {
 
                 override fun onLoadFailed(
@@ -176,6 +181,7 @@ class LiveWallpaperAdapter(
                 }
             }).into(wallpaperMainImage)
 
+
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
             if (currentTime - lastClickTime >= debounceThreshold) {
@@ -186,6 +192,23 @@ class LiveWallpaperAdapter(
     }
 
     var nativeAdView: IkmDisplayWidgetAdView? = null
+
+    private fun preloadAd() {
+        coroutineScope?.launch(Dispatchers.IO) {
+            if (nativeAdView == null) {
+                IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object : IKLoadDisplayAdViewListener {
+                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                        nativeAdView = adObject
+                        Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
+                    }
+
+                    override fun onAdLoadFail(error: IKAdError) {
+                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
+                    }
+                })
+            }
+        }
+    }
 
     private fun loadAd(binding: StaggeredNativeLayoutBinding) {
         coroutineScope?.launch(Dispatchers.Main) {
@@ -202,20 +225,9 @@ class LiveWallpaperAdapter(
                 mediaView = findViewById(R.id.custom_media)
             }
 
-            if (nativeAdView == null) {
-                IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object : IKLoadDisplayAdViewListener {
-                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                        nativeAdView = adObject
-                    }
-
-                    override fun onAdLoadFail(error: IKAdError) {
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
-                    }
-                })
-            }
-
             withContext(Dispatchers.Main) {
                 nativeAdView?.let {
+                    // Attach the preloaded ad to the layout
                     binding.adsView.showWithDisplayAdView(
                         R.layout.shimmer_loading_native, adLayout!!, "mainscr_live_tab_scroll",
                         it,
@@ -227,10 +239,13 @@ class LiveWallpaperAdapter(
 
                             override fun onAdShowed() {
                                 binding.adsView.visibility = View.VISIBLE
-                                Log.e("TAG", "onAdsLoaded: native loaded")
+                                Log.d("TAG", "onAdsLoaded: native loaded successfully.")
                             }
                         }
                     )
+                } ?: run {
+                    // Retry loading ad if not preloaded
+                    preloadAd()
                 }
             }
         }

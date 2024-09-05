@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         val context = LocaleManager.setLocale(this, lan!!)
         val resources = context.resources
-        val newLocale = Locale(lan!!)
+        val newLocale = Locale(lan)
         val resources1 = getResources()
         val configuration = resources1.configuration
         configuration.setLocale(newLocale)
@@ -160,9 +160,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     windowInsetsController.systemBarsBehavior =
                         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-// Hide the system bars.
                     windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
                 }
+
                 else -> {
                     disableEdgeToEdge(window)
                     val windowInsetsController =
@@ -176,7 +176,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     }
 
-    fun disableEdgeToEdge(window: Window) {
+    private fun disableEdgeToEdge(window: Window) {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             window.insetsController?.apply {
@@ -510,7 +510,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
     }
 
-    fun getSetTotallikes() {
+    private fun getSetTotallikes() {
         myViewModel.getAllLikes()
 
         MySharePreference.getDeviceID(this@MainActivity)?.let { myViewModel.getAllLiked(it) }
@@ -720,7 +720,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         AdConfig.BASE_URL_DATA = baseUrls
 
-                        Log.e(TAG, "initFirebaseRemoteConfig: $baseUrls")
+                        Log.e(TAG, "initFirebaseRemoteConfigURL: $baseUrls")
 
 
 
@@ -868,9 +868,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val updated = task.result
-
                     Log.e("TAG", "Config params updated: $updated")
-
                 }
             }
 

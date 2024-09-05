@@ -3,12 +3,12 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welc
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
@@ -22,7 +22,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.w3c.dom.Text
 
 class WelcomeFragment3 : Fragment() {
 
@@ -72,16 +71,16 @@ class WelcomeFragment3 : Fragment() {
             R.layout.layout_image_native_full,
             null, false
         ) as? IkmWidgetAdLayout
+        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
         adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
         adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-            val title:TextView = adLayout?.findViewById(R.id.title)!!
-            val next:ImageView = adLayout.findViewById(R.id.next_btn)!!
-            title.text = "Tap button to continue experiencing"
+        val title: TextView = adLayout?.findViewById(R.id.title)!!
+        val next: ImageView = adLayout.findViewById(R.id.next_btn)!!
+        title.text = "Tap button to continue experiencing"
         next.setOnClickListener { viewPagerCallback?.swipe() }
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout,"onboardscr_fullscreen",
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout, "onboardscr_fullscreen",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
                     Log.e("WelcomeFragment3", "Ad failed to show: ${error.message}")
@@ -107,6 +106,7 @@ class WelcomeFragment3 : Fragment() {
         super.onStop()
         scrollJob?.cancel()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         scrollJob?.cancel()
@@ -114,10 +114,11 @@ class WelcomeFragment3 : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (isAdded){
+        if (isAdded) {
             startAutoScroll()
         }
     }
+
     private fun startAutoScroll() {
         scrollJob?.cancel()
         if (AdConfig.autoNext) {

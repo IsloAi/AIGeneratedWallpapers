@@ -113,72 +113,104 @@ class SplashOnFragment : Fragment() {
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
         // Check if the user is a premium user
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
             IKBillingController.reCheckIAP(object :IKBillingListener{
                 override fun onBillingFail() {
                     AdConfig.ISPAIDUSER = false
                     Log.e(TAG, "InAppPurchase13: false")
 
+                    binding.adsView.attachLifecycle(lifecycle)
+                    binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
+                        override fun onAdShowed() {}
+                        override fun onAdShowFail(error: IKAdError) {
+                            if (isAdded){
+                                binding.adsView.visibility = View.GONE
+                            }
+                        }
+                    })
+
+                    // Preload the native ad if necessary
+                    Log.e("TAG", "onViewCreated: load pre")
+
+                    IKSdkController.preloadNativeAd("languagescr_bottom", object : IKLoadAdListener {
+                        override fun onAdLoaded() {
+                            // Ad loaded successfully
+                        }
+
+                        override fun onAdLoadFail(error: IKAdError) {
+                            Log.e(TAG, "onAdLoadFail: ")
+                        }
+                    })
+
+                    IKSdkController.preloadNativeAd("languagescr_bottom2", object : IKLoadAdListener {
+                        override fun onAdLoaded() {
+                            // Ad loaded successfully
+                        }
+
+                        override fun onAdLoadFail(error: IKAdError) {
+                            Log.e(TAG, "onAdLoadFail: ")
+                        }
+                    })
+
+                    IKSdkController.preloadNativeAd("onboardscr_fullscreen", object : IKLoadAdListener {
+                        override fun onAdLoaded() {
+                            // Ad loaded successfully
+                        }
+
+                        override fun onAdLoadFail(error: IKAdError) {
+                            Log.e(TAG, "onAdLoadFail: ")
+                        }
+                    })
+
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        IKSdkController
+                            .loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
+                                override fun onAdsDismiss() {
+                                    if (isAdded){
+                                        moveNext = true
+                                        Constants.checkAppOpen = true
+                                        navigateToNextScreen()
+                                        IKSdkController.setEnableShowResumeAds(true)
+                                    }
+
+                                }
+
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    Log.e(TAG, "onAdsShowFail: $error")
+                                    if (isAdded){
+                                        navigateToNextScreen()
+
+                                        IKSdkController.setEnableShowResumeAds(true)
+                                    }
+                                }
+
+                                override fun onAdsShowed() {
+                                    counter++
+                                    if (isAdded) {
+                                        binding.adsView.visibility = View.GONE
+                                    }
+                                }
+
+                            })
+                    }
                 }
 
                 override fun onBillingSuccess() {
                     AdConfig.ISPAIDUSER = true
+                    binding.adsView.visibility = View.GONE
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        if (AdConfig.ISPAIDUSER) {
+                            delay(3000)
+                        }
+                        if (isAdded){
+                            navigateToNextScreen()
+                        }
+                    }
                     Log.e(TAG, "InAppPurchase13: true")
                 }
             },false)
 
-            if (AdConfig.ISPAIDUSER) {
-                binding.adsView.visibility = View.GONE
-            } else {
-                binding.adsView.attachLifecycle(lifecycle)
-                binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
-                    override fun onAdShowed() {}
-                    override fun onAdShowFail(error: IKAdError) {
-                        if (isAdded){
-                            binding.adsView.visibility = View.GONE
-                        }
-                    }
-                })
-            }
-        }
-
-
-        // Preload the native ad if necessary
-        Log.e("TAG", "onViewCreated: load pre")
-
-        IKSdkController.preloadNativeAd("languagescr_bottom", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                Log.e(TAG, "onAdLoadFail: ")
-            }
-        })
-
-        IKSdkController.preloadNativeAd("languagescr_bottom2", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                Log.e(TAG, "onAdLoadFail: ")
-            }
-        })
-
-        IKSdkController.preloadNativeAd("onboardscr_fullscreen", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                Log.e(TAG, "onAdLoadFail: ")
-            }
-        })
-        animateLoadingText()
-
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
             val duration = 2000 // 5000 milliseconds = 5 seconds
             val interval = 50 // Adjust the interval for smoother progress
@@ -188,53 +220,13 @@ class SplashOnFragment : Fragment() {
 
             for (currentProgress in 0..100 step progressIncrement) {
                 if (isAdded) {
-
                     binding.activeProgress.progress = currentProgress
                 }
                 delay(interval.toLong())
             }
-
-
-            if (counter == 0 && !AdConfig.ISPAIDUSER) {
-                IKSdkController
-                    .loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
-                        override fun onAdsDismiss() {
-                            if (isAdded){
-                                moveNext = true
-                                Constants.checkAppOpen = true
-                                navigateToNextScreen()
-                                IKSdkController.setEnableShowResumeAds(true)
-                            }
-
-                        }
-
-                        override fun onAdsShowFail(error: IKAdError) {
-                            Log.e(TAG, "onAdsShowFail: $error")
-                            if (isAdded){
-                                navigateToNextScreen()
-
-                                IKSdkController.setEnableShowResumeAds(true)
-                            }
-                        }
-
-                        override fun onAdsShowed() {
-                            counter++
-                            if (isAdded) {
-                                binding.adsView.visibility = View.GONE
-                            }
-                        }
-
-                    })
-            } else {
-                if (AdConfig.ISPAIDUSER) {
-                    delay(3000)
-                }
-                if (isAdded){
-                    navigateToNextScreen()
-                }
-            }
         }
 
+        animateLoadingText()
 
     }
 
@@ -274,10 +266,6 @@ class SplashOnFragment : Fragment() {
         dotCount = (dotCount + 1) % 4
         val dots = ".".repeat(dotCount)
         textView.text = "Loading$dots"
-    }
-
-    override fun onPause() {
-        super.onPause()
     }
 
     override fun onResume() {

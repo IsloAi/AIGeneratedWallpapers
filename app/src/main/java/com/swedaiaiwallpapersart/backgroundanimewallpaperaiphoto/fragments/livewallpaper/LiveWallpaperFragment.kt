@@ -233,6 +233,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 if (isAdded && view != null) {
                     adapter?.nativeAdView = adObject
                     binding.liveReccyclerview.adapter = adapter
+                    binding.liveReccyclerview.setHasFixedSize(true)
                 }
             }
 
@@ -308,30 +309,14 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
             for (i in data.indices) {
                 if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
-
-
-
-                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
                 } else if (i == firstLine) {
                     newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
-
             }
-            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
-
-
-
-
             newData
         }
-
-
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -341,22 +326,13 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ")
     }
 
-    override fun onAdLoading() {
+    override fun onAdLoading() {}
 
-    }
+    override fun onAdsShowTimeout() {}
 
-    override fun onAdsShowTimeout() {
+    override fun onShowAdComplete() {}
 
-    }
-
-    override fun onShowAdComplete() {
-
-    }
-
-    override fun onShowAdFail() {
-
-    }
+    override fun onShowAdFail() {}
 }

@@ -479,12 +479,8 @@ class SearchWallpapersFragment : Fragment() {
 
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
-        val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList.filterNotNull())
-
         val countOfNulls = arrayList.subList(0, position).count { it == null }
         val sharedViewModel: SharedViewModel by activityViewModels()
-
 
         sharedViewModel.clearData()
 
@@ -494,13 +490,9 @@ class SearchWallpapersFragment : Fragment() {
             putString("from", "trending")
             putString("wall","home")
             putInt("position", position - countOfNulls)
-            requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment, this)
+            findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
     }
-
-
-
-
 
     private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
 
@@ -514,18 +506,12 @@ class SearchWallpapersFragment : Fragment() {
         for (i in data.indices){
             if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
                 newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
             }else if (i == firstLine){
                 newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-            Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
             newData.add(data[i])
-
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
         return newData
     }
 
@@ -538,7 +524,6 @@ class SearchWallpapersFragment : Fragment() {
 
         if (isAdded ){
             if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-
                 findNavController().navigate(R.id.listViewFragment, bundle)
             }
         }
