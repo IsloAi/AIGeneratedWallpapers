@@ -123,7 +123,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                         }
 
                         withContext(Dispatchers.Main) {
-                            listNullable?.let { adapter?.updateMoreData(it) }
+                            listNullable?.let { adapter?.updateData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
                     }

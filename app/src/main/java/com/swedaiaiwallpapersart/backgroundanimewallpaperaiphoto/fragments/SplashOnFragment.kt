@@ -119,7 +119,7 @@ class SplashOnFragment : Fragment() {
                 override fun onBillingFail() {
                     AdConfig.ISPAIDUSER = false
                     Log.e(TAG, "InAppPurchase13: false")
-
+                    binding.adsView.visibility = View.VISIBLE
                     binding.adsView.attachLifecycle(lifecycle)
                     binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
                         override fun onAdShowed() {}

@@ -9,6 +9,7 @@ plugins {
 android {
     namespace 'com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto'
     compileSdk 34
+
     defaultConfig {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
@@ -19,11 +20,21 @@ android {
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
     }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include("armeabi-v7a", "arm64-v8a", "x86", "x86_64")
+            universalApk true
+        }
+    }
+
     buildTypes {
         debug {
             debuggable true
-            shrinkResources false
-            minifyEnabled false
+            shrinkResources true
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {

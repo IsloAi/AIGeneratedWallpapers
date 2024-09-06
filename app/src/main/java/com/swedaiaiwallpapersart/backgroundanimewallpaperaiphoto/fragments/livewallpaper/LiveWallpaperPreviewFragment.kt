@@ -84,6 +84,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.UnknownHostException
 import javax.inject.Inject
+import kotlin.math.log
 
 @AndroidEntryPoint
 class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
@@ -862,9 +863,9 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     val errorMessage = when (error.errorCode) {
                         PlaybackException.ERROR_CODE_DECODING_FAILED -> "The video is malformed."
                         PlaybackException.ERROR_CODE_REMOTE_ERROR -> "Remote playback error."
-                        else -> "An unknown error occurred. Error code: ${error.errorCode}"
+                        else -> "An unknown error occurred. Error code: ${error.message}"
                     }
-                    Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "onPlayerError: $errorMessage")
                 }
 
                 override fun onPlaybackStateChanged(playbackState: Int) {
@@ -881,7 +882,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                 exoPlayer.videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT
-                // Adjust other parameters if necessary to force lower resolution video rendering
             }
             // Prepare and start playback
             exoPlayer.prepare()
@@ -896,25 +896,9 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         _binding = null
     }
 
-    override fun onAdDismiss() {
-        checkAppOpen = true
-        Log.e("TAG", "app open dismissed: ")
-    }
-
-    override fun onAdLoading() {
-
-    }
-
-    override fun onAdsShowTimeout() {
-
-    }
-
-    override fun onShowAdComplete() {
-
-    }
-
-    override fun onShowAdFail() {
-
-    }
-
+    override fun onAdDismiss() { checkAppOpen = true }
+    override fun onAdLoading() {}
+    override fun onAdsShowTimeout() {}
+    override fun onShowAdComplete() {}
+    override fun onShowAdFail() {}
 }

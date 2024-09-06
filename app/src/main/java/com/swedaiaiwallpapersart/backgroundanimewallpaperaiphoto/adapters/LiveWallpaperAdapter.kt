@@ -152,8 +152,8 @@ class LiveWallpaperAdapter(
 
         Glide.with(context)
             .load("${AdConfig.BASE_URL_DATA}/livewallpaper/${model.thumnail_url}")
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .thumbnail(0.1f)     // Use lower resolution for faster load while scrolling
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
 
                 override fun onLoadFailed(
