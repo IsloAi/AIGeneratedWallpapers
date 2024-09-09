@@ -117,10 +117,6 @@ class LiveWallpaperAdapter(
             }
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
-                // Preload ad based on position
-                if (position >= 0 && position <= arrayList.size - 3) {
-                    preloadAd()
-                }
                 viewHolderContainer3.bind()
             }
         }
@@ -212,6 +208,7 @@ class LiveWallpaperAdapter(
 
     private fun loadAd(binding: StaggeredNativeLayoutBinding) {
         coroutineScope?.launch(Dispatchers.Main) {
+
             val adLayout = LayoutInflater.from(binding.root.context).inflate(
                 R.layout.native_dialog_layout,
                 null, false
