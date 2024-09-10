@@ -90,17 +90,6 @@
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_notification_channel_id" />
 
-<!--        <provider-->
-<!--            android:name="androidx.startup.InitializationProvider"-->
-<!--            android:authorities="${applicationId}.androidx-startup"-->
-<!--            android:exported="false"-->
-<!--            tools:node="merge">-->
-<!--            <meta-data-->
-<!--                android:name="androidx.work.WorkManagerInitializer"-->
-<!--                android:value="androidx.startup"-->
-<!--                tools:node="remove" />-->
-<!--        </provider>-->
-
         <service
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService"
             android:enabled="true"
@@ -123,6 +112,12 @@
                 <action android:name="android.intent.action.POWER_DISCONNECTED" />
             </intent-filter>
         </receiver>
+        <service
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService"
+            android:foregroundServiceType="mediaPlayback"
+            android:exported="false"
+            tools:ignore="ForegroundServicePermission">
+        </service>
     </application>
 
 </manifest>

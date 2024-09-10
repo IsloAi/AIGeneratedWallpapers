@@ -40,4 +40,8 @@
         parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@drawable/exit_bottom_bg</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">10%</item>
+    </style>
 </resources>

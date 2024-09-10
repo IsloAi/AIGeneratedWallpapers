@@ -1,6 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -45,7 +49,6 @@ import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.billing.IKBillingController
 import com.ikame.android.sdk.listener.pub.IKBillingListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.utils.IKUtils
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
@@ -58,6 +61,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.PermissionManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig.autoNext
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig.timeNext
@@ -82,6 +87,7 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
+import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
@@ -90,6 +96,9 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity(), ConnectivityListener {
     lateinit var binding: ActivityMainBinding
     private var selectedPrompt: String? = null
+
+    @Inject
+    lateinit var permissionManager: PermissionManager
 
     private var alertDialog: AlertDialog? = null
 
@@ -125,12 +134,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val resources1 = getResources()
         val configuration = resources1.configuration
         configuration.setLocale(newLocale)
-        configuration.setLayoutDirection(Locale(lan!!));
+        configuration.setLayoutDirection(Locale(lan))
         resources1.updateConfiguration(configuration, resources.displayMetrics)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        scheduleWidgetUpdate()
 
         initFirebaseRemoteConfig()
 
@@ -675,9 +684,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 .toList()
 
                         AdConfig.categoryOrder = categoryOrderArray
+                        AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
 
                         val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
-                        Log.e("RemoteConfig123", fullOnboardingAutoNext)
+                        Log.e("Noti_Widget", AdConfig.Noti_Widget)
                         if (fullOnboardingAutoNext.isEmpty()) {
                             Log.e("RemoteConfig123", "Remote Config value for fullonboarding_auto_next is null or empty")
                         } else {
@@ -691,7 +701,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         val languagesOrder = remoteConfig["languages"].asString()
                         val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
 
-                        Log.e(TAG, "initFirebaseRemoteConfig: "+languagesOrderArray )
+                        Log.e(TAG, "initFirebaseRemoteConfig: $languagesOrderArray")
                         AdConfig.languagesOrder = languagesOrderArray
                         val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
                         AdConfig.languageLogicShowNative = languageShowNative.toInt()
@@ -910,6 +920,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         } catch (e: StringIndexOutOfBoundsException) {
             e.printStackTrace()
         }
+
+        AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
+        Log.e("Noti_Widget", AdConfig.Noti_Widget)
 
         try {
 
@@ -1498,28 +1511,20 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             alertDialog?.dismiss()
         }
     }
+
+    private fun startOrStopService() {
+        val serviceIntent = Intent(this, NotificationWidgetService::class.java)
+        startService(serviceIntent)
+    }
+
+    private fun scheduleWidgetUpdate() {
+            if (permissionManager.checkDrawOverOtherAppsPermission()) {
+                startOrStopService()
+            } else {
+                permissionManager.requestDrawOverOtherAppsPermission(this) {
+                    startOrStopService()
+                }
+            }
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

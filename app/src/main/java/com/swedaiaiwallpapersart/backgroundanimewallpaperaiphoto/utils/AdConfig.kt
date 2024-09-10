@@ -29,6 +29,7 @@ object AdConfig {
 
 
     var BASE_URL_DATA:String = ""
+    var Noti_Widget:String = ""
 
     val BASE_URL = "https://vps.edecator.com/wallpaper_App/V4/"
     val HD_ImageUrl = "${BASE_URL_DATA}/images/"

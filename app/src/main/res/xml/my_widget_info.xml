@@ -1,0 +1,6 @@
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="@dimen/_300sdp"
+    android:minHeight="@dimen/_300sdp"
+    android:updatePeriodMillis="0"
+    android:initialLayout="@layout/layout_noti_widget"
+    android:widgetCategory="home_screen|keyguard" />
