@@ -6,6 +6,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.MostDownloadedResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -21,8 +22,7 @@ interface WallpaperRepositry {
 //    fun getAllWallpapers(apiKey:String,page:String,record:String):Flow<Response<ArrayList<SingleAllResponse>>>
 
     fun getUpdatedWallpapers(page:String,record:String,lastid:String):Flow<Response<ArrayList<SingleAllResponse>>>
-
-
+    fun getRewardWallpaper():Flow<Response<ArrayList<RewardedAllResponse>>>
 
     fun getAllLikes():Flow<Response<ArrayList<LikesResponse>>>
     fun getLiked(deviceId: String):Flow<Response<ArrayList<LikedResponse>>>

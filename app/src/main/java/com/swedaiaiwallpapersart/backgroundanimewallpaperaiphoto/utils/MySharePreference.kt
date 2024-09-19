@@ -3,6 +3,9 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MySharePreference {
     companion object{
@@ -54,7 +57,45 @@ class MySharePreference {
             myEdit.apply()
         }
 
+        // Function to get the stored day
+        fun getStoredDay(context: Context): Int {
+            val sharedPreferences = context.getSharedPreferences("MySpValue", Context.MODE_PRIVATE)
+            return sharedPreferences.getInt("KEY_DAY", 0)
+        }
 
+        fun getStoredDate(context: Context): String {
+            val sharedPreferences = context.getSharedPreferences("MySpValue", Context.MODE_PRIVATE)
+            return sharedPreferences.getString("KEY_DATE", "")!!
+        }
+
+        fun getCurrentDate(): String {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            return sdf.format(Date())
+        }
+
+        // Function to increment day if the date has changed
+        fun updateDayIfDateChanged(context: Context) {
+            val sharedPreferences = context.getSharedPreferences("MySpValue", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+
+            // Get stored values
+            val storedDate = sharedPreferences.getString("KEY_DATE", getCurrentDate())
+            val storedDay = sharedPreferences.getInt("KEY_DAY", 0) // Default to 0 for Sunday
+
+            // Get current date
+            val currentDate = getCurrentDate()
+
+            // Check if the date has changed
+            if (currentDate == storedDate) {
+                // Increment day and wrap around from 6 to 0
+                val newDay = (storedDay + 1) % 7
+                editor.putInt("KEY_DAY", newDay)
+                editor.putString("KEY_DATE", currentDate)
+            }
+
+            // Apply changes
+            editor.apply()
+        }
 
         fun getLanguage(context: Context):String?{
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
@@ -62,14 +103,14 @@ class MySharePreference {
         }
 
 
-        fun setLanguageposition(context: Context,value:Int){
+        fun setLanguagePosition(context: Context, value:Int){
             val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
             myEdit.putInt("position",value)
             myEdit.apply()
         }
 
-        fun getLanguageposition(context: Context):Int?{
+        fun getLanguagePosition(context: Context):Int{
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             return sp.getInt("position",0)
         }
@@ -276,5 +317,38 @@ class MySharePreference {
             return sharedPreferences.getLong(LAST_DISMISSED_TIME, 0L)
         }
 
+        fun setVIPGiftBool(context: Context,value:Boolean){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("VIP_GIFT",value)
+            myEdit.apply()
+        }
+
+        fun getVIPGiftBool(context: Context): Boolean {
+            val sharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sharedPreferences.getBoolean("VIP_GIFT", false)
+        }
+
+        fun setVIPGiftDate(context: Context){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("VIP_GIFT_DATE", System.currentTimeMillis().toString())
+            myEdit.apply()
+        }
+        fun getVIPGiftDate(context: Context):String?{
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getString("VIP_GIFT_DATE","")
+        }
+        fun isVIPGiftExpired(context: Context): Boolean {
+            val savedDate = getVIPGiftDate(context)?.toLongOrNull()
+
+            if (savedDate != null) {
+                val currentTime = System.currentTimeMillis()
+                val diffInMillis = currentTime - savedDate
+                val twentyFourHoursInMillis = 24 * 60 * 60 * 1000
+                return diffInMillis >= twentyFourHoursInMillis
+            }
+            return true
+        }
     }
 }

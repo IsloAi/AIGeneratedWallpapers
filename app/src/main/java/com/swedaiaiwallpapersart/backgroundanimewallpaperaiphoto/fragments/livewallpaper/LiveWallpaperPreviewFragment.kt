@@ -411,7 +411,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
-                    Constants.checkInter = true
+                    checkInter = true
                     setWallpaper()
                 }
             }

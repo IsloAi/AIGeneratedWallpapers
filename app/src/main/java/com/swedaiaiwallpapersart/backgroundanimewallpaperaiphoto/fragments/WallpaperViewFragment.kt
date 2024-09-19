@@ -205,18 +205,13 @@ class WallpaperViewFragment : Fragment() {
                 from = arguments?.getString("from")!!
                 wall = arguments?.getString("wall")!!
 
-                Log.e(TAG, "recieved position: $pos")
-                Log.e(TAG, "recieved from: $from")
-
                 adcount = pos!!
                 if (arrayListJson != null && pos != null) {
                     val arrayListOfImages = arrayListJson
                     arrayListOfImages.filterNotNull()
 
-                    Log.e(TAG, "onCreate: " + arrayListOfImages.size)
-
                     arrayList = if (AdConfig.ISPAIDUSER){
-                        arrayListOfImages as ArrayList<CatResponse?>
+                        ArrayList(arrayListOfImages)
                     }else{
                         addNullValueInsideArray(arrayListOfImages)
                     }
@@ -224,8 +219,6 @@ class WallpaperViewFragment : Fragment() {
                     val firstAdLineThreshold =
                         if (AdConfig.firstAdLineTrending != 0) AdConfig.firstAdLineTrending else 4
 
-
-                    // Calculate the adjusted position by considering the null ads in the array
                     if (firstTime) {
                         position = 0
                         position = if (AdConfig.ISPAIDUSER) {
@@ -239,46 +232,14 @@ class WallpaperViewFragment : Fragment() {
                                 pos + totalADs
                             }
                         }
-
-
                         firstTime = false
                     }
-
                     isNavigated = true
-
-
-                    Log.e(TAG, "new position: $position")
-
-
-
-
-                    Log.d(TAG, "onCreate:  $arrayListOfImages")
                 }
-
-
-
-
                 functionality()
             }
         }
-
-
-
-
         return binding.root
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-//        outState.putInt("currentItem", position)
-    }
-
-    // Restore the state
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-//        val currentItem = savedInstanceState?.getInt("currentItem") ?: 0
-//        position = currentItem
-//        binding.viewPager.setCurrentItem(currentItem, false)
     }
 
     private fun loadRewardAd() {
@@ -499,17 +460,22 @@ class WallpaperViewFragment : Fragment() {
         }
         setViewPager()
         checkRedHeart(position)
-        if (arrayList[position] != null) {
-            getLargImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +arrayList[position]?.hd_image_url!!
-            getSmallImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" +arrayList[position]?.compressed_image_url!!
-            getBitmapFromGlide(getLargImage)
-
-
+        if (from=="Vip"){
+            if (arrayList[position] != null) {
+                getLargImage = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" +arrayList[position]?.hd_image_url!!
+                getSmallImage = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" +arrayList[position]+"?class=custom"
+                getBitmapFromGlide(getLargImage)
+            }
+        }else{
+            if (arrayList[position] != null) {
+                getLargImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +arrayList[position]?.hd_image_url!!
+                getSmallImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" +arrayList[position]?.compressed_image_url!!
+                getBitmapFromGlide(getLargImage)
+            }
         }
 
 
         binding.buttonApplyWallpaper.setOnClickListener {
-//           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             if (bitmap != null) {
                 if (arrayList[position]?.unlockimges == true) {
                     val model = arrayList[position]
@@ -532,10 +498,6 @@ class WallpaperViewFragment : Fragment() {
                     getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
                 ).show()
             }
-//           }else{
-//               Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//           }
-
         }
         binding.favouriteButton.setOnClickListener {
 
@@ -776,12 +738,12 @@ class WallpaperViewFragment : Fragment() {
                 }
 
                 sharedViewModel.selectCat(image)
-
                 sharedViewModel.setPosition(position)
+                sharedViewModel.setWallpaperFromType(from)
 
                 navController?.navigate(R.id.fullScreenImageViewFragment)
             }
-        }, myActivity)
+        }, myActivity, from)
         adapter!!.setCoroutineScope(fragmentScope)
 
         IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
@@ -829,9 +791,19 @@ class WallpaperViewFragment : Fragment() {
             override fun onPageSelected(positi: Int) {
                 if (positi >= 0 && positi < arrayList.size) {
                     if (arrayList[positi]?.hd_image_url != null) {
-                        getLargImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +arrayList[positi]?.hd_image_url!!
-                        getSmallImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" +arrayList[positi]?.compressed_image_url!!
-
+                        if (from=="Vip"){
+                            if (arrayList[position] != null) {
+                                getLargImage = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" +arrayList[position]?.hd_image_url!!
+                                getSmallImage = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" +arrayList[position]+"?class=custom"
+                                getBitmapFromGlide(getLargImage)
+                            }
+                        }else{
+                            if (arrayList[position] != null) {
+                                getLargImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +arrayList[position]?.hd_image_url!!
+                                getSmallImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" +arrayList[position]?.compressed_image_url!!
+                                getBitmapFromGlide(getLargImage)
+                            }
+                        }
                         position = positi
 
 
@@ -846,9 +818,6 @@ class WallpaperViewFragment : Fragment() {
                     } else {
                         position = positi
                     }
-
-
-
 
                     if (arrayList[positi]?.hd_image_url == null) {
                         binding.unlockWallpaper.visibility = View.GONE
@@ -862,7 +831,6 @@ class WallpaperViewFragment : Fragment() {
                             binding.adsView.visibility = View.GONE
 
                         }else{
-
                             binding.adsView.visibility = View.VISIBLE
                         }
 
@@ -874,10 +842,8 @@ class WallpaperViewFragment : Fragment() {
                             binding.unlockWallpaper.visibility = View.GONE
                             binding.buttonApplyWallpaper.visibility = View.VISIBLE
                         }
-
                     }
-                    Log.e(TAG, "onPageSelected: "+position )
-
+                    Log.e(TAG, "onPageSelected: $position")
                     checkRedHeart(position)
                     getBitmapFromGlide(getLargImage)
                 }
@@ -891,13 +857,13 @@ class WallpaperViewFragment : Fragment() {
         val dialog = Dialog(requireContext())
         val bindingDialog =
             DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(bindingDialog.root)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(width, height)
-        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog?.setCancelable(false)
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
 
         if (AdConfig.iapScreenType == 0) {
             bindingDialog.upgradeButton.visibility = View.GONE
@@ -905,13 +871,9 @@ class WallpaperViewFragment : Fragment() {
             bindingDialog.dividerEnd.visibility = View.INVISIBLE
             bindingDialog.dividerStart.visibility = View.INVISIBLE
         }
-//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-
-
-        bindingDialog.watchAds?.setOnClickListener {
+        bindingDialog.watchAds.setOnClickListener {
             dialog.dismiss()
             if (bitmap != null) {
-
 
                 rewardAd.showAd(
                     requireActivity(),
@@ -958,15 +920,15 @@ class WallpaperViewFragment : Fragment() {
             }
         }
 
-        bindingDialog.upgradeButton?.setOnClickListener {
-            dialog?.dismiss()
+        bindingDialog.upgradeButton.setOnClickListener {
+            dialog.dismiss()
             findNavController().navigate(R.id.IAPFragment)
         }
-        bindingDialog.cancelDialog?.setOnClickListener {
-            dialog?.dismiss()
+        bindingDialog.cancelDialog.setOnClickListener {
+            dialog.dismiss()
         }
 
-        dialog?.show()
+        dialog.show()
     }
 
 
@@ -1038,8 +1000,6 @@ class WallpaperViewFragment : Fragment() {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
-
-
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {

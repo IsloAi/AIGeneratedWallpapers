@@ -266,5 +266,9 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doublewallpaper.DoubleWallpaperSliderFragment"
         android:label="fragment_double_wallpaper_slider"
         tools:layout="@layout/fragment_double_wallpaper_slider" />
-
+    <fragment
+        android:id="@+id/rewardDetailsFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.reward.RewardDetailsFragment"
+        android:label="fragment_reward_details"
+        tools:layout="@layout/fragment_reward_details" />
 </navigation>

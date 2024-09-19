@@ -15,9 +15,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ikame.android.sdk.IKSdkController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
@@ -56,11 +56,11 @@ import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 class FavouriteFragment : Fragment() {
-   private var _binding: FragmentFavouriteBinding? = null
+    private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
     private lateinit var myViewModel: MyFavouriteViewModel
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
-    private lateinit var myActivity : MainActivity
+    private lateinit var myActivity: MainActivity
     private lateinit var roomViewModel: RoomViewModel
 
     private var cachedIGList: ArrayList<FavouriteListIGEntity>? = ArrayList()
@@ -76,14 +76,17 @@ class FavouriteFragment : Fragment() {
     val interAd = IKInterstitialAd()
 
 
-
-
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
 
-        return binding.root}
+        return binding.root
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,6 +99,7 @@ class FavouriteFragment : Fragment() {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -104,11 +108,12 @@ class FavouriteFragment : Fragment() {
 
     }
 
-    private fun onCreateViewCalling(){
+    private fun onCreateViewCalling() {
 
 
         val roomDatabase = AppDatabase.getInstance(requireContext())
-        roomViewModel = ViewModelProvider(this, ViewModelFactory(roomDatabase,0))[RoomViewModel::class.java]
+        roomViewModel =
+            ViewModelProvider(this, ViewModelFactory(roomDatabase, 0))[RoomViewModel::class.java]
         myActivity = activity as MainActivity
         viewVisible()
 
@@ -118,7 +123,8 @@ class FavouriteFragment : Fragment() {
             Constants.checkAppOpen = false
         }
     }
-    private fun viewVisible(){
+
+    private fun viewVisible() {
         binding.errorMessage.visibility = INVISIBLE
         binding.aiRecyclerView.visibility = VISIBLE
         binding.selfCreationRecyclerView.visibility = VISIBLE
@@ -126,40 +132,40 @@ class FavouriteFragment : Fragment() {
         binding.progressBar.visibility = VISIBLE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         binding.aiRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.aiRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10000))
+        binding.aiRecyclerView.addItemDecoration(RvItemDecore(2, 20, false, 10000))
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2,20,false,10000))
+        binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2, 20, false, 10000))
         binding.liveRecyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.liveRecyclerview.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.liveRecyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
 
         loadData()
         loadDataFromRoomDB()
-        if(MySharePreference.getFavouriteSaveState(requireContext())==1){
+        if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
-            selector(binding.aiWallpaper,binding.selfCreation,binding.live)
+            selector(binding.aiWallpaper, binding.selfCreation, binding.live)
             binding.emptySupportAI.visibility = View.GONE
             binding.liveRecyclerview.visibility = View.GONE
 
 
-            if(!isLoadedData){
+            if (!isLoadedData) {
                 binding.progressBar.visibility = VISIBLE
             }
 
-        }else if(MySharePreference.getFavouriteSaveState(requireContext()) ==2){
+        } else if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
             binding.selfCreationRecyclerView.visibility = VISIBLE
-            binding.aiRecyclerView.visibility =  INVISIBLE
-            selector(binding.selfCreation,binding.aiWallpaper,binding.live)
+            binding.aiRecyclerView.visibility = INVISIBLE
+            selector(binding.selfCreation, binding.aiWallpaper, binding.live)
             binding.progressBar.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
             binding.liveRecyclerview.visibility = View.GONE
-        }else if(MySharePreference.getFavouriteSaveState(requireContext()) ==3){
+        } else if (MySharePreference.getFavouriteSaveState(requireContext()) == 3) {
             initObservers()
             binding.selfCreationRecyclerView.visibility = INVISIBLE
-            binding.aiRecyclerView.visibility =  INVISIBLE
+            binding.aiRecyclerView.visibility = INVISIBLE
             binding.liveRecyclerview.visibility = View.VISIBLE
-            selector(binding.live,binding.selfCreation,binding.aiWallpaper)
+            selector(binding.live, binding.selfCreation, binding.aiWallpaper)
             binding.progressBar.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
             binding.emptySupportAI.visibility = View.GONE
@@ -167,16 +173,16 @@ class FavouriteFragment : Fragment() {
 
         binding.aiWallpaper.setOnClickListener {
             loadData()
-            selector(binding.aiWallpaper,binding.selfCreation,binding.live)
+            selector(binding.aiWallpaper, binding.selfCreation, binding.live)
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
             binding.emptySupportAI.visibility = View.GONE
             binding.liveRecyclerview.visibility = INVISIBLE
-            if (cachedCatResponses?.isEmpty() == true){
+            if (cachedCatResponses?.isEmpty() == true) {
                 binding.emptySupport.visibility = View.VISIBLE
             }
-           MySharePreference.setFavouriteSaveState(requireContext(),1)
-            if(!isLoadedData){
+            MySharePreference.setFavouriteSaveState(requireContext(), 1)
+            if (!isLoadedData) {
                 binding.progressBar.visibility = VISIBLE
             }
 
@@ -184,21 +190,21 @@ class FavouriteFragment : Fragment() {
         }
         binding.selfCreation.setOnClickListener {
             loadDataFromRoomDB()
-            selector(binding.selfCreation,binding.aiWallpaper,binding.live)
+            selector(binding.selfCreation, binding.aiWallpaper, binding.live)
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
             binding.liveRecyclerview.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
-            if (cachedIGList?.isEmpty() == true){
+            if (cachedIGList?.isEmpty() == true) {
                 binding.emptySupportAI.visibility = View.VISIBLE
             }
-            MySharePreference.setFavouriteSaveState(requireContext(),2)
+            MySharePreference.setFavouriteSaveState(requireContext(), 2)
             binding.progressBar.visibility = INVISIBLE
         }
 
         binding.live.setOnClickListener {
-            selector(binding.live,binding.selfCreation,binding.aiWallpaper)
-            MySharePreference.setFavouriteSaveState(requireContext(),3)
+            selector(binding.live, binding.selfCreation, binding.aiWallpaper)
+            MySharePreference.setFavouriteSaveState(requireContext(), 3)
             initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
@@ -212,32 +218,34 @@ class FavouriteFragment : Fragment() {
         binding.addToFav.setOnClickListener {
 
             sharedViewModel.selectTab(1)
-            findNavController().popBackStack(R.id.homeTabsFragment,false)
+            findNavController().popBackStack(R.id.homeTabsFragment, false)
 
 
         }
 
         binding.addToFavAI.setOnClickListener {
             sharedViewModel.selectTab(5)
-            findNavController().popBackStack(R.id.homeTabsFragment,false)
+            findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
 
     }
-    private fun selector(selector: TextView,unSelector:TextView, unselector1:TextView){
+
+    private fun selector(selector: TextView, unSelector: TextView, unselector1: TextView) {
         selector.setBackgroundResource(R.drawable.text_selector)
         unSelector.setBackgroundResource(0)
         unselector1.setBackgroundResource(0)
         selector.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-         unSelector.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        unSelector.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
         unselector1.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
     }
+
     private fun loadData() {
         myViewModel = ViewModelProvider(this)[MyFavouriteViewModel::class.java]
         // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
-                if (MySharePreference.getFavouriteSaveState(requireContext())==1){
+                if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
                     binding.emptySupport.visibility = View.GONE
                     binding.aiRecyclerView.visibility = VISIBLE
                 }
@@ -246,8 +254,8 @@ class FavouriteFragment : Fragment() {
                 if (view != null) {
                     updateUIWithFetchedData(catResponses)
                 }
-            }else{
-                if (MySharePreference.getFavouriteSaveState(requireContext())==1){
+            } else {
+                if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
                     isLoadedData = true
                     binding.emptySupport.visibility = VISIBLE
                     binding.aiRecyclerView.visibility = View.GONE
@@ -255,22 +263,28 @@ class FavouriteFragment : Fragment() {
 
             }
         }
-        myViewModel.fetchWallpapers(requireContext(), MySharePreference.getDeviceID(requireContext())!!,binding.progressBar)
+        myViewModel.fetchWallpapers(
+            requireContext(),
+            MySharePreference.getDeviceID(requireContext())!!,
+            binding.progressBar
+        )
     }
 
-    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
+    private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstAdLineThreshold =
+            if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
         val firstLine = firstAdLineThreshold * 2
 
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineCount =
+            if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
         val lineC = lineCount * 2
         val newData = arrayListOf<CatResponse?>()
 
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+        for (i in data.indices) {
+            if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                 newData.add(null)
-            }else if (i == firstLine){
+            } else if (i == firstLine) {
                 newData.add(null)
             }
             newData.add(data[i])
@@ -280,10 +294,10 @@ class FavouriteFragment : Fragment() {
         return newData
     }
 
-    fun initObservers(){
+    fun initObservers() {
 
-        liveWallpaperViewModel.liveWallsFromDB.observe(viewLifecycleOwner){result->
-            when(result){
+        liveWallpaperViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
+            when (result) {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val filtered = result.data?.filter { it.liked }
@@ -294,17 +308,17 @@ class FavouriteFragment : Fragment() {
                 }
 
                 is Response.Loading -> {
-                    Log.e("TAG", "loadData: Loading" )
+                    Log.e("TAG", "loadData: Loading")
                 }
 
                 is Response.Error -> {
-                    Log.e("TAG", "loadData: response error", )
+                    Log.e("TAG", "loadData: response error")
                     MySharePreference.getDeviceID(requireContext())
-                        ?.let { liveWallpaperViewModel.getMostUsed("1","500", it) }
+                        ?.let { liveWallpaperViewModel.getMostUsed("1", "500", it) }
                 }
 
                 is Response.Processing -> {
-                    Log.e("TAG", "loadData: processing", )
+                    Log.e("TAG", "loadData: processing")
                 }
             }
 
@@ -312,32 +326,39 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun updateUIWithFetchedDataLive(catResponses: ArrayList<LiveWallpaperModel?>) {
-
-        val adapter = LiveWallpaperAdapter(catResponses, object :
-            downloadCallback {
+        val adapter = LiveWallpaperAdapter(catResponses, object : downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
                 BlurView.filePath = ""
                 sharedViewModel.clearLiveWallpaper()
                 sharedViewModel.setLiveWallpaper(listOf(model))
                 findNavController().navigate(R.id.downloadLiveWallpaperFragment)
             }
-        },myActivity)
+        }, myActivity)
 
-        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    adapter.nativeAdView = adObject
-                    binding.liveRecyclerview.adapter = adapter
+        IKSdkController.loadNativeDisplayAd(
+            "mainscr_live_tab_scroll",
+            object : IKLoadDisplayAdViewListener {
+                override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                    // Update UI on the main thread using coroutines
+                    CoroutineScope(Dispatchers.Main).launch {
+                        if (isAdded && view != null) {
+                            adapter.nativeAdView = adObject
+                            binding.liveRecyclerview.adapter = adapter
+                        }
+                    }
                 }
-            }
 
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })
-        binding.liveRecyclerview.adapter = adapter
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure
+                }
+            })
+
+        // Update the RecyclerView adapter on the main thread
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.liveRecyclerview.adapter = adapter
+        }
     }
+
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
         val list = addNullValueInsideArray(catResponses)
@@ -350,13 +371,14 @@ class FavouriteFragment : Fragment() {
                     "mainscr_favorite_tab_click_item",
                     adListener = object : IKShowAdListener {
                         override fun onAdsShowFail(error: IKAdError) {
-                            if (isAdded){
-                                navigateToDestination(list,position)
+                            if (isAdded) {
+                                navigateToDestination(list, position)
                             }
                         }
+
                         override fun onAdsDismiss() {
-                            if (isAdded){
-                                navigateToDestination(list,position)
+                            if (isAdded) {
+                                navigateToDestination(list, position)
                             }
                         }
                     }
@@ -366,38 +388,40 @@ class FavouriteFragment : Fragment() {
             override fun getFavorites(position: Int) {
                 loadData()
             }
-        },myActivity,"favorites")
+        }, myActivity, "favorites")
         adapter.setCoroutineScope(fragmentScope)
         binding.aiRecyclerView.adapter = adapter
 
     }
 
-    private fun addNullValueInsideArrayLive(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?>{
+    private fun addNullValueInsideArrayLive(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        val firstAdLineThreshold =
+            if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
         val firstLine = firstAdLineThreshold * 3
 
-        val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+        val lineCount =
+            if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
         val lineC = lineCount * 3
         val newData = arrayListOf<LiveWallpaperModel?>()
 
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+        for (i in data.indices) {
+            if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                 newData.add(null)
 
 
 
-                Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: null " + i)
 
-            }else if (i == firstLine){
+            } else if (i == firstLine) {
                 newData.add(null)
-                Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                Log.e("******NULL", "addNullValueInsideArray: null first " + i)
             }
-            Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+            Log.e("******NULL", "addNullValueInsideArray: not null " + i)
             newData.add(data[i])
 
         }
-        Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+        Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
 
 
 
@@ -405,7 +429,7 @@ class FavouriteFragment : Fragment() {
         return newData
     }
 
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
         val gson = Gson()
         val arrayListJson = gson.toJson(arrayList.filterNotNull())
 
@@ -414,10 +438,10 @@ class FavouriteFragment : Fragment() {
         sharedViewModel.clearData()
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         Bundle().apply {
-            putInt("position",position - countOfNulls)
-            putString("from","trending")
-            putString("wall","home")
-            findNavController().navigate(R.id.wallpaperViewFragment,this)
+            putInt("position", position - countOfNulls)
+            putString("from", "trending")
+            putString("wall", "home")
+            findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
         myViewModel.clear()
     }
@@ -427,10 +451,11 @@ class FavouriteFragment : Fragment() {
         _binding = null
         fragmentScope.cancel()
     }
+
     private fun loadDataFromRoomDB() {
-        roomViewModel.myFavouriteList.observe(viewLifecycleOwner){
+        roomViewModel.myFavouriteList.observe(viewLifecycleOwner) {
             Log.d("tracingFavouriteList", "loadDataFromRoomDB: $it")
-            if(it.isNotEmpty()){
+            if (it.isNotEmpty()) {
 
                 cachedIGList?.addAll(it)
                 val randomNumber = if (it.size > 1) {
@@ -439,28 +464,29 @@ class FavouriteFragment : Fragment() {
                     0 // Handle the case where it.size is 0 or 1
                 }
 //                getBitmapFromGlide(it[randomNumber].image!!)
-                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
+                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
                     binding.selfCreationRecyclerView.visibility = View.VISIBLE
                 }
 
                 binding.emptySupportAI.visibility = View.GONE
-                val adapter = MyCreationFavAdapter(it.reversed(),object:GetFavouriteImagePath{
+                val adapter = MyCreationFavAdapter(it.reversed(), object : GetFavouriteImagePath {
                     override fun getPath(path: String) {
                         roomViewModel.deleteItem(path)
                     }
+
                     override fun getImageClick(position: Int, prompt: String?, imageId: Int) {
                         val gson = Gson()
                         val arrayListJson = gson.toJson(it.reversed())
-                        val bundle =  Bundle().apply {
-                            putString("arrayListJson",arrayListJson)
-                            putInt("position",position)
+                        val bundle = Bundle().apply {
+                            putString("arrayListJson", arrayListJson)
+                            putInt("position", position)
                         }
-                        findNavController().navigate(R.id.favouriteSliderViewFragment,bundle)
+                        findNavController().navigate(R.id.favouriteSliderViewFragment, bundle)
                     }
                 })
                 binding.selfCreationRecyclerView.adapter = adapter
-            }else{
-                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2){
+            } else {
+                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
                     binding.emptySupportAI.visibility = View.VISIBLE
                     binding.selfCreationRecyclerView.visibility = View.GONE
 //                    Toast.makeText(requireContext(),
@@ -475,7 +501,7 @@ class FavouriteFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Favorites Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)

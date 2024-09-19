@@ -35,6 +35,9 @@ class SharedViewModel : ViewModel() {
     private val _wallAdPosition = MutableLiveData<Int>()
     val wallAdPosition: LiveData<Int> = _wallAdPosition
 
+    private val _wallpaperFromType = MutableLiveData<String>()
+    val wallpaperFromType: LiveData<String> = _wallpaperFromType
+
     val selectedCat = MutableLiveData<CatResponse>()
 
 
@@ -46,8 +49,15 @@ class SharedViewModel : ViewModel() {
         _currentPosition.value = position
     }
 
+    fun setCatResponseList(catResponses: List<CatResponse>) {
+        _catResponseList.value = catResponses
+    }
 
-
+    fun addNullValuesToCatResponseList(catResponses: List<CatResponse?>): List<CatResponse?> {
+        val listWithNulls = catResponses.toMutableList()
+        listWithNulls.add(null)
+        return listWithNulls
+    }
 
     fun updateCatResponseAtIndex(updatedCatResponse: CatResponse, index: Int) {
         val currentList = _catResponseList.value.orEmpty().toMutableList()
@@ -61,20 +71,12 @@ class SharedViewModel : ViewModel() {
         _liveWallpaperResponseList.value = catResponses
     }
 
-    fun setchargingAnimation(catResponses: List<ChargingAnimModel>){
-        _chargingAnimationResponseList.value = catResponses
-    }
-
     fun clearData() {
         _catResponseList.value = emptyList()
     }
 
     fun clearLiveWallpaper() {
         _liveWallpaperResponseList.value = emptyList()
-    }
-
-    fun clearChargeAnimation() {
-        _chargingAnimationResponseList.value = emptyList()
     }
 
     fun selectCat(cat: CatResponse) {
@@ -89,23 +91,16 @@ class SharedViewModel : ViewModel() {
         _selectTab.value = position
     }
 
-
     fun setAdPosition(position: Int){
         _liveAdPosition.value = position
     }
 
-
-    fun setChargingAdPosition(position: Int){
-        _chargingAdPosition.value = position
+    fun setWallpaperFromType(type: String) {
+        _wallpaperFromType.value = type
     }
 
-    fun setWallAdPosition(position: Int){
-        _wallAdPosition.value = position
+    fun getWallpaperFromType(): String? {
+        return _wallpaperFromType.value
     }
-
-
-
-
-
 
 }

@@ -11,5 +11,6 @@ class Constants {
          var plan6:String = ""
          var checkAppOpen:Boolean = false
          var checkInter:Boolean = false
+         var hasShownRewardScreen = false
     }
 }

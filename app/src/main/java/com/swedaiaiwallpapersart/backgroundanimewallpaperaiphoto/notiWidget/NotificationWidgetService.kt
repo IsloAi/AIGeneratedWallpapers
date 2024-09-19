@@ -1,161 +1,200 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget
 
-import android.Manifest
-import android.app.AlarmManager
+import android.app.KeyguardManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.content.pm.ServiceInfo
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
+import android.content.IntentFilter
+import android.os.Handler
 import android.os.IBinder
-import android.widget.RemoteViews
-import androidx.core.app.ActivityCompat
+import android.os.Looper
+import android.util.Log
+import android.view.View
+import android.view.WindowManager
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import com.google.gson.Gson
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.models.NotificationConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.InputStream
-import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @AndroidEntryPoint
 class NotificationWidgetService : Service() {
     private lateinit var job: Job
+    private lateinit var windowManager: WindowManager
+    private lateinit var overlayView: View
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var screenLockReceiver: ScreenLockReceiver
+
+    private val checkOverlayRunnable = object : Runnable {
+        override fun run() {
+            checkAndShowOverlay()
+            handler.postDelayed(this, 1000) // Check every second
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
         job = Job()
         val scope = CoroutineScope(Dispatchers.IO + job)
+        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        startForegroundService()
+        // Initialize the BroadcastReceiver
+        screenLockReceiver = ScreenLockReceiver(
+            onLock = {
+                Log.d("NotificationWidgetService", "Device locked")
+                handler.post(checkOverlayRunnable) // Start checking every second when locked
+            },
+            onUnlock = {
+                Log.d("NotificationWidgetService", "Device unlocked")
+                handler.removeCallbacks(checkOverlayRunnable) // Stop checking when unlocked
+                removeOverlay()
+            }
+        )
+        registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+        registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
 
-        // Launch a coroutine to call initObservers
+        // Initial check
         scope.launch {
-            initObservers()
+            checkAndShowOverlay()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        job.cancel()
+        handler.removeCallbacks(checkOverlayRunnable) // Stop the runnable when service is destroyed
+        unregisterReceiver(screenLockReceiver) // Unregister the receiver
+        removeOverlay() // Ensure the overlay is removed
     }
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        showNotification()
-        return START_REDELIVER_INTENT
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
-    }
-
-    private fun showNotification() {
-        // Create a custom notification layout
-        val remoteViews = RemoteViews(packageName, R.layout.layout_noti_widget)
-
-        val notificationBuilder = NotificationCompat.Builder(this, "Background progress")
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setColor(ContextCompat.getColor(this, R.color.white))
-            .setContent(remoteViews)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Ensure it shows on the lock screen
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .build()
-
-        val notificationManager = NotificationManagerCompat.from(this)
-
-        // Create the notification channel for Android Oreo and above
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                "Background progress",
-                "Channel Name",
-                NotificationManager.IMPORTANCE_HIGH // High importance to ensure visibility on lock screen
-            )
-            channel.lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        // Show the notification
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        notificationManager.notify(1, notificationBuilder)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(
-                1,
-                notificationBuilder,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
-            )
-        } else {
-            startForeground(1, notificationBuilder)
-        }
-    }
-
-    private fun scheduleNotification(triggerTimeInMillis: Long) {
-        val intent = Intent(this, NotificationWidgetService::class.java)
-        val pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setExact(
-            AlarmManager.RTC_WAKEUP,
-            triggerTimeInMillis,
-            pendingIntent
-        )
-    }
-
-    private suspend fun showNotification(notificationModel: NotificationConfig) {
-        // Create an intent for action (if any)
-
-        // Fetch the image if there is one
-        val bitmap = notificationModel.notification_data[0].image["en"]?.let {
-            withContext(Dispatchers.IO) {
-                val url = URL(it)
-                val inputStream: InputStream = url.openConnection().getInputStream()
-                BitmapFactory.decodeStream(inputStream)
+    private fun removeOverlay() {
+        if (::overlayView.isInitialized) {
+            try {
+                if (overlayView.windowToken != null) {
+                    windowManager.removeView(overlayView)
+                    Log.d("NotificationWidgetService", "Overlay removed")
+                }
+            } catch (e: IllegalArgumentException) {
+                Log.e("NotificationWidgetService", "Error removing overlay: ${e.message}", e)
             }
         }
+    }
 
-        // Create the notification
-        val builder = NotificationCompat.Builder(this, "your_channel_id")
-            .setSmallIcon(R.drawable.app_icon)
-            .setContentTitle(notificationModel.notification_data[0].title["en"])
-            .setContentText(notificationModel.notification_data[0].message["en"])
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setAutoCancel(true)
+    private fun checkAndShowOverlay() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val gson = Gson()
+            val notificationConfig =
+                gson.fromJson(AdConfig.Noti_Widget, NotificationConfig::class.java)
 
-        // If there is an image, show it
-        if (bitmap != null) {
-            builder.setStyle(NotificationCompat.BigPictureStyle().bigPicture(bitmap))
-        }
+            if (notificationConfig == null) {
+                Log.e("NotificationWidgetService", "Failed to fetch notification config")
+                return@launch
+            }
 
-        // Show the notification
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            NotificationManagerCompat.from(this).notify(1, builder.build())
-            return
+            for (dayIndex in 0 until 7) {
+                val calendar = Calendar.getInstance()
+                val currentDate = MySharePreference.getStoredDate(this@NotificationWidgetService)
+                val currentDay = MySharePreference.getStoredDay(this@NotificationWidgetService)
+                val currentTimeInMillis = System.currentTimeMillis()
+                val todayDate = SimpleDateFormat(
+                    "yyyy-MM-dd",
+                    Locale.getDefault()
+                ).format(Calendar.getInstance().time)
+
+                if (currentDate != todayDate) {
+                    val dayConfig = notificationConfig.notification_scheduler.getOrNull(dayIndex)
+                    if (dayConfig?.is_active == true && dayIndex == currentDay) {
+                        val time = dayConfig.time
+                        val timeArray = time.split(":")
+                        calendar.set(Calendar.HOUR_OF_DAY, timeArray[0].toInt())
+                        calendar.set(Calendar.MINUTE, timeArray[1].toInt())
+                        calendar.set(Calendar.SECOND, 0)
+
+                        if (currentTimeInMillis >= calendar.timeInMillis && isDeviceLocked(this@NotificationWidgetService)) {
+                            MySharePreference.updateDayIfDateChanged(this@NotificationWidgetService)
+                            val intent =
+                                Intent(
+                                    this@NotificationWidgetService,
+                                    NotiWidgetActivity::class.java
+                                )
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+                            intent.putExtra("notification_config", notificationConfig)
+                            startActivity(intent)
+                            break
+                        }
+                    }
+                }
+            }
         }
     }
-    private suspend fun initObservers() {
-        val gson = Gson()
-        val notificationConfig = gson.fromJson(AdConfig.Noti_Widget, NotificationConfig::class.java)
-        showNotification(notificationConfig)
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        return START_STICKY
+    }
+
+    private fun startForegroundService() {
+        val notificationId = 123
+        val channelId = "notification_widget_service_channel"
+        val channelName = "Silent Notifications"
+
+        val notificationIntent = Intent(this, MainActivity::class.java)
+        val pendingIntent =
+            PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE)
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_MIN
+            ).apply {
+                description = "Channel for silent notifications"
+                enableLights(false)
+                enableVibration(false)
+                setSound(null, null)
+                setShowBadge(false)
+            }
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+
+        val notification = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.app_icon)
+            .setContentTitle(null)
+            .setContentText(null)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setOngoing(true)
+            .setSilent(true)
+            .setVibrate(null)
+            .setSound(null)
+            .setContentIntent(pendingIntent)
+            .setOnlyAlertOnce(true)
+            .setAutoCancel(false)
+            .build()
+
+        startForeground(notificationId, notification)
+    }
+
+    private fun isDeviceLocked(context: Context): Boolean {
+        val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        return keyguardManager.isKeyguardLocked
     }
 }

@@ -96,7 +96,18 @@
             />
 
 
-
+        <com.airbnb.lottie.LottieAnimationView
+            android:visibility="gone"
+            android:id="@+id/animation"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="@dimen/_7sdp"
+            app:layout_constraintEnd_toStartOf="@id/go_premium"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/vip_reward" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

@@ -97,7 +97,6 @@
     <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
-
         android:background="@drawable/ads_background"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content" />

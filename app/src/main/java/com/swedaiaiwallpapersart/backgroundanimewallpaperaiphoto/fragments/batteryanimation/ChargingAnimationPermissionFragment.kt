@@ -113,7 +113,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
 
 
     private fun setEvents() {
-        binding.mySwitch.setOnCheckedChangeListener { compoundButton, b ->
+        binding.mySwitch.setOnCheckedChangeListener { _, b ->
             if (b){
                 requestDrawOverlaysPermission(requireActivity())
             }
@@ -122,7 +122,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
         backHandle()
     }
 
-    fun requestDrawOverlaysPermission(activity: Activity) {
+    private fun requestDrawOverlaysPermission(activity: Activity) {
 
         IKSdkController.setEnableShowResumeAds(true)
 
@@ -143,7 +143,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
         }
     }
 
-    fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
+    private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
         return Settings.canDrawOverlays(context)
     }
 

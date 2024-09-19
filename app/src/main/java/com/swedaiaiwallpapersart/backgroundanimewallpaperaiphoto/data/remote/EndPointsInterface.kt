@@ -7,6 +7,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelChargingAnimation
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelDoubleWallpapers
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelListMostDownloaded
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedAllResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
 import okhttp3.ResponseBody
@@ -40,11 +42,11 @@ interface EndPointsInterface {
         @Query("lastid") lastid:String
     ):retrofit2.Response<ListResponse>
 
+    @GET("getRewardWallpaper.php")
+    suspend fun getRewardWallpaper():retrofit2.Response<RewardedListResponse>
 
     @GET("totalLikes.php")
-    suspend fun getAllLikes(
-
-    ):retrofit2.Response<ArrayList<LikesResponse>>
+    suspend fun getAllLikes():retrofit2.Response<ArrayList<LikesResponse>>
 
     @GET("get_mostdownloaded.php")
     suspend fun getMostUsed(

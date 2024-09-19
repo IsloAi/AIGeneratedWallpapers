@@ -14,6 +14,7 @@ import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
 import android.text.TextPaint
 import android.util.Log
@@ -79,10 +80,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.RewardedViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -107,8 +110,6 @@ class HomeTabsFragment : Fragment() {
 
     private var isBottomSheetVisible = false
 
-
-
     @Inject
     lateinit var appDatabase: AppDatabase
 
@@ -117,17 +118,12 @@ class HomeTabsFragment : Fragment() {
 
     private var reviewManager: ReviewManager? = null
 
-
-
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
+    private val rewardedViewModel: RewardedViewModel by activityViewModels()
     companion object{
         var navigationInProgress = false
     }
-
     val interAd = IKInterstitialAd(lifecycle)
-
-
 
     val images = arrayOf(R.drawable.tab_icon_popular,R.drawable.tab_icon_trending,R.drawable.tab_icon_live,R.drawable.tab_icon_ai_wallpaper,R.drawable.tab_icon_categories,R.drawable.tab_icon_generate)
     private val tabIconMap = mapOf(
@@ -143,11 +139,10 @@ class HomeTabsFragment : Fragment() {
         "Double" to R.drawable.tab_double_icon
     )
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View{
         _binding = FragmentHomeTabsBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -158,7 +153,7 @@ class HomeTabsFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         reviewManager = ReviewManagerFactory.create(requireContext())
         SplashOnFragment.exit = false
-            myActivity = activity as MainActivity
+        myActivity = activity as MainActivity
 
         if (AdConfig.iapScreenType == 0){
             binding.goPremium.visibility = View.GONE
@@ -170,34 +165,25 @@ class HomeTabsFragment : Fragment() {
             }
         }
 
+        showRewardWallpaperScreen()
+
         interAd.loadAd("exitapp_inter", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
+            override fun onAdLoaded() {}
+            override fun onAdLoadFail(error: IKAdError) {}
         })
 
-        Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions.contentToString() )
         if (AdConfig.tabPositions[0].isEmpty()){
             Log.e("TAG", "onViewCreated: "+AdConfig.tabPositions )
             AdConfig.tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
-
-        }else{
-//            AdConfig.tabPositions = AdConfig.tabPositions.filter { it != "Charging" }.toTypedArray()
         }
 
         if (AdConfig.BASE_URL_DATA == ""){
-//            AdConfig.BASE_URL_DATA = "http://edecator.com/wallpaperApp"
             AdConfig.BASE_URL_DATA = "https://4k-pullzone.b-cdn.net"
         }
-
 
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "MainScr_View"))
         }
-
         loadbannerAd()
         setGradienttext()
         setViewPager()
@@ -218,44 +204,28 @@ class HomeTabsFragment : Fragment() {
                             }else{
                                 launchUpdateFlow()
                             }
-
                         }
-
-                        Log.e("TAG", "onUpdateAvailable: $version$versionCode")
                     } catch (e: PackageManager.NameNotFoundException) {
                         e.printStackTrace()
                     }
-
                 }
-
-                override fun onUpdateFail() {
-                    Log.e("TAG", "onUpdateFail: " )
-
-                }
-
+                override fun onUpdateFail() {}
             })
-
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (isAdded) {
                 try {
-                    if (NotificationManagerCompat.from(requireContext()).canUseFullScreenIntent()) {
-                        Log.e("TAG", "onViewCreated: canUseFullScreenIntent" )
-
-                    } else {
+                    if (!NotificationManagerCompat.from(requireContext()).canUseFullScreenIntent()) {
                         val intent = Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
                         intent.putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
                         requireContext().startActivity(intent)
-                        Log.e("TAG", "onViewCreated: not canUseFullScreenIntent" )
                     }
                 }catch (e: ActivityNotFoundException){
                     e.printStackTrace()
                 }
-
             }
         }
-
     }
 
     private fun sendTracking(
@@ -267,7 +237,6 @@ class HomeTabsFragment : Fragment() {
     }
 
     private fun feedback1Sheet() {
-
         if (isBottomSheetVisible) {
             return
         }
@@ -289,7 +258,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         bottomSheetDialog.setOnDismissListener {
-            isBottomSheetVisible = false // Update flag when bottom sheet is dismissed
+            isBottomSheetVisible = false
             MySharePreference.setLastDismissedTime(requireContext(), System.currentTimeMillis())
 
         }
@@ -299,7 +268,6 @@ class HomeTabsFragment : Fragment() {
                 MySharePreference.setFeedbackSession2Completed(requireContext(),true)
             }
         }
-
 
         binding.cancel.setOnClickListener {
             if (isAdded){
@@ -323,9 +291,8 @@ class HomeTabsFragment : Fragment() {
                             if (task.isSuccessful) {
                                 val reviewInfo: ReviewInfo = task.result
                                 val flow: Task<Void> =
-                                    reviewManager!!.launchReviewFlow(myActivity!!, reviewInfo)
-                                flow.addOnCompleteListener { task1 ->
-
+                                    reviewManager!!.launchReviewFlow(myActivity, reviewInfo)
+                                flow.addOnCompleteListener { _ ->
                                 }
                             }
                         }
@@ -348,9 +315,7 @@ class HomeTabsFragment : Fragment() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackRateBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
-        binding.simpleRatingBar.setOnRatingChangeListener { ratingBar, rating, fromUser ->
-
-        }
+        binding.simpleRatingBar.setOnRatingChangeListener { _, _, _ -> }
 
         binding.buttonApplyWallpaper.setOnClickListener {
             MySharePreference.setReviewedSuccess(requireContext(),true)
@@ -452,10 +417,8 @@ class HomeTabsFragment : Fragment() {
                 ColorStateList.valueOf(resources.getColor(R.color.button_bg))
         }
 
-
         binding.buttonApplyWallpaper.setOnClickListener {
             if (binding.feedbackEdt.text.isNotEmpty()){
-
                 try {
                     lifecycleScope.launch(Dispatchers.IO) {
                         MySharePreference.setReviewedSuccess(requireContext(),true)
@@ -464,23 +427,20 @@ class HomeTabsFragment : Fragment() {
                                 MySharePreference.getDeviceID(requireContext())!!
                             )
                         )
-
                         withContext(Dispatchers.Main){
                             Toast.makeText(requireContext(),"Thank you!",Toast.LENGTH_SHORT).show()
                             bottomSheetDialog.dismiss()
                         }
                     }
                 }catch (e:Exception){
-
+                    e.printStackTrace()
                 }catch (e: UnknownHostException){
                     e.printStackTrace()
                 }
-
             }
         }
         bottomSheetDialog.show()
     }
-
 
     private fun getUserIdDialog() {
         val dialogBinding = UpdateDialogBinding.inflate(layoutInflater)
@@ -501,7 +461,6 @@ class HomeTabsFragment : Fragment() {
         dialog.show()
     }
 
-
     fun launchUpdateFlow(){
         if (isAdded){
             val appUpdateManager = AppUpdateManagerFactory.create(requireContext())
@@ -509,31 +468,21 @@ class HomeTabsFragment : Fragment() {
 
             appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-
                     && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
                 ) {
-
                     try {
                         appUpdateManager.startUpdateFlowForResult(
-                            // Pass the intent that is returned by 'getAppUpdateInfo()'.
                             appUpdateInfo,
-                            // an activity result launcher registered via registerForActivityResult
                             updateResultStarter,
-
-                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
-
-                            150
-                        )
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(), 150)
                     } catch (exception: IntentSender.SendIntentException) {
                         Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT).show()
                     }
 
                 }
             }
-
         }
     }
-
 
     private val updateResultStarter =
         IntentSenderForResultStarter { intent, _, fillInIntent, flagsMask, flagsValues, _, _ ->
@@ -544,11 +493,9 @@ class HomeTabsFragment : Fragment() {
             updateLauncher.launch(request)
         }
 
-
     private val updateLauncher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
-        // handle callback
         if (result.data == null) return@registerForActivityResult
         if (result.resultCode == 150) {
             Toast.makeText(context, "Downloading stated", Toast.LENGTH_SHORT).show()
@@ -562,18 +509,30 @@ class HomeTabsFragment : Fragment() {
         if (AdConfig.ISPAIDUSER){
             binding.adsView.visibility = View.GONE
         }else{
-
             binding.adsView.attachLifecycle(lifecycle)
             binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
                 override fun onAdShowed() {}
                 override fun onAdShowFail(error: IKAdError) {
                 }
-
             })
         }
-
     }
+
     private fun setEvents(){
+
+        if (AdConfig.Reward_Screen && MySharePreference.getVIPGiftBool(requireActivity()) && !MySharePreference.isVIPGiftExpired(requireActivity())){
+            binding.animation.visibility = View.VISIBLE
+        }
+
+        binding.animation.setOnClickListener {
+            rewardedViewModel.getAllWallpapers()
+            val bundle = Bundle().apply {
+                putString("name", "Vip")
+                putString("from", "Vip")
+            }
+            findNavController().navigate(R.id.listViewFragment, bundle)
+        }
+
         binding.settings.setOnClickListener {
             IKUtils.closeOldCollapse()
             if (isAdded){
@@ -583,7 +542,6 @@ class HomeTabsFragment : Fragment() {
             Constants.checkAppOpen = false
             findNavController().navigate(R.id.settingFragment)
         }
-
 
         binding.search.setOnClickListener {
             IKUtils.closeOldCollapse()
@@ -604,9 +562,6 @@ class HomeTabsFragment : Fragment() {
         }
         backHandle()
     }
-
-
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -635,7 +590,6 @@ class HomeTabsFragment : Fragment() {
                                     thankyouDialog()
                                 }
                             }
-
                             override fun onAdsShowFail(error: IKAdError) {
                                 if (isAdded){
                                     exit = true
@@ -645,11 +599,7 @@ class HomeTabsFragment : Fragment() {
 
                         })
                     }
-
-
                 }
-
-                Log.e("TAG", "handleOnBackPressed: ", )
             }
         })
     }
@@ -689,17 +639,12 @@ class HomeTabsFragment : Fragment() {
     }
 
     private fun initTabs(){
-
         val images = generateImagesArray(AdConfig.tabPositions)
         AdConfig.tabPositions = AdConfig.tabPositions.map { if (it == "4K") "Car" else it }.toTypedArray()
-
-
 
         val titles = arrayOf(getString(R.string.popular),getString(R.string.trending),
             getString(R.string.live), getString(R.string.ai_wallpaper),
             getString(R.string.category), getString(R.string.gen_ai))
-
-
 
         binding.tabLayout.setSelectedTabIndicatorHeight(0)
         val tabCount: Int = binding.tabLayout.tabCount
@@ -709,20 +654,15 @@ class HomeTabsFragment : Fragment() {
                 tab.setCustomView(R.layout.tab_item)
                 val tabCardView = tab.customView!!.findViewById<CardView>(R.id.container)
                 val tabIcon = tab.customView!!.findViewById<ImageView>(R.id.icon)
-                var tabtitle = tab.customView!!.findViewById<TextView>(R.id.text)
+                val tabtitle = tab.customView!!.findViewById<TextView>(R.id.text)
 
                 tabIcon.setImageResource(images[i])
                 tabtitle.text = AdConfig.tabPositions[i]
 
-
-
                 if (i == 0 ){
                     tabCardView.setCardBackgroundColor(resources.getColor(R.color.button_bg))
                     tabIcon.visibility = View.VISIBLE
-//                    setMarginsForTab(0,0,13)
                 }
-
-
             }
         }
 
@@ -733,7 +673,6 @@ class HomeTabsFragment : Fragment() {
                         if (isAdded){
                             sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "MainScr_LiveTab_Click"))
                         }
-
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: "+ tab.text)
@@ -768,7 +707,6 @@ class HomeTabsFragment : Fragment() {
                         }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
-                        Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Charging" -> {
                         if (isAdded){
@@ -776,7 +714,6 @@ class HomeTabsFragment : Fragment() {
                         }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
-                        Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                     "Gen AI" -> {
                         if (isAdded){
@@ -784,7 +721,6 @@ class HomeTabsFragment : Fragment() {
                         }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
-                        Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
 
                     "Double" -> {
@@ -793,21 +729,16 @@ class HomeTabsFragment : Fragment() {
                         }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
-                        Log.e("TABS", "onTabSelected: "+ tab.text)
                     }
                 }
                 viewModel.setData(true)
                 updateTabAppearance(tab!!,true)
-
             }
-
             override fun onTabUnselected(tab: TabLayout.Tab?) {
                 updateTabAppearance(tab!!,false)
             }
 
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
 
@@ -822,6 +753,7 @@ class HomeTabsFragment : Fragment() {
             val fragment = getFragmentForTab(tabName)
             adapter.addFragment(fragment, tabName)
         }
+
         binding.viewPager.adapter= adapter
         binding.viewPager.offscreenPageLimit = 8
         binding.viewPager.isSaveEnabled = false
@@ -832,19 +764,13 @@ class HomeTabsFragment : Fragment() {
         updateTabAppearance(binding.tabLayout.getTabAt(viewModel.getTab())!!,true)
 
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                // No need to implement
-            }
-
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
             override fun onPageSelected(position: Int) {
                 if (isAdded){
                     viewModel.setTab(position)
                 }
             }
-
-            override fun onPageScrollStateChanged(state: Int) {
-                // No need to implement
-            }
+            override fun onPageScrollStateChanged(state: Int) {}
         })
     }
 
@@ -862,7 +788,6 @@ class HomeTabsFragment : Fragment() {
             else -> {HomeFragment()}
         }
     }
-
 
     private fun updateTabAppearance(tab: TabLayout.Tab, isSelected: Boolean) {
         val tabCardView = tab.customView!!.findViewById<CardView>(R.id.container)
@@ -916,26 +841,23 @@ class HomeTabsFragment : Fragment() {
             }
         }
 
-
-
-
         if (isAdded){
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Home Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
+
+        checkPermissionAndAllow()
     }
 
-    fun shouldShowReviewDialog(context: Context): Boolean {
+    private fun shouldShowReviewDialog(context: Context): Boolean {
         val lastDismissedTime = MySharePreference.getLastDismissedTime(context)
         val currentTime = System.currentTimeMillis()
         val twoMinutesInMillis = 4 * 60 * 1000
 
         return (currentTime - lastDismissedTime) > twoMinutesInMillis
     }
-
-
 
     fun getHomeFragmentIndex(): Int {
         val tabLayout = binding.tabLayout
@@ -951,7 +873,7 @@ class HomeTabsFragment : Fragment() {
     }
 
 
-    fun getTabPositionByName(tabName:String): Int {
+    private fun getTabPositionByName(tabName:String): Int {
         for (i in 0 until binding.tabLayout.tabCount) {
             val tab = binding.tabLayout.getTabAt(i)
             if (tab?.text == tabName) {
@@ -961,7 +883,7 @@ class HomeTabsFragment : Fragment() {
         return -1 // Return -1 if no tab with the specified name is found
     }
 
-    fun navigateToTrending(index:Int){
+    private fun navigateToTrending(index:Int){
         if (isAdded){
             binding.viewPager.currentItem = index
         }
@@ -972,6 +894,37 @@ class HomeTabsFragment : Fragment() {
         val tabPos = getTabPositionByName(tabName)
         if (isAdded){
             navigateToTrending(tabPos)
+        }
+    }
+
+    private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
+        return Settings.canDrawOverlays(context)
+    }
+
+    private fun startService() {
+        val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
+        requireActivity().startService(serviceIntent)
+    }
+
+    private fun checkPermissionAndAllow(){
+        if (!isDrawOverlaysPermissionGranted(requireContext())){
+            findNavController().navigate(R.id.chargingAnimationPermissionFragment)
+        }else{
+            startService()
+        }
+    }
+
+    private fun showRewardWallpaperScreen(){
+        lifecycleScope.launch {
+            delay(3000)
+            if (AdConfig.Reward_Screen){
+                if (!MySharePreference.getVIPGiftBool(requireActivity())){
+                    if (!Constants.hasShownRewardScreen){
+                        Constants.hasShownRewardScreen = true
+                        findNavController().navigate(R.id.rewardDetailsFragment)
+                    }
+                }
+            }
         }
     }
 }

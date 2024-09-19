@@ -62,7 +62,7 @@ class LocalizationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        posnew = MySharePreference.getLanguageposition(requireContext())!!
+        posnew = MySharePreference.getLanguagePosition(requireContext())!!
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
@@ -275,7 +275,7 @@ class LocalizationFragment : Fragment() {
                     sendTracking("language_selected",Pair("language", selectedItem?.lan_name))
                 }
                 MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
-                MySharePreference.setLanguageposition(requireContext(),selected)
+                MySharePreference.setLanguagePosition(requireContext(),selected)
                 val context = LocaleManager.setLocale(requireContext(), selectedItem!!.lan_code)
                 val resources = context.resources
                 val newLocale = Locale(selectedItem!!.lan_code)
@@ -329,7 +329,7 @@ class LocalizationFragment : Fragment() {
                 }
 
                 MySharePreference.setLanguage(requireContext(),"en")
-                MySharePreference.setLanguageposition(requireContext(),0)
+                MySharePreference.setLanguagePosition(requireContext(),0)
                 val context = LocaleManager.setLocale(requireContext(), "en")
                 val resources = context.resources
                 val newLocale = Locale("en")

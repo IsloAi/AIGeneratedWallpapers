@@ -1,10 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -25,7 +21,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
@@ -61,8 +56,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.PermissionManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig.autoNext
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig.timeNext
@@ -78,6 +71,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -87,7 +81,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
 import java.io.InputStream
-import java.util.Calendar
 import java.util.Locale
 import javax.inject.Inject
 
@@ -97,8 +90,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     lateinit var binding: ActivityMainBinding
     private var selectedPrompt: String? = null
 
-    @Inject
-    lateinit var permissionManager: PermissionManager
+    private lateinit var job: Job
 
     private var alertDialog: AlertDialog? = null
 
@@ -128,6 +120,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val lan = MySharePreference.getLanguage(this)
         (application as? MyApp)?.setConnectivityListener(this)
 
+        job = Job()
         val context = LocaleManager.setLocale(this, lan!!)
         val resources = context.resources
         val newLocale = Locale(lan)
@@ -138,8 +131,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         resources1.updateConfiguration(configuration, resources.displayMetrics)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        scheduleWidgetUpdate()
 
         initFirebaseRemoteConfig()
 
@@ -185,6 +176,13 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (::job.isInitialized) {
+            job.cancel()
+        }
+    }
+
     private fun disableEdgeToEdge(window: Window) {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -228,7 +226,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                     // Start the API task after the first JSON insertion completes
                     withContext(Dispatchers.Main) {
-                        mainActivityViewModel.updates.observe(this@MainActivity){result ->
+                        mainActivityViewModel.updates.observe(this@MainActivity) { result ->
                             when (result) {
                                 is Response.Success -> {
                                     Log.e(TAG, "updatedWalls: " + result.data)
@@ -267,21 +265,27 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 Response.Loading -> {
                                     Log.e(TAG, "observefetechedData: loading")
                                 }
+
+                                is Response.Error -> TODO()
+                                Response.Loading -> TODO()
+                                is Response.Processing -> TODO()
+                                is Response.Success -> TODO()
                             }
                         }
 
-                        mainActivityViewModel.deletedIds.observe(this@MainActivity){result->
-                            when(result){
+                        mainActivityViewModel.deletedIds.observe(this@MainActivity) { result ->
+                            when (result) {
                                 is Response.Success -> {
                                     Log.e(TAG, "updatedWalls: " + result.data)
 
                                     result.data?.forEach { item ->
 
-                                        Log.e(TAG, "readjsonAndSaveDataToDb: "+item )
+                                        Log.e(TAG, "readjsonAndSaveDataToDb: " + item)
 
 
                                         CoroutineScope(Dispatchers.IO).async {
-                                            appDatabase.wallpapersDao().deleteById(item.imgid.toInt())
+                                            appDatabase.wallpapersDao()
+                                                .deleteById(item.imgid.toInt())
                                         }
                                     }
 
@@ -328,7 +332,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         }
 
                         val percent = (images2.size * 0.3).toInt()
-                        val topDownloadedWallpapers = appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(percent)
+                        val topDownloadedWallpapers =
+                            appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(percent)
 
                         topDownloadedWallpapers.forEach { it.unlocked = false }
                         appDatabase.liveWallpaperDao().updateWallpapers(topDownloadedWallpapers)
@@ -428,7 +433,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         eventName: String,
         vararg param: Pair<String, String?>
     ) {
-        IKTrackingHelper.sendTracking( eventName, *param)
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
 
@@ -611,7 +616,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     }
 
-    suspend fun parseJsonLive(jsonString: String): LiveImagesResponse? {
+    private suspend fun parseJsonLive(jsonString: String): LiveImagesResponse? {
         return withContext(Dispatchers.IO) {
             try {
                 val gson = Gson()
@@ -625,7 +630,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
 
-    suspend fun readJsonFile(context: Context, fileName: String): String {
+    private suspend fun readJsonFile(context: Context, fileName: String): String {
         return withContext(Dispatchers.IO) {
             try {
                 val inputStream: InputStream = context.assets.open(fileName)
@@ -646,7 +651,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     private fun initFirebaseRemoteConfig() {
         val first = "position_ads"
 
-        var remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
+        val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
 
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
@@ -658,13 +663,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
             override fun onUpdate(configUpdate: ConfigUpdate) {
-                Log.d("TAG", "Updated keys: " + configUpdate.updatedKeys)
 
                 if (configUpdate.updatedKeys.contains(first)) {
                     remoteConfig.activate().addOnCompleteListener {
-
-                        Log.e("TAG", "onUpdate: " + configUpdate.updatedKeys)
-
                         val welcomeMessage = remoteConfig[first].asString()
 
                         val onboarding = remoteConfig["onboarding_screen"].asBoolean()
@@ -672,12 +673,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         val iap = remoteConfig["iap_config"].asString()
 
                         val categoryOrder = remoteConfig["category_order"].asString()
-                        Log.e(TAG, "onUpdate: $categoryOrder")
-                        Log.e(TAG, "onUpdate: $iap")
 
                         val inAppConfig = remoteConfig["in_app_config"].asString()
-
-                        Log.e(TAG, "onUpdate: $inAppConfig")
 
                         val categoryOrderArray =
                             categoryOrder.substring(1, categoryOrder.length - 1).split(", ")
@@ -685,13 +682,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         AdConfig.categoryOrder = categoryOrderArray
                         AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
+                        AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
 
-                        val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
-                        Log.e("Noti_Widget", AdConfig.Noti_Widget)
-                        if (fullOnboardingAutoNext.isEmpty()) {
-                            Log.e("RemoteConfig123", "Remote Config value for fullonboarding_auto_next is null or empty")
-                        } else {
-
+                        val fullOnboardingAutoNext =
+                            remoteConfig["fullonboarding_auto_next"].asString()
+                        if (fullOnboardingAutoNext.isNotEmpty()) {
                             val jsonArray = JSONArray(fullOnboardingAutoNext)
                             val jsonObject = jsonArray.getJSONObject(0)
                             autoNext = jsonObject.getBoolean("auto_next")
@@ -699,9 +694,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         }
 
                         val languagesOrder = remoteConfig["languages"].asString()
-                        val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
+                        val languagesOrderArray =
+                            languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
 
-                        Log.e(TAG, "initFirebaseRemoteConfig: $languagesOrderArray")
                         AdConfig.languagesOrder = languagesOrderArray
                         val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
                         AdConfig.languageLogicShowNative = languageShowNative.toInt()
@@ -714,65 +709,28 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
                         AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
 
-
-                        Log.e(
-                            TAG,
-                            "initFirebaseRemoteConfig: " + languageShowNative + "full native$onboardingFullNative"
-                        )
-
-
-
-
-
-                        Log.e(TAG, "onUpdate: $categoryOrderArray")
-
                         val baseUrls = remoteConfig["dataUrl"].asString()
 
                         AdConfig.BASE_URL_DATA = baseUrls
 
-                        Log.e(TAG, "initFirebaseRemoteConfigURL: $baseUrls")
-
-
-
                         try {
-
                             val jsonObject = JSONObject(inAppConfig)
-
-                            // Retrieve the boolean value associated with the key "languagescralwayshow"
                             val languagescralwayshow =
                                 jsonObject.getBoolean("language_scr_alway_show")
-
                             val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
-
-                            Log.e(TAG, "onUpdate: $languagescralwayshow")
-                            Log.e(TAG, "onUpdate: regular wallpaper $regularWallpaperFlow")
                             AdConfig.regularWallpaperFlow = regularWallpaperFlow
                             AdConfig.inAppConfig = languagescralwayshow
-
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
-
-
-
                         try {
-
-
                             val jsonObject = JSONObject(iap)
-
-                            // Get the value associated with the key "IAPScreentype"
                             val iapScreenType = jsonObject.optInt("IAPScreentype")
-                            Log.e(TAG, "onUpdate: $iapScreenType")
-
                             AdConfig.iapScreenType = iapScreenType
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
-
-
-                        Log.e(TAG, "onUpdate: $positionTabs")
-
-                        var tabNamesArray: Array<String> = positionTabs
+                        val tabNamesArray: Array<String> = positionTabs
                             .replace("{", "")   // Remove the opening curly brace
                             .replace("}", "")   // Remove the closing curly brace
                             .replace("\"", "")
@@ -782,16 +740,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         for (element in tabNamesArray) {
                             Log.e(TAG, "onUpdate: $element")
                         }
-                        //in next update
-//                        tabNamesArray += "Trending"
-
                         AdConfig.tabPositions = tabNamesArray
-
-                        Log.e(TAG, "onUpdate: $positionTabs")
-
                         AdConfig.showOnboarding = onboarding
-                        Log.e(TAG, "onUpdate: $onboarding")
-                        Log.e("TAG update", "initFirebaseRemoteConfig: $welcomeMessage")
 
                         try {
                             val jsonObject = JSONObject(welcomeMessage)
@@ -811,7 +761,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 AdConfig.adStatusTrending = status.toInt()
                                 AdConfig.firstAdLineTrending = threshold.toInt()
                                 AdConfig.lineCountTrending = lineCount.toInt() + 1
-                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
 
                             val cateScrollViewArray =
@@ -826,7 +775,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 AdConfig.adStatusCategoryArt = status.toInt()
                                 AdConfig.firstAdLineCategoryArt = threshold.toInt()
                                 AdConfig.lineCountCategoryArt = lineCount.toInt()
-                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
 
                             val mainScreenScroll =
@@ -837,7 +785,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 val threshold = obj.getString("fisrt_ad_line_threshold")
                                 val lineCount = obj.getString("line_count")
                                 val designType = obj.getString("native_design_type")
-
 
                                 AdConfig.adStatusTrending = status.toInt()
                                 AdConfig.firstAdLineTrending = threshold.toInt()
@@ -853,14 +800,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 val lineCount = obj.getString("line_count")
                                 val designType = obj.getString("native_design_type")
 
-
                                 AdConfig.adStatusMostUsed = status.toInt()
                                 AdConfig.firstAdLineMostUsed = threshold.toInt()
                                 AdConfig.lineCountMostUsed = lineCount.toInt() + 1
-                                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
                             }
-
-
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
@@ -878,206 +821,150 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     val updated = task.result
-                    Log.e("TAG", "Config params updated: $updated")
+                    val welcomeMessage = remoteConfig[first].asString()
+                    val onboarding = remoteConfig["onboarding_screen"].asBoolean()
+                    val positionTabs = remoteConfig["tablist_156"].asString()
+                    val categoryOrder = remoteConfig["category_order"].asString()
+                    val languagesOrder = remoteConfig["languages"].asString()
+                    val inAppConfig = remoteConfig["in_app_config"].asString()
+
+                    val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
+                    if (fullOnboardingAutoNext.isNotEmpty()) {
+                        val jsonArray = JSONArray(fullOnboardingAutoNext)
+                        val jsonObject = jsonArray.getJSONObject(0)
+                        autoNext = jsonObject.getBoolean("auto_next")
+                        timeNext = jsonObject.getLong("time_next")
+                    }
+                    val baseUrls = remoteConfig["dataUrl"].asString()
+                    AdConfig.BASE_URL_DATA = baseUrls
+
+                    try {
+                        val categoryOrderArray =
+                            categoryOrder.substring(1, categoryOrder.length - 1).replace("\"", "")
+                                .split(", ")
+                                .toList()
+                        AdConfig.categoryOrder = categoryOrderArray
+                    } catch (e: StringIndexOutOfBoundsException) {
+                        e.printStackTrace()
+                    }
+                    AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
+                    AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
+                    try {
+                        val languagesOrderArray =
+                            languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
+
+                        AdConfig.languagesOrder = languagesOrderArray
+                    } catch (e: StringIndexOutOfBoundsException) {
+                        e.printStackTrace()
+                    }
+
+                    val iap = remoteConfig["iap_config"].asString()
+                    try {
+                        val jsonObject = JSONObject(inAppConfig)
+                        val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
+                        val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
+
+                        AdConfig.regularWallpaperFlow = regularWallpaperFlow
+                        AdConfig.inAppConfig = languagescralwayshow
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+
+                    try {
+                        val jsonObject = JSONObject(iap)
+                        val iapScreenType = jsonObject.optInt("IAPScreentype")
+
+                        AdConfig.iapScreenType = iapScreenType
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+
+                    val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
+                    AdConfig.languageLogicShowNative = languageShowNative.toInt()
+                    val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
+                    AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
+
+                    val policyOpenAd = remoteConfig["avoid_policy_openad_inter"].asLong()
+                    AdConfig.avoidPolicyOpenAdInter = policyOpenAd.toInt()
+
+                    val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
+                    AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
+
+                    val tabNamesArray: Array<String> = positionTabs
+                        .replace("{", "")   // Remove the opening curly brace
+                        .replace("}", "")   // Remove the closing curly brace
+                        .replace("\"", "")
+                        .split(", ")        // Split the string into an array using ", " as the delimiter
+                        .toTypedArray()
+
+                    for (element in tabNamesArray) {
+                        Log.e(TAG, "onUpdate: $element")
+                    }
+
+                    AdConfig.tabPositions = tabNamesArray
+                    AdConfig.showOnboarding = onboarding
+
+                    try {
+                        val jsonObject = JSONObject(welcomeMessage)
+                        val trendingScrollViewArray =
+                            jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
+                        for (i in 0 until trendingScrollViewArray.length()) {
+                            val obj = trendingScrollViewArray.getJSONObject(i)
+                            val status = obj.getString("Status")
+                            val threshold = obj.getString("fisrt_ad_line_threshold")
+                            val lineCount = obj.getString("line_count")
+                            val designType = obj.getString("native_design_type")
+
+                            AdConfig.adStatusViewListWallSRC = status.toInt()
+                            AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
+                            AdConfig.lineCountViewListWallSRC = lineCount.toInt() + 1
+                        }
+
+                        val cateScrollViewArray =
+                            jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
+                        for (i in 0 until cateScrollViewArray.length()) {
+                            val obj = cateScrollViewArray.getJSONObject(i)
+                            val status = obj.getString("Status")
+                            val threshold = obj.getString("fisrt_ad_line_threshold")
+                            val lineCount = obj.getString("line_count")
+                            val designType = obj.getString("native_design_type")
+
+                            AdConfig.adStatusCategoryArt = status.toInt()
+                            AdConfig.firstAdLineCategoryArt = threshold.toInt()
+                            AdConfig.lineCountCategoryArt = lineCount.toInt()
+                        }
+
+                        val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
+                        for (i in 0 until mainScreenScroll.length()) {
+                            val obj = mainScreenScroll.getJSONObject(i)
+                            val status = obj.getString("Status")
+                            val threshold = obj.getString("fisrt_ad_line_threshold")
+                            val lineCount = obj.getString("line_count")
+                            val designType = obj.getString("native_design_type")
+
+                            AdConfig.adStatusTrending = status.toInt()
+                            AdConfig.firstAdLineTrending = threshold.toInt()
+                            AdConfig.lineCountTrending = lineCount.toInt() + 1
+                        }
+
+
+                        val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
+                        for (i in 0 until mostUsedScreen.length()) {
+                            val obj = mostUsedScreen.getJSONObject(i)
+                            val status = obj.getString("Status")
+                            val threshold = obj.getString("fisrt_ad_line_threshold")
+                            val lineCount = obj.getString("line_count")
+                            val designType = obj.getString("native_design_type")
+
+                            AdConfig.adStatusMostUsed = status.toInt()
+                            AdConfig.firstAdLineMostUsed = threshold.toInt()
+                            AdConfig.lineCountMostUsed = lineCount.toInt() + 1
+                        }
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
                 }
             }
-
-        val welcomeMessage = remoteConfig[first].asString()
-        val onboarding = remoteConfig["onboarding_screen"].asBoolean()
-        val positionTabs = remoteConfig["tablist_156"].asString()
-        val categoryOrder = remoteConfig["category_order"].asString()
-        Log.e(TAG, "onUpdate: $categoryOrder")
-        val languagesOrder = remoteConfig["languages"].asString()
-        val inAppConfig = remoteConfig["in_app_config"].asString()
-
-        val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
-        Log.e("RemoteConfig123", fullOnboardingAutoNext)
-        if (fullOnboardingAutoNext.isEmpty()) {
-            Log.e("RemoteConfig123", "Remote Config value for fullonboarding_auto_next is null or empty")
-        } else {
-
-            val jsonArray = JSONArray(fullOnboardingAutoNext)
-            val jsonObject = jsonArray.getJSONObject(0)
-            autoNext = jsonObject.getBoolean("auto_next")
-            timeNext = jsonObject.getLong("time_next")
-        }
-        val baseUrls = remoteConfig["dataUrl"].asString()
-
-        AdConfig.BASE_URL_DATA = baseUrls
-
-        Log.e(TAG, "initFirebaseRemoteConfig: $baseUrls")
-
-        Log.e(TAG, "onUpdate: $inAppConfig")
-
-        try {
-            val categoryOrderArray =
-                categoryOrder.substring(1, categoryOrder.length - 1).replace("\"", "").split(", ")
-                    .toList()
-
-            AdConfig.categoryOrder = categoryOrderArray
-
-            Log.e(TAG, "onUpdate: $categoryOrderArray")
-        } catch (e: StringIndexOutOfBoundsException) {
-            e.printStackTrace()
-        }
-
-        AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
-        Log.e("Noti_Widget", AdConfig.Noti_Widget)
-
-        try {
-
-            val languagesOrderArray = languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
-
-            Log.e(TAG, "initFirebaseRemoteConfig: $languagesOrderArray")
-
-            AdConfig.languagesOrder = languagesOrderArray
-
-
-
-        } catch (e: StringIndexOutOfBoundsException) {
-            e.printStackTrace()
-        }
-
-
-        val iap = remoteConfig["iap_config"].asString()
-        Log.e(TAG, "onUpdate: $iap")
-
-
-        try {
-
-            val jsonObject = JSONObject(inAppConfig)
-
-            // Retrieve the boolean value associated with the key "languagescralwayshow"
-            val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
-            val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
-
-            Log.e(TAG, "onUpdate: $languagescralwayshow")
-            Log.e(TAG, "onUpdate: regular wallpaper $regularWallpaperFlow")
-            AdConfig.regularWallpaperFlow = regularWallpaperFlow
-            AdConfig.inAppConfig = languagescralwayshow
-
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-        try {
-            val jsonObject = JSONObject(iap)
-            val iapScreenType = jsonObject.optInt("IAPScreentype")
-            Log.e(TAG, "onUpdate: $iapScreenType")
-
-            AdConfig.iapScreenType = iapScreenType
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-
-        val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
-        AdConfig.languageLogicShowNative = languageShowNative.toInt()
-        val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
-        AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
-
-        val policyOpenAd = remoteConfig["avoid_policy_openad_inter"].asLong()
-        AdConfig.avoidPolicyOpenAdInter = policyOpenAd.toInt()
-
-        val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
-        AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
-
-        Log.e(
-            TAG,
-            "initFirebaseRemoteConfig: " + languageShowNative + "full native$onboardingFullNative"
-        )
-
-
-        // Get the value associated with the key "IAPScreentype"
-
-
-        Log.e(TAG, "onUpdate: $positionTabs")
-        val tabNamesArray: Array<String> = positionTabs
-            .replace("{", "")   // Remove the opening curly brace
-            .replace("}", "")   // Remove the closing curly brace
-            .replace("\"", "")
-            .split(", ")        // Split the string into an array using ", " as the delimiter
-            .toTypedArray()
-
-        for (element in tabNamesArray) {
-            Log.e(TAG, "onUpdate: $element")
-        }
-
-        AdConfig.tabPositions = tabNamesArray
-        AdConfig.showOnboarding = onboarding
-        Log.e(TAG, "onUpdate: $onboarding")
-        Log.e("TAG new", "initFirebaseRemoteConfig: $welcomeMessage")
-
-        Log.e(TAG, "initFirebaseRemoteConfig: $remoteConfig")
-
-        try {
-            val jsonObject = JSONObject(welcomeMessage)
-            val trendingScrollViewArray =
-                jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
-            for (i in 0 until trendingScrollViewArray.length()) {
-                val obj = trendingScrollViewArray.getJSONObject(i)
-                val status = obj.getString("Status")
-                val threshold = obj.getString("fisrt_ad_line_threshold")
-                val lineCount = obj.getString("line_count")
-                val designType = obj.getString("native_design_type")
-
-                AdConfig.adStatusViewListWallSRC = status.toInt()
-                AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
-                AdConfig.lineCountViewListWallSRC = lineCount.toInt() + 1
-                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
-            }
-
-            val cateScrollViewArray = jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
-            for (i in 0 until cateScrollViewArray.length()) {
-                val obj = cateScrollViewArray.getJSONObject(i)
-                val status = obj.getString("Status")
-                val threshold = obj.getString("fisrt_ad_line_threshold")
-                val lineCount = obj.getString("line_count")
-                val designType = obj.getString("native_design_type")
-
-                AdConfig.adStatusCategoryArt = status.toInt()
-                AdConfig.firstAdLineCategoryArt = threshold.toInt()
-                AdConfig.lineCountCategoryArt = lineCount.toInt()
-                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
-            }
-
-
-            val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
-            for (i in 0 until mainScreenScroll.length()) {
-                val obj = mainScreenScroll.getJSONObject(i)
-                val status = obj.getString("Status")
-                val threshold = obj.getString("fisrt_ad_line_threshold")
-                val lineCount = obj.getString("line_count")
-                val designType = obj.getString("native_design_type")
-
-
-
-                AdConfig.adStatusTrending = status.toInt()
-                AdConfig.firstAdLineTrending = threshold.toInt()
-                AdConfig.lineCountTrending = lineCount.toInt() + 1
-                println("Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
-            }
-
-
-            val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
-            for (i in 0 until mostUsedScreen.length()) {
-                val obj = mostUsedScreen.getJSONObject(i)
-                val status = obj.getString("Status")
-                val threshold = obj.getString("fisrt_ad_line_threshold")
-                val lineCount = obj.getString("line_count")
-                val designType = obj.getString("native_design_type")
-
-
-                AdConfig.adStatusMostUsed = status.toInt()
-                AdConfig.firstAdLineMostUsed = threshold.toInt()
-                AdConfig.lineCountMostUsed = lineCount.toInt() + 1
-                println("MostUsed: Status: $status, Threshold: $threshold, Line Count: $lineCount, Design Type: $designType")
-            }
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
-
-
     }
 
     fun openPopupMenu(name: String, editPrompt: EditText) {
@@ -1087,7 +974,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog.window!!.setLayout(width, height)
-        val params = (view.parent as View).layoutParams as CoordinatorLayout.LayoutParams
         (view.parent as View).setBackgroundColor(Color.TRANSPARENT)
         dialog.setCancelable(false)
         dialog.findViewById<RelativeLayout>(R.id.closeButton)
@@ -1097,9 +983,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         val applyButton: Button = dialog.findViewById(R.id.applButton)!!
         promptRecyclerView(promptRecyclerView, name, applyButton, editPrompt, dialog)
         dialog.show()
-
     }
-
 
     private fun promptRecyclerView(
         promptRecyclerView: RecyclerView?,
@@ -1109,7 +993,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         dialog: BottomSheetDialog
     ) {
         promptRecyclerView?.layoutManager = LinearLayoutManager(this@MainActivity)
-        val adapter = PromptListAdapter(prompts(name, false), object : GetPromptDetails {
+        val adapter = PromptListAdapter(prompts(name), object : GetPromptDetails {
             override fun getPrompt(prompt: String) {
                 selectedPrompt = ""
                 selectedPrompt = prompt
@@ -1126,14 +1010,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             } else {
                 editPrompt.setText(selectedPrompt)
             }
-
             dialog.dismiss()
-
-
         }
     }
 
-    private fun prompts(name: String, notSelected: Boolean): ArrayList<Prompts> {
+    private fun prompts(name: String): ArrayList<Prompts> {
         val list = ArrayList<Prompts>()
         when (name) {
             "Nature" -> {
@@ -1477,7 +1358,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     IKSdkController.setEnableShowResumeAds(true)
                     Log.e(TAG, "InAppPurchase15: true")
                 }
-            },false)
+            }, false)
         }
     }
 
@@ -1489,21 +1370,15 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         showNoInternetDialog()
     }
 
-
     private fun showNoInternetDialog() {
-
         lifecycleScope.launch(Dispatchers.Main) {
             val builder = AlertDialog.Builder(this@MainActivity)
             builder.setTitle("No Internet Connection")
             builder.setMessage("Please connect to the internet and try again.")
             builder.setCancelable(false)
-
             alertDialog = builder.create()
-
             alertDialog?.show()
         }
-
-
     }
 
     private fun dismissNoInternetDialog() {
@@ -1511,20 +1386,4 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             alertDialog?.dismiss()
         }
     }
-
-    private fun startOrStopService() {
-        val serviceIntent = Intent(this, NotificationWidgetService::class.java)
-        startService(serviceIntent)
-    }
-
-    private fun scheduleWidgetUpdate() {
-            if (permissionManager.checkDrawOverOtherAppsPermission()) {
-                startOrStopService()
-            } else {
-                permissionManager.requestDrawOverOtherAppsPermission(this) {
-                    startOrStopService()
-                }
-            }
-    }
-
 }

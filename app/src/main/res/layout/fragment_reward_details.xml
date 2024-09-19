@@ -1,0 +1,218 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/background"
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.reward.RewardDetailsFragment">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.03"
+        android:orientation="horizontal"
+        android:id="@+id/topGuideline"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.55"
+        android:orientation="horizontal"
+        android:id="@+id/midGuideline"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.05"
+        android:id="@+id/startGuideline"
+        android:orientation="vertical"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.97"
+        android:id="@+id/bottomGuideline"
+        android:orientation="horizontal"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent="0.95"
+        android:id="@+id/endGuideline"
+        android:orientation="vertical"
+        />
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/reward_bg"
+        android:scaleType="centerCrop"/>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/reward_fg"
+        android:scaleType="centerCrop"/>
+
+    <ImageView
+        android:id="@+id/close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/topGuideline"
+        android:src="@drawable/ic_close"/>
+
+    <TextView
+        android:id="@+id/bottom_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        app:layout_constraintBottom_toTopOf="@id/bottomGuideline"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        android:text="Click on “Watch Ad” to claim your VIP Wallpaper pack!"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12sdp"
+        android:fontFamily="@font/poppins_regular"
+        android:layout_marginBottom="@dimen/_10sdp"/>
+    
+    <RelativeLayout
+        android:id="@+id/watchAd"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_40sdp"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintBottom_toTopOf="@id/bottom_text"
+        android:layout_marginHorizontal="@dimen/_20sdp"
+        android:layout_marginVertical="@dimen/_10sdp"
+        android:backgroundTint="@color/color_ads_text_bg"
+        android:background="@drawable/new_button_bg">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_watch_ad"
+                android:layout_centerVertical="true"
+                android:id="@+id/icon"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/watch_ad"
+                android:textAllCaps="true"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13sdp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/icon"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:includeFontPadding="false"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintBottom_toTopOf="@id/watchAd"
+        app:layout_constraintTop_toBottomOf="@id/subtitle">
+        <ImageView
+            android:layout_marginVertical="@dimen/_10sdp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_wallpapers_rewarded"
+            android:id="@+id/icon4K"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:layout_marginVertical="@dimen/_10sdp"
+            app:layout_constraintBottom_toTopOf="@id/icon4K"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_duration"
+            android:id="@+id/duration"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30 Free Wallpapers"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/icon4K"
+            app:layout_constraintStart_toEndOf="@id/icon4K"
+            app:layout_constraintTop_toTopOf="@id/icon4K"
+            app:layout_constraintBottom_toBottomOf="@id/icon4K"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:includeFontPadding="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="24 hours"
+            android:fontFamily="@font/poppins_medium"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/icon4K"
+            app:layout_constraintStart_toEndOf="@id/duration"
+            app:layout_constraintTop_toTopOf="@id/duration"
+            app:layout_constraintBottom_toBottomOf="@id/duration"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:includeFontPadding="false"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Watch an AD"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_24sdp"
+        android:layout_centerVertical="true"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/midGuideline"
+        android:includeFontPadding="false"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_amp"
+        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        android:layout_marginBottom="@dimen/_5sdp"/>
+    <TextView
+        android:id="@+id/subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Earn VIP Wallpapers Pack"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@color/gems_color"
+        android:textSize="@dimen/_18sdp"
+        android:layout_centerVertical="true"
+        app:layout_constraintStart_toEndOf="@id/startGuideline"
+        app:layout_constraintEnd_toStartOf="@id/endGuideline"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:includeFontPadding="false"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

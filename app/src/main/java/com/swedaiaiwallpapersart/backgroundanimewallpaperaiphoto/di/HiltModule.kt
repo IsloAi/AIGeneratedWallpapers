@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.FetchDataRepositoryImpl
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.WallpaperRepositryImp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.WallpaperRepositoryImp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.FetchDataRepository
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.WallpaperRepositry
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
@@ -71,7 +71,7 @@ object HiltModule {
 
     @Provides
     fun provideWallpaperRepo(webApiInterface: EndPointsInterface): WallpaperRepositry {
-        return WallpaperRepositryImp(webApiInterface)
+        return WallpaperRepositoryImp(webApiInterface)
     }
 
     @Provides

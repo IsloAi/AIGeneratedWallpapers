@@ -153,7 +153,6 @@ class PreviewChargingAnimationFragment : Fragment() {
                 }
                 }
             }else{
-
                 findNavController().navigate(R.id.chargingAnimationPermissionFragment)
             }
         }
@@ -175,7 +174,7 @@ class PreviewChargingAnimationFragment : Fragment() {
         IKTrackingHelper.sendTracking( eventName, *param)
     }
 
-    fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
+    private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
         return Settings.canDrawOverlays(context)
     }
 

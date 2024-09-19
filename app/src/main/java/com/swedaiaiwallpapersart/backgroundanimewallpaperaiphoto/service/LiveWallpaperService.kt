@@ -24,7 +24,7 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import com.google.firebase.FirebaseApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
+import java.io.File
 
 class LiveWallpaperService : WallpaperService() {
 
@@ -55,8 +55,17 @@ class LiveWallpaperService : WallpaperService() {
             intentFilter.addAction(ACTION_UPDATE_WALLPAPER)
 
             liveWallBroadcastReceiver = object : BroadcastReceiver() {
+                @UnstableApi
                 override fun onReceive(context: Context?, intent: Intent) {
                     super.onReceive(context, intent)
+                    if (context == null || intent == null) {
+                        Log.e(
+                            "LiveWallpaperService",
+                            "Context or Intent is null in BroadcastReceiver"
+                        )
+                        return
+                    }
+
                     when (intent.action) {
                         KEY_ACTION -> {
                             val action = intent.getBooleanExtra(KEY_ACTION, false)
@@ -122,7 +131,9 @@ class LiveWallpaperService : WallpaperService() {
                 liveVideoFilePath = videoPath
                 val mediaItem = MediaItem.fromUri(videoPath)
 
-                setMediaItem(mediaItem)
+                if (File(liveVideoFilePath!!).exists()) {
+                    setMediaItem(mediaItem)
+                }
                 repeatMode = Player.REPEAT_MODE_ALL
                 videoScalingMode = C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING
 
@@ -152,30 +163,47 @@ class LiveWallpaperService : WallpaperService() {
             exoPlayer?.playWhenReady = visible
         }
 
+        @UnstableApi
         private fun restartExoPlayer() {
-            exoPlayer?.release()
-            initializeExoPlayer(surfaceHolder)
+            val handler = Handler(Looper.getMainLooper())
+            handler.post {
+                exoPlayer?.run {
+                    if (!isReleased) {
+                        release()
+                    }
+                    initializeExoPlayer(surfaceHolder)
+                }
+            }
         }
 
         override fun onSurfaceDestroyed(holder: SurfaceHolder) {
-            super.onSurfaceDestroyed(holder)
             exoPlayer?.release()
             exoPlayer = null
+            super.onSurfaceDestroyed(holder)
         }
 
         override fun onDestroy() {
             super.onDestroy()
-            exoPlayer?.release()
-            exoPlayer = null
 
+            Handler(Looper.getMainLooper()).post {
+                exoPlayer?.release()
+                exoPlayer = null
+            }
+
+            // Unregister the receiver only if it was registered
             if (isReceiverRegistered && liveWallBroadcastReceiver != null) {
-                unregisterReceiver(liveWallBroadcastReceiver)
-                isReceiverRegistered = false
-                liveWallBroadcastReceiver = null
+                try {
+                    unregisterReceiver(liveWallBroadcastReceiver)
+                    isReceiverRegistered = false
+                    liveWallBroadcastReceiver = null
+                } catch (e: IllegalArgumentException) {
+                    Log.e("LiveWallpaperService", "Receiver not registered: ${e.message}")
+                }
             }
 
             engineInstance = null
         }
+
     }
 
     override fun onCreateEngine(): Engine {
@@ -193,9 +221,11 @@ class LiveWallpaperService : WallpaperService() {
         const val ACTION_UPDATE_WALLPAPER = "com.swedaiaiwallpapersart.UPDATE_WALLPAPER"
 
         private fun updateWallpaper(context: Context) {
-            Log.d(TAG, "updateWallpaper: SendBroadcast")
             Intent(ACTION_WALLPAPER_SET_SUCCESS).apply { context.sendBroadcast(this) }
-            Intent(ACTION_UPDATE_WALLPAPER).apply { context.sendBroadcast(this) }
+            Handler(Looper.getMainLooper()).post {
+                context.sendBroadcast(Intent(ACTION_UPDATE_WALLPAPER))
+            }
+
         }
 
         fun setToWallPaper(context: Context, isFirst: Boolean) {

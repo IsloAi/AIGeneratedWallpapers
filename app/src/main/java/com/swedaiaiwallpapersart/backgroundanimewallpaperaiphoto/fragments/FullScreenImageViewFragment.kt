@@ -95,6 +95,7 @@ class FullScreenImageViewFragment : DialogFragment() {
     val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var myActivity : MainActivity
+    private var fromStr:String = ""
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -113,15 +114,25 @@ class FullScreenImageViewFragment : DialogFragment() {
     }
 
 
-    private fun initDataObservers(){
-        sharedViewModel.selectedCat.observe(viewLifecycleOwner){
-            if (it != null){
+    private fun initDataObservers() {
+        sharedViewModel.selectedCat.observe(viewLifecycleOwner) { catResponse ->
+            catResponse?.let {
+                               // Observe the wallpaperFromType to determine which URL to use
+                sharedViewModel.wallpaperFromType.observe(viewLifecycleOwner) { from ->
+                    fromStr = from
+                    val url = if (from == "Vip") {
+                        AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + responseData?.hd_image_url
+                    } else {
+                        AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + responseData?.hd_image_url
+                    }
+
+                    // Load the image from the constructed URL
+                    getBitmapFromGlide(url)
+                }
+
                 responseData = it
                 setImageToView()
-
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +responseData?.hd_image_url)
             }
-
         }
     }
 
@@ -412,8 +423,13 @@ class FullScreenImageViewFragment : DialogFragment() {
 
 
     private fun setImageToView(){
+        val url = if (fromStr == "Vip"){
+            AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + responseData!!.hd_image_url
+        }else{
+            AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + responseData!!.hd_image_url
+        }
         Glide.with(requireContext())
-            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +responseData!!.hd_image_url)
+            .load(url)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,

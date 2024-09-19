@@ -12,6 +12,7 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,7 +46,7 @@ class ApiCategoriesListAdapter(
     var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
     private val myActivity: MainActivity,
-    from: String
+    private val from: String
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -61,6 +62,7 @@ class ApiCategoriesListAdapter(
         "trending" -> "mainscr_trending_tab_scroll_view"
         "category" -> "categoryscr_scroll_view"
         "search" -> "searchscr_scroll_view"
+        "Vip" -> "rewardscr"
         else -> "mainscr_sub_cate_tab_click_item"
     }
     private val firstAdLineThreshold = AdConfig.firstAdLineViewListWallSRC.takeIf { it != 0 } ?: 4
@@ -170,9 +172,13 @@ class ApiCategoriesListAdapter(
             iapItem.visibility = View.GONE
         }
 
-
+        val url = if (from == "Vip"){
+            AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url + "?class=custom"
+        }else{
+            AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom"
+        }
         Glide.with(context!!)
-            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")
+            .load(url)
             .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -181,7 +187,7 @@ class ApiCategoriesListAdapter(
                     target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    Log.d("onLoadFailed", "onLoadFailed: ")
+                    Log.d("onLoadFailed", "Failed to load: ${e?.message}")
                     animationView.setAnimation(R.raw.no_data_image_found)
                     animationView.visibility = View.VISIBLE
                     errorImg.visibility = View.VISIBLE
@@ -335,8 +341,5 @@ class ApiCategoriesListAdapter(
     fun addNewData() {
         arrayList.clear()
         notifyDataSetChanged()
-
     }
-
-
 }

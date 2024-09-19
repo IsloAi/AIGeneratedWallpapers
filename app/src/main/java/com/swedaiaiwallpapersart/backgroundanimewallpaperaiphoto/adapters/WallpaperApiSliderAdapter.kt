@@ -45,7 +45,8 @@ import kotlinx.coroutines.withContext
 class WallpaperApiSliderAdapter(
     private val arrayList: ArrayList<CatResponse?>,
     private val fullViewImage: FullViewImage,
-    private val mActivity:MainActivity
+    private val mActivity:MainActivity,
+    private val from:String
     ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var context :Context? = null
 
@@ -167,7 +168,14 @@ class WallpaperApiSliderAdapter(
                 fullViewImage.getFullImageUrl(model)
 //            }
         }
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +model.hd_image_url).diskCacheStrategy(DiskCacheStrategy.ALL)
+
+        val url = if (from == "Vip"){
+            AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url
+        }else{
+            AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url
+        }
+
+        Glide.with(context!!).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object:
                 RequestListener<Drawable> {
                 override fun onLoadFailed(

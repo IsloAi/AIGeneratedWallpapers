@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotiWidgetActivity">
 
-    <ImageView
-        android:id="@+id/close"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/close"
-        android:layout_alignParentEnd="true"
-        app:tint="@color/black"/>
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:id="@+id/close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close"
+            android:layout_alignParentEnd="true"
+            app:tint="@color/black"/>
 
         <RelativeLayout
             android:layout_marginTop="@dimen/_10sdp"
@@ -38,38 +46,38 @@
                     android:src="@drawable/app_icon"
                     android:layout_marginStart="@dimen/_15sdp"/>
 
-               <LinearLayout
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical"
-                   android:layout_marginHorizontal="@dimen/_15sdp"
-                   android:layout_toEndOf="@id/appIcon"
-                   android:layout_centerVertical="true">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="@dimen/_15sdp"
+                    android:layout_toEndOf="@id/appIcon"
+                    android:layout_centerVertical="true">
 
-                   <TextView
-                       android:id="@+id/title"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Notification Title"
-                       android:textColor="@color/white"
-                       android:fontFamily="@font/poppins_semibold"
-                       android:textSize="18sp"
-                       android:includeFontPadding="false"/>
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notification Title"
+                        android:textColor="@color/white"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:textSize="18sp"
+                        android:includeFontPadding="false"/>
 
-                   <TextView
-                       android:id="@+id/message"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:text="Notification Title Notification Title Notification Title Notification Title Notification Title Notification Title Notification Title"
-                       android:textColor="@color/white"
-                       android:ellipsize="end"
-                       android:fontFamily="@font/poppins_regular"
-                       android:textSize="12sp"
-                       android:lines="2"
-                       android:includeFontPadding="false"
-                       />
+                    <TextView
+                        android:id="@+id/message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Notification Title Notification Title Notification Title Notification Title Notification Title Notification Title Notification Title"
+                        android:textColor="@color/white"
+                        android:ellipsize="end"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textSize="12sp"
+                        android:lines="2"
+                        android:includeFontPadding="false"
+                        />
 
-               </LinearLayout>
+                </LinearLayout>
 
             </RelativeLayout>
 
@@ -85,7 +93,7 @@
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                 android:layout_above="@id/action_button"/>
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/action_button"
                 android:layout_width="match_parent"
                 android:layout_marginHorizontal="@dimen/_15sdp"
@@ -104,4 +112,6 @@
                 android:background="@drawable/new_button_bg"
                 />
         </RelativeLayout>
+
+    </RelativeLayout>
 </RelativeLayout>
