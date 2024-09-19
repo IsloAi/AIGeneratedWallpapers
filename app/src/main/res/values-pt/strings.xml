@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">4K Wallpapers - AI Generator</string>
+     <string name="app_name">4K Wallpapers - Live Wallpapers</string>
 
     <string name="are_you_sure_you_want_to_exit">Tem certeza que deseja sair..!</string>
     <string name="categories">Categorias</string>

@@ -68,7 +68,7 @@ class MySharePreference {
             return sharedPreferences.getString("KEY_DATE", "")!!
         }
 
-        fun getCurrentDate(): String {
+        private fun getCurrentDate(): String {
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             return sdf.format(Date())
         }

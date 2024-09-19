@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">4K Wallpapers - Live Wallpapers</string>
+
     <string name="are_you_sure_you_want_to_exit">क्या आप निश्चित हैं कि आप बाहर जाना चाहते हैं..!</string>
     <string name="categories">श्रेणियाँ</string>
     <string name="wallpapers">वॉलपेपर्स</string>
