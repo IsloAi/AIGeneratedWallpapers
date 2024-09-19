@@ -136,6 +136,7 @@ class ListViewFragment : Fragment(), AdEventListener {
                 initTrendingData()
             }
             "Vip" -> {
+                sharedViewModel.clearData()
                 loadRewardedData()
             }
             else -> {
@@ -397,7 +398,6 @@ class ListViewFragment : Fragment(), AdEventListener {
                                 tempList.add(model)
                             }
                         }
-
                         val processedList = if (AdConfig.ISPAIDUSER) {
                             tempList.shuffled()
                         } else {

@@ -129,6 +129,7 @@ import java.net.URL
 import java.net.UnknownHostException
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import kotlin.math.abs
 
 @AndroidEntryPoint
 class WallpaperViewFragment : Fragment() {
@@ -464,13 +465,17 @@ class WallpaperViewFragment : Fragment() {
             if (arrayList[position] != null) {
                 getLargImage = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" +arrayList[position]?.hd_image_url!!
                 getSmallImage = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" +arrayList[position]+"?class=custom"
-                getBitmapFromGlide(getLargImage)
+                if (isAdded){
+                    getBitmapFromGlide(getLargImage)
+                }
             }
         }else{
             if (arrayList[position] != null) {
                 getLargImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +arrayList[position]?.hd_image_url!!
                 getSmallImage = AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" +arrayList[position]?.compressed_image_url!!
-                getBitmapFromGlide(getLargImage)
+                if (isAdded){
+                    getBitmapFromGlide(getLargImage)
+                }
             }
         }
 
@@ -543,8 +548,6 @@ class WallpaperViewFragment : Fragment() {
             addFavourite(requireContext(), position, binding.favouriteButton)
             Constants.checkInter = false
             Constants.checkAppOpen = false
-
-
         }
 
 
@@ -783,7 +786,7 @@ class WallpaperViewFragment : Fragment() {
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(50))
         transformer.addTransformer { page, position ->
-            val r: Float = 1 - Math.abs(position)
+            val r: Float = 1 - abs(position)
             page.scaleY = 0.82f + r * 0.16f
         }
         viewPager2?.setPageTransformer(transformer)

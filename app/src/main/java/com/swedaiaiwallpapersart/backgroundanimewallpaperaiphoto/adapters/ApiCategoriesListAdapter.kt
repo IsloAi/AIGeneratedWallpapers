@@ -12,11 +12,9 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -36,7 +34,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,13 +74,15 @@ class ApiCategoriesListAdapter(
         coroutineScope = scope
     }
 
-    inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatResponse) {
             setAllData(adapterPosition, model, binding)
         }
     }
 
-    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             loadad(binding)
         }
@@ -113,10 +112,12 @@ class ApiCategoriesListAdapter(
                 val binding = WallpaperRowBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
+
             VIEW_TYPE_NATIVE_AD -> {
                 val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -130,6 +131,7 @@ class ApiCategoriesListAdapter(
                 val viewHolderContainer1 = holder as ViewHolderContainer1
                 arrayList[position]?.let { viewHolderContainer1.bind(it) }
             }
+
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind()
@@ -172,9 +174,9 @@ class ApiCategoriesListAdapter(
             iapItem.visibility = View.GONE
         }
 
-        val url = if (from == "Vip"){
+        val url = if (from == "Vip") {
             AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url + "?class=custom"
-        }else{
+        } else {
             AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom"
         }
         Glide.with(context!!)
@@ -255,11 +257,12 @@ class ApiCategoriesListAdapter(
                     object : IKShowWidgetAdListener {
                         override fun onAdShowFail(error: IKAdError) {
                             Log.e("TAG", "onAdsLoadFail: native failed")
-                            binding.adsView.visibility = if (statusAd == 0 || !isNetworkAvailable()) {
-                                View.GONE
-                            } else {
-                                View.VISIBLE
-                            }
+                            binding.adsView.visibility =
+                                if (statusAd == 0 || !isNetworkAvailable()) {
+                                    View.GONE
+                                } else {
+                                    View.VISIBLE
+                                }
                         }
 
                         override fun onAdShowed() {
@@ -305,8 +308,12 @@ class ApiCategoriesListAdapter(
         }
 
         if (newItems.isNotEmpty()) {
-            arrayList.addAll(newItems.distinct())
-            notifyItemRangeInserted(startPosition, newItems.size)
+            try {
+                arrayList.addAll(newItems.distinct())
+                notifyItemRangeInserted(startPosition, newItems.size)
+            } catch (e: IndexOutOfBoundsException) {
+                e.printStackTrace()
+            }
         } else {
             Log.e("********new Data", "updateMoreData: no new items to add")
         }
@@ -329,6 +336,7 @@ class ApiCategoriesListAdapter(
         override fun getNewListSize() = newList.size
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
             oldList[oldItemPosition]?.id == newList[newItemPosition]?.id  // Adjust comparison based on your data
+
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
             oldList[oldItemPosition] == newList[newItemPosition]
     }
@@ -339,7 +347,11 @@ class ApiCategoriesListAdapter(
     }
 
     fun addNewData() {
-        arrayList.clear()
-        notifyDataSetChanged()
+        try {
+            arrayList.clear()
+            notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
     }
 }

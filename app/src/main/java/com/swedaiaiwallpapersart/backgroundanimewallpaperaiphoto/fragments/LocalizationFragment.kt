@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
@@ -285,49 +286,31 @@ class LocalizationFragment : Fragment() {
                 configuration.setLayoutDirection(Locale(selectedItem!!.lan_code));
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
                 if (exit){
-                    Log.e(TAG, "setEvents:  exit true", )
-
                     if (onBoard){
                         findNavController().navigate(R.id.homeTabsFragment)
                     }else{
                         if (AdConfig.showOnboarding){
-                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
                             findNavController().navigate(R.id.onBoardingFragment)
                         }else{
-                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
                     }
 
                 }else{
-                    Log.e(TAG, "setEvents:  exit false", )
                     if (!onBoard){
-                        Log.e(TAG, "setEvents:  exit false, onboard false", )
                         if (AdConfig.showOnboarding){
-                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording true", )
                             findNavController().navigate(R.id.onBoardingFragment)
                         }else{
-                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording false", )
-
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
-
-
                     }else{
-                        Log.e(TAG, "setEvents:  exit false, onboard true", )
                         findNavController().navigateUp()
                     }
                 }
-
-
-
-
             } else {
-
                 if (isAdded){
                     sendTracking("language_selected",Pair("language", "English"))
                 }
-
                 MySharePreference.setLanguage(requireContext(),"en")
                 MySharePreference.setLanguagePosition(requireContext(),0)
                 val context = LocaleManager.setLocale(requireContext(), "en")
@@ -343,34 +326,23 @@ class LocalizationFragment : Fragment() {
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
                 if (exit){
-                    Log.e(TAG, "setEvents:  exit true", )
                     if (onBoard){
                         findNavController().navigate(R.id.homeTabsFragment)
                     }else{
                         if (AdConfig.showOnboarding){
-                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding true", )
                             findNavController().navigate(R.id.onBoardingFragment)
                         }else{
-                            Log.e(TAG, "setEvents:  exit true, Adconfig.showonboarding false", )
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
                     }
                 }else{
-                    Log.e(TAG, "setEvents:  exit false", )
                     if (!onBoard){
-                        Log.e(TAG, "setEvents:  exit false, onboard false", )
                         if (AdConfig.showOnboarding){
-                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording true", )
                             findNavController().navigate(R.id.onBoardingFragment)
                         }else{
-                            Log.e(TAG, "setEvents:  exit false, onboard false,Adconfig.showonbaording false", )
-
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
-
-
                     }else{
-                        Log.e(TAG, "setEvents:  exit false, onboard true", )
                         findNavController().navigateUp()
                     }
                 }
@@ -378,7 +350,6 @@ class LocalizationFragment : Fragment() {
             }
         }
     }
-
 
     private fun backHandle(){
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
@@ -406,8 +377,4 @@ class LocalizationFragment : Fragment() {
             }
         }
     }
-
-
-
-
 }

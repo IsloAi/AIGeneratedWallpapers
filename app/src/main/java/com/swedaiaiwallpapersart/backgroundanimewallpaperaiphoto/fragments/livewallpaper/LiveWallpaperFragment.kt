@@ -91,6 +91,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         })
 
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
+        (binding.liveReccyclerview.layoutManager as GridLayoutManager).isItemPrefetchEnabled = false
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)

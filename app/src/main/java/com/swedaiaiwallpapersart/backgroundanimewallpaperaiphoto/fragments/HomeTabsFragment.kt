@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.ikame.android.sdk.IKSdkController
@@ -596,7 +597,6 @@ class HomeTabsFragment : Fragment() {
                                     existDialog.exitPopup(requireContext(),requireActivity(),myActivity)
                                 }
                             }
-
                         })
                     }
                 }
@@ -911,17 +911,20 @@ class HomeTabsFragment : Fragment() {
             findNavController().navigate(R.id.chargingAnimationPermissionFragment)
         }else{
             startService()
+            showRewardWallpaperScreen()
         }
     }
 
-    private fun showRewardWallpaperScreen(){
-        lifecycleScope.launch {
-            delay(3000)
-            if (AdConfig.Reward_Screen){
-                if (!MySharePreference.getVIPGiftBool(requireActivity())){
-                    if (!Constants.hasShownRewardScreen){
-                        Constants.hasShownRewardScreen = true
-                        findNavController().navigate(R.id.rewardDetailsFragment)
+    private fun showRewardWallpaperScreen() {
+        // Use a flag to avoid multiple calls if needed
+        if (!Constants.hasShownRewardScreen && !AdConfig.ISPAIDUSER) {
+            lifecycleScope.launch {
+                delay(3000)
+                if (AdConfig.Reward_Screen) {
+                    if (!MySharePreference.getVIPGiftBool(requireActivity())) {
+                        if (findNavController().currentDestination?.id == R.id.homeTabsFragment) {
+                            findNavController().navigate(R.id.rewardDetailsFragment)
+                        }
                     }
                 }
             }

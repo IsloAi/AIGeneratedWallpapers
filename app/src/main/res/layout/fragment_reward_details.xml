@@ -109,7 +109,6 @@
                 android:src="@drawable/ic_watch_ad"
                 android:layout_centerVertical="true"
                 android:id="@+id/icon"/>
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

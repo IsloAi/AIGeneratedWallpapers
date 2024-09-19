@@ -46,7 +46,7 @@
         >
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="4K Wallpaper"
             android:fontFamily="@font/microgramma"
@@ -54,6 +54,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/animation"
             android:id="@+id/toolTxt"
             android:textColor="@color/white"
             />
@@ -75,7 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@id/settings"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/icon_search"
@@ -87,7 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toStartOf="@id/search"
-            android:layout_marginEnd="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/go_premium"
@@ -99,14 +100,15 @@
         <com.airbnb.lottie.LottieAnimationView
             android:visibility="gone"
             android:id="@+id/animation"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_40sdp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_30sdp"
             android:layout_marginBottom="@dimen/_7sdp"
             app:layout_constraintEnd_toStartOf="@id/go_premium"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
+            android:scaleType="centerCrop"
             app:lottie_rawRes="@raw/vip_reward" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

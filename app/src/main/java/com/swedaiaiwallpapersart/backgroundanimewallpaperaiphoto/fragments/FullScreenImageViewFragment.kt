@@ -116,8 +116,8 @@ class FullScreenImageViewFragment : DialogFragment() {
 
     private fun initDataObservers() {
         sharedViewModel.selectedCat.observe(viewLifecycleOwner) { catResponse ->
-            catResponse?.let {
-                               // Observe the wallpaperFromType to determine which URL to use
+            catResponse?.let { response ->
+                responseData = response
                 sharedViewModel.wallpaperFromType.observe(viewLifecycleOwner) { from ->
                     fromStr = from
                     val url = if (from == "Vip") {
@@ -125,13 +125,13 @@ class FullScreenImageViewFragment : DialogFragment() {
                     } else {
                         AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + responseData?.hd_image_url
                     }
-
-                    // Load the image from the constructed URL
-                    getBitmapFromGlide(url)
+                    if (isAdded){
+                        getBitmapFromGlide(url)
+                    }
+                    if (isAdded){
+                        setImageToView()
+                    }
                 }
-
-                responseData = it
-                setImageToView()
             }
         }
     }
@@ -152,23 +152,14 @@ class FullScreenImageViewFragment : DialogFragment() {
 
 
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("viewlistwallscr_item_vip_inter", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
+            override fun onAdLoaded() {}
+            override fun onAdLoadFail(error: IKAdError) {}
         })
 
         interAd.loadAd("viewlistwallscr_setdilog_set_button", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
+            override fun onAdLoaded() {}
+            override fun onAdLoadFail(error: IKAdError) {}
         })
         initDataObservers()
         myWallpaperManager = MyWallpaperManager(requireContext(),requireActivity())
@@ -178,42 +169,25 @@ class FullScreenImageViewFragment : DialogFragment() {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetRegularWallScr_BackBt_Click"))
             }
-
         }
-
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "SetRegularWallScr_View"))
         }
         setEvents()
-
-
-
     }
 
     private fun loadRewardAd() {
         rewardAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
         rewardAd.loadAd("viewlistwallscr_item_vip_reward", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
+            override fun onAdLoaded() {}
+            override fun onAdLoadFail(error: IKAdError) {}
         })
 
         rewardAd.loadAd("viewlistwallscr_download_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
+            override fun onAdLoaded() {}
+            override fun onAdLoadFail(error: IKAdError) {}
         })
     }
-
 
     fun setEvents(){
         binding.favouriteButton.setOnClickListener {
@@ -229,8 +203,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                 binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
             }
             addFavourite(requireContext(),binding.favouriteButton)
-
-
         }
 
         binding.downloadWallpaper.setOnClickListener{
@@ -247,7 +219,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                     if (AdConfig.ISPAIDUSER){
                         mSaveMediaToStorage(bitmap)
                     }else{
-
                         getUserIdDialog()
                     }
                 }
@@ -258,49 +229,39 @@ class FullScreenImageViewFragment : DialogFragment() {
                     getUserIdDialog()
                 }
             }
-
         }
 
         binding.buttonApplyWallpaper.setOnClickListener {
             if (isAdded){
                 sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "SetRegularWallScr_ApplyBt_Click"))
             }
-//           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             if(bitmap != null){
-
                 if (responseData?.unlockimges == true){
                     openPopupMenu(responseData!!)
                 }else{
-
                     if (AdConfig.ISPAIDUSER){
-
                         openPopupMenu(responseData!!)
                     }else{
                         unlockDialog()
                     }
-
                 }
             }else{
                 Toast.makeText(requireContext(),
                     getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT).show()
             }
-//           }else{
-//               Toast.makeText(requireContext(), "Please first buy your wallpaper", Toast.LENGTH_SHORT).show()
-//           }
-
         }
     }
 
     private fun unlockDialog() {
         val dialog = Dialog(requireContext())
         val bindingDialog = DialogUnlockOrWatchAdsBinding.inflate(LayoutInflater.from(requireContext()))
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(bindingDialog.root)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(width, height)
-        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog?.setCancelable(false)
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
 
         if (AdConfig.iapScreenType == 0){
             bindingDialog.upgradeButton.visibility = View.GONE
@@ -308,10 +269,8 @@ class FullScreenImageViewFragment : DialogFragment() {
             bindingDialog.dividerEnd.visibility = View.INVISIBLE
             bindingDialog.dividerStart.visibility = View.INVISIBLE
         }
-//        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
 
-
-        bindingDialog.watchAds?.setOnClickListener {
+        bindingDialog.watchAds.setOnClickListener {
             dialog.dismiss()
             if(bitmap != null){
 
@@ -347,31 +306,31 @@ class FullScreenImageViewFragment : DialogFragment() {
             }
         }
 
-        bindingDialog.upgradeButton?.setOnClickListener {
+        bindingDialog.upgradeButton.setOnClickListener {
             findNavController().navigate(R.id.IAPFragment)
         }
-        bindingDialog.cancelDialog?.setOnClickListener {
-            dialog?.dismiss()
+        bindingDialog.cancelDialog.setOnClickListener {
+            dialog.dismiss()
         }
 
-        dialog?.show()
+        dialog.show()
     }
 
 
     private fun getUserIdDialog() {
         val dialog = Dialog(requireContext())
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setContentView(R.layout.rewarded_ad_dialog)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.rewarded_ad_dialog)
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
-        dialog?.window!!.setLayout(width, height)
-        dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog?.setCancelable(false)
-        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-        var dismiss = dialog?.findViewById<TextView>(R.id.noThanks)
+        dialog.window!!.setLayout(width, height)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        val getReward = dialog.findViewById<LinearLayout>(R.id.buttonGetReward)
+        val dismiss = dialog.findViewById<TextView>(R.id.noThanks)
 
         getReward?.setOnClickListener {
-            dialog?.dismiss()
+            dialog.dismiss()
 
             rewardAd.showAd(
                 requireActivity(),
@@ -404,10 +363,10 @@ class FullScreenImageViewFragment : DialogFragment() {
         }
 
         dismiss?.setOnClickListener {
-            dialog?.dismiss()
+            dialog.dismiss()
         }
 
-        dialog?.show()
+        dialog.show()
     }
     private fun getBitmapFromGlide(url:String){
         Glide.with(requireContext()).asBitmap().load(url)
@@ -415,7 +374,6 @@ class FullScreenImageViewFragment : DialogFragment() {
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
-
                 }
                 override fun onLoadCleared(placeholder: Drawable?) {
                 } })
@@ -451,8 +409,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                         binding.fullViewImage.isEnabled = true
                         binding.bottomMenu.visibility = View.VISIBLE
                     }
-
-
                     return false
                 }
             })
@@ -471,9 +427,9 @@ class FullScreenImageViewFragment : DialogFragment() {
         val width = WindowManager.LayoutParams.MATCH_PARENT
         val height = WindowManager.LayoutParams.WRAP_CONTENT
         dialog.window!!.setLayout(width, height)
-        val params = (view.getParent() as View).layoutParams as CoordinatorLayout.LayoutParams
+        val params = (view.parent as View).layoutParams as CoordinatorLayout.LayoutParams
         val behavior = params.behavior
-        (view.getParent() as View).setBackgroundColor(Color.TRANSPARENT)
+        (view.parent as View).setBackgroundColor(Color.TRANSPARENT)
         dialog.setCancelable(false)
         val buttonHome = view.findViewById<Button>(R.id.buttonHome)
         val buttonLock = view.findViewById<Button>(R.id.buttonLock)
@@ -494,19 +450,13 @@ class FullScreenImageViewFragment : DialogFragment() {
                                     dialog
                                 )
                             }
-
-
                         }
-
                         setDownloaded(model)
-
-
                     }catch (e: Exception) {
                         e.printStackTrace()
                     }
                 }
             }else{
-
                 interAd.showAd(
                     requireActivity(),
                     "viewlistwallscr_setdilog_set_button",
@@ -530,13 +480,8 @@ class FullScreenImageViewFragment : DialogFragment() {
                                                 dialog
                                             )
                                         }
-
-
                                     }
-
                                     setDownloaded(model)
-
-
                                 }catch (e: Exception) {
                                     e.printStackTrace()
                                 }
@@ -545,7 +490,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                     }
                 )
             }
-
         }
         buttonLock.setOnClickListener {
             if (isAdded){
@@ -578,10 +522,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                                         dialog
                                     )
                                 }
-
-
-
-
                                 setDownloaded(model)
                             }
                             override fun onAdsDismiss() {
@@ -639,11 +579,9 @@ class FullScreenImageViewFragment : DialogFragment() {
                                 myWallpaperManager.homeAndLockScreen(bitmap!!)
                             }
                             myHandler.post {
-
                                 if (isAdded){
                                     interstitialAdWithToast(getString(R.string.set_successfully_on_both),dialog)
                                 }
-
                             }
                             setDownloaded(model)
                         }
@@ -707,22 +645,8 @@ class FullScreenImageViewFragment : DialogFragment() {
             val apiService = retrofit.create(SetMostDownloaded::class.java)
             val call = apiService.setDownloaded(model.id.toString())
             call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    if (response.isSuccessful) {
-
-
-                        Log.e("TAG", "onResponse: success"+response.body().toString() )
-                    }
-                    else
-                    {
-                        Log.e("TAG", "onResponse: not success" )
-//                        Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
-                    }
-                }
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.e("TAG", "onResponse: failed" )
-//                    Toast.makeText(requireContext(), "onFailure error", Toast.LENGTH_SHORT).show()
-                }
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {}
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
             })
         }
 

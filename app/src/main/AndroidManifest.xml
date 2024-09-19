@@ -128,7 +128,14 @@
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="specialUse"
-            tools:ignore="ForegroundServicePermission" >
+            tools:ignore="ForegroundServicePermission">
+            <intent-filter>
+                <action android:name="android.intent.action.FOREGROUND_SERVICE" />
+            </intent-filter>
+
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="@string/fgs_notification_widget_description" />
         </service>
     </application>
 

@@ -14,18 +14,18 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
@@ -45,7 +45,7 @@ class LiveWallpaperAdapter(
     private val myActivity: MainActivity
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private lateinit var context:Context
+    private lateinit var context: Context
     private var lastClickTime = 0L
     private val debounceThreshold = 2000L // 2 seconds
     private val VIEW_TYPE_CONTAINER1 = 0
@@ -53,9 +53,11 @@ class LiveWallpaperAdapter(
     private val loadedAds = mutableMapOf<Int, IkmDisplayWidgetAdView?>()
 
 
-    private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+    private val firstAdLineThreshold =
+        if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
     private val firstline = firstAdLineThreshold * 3
-    private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+    private val lineCount =
+        if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
     private val lineC = lineCount * 3
     private val statusAd = AdConfig.adStatusViewListWallSRC
     private var coroutineScope: CoroutineScope? = null
@@ -64,13 +66,22 @@ class LiveWallpaperAdapter(
         coroutineScope = scope
     }
 
-    inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(model: LiveWallpaperModel) {
-            setAllData(model, adapterPosition, binding.loading, binding.wallpaper, binding.errorImage, binding.iap)
+            setAllData(
+                model,
+                adapterPosition,
+                binding.loading,
+                binding.wallpaper,
+                binding.errorImage,
+                binding.iap
+            )
         }
     }
 
-    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             loadAd(binding)
         }
@@ -100,10 +111,12 @@ class LiveWallpaperAdapter(
                 val binding = ListItemLiveWallpaperBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
+
             VIEW_TYPE_NATIVE_AD -> {
                 val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -115,6 +128,7 @@ class LiveWallpaperAdapter(
                 val viewHolderContainer1 = holder as ViewHolderContainer1
                 model?.let { viewHolderContainer1.bind(it) }
             }
+
             VIEW_TYPE_NATIVE_AD -> {
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind()
@@ -192,16 +206,18 @@ class LiveWallpaperAdapter(
     private fun preloadAd() {
         coroutineScope?.launch(Dispatchers.IO) {
             if (nativeAdView == null) {
-                IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object : IKLoadDisplayAdViewListener {
-                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                        nativeAdView = adObject
-                        Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
-                    }
+                IKSdkController.loadNativeDisplayAd(
+                    "mainscr_live_tab_scroll",
+                    object : IKLoadDisplayAdViewListener {
+                        override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                            nativeAdView = adObject
+                            Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
+                        }
 
-                    override fun onAdLoadFail(error: IKAdError) {
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
-                    }
-                })
+                        override fun onAdLoadFail(error: IKAdError) {
+                            Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
+                        }
+                    })
             }
         }
     }
@@ -231,7 +247,8 @@ class LiveWallpaperAdapter(
                         object : IKShowWidgetAdListener {
                             override fun onAdShowFail(error: IKAdError) {
                                 Log.e("TAG", "onAdsLoadFail: native failed")
-                                binding.adsView.visibility = if (statusAd == 0 || !isNetworkAvailable()) View.GONE else View.VISIBLE
+                                binding.adsView.visibility =
+                                    if (statusAd == 0 || !isNetworkAvailable()) View.GONE else View.VISIBLE
                             }
 
                             override fun onAdShowed() {
@@ -249,7 +266,8 @@ class LiveWallpaperAdapter(
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
@@ -262,21 +280,33 @@ class LiveWallpaperAdapter(
     }
 
     fun updateMoreData(list: ArrayList<LiveWallpaperModel?>) {
-        val startPosition = arrayList.size
-        arrayList.addAll(list.filter { !arrayList.contains(it) })
-        notifyItemRangeInserted(startPosition, list.size)
+        try {
+            val startPosition = arrayList.size
+            arrayList.addAll(list.filter { !arrayList.contains(it) })
+            notifyItemRangeInserted(startPosition, list.size)
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
     }
 
     fun getAllItems(): ArrayList<LiveWallpaperModel?> = arrayList
 
     fun addNewData() {
-        arrayList.clear()
-        notifyDataSetChanged()
+        try {
+            arrayList.clear()
+            notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
     }
 
     fun updateData(list: ArrayList<LiveWallpaperModel?>) {
-        arrayList.clear()
-        arrayList.addAll(list)
-        notifyDataSetChanged()
+        try {
+            arrayList.clear()
+            arrayList.addAll(list)
+            notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
     }
 }

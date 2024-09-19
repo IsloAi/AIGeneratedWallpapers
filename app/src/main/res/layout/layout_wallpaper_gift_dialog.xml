@@ -7,14 +7,15 @@
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_130sdp"
-        android:layout_marginVertical="@dimen/_15sdp"
+        android:layout_width="@dimen/_250sdp"
+        android:layout_height="@dimen/_150sdp"
+        android:layout_marginBottom="@dimen/_15sdp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
+        android:scaleType="centerCrop"
         app:lottie_rawRes="@raw/vip_reward" />
 
     <TextView

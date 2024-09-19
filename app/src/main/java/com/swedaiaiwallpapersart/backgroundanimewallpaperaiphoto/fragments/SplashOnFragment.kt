@@ -121,7 +121,7 @@ class SplashOnFragment : Fragment() {
                                 override fun onAdLoadFail(error: IKAdError) {}
                             })
 
-                        IKSdkController.preloadNativeAd(
+                        IKSdkController.preloadNativeAdFullScreen(
                             "onboardscr_fullscreen",
                             object : IKLoadAdListener {
                                 override fun onAdLoaded() {}
