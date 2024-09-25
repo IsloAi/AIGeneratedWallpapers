@@ -38,7 +38,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PreviewChargingAnimationFragment : Fragment() {
-    private var _binding:FragmentPreviewChargingAnimationBinding ?= null
+    private var _binding: FragmentPreviewChargingAnimationBinding? = null
     private val binding get() = _binding!!
 
     val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
@@ -46,7 +46,7 @@ class PreviewChargingAnimationFragment : Fragment() {
     private var livewallpaper: ChargingAnimModel? = null
     var adPosition = 0
 
-    private lateinit var myActivity : MainActivity
+    private lateinit var myActivity: MainActivity
 
     @Inject
     lateinit var webApiInterface: EndPointsInterface
@@ -55,12 +55,11 @@ class PreviewChargingAnimationFragment : Fragment() {
     lateinit var appDatabase: AppDatabase
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentPreviewChargingAnimationBinding.inflate(inflater,container,false)
+        _binding = FragmentPreviewChargingAnimationBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -70,9 +69,9 @@ class PreviewChargingAnimationFragment : Fragment() {
 
 
         myActivity = activity as MainActivity
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
-        }else{
+        } else {
 
             binding.adsView.attachLifecycle(lifecycle)
             binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
@@ -114,47 +113,63 @@ class PreviewChargingAnimationFragment : Fragment() {
             })
     }
 
-
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            Log.e("TAG", "setEvents: clicked" )
-            if (isDrawOverlaysPermissionGranted(requireContext())){
-                if (isAdded){
-                val intent = Intent(requireContext(),ChargingAnimationService::class.java)
-                MySharePreference.setAnimationPath(requireContext(),BlurView.filePathBattery)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-                    Log.e("TAG", "setEvents: service start Q")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE){
+            Log.e("TAG", "setEvents: clicked")
+            /*if (isDrawOverlaysPermissionGranted(requireContext())) {*/
+                if (isAdded) {
+                    val intent = Intent(requireContext(), ChargingAnimationService::class.java)
+                    MySharePreference.setAnimationPath(requireContext(), BlurView.filePathBattery)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Log.e("TAG", "setEvents: service start Q")
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                             var dialog: Dialog = AlertDialog.Builder(requireContext())
                                 .setTitle("Foreground Service Required")
                                 .setMessage("To continue playing the animation, the app needs to run in the foreground. This means that the app will continue to run even when you close it.")
-                                .setPositiveButton("Allow"
+                                .setPositiveButton(
+                                    "Allow"
                                 ) { dialog, which -> // Start the foreground service
                                     requireContext().startForegroundService(intent)
-                                    sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
-                                    Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
+                                    sendTracking(
+                                        "typewallpaper_used",
+                                        Pair("typewallpaper", "Charging")
+                                    )
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Charging animation Applied Successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
-                                .setNegativeButton("Cancel"
+                                .setNegativeButton(
+                                    "Cancel"
                                 ) { dialog, which -> dialog.dismiss() }
                                 .show()
 
 
-                    }else{
-                        sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
-                        Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
-                        requireContext().startForegroundService(intent)
-                    }
+                        } else {
+                            sendTracking("typewallpaper_used", Pair("typewallpaper", "Charging"))
+                            Toast.makeText(
+                                requireContext(),
+                                "Charging animation Applied Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            requireContext().startForegroundService(intent)
+                        }
 
-                }else{
-                    Log.e("TAG", "setEvents: service start else")
-                    requireContext().startService(intent)
-                    sendTracking("typewallpaper_used",Pair("typewallpaper", "Charging"))
-                    Toast.makeText(requireContext(),"Charging animation Applied Successfully",Toast.LENGTH_SHORT).show()
+                    } else {
+                        Log.e("TAG", "setEvents: service start else")
+                        requireContext().startService(intent)
+                        sendTracking("typewallpaper_used", Pair("typewallpaper", "Charging"))
+                        Toast.makeText(
+                            requireContext(),
+                            "Charging animation Applied Successfully",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-                }
-            }else{
+            /*} else {
                 findNavController().navigate(R.id.chargingAnimationPermissionFragment)
-            }
+            }*/
         }
 
         binding.toolbar.setOnClickListener {
@@ -169,9 +184,8 @@ class PreviewChargingAnimationFragment : Fragment() {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
@@ -186,8 +200,8 @@ class PreviewChargingAnimationFragment : Fragment() {
 
 
     private fun setWallpaperOnView() {
-        if (isAdded){
-            binding.liveWallpaper.setAnimationFromUrl(AdConfig.BASE_URL_DATA + "/animation/"+livewallpaper?.hd_animation)
+        if (isAdded) {
+            binding.liveWallpaper.setAnimationFromUrl(AdConfig.BASE_URL_DATA + "/animation/" + livewallpaper?.hd_animation)
             binding.liveWallpaper.playAnimation()
         }
 

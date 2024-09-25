@@ -6,6 +6,7 @@ plugins {
     id 'com.google.firebase.crashlytics'
     id 'dagger.hilt.android.plugin'
 }
+
 android {
     namespace 'com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto'
     compileSdk 34
@@ -14,11 +15,20 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 144
-        versionName "1.8.3"
+        versionCode 145
+        versionName "1.8.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
+    }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = "swedai"
+            keyPassword = "swedai"
+            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers")
+            storePassword = "swedai"
+        }
     }
 
     buildTypes {
@@ -29,6 +39,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         release {
+            signingConfig = signingConfigs.getByName("release")
             shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -62,6 +73,7 @@ android {
     }
 }
 dependencies {
+
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'

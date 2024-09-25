@@ -46,7 +46,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class DownloadBatteryAnimation : Fragment(), AdEventListener {
-    private var _binding:FragmentDownloadBatteryAnimationBinding ?= null
+    private var _binding: FragmentDownloadBatteryAnimationBinding? = null
     private val binding get() = _binding!!
 
     val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
@@ -57,7 +57,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     val TAG = "DOWNLOAD_SCREEN"
 
-    var adShowed :Boolean ? =  false
+    var adShowed: Boolean? = false
 
 //    var checkAppOpen = false
 
@@ -71,7 +71,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDownloadBatteryAnimationBinding.inflate(inflater,container,false)
+        _binding = FragmentDownloadBatteryAnimationBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -80,18 +80,19 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         super.onViewCreated(view, savedInstanceState)
 
         adShowed = arguments?.getBoolean("adShowed")
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
-        }else{
+        } else {
             loadAd()
         }
 
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -110,7 +111,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     }
 
-    fun loadAd(){
+    fun loadAd() {
         val adLayout = LayoutInflater.from(activity).inflate(
             R.layout.new_native_language,
             null, false
@@ -121,13 +122,15 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"downloadscr_native_bottom",
+        binding.adsView.loadAd(R.layout.shimmer_loading_native,
+            adLayout!!,
+            "downloadscr_native_bottom",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
-                    if (AdConfig.ISPAIDUSER){
+                    if (AdConfig.ISPAIDUSER) {
                         binding.adsView.visibility = View.GONE
                     }
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                    Log.e("TAG", "onAdsLoadFail: native failded ")
                 }
 
                 override fun onAdShowed() {
@@ -140,14 +143,13 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         )
     }
 
-
-    fun setEvents(){
+    fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (AdConfig.ISPAIDUSER){
+            if (AdConfig.ISPAIDUSER) {
                 navigateToNext()
-            }else if (adShowed == true){
+            } else if (adShowed == true) {
                 navigateToNext()
-            }else{
+            } else {
                 var shouldShowInterAd = true
 
                 if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
@@ -182,10 +184,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
 
             }
-
-
         }
-
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
             Constants.checkInter = false
@@ -219,21 +218,24 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         }
     }
 
-    private fun initObservers(){
+    private fun initObservers() {
 
         val file = requireContext().filesDir
-        val video = File(file,"video.mp4")
-        sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner){wallpaper ->
-            if (wallpaper.isNotEmpty()){
+        val video = File(file, "video.mp4")
+        sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            if (wallpaper.isNotEmpty()) {
 
                 startProgressCoroutine()
                 Log.e("TAG", "initObservers: $wallpaper")
 
-                if (BlurView.filePathBattery == ""){
-                    downloadVideo(AdConfig.BASE_URL_DATA + "/animation/"+wallpaper[0].hd_animation,video)
+                if (BlurView.filePathBattery == "") {
+                    downloadVideo(
+                        AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].hd_animation,
+                        video
+                    )
 
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/animation/"+wallpaper[0].thumnail)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].thumnail)
 
 
             }
@@ -245,7 +247,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
             var progress = 0
             repeat((totalTimeInMillis / intervalInMillis).toInt()) {
                 progress = ((it * intervalInMillis * 100) / totalTimeInMillis).toInt()
-                if (isAdded){
+                if (isAdded) {
                     binding.progress.progress = progress
                     binding.progressTxt.text =
                         progress.toString() + "%"
@@ -253,7 +255,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
                 delay(intervalInMillis)
             }
 
-            if (isAdded){
+            if (isAdded) {
                 binding.progress.progress = 100 // Ensure progress reaches 100% even if not exact
                 binding.progressTxt.text = "100%"
                 onProgressComplete(100)
@@ -265,8 +267,8 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     private fun onProgressComplete(progress: Int) {
         if (progress >= 100) {
-            if (isAdded){
-                binding.buttonApplyWallpaper.visibility =  View.VISIBLE
+            if (isAdded) {
+                binding.buttonApplyWallpaper.visibility = View.VISIBLE
 
                 animationJob?.cancel()
                 binding.loadingTxt.text = "Download Successfull"
@@ -276,30 +278,25 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         }
     }
 
-
-
-
-
-    private fun getBitmapFromGlide(url:String){
+    private fun getBitmapFromGlide(url: String) {
         Glide.with(requireContext()).asBitmap().load(url)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
 
-                    if (isAdded){
+                    if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
 
 
-
                 }
+
                 override fun onLoadCleared(placeholder: Drawable?) {
-                } })
+                }
+            })
     }
-
-
 
     private fun downloadVideo(url: String, destinationFile: File) {
 
@@ -307,12 +304,12 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".json"
 
-        val filepath = File(file,fileName)
+        val filepath = File(file, fileName)
 
         BlurView.filePathBattery = filepath.path
         BlurView.fileNameBattery = fileName
-        MySharePreference.setFileName(requireContext(),fileName)
-        Log.e("TAG", "downloadVideo: "+ BlurView.fileName )
+        MySharePreference.setFileName(requireContext(), fileName)
+        Log.e("TAG", "downloadVideo: " + BlurView.fileName)
 
         animateLoadingText()
         lifecycleScope.launch(Dispatchers.IO) {
@@ -330,12 +327,13 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
                     }
 
                     override fun onError(error: ANError?) {
-                        Log.e(TAG, "onError: ", )
+                        Log.e(TAG, "onError: ")
                         // handle error
                     }
                 })
         }
     }
+
     private fun animateLoadingText() {
         animationJob = viewLifecycleOwner.lifecycleScope.launch {
             while (isActive) {
@@ -355,20 +353,18 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         textView.text = "Downloading$dots"
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
-        if (animationJob?.isActive == true){
+        if (animationJob?.isActive == true) {
             animationJob?.cancel()
         }
 
         _binding = null
     }
 
-
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

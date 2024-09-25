@@ -41,17 +41,17 @@ import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class ChargingAnimationFragment : Fragment(), AdEventListener {
-    private var _binding:FragmentChargingAnimationBinding ?= null
+    private var _binding: FragmentChargingAnimationBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
 
-    val chargingAnimationViewmodel:ChargingAnimationViewmodel by activityViewModels()
+    val chargingAnimationViewmodel: ChargingAnimationViewmodel by activityViewModels()
 
-    private lateinit var myActivity : MainActivity
-    var adapter: ChargingAnimationAdapter?= null
+    private lateinit var myActivity: MainActivity
+    var adapter: ChargingAnimationAdapter? = null
 
     val TAG = "ChargingAnimation"
 
@@ -59,12 +59,11 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 //    var checkAppOpen = false
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentChargingAnimationBinding.inflate(inflater,container,false)
+        _binding = FragmentChargingAnimationBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -76,11 +75,12 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         myActivity = activity as MainActivity
 
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -88,7 +88,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
@@ -97,21 +97,21 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
-        chargingAnimationViewmodel.chargingAnimList.observe(viewLifecycleOwner){result->
-            when(result){
+        chargingAnimationViewmodel.chargingAnimList.observe(viewLifecycleOwner) { result ->
+            when (result) {
                 is Response.Success -> {
 
-                    Log.e(TAG, "ChargingAnimation: "+result.data )
+                    Log.e(TAG, "ChargingAnimation: " + result.data)
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data
 
-                        val data = if (AdConfig.ISPAIDUSER){
+                        val data = if (AdConfig.ISPAIDUSER) {
                             list as ArrayList<ChargingAnimModel?>
-                        }else{
+                        } else {
                             list?.let { addNullValueInsideArray(it.shuffled()) }
                         }
 
-                        withContext(Dispatchers.Main){
+                        withContext(Dispatchers.Main) {
                             data?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
@@ -121,16 +121,16 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 }
 
                 is Response.Loading -> {
-                    Log.e(TAG, "loadData: Loading" )
+                    Log.e(TAG, "loadData: Loading")
                 }
 
                 is Response.Error -> {
-                    Log.e(TAG, "loadData: response error", )
+                    Log.e(TAG, "loadData: response error")
 
                 }
 
                 is Response.Processing -> {
-                    Log.e(TAG, "loadData: processing", )
+                    Log.e(TAG, "loadData: processing")
                 }
             }
 
@@ -147,11 +147,15 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         super.onResume()
         loadData()
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_ChargingTab_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "Tab"),
+                Pair("action_name", "MainScr_ChargingTab_View")
+            )
         }
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -162,9 +166,8 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
 
@@ -176,16 +179,16 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
             override fun getPosition(position: Int, model: ChargingAnimModel) {
                 val newPosition = position + 1
 
-                Log.e(TAG, "getPosition: "+model )
+                Log.e(TAG, "getPosition: " + model)
 
-                Log.e(TAG, "getPosition: "+position )
+                Log.e(TAG, "getPosition: " + position)
 
                 sharedViewModel.setChargingAdPosition(newPosition)
-                    Log.e(TAG, "getPosition:$position odd " )
+                Log.e(TAG, "getPosition:$position odd ")
 
-                if (AdConfig.ISPAIDUSER){
-                    setPathandNavigate(model,false)
-                }else{
+                if (AdConfig.ISPAIDUSER) {
+                    setPathandNavigate(model, false)
+                } else {
                     var shouldShowInterAd = true
 
                     if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
@@ -222,7 +225,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 }
 
             }
-        },myActivity)
+        }, myActivity)
 
         binding.recyclerviewAll.adapter = adapter
         binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -257,14 +260,14 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         )
     }
 
-    private fun setPathandNavigate(model: ChargingAnimModel,adShowd:Boolean) {
+    private fun setPathandNavigate(model: ChargingAnimModel, adShowd: Boolean) {
         BlurView.filePathBattery = ""
         sharedViewModel.clearChargeAnimation()
         sharedViewModel.setchargingAnimation(listOf(model))
         if (isAdded) {
             Bundle().apply {
-                putBoolean("adShowed",adShowd)
-                findNavController().navigate(R.id.downloadBatteryAnimation,this)
+                putBoolean("adShowed", adShowd)
+                findNavController().navigate(R.id.downloadBatteryAnimation, this)
             }
         }
     }
@@ -272,33 +275,35 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-    private suspend fun addNullValueInsideArray(data: List<ChargingAnimModel?>): ArrayList<ChargingAnimModel?>{
+    private suspend fun addNullValueInsideArray(data: List<ChargingAnimModel?>): ArrayList<ChargingAnimModel?> {
 
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        return withContext(Dispatchers.IO) {
+            val firstAdLineThreshold =
+                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
             val firstLine = firstAdLineThreshold * 3
 
-            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineCount =
+                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
             val newData = arrayListOf<ChargingAnimModel?>()
 
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+            for (i in data.indices) {
+                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
 
 
 
-                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
 
-                }else if (i == firstLine){
+                } else if (i == firstLine) {
                     newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
 
 
 
@@ -316,7 +321,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

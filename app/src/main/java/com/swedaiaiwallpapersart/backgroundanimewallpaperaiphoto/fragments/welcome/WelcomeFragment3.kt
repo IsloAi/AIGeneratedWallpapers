@@ -2,6 +2,8 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welc
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -55,6 +57,7 @@ class WelcomeFragment3 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         IKSdkController.preloadNativeAd("onboardscr_fullscreen", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
@@ -67,20 +70,45 @@ class WelcomeFragment3 : Fragment() {
         })
 
         binding.adsView.attachLifecycle(this.lifecycle)
+
         val adLayout = LayoutInflater.from(activity).inflate(
             R.layout.layout_image_native_full,
             null, false
         ) as? IkmWidgetAdLayout
+
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
         adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
         adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
         adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
+
         val title: TextView = adLayout?.findViewById(R.id.title)!!
         val next: ImageView = adLayout.findViewById(R.id.next_btn)!!
+
         title.text = "Tap button to continue experiencing"
         next.setOnClickListener { viewPagerCallback?.swipe() }
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout, "onboardscr_fullscreen",
+
+        // Slight delay to ensure smooth rendering
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout, "onboardscr_fullscreen",
+                object : IKShowWidgetAdListener {
+                    override fun onAdShowFail(error: IKAdError) {
+                        Log.e("WelcomeFragment3", "Ad failed to show: ${error.message}")
+                        if (AdConfig.ISPAIDUSER) {
+                            binding.adsView.visibility = View.GONE
+                        }
+                        viewPagerCallback?.swipe()
+                    }
+
+                    override fun onAdShowed() {
+                        // Ad showed successfully
+                    }
+                }
+            )
+        }, 200)  // Delay can be adjusted for smoother performance
+
+
+        /*binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout, "onboardscr_fullscreen",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
                     Log.e("WelcomeFragment3", "Ad failed to show: ${error.message}")
@@ -94,7 +122,7 @@ class WelcomeFragment3 : Fragment() {
 
                 }
             }
-        )
+        )*/
     }
 
     override fun onPause() {

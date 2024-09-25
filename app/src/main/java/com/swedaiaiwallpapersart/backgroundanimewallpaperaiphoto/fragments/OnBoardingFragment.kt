@@ -67,13 +67,9 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
 
         populateOnbaordingItems()
 
-
-
         if (isAdded){
             sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "OnboardingScr1_View"))
         }
-
-
 
         binding.onboardingViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
@@ -170,7 +166,6 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
             binding.onboardingViewPager.setCurrentItem(welcomeAdapter.itemCount-1, true)
         }
 
-
         binding.nextBtn.setOnClickListener {
             MySharePreference.setOnboarding(requireContext(),true)
             val currentItem = binding.onboardingViewPager.currentItem
@@ -266,8 +261,6 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
-
-
 
     private fun populateOnbaordingItems() {
         welcomeAdapter= OnboardingPagerAdapter(activity as MainActivity, this)

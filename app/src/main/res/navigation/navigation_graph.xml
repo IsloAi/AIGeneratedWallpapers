@@ -8,22 +8,19 @@
         android:id="@+id/splashFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash"
-        >
-    </fragment>
+        tools:layout="@layout/fragment_splash"></fragment>
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.hdwallpaper.Fragments.MainFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main" >
+        tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_wallpaperViewFragment"
             app:destination="@id/wallpaperViewFragment"
             app:enterAnim="@anim/slide_in_up"
             app:exitAnim="@anim/slide_out_down"
             app:popEnterAnim="@anim/slide_in_up"
-            app:popExitAnim="@anim/slide_out_down"
-            />
+            app:popExitAnim="@anim/slide_out_down" />
         <action
             android:id="@+id/action_mainFragment_to_listViewFragment"
             app:destination="@id/listViewFragment"
@@ -54,7 +51,7 @@
         android:id="@+id/wallpaperViewFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment"
         android:label="fragment_wallpaper_view"
-        tools:layout="@layout/fragment_wallpaper_view" >
+        tools:layout="@layout/fragment_wallpaper_view">
         <action
             android:id="@+id/action_wallpaperViewFragment_to_premiumPlanFragment"
             app:destination="@id/premiumPlanFragment" />
@@ -67,7 +64,7 @@
         android:id="@+id/listViewFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ListViewFragment"
         android:label="fragment_list_view"
-        tools:layout="@layout/fragment_list_view" >
+        tools:layout="@layout/fragment_list_view">
         <action
             android:id="@+id/action_listViewFragment_to_wallpaperViewFragment"
             app:destination="@id/wallpaperViewFragment"
@@ -86,7 +83,7 @@
         android:id="@+id/premiumPlanFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PremiumPlanFragment"
         android:label="fragment_premium_plan"
-        tools:layout="@layout/fragment_premium_plan" >
+        tools:layout="@layout/fragment_premium_plan">
         <action
             android:id="@+id/action_premiumPlanFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
@@ -100,37 +97,36 @@
         android:id="@+id/myViewCreationFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.MyCreationViewFragment"
         android:label="fragment_my_creation_view"
-        tools:layout="@layout/fragment_my_creation_view"
-        >
+        tools:layout="@layout/fragment_my_creation_view">
         <action
             android:id="@+id/action_myViewCreationFragment_to_creationSliderViewFragment"
             app:destination="@id/creationSliderViewFragment" />
     </fragment>
 
-    <fragment android:id="@+id/creationSliderViewFragment"
+    <fragment
+        android:id="@+id/creationSliderViewFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.CreationSliderViewFragment"
-       android:label="fragment_creation_view_slider"
-        tools:layout="@layout/fragment_creation_slider_view"
-        />
-    <fragment android:id="@+id/favouriteSliderViewFragment"
+        android:label="fragment_creation_view_slider"
+        tools:layout="@layout/fragment_creation_slider_view" />
+    <fragment
+        android:id="@+id/favouriteSliderViewFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.FavouriteSliderViewFragment"
         android:label="fragment_favourite_view_slider"
-        tools:layout="@layout/fragment_creation_slider_view"
-        />
-    <fragment android:id="@+id/signInFragment"
+        tools:layout="@layout/fragment_creation_slider_view" />
+    <fragment
+        android:id="@+id/signInFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SignInFragment"
         android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in"
-        >
+        tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
     </fragment>
-    <fragment android:id="@+id/signUpFragment"
+    <fragment
+        android:id="@+id/signUpFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SignUpFragment"
         android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up"
-        />
+        tools:layout="@layout/fragment_sign_up" />
     <fragment
         android:id="@+id/viewAllCreations"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.ViewAllCreations"
@@ -140,7 +136,7 @@
         android:id="@+id/splashOnFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment"
         android:label="fragment_splash_on"
-        tools:layout="@layout/fragment_splash_on" >
+        tools:layout="@layout/fragment_splash_on">
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -154,8 +150,7 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
     <fragment
@@ -167,7 +162,7 @@
         android:id="@+id/onBoardingFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.OnBoardingFragment"
         android:label="fragment_on_boarding"
-        tools:layout="@layout/fragment_on_boarding" >
+        tools:layout="@layout/fragment_on_boarding">
         <action
             android:id="@+id/action_onBoardingFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -183,14 +178,13 @@
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            />
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
     <fragment
         android:id="@+id/homeTabsFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment"
         android:label="fragment_home_tabs"
-        tools:layout="@layout/fragment_home_tabs" >
+        tools:layout="@layout/fragment_home_tabs">
         <action
             android:id="@+id/action_homeTabsFragment_to_wallpaperViewFragment"
             app:destination="@id/wallpaperViewFragment" />
@@ -234,8 +228,7 @@
         android:id="@+id/downloadBatteryAnimation"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.DownloadBatteryAnimation"
         android:label="DownloadBatteryAnimation"
-        tools:layout="@layout/fragment_download_battery_animation"
-        />
+        tools:layout="@layout/fragment_download_battery_animation" />
     <fragment
         android:id="@+id/chargingAnimationPermissionFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationPermissionFragment"
