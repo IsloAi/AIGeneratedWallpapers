@@ -711,6 +711,14 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         val baseUrls = remoteConfig["dataUrl"].asString()
 
+                        //here we are getting the baseUrls to show wallpaper
+                        //For live to change we need to get the
+                        // different variable from the remote config and pass that
+                        // value for the Live wallpaper fragment
+                        //Log.d("usmanTAG", "onUpdate: baseURls: $baseUrls")
+                        //the current url for showing wallpaper is
+                        // https://4kwallpaper-zone.b-cdn.net/livewallpaper/
+
                         AdConfig.BASE_URL_DATA = baseUrls
 
                         try {

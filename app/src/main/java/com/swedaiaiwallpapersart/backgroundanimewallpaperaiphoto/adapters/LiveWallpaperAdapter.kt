@@ -52,7 +52,6 @@ class LiveWallpaperAdapter(
     private val VIEW_TYPE_NATIVE_AD = 1
     private val loadedAds = mutableMapOf<Int, IkmDisplayWidgetAdView?>()
 
-
     private val firstAdLineThreshold =
         if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
     private val firstline = firstAdLineThreshold * 3

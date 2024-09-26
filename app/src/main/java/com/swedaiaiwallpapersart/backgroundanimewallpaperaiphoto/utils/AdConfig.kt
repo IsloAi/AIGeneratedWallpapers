@@ -26,9 +26,8 @@ object AdConfig {
 
     var categoryOrder:List<String> = listOf( "Sadness", "Car", "Motor Bike", "Fantasy", "Animal","New Year", "Christmas", "Travel", "Ocean", "Nature", "Mountains", "Music", "Love", "Art", "Space", "Adstract", "Tech", "Black And White", "Architecture", "Artistic", "Pattern", "City", "Minimal", "Vintage","4K", "Anime", "Super Heros", "IOS", "Dark")
 
-
-
     var BASE_URL_DATA:String = ""
+
     var Noti_Widget:String = ""
 
     val BASE_URL = "https://vps.edecator.com/wallpaper_App/V4/"

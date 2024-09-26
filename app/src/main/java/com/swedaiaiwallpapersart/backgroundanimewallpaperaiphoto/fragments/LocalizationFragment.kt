@@ -14,16 +14,15 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.os.BuildCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLocalizationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
@@ -38,12 +37,12 @@ import kotlinx.coroutines.launch
 import java.util.Locale
 
 class LocalizationFragment : Fragment() {
-    private var _binding: FragmentLocalizationBinding?= null
-    private val binding get() = _binding!!
+    private lateinit var _binding: FragmentLocalizationBinding
+    private val binding get() = _binding
 
     var selectedItem: DummyModelLanguages? = null
 
-    var sel: String = "en"
+    private var sel: String = "en"
     var selected = -1
 
     var posnew = 0
@@ -56,27 +55,31 @@ class LocalizationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentLocalizationBinding.inflate(inflater,container,false)
+    ): View {
+        _binding = FragmentLocalizationBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        posnew = MySharePreference.getLanguagePosition(requireContext())!!
+        posnew = MySharePreference.getLanguagePosition(requireContext())
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
         }
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "LanguageScr_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "screen"),
+                Pair("action_name", "LanguageScr_View")
+            )
         }
 
         lifecycleScope.launch {
-            delay(2000)
-            Log.e(TAG, "getLanguageList: "+getDefaultLocaleInfo())
+            delay(200)
+            Log.e(TAG, "getLanguageList: " + getDefaultLocaleInfo())
         }
 
         setGradienttext()
@@ -86,7 +89,7 @@ class LocalizationFragment : Fragment() {
         backHandle()
     }
 
-    private fun setGradienttext(){
+    private fun setGradienttext() {
         val customColors = intArrayOf(
             Color.parseColor("#FC9502"),
             Color.parseColor("#FF6726")
@@ -104,12 +107,11 @@ class LocalizationFragment : Fragment() {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
-    fun loadNativeAd(){
+    fun loadNativeAd() {
         binding.adsView.attachLifecycle(this.lifecycle)
         val adLayout = LayoutInflater.from(activity).inflate(
             R.layout.new_native_language,
@@ -120,10 +122,10 @@ class LocalizationFragment : Fragment() {
         adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"languagescr_bottom",
+        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!, "languagescr_bottom",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
-                    if (isAdded){
+                    if (isAdded) {
                         binding.adsView.visibility = View.GONE
                     }
                 }
@@ -137,19 +139,19 @@ class LocalizationFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //_binding = null
     }
 
     override fun onResume() {
         super.onResume()
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
-        }else{
+        } else {
             binding.adsView.visibility = View.VISIBLE
             loadNativeAd()
         }
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Language Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -157,27 +159,27 @@ class LocalizationFragment : Fragment() {
         }
     }
 
-    private fun initLanguages(){
+    private fun initLanguages() {
         binding.rvLanguages.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.rvLanguages.addItemDecoration(RvItemDecore(2,20,false,10000))
+        binding.rvLanguages.addItemDecoration(RvItemDecore(2, 20, false, 10000))
 
         sel = getDefaultLocaleInfo()
         val list = getLanguageList(sel)
 
 
-        Log.e(TAG, "initLanguages: "+AdConfig.languagesOrder )
+        Log.e(TAG, "initLanguages: " + AdConfig.languagesOrder)
         val sortedList = sortLanguages(list, AdConfig.languagesOrder)
 
 
         val arrayList: ArrayList<DummyModelLanguages> = sortedList.toCollection(ArrayList())
         adapter =
-            LocalizationAdapter(arrayList,  getSelectedLanguagePosition(arrayList), object :
+            LocalizationAdapter(arrayList, getSelectedLanguagePosition(arrayList), object :
                 LocalizationAdapter.OnLanguageChangeListener {
 
                 override fun onLanguageItemClick(language: DummyModelLanguages?, position: Int) {
 
-                    if (AdConfig.languageLogicShowNative == 1 && !AdConfig.ISPAIDUSER){
-                        if (!adnext){
+                    if (AdConfig.languageLogicShowNative == 1 && !AdConfig.ISPAIDUSER) {
+                        if (!adnext) {
                             adnext = true
                             loadNativeAd()
                         }
@@ -191,13 +193,12 @@ class LocalizationFragment : Fragment() {
         binding.rvLanguages.adapter = adapter
     }
 
-
     private fun getDefaultLocaleInfo(): String {
         val locale = Locale.getDefault()
         val name = locale.displayName
         Log.e(TAG, "getLanguageList: $name")
         val language = locale.language
-        Log.e(TAG, "getLanguageList: $language" )
+        Log.e(TAG, "getLanguageList: $language")
         return language
     }
 
@@ -205,7 +206,7 @@ class LocalizationFragment : Fragment() {
         return sortedLanguages.indexOfFirst { it.isSelected_lan }
     }
 
-    private fun getLanguageList(pos:String): ArrayList<DummyModelLanguages> {
+    private fun getLanguageList(pos: String): ArrayList<DummyModelLanguages> {
         val languagesList = ArrayList<DummyModelLanguages>()
         languagesList.add(DummyModelLanguages("German", "de", R.drawable.flag_gr, false))
         languagesList.add(DummyModelLanguages("Japanese ", "ja", R.drawable.flag_japan, false))
@@ -242,7 +243,10 @@ class LocalizationFragment : Fragment() {
         return languagesList
     }
 
-    private fun sortLanguages(languages: ArrayList<DummyModelLanguages>, order: List<String>): List<DummyModelLanguages> {
+    private fun sortLanguages(
+        languages: ArrayList<DummyModelLanguages>,
+        order: List<String>
+    ): List<DummyModelLanguages> {
         val orderMap = order.withIndex().associate { it.value.trim() to it.index }
 
         // Sort the languages based on the order specified in the map
@@ -252,7 +256,7 @@ class LocalizationFragment : Fragment() {
     private fun setEvents() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
 
-        if (!onBoard){
+        if (!onBoard) {
             IKSdkController.preloadNativeAd("onboardscr_bottom", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
@@ -266,17 +270,21 @@ class LocalizationFragment : Fragment() {
 
         binding.applyLanguage.setOnClickListener {
 
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "LanguageScr_Next_Click"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "LanguageScr_Next_Click")
+                )
 
             }
 
             if (selectedItem != null) {
-                if (isAdded){
-                    sendTracking("language_selected",Pair("language", selectedItem?.lan_name))
+                if (isAdded) {
+                    sendTracking("language_selected", Pair("language", selectedItem?.lan_name))
                 }
-                MySharePreference.setLanguage(requireContext(),selectedItem!!.lan_code)
-                MySharePreference.setLanguagePosition(requireContext(),selected)
+                MySharePreference.setLanguage(requireContext(), selectedItem!!.lan_code)
+                MySharePreference.setLanguagePosition(requireContext(), selected)
                 val context = LocaleManager.setLocale(requireContext(), selectedItem!!.lan_code)
                 val resources = context.resources
                 val newLocale = Locale(selectedItem!!.lan_code)
@@ -285,34 +293,34 @@ class LocalizationFragment : Fragment() {
                 configuration.setLocale(newLocale)
                 configuration.setLayoutDirection(Locale(selectedItem!!.lan_code));
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
-                if (exit){
-                    if (onBoard){
+                if (exit) {
+                    if (onBoard) {
                         findNavController().navigate(R.id.homeTabsFragment)
-                    }else{
-                        if (AdConfig.showOnboarding){
+                    } else {
+                        if (AdConfig.showOnboarding) {
                             findNavController().navigate(R.id.onBoardingFragment)
-                        }else{
+                        } else {
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
                     }
 
-                }else{
-                    if (!onBoard){
-                        if (AdConfig.showOnboarding){
+                } else {
+                    if (!onBoard) {
+                        if (AdConfig.showOnboarding) {
                             findNavController().navigate(R.id.onBoardingFragment)
-                        }else{
+                        } else {
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
-                    }else{
+                    } else {
                         findNavController().navigateUp()
                     }
                 }
             } else {
-                if (isAdded){
-                    sendTracking("language_selected",Pair("language", "English"))
+                if (isAdded) {
+                    sendTracking("language_selected", Pair("language", "English"))
                 }
-                MySharePreference.setLanguage(requireContext(),"en")
-                MySharePreference.setLanguagePosition(requireContext(),0)
+                MySharePreference.setLanguage(requireContext(), "en")
+                MySharePreference.setLanguagePosition(requireContext(), 0)
                 val context = LocaleManager.setLocale(requireContext(), "en")
                 val resources = context.resources
                 val newLocale = Locale("en")
@@ -325,24 +333,24 @@ class LocalizationFragment : Fragment() {
 
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
-                if (exit){
-                    if (onBoard){
+                if (exit) {
+                    if (onBoard) {
                         findNavController().navigate(R.id.homeTabsFragment)
-                    }else{
-                        if (AdConfig.showOnboarding){
+                    } else {
+                        if (AdConfig.showOnboarding) {
                             findNavController().navigate(R.id.onBoardingFragment)
-                        }else{
+                        } else {
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
                     }
-                }else{
-                    if (!onBoard){
-                        if (AdConfig.showOnboarding){
+                } else {
+                    if (!onBoard) {
+                        if (AdConfig.showOnboarding) {
                             findNavController().navigate(R.id.onBoardingFragment)
-                        }else{
+                        } else {
                             findNavController().navigate(R.id.homeTabsFragment)
                         }
-                    }else{
+                    } else {
                         findNavController().navigateUp()
                     }
                 }
@@ -351,30 +359,37 @@ class LocalizationFragment : Fragment() {
         }
     }
 
-    private fun backHandle(){
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (isAdded){
-                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Sytem_BackButton_Click"))
+    private fun backHandle() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (isAdded) {
+                        sendTracking(
+                            "click_button",
+                            Pair("action_type", "button"),
+                            Pair("action_name", "Sytem_BackButton_Click")
+                        )
+                    }
+                    if (exit) {
+                        findNavController().navigate(R.id.onBoardingFragment)
+                    } else {
+                        findNavController().navigateUp()
+                    }
                 }
-                if (exit){
-                    findNavController().navigate(R.id.onBoardingFragment)
-                }else{
-                    findNavController().navigateUp()
-                }
-            }
-        })
+            })
 
         if (BuildCompat.isAtLeastT()) {
             requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
-                if (exit){
+                if (exit) {
                     findNavController().navigate(R.id.onBoardingFragment)
-                }else{
+                } else {
                     findNavController().navigateUp()
                 }
             }
         }
     }
+
 }

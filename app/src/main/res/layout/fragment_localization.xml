@@ -1,68 +1,69 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.LocalizationFragment">
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.09"
-        android:id="@+id/tool_bar"
         android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintHeight_percent="0.09"
         app:layout_constraintTop_toTopOf="parent">
+
         <TextView
             android:id="@+id/catTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/poppins_bold"
             android:text="Language"
             android:textColor="@color/mywhite"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_16sdp"
             android:textStyle="bold"
-            android:fontFamily="@font/poppins_bold"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
+            android:id="@+id/apply_language"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/apply_language"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:fontFamily="@font/poppins_bold"
             android:text="Next"
             android:textColor="@color/white"
-            android:fontFamily="@font/poppins_bold"
             android:textSize="@dimen/_15sdp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/_5sdp"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_languages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/rv_languages"
-        tools:listitem="@layout/list_item_languages"
-        app:spanCount="2"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="@dimen/_10sdp"
-        android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/adsView"
-        app:layout_constraintTop_toBottomOf="@id/tool_bar" />
+        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:spanCount="2"
+        tools:listitem="@layout/list_item_languages" />
 
     <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_height="wrap_content" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

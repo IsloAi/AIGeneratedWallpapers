@@ -103,7 +103,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     }
 
-
     private fun loadData() {
         Log.d("functionCallingTest", "onCreateCustom:  home on create")
         myViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
