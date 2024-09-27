@@ -55,16 +55,14 @@ import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
 class HomeFragment : Fragment(), AdEventListener {
-    private var _binding: FragmentHomeBinding?=null
+    private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-//    private  val myViewModel: MyHomeViewModel by activityViewModels()
+
+    //private  val myViewModel: MyHomeViewModel by activityViewModels()
     private var navController: NavController? = null
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
-    private lateinit var myActivity : MainActivity
-
-
-
-    private lateinit var adapter:ApiCategoriesListAdapter
+    private lateinit var myActivity: MainActivity
+    private lateinit var adapter: ApiCategoriesListAdapter
     private val viewModel: SaveStateViewModel by viewModels()
 
     private var isFirstLoad = true
@@ -73,7 +71,6 @@ class HomeFragment : Fragment(), AdEventListener {
     val TAG = "HOMEFRAG"
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
 
     var dataset = false
 
@@ -84,18 +81,20 @@ class HomeFragment : Fragment(), AdEventListener {
 
     var isNavigationInProgress = false
 
-
-
     var externalOpen = false
 
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
     val interAd = IKInterstitialAd()
 
-//    var checkAppOpen = false
+    //var checkAppOpen = false
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View{
-        _binding = FragmentHomeBinding.inflate(inflater,container,false)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         return binding.root
     }
@@ -110,11 +109,12 @@ class HomeFragment : Fragment(), AdEventListener {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -123,20 +123,18 @@ class HomeFragment : Fragment(), AdEventListener {
         setEvents()
     }
 
-
-    private fun setEvents(){
-
+    private fun setEvents() {
         binding.swipeLayout.setOnRefreshListener {
 
             val newData = cachedCatResponses.filterNotNull().shuffled()
             lifecycleScope.launch(Dispatchers.IO) {
-                val nullAdd = if (AdConfig.ISPAIDUSER){
+                val nullAdd = if (AdConfig.ISPAIDUSER) {
                     newData as ArrayList<CatResponse?>
-                }else{
+                } else {
                     addNullValueInsideArray(newData.shuffled())
                 }
 
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     cachedCatResponses.clear()
                     cachedCatResponses = nullAdd
                     val initialItems = getItems(0, 30)
@@ -146,18 +144,15 @@ class HomeFragment : Fragment(), AdEventListener {
                     adapter.updateMoreData(initialItems)
                     startIndex += 30
 
-
-
                     binding.swipeLayout.isRefreshing = false
                 }
             }
 
 
-
-
         }
     }
-    private fun onCreatingCalling(){
+
+    private fun onCreatingCalling() {
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
 //        checkDailyReward()
 
@@ -165,7 +160,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
 
         setAdapter()
@@ -202,7 +197,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
         myViewModel.getAllCreations("Car")
 
-        myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->
+        myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
 
@@ -214,19 +209,31 @@ class HomeFragment : Fragment(), AdEventListener {
                         lifecycleScope.launch(Dispatchers.IO) {
                             if (!dataset) {
 
-                                val tempList =  ArrayList<CatResponse>()
+                                val tempList = ArrayList<CatResponse>()
 
-
-                                result.data?.forEach {item ->
-                                    val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                                    if (!tempList.contains(model)){
+                                result.data?.forEach { item ->
+                                    val model = CatResponse(
+                                        item.id,
+                                        item.image_name,
+                                        item.cat_name,
+                                        item.hd_image_url,
+                                        item.compressed_image_url,
+                                        null,
+                                        item.likes,
+                                        item.liked,
+                                        item.unlocked,
+                                        item.size,
+                                        item.Tags,
+                                        item.capacity
+                                    )
+                                    if (!tempList.contains(model)) {
                                         tempList.add(model)
                                     }
                                 }
 
-                                val list = if (AdConfig.ISPAIDUSER){
+                                val list = if (AdConfig.ISPAIDUSER) {
                                     tempList.shuffled() as ArrayList<CatResponse?>
-                                }else{
+                                } else {
                                     addNullValueInsideArray(tempList.shuffled())
                                 }
 
@@ -234,7 +241,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
                                 val initialItems = getItems(0, 30)
 
-                                Log.e(TAG, "initMostDownloadedData: " + initialItems)
+                                Log.e(TAG, "initMostDownloadedData: $initialItems")
 
                                 withContext(Dispatchers.Main) {
                                     adapter.updateMoreData(initialItems)
@@ -256,12 +263,8 @@ class HomeFragment : Fragment(), AdEventListener {
                 else -> {
                 }
             }
-
         }
-
-
     }
-
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
         val endIndex = startIndex1 + chunkSize
@@ -277,35 +280,35 @@ class HomeFragment : Fragment(), AdEventListener {
         }
     }
 
+    private suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
 
-
-    suspend private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
-
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+        return withContext(Dispatchers.IO) {
+            val firstAdLineThreshold =
+                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
             val firstLine = firstAdLineThreshold * 3
 
-            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineCount =
+                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
             val newData = arrayListOf<CatResponse?>()
 
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+            for (i in data.indices) {
+                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
 
 
 
-                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
 
-                }else if (i == firstLine){
+                } else if (i == firstLine) {
                     newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
 
 
 
@@ -314,10 +317,9 @@ class HomeFragment : Fragment(), AdEventListener {
         }
 
 
-
     }
-    private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
+    private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
     private fun setAdapter() {
 
@@ -325,13 +327,13 @@ class HomeFragment : Fragment(), AdEventListener {
         adapter = ApiCategoriesListAdapter(list, object :
             PositionCallback {
             override fun getPosition(position: Int) {
-                if (!navigationInProgress){
+                if (!navigationInProgress) {
 
-                    if (!isNavigationInProgress){
+                    if (!isNavigationInProgress) {
                         hasToNavigateHome = true
                         externalOpen = true
                         val allItems = adapter.getAllItems()
-                        if (addedItems?.isNotEmpty() == true){
+                        if (addedItems?.isNotEmpty() == true) {
                             addedItems?.clear()
                         }
 
@@ -341,17 +343,17 @@ class HomeFragment : Fragment(), AdEventListener {
                         addedItems = allItems
 
                         oldPosition = position
-                        if (AdConfig.ISPAIDUSER){
-                            if (isAdded){
-                                navigateToDestination(allItems,position)
+                        if (AdConfig.ISPAIDUSER) {
+                            if (isAdded) {
+                                navigateToDestination(allItems, position)
                             }
-                        }else{
+                        } else {
                             var shouldShowInterAd = true
 
                             if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
                                 if (isAdded) {
                                     Constants.checkInter = false
-                                    navigateToDestination(allItems,position)
+                                    navigateToDestination(allItems, position)
                                     shouldShowInterAd = false // Skip showing the ad for this action
                                 }
                             }
@@ -359,18 +361,18 @@ class HomeFragment : Fragment(), AdEventListener {
                             if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
                                 if (isAdded) {
                                     checkAppOpen = false
-                                    navigateToDestination(allItems,position)
+                                    navigateToDestination(allItems, position)
                                     Log.e(TAG, "app open showed")
                                     shouldShowInterAd = false // Skip showing the ad for this action
                                 }
                             }
-
                             if (shouldShowInterAd) {
-                                showInterAd(allItems, position) // Show the interstitial ad if no conditions were met
+                                showInterAd(
+                                    allItems,
+                                    position
+                                ) // Show the interstitial ad if no conditions were met
                             }
                         }
-
-
                     }
                 }
             }
@@ -378,15 +380,17 @@ class HomeFragment : Fragment(), AdEventListener {
             override fun getFavorites(position: Int) {
                 //
             }
-        },myActivity,"trending")
+        }, myActivity, "trending")
         adapter.setCoroutineScope(fragmentScope)
 
         IKSdkController.loadNativeDisplayAd("mainscr_trending_tab_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    adapter?.nativeAdView = adObject
-                    binding.recyclerviewAll.adapter = adapter
+                if (isAdded && view != null) {
+                    adapter.nativeAdView = adObject
+                    if (binding.recyclerviewAll.adapter == null) {
+                        binding.recyclerviewAll.adapter = adapter
+                    }
                 }
             }
 
@@ -394,9 +398,9 @@ class HomeFragment : Fragment(), AdEventListener {
                 // Handle ad load failure with view object
             }
         })
-        binding.recyclerviewAll.adapter = adapter
-
-
+        if (binding.recyclerviewAll.adapter == null) {
+            binding.recyclerviewAll.adapter = adapter
+        }
 
     }
 
@@ -422,9 +426,8 @@ class HomeFragment : Fragment(), AdEventListener {
         )
     }
 
-
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
-        Log.e(TAG, "navigateToDestination: inside", )
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
+        Log.e(TAG, "navigateToDestination: inside")
 
 
         viewModel.setCatList(arrayList.filterNotNull() as ArrayList<CatResponse>)
@@ -441,12 +444,12 @@ class HomeFragment : Fragment(), AdEventListener {
 
 
         Bundle().apply {
-            Log.e(TAG, "navigateToDestination: inside bundle", )
+            Log.e(TAG, "navigateToDestination: inside bundle")
 
-            putString("from","trending")
-            putString("wall","home")
-            putInt("position",position - countOfNulls)
-            findNavController().navigate(R.id.wallpaperViewFragment,this)
+            putString("from", "trending")
+            putString("wall", "home")
+            putInt("position", position - countOfNulls)
+            findNavController().navigate(R.id.wallpaperViewFragment, this)
             navigationInProgress = false
         }
 
@@ -456,7 +459,8 @@ class HomeFragment : Fragment(), AdEventListener {
 
     private fun congratulationsDialog() {
         val dialog = Dialog(requireContext())
-        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        val bindingDialog =
+            DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
@@ -478,24 +482,28 @@ class HomeFragment : Fragment(), AdEventListener {
     override fun onResume() {
         super.onResume()
 
-        if (wallFromHome){
-            if (isAdded){
+        if (wallFromHome) {
+            if (isAdded) {
                 congratulationsDialog()
             }
         }
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_CarTab_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "Tab"),
+                Pair("action_name", "MainScr_CarTab_View")
+            )
         }
 
         loadData()
-        if (dataset){
+        if (dataset) {
 
             Log.e(TAG, "onResume: Data set $dataset")
 //            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
 
-            if (addedItems?.isEmpty() == true){
-                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+            if (addedItems?.isEmpty() == true) {
+                Log.e(TAG, "onResume: " + cachedCatResponses.size)
 
 
             }
@@ -505,7 +513,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
         }
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Trending Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -514,9 +522,9 @@ class HomeFragment : Fragment(), AdEventListener {
 
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
-            if (!WallpaperViewFragment.isNavigated && hasToNavigateHome){
-                if (isAdded){
-                    navigateToDestination(addedItems!!,oldPosition)
+            if (!WallpaperViewFragment.isNavigated && hasToNavigateHome) {
+                if (isAdded) {
+                    navigateToDestination(addedItems!!, oldPosition)
                 }
             }
         }
@@ -526,23 +534,22 @@ class HomeFragment : Fragment(), AdEventListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
-    companion object{
+    companion object {
         var hasToNavigateHome = false
         var wallFromHome = false
     }
 
     override fun onPause() {
         super.onPause()
-        Log.e(TAG, "onPause: ", )
+        Log.e(TAG, "onPause: ")
 
-        if (!externalOpen){
+        if (!externalOpen) {
             val allItems = adapter.getAllItems()
-            if (addedItems?.isNotEmpty() == true){
+            if (addedItems?.isNotEmpty() == true) {
                 addedItems?.clear()
             }
 
@@ -554,12 +561,12 @@ class HomeFragment : Fragment(), AdEventListener {
     override fun onDestroyView() {
         super.onDestroyView()
         isFirstLoad = true
-        _binding =null
+        _binding = null
     }
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

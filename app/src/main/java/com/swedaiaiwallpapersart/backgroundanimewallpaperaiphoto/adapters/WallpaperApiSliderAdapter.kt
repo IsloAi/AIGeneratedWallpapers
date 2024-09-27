@@ -193,17 +193,25 @@ class WallpaperApiSliderAdapter(
 //            }
         }
 
-        val url = if (from == "Vip") {
-            AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url
+        var url: String ?= ""
+        if (from == "Vip") {
+            url = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url
+        } else {
+            url = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url
+        }
+
+        /*val url = if (from == "Vip") {
+            AdConfig.BASE_URL_DATA+"/rewardwallpaper/hd/"+ model.hd_image_url
         } else {
 
             AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url
             Log.d(
                 "usmanTAG",
-                "dataSet: ${AdConfig.BASE_URL_DATA}+/staticwallpaper/hd/+${model.hd_image_url}"
+                "dataSet: ${AdConfig.BASE_URL_DATA}/staticwallpaper/hd/${model.hd_image_url}"
             )
-        }
+        }*/
 
+        Log.d("usmanTAG", "dataSet:url = $url ")
         Glide.with(context!!).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object :
                 RequestListener<Drawable> {

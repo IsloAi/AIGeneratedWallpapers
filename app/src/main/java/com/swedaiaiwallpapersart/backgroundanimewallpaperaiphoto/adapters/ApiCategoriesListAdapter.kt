@@ -88,7 +88,6 @@ class ApiCategoriesListAdapter(
         }
     }
 
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
@@ -124,18 +123,21 @@ class ApiCategoriesListAdapter(
 
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (position >= arrayList.size) return
+        try {
+            if (position >= arrayList.size) return
+            when (holder.itemViewType) {
+                VIEW_TYPE_CONTAINER1 -> {
+                    val viewHolderContainer1 = holder as ViewHolderContainer1
+                    arrayList[position]?.let { viewHolderContainer1.bind(it) }
+                }
 
-        when (holder.itemViewType) {
-            VIEW_TYPE_CONTAINER1 -> {
-                val viewHolderContainer1 = holder as ViewHolderContainer1
-                arrayList[position]?.let { viewHolderContainer1.bind(it) }
+                VIEW_TYPE_NATIVE_AD -> {
+                    val viewHolderContainer3 = holder as ViewHolderContainer3
+                    viewHolderContainer3.bind()
+                }
             }
-
-            VIEW_TYPE_NATIVE_AD -> {
-                val viewHolderContainer3 = holder as ViewHolderContainer3
-                viewHolderContainer3.bind()
-            }
+        } catch (e: Exception) {
+            Log.d("usmanTAG", "onBindViewHolder: error ${e.localizedMessage}")
         }
     }
 
@@ -294,7 +296,6 @@ class ApiCategoriesListAdapter(
         return arrayList[0]?.hd_image_url!!
     }
 
-
     fun updateMoreData(list: ArrayList<CatResponse?>) {
         val startPosition = arrayList.size
         val currentItems = arrayList.toHashSet()
@@ -341,7 +342,6 @@ class ApiCategoriesListAdapter(
             oldList[oldItemPosition] == newList[newItemPosition]
     }
 
-
     fun getAllItems(): ArrayList<CatResponse?> {
         return arrayList
     }
@@ -351,7 +351,7 @@ class ApiCategoriesListAdapter(
             arrayList.clear()
             notifyDataSetChanged()
         } catch (e: IndexOutOfBoundsException) {
-            e.printStackTrace()
+            Log.d("usmanTAG", "addNewData: error ${e.localizedMessage} ")
         }
     }
 }

@@ -189,6 +189,7 @@ class SplashOnFragment : Fragment() {
             }
         }
         animateLoadingText()
+        
     }
 
     private fun navigateToNextScreen() {

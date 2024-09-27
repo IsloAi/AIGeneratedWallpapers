@@ -69,6 +69,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.Live
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.MainActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -84,35 +85,29 @@ import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ConnectivityListener {
-    lateinit var binding: ActivityMainBinding
-    private var selectedPrompt: String? = null
 
+    lateinit var binding: ActivityMainBinding
     private lateinit var job: Job
 
+    val TAG = "ANR-SPY"
+
+    private var selectedPrompt: String? = null
     private var alertDialog: AlertDialog? = null
 
     private val liveViewModel: LiveWallpaperViewModel by viewModels()
-    val TAG = "ANRSPY"
-
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
-
-    val mainActivityViewModel: MainActivityViewModel by viewModels()
+    private val mainActivityViewModel: MainActivityViewModel by viewModels()
+    private val myViewModel: MyHomeViewModel by viewModels()
+    private val chargingAnimationViewmodel: ChargingAnimationViewmodel by viewModels()
+    private val doubleWallpaperVideModel: DoubeWallpaperViewModel by viewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
 
-    private val myViewModel: MyHomeViewModel by viewModels()
-
-    private val chargingAnimationViewmodel: ChargingAnimationViewmodel by viewModels()
-    private val doubleWallpaperVideModel: DoubeWallpaperViewModel by viewModels()
-
     private var _navController: NavController? = null
-
     private val navController get() = _navController!!
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,12 +124,14 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         configuration.setLocale(newLocale)
         configuration.setLayoutDirection(Locale(lan))
         resources1.updateConfiguration(configuration, resources.displayMetrics)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initFirebaseRemoteConfig()
 
         handleBackPress()
+
         fetchData(deviceID)
 
         observefetechedData()
@@ -142,14 +139,16 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         if (!isNetworkAvailable()) {
             showNoInternetDialog()
         }
-        readjsonAndSaveDataToDb()
+
+        readJsonAndSaveDataToDb()
+
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID)
         }
+
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         _navController = navHostFragment.navController
-
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
@@ -172,8 +171,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             }
 
         }
-
-
     }
 
     override fun onDestroy() {
@@ -192,8 +189,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
     }
 
-    private fun readjsonAndSaveDataToDb() {
-        GlobalScope.launch {
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun readJsonAndSaveDataToDb() {
+        GlobalScope.launch(Dispatchers.IO) {
             // Step 1: Read and insert wallpapers.json
             val jsonFileName1 = "wallpapers.json"
             val jsonString1 = readJsonFile(this@MainActivity, jsonFileName1)
@@ -229,7 +227,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         mainActivityViewModel.updates.observe(this@MainActivity) { result ->
                             when (result) {
                                 is Response.Success -> {
-                                    Log.e(TAG, "updatedWalls: " + result.data)
+                                    Log.d(TAG, "updatedWalls: " + result.data)
 
                                     result.data?.forEach { item ->
                                         val model = SingleDatabaseResponse(
@@ -276,11 +274,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         mainActivityViewModel.deletedIds.observe(this@MainActivity) { result ->
                             when (result) {
                                 is Response.Success -> {
-                                    Log.e(TAG, "updatedWalls: " + result.data)
+                                    Log.d(TAG, "updatedWalls: " + result.data)
 
                                     result.data?.forEach { item ->
 
-                                        Log.e(TAG, "readjsonAndSaveDataToDb: " + item)
+                                        Log.d(TAG, "readJsonAndSaveDataToDb: $item")
 
 
                                         CoroutineScope(Dispatchers.IO).async {
@@ -306,6 +304,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             }
                         }
                     }
+
                 } else {
                     Log.e(TAG, "readJsonAndSaveDataToDb: IMAGELIST NULL")
                     return@launch
@@ -350,7 +349,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             }
         }
     }
-
 
     private fun observefetechedData() {
         mainActivityViewModel.allModels.observe(this) { result ->
@@ -428,14 +426,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         })
     }
 
-
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
     ) {
         IKTrackingHelper.sendTracking(eventName, *param)
     }
-
 
     private fun saveLiveWallpapersInDB() {
         liveViewModel.liveWallpapers.observe(this) { result ->
@@ -444,7 +440,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach { wallpaper ->
 
-                            Log.e(TAG, "saveLiveWallpapersInDB: $wallpaper")
+                            Log.d(TAG, "saveLiveWallpapersInDB: $wallpaper")
                             val model = wallpaper.copy(unlocked = true)
                             appDatabase.liveWallpaperDao().insert(model)
 
@@ -629,7 +625,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     }
 
-
     private suspend fun readJsonFile(context: Context, fileName: String): String {
         return withContext(Dispatchers.IO) {
             try {
@@ -647,7 +642,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     }
 
-
     private fun initFirebaseRemoteConfig() {
         val first = "position_ads"
 
@@ -659,7 +653,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         remoteConfig.setConfigSettingsAsync(configSettings)
 
         remoteConfig.setDefaultsAsync(R.xml.remote_config)
-
 
         remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
             override fun onUpdate(configUpdate: ConfigUpdate) {
@@ -823,7 +816,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 Log.e("TAG", "Config update error with code: " + error.code, error)
             }
         })
-
 
         remoteConfig.fetchAndActivate()
             .addOnCompleteListener(this) { task ->
@@ -1350,7 +1342,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         return list
     }
 
-
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
@@ -1394,4 +1385,5 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             alertDialog?.dismiss()
         }
     }
+
 }
