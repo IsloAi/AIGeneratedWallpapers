@@ -128,8 +128,10 @@ class RewardDetailsFragment : Fragment() {
         }
 
         dialogBinding.close.setOnClickListener {
-            findNavController().navigateUp()
-            dialog.dismiss()
+            if (isAdded && isVisible) {
+                findNavController().navigateUp()
+                dialog.dismiss()
+            }
         }
 
         dialog.show()

@@ -45,33 +45,6 @@ class NotificationWidgetService : Service() {
         }
     }
 
-    override fun onCreate() {
-        super.onCreate()
-        job = Job()
-        val scope = CoroutineScope(Dispatchers.IO + job)
-        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        startForegroundService()
-        // Initialize the BroadcastReceiver
-        screenLockReceiver = ScreenLockReceiver(
-            onLock = {
-                Log.d("NotificationWidgetService", "Device locked")
-                handler.post(checkOverlayRunnable) // Start checking every second when locked
-            },
-            onUnlock = {
-                Log.d("NotificationWidgetService", "Device unlocked")
-                handler.removeCallbacks(checkOverlayRunnable) // Stop checking when unlocked
-                removeOverlay()
-            }
-        )
-        registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
-        registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
-
-        // Initial check
-        scope.launch {
-            checkAndShowOverlay()
-        }
-    }
-
     override fun onDestroy() {
         super.onDestroy()
         job.cancel()
@@ -145,7 +118,34 @@ class NotificationWidgetService : Service() {
         }
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        job = Job()
+        val scope = CoroutineScope(Dispatchers.IO + job)
+        windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        // Initialize the BroadcastReceiver
+        screenLockReceiver = ScreenLockReceiver(
+            onLock = {
+                Log.d("NotificationWidgetService", "Device locked")
+                handler.post(checkOverlayRunnable) // Start checking every second when locked
+            },
+            onUnlock = {
+                Log.d("NotificationWidgetService", "Device unlocked")
+                handler.removeCallbacks(checkOverlayRunnable) // Stop checking when unlocked
+                removeOverlay()
+            }
+        )
+        registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
+        registerReceiver(screenLockReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+
+        // Initial check
+        scope.launch {
+            checkAndShowOverlay()
+        }
+    }
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForegroundService()
         return START_STICKY
     }
 

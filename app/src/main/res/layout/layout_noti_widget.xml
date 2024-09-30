@@ -73,7 +73,7 @@
 
             </RelativeLayout>
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_100sdp"
@@ -82,7 +82,6 @@
                 android:layout_marginVertical="@dimen/_15sdp"
                 android:layout_marginHorizontal="@dimen/_15sdp"
                 android:layout_below="@id/header"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
                 android:layout_above="@id/action_button"/>
 
             <Button
