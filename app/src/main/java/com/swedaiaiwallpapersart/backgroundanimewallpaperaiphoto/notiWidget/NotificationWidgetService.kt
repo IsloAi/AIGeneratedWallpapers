@@ -147,6 +147,7 @@ class NotificationWidgetService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("usmanTAG", "onStartCommand: NotificationStarted")
+        startForegroundService()
         return START_STICKY
     }
 

@@ -67,7 +67,6 @@ class SplashOnFragment : Fragment() {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
@@ -220,7 +219,6 @@ class SplashOnFragment : Fragment() {
         }
     }
 
-
     private var dotCount = 0
 
     private fun animateDots(textView: TextView) {
@@ -278,7 +276,6 @@ class SplashOnFragment : Fragment() {
     ) {
         IKTrackingHelper.sendTracking(eventName, *param)
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

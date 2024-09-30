@@ -972,7 +972,7 @@ class HomeTabsFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
-        checkPermissionAndAllow()
+        //checkPermissionAndAllow()
     }
 
     private fun shouldShowReviewDialog(context: Context): Boolean {
@@ -1026,7 +1026,17 @@ class HomeTabsFragment : Fragment() {
 
     private fun startService() {
         val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
-        requireActivity().startService(serviceIntent)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // For Android 8.0+ (API level 26 and above)
+            requireActivity().startForegroundService(serviceIntent)
+        } else {
+            // For below Android 8.0
+            requireActivity().startService(serviceIntent)
+        }
+
+        /*val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
+        requireActivity().startForegroundService(serviceIntent)*/
     }
 
     private fun checkPermissionAndAllow() {
@@ -1053,4 +1063,5 @@ class HomeTabsFragment : Fragment() {
             }
         }
     }
+
 }
