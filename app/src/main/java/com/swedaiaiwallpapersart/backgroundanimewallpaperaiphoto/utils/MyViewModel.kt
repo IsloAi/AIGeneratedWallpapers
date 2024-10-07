@@ -76,6 +76,7 @@ class MyViewModel @Inject constructor(private val getCategoryWallpapersUseCase: 
             }
         }
     }
+
     fun clear(){
         wallpaperData.value = null
     }

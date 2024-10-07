@@ -21,4 +21,5 @@ object RetrofitInstance {
             .build()
         return retrofit
     }
+
 }

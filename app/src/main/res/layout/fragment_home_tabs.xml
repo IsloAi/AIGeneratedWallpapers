@@ -1,10 +1,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment">
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
@@ -34,118 +33,112 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.97" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tool"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         app:layout_constraintHeight_percent="0.09"
         app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/tool"
-        >
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/toolTxt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="4K Wallpaper"
             android:fontFamily="@font/microgramma"
-            android:textSize="@dimen/_16sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/animation"
-            android:id="@+id/toolTxt"
+            android:text="4K Wallpaper"
             android:textColor="@color/white"
-            />
+            android:textSize="@dimen/_16sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/animation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/icon_settings_"
-            android:padding="@dimen/_5sdp"
             android:id="@+id/settings"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/icon_settings_"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@id/settings"
-            android:layout_marginEnd="@dimen/_8sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/icon_search"
             android:id="@+id/search"
-            android:padding="@dimen/_5sdp"
-            />
-
-        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toStartOf="@id/search"
             android:layout_marginEnd="@dimen/_8sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:src="@drawable/go_premium"
-            android:id="@+id/go_premium"
             android:padding="@dimen/_5sdp"
-            />
+            android:src="@drawable/icon_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/settings"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/go_premium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:padding="@dimen/_5sdp"
+            android:src="@drawable/go_premium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/search"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.airbnb.lottie.LottieAnimationView
-            android:visibility="gone"
             android:id="@+id/animation"
             android:layout_width="@dimen/_40sdp"
             android:layout_height="@dimen/_30sdp"
             android:layout_marginBottom="@dimen/_7sdp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/go_premium"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            android:scaleType="centerCrop"
             app:lottie_rawRes="@raw/vip_reward" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="#00FFFFFF"
-        app:layout_constraintTop_toBottomOf="@id/tool"
-        app:tabIndicatorColor="#00000000"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        android:elevation="0dp"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/tool"
         app:tabGravity="start"
-        app:tabRippleColor="#00FCFCFC"
-        app:tabPaddingStart="0dp"
-        app:tabPaddingEnd="5dp"
+        app:tabIndicatorColor="#00000000"
         app:tabMode="scrollable"
-        android:elevation="0dp" />
-
+        app:tabPaddingEnd="5dp"
+        app:tabPaddingStart="0dp"
+        app:tabRippleColor="#00FCFCFC" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/_10sdp"
-        app:layout_constraintTop_toBottomOf="@id/tab_layout"
         app:layout_constraintBottom_toTopOf="@id/adsView"
-        />
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
     <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+

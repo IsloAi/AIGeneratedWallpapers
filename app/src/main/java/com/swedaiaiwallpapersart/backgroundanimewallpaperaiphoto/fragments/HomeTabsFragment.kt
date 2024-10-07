@@ -728,7 +728,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
+            override fun onTabSelected(tab: TabLayout.Tab? ){
                 when (tab?.text) {
                     "Live" -> {
                         if (isAdded) {

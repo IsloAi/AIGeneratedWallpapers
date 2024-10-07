@@ -69,7 +69,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
@@ -177,7 +176,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     ) {
         IKTrackingHelper.sendTracking(eventName, *param)
     }
-
 
     private fun updateUIWithFetchedData() {
 
@@ -291,7 +289,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         }
     }
 
-
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
     private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
@@ -335,4 +332,5 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     override fun onShowAdComplete() {}
 
     override fun onShowAdFail() {}
+
 }

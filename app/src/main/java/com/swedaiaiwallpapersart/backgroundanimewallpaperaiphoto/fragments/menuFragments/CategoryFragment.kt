@@ -1,4 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
+
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -42,10 +43,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class CategoryFragment : Fragment(), AdEventListener {
-   private var _binding: FragmentCategoryBinding? = null
+    private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var myActivity : MainActivity
+    private lateinit var myActivity: MainActivity
 
     val catlist = ArrayList<CatNameResponse?>()
 
@@ -67,10 +68,12 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     val TAG = "CATEGORIES"
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,savedInstanceState: Bundle?): View{
-        _binding = FragmentCategoryBinding.inflate(inflater,container,false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
 
-       return  binding.root }
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,6 +84,7 @@ class CategoryFragment : Fragment(), AdEventListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -93,6 +97,7 @@ class CategoryFragment : Fragment(), AdEventListener {
         (myActivity.application as MyApp).registerAdEventListener(this)
 
     }
+
     @SuppressLint("SuspiciousIndentation")
     private fun onCustomCreateView() {
         myActivity = activity as MainActivity
@@ -101,9 +106,9 @@ class CategoryFragment : Fragment(), AdEventListener {
 
         updateUIWithFetchedData()
         binding.progressBar.visibility = View.GONE
-        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(),3)
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5  ,false,10000))
-        val adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
+        val adapter = ApiCategoriesNameAdapter(catlist, object : StringCallback {
             override fun getStringCall(string: String) {
 
                 if (isAdded) {
@@ -116,9 +121,9 @@ class CategoryFragment : Fragment(), AdEventListener {
 
                 catListViewmodel.getAllCreations(string)
 
-                if (AdConfig.ISPAIDUSER){
+                if (AdConfig.ISPAIDUSER) {
                     setFragment(string)
-                }else{
+                } else {
                     var shouldShowInterAd = true
 
                     if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
@@ -155,14 +160,13 @@ class CategoryFragment : Fragment(), AdEventListener {
                 }
 
 
-
             }
-        },myActivity,"")
+        }, myActivity, "")
 
         IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
+                if (isAdded && view != null) {
                     adapter?.nativeAdView = adObject
                     binding.recyclerviewAll.adapter = adapter
                 }
@@ -175,22 +179,22 @@ class CategoryFragment : Fragment(), AdEventListener {
         binding.recyclerviewAll.adapter = adapter
 
         myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
-            Log.e("TAG", "onCustomCreateView: no data exists" )
-                if (wallpapersList?.size!! > 0){
-                    Log.e("TAG", "onCustomCreateView: data exists" )
-                    lifecycleScope.launch(Dispatchers.IO) {
+            Log.e("TAG", "onCustomCreateView: no data exists")
+            if (wallpapersList?.size!! > 0) {
+                Log.e("TAG", "onCustomCreateView: data exists")
+                lifecycleScope.launch(Dispatchers.IO) {
 
 
-                        Log.e("TAG", "onCustomCreateView: "+wallpapersList )
+                    Log.e("TAG", "onCustomCreateView: " + wallpapersList)
 
-                        val list =wallpapersList.shuffled()
+                    val list = wallpapersList.shuffled()
 
-                        withContext(Dispatchers.Main){
-                            adapter.updateData(newData = list)
-                        }
+                    withContext(Dispatchers.Main) {
+                        adapter.updateData(newData = list)
                     }
-
                 }
+
+            }
         }
 
 
@@ -223,46 +227,47 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     private fun updateUIWithFetchedData() {
         val gson = Gson()
-        val categoryList: ArrayList<CatNameResponse> = gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
+        val categoryList: ArrayList<CatNameResponse> =
+            gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
 
 
         adapter = LiveCategoriesHorizontalAdapter(categoryList, object : StringCallback {
-                override fun getStringCall(string: String) {
-                    if (string == "Roro'Noa Zoro"){
-                        myViewModel.getMostUsed("Roro")
-                    }else{
-                        myViewModel.getMostUsed(string)
+            override fun getStringCall(string: String) {
+                if (string == "Roro'Noa Zoro") {
+                    myViewModel.getMostUsed("Roro")
+                } else {
+                    myViewModel.getMostUsed(string)
+                }
+
+                if (isAdded) {
+                    sendTracking("categorymainscr_click", Pair("categorymainscr", "$string Live"))
+                }
+
+                if (AdConfig.ISPAIDUSER) {
+                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                } else {
+                    var shouldShowInterAd = true
+
+                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (isAdded) {
+                            Constants.checkInter = false
+                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
                     }
 
-                    if (isAdded){
-                        sendTracking("categorymainscr_click",Pair("categorymainscr", "$string Live"))
+                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                        if (isAdded) {
+                            checkAppOpen = false
+                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                            Log.e(TAG, "app open showed")
+                            shouldShowInterAd = false // Skip showing the ad for this action
+                        }
                     }
 
-                    if (AdConfig.ISPAIDUSER){
-                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                    }else{
-                        var shouldShowInterAd = true
-
-                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                            if (isAdded) {
-                                Constants.checkInter = false
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                shouldShowInterAd = false // Skip showing the ad for this action
-                            }
-                        }
-
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                            if (isAdded) {
-                                checkAppOpen = false
-                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                                Log.e(TAG, "app open showed")
-                                shouldShowInterAd = false // Skip showing the ad for this action
-                            }
-                        }
-
-                        if (shouldShowInterAd) {
-                            showIntersAd() // Show the interstitial ad if no conditions were met
-                        }
+                    if (shouldShowInterAd) {
+                        showIntersAd() // Show the interstitial ad if no conditions were met
+                    }
 //                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
 //                            if (isAdded){
 //                                checkAppOpen = false
@@ -274,12 +279,11 @@ class CategoryFragment : Fragment(), AdEventListener {
 //                        }
 
 
-                    }
-
-
-
                 }
-            }, myActivity)
+
+
+            }
+        }, myActivity)
 
         binding.recyclerviewTrending.adapter = adapter
     }
@@ -354,21 +358,21 @@ class CategoryFragment : Fragment(), AdEventListener {
 ]
 """
 
-    fun sortWallpaperCategories(categories: List<CatNameResponse>, order: List<String>): List<CatNameResponse> {
+    fun sortWallpaperCategories(
+        categories: List<CatNameResponse>,
+        order: List<String>
+    ): List<CatNameResponse> {
         // Create a map to store the order of categories based on their names
-        Log.e("TAG", "sortWallpaperCategories: "+categories )
-        Log.e("TAG", "sortWallpaperCategories: "+order )
+        Log.e("TAG", "sortWallpaperCategories: " + categories)
+        Log.e("TAG", "sortWallpaperCategories: " + order)
         order.forEach {
-            Log.e("TAG", "sortWallpaperCategories: "+it )
+            Log.e("TAG", "sortWallpaperCategories: " + it)
         }
         val orderMap = order.withIndex().associate { it.value.trim() to it.index }
 
         // Sort the categories based on the order specified in the map
         return categories.sortedWith(compareBy { orderMap[it.cat_name] ?: Int.MAX_VALUE })
     }
-
-
-
 
 
 //    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
@@ -402,11 +406,11 @@ class CategoryFragment : Fragment(), AdEventListener {
 //    }
 
 
-    private fun setFragment(name:String){
-        sendTracking("categorymainscr_click",Pair("categorymainscr", name))
-       val bundle =  Bundle().apply {
-            putString("name",name)
-            putString("from","category")
+    private fun setFragment(name: String) {
+        sendTracking("categorymainscr_click", Pair("categorymainscr", name))
+        val bundle = Bundle().apply {
+            putString("name", name)
+            putString("from", "category")
 
         }
         if (findNavController().currentDestination?.id != R.id.listViewFragment) {
@@ -418,11 +422,15 @@ class CategoryFragment : Fragment(), AdEventListener {
     override fun onResume() {
         super.onResume()
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_CateTab_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "Tab"),
+                Pair("action_name", "MainScr_CateTab_View")
+            )
         }
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Categories Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -433,9 +441,8 @@ class CategoryFragment : Fragment(), AdEventListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     override fun onDestroyView() {
@@ -446,7 +453,7 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {
