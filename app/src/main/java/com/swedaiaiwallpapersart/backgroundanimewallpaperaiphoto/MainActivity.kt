@@ -682,6 +682,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         AdConfig.categoryOrder = categoryOrderArray
                         AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
+                        MySharePreference.setNotificationWidget(this@MainActivity,AdConfig.Noti_Widget)
+                        Log.d(TAG, "initFirebaseRemoteConfigNoti1: ${MySharePreference.getNotificationWidget(this@MainActivity)}")
                         AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
 
                         val fullOnboardingAutoNext =
@@ -848,6 +850,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         e.printStackTrace()
                     }
                     AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
+                    Log.d(TAG, "initFirebaseRemoteConfigNotiRemote: ${remoteConfig["Noti_Widget"].asString()}")
+                    MySharePreference.setNotificationWidget(this@MainActivity,remoteConfig["Noti_Widget"].asString())
+                    Log.d(TAG, "initFirebaseRemoteConfigNotiPref: ${MySharePreference.getNotificationWidget(this@MainActivity)}")
                     AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
                     try {
                         val languagesOrderArray =

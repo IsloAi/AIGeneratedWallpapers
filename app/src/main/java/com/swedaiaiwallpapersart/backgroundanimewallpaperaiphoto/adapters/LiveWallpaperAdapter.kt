@@ -281,6 +281,7 @@ class LiveWallpaperAdapter(
 
     fun updateMoreData(list: ArrayList<LiveWallpaperModel?>) {
         try {
+            Log.d("LIST_SIZE_1", "updateData: ${list.size}")
             val startPosition = arrayList.size
             arrayList.addAll(list.filter { !arrayList.contains(it) })
             notifyItemRangeInserted(startPosition, list.size)
@@ -302,6 +303,7 @@ class LiveWallpaperAdapter(
 
     fun updateData(list: ArrayList<LiveWallpaperModel?>) {
         try {
+            Log.d("LIST_SIZE", "updateData: ${list.size}")
             arrayList.clear()
             arrayList.addAll(list)
             notifyDataSetChanged()

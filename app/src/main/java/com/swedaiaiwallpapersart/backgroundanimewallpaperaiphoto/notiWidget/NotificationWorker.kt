@@ -1,15 +1,20 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget
 
+import android.app.KeyguardManager
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
+import android.content.pm.ServiceInfo
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES.Q
+import android.os.PowerManager
 import android.util.Log
-import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.work.ForegroundInfo
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
@@ -17,21 +22,59 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.models.NotificationConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.net.URL
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
-class NotificationWorker(context: Context, workerParams: WorkerParameters) : Worker(context, workerParams) {
+class NotificationWorker(context: Context, workerParams: WorkerParameters) :
+    Worker(context, workerParams) {
     override fun doWork(): Result {
-        showFullScreenNotification(applicationContext)
+        Log.d(
+            "NotificationScheduler",
+            "Notification called from doWork()"
+        )
+        val config = loadData(applicationContext)
+        if (config != null) {
+            setForegroundAsync(createForegroundInfo(applicationContext, config))
+            createNotificationChannel()
+        }else{
+            Log.e("NotificationScheduler", "Failed to fetch notification config")
+        }
         return Result.success()
     }
-    private fun showFullScreenNotification(context: Context) {
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "NOTIFICATION_CHANNEL"
+            val channel = NotificationChannel(
+                channelId,
+                "Notification Channel",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Channel for notifications"
+                lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            }
+            val notificationManager =
+                applicationContext.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private fun createForegroundInfo(context: Context, config: NotificationConfig): ForegroundInfo {
+        return if (SDK_INT >= Q) {
+            ForegroundInfo(
+                15,
+                showFullScreenNotification(context, config),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            ForegroundInfo(15, showFullScreenNotification(context, config))
+        }
+    }
+
+    private fun showFullScreenNotification(
+        context: Context,
+        notificationConfig: NotificationConfig
+    ): Notification {
+        val languageCode = MySharePreference.getLanguage(context)
+            ?.takeIf { it.isNotEmpty() } ?: "en"
         val notificationManager =
             context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
@@ -43,6 +86,7 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
                 NotificationManager.IMPORTANCE_HIGH
             ).apply {
                 description = "Channel for full-screen notifications"
+                lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
             }
             notificationManager.createNotificationChannel(channel)
         }
@@ -57,69 +101,68 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) : Wor
             fullScreenIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        val remoteViews = RemoteViews(context.packageName, R.layout.layout_noti_widget)
-        CoroutineScope(Dispatchers.IO).launch {
-            val gson = Gson()
-            val notificationConfig =
-                gson.fromJson(AdConfig.Noti_Widget, NotificationConfig::class.java)
 
-            if (notificationConfig == null) {
-                Log.e("NotificationWidgetService", "Failed to fetch notification config")
-                return@launch
-            }
-            for (dayIndex in 0 until 7) {
-                val calendar = Calendar.getInstance()
-                val currentDate = MySharePreference.getStoredDate(context)
-                val currentDay = MySharePreference.getStoredDay(context)
-                val currentTimeInMillis = System.currentTimeMillis()
-                val todayDate = SimpleDateFormat(
-                    "yyyy-MM-dd",
-                    Locale.getDefault()
-                ).format(Calendar.getInstance().time)
-
-                if (currentDate != todayDate) {
-                    val dayConfig = notificationConfig.notification_scheduler.getOrNull(dayIndex)
-                    if (dayConfig?.is_active == true && dayIndex == currentDay) {
-                        val time = dayConfig.time
-                        val timeArray = time.split(":")
-                        calendar.set(Calendar.HOUR_OF_DAY, 14)
-                        calendar.set(Calendar.MINUTE, 34)
-                        calendar.set(Calendar.SECOND, 0)
-
-                        val languageCode = MySharePreference.getLanguage(context)?.takeIf { it.isNotEmpty() } ?: "en"
-                        if (currentTimeInMillis >= calendar.timeInMillis) {
-                            remoteViews.setTextViewText(R.id.title,notificationConfig.notification_data[0].title[languageCode])
-                            remoteViews.setTextViewText(R.id.message,notificationConfig.notification_data[0].message[languageCode])
-                            CoroutineScope(Dispatchers.IO).launch {
-                                try {
-                                    val inputStream = URL(notificationConfig.notification_data[0].image[languageCode]).openStream()
-                                    val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                                    withContext(Dispatchers.Main) {
-                                        remoteViews.setBitmap(R.id.image,"",bitmap)
-                                    }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
-                            }
-                            break
-                        }
-                    }
-                }
-            }
-        }
+        val previousDay = MySharePreference.getStoredDay(context)
+        val dayIndex = (previousDay + 1) % 7
 
         val notificationBuilder = NotificationCompat.Builder(context, "full_screen_channel")
             .setSmallIcon(R.drawable.app_icon)
-            .setCustomContentView(remoteViews)
-            .setContentTitle("Full-Screen Notification")
-            .setContentText("This is a full-screen notification.")
+            .setContentTitle(notificationConfig.notification_data[dayIndex].title[languageCode])
+            .setContentText(notificationConfig.notification_data[dayIndex].message[languageCode])
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
             .setFullScreenIntent(fullScreenPendingIntent, true)
-            .setAutoCancel(true)
+            .setOngoing(false)
+            .setAutoCancel(false)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
 
+        wakeScreenAndShowActivity(context, fullScreenIntent)
         notificationManager.notify(1, notificationBuilder.build())
+
+        return notificationBuilder.build()
+    }
+
+    private fun wakeScreenAndShowActivity(context: Context, intent: Intent) {
+        val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+
+        // Wake up the screen
+        val isScreenOn = powerManager.isInteractive
+        if (!isScreenOn) {
+            val wakeLock = powerManager.newWakeLock(
+                PowerManager.FULL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP or PowerManager.ON_AFTER_RELEASE,
+                "MyApp::MyWakelockTag"
+            )
+            wakeLock.acquire(10 * 60 * 1000L /*10 minutes*/)
+        }
+
+        // Check if the keyguard is locked
+        if (keyguardManager.isKeyguardLocked) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS)
+            context.startActivity(intent)
+        }
+    }
+
+    private fun loadData(context: Context): NotificationConfig? {
+        val gson = Gson()
+        val notiConfigJson = MySharePreference.getNotificationWidget(context)
+        val config = gson.fromJson(notiConfigJson, NotificationConfig::class.java)
+
+        if (config == null) {
+            Log.e("NotificationWidgetService", "Failed to fetch notification config")
+            return null
+        }
+        val previousDay = MySharePreference.getStoredDay(context)
+        val dayIndex = (previousDay + 1) % 7
+        var dayConfig = config.notification_scheduler.getOrNull(dayIndex)
+        if (previousDay == -1) {
+            dayConfig = config.notification_scheduler.getOrNull(0)
+        }
+
+        // Only show the notification for the active day and time
+        if (dayConfig?.is_active == true) {
+            return config
+        }
+        return null
     }
 }

@@ -60,7 +60,7 @@ class MySharePreference {
         // Function to get the stored day
         fun getStoredDay(context: Context): Int {
             val sharedPreferences = context.getSharedPreferences("MySpValue", Context.MODE_PRIVATE)
-            return sharedPreferences.getInt("KEY_DAY", 0)
+            return sharedPreferences.getInt("KEY_DAY", -1)
         }
 
         fun getStoredDate(context: Context): String {
@@ -68,7 +68,19 @@ class MySharePreference {
             return sharedPreferences.getString("KEY_DATE", "")!!
         }
 
-        private fun getCurrentDate(): String {
+        fun getNotificationWidget(context: Context): String {
+            val sharedPreferences = context.getSharedPreferences("MySpValue", Context.MODE_PRIVATE)
+            return sharedPreferences.getString("Noti_Widget", "")!!
+        }
+
+        fun setNotificationWidget(context: Context,value:String){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("Noti_Widget",value)
+            myEdit.apply()
+        }
+
+        fun getCurrentDate(): String {
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             return sdf.format(Date())
         }
@@ -79,14 +91,14 @@ class MySharePreference {
             val editor = sharedPreferences.edit()
 
             // Get stored values
-            val storedDate = sharedPreferences.getString("KEY_DATE", getCurrentDate())
-            val storedDay = sharedPreferences.getInt("KEY_DAY", 0) // Default to 0 for Sunday
+            val storedDate = sharedPreferences.getString("KEY_DATE", "")
+            val storedDay = sharedPreferences.getInt("KEY_DAY", -1)
 
             // Get current date
             val currentDate = getCurrentDate()
 
             // Check if the date has changed
-            if (currentDate == storedDate) {
+            if (currentDate != storedDate) {
                 // Increment day and wrap around from 6 to 0
                 val newDay = (storedDay + 1) % 7
                 editor.putInt("KEY_DAY", newDay)

@@ -153,7 +153,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         super.onResume()
         loadData()
 
-        Log.e(TAG, "onResume: ")
+        Log.e(TAG, "onResume1: ")
 
         if (isAdded) {
             sendTracking(

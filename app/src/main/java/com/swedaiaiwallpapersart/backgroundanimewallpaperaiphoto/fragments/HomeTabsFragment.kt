@@ -2,14 +2,9 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.Dialog
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.IntentSender
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -17,8 +12,11 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import android.text.TextPaint
 import android.util.Log
 import android.view.LayoutInflater
@@ -33,8 +31,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -42,7 +38,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
+import androidx.work.BackoffPolicy
+import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -56,6 +55,7 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.gson.Gson
 import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.data.dto.pub.UpdateAppDto
@@ -86,11 +86,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotiWidgetActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationReceiver
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWorker
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.BroadcastReceiver
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.models.NotificationConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -106,7 +103,7 @@ import java.net.UnknownHostException
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-
+import kotlin.math.log
 
 @AndroidEntryPoint
 class HomeTabsFragment : Fragment() {
@@ -119,7 +116,6 @@ class HomeTabsFragment : Fragment() {
     private lateinit var myActivity: MainActivity
 
     val sharedViewModel: SharedViewModel by activityViewModels()
-    private lateinit var notificationReceiver: NotificationReceiver
 
     private var isBottomSheetVisible = false
 
@@ -136,17 +132,20 @@ class HomeTabsFragment : Fragment() {
 
     companion object {
         var navigationInProgress = false
-        const val ALARM_ACTION = "ALARM_ACTION"
     }
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
             if (isGranted) {
                 // Permission granted, you can now send notifications
-                scheduleNotification(requireActivity(),14,30)
+                loadData(requireActivity())
             } else {
                 // Permission denied, show a message or handle accordingly
-                Toast.makeText(requireActivity(), "Notification permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireActivity(),
+                    "Notification permission denied",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -186,9 +185,8 @@ class HomeTabsFragment : Fragment() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         reviewManager = ReviewManagerFactory.create(requireContext())
-        SplashOnFragment.exit = false
+        exit = false
         myActivity = activity as MainActivity
-        notificationReceiver = NotificationReceiver()
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
         } else {
@@ -237,7 +235,6 @@ class HomeTabsFragment : Fragment() {
                             requireContext().packageName,
                             0
                         )
-                        val version = pInfo.versionName
                         val versionCode = pInfo.versionCode
 
                         if (versionCode < updateDto?.minVersionCode!!) {
@@ -920,6 +917,7 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        Log.d("HOME_TABS", "onResume: ")
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
         } else {
@@ -977,7 +975,6 @@ class HomeTabsFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
-//        checkPermissionAndAllow()
     }
 
     private fun shouldShowReviewDialog(context: Context): Boolean {
@@ -987,20 +984,6 @@ class HomeTabsFragment : Fragment() {
 
         return (currentTime - lastDismissedTime) > twoMinutesInMillis
     }
-
-    fun getHomeFragmentIndex(): Int {
-        val tabLayout = binding.tabLayout
-        val tabCount = tabLayout.tabCount
-        for (i in 0 until tabCount) {
-            val tab = tabLayout.getTabAt(i)
-            val tabTitle = tab?.text?.toString()
-            if (tabTitle == getString(R.string.trending)) {
-                return i
-            }
-        }
-        return -1 // If HomeFragment is not found
-    }
-
 
     private fun getTabPositionByName(tabName: String): Int {
         for (i in 0 until binding.tabLayout.tabCount) {
@@ -1012,6 +995,15 @@ class HomeTabsFragment : Fragment() {
         return -1 // Return -1 if no tab with the specified name is found
     }
 
+    private fun checkBatteryOptimization(){
+        val powerManager = requireContext().getSystemService(Context.POWER_SERVICE) as PowerManager
+        if (!powerManager.isIgnoringBatteryOptimizations(requireActivity().packageName)) {
+            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+                .setData(Uri.parse("package:${requireActivity().packageName}"))
+            startActivity(intent)
+        }
+
+    }
     private fun navigateToTrending(index: Int) {
         if (isAdded) {
             binding.viewPager.currentItem = index
@@ -1026,71 +1018,99 @@ class HomeTabsFragment : Fragment() {
         }
     }
 
-//    private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
-//        return Settings.canDrawOverlays(context)
-//    }
+    private fun loadData(context: Context) {
+        val gson = Gson()
+        val config = gson.fromJson(AdConfig.Noti_Widget, NotificationConfig::class.java)
 
-    private fun startService() {
-        val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
-        requireActivity().startService(serviceIntent)
-    }
+        if (config == null) {
+            Log.e("NotificationWidgetService", "Failed to fetch notification config")
+            return
+        }
 
-    private fun checkPermissionAndAllow() {
-//        if (!isDrawOverlaysPermissionGranted(requireContext())){
-//            findNavController().navigate(R.id.chargingAnimationPermissionFragment)
-//        }else{
-//            startService()
-//        showRewardWallpaperScreen()
-//        }
-    }
-
-    private fun scheduleNotification(context: Context, hour: Int, minute: Int) {
-        // Get the current time
+        val currentDayIndex = MySharePreference.getStoredDay(context)
+        val previousDate = MySharePreference.getStoredDate(context)
         val currentTime = Calendar.getInstance()
 
-        // Set up a Calendar for the target time
-        val targetTime = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
+        for (i in 1..7) {
+            val dayIndex = (currentDayIndex + i) % 7
 
-            // If the target time is in the past, set it for the next day
-            if (before(currentTime)) {
-                add(Calendar.DAY_OF_YEAR, 1)
+            // Fetch the config for this day
+            val dayConfig = config.notification_scheduler.getOrNull(dayIndex)
+
+            if (dayConfig?.is_active == true && previousDate != MySharePreference.getCurrentDate()) {
+                val time = dayConfig.time
+                val timeArray = time.split(":")
+                val hour = timeArray[0].toInt()
+                val minute = timeArray[1].toInt()
+
+                // Get the scheduled time for the target day
+                val targetTime = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, hour)
+                    set(Calendar.MINUTE, minute)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                    add(Calendar.DAY_OF_YEAR, i-1)
+                }
+
+                // If today’s notification time has passed, schedule it for the next week
+                if (i == 1 && targetTime.before(currentTime)) {
+                    targetTime.add(Calendar.DAY_OF_YEAR, 7)
+                    Log.d("NotificationScheduler", "Today's time has passed. Scheduling for the next week.")
+                }
+
+                Log.d("NotificationScheduler", "Scheduling for day $dayIndex: ${targetTime.time}")
+                scheduleNotification(context, dayIndex, targetTime)
+            }
+        }
+    }
+
+
+    private fun scheduleNotification(context: Context,dayIndex: Int, targetTime: Calendar) {
+        val uniqueTag = "NotificationScheduler_$dayIndex"
+
+        // Cancel any existing notification work for the same day index
+        WorkManager.getInstance(context).cancelAllWorkByTag(uniqueTag)
+
+        val delayMillis = targetTime.timeInMillis - Calendar.getInstance().timeInMillis
+
+        // Build and enqueue the work request with the calculated delay
+        val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+            .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
+            .setBackoffCriteria(BackoffPolicy.LINEAR, 10, TimeUnit.MINUTES)
+            .addTag(uniqueTag)
+            .build()
+
+        WorkManager.getInstance(context).enqueue(workRequest)
+
+        WorkManager.getInstance(context).getWorkInfosByTagLiveData(uniqueTag).observeForever { workInfos ->
+            for (workInfo in workInfos) {
+                Log.d("WorkManagerLog", "State: ${workInfo.state}")
             }
         }
 
-        // Calculate the delay in milliseconds
-        val delayMillis = targetTime.timeInMillis - currentTime.timeInMillis
-
-        // Create the work request with the calculated delay
-        val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
-            .setInitialDelay(delayMillis, TimeUnit.MILLISECONDS)
-            .build()
-
-        // Enqueue the work request
-        WorkManager.getInstance(context).enqueue(workRequest)
+        Log.d(
+            "NotificationScheduler",
+            "Notification scheduled for day $dayIndex: ${targetTime.time}"
+        )
     }
-
 
     private fun showRewardWallpaperScreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             when {
-                ContextCompat.checkSelfPermission(requireActivity(), Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED -> {
-                    // Permission is granted, proceed with sending notifications
-                    scheduleNotification(requireActivity(),14,34)
+                ContextCompat.checkSelfPermission(
+                    requireActivity(),
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    loadData(requireActivity())
                 }
+
                 else -> {
-                    // Request notification permission
                     requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         } else {
-            // For Android versions below Tiramisu, no need to request permission
-            scheduleNotification(requireActivity(),14,34)
+            loadData(requireActivity())
         }
-        // Use a flag to avoid multiple calls if needed
         if (!Constants.hasShownRewardScreen && !AdConfig.ISPAIDUSER) {
             lifecycleScope.launch {
                 if (AdConfig.Reward_Screen) {

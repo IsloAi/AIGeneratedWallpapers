@@ -1,6 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.util.Log
+import androidx.work.Configuration
+import androidx.work.WorkManager
 import com.google.firebase.FirebaseApp
 import com.ikame.android.sdk.IKBaseApplication
 import com.ikame.android.sdk.IKSdkController
@@ -22,10 +24,6 @@ class MyApp : IKBaseApplication() {
     override fun enableRewardAd(): Boolean {
         return true
     }
-
-
-
-
 
     override fun configIAPData(): SDKIAPProductIDProvider {
         return object : SDKIAPProductIDProvider {
@@ -63,7 +61,6 @@ class MyApp : IKBaseApplication() {
         FirebaseApp.initializeApp(applicationContext)
         IKSdkController.addActivityEnableShowResumeAd(MainActivity::class.java)
         IKSdkController.setEnableShowResumeAds(true)
-//        IKSdkController.setAutoReloadRewarded(true)
         IKSdkController.setEnableShowLoadingResumeAds(true)
 
         IKSdkController.setAppOpenAdsCallback(object:IKAppOpenAdCallback{

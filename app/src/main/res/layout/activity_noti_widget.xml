@@ -9,10 +9,55 @@
     android:background="@color/background"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotiWidgetActivity">
 
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tuesday, October 1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_semibold"
+        android:textSize="20sp"
+        android:includeFontPadding="false"/>
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_above="@id/main"
+    android:layout_below="@id/date"
+    android:gravity="center"
+    android:layout_centerHorizontal="true">
+    <TextView
+        android:id="@+id/hour"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_85sdp"
+        android:text="08"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="100sp"
+        android:includeFontPadding="false"/>
+
+    <TextView
+        android:layout_marginTop="-20dp"
+        android:id="@+id/minutes"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_85sdp"
+        android:text="50"
+        android:textColor="@color/white"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="100sp"
+        android:includeFontPadding="false"/>
+</LinearLayout>
+
     <RelativeLayout
+        android:layout_margin="@dimen/_10sdp"
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
+
         <ImageView
             android:id="@+id/close"
             android:layout_width="wrap_content"
@@ -21,98 +66,99 @@
             android:layout_alignParentEnd="true"
             app:tint="@color/white"/>
 
-        <RelativeLayout
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:layout_below="@id/close"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_300sdp"
-            android:background="@drawable/widget_background">
-
+            app:cardCornerRadius="@dimen/_25sdp">
             <RelativeLayout
-                android:id="@+id/header"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_70sdp">
+                android:layout_height="@dimen/_300sdp"
+                android:background="@drawable/widget_background">
 
                 <RelativeLayout
+                    android:id="@+id/header"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:alpha="0.1"/>
+                    android:layout_height="@dimen/_70sdp">
 
-                <ImageView
-                    android:layout_centerVertical="true"
-                    android:id="@+id/appIcon"
-                    android:layout_width="@dimen/_50sdp"
-                    android:layout_height="@dimen/_50sdp"
-                    android:src="@drawable/app_icon"
-                    android:layout_marginStart="@dimen/_15sdp"/>
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:alpha="0.1"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    <ImageView
+                        android:layout_centerVertical="true"
+                        android:id="@+id/appIcon"
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        android:src="@drawable/app_icon"
+                        android:layout_marginStart="@dimen/_15sdp"/>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginHorizontal="@dimen/_15sdp"
+                        android:layout_toEndOf="@id/appIcon"
+                        android:layout_centerVertical="true">
+
+                        <TextView
+                            android:id="@+id/title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:textSize="18sp"
+                            android:includeFontPadding="false"/>
+
+                        <TextView
+                            android:id="@+id/message"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/white"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textSize="12sp"
+                            android:lines="2"
+                            android:includeFontPadding="false"
+                            />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_100sdp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginVertical="@dimen/_15sdp"
                     android:layout_marginHorizontal="@dimen/_15sdp"
-                    android:layout_toEndOf="@id/appIcon"
-                    android:layout_centerVertical="true">
+                    android:layout_below="@id/header"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                    android:layout_above="@id/action_button"/>
 
-                    <TextView
-                        android:id="@+id/title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notification Title"
-                        android:textColor="@color/white"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:textSize="18sp"
-                        android:includeFontPadding="false"/>
-
-                    <TextView
-                        android:id="@+id/message"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Notification Title Notification Title Notification Title Notification Title Notification Title Notification Title Notification Title"
-                        android:textColor="@color/white"
-                        android:ellipsize="end"
-                        android:fontFamily="@font/poppins_regular"
-                        android:textSize="12sp"
-                        android:lines="2"
-                        android:includeFontPadding="false"
-                        />
-
-                </LinearLayout>
-
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/action_button"
+                    android:layout_width="match_parent"
+                    android:layout_marginHorizontal="@dimen/_15sdp"
+                    android:layout_marginBottom="@dimen/_15sdp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_height="@dimen/_40sdp"
+                    android:shadowColor="@color/black"
+                    android:shadowDx="1.8"
+                    android:shadowDy="1.8"
+                    android:shadowRadius="0.1"
+                    android:fontFamily="@font/raleway_medium"
+                    android:textAllCaps="false"
+                    android:textSize="15sp"
+                    android:textColor="@color/mywhite"
+                    android:background="@drawable/new_button_bg"
+                    />
             </RelativeLayout>
-
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/image"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_100sdp"
-                android:src="@drawable/ic_launcher_background"
-                android:scaleType="centerCrop"
-                android:layout_marginVertical="@dimen/_15sdp"
-                android:layout_marginHorizontal="@dimen/_15sdp"
-                android:layout_below="@id/header"
-                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                android:layout_above="@id/action_button"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/action_button"
-                android:layout_width="match_parent"
-                android:layout_marginHorizontal="@dimen/_15sdp"
-                android:layout_marginBottom="@dimen/_15sdp"
-                android:layout_alignParentBottom="true"
-                android:layout_height="@dimen/_40sdp"
-                android:text="Upload Image"
-                android:shadowColor="@color/black"
-                android:shadowDx="1.8"
-                android:shadowDy="1.8"
-                android:shadowRadius="0.1"
-                android:fontFamily="@font/raleway_medium"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                android:textColor="@color/mywhite"
-                android:background="@drawable/new_button_bg"
-                />
-        </RelativeLayout>
+        </androidx.cardview.widget.CardView>
 
     </RelativeLayout>
 </RelativeLayout>
