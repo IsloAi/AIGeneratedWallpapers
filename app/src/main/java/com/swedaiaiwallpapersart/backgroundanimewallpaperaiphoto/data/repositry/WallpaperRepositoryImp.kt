@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.channelFlow
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-
 class WallpaperRepositoryImp@Inject constructor(
     private val webApiInterface: EndPointsInterface,
 ):WallpaperRepositry {
@@ -52,7 +51,7 @@ class WallpaperRepositoryImp@Inject constructor(
             val resp = webApiInterface.getRewardWallpaper()
 
             if (resp.isSuccessful){
-                Log.e("TAG", "GenerateTextToImage: ${resp.body()?.images}")
+                Log.d("TAG", "GenerateTextToImage: ${resp.body()?.images}")
                 trySend(Response.Success(resp.body()?.images))
             }
         } catch (e: Exception) {
@@ -65,7 +64,6 @@ class WallpaperRepositoryImp@Inject constructor(
 
         awaitClose()
     }
-
 
     override fun getAllLikes(): Flow<Response<ArrayList<LikesResponse>>>  = channelFlow {
         try {
@@ -214,6 +212,5 @@ class WallpaperRepositoryImp@Inject constructor(
             trySend(Response.Error("unexpected error occurred ${e.message}"))
         }
     }
-
 
 }

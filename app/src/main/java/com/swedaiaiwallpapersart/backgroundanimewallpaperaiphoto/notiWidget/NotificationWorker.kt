@@ -34,7 +34,7 @@ class NotificationWorker(context: Context, workerParams: WorkerParameters) :
         if (config != null) {
             setForegroundAsync(createForegroundInfo(applicationContext, config))
             createNotificationChannel()
-        }else{
+        } else {
             Log.e("NotificationScheduler", "Failed to fetch notification config")
         }
         return Result.success()

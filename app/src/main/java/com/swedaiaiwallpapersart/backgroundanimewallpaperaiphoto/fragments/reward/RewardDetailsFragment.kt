@@ -142,4 +142,5 @@ class RewardDetailsFragment : Fragment() {
         super.onDestroy()
         _binding = null
     }
+
 }

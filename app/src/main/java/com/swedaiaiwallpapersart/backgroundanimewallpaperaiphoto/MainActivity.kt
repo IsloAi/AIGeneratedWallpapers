@@ -84,35 +84,26 @@ import java.io.InputStream
 import java.util.Locale
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), ConnectivityListener {
+
     lateinit var binding: ActivityMainBinding
     private var selectedPrompt: String? = null
-
     private lateinit var job: Job
-
     private var alertDialog: AlertDialog? = null
-
     private val liveViewModel: LiveWallpaperViewModel by viewModels()
     val TAG = "ANRSPY"
-
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
-
     val mainActivityViewModel: MainActivityViewModel by viewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
 
     private val myViewModel: MyHomeViewModel by viewModels()
-
     private val chargingAnimationViewmodel: ChargingAnimationViewmodel by viewModels()
     private val doubleWallpaperVideModel: DoubeWallpaperViewModel by viewModels()
-
     private var _navController: NavController? = null
-
     private val navController get() = _navController!!
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -629,7 +620,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     }
 
-
     private suspend fun readJsonFile(context: Context, fileName: String): String {
         return withContext(Dispatchers.IO) {
             try {
@@ -646,7 +636,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
 
     }
-
 
     private fun initFirebaseRemoteConfig() {
         val first = "position_ads"
@@ -682,8 +671,16 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         AdConfig.categoryOrder = categoryOrderArray
                         AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
-                        MySharePreference.setNotificationWidget(this@MainActivity,AdConfig.Noti_Widget)
-                        Log.d(TAG, "initFirebaseRemoteConfigNoti1: ${MySharePreference.getNotificationWidget(this@MainActivity)}")
+                        MySharePreference.setNotificationWidget(
+                            this@MainActivity,
+                            AdConfig.Noti_Widget
+                        )
+                        Log.d(
+                            TAG,
+                            "initFirebaseRemoteConfigNoti1: ${
+                                MySharePreference.getNotificationWidget(this@MainActivity)
+                            }"
+                        )
                         AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
 
                         val fullOnboardingAutoNext =
@@ -850,9 +847,20 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         e.printStackTrace()
                     }
                     AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
-                    Log.d(TAG, "initFirebaseRemoteConfigNotiRemote: ${remoteConfig["Noti_Widget"].asString()}")
-                    MySharePreference.setNotificationWidget(this@MainActivity,remoteConfig["Noti_Widget"].asString())
-                    Log.d(TAG, "initFirebaseRemoteConfigNotiPref: ${MySharePreference.getNotificationWidget(this@MainActivity)}")
+                    Log.d(
+                        TAG,
+                        "initFirebaseRemoteConfigNotiRemote: ${remoteConfig["Noti_Widget"].asString()}"
+                    )
+                    MySharePreference.setNotificationWidget(
+                        this@MainActivity,
+                        remoteConfig["Noti_Widget"].asString()
+                    )
+                    Log.d(
+                        TAG,
+                        "initFirebaseRemoteConfigNotiPref: ${
+                            MySharePreference.getNotificationWidget(this@MainActivity)
+                        }"
+                    )
                     AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
                     try {
                         val languagesOrderArray =
@@ -1347,7 +1355,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         return list
     }
 
-
     override fun onResume() {
         super.onResume()
         lifecycleScope.launch {
@@ -1392,3 +1399,5 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
     }
 }
+
+

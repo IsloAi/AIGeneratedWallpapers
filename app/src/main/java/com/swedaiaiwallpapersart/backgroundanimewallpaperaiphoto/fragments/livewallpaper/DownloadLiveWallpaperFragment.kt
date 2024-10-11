@@ -285,7 +285,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 .doNotCacheResponse()
                 .build()
                 .setDownloadProgressListener { bytesDownloaded, totalBytes ->
-                    Log.e("TAG", "downloadVideo: $bytesDownloaded")
+                    Log.e("TAG", "downloadVideo:bytesDownloaded $bytesDownloaded")
                     Log.e("TAG", "downloadVideo total bytes: $totalBytes")
                     lifecycleScope.launch(Dispatchers.Main) {
 
@@ -298,7 +298,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                                 binding.progressTxt.text =
                                     currentCount.toString() + "%"
                             }else{
-                                Log.e(TAG, "downloadVideo: $currentCount", )
+                                Log.e(TAG, "downloadVideo:currentCount $currentCount", )
                             }
                             binding.progress.progress =percentage
                         }
@@ -330,7 +330,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                         if (isAdded){
                             checkInter = true
                             checkAppOpen = true
-                            Log.d(TAG, "onErrorVideoDownloadFailed $error")
+                            Log.e(TAG, "onErrorVideoDownloadFailed ${error?.message}")
                             Toast.makeText(requireContext(), "Server down. Please try again later!", Toast.LENGTH_SHORT).show()
                             findNavController().navigateUp()
                         }
