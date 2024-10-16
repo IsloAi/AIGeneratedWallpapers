@@ -65,7 +65,6 @@ class CategoryFragment : Fragment(), AdEventListener {
 
 //    var checkAppOpen = false
 
-
     val TAG = "CATEGORIES"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -79,7 +78,7 @@ class CategoryFragment : Fragment(), AdEventListener {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
@@ -223,7 +222,6 @@ class CategoryFragment : Fragment(), AdEventListener {
             }
         )
     }
-
 
     private fun updateUIWithFetchedData() {
         val gson = Gson()
@@ -375,35 +373,35 @@ class CategoryFragment : Fragment(), AdEventListener {
     }
 
 
-//    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
-//        return withContext(Dispatchers.IO){
-//            val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-//            val firstLine = firstAdLineThreshold * 3
-//
-//            val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-//            val lineC = lineCount * 3
-//            val newData = arrayListOf<CatNameResponse?>()
-//
-//            for (i in data.indices){
-//                if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
-//                    newData.add(null)
-//                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
-//
-//                }else if (i == firstLine){
-//                    newData.add(null)
-//                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
-//                }
-//                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-//                Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
-//                newData.add(data[i])
-//
-//            }
-//            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-//             newData
-//        }
+/*    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+        return withContext(Dispatchers.IO){
+            val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+            val firstLine = firstAdLineThreshold * 3
+
+            val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+            val lineC = lineCount * 3
+            val newData = arrayListOf<CatNameResponse?>()
+
+            for (i in data.indices){
+                if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+
+                }else if (i == firstLine){
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
+                newData.add(data[i])
+
+            }
+            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+             newData
+        }
 
 
-//    }
+    }*/
 
 
     private fun setFragment(name: String) {

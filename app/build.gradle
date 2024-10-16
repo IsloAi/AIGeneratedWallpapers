@@ -15,8 +15,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 146
-        versionName "1.8.5"
+        versionCode 148
+        versionName "1.8.7"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -26,7 +26,7 @@ android {
         create("release") {
             keyAlias = "swedai"
             keyPassword = "swedai"
-            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers")
+            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers\\SwedAi.jks")
             storePassword = "swedai"
         }
     }
@@ -52,20 +52,14 @@ android {
     kotlinOptions {
         jvmTarget = '17'
     }
-    buildFeatures
-            {
-                viewBinding true
-            }
-
+    buildFeatures { viewBinding true }
     bundle {
         language {
             enableSplit = false
         }
     }
-
     defaultConfig {
         multiDexEnabled true
-
     }
     // Allow references to generated code
     kapt {
@@ -88,7 +82,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
-
     //Lottie lib
     implementation "com.airbnb.android:lottie:6.4.0"
     //glide lip
@@ -110,7 +103,6 @@ dependencies {
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
-    //
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
 
@@ -131,22 +123,20 @@ dependencies {
     implementation "androidx.navigation:navigation-fragment-ktx:2.8.0"
     implementation "androidx.navigation:navigation-ui-ktx:2.8.0"
 
-
     //roomDatabase
     implementation "androidx.room:room-runtime:2.6.1"
     implementation "androidx.room:room-ktx:2.6.1"
     kapt "androidx.room:room-compiler:2.6.1"
 
-
     //work manager
     implementation 'androidx.work:work-runtime-ktx:2.9.1'
 
     //firebase for google login
-    implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
     // Dependency for Firebase Dynamic Links
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:22.1.0'
     // Official Firebase documentation suggests adding this dependency as well.
-    implementation 'com.google.firebase:firebase-analytics-ktx:22.1.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:22.1.2'
 
     //In-App Review
     implementation("com.google.android.play:review:2.0.1")
@@ -174,7 +164,8 @@ dependencies {
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.51.1"
     kapt "com.google.dagger:hilt-android-compiler:2.51.1"
-    implementation("androidx.startup:startup-runtime:1.1.1")
+
+    implementation("androidx.startup:startup-runtime:1.2.0")
 
     //in app update
     implementation("com.google.android.play:app-update:2.1.0")

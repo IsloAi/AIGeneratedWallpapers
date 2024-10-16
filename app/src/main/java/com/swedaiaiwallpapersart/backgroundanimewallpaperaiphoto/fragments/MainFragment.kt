@@ -27,7 +27,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -235,14 +234,14 @@ class MainFragment : Fragment(){
     private fun setFragment(click: Int){
         val transaction = childFragmentManager.beginTransaction()
         when(click){
-            1->  transaction.replace(R.id.fragmentContainer, GenerateImageFragment())
-            2-> transaction.replace(R.id.fragmentContainer, HomeFragment())
-            3-> transaction.replace(R.id.fragmentContainer, CategoryFragment())
+            1->  transaction.replace(R.id.fragmentContainer, HomeFragment())
+            2-> transaction.replace(R.id.fragmentContainer, CategoryFragment())
+            3-> transaction.replace(R.id.fragmentContainer, FavouriteFragment())
             4->{
                 //Toast.makeText(requireContext(), "coming soon", Toast.LENGTH_SHORT).show()
-                transaction.replace(R.id.fragmentContainer, FavouriteFragment())
+                transaction.replace(R.id.fragmentContainer, SettingFragment())
             }
-            5-> transaction.replace(R.id.fragmentContainer, SettingFragment())
+            //5-> transaction.replace(R.id.fragmentContainer, SettingFragment())
         }
             transaction.commit()
     }

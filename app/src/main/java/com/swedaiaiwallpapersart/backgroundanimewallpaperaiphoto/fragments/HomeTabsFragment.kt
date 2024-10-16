@@ -79,7 +79,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.doubl
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.CategoryFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.GenerateImageFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
@@ -888,7 +887,7 @@ class HomeTabsFragment : Fragment() {
             "Live" -> LiveWallpaperFragment()
             "Anime" -> AnimeWallpaperFragment()
             "Category" -> CategoryFragment()
-            "Gen AI" -> GenerateImageFragment()
+            //"Gen AI" -> GenerateImageFragment()
             "Charging" -> ChargingAnimationFragment()
             "Double" -> DoubleWallpaperFragment()
 

@@ -102,8 +102,8 @@ class ApiCategoriesNameAdapter(
         }
     }
 
-
     override fun getItemCount(): Int {
+        Log.d("LiveWallpaperCategory", "getItemCount: ${arrayList.size}")
         if (arrayList.isNotEmpty()) {
             return if (AdConfig.ISPAIDUSER) {
                 arrayList.size
@@ -254,7 +254,7 @@ class ApiCategoriesNameAdapter(
     fun updateData(newData:List<CatNameResponse?>){
         arrayList.clear()
         arrayList.addAll(newData)
-        Log.d(TAG, "updateData1223: ${newData.size}")
+        Log.d("LiveWallpaperCategory", "updateData1223: ${newData.size}")
         notifyDataSetChanged()
 
     }
