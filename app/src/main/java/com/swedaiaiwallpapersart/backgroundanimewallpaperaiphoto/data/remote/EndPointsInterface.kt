@@ -22,18 +22,18 @@ import retrofit2.http.Query
 
 interface EndPointsInterface {
 
-//    @GET("generateKey.php")
-//    suspend fun generateDeviceToken(
-//        @Query("deviceid") deviceId: String
-//    ): retrofit2.Response<Unit>
-//
-//    @GET("all.php")
-//    suspend fun getAllWallpapers(
-//        @Header("Authorization") apiKey:String,
-//        @Query("page") page:String,
-//        @Query("record") record:String
-//
-//    ):retrofit2.Response<ListResponse>
+/*    @GET("generateKey.php")
+    suspend fun generateDeviceToken(
+        @Query("deviceid") deviceId: String
+    ): retrofit2.Response<Unit>
+
+    @GET("all.php")
+    suspend fun getAllWallpapers(
+        @Header("Authorization") apiKey:String,
+        @Query("page") page:String,
+        @Query("record") record:String
+
+    ):retrofit2.Response<ListResponse>*/
 
     @GET("getupdatedwallpaper.php")
     suspend fun getUpdatedWallpapers(

@@ -26,7 +26,7 @@ class welcomeFragment2 : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentWelcome2Binding.inflate(inflater,container,false)
         // Inflate the layout for this fragment
         return binding.root
@@ -34,6 +34,7 @@ class welcomeFragment2 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         Glide.with(requireContext()).load(R.drawable.onboard_2).into(binding.onBoardImg)
 
         setIndicator()
@@ -48,6 +49,8 @@ class welcomeFragment2 : Fragment() {
                     Log.e("TAG", "onAdLoadFail: ")
                 }
             })
+            //Hiding the Ad layout as per client request on 29Oct24
+            binding.adsView.visibility = View.GONE
 
             binding.adsView.attachLifecycle(this.lifecycle)
             val adLayout = LayoutInflater.from(activity).inflate(
@@ -59,7 +62,7 @@ class welcomeFragment2 : Fragment() {
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
             adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-            binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"onboardscr_bottom",
+            /*binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"onboardscr_bottom",
                 object : IKShowWidgetAdListener {
                     override fun onAdShowFail(error: IKAdError) {
                         if (AdConfig.ISPAIDUSER){
@@ -72,7 +75,7 @@ class welcomeFragment2 : Fragment() {
 
                     }
                 }
-            )
+            )*/
         }else{
             binding.adsView.visibility = View.GONE
         }

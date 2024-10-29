@@ -44,7 +44,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentLiveWallpaperCategoriesBinding.inflate(inflater, container, false)
         return binding.root
@@ -121,7 +121,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
             Constants.checkInter = false
             Constants.checkAppOpen = false
         }
-        //adapter.updateData(categoryList)
+
     }
 
     private fun showInterAd() {

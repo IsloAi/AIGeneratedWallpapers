@@ -59,7 +59,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PopularWallpaperFragment () : Fragment(),AdEventListener {
+class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     private var _binding: FragmentPopularWallpaperBinding? = null
     private val binding get() = _binding!!
@@ -73,7 +73,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
     val catListViewmodel: MyViewModel by activityViewModels()
 
-    companion object{
+    companion object {
         var hasToNavigate = false
         var wallFromPopular = false
     }
@@ -92,27 +92,19 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
     private var mostUsedWallpaperAdapter: MostUsedWallpaperAdapter? = null
     private var adapter: ApicategoriesListHorizontalAdapter? = null
-
+    var cachedMostDownloaded = ArrayList<CatResponse?>()
 
     private val viewModel: MostDownloadedViewmodel by activityViewModels()
 
-    var cachedMostDownloaded = ArrayList<CatResponse?>()
-
-
     var isLoadingMore = false
-
     var dataset = false
     var datasetTrending = false
-
-
     var externalOpen = false
     var oldPosition = 0
-
     val TAG = "POPULARTAB"
     var isNavigationInProgress = false
 
     val interAd = IKInterstitialAd()
-
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     override fun onCreateView(
@@ -148,6 +140,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -157,6 +150,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -166,6 +160,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
             }
+
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure
             }
@@ -190,14 +185,14 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         initMostUsedRV()
     }
 
-    private fun setEvents(){
+    private fun setEvents() {
         binding.refresh.setOnRefreshListener {
 
             lifecycleScope.launch {
                 val newData = cachedMostDownloaded.filterNotNull()
-                val nullAdd = if (AdConfig.ISPAIDUSER){
+                val nullAdd = if (AdConfig.ISPAIDUSER) {
                     newData as ArrayList<CatResponse?>
-                }else{
+                } else {
                     addNullValueInsideArray(newData.shuffled())
                 }
                 cachedMostDownloaded.clear()
@@ -205,7 +200,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
                 val initialItems = getItems(0, 30)
                 startIndex = 0
 
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     mostUsedWallpaperAdapter?.addNewData()
                     Log.e(TAG, "initMostDownloadedData: " + initialItems)
                     mostUsedWallpaperAdapter?.updateMoreData(initialItems)
@@ -219,7 +214,6 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
             }
 
 
-
         }
 
         binding.more.setOnClickListener {
@@ -227,8 +221,6 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         }
 
     }
-
-
 
     private fun initMostUsedRV() {
 
@@ -238,26 +230,25 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         val list = ArrayList<CatResponse?>()
         mostUsedWallpaperAdapter = MostUsedWallpaperAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
-                Log.e(TAG, "getPosition: clicked" )
-                if (!isNavigationInProgress){
+                Log.e(TAG, "getPosition: clicked")
+                if (!isNavigationInProgress) {
                     hasToNavigate = true
                     externalOpen = true
                     val allItems = mostUsedWallpaperAdapter?.getAllItems()
-                    if (addedItems?.isNotEmpty() == true){
+                    if (addedItems?.isNotEmpty() == true) {
                         addedItems?.clear()
                     }
                     isNavigationInProgress = true
-
 
                     addedItems = allItems
 
                     oldPosition = position
 
-                    if (AdConfig.ISPAIDUSER){
-                        if (isAdded){
+                    if (AdConfig.ISPAIDUSER) {
+                        if (isAdded) {
                             navigateToDestination(allItems!!, position)
                         }
-                    }else{
+                    } else {
                         var shouldShowInterAd = true
 
                         if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
@@ -280,18 +271,17 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
                         if (shouldShowInterAd) {
                             showInterAdForAllItems(allItems, position)
                         }
-//                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                            if (isAdded){
-//                                checkAppOpen = false
-//                                navigateToDestination(allItems!!, position)
-//                                Log.e(TAG, "app open showed: ", )
-//                            }
-//                        }else{
-//                            showInterAdForAllItems(allItems, position)
-//                        }
+
+                        /*if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                            if (isAdded){
+                                checkAppOpen = false
+                                navigateToDestination(allItems!!, position)
+                                Log.e(TAG, "app open showed: ", )
+                            }
+                        }else{
+                            showInterAdForAllItems(allItems, position)
+                        }*/
                     }
-
-
                 }
 
 
@@ -303,21 +293,22 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
         }, myActivity)
 
-
         mostUsedWallpaperAdapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("mainscr_all_tab_scroll", object : IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    mostUsedWallpaperAdapter?.nativeAdView = adObject
-                    binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
+        IKSdkController.loadNativeDisplayAd(
+            "mainscr_all_tab_scroll",
+            object : IKLoadDisplayAdViewListener {
+                override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                    if (isAdded && view != null) {
+                        mostUsedWallpaperAdapter?.nativeAdView = adObject
+                        binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
+                    }
                 }
-            }
 
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })
+                override fun onAdLoadFail(error: IKAdError) {
+                    // Handle ad load failure with view object
+                }
+            })
 
         binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
 
@@ -373,70 +364,81 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         )
     }
 
-
     private fun initMostDownloadedData() {
 
-            viewModel.allCreations.observe(viewLifecycleOwner){result ->
-                when (result) {
-                    is Response.Loading -> {
-                    }
+        viewModel.allCreations.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Response.Loading -> {
+                }
 
-                    is Response.Success -> {
+                is Response.Success -> {
 
-                        if (!result.data.isNullOrEmpty()) {
-                            val list = arrayListOf<CatResponse>()
-                            result.data.forEach { item ->
-                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                                if (!list.contains(model)){
-                                    list.add(model)
-                                }
-
+                    if (!result.data.isNullOrEmpty()) {
+                        val list = arrayListOf<CatResponse>()
+                        result.data.forEach { item ->
+                            val model = CatResponse(
+                                item.id,
+                                item.image_name,
+                                item.cat_name,
+                                item.hd_image_url,
+                                item.compressed_image_url,
+                                null,
+                                item.likes,
+                                item.liked,
+                                item.unlocked,
+                                item.size,
+                                item.Tags,
+                                item.capacity
+                            )
+                            if (!list.contains(model)) {
+                                list.add(model)
                             }
 
+                        }
 
-                            if (view != null) {
-                                lifecycleScope.launch {
-                                    Log.e(TAG, "initMostDownloadedData: ", )
-                                    if (!dataset) {
-                                        Log.e(TAG, "initMostDownloadedData: $dataset")
 
-                                        val newList = if (AdConfig.ISPAIDUSER){
-                                            list.shuffled() as ArrayList<CatResponse?>
-                                        }else{
-                                            addNullValueInsideArray(list.shuffled())
-                                        }
+                        if (view != null) {
+                            lifecycleScope.launch {
+                                if (!dataset) {
+                                    Log.e(TAG, "initMostDownloadedData: DataSet= $dataset")
 
-                                        cachedMostDownloaded = newList
-
-                                        val initialItems = getItems(0, 30)
-
-                                        Log.e(TAG, "initMostDownloadedData: " + initialItems)
-
-                                        lifecycleScope.launch(Dispatchers.Main) {
-                                            mostUsedWallpaperAdapter?.updateMoreData(initialItems)
-                                            startIndex += 30
-                                        }
-
-                                        dataset = true
+                                    val newList = if (AdConfig.ISPAIDUSER) {
+                                        list.shuffled() as ArrayList<*>
+                                    } else {
+                                        addNullValueInsideArray(list.shuffled())
                                     }
-                                }
 
+                                    cachedMostDownloaded = newList as ArrayList<CatResponse?>
+
+                                    val initialItems = getItems(0, 30)
+
+                                    Log.e(TAG, "initMostDownloadedData:initialItems= $initialItems")
+
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+                                        startIndex += 30
+                                    }
+
+                                    dataset = true
+                                }
                             }
+
                         }
                     }
+                }
 
-                    is Response.Error -> {
+                is Response.Error -> {
 
-                        Log.e("TAG", "error: ${result.message}")
-                        Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                    Log.e("TAG", "error: ${result.message}")
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
-                    else -> {
+                else -> {
 
-                    }
                 }
             }
+        }
 
 
 //        appDatabase.wallpapersDao()?.getAllWallpapersLive()?.observe(viewLifecycleOwner) {
@@ -450,7 +452,6 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 //                }
 //            }
 //        }
-
 
 
     }
@@ -469,68 +470,70 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         }
     }
 
+    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+        return withContext(Dispatchers.IO) {
+            Log.e(TAG, "addNullValueInsideArray:DataSize= " + data.size)
 
-     suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
-         return withContext(Dispatchers.IO){
-             Log.e(TAG, "addNullValueInsideArray: "+data.size )
+            val firstAdLineThreshold =
+                if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
+            val firstLine = firstAdLineThreshold * 3
 
-             val firstAdLineThreshold =
-                 if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
-             val firstLine = firstAdLineThreshold * 3
+            val lineCount =
+                if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
+            val lineC = lineCount * 3
+            val newData = arrayListOf<CatResponse?>()
 
-             val lineCount =
-                 if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
-             val lineC = lineCount * 3
-             val newData = arrayListOf<CatResponse?>()
-
-             for (i in data.indices) {
-                 if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
-                     newData.add(null)
-
-
-
-                     Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
-                 } else if (i == firstLine) {
-                     newData.add(null)
-                     Log.e("******NULL", "addNullValueInsideArray: null first " + i)
-                 }
-                 Log.e("******NULL", "addNullValueInsideArray: not null " + i)
-                 newData.add(data[i])
-
-             }
-             Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
+            for (i in data.indices) {
+                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                    newData.add(null)
 
 
 
+                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
 
-              newData
-         }
+                } else if (i == firstLine) {
+                    newData.add(null)
+                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
+                }
+                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
+                newData.add(data[i])
+
+            }
+            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
+
+
+
+
+            newData
+        }
 
     }
-
 
     override fun onResume() {
         super.onResume()
 
-        if (wallFromPopular){
-            if (isAdded){
+        if (wallFromPopular) {
+            if (isAdded) {
                 congratulationsDialog()
             }
         }
 
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_PopTab_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "Tab"),
+                Pair("action_name", "MainScr_PopTab_View")
+            )
         }
 
         initMostDownloadedData()
 
         initTrendingData()
 
-        if (datasetTrending){
-            if (cachedCatResponses?.isEmpty() == true){
-                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+        if (datasetTrending) {
+            if (cachedCatResponses?.isEmpty() == true) {
+                Log.e(TAG, "onResume: " + cachedCatResponses.size)
 
 
             }
@@ -540,15 +543,13 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
 
 
-        if (dataset){
+        if (dataset) {
 
             Log.e(TAG, "onResume: Data set $dataset")
             Log.e(TAG, "onResume: Data set ${addedItems?.size}")
 
-            if (addedItems?.isEmpty() == true){
-                Log.e(TAG, "onResume: "+cachedMostDownloaded.size )
-
-
+            if (addedItems?.isEmpty() == true) {
+                Log.e(TAG, "onResume: " + cachedMostDownloaded.size)
             }
             mostUsedWallpaperAdapter?.updateMoreData(addedItems!!)
 
@@ -556,7 +557,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
         }
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Popular Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
@@ -565,28 +566,24 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
-            if (!isNavigated && hasToNavigate){
-                navigateToDestination(addedItems!!,oldPosition)
+            if (!isNavigated && hasToNavigate) {
+                navigateToDestination(addedItems!!, oldPosition)
             }
         }
 
-
-
     }
-
 
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
-
 
     private fun congratulationsDialog() {
         val dialog = Dialog(requireContext())
-        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        val bindingDialog =
+            DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
@@ -605,26 +602,25 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         dialog.show()
     }
 
-
     override fun onPause() {
         super.onPause()
 
-        Log.e(TAG, "onPause: ", )
+        Log.e(TAG, "onPause: ")
 
-        if (!externalOpen){
+        if (!externalOpen) {
 
             val allItems = mostUsedWallpaperAdapter?.getAllItems()
 
             Log.e(TAG, "onPause: all items${allItems?.size}")
-            if (addedItems?.isNotEmpty() == true){
+            if (addedItems?.isNotEmpty() == true) {
 
-                Log.e(TAG, "onPause: cleared", )
+                Log.e(TAG, "onPause: cleared")
                 addedItems?.clear()
             }
 
             allItems?.let { addedItems?.addAll(it) }
 
-            Log.e(TAG, "onPause: "+addedItems?.size )
+            Log.e(TAG, "onPause: " + addedItems?.size)
         }
 
     }
@@ -649,18 +645,19 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
                         2 -> {
                             catListViewmodel.getAllCreations("4K")
-                            if (AdConfig.ISPAIDUSER){
+                            if (AdConfig.ISPAIDUSER) {
                                 setFragment("4K")
-                            }else{
+                            } else {
                                 interAd.showAd(
                                     requireActivity(),
                                     "mainscr_cate_tab_click_item",
                                     adListener = object : IKShowAdListener {
                                         override fun onAdsShowFail(error: IKAdError) {
-                                            if (isAdded){
+                                            if (isAdded) {
                                                 setFragment("4K")
                                             }
                                         }
+
                                         override fun onAdsDismiss() {
                                             setFragment("4K")
                                         }
@@ -676,7 +673,6 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
     }
 
-
     private fun setFragment(name: String) {
         val bundle = Bundle().apply {
             putString("name", name)
@@ -689,11 +685,10 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         }
     }
 
-
     private fun initTrendingData() {
         viewModel.getAllTrendingWallpapers()
 
-        viewModel.trendingWallpapers.observe(viewLifecycleOwner){result ->
+        viewModel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
 
@@ -707,15 +702,28 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
                                 val list = result.data?.take(100)
 
-                                list?.forEach {item->
-                                    val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                                    if (!cachedCatResponses.contains(model)){
+                                list?.forEach { item ->
+                                    val model = CatResponse(
+                                        item.id,
+                                        item.image_name,
+                                        item.cat_name,
+                                        item.hd_image_url,
+                                        item.compressed_image_url,
+                                        null,
+                                        item.likes,
+                                        item.liked,
+                                        item.unlocked,
+                                        item.size,
+                                        item.Tags,
+                                        item.capacity
+                                    )
+                                    if (!cachedCatResponses.contains(model)) {
                                         cachedCatResponses.add(model)
                                     }
                                 }
                                 Log.e(TAG, "initMostDownloadedData: " + list)
 
-                                Log.e(TAG, "initTrendingData: "+cachedCatResponses )
+                                Log.e(TAG, "initTrendingData: " + cachedCatResponses)
 
 
                                 withContext(Dispatchers.Main) {
@@ -749,15 +757,15 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
             ApicategoriesListHorizontalAdapter(list, object :
                 PositionCallback {
                 override fun getPosition(position: Int) {
-                    if (!isNavigationInProgress){
+                    if (!isNavigationInProgress) {
                         isNavigationInProgress = true
                         val allItems = adapter?.getAllItems()
 
-                        if (AdConfig.ISPAIDUSER){
-                            if (isAdded){
+                        if (AdConfig.ISPAIDUSER) {
+                            if (isAdded) {
                                 navigateToDestination(allItems!!, position)
                             }
-                        }else{
+                        } else {
                             var shouldShowInterAd = true
 
                             if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
@@ -793,7 +801,6 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
                         }
 
                     }
-
 
 
                 }
@@ -861,7 +868,6 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         }
     }
 
-
     private fun setCurrentIndicator(index: Int) {
         val childCount = binding.layoutOnboardingIndicators.childCount
         for (i in 0 until childCount) {
@@ -885,16 +891,12 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
         }
     }
 
-
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
-        Log.e(TAG, "navigateToDestination: " )
+        Log.e(TAG, "navigateToDestination: arrayList: $arrayList")
 
         try {
             val countOfNulls = arrayList.subList(0, position).count { it == null }
             val sharedViewModel: SharedViewModel by activityViewModels()
-
-            Log.e(TAG, "navigateToDestination: ", )
-
 
             sharedViewModel.clearData()
 
@@ -904,20 +906,21 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
                 Bundle().apply {
                     putString("from", "trending")
-                    putString("wall","popular")
+                    putString("wall", "popular")
                     putInt("position", position - countOfNulls)
-                    Log.e(TAG, "navigateToDestination: inside bundle", )
+                    Log.e(TAG, "navigateToDestination: inside bundle")
 
-                    requireParentFragment().findNavController().navigate(R.id.wallpaperViewFragment, this)
+                    requireParentFragment().findNavController()
+                        .navigate(R.id.wallpaperViewFragment, this)
                 }
             }
 
 
 
             isNavigationInProgress = false
-        }catch (e:IndexOutOfBoundsException){
+        } catch (e: IndexOutOfBoundsException) {
             e.printStackTrace()
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -931,7 +934,7 @@ class PopularWallpaperFragment () : Fragment(),AdEventListener {
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

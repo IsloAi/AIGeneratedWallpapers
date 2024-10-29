@@ -149,6 +149,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
+
         loadData()
 
         Log.e(TAG, "onResume: ")
@@ -267,7 +268,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdsDismiss() {
-                    if (isAdded){
+                    if (isAdded) {
                         checkInter = true
                         setDownloadAbleWallpaperAndNavigate(model, true)
                     }

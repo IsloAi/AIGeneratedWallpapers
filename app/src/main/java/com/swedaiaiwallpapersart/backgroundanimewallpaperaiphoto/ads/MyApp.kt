@@ -23,17 +23,16 @@ class MyApp : IKBaseApplication() {
         return true
     }
 
-
-
-
-
     override fun configIAPData(): SDKIAPProductIDProvider {
         return object : SDKIAPProductIDProvider {
             override val enableIAPFunction: Boolean
                 get() = true
 
             override fun listProductIDsSubscription(): ArrayList<String> {
-                return arrayListOf("unlock_all_premium_wallpaper_weekly_1","unlock_all_premium_wallpaper_yearly_2")
+                return arrayListOf(
+                    "unlock_all_premium_wallpaper_weekly_1",
+                    "unlock_all_premium_wallpaper_yearly_2"
+                )
             }
 
             override fun listProductIDsPurchase(): ArrayList<String> {
@@ -41,11 +40,18 @@ class MyApp : IKBaseApplication() {
             }
 
             override fun listProductIDsRemoveAd(): ArrayList<String> {
-                return arrayListOf("unlock_all_premium_wallpaper_weekly_1","unlock_all_premium_wallpaper_yearly_2","unlock_all_premium_lifetime")
+                return arrayListOf(
+                    "unlock_all_premium_wallpaper_weekly_1",
+                    "unlock_all_premium_wallpaper_yearly_2",
+                    "unlock_all_premium_lifetime"
+                )
             }
 
             override fun listProductIDsCanPurchaseMultiTime(): ArrayList<String> {
-                return arrayListOf("unlock_all_premium_wallpaper_weekly_1","unlock_all_premium_wallpaper_yearly_2")
+                return arrayListOf(
+                    "unlock_all_premium_wallpaper_weekly_1",
+                    "unlock_all_premium_wallpaper_yearly_2"
+                )
             }
 
         }
@@ -57,6 +63,7 @@ class MyApp : IKBaseApplication() {
     fun setConnectivityListener(listener: ConnectivityListener) {
         connectivityListener = listener
     }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -66,7 +73,7 @@ class MyApp : IKBaseApplication() {
 //        IKSdkController.setAutoReloadRewarded(true)
         IKSdkController.setEnableShowLoadingResumeAds(true)
 
-        IKSdkController.setAppOpenAdsCallback(object:IKAppOpenAdCallback{
+        IKSdkController.setAppOpenAdsCallback(object : IKAppOpenAdCallback {
             override fun onAdDismiss() {
                 Log.d("MyApp", "Ad dismissed in MyApp")
                 adEventListener?.onAdDismiss()
@@ -94,8 +101,8 @@ class MyApp : IKBaseApplication() {
 
 
         IKBillingController.setBillingListener(object : IKBillingHandlerListener {
-            override fun onProductPurchased(productId: String,  orderId: String?) {
-                Log.e("SPLASH", "onProductPurchased: $productId", )
+            override fun onProductPurchased(productId: String, orderId: String?) {
+                Log.e("SPLASH", "onProductPurchased: $productId")
                 //do some thing
             }
 
@@ -104,15 +111,14 @@ class MyApp : IKBaseApplication() {
             }
 
             override fun onBillingError(error: IKBillingError) {
-                Log.e("TAG", "onBillingError: $error" )
+                Log.e("TAG", "onBillingError: $error")
             }
 
             override fun onBillingInitialized() {
-                Log.e("TAG", "onBillingInitialized: " )
+                Log.e("TAG", "onBillingInitialized: ")
             }
         })
     }
-
 
     private var adEventListener: AdEventListener? = null
 

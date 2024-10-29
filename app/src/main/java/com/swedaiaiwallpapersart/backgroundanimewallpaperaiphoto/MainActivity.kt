@@ -90,6 +90,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var job: Job
+    companion object{
+        var startTime : Long = 0
+    }
 
     val TAG = "ANR-SPY"
 
@@ -461,8 +464,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                                 it
                             )
                         }
-
-
                     }
                 }
 
@@ -497,11 +498,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         if (item == result.data.last()) {
                             getSetTotallikes()
                         }
-
-
                     }
-
-
                 }
 
                 is Response.Processing -> {
@@ -622,7 +619,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 null
             }
         }
-
     }
 
     private suspend fun readJsonFile(context: Context, fileName: String): String {
@@ -639,7 +635,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 ""
             }
         }
-
     }
 
     private fun initFirebaseRemoteConfig() {
@@ -969,6 +964,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     override fun onResume() {
         super.onResume()
+        startTime = System.currentTimeMillis()
+        Log.d("ColdStartTime", "App start time: $startTime")
+
         lifecycleScope.launch {
             IKBillingController.reCheckIAP(object : IKBillingListener {
                 override fun onBillingFail() {

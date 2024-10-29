@@ -28,7 +28,7 @@ class LiveWallpaperViewModel @Inject constructor(
     fun getMostUsed(page: String, record: String, deviceid: String) {
         viewModelScope.launch {
             getLiveWallpapersUsecase.invoke(page, record, deviceid).collect() {
-                Log.e("TAG", "getAllModels: " + it)
+                Log.e("TAG", "getAllModels: $it")
                 _liveWallpapers.value = it
             }
         }

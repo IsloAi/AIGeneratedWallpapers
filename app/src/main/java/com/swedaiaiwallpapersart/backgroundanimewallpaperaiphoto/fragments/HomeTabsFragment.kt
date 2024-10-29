@@ -331,7 +331,6 @@ class HomeTabsFragment : Fragment() {
         }
     }
 
-
     private fun feedbackRateSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackRateBinding.inflate(layoutInflater)
@@ -700,12 +699,6 @@ class HomeTabsFragment : Fragment() {
         AdConfig.tabPositions =
             AdConfig.tabPositions.map { if (it == "4K") "Car" else it }.toTypedArray()
 
-        val titles = arrayOf(
-            getString(R.string.popular), getString(R.string.trending),
-            getString(R.string.live), getString(R.string.ai_wallpaper),
-            getString(R.string.category), getString(R.string.gen_ai)
-        )
-
         binding.tabLayout.setSelectedTabIndicatorHeight(0)
         val tabCount: Int = binding.tabLayout.tabCount
         for (i in 0 until tabCount) {
@@ -914,6 +907,11 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        val endtime = System.currentTimeMillis()
+        val startTime = MainActivity.startTime
+        val time = endtime - startTime
+        Log.d("ColdStartTime", "Cold start duration: $time ms")
+
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
         } else {
@@ -1014,6 +1012,7 @@ class HomeTabsFragment : Fragment() {
 
     fun navigateTOTabs(tabName: String) {
         val tabPos = getTabPositionByName(tabName)
+        Log.d("USMAN", "navigateTOTabs: $tabPos ")
         if (isAdded) {
             navigateToTrending(tabPos)
         }
@@ -1062,5 +1061,6 @@ class HomeTabsFragment : Fragment() {
             }
         }
     }
+
 
 }

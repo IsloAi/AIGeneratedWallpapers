@@ -34,28 +34,29 @@ import retrofit2.Response
 import java.lang.Math.abs
 
 class SplashFragment : Fragment() {
-    private var _binding : FragmentSplashBinding? = null
+    private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
     private var viewPager2: ViewPager2? = null
-     private var handler2 : Handler? = null
+    private var handler2: Handler? = null
     private var arrayList = ArrayList<SplashModel>()
     private val handler = Handler(Looper.getMainLooper())
     private var currentPage = 0
     private val delayTime: Long = 1000
-    lateinit var circle1:RelativeLayout
-    lateinit var circle2:RelativeLayout
-    lateinit var circle3:RelativeLayout
-    lateinit var circle4:RelativeLayout
-    lateinit var circle5:RelativeLayout
+    lateinit var circle1: RelativeLayout
+    lateinit var circle2: RelativeLayout
+    lateinit var circle3: RelativeLayout
+    lateinit var circle4: RelativeLayout
+    lateinit var circle5: RelativeLayout
     private var isFragmentAttached: Boolean = false
     private val postDataOnServer = PostDataOnServer()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSplashBinding.inflate(inflater,container,false)
+        _binding = FragmentSplashBinding.inflate(inflater, container, false)
 
-        return binding.root}
+        return binding.root
+    }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -93,12 +94,10 @@ class SplashFragment : Fragment() {
         allOnCreateCalling()
 
 
-
-
     }
 
 
-   private fun allOnCreateCalling(){
+    private fun allOnCreateCalling() {
         circle1 = binding.circle1
         circle2 = binding.circle2
         circle3 = binding.circle3
@@ -112,10 +111,11 @@ class SplashFragment : Fragment() {
 //        arrayList.add(SplashModel(R.drawable.splash5))
         setViewPager()
     }
+
     override fun onResume() {
         super.onResume()
-             navigate()
-            fetchGems()
+        navigate()
+        fetchGems()
 
     }
 
@@ -123,6 +123,7 @@ class SplashFragment : Fragment() {
         super.onPause()
         handler2?.removeCallbacksAndMessages(null)
     }
+
     private val autoSlideRunnable = object : Runnable {
         override fun run() {
             currentPage = (currentPage + 1) % arrayList.size
@@ -130,12 +131,15 @@ class SplashFragment : Fragment() {
             handler.postDelayed(this, delayTime)
         }
     }
+
     private fun startAutoSlide() {
         handler.postDelayed(autoSlideRunnable, delayTime)
     }
+
     private fun stopAutoSlide() {
         handler.removeCallbacks(autoSlideRunnable)
     }
+
     private fun setViewPager() {
         val adopter = SplashSliderAdapter(arrayList, viewPager2!!)
         viewPager2?.adapter = adopter
@@ -164,39 +168,47 @@ class SplashFragment : Fragment() {
 
         val viewPagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-               if(position==0){
-                   fillCircle(circle1)
-                   unFillCircle(circle2,circle3,circle4,circle5)
-               }
-                if(position==1){
+                if (position == 0) {
+                    fillCircle(circle1)
+                    unFillCircle(circle2, circle3, circle4, circle5)
+                }
+                if (position == 1) {
                     fillCircle(circle2)
-                    unFillCircle(circle1,circle3,circle4,circle5)
+                    unFillCircle(circle1, circle3, circle4, circle5)
                 }
-                if(position==2){
+                if (position == 2) {
                     fillCircle(circle3)
-                    unFillCircle(circle1,circle2,circle4,circle5)
+                    unFillCircle(circle1, circle2, circle4, circle5)
                 }
-                if(position==3){
+                if (position == 3) {
                     fillCircle(circle4)
-                    unFillCircle(circle1,circle2,circle3,circle5)
+                    unFillCircle(circle1, circle2, circle3, circle5)
                 }
-                if(position==4){
+                if (position == 4) {
                     fillCircle(circle5)
-                    unFillCircle(circle1,circle2,circle3,circle4)
+                    unFillCircle(circle1, circle2, circle3, circle4)
                 }
             }
         }
         viewPager2?.registerOnPageChangeCallback(viewPagerChangeCallback)
     }
-    private fun fillCircle(layout: RelativeLayout){
+
+    private fun fillCircle(layout: RelativeLayout) {
         layout.setBackgroundResource(R.drawable.fill_circle)
     }
-    private fun unFillCircle(layout1: RelativeLayout,layout2: RelativeLayout,layout3: RelativeLayout,layout4: RelativeLayout){
+
+    private fun unFillCircle(
+        layout1: RelativeLayout,
+        layout2: RelativeLayout,
+        layout3: RelativeLayout,
+        layout4: RelativeLayout
+    ) {
         layout1.setBackgroundResource(R.drawable.circle)
         layout2.setBackgroundResource(R.drawable.circle)
         layout3.setBackgroundResource(R.drawable.circle)
         layout4.setBackgroundResource(R.drawable.circle)
     }
+
     private fun fetchGems() {
 
         lifecycleScope.launch {
@@ -210,17 +222,21 @@ class SplashFragment : Fragment() {
                     if (response.isSuccessful) {
                         Log.d("postDataTesting", "onResponse: success ${response.body()}")
                         response.body()?.let {
-                            val gemData = GetGemsData(it.uid,it.gems,it.counter,it.message)
+                            val gemData = GetGemsData(it.uid, it.gems, it.counter, it.message)
                             Log.d("postDataTesting", "onResponse: model ${gemData}")
                             if (gemData.uid == MySharePreference.getDeviceID(requireContext())!!) {
                                 MySharePreference.setGemsValue(requireContext(), gemData.gems!!)
-                                MySharePreference.setCounterValue(requireContext(),gemData.counter!!)
+                                MySharePreference.setCounterValue(
+                                    requireContext(),
+                                    gemData.counter!!
+                                )
                             }
                         }
                     } else {
                         Log.d("responseNotOk", "onResponse: Response not successful")
                     }
                 }
+
                 override fun onFailure(call: Call<GetGemsData>, t: Throwable) {
                     Toast.makeText(requireContext(), "Error Loading", Toast.LENGTH_SHORT).show()
                     // Handle failure case
@@ -230,6 +246,7 @@ class SplashFragment : Fragment() {
         }
 
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         isFragmentAttached = false
@@ -237,15 +254,17 @@ class SplashFragment : Fragment() {
         handler.removeCallbacksAndMessages(null)
         handler2?.removeCallbacksAndMessages(null)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         isFragmentAttached = true
     }
-        private fun navigate() {
+
+    private fun navigate() {
         handler2 = Handler()
         handler2?.postDelayed({
             findNavController().apply { navigate(R.id.action_splashFragment_to_mainFragment) }
-        },6000)
+        }, 6000)
     }
 
 

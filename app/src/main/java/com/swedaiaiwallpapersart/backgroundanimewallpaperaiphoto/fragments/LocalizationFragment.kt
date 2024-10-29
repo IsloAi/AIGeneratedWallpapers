@@ -222,7 +222,7 @@ class LocalizationFragment : Fragment() {
         languagesList.add(DummyModelLanguages("French", "fr", R.drawable.flag_fr, false))
         languagesList.add(DummyModelLanguages("Thai", "th", R.drawable.flag_thai, false))
         languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
-        languagesList.add(DummyModelLanguages("Vietnamese ", "vi", R.drawable.flag_vietnamese, false))
+        languagesList.add(DummyModelLanguages("Vietnamese ", "vi", R.drawable.flag_vietnamese,false))
         languagesList.add(DummyModelLanguages("Hindi", "hi", R.drawable.flag_hi, false))
         languagesList.add(DummyModelLanguages("Dutch", "nl", R.drawable.flag_ducth, false))
         languagesList.add(DummyModelLanguages("Indonesian", "in", R.drawable.flag_indona, false))
