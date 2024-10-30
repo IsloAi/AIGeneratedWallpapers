@@ -1,24 +1,5 @@
 {
   "images": [
-    {
-      "id": 431,
-      "catname": "not selected",
-      "livewallpaper_url": "hd/66a09405e6560_f.mp4",
-      "thumnail_url": "compress/66a09405e6560_f.jpg?class=live",
-      "videoSize": 1550,
-      "downloads": 6416,
-      "likes": 579,
-      "liked": false
-    },
-    {
-      "id": 430,
-      "catname": "not selected",
-      "livewallpaper_url": "hd/66a093f4d0754_e.mp4",
-      "thumnail_url": "compress/66a093f4d0754_e.jpg?class=live",
-      "videoSize": 1027,
-      "downloads": 7978,
-      "likes": 683,
-      "liked": false
-    }
+
   ]
 }

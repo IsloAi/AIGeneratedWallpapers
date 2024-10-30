@@ -7,15 +7,11 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelChargingAnimation
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelDoubleWallpapers
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ResponseModelListMostDownloaded
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
-import okhttp3.ResponseBody
-import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.POST
 
 import retrofit2.http.Query
@@ -67,7 +63,7 @@ interface EndPointsInterface {
     )
 
     @GET("getfavrt.php")
-    suspend fun getLiked(
+    suspend fun getFavourite(
         @Query("deviceid") deviceId: String
     ):retrofit2.Response<ArrayList<LikedResponse>>
 

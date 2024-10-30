@@ -8,9 +8,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.resp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.MostDownloadedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleAllResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.TokenResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +22,7 @@ interface WallpaperRepositry {
     fun getRewardWallpaper():Flow<Response<ArrayList<RewardedAllResponse>>>
 
     fun getAllLikes():Flow<Response<ArrayList<LikesResponse>>>
-    fun getLiked(deviceId: String):Flow<Response<ArrayList<LikedResponse>>>
+    fun getFavourites(deviceId: String):Flow<Response<ArrayList<LikedResponse>>>
 
     fun getMostDownloaded(page:String,record:String):Flow<Response<ArrayList<MostDownloadedResponse>>>
 

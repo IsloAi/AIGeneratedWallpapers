@@ -1,27 +1,5 @@
 {
   "images": [
-    {
-      "id": 140,
-      "cat_name": "Anime",
-      "image_name": "Anime Fighter 2 ",
-      "url": "64e463776c62d.jpg",
-      "size": 128,
-      "likes": 637,
-      "liked": false,
-      "Tags": "Anime",
-      "capacity": "1080 X 2400"
-    },
-    {
-      "id": 6518,
-      "cat_name": "Tech",
-      "image_name": "Circuit Board",
-      "url": "666abd503c746.jpg",
-      "size": 281,
-      "likes": 34,
-      "liked": false,
-      "Tags": "Tech, board",
-      "capacity": "1080 X 2400"
-    }
 
   ]
 }

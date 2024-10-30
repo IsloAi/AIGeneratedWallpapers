@@ -84,10 +84,10 @@ class WallpaperRepositoryImp@Inject constructor(
         }
     }
 
-    override fun getLiked(deviceId: String): Flow<Response<ArrayList<LikedResponse>>> = channelFlow {
+    override fun getFavourites(deviceId: String): Flow<Response<ArrayList<LikedResponse>>> = channelFlow {
         try {
             trySend(Response.Loading)
-            val resp = webApiInterface.getLiked(deviceId)
+            val resp = webApiInterface.getFavourite(deviceId)
             if (resp.isSuccessful){
                 trySend(Response.Success(resp.body()))
             }

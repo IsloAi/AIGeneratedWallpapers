@@ -90,11 +90,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var job: Job
-    companion object{
-        var startTime : Long = 0
+
+    companion object {
+        var startTime: Long = 0
     }
 
-    val TAG = "ANR-SPY"
+    val TAG = "MainActivity"
 
     private var selectedPrompt: String? = null
     private var alertDialog: AlertDialog? = null
@@ -111,10 +112,16 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     private var _navController: NavController? = null
     private val navController get() = _navController!!
+    private var deviceID: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+
+        deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
+        Log.d(TAG, "onCreate:deviceID - $deviceID")
+
+        //MySharePreference.setDeviceID(this, deviceID)
+
         val lan = MySharePreference.getLanguage(this)
         (application as? MyApp)?.setConnectivityListener(this)
 
@@ -135,7 +142,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         handleBackPress()
 
-        fetchData(deviceID)
+        fetchData(deviceID.toString())
 
         observefetechedData()
 
@@ -145,8 +152,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         readJsonAndSaveDataToDb()
 
+        initObservers()
+        getSetTotallikes()
+
         if (deviceID != null) {
-            MySharePreference.setDeviceID(this, deviceID)
+            MySharePreference.setDeviceID(this, deviceID.toString())
         }
 
         val navHostFragment =
@@ -496,7 +506,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             appDatabase.wallpapersDao().updateLocked(false, item.image_id.toInt())
                         }
                         if (item == result.data.last()) {
-                            getSetTotallikes()
+
                         }
                     }
                 }
@@ -518,9 +528,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
     private fun getSetTotallikes() {
-        myViewModel.getAllLikes()
 
-        MySharePreference.getDeviceID(this@MainActivity)?.let { myViewModel.getAllLiked(it) }
+        myViewModel.getAllLikes()
+        myViewModel.getAllLiked(deviceID.toString())
+
+        /*MySharePreference.getDeviceID(this@MainActivity)?.let {
+            myViewModel.getAllLiked(it) }*/
 
         myViewModel.allLikes.observe(this@MainActivity) { result ->
             when (result) {
@@ -555,13 +568,14 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             when (result) {
                 is Response.Success -> {
 
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        result.data?.forEach { item ->
 
-                            Log.e("TAG", "getSetTotallikes: " + item)
-                            appDatabase.wallpapersDao().updateLiked(true, item.imageid.toInt())
-                        }
+                    result.data?.forEach { item ->
+                        Log.d(TAG, "getSetTotalLikes: $item")
+                        //appDatabase.wallpapersDao().updateLiked(true, item.imageid.toInt())
                     }
+
+                    /*lifecycleScope.launch(Dispatchers.IO) {
+                    }*/
 
                 }
 
@@ -570,7 +584,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 }
 
                 is Response.Error -> {
-
+                    Log.e(TAG, "TLikesError : ${result.message} ")
                 }
 
                 is Response.Processing -> {
@@ -708,6 +722,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         // https://4kwallpaper-zone.b-cdn.net/livewallpaper/
 
                         AdConfig.BASE_URL_DATA = baseUrls
+                        Log.d(TAG, "onUpdate:BaseURL: ${AdConfig.BASE_URL_DATA} ")
 
                         try {
                             val jsonObject = JSONObject(inAppConfig)
@@ -1008,6 +1023,5 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             alertDialog?.dismiss()
         }
     }
-
 
 }

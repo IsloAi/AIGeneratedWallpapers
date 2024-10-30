@@ -9,6 +9,6 @@ import javax.inject.Inject
 
 class GetAllLikedUseCase @Inject constructor(private val textToImgRepository: WallpaperRepositry){
     operator fun invoke(deviceId: String): Flow<Response<ArrayList<LikedResponse>>> {
-        return textToImgRepository.getLiked(deviceId)
+        return textToImgRepository.getFavourites(deviceId)
     }
 }

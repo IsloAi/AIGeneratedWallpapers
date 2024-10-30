@@ -175,7 +175,7 @@ class SplashOnFragment : Fragment() {
             }, false)
 
             val duration = 2000
-            val interval = 50
+            val interval = 20
 
             val steps = duration / interval
             val progressIncrement = 100 / steps
@@ -188,7 +188,7 @@ class SplashOnFragment : Fragment() {
             }
         }
         animateLoadingText()
-        
+
     }
 
     private fun navigateToNextScreen() {
