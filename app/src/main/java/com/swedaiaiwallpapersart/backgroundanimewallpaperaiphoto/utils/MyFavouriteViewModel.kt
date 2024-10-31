@@ -29,7 +29,6 @@ class MyFavouriteViewModel @Inject constructor(
                         val ids = response.data?.map { it.imageid } ?: emptyList()
                         Log.d("FAVORITES", "loadFavourites: $ids")
                         _favourites.value = Response.Success(ArrayList(ids))
-//                        _favourites.value = Response.Success(ArrayList(ids)).toString()
                     }
 
                     is Response.Loading -> {

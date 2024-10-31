@@ -468,9 +468,7 @@ class FavouriteFragment : Fragment() {
                             Log.d(TAG, "loadDataFromRoomDB:Wallpaper: $wallpaper ")
                             wallpaper.let { wallpapers.add(it) } // Add the fetched wallpaper to the list
                         }
-                        val favourites =
-                            appDatabase.wallpapersDao().getFavouritesByDeviceId(data.toString())
-                        Log.d(TAG, "loadDataFromRoomDB:fav = ${favourites[0]} ")
+                        Log.d(TAG, "loadDataFromRoomDB:fav = ${wallpapers} ")
 
                     }
 
