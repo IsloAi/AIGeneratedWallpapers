@@ -1,127 +1,115 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/new_main_background"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment">
 
     <ImageView
+        android:id="@+id/backImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:id="@+id/backImage"
-        />
+        android:scaleType="centerCrop" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent=".091"
         android:paddingHorizontal="@dimen/_10sdp"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent=".091"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/toolbar"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginStart="@dimen/_5sdp"
-            app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_back_arrow"
-                />
+                android:src="@drawable/ic_back_arrow" />
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:trackThickness="@dimen/_10sdp"
+        android:progress="0"
+        app:indicatorColor="@color/button_bg"
+        app:indicatorSize="@dimen/_100sdp"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
         app:trackColor="#26C7C7C7"
         app:trackCornerRadius="@dimen/_100sdp"
-        app:indicatorSize="@dimen/_100sdp"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:indicatorColor="@color/button_bg"
-        android:progress="0"
-        android:id="@+id/progress"
-        />
-
+        app:trackThickness="@dimen/_10sdp" />
 
     <TextView
+        android:id="@+id/loadingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Downloading..."
-        android:id="@+id/loadingTxt"
-        android:textColor="@color/white"
-        android:fontFamily="@font/poppins_medium"
-        app:layout_constraintTop_toBottomOf="@id/progress"
-        app:layout_constraintBottom_toTopOf="@id/buttonApplyWallpaper"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="@dimen/_2sdp"
+        android:fontFamily="@font/poppins_medium"
+        android:text="Downloading..."
+        android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
-        />
+        app:layout_constraintBottom_toTopOf="@id/buttonApplyWallpaper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress" />
 
     <Button
         android:id="@+id/buttonApplyWallpaper"
         android:layout_width="0dp"
-        app:layout_constraintWidth_percent="0.7"
         android:layout_height="@dimen/_35sdp"
+        android:background="@drawable/new_button_bg"
+        android:fontFamily="@font/raleway_medium"
         android:minWidth="@dimen/_160sdp"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
-        android:text="Preview"
-
         android:shadowColor="@color/black"
         android:shadowDx="1.8"
         android:shadowDy="1.8"
         android:shadowRadius="0.1"
-        android:fontFamily="@font/raleway_medium"
+        android:text="Preview"
         android:textAllCaps="false"
-        android:textSize="15sp"
         android:textColor="@color/mywhite"
-        android:background="@drawable/new_button_bg"
-        />
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress"
+        app:layout_constraintWidth_percent="0.7" />
 
     <TextView
+        android:id="@+id/progressTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
         android:text="0%"
         android:textColor="@color/white"
-        android:fontFamily="@font/poppins_medium"
         android:textSize="@dimen/_15sdp"
-        app:layout_constraintTop_toTopOf="@id/progress"
         app:layout_constraintBottom_toBottomOf="@id/progress"
-        app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintEnd_toEndOf="@id/progress"
-        android:id="@+id/progressTxt"
-        />
-
-
-
+        app:layout_constraintStart_toStartOf="@id/progress"
+        app:layout_constraintTop_toTopOf="@id/progress" />
 
     <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
 
+        android:layout_height="wrap_content"
         android:background="@drawable/ads_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_height="wrap_content" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

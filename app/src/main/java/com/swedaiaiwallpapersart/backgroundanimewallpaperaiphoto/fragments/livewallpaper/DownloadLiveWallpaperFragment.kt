@@ -49,7 +49,7 @@ import java.io.File
 
 class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
-    private var _binding: FragmentDownloadLiveWallpaperBinding?= null
+    private var _binding: FragmentDownloadLiveWallpaperBinding? = null
 
     private val binding get() = _binding!!
 
@@ -61,14 +61,14 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     val TAG = "DOWNLOAD_SCREEN"
 
-    var showAd :Boolean? = false
+    var showAd: Boolean? = false
 
     val interAd = IKInterstitialAd()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDownloadLiveWallpaperBinding.inflate(inflater,container,false)
+        _binding = FragmentDownloadLiveWallpaperBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -79,15 +79,16 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         Log.e(TAG, "onViewCreated: $showAd")
 
-        if (AdConfig.ISPAIDUSER){
+        if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
-        }else{
+        } else {
             loadAd()
             interAd.attachLifecycle(this.lifecycle)
             interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
                 }
+
                 override fun onAdLoadFail(error: IKAdError) {
                     // Handle ad load failure
                 }
@@ -99,8 +100,12 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         initObservers()
 
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "screen"), Pair("action_name", "Downloadscr_View"))
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "screen"),
+                Pair("action_name", "Downloadscr_View")
+            )
         }
     }
 
@@ -113,12 +118,11 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     private fun sendTracking(
         eventName: String,
         vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
+    ) {
+        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
-    fun loadAd(){
+    fun loadAd() {
         val adLayout = LayoutInflater.from(activity).inflate(
             R.layout.large_native_layout,
             null, false
@@ -129,13 +133,15 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
         adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
 
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"downloadscr_native_bottom",
+        binding.adsView.loadAd(R.layout.shimmer_loading_native,
+            adLayout!!,
+            "downloadscr_native_bottom",
             object : IKShowWidgetAdListener {
                 override fun onAdShowFail(error: IKAdError) {
-                    if (AdConfig.ISPAIDUSER){
+                    if (AdConfig.ISPAIDUSER) {
                         binding.adsView.visibility = View.GONE
                     }
-                    Log.e("TAG", "onAdsLoadFail: native failded " )
+                    Log.e("TAG", "onAdsLoadFail: native failded ")
                 }
 
                 override fun onAdShowed() {
@@ -147,19 +153,22 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         )
     }
 
-
-    fun setEvents(){
+    fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Previewbt_click"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "Downloadscr_Previewbt_click")
+                )
             }
 
-            if (AdConfig.ISPAIDUSER){
+            if (AdConfig.ISPAIDUSER) {
                 navigateToPreview()
-            }else{
-                if (showAd == true){
+            } else {
+                if (showAd == true) {
                     navigateToPreview()
-                }else{
+                } else {
                     var shouldShowInterAd = true
 
                     if (AdConfig.avoidPolicyRepeatingInter == 1 && checkInter) {
@@ -188,8 +197,12 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         binding.toolbar.setOnClickListener {
 
-            if (isAdded){
-                sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Backbutton_click"))
+            if (isAdded) {
+                sendTracking(
+                    "click_button",
+                    Pair("action_type", "button"),
+                    Pair("action_name", "Downloadscr_Backbutton_click")
+                )
             }
 
             checkInter = false
@@ -225,56 +238,57 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         }
     }
 
-    private fun initObservers(){
-        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner){wallpaper ->
-            if (wallpaper.isNotEmpty()){
+    private fun initObservers() {
+        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            if (wallpaper.isNotEmpty()) {
 
                 Log.e("TAG", "initObservers: $wallpaper")
 
-                if (BlurView.filePath == ""){
-                    Log.e(TAG, "initObservers123: "+wallpaper[0] )
-                    Log.e(TAG, "initObservers123: "+AdConfig.BASE_URL_DATA)
-                    downloadVideo(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].livewallpaper_url,wallpaper[0].videoSize)
+                if (BlurView.filePath == "") {
+                    Log.e(TAG, "initObservers123: " + wallpaper[0])
+                    Log.e(TAG, "initObservers123: " + AdConfig.BASE_URL_DATA)
+                    downloadVideo(
+                        AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].livewallpaper_url,
+                        wallpaper[0].videoSize
+                    )
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/"+wallpaper[0].thumnail_url)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
             }
         }
     }
 
 
-
-
-
-    private fun getBitmapFromGlide(url:String){
+    private fun getBitmapFromGlide(url: String) {
         Glide.with(requireContext()).asBitmap().load(url)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
 
-                    if (isAdded){
+                    if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
                 }
+
                 override fun onLoadCleared(placeholder: Drawable?) {
-                } })
+                }
+            })
     }
 
 
-
-    private fun downloadVideo(url: String,size:Float) {
+    private fun downloadVideo(url: String, size: Float) {
         Log.e(TAG, "downloadVideo: $url")
 
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".mp4"
 
-        val filepath = File(file,fileName)
+        val filepath = File(file, fileName)
 
         BlurView.filePath = filepath.path
         BlurView.fileName = fileName
-        MySharePreference.setFileName(requireContext(),fileName)
-        Log.e("TAG", "downloadVideo: "+BlurView.fileName )
+        MySharePreference.setFileName(requireContext(), fileName)
+        Log.e("TAG", "downloadVideo: " + BlurView.fileName)
 
         val totalSize = (size * 1024).toLong()
         animateLoadingText()
@@ -292,15 +306,15 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                         val percentage = (bytesDownloaded * 100 / totalSize).toInt()
                         Log.e("TAG", "downloadVideo: $percentage")
 
-                        if (isAdded){
+                        if (isAdded) {
                             val currentCount = (bytesDownloaded * 100 / totalSize)
-                            if (currentCount <= 100){
+                            if (currentCount <= 100) {
                                 binding.progressTxt.text =
                                     currentCount.toString() + "%"
-                            }else{
-                                Log.e(TAG, "downloadVideo: $currentCount", )
+                            } else {
+                                Log.e(TAG, "downloadVideo: $currentCount")
                             }
-                            binding.progress.progress =percentage
+                            binding.progress.progress = percentage
                         }
 
 
@@ -309,7 +323,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 .startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
                         lifecycleScope.launch(Dispatchers.Main) {
-                            if (isAdded){
+                            if (isAdded) {
                                 binding.progressTxt.text = "100%"
                                 binding.progress.progress = 100
                                 binding.buttonApplyWallpaper.visibility = View.VISIBLE
@@ -319,25 +333,34 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                                 binding.loadingTxt.text = "Download Successfull"
 
 
-                                if (isAdded){
-                                    sendTracking("click_button",Pair("action_type", "button"), Pair("action_name", "Downloadscr_Successful"))
+                                if (isAdded) {
+                                    sendTracking(
+                                        "click_button",
+                                        Pair("action_type", "button"),
+                                        Pair("action_name", "Downloadscr_Successful")
+                                    )
                                 }
                             }
                         }
                     }
 
                     override fun onError(error: ANError?) {
-                        if (isAdded){
+                        if (isAdded) {
                             checkInter = true
                             checkAppOpen = true
                             Log.d(TAG, "onErrorVideoDownloadFailed $error")
-                            Toast.makeText(requireContext(), "Server down. Please try again later!", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(),
+                                "Server down. Please try again later!",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             findNavController().navigateUp()
                         }
                     }
                 })
         }
     }
+
     private fun animateLoadingText() {
         animationJob = viewLifecycleOwner.lifecycleScope.launch {
             while (isActive) {
@@ -359,16 +382,16 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        if (animationJob?.isActive == true){
+        if (animationJob?.isActive == true) {
             animationJob?.cancel()
         }
 
-        _binding =  null
+        _binding = null
     }
 
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

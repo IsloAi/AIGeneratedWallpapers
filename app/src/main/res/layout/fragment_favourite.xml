@@ -1,393 +1,366 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/new_main_background"
-    >
+    android:background="@color/new_main_background">
 
     <ImageView
+        android:id="@+id/backImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:id="@+id/backImage"
-        />
+        android:scaleType="centerCrop" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/_10sdp"
-        >
+        android:layout_height="match_parent">
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progressBar"
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_150sdp"
             android:layout_centerInParent="true"
-            app:lottie_autoPlay="true"
-            android:visibility="gone"
-            app:lottie_loop="true"
             android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
-
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolBar"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_percent=".091"
             android:background="@color/new_main_background"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".091"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
                 android:id="@+id/toolbar"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintTop_toTopOf="parent"
                 android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_back_arrow"
-                    />
+                    android:src="@drawable/ic_back_arrow" />
             </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
                 android:text="@string/favourites"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                app:layout_constraintTop_toTopOf="@id/toolbar"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="@id/toolbar"
                 app:layout_constraintStart_toEndOf="@id/toolbar"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_14sdp"
-                android:gravity="center"
-                />
+                app:layout_constraintTop_toTopOf="@id/toolbar" />
 
 
             <ImageView
+                android:id="@+id/shareAPp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/share_app"
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/shareAPp"
-                android:visibility="gone"
-                android:padding="@dimen/_5sdp"
+                app:layout_constraintTop_toTopOf="parent"
 
                 />
-
 
 
             <ImageView
+                android:id="@+id/wallpaperInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/information_wallpaper"
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/shareAPp"
-                android:id="@+id/wallpaperInfo"
-                android:visibility="gone"
-                android:padding="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_3sdp"
-                />
-
-
-
-
-
-
-
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/switchLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/toolBar"
             app:layout_constraintBottom_toTopOf="@+id/recyclerViewLauout"
             app:layout_constraintHeight_percent=".06"
-            >
+            app:layout_constraintTop_toBottomOf="@+id/toolBar">
+
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent=".9"
                 android:elevation="@dimen/_10sdp"
-                app:cardCornerRadius="@dimen/_7sdp"
                 app:cardBackgroundColor="@color/white"
-                >
+                app:cardCornerRadius="@dimen/_7sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".9">
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:padding="1dp"
-                    >
+                    android:padding="1dp">
 
                     <TextView
                         android:id="@+id/ai_wallpaper"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        app:layout_constraintEnd_toStartOf="@+id/self_creation"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:fontFamily="@font/raleway_medium"
-                        android:text="AI Wallpaper"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:textColor="@color/white"
                         android:background="@drawable/text_selector"
-                        />
+                        android:fontFamily="@font/raleway_medium"
+                        android:gravity="center"
+                        android:text="AI Wallpaper"
+                        android:textColor="@color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toStartOf="@+id/Static_wallpaper"
+                        app:layout_constraintStart_toStartOf="parent" />
+
                     <TextView
-                        android:id="@+id/self_creation"
+                        android:id="@+id/Static_wallpaper"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        app:layout_constraintStart_toEndOf="@+id/ai_wallpaper"
-                        app:layout_constraintEnd_toStartOf="@id/live"
+                        android:background="@drawable/text_selector"
                         android:fontFamily="@font/raleway_medium"
-                        android:text="AI Generated"
                         android:gravity="center"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
+                        android:text="Static Wallpaper"
                         android:textColor="@color/black"
-                        />
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@id/live"
+                        app:layout_constraintStart_toEndOf="@+id/ai_wallpaper"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/live"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        app:layout_constraintStart_toEndOf="@+id/self_creation"
-                        app:layout_constraintEnd_toEndOf="parent"
                         android:fontFamily="@font/raleway_medium"
-                        android:text="Live"
                         android:gravity="center"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
+                        android:text="Live"
                         android:textColor="@color/black"
-                        />
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/Static_wallpaper"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <RelativeLayout
             android:id="@+id/recyclerViewLauout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/switchLayout"
+            android:layout_marginTop="@dimen/_7sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="@dimen/_7sdp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchLayout">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/aiRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/selfCreationRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/liveRecyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                />
+                android:layout_height="match_parent" />
         </RelativeLayout>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/empty_support"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/switchLayout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/_7sdp"
-            android:id="@+id/empty_support"
-            >
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchLayout">
 
 
             <ImageView
+                android:id="@+id/no_fav_img"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/no_favorites"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="@dimen/_50sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/no_fav_img"
-                />
+                android:src="@drawable/no_favorites"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/no_fav_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/raleway_medium"
                 android:text="@string/zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon"
                 android:textColor="#BCBCBC"
-                app:layout_constraintTop_toBottomOf="@id/no_fav_img"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:fontFamily="@font/raleway_medium"
                 android:textSize="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:id="@+id/no_fav_txt"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_img" />
 
             <ImageView
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:src="@drawable/heart_fav"
-                app:layout_constraintStart_toEndOf="@id/no_fav_txt"
                 app:layout_constraintBottom_toBottomOf="@id/no_fav_txt"
-                />
+                app:layout_constraintStart_toEndOf="@id/no_fav_txt" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/addToFav"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40sdp"
-                android:paddingHorizontal="@dimen/_10sdp"
-                app:layout_constraintStart_toStartOf="@id/no_fav_img"
-                app:layout_constraintEnd_toEndOf="@id/no_fav_img"
-                android:background="@drawable/no_fav_btn"
-                app:layout_constraintTop_toBottomOf="@id/no_fav_txt"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:id="@+id/addToFav"
+                android:background="@drawable/no_fav_btn"
+                android:paddingHorizontal="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="@id/no_fav_img"
+                app:layout_constraintStart_toStartOf="@id/no_fav_img"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_txt">
+
                 <TextView
+                    android:id="@+id/add_fav_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_favorite"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/raleway_medium"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="@dimen/_25sdp"
-                    android:id="@+id/add_fav_txt"
+                    android:fontFamily="@font/raleway_medium"
+                    android:text="@string/add_favorite"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
-                    />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/heart_fav"
-                    app:layout_constraintStart_toEndOf="@id/add_fav_txt"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginStart="@dimen/_10sdp"
-                    />
+                    android:src="@drawable/heart_fav"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_fav_txt"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/empty_supportAI"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="visible"
-            app:layout_constraintTop_toBottomOf="@+id/switchLayout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="@dimen/_7sdp"
-            android:id="@+id/empty_supportAI"
-            >
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchLayout">
 
 
             <ImageView
+                android:id="@+id/no_fav_imgAI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/no_favorites"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="@dimen/_50sdp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/no_fav_imgAI"
-                />
+                android:src="@drawable/no_favorites"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/no_fav_txtAI"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:fontFamily="@font/raleway_medium"
                 android:text="@string/zero_favorites_let_s_fix_that_nstart_by_tapping_the_heart_icon"
                 android:textColor="#BCBCBC"
-                app:layout_constraintTop_toBottomOf="@id/no_fav_imgAI"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:fontFamily="@font/raleway_medium"
                 android:textSize="@dimen/_12sdp"
-                android:layout_marginTop="@dimen/_5sdp"
-                android:id="@+id/no_fav_txtAI"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_imgAI" />
 
             <ImageView
                 android:layout_width="@dimen/_15sdp"
                 android:layout_height="@dimen/_15sdp"
                 android:src="@drawable/heart_fav"
-                app:layout_constraintStart_toEndOf="@id/no_fav_txtAI"
                 app:layout_constraintBottom_toBottomOf="@id/no_fav_txtAI"
-                />
+                app:layout_constraintStart_toEndOf="@id/no_fav_txtAI" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/addToFavAI"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/_40sdp"
-                android:paddingHorizontal="@dimen/_10sdp"
-                app:layout_constraintStart_toStartOf="@id/no_fav_imgAI"
-                app:layout_constraintEnd_toEndOf="@id/no_fav_imgAI"
-                android:background="@drawable/no_fav_btn"
-                app:layout_constraintTop_toBottomOf="@id/no_fav_txtAI"
                 android:layout_marginTop="@dimen/_5sdp"
-                android:id="@+id/addToFavAI"
+                android:background="@drawable/no_fav_btn"
+                android:paddingHorizontal="@dimen/_10sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                >
+                app:layout_constraintEnd_toEndOf="@id/no_fav_imgAI"
+                app:layout_constraintStart_toStartOf="@id/no_fav_imgAI"
+                app:layout_constraintTop_toBottomOf="@id/no_fav_txtAI">
+
                 <TextView
+                    android:id="@+id/add_fav_txtAI"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/add_favorite"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:textColor="@color/white"
-                    android:fontFamily="@font/raleway_medium"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="@dimen/_25sdp"
-                    android:id="@+id/add_fav_txtAI"
+                    android:fontFamily="@font/raleway_medium"
+                    android:text="@string/add_favorite"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/_15sdp"
-                    />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/heart_fav"
-                    app:layout_constraintStart_toEndOf="@id/add_fav_txtAI"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:layout_marginStart="@dimen/_10sdp"
-                    />
+                    android:src="@drawable/heart_fav"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/add_fav_txtAI"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -397,79 +370,75 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/error_lotti"
                 android:layout_width="@dimen/_150sdp"
                 android:layout_height="@dimen/_150sdp"
                 android:scaleType="centerCrop"
-                app:lottie_autoPlay="true"
-                app:lottie_loop="true"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true" />
+
             <TextView
                 android:id="@+id/error_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_7sdp"
-                android:layout_marginTop="@dimen/_6sdp"
-                android:gravity="center"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="@color/white"
-                android:fontFamily="@font/raleway_medium"
-                app:layout_constraintTop_toBottomOf="@+id/error_lotti"
-                android:paddingHorizontal="@dimen/_15sdp"
                 android:layout_below="@+id/error_lotti"
                 android:layout_centerHorizontal="true"
-                />
+                android:layout_marginStart="@dimen/_7sdp"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:fontFamily="@font/raleway_medium"
+                android:gravity="center"
+                android:paddingHorizontal="@dimen/_15sdp"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/error_lotti" />
 
             <RelativeLayout
                 android:id="@+id/googleLogin"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/_40sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_below="@+id/error_text"
-                android:background="@drawable/set_button_bg"
-                app:layout_constraintTop_toBottomOf="@+id/error_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginHorizontal="@dimen/_30sdp"
                 android:layout_marginTop="@dimen/_10sdp"
-                >
+                android:background="@drawable/set_button_bg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/error_text">
+
                 <ImageView
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
-                    android:src="@drawable/google"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/_15sdp"
+                    android:src="@drawable/google"
 
                     />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="@dimen/_7sdp"
+                    android:fontFamily="@font/raleway_medium"
                     android:text="Google"
                     android:textColor="@color/white"
-                    android:layout_marginStart="@dimen/_7sdp"
-                    android:textStyle="bold"
-                    android:layout_centerInParent="true"
-                    android:fontFamily="@font/raleway_medium"
                     android:textSize="17sp"
-                    />
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,8 +30,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.MyCreationFavAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetFavouriteImagePath
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
@@ -48,53 +48,47 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlin.random.Random
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavouriteFragment : Fragment() {
+
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
-    private lateinit var myViewModel: MyFavouriteViewModel
+    private val favouriteViewModel: MyFavouriteViewModel by activityViewModels()
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private lateinit var myActivity: MainActivity
     private lateinit var roomViewModel: RoomViewModel
-
     private var cachedIGList: ArrayList<FavouriteListIGEntity>? = ArrayList()
     private var isLoadedData = false
-
     private val liveWallpaperViewModel: LiveWallpaperViewModel by activityViewModels()
-
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-
+    val interAd = IKInterstitialAd()
+    val sharedViewModel: SharedViewModel by activityViewModels()
     val TAG = "FAVORITES"
 
-    val interAd = IKInterstitialAd()
-
-
-    val sharedViewModel: SharedViewModel by activityViewModels()
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFavouriteBinding.inflate(inflater, container, false)
-
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_favorite_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
@@ -109,7 +103,6 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun onCreateViewCalling() {
-
 
         val roomDatabase = AppDatabase.getInstance(requireContext())
         roomViewModel =
@@ -138,13 +131,10 @@ class FavouriteFragment : Fragment() {
         binding.liveRecyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveRecyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
-
-        loadData()
-        loadDataFromRoomDB()
         if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
-            selector(binding.aiWallpaper, binding.selfCreation, binding.live)
+            selector(binding.aiWallpaper, binding.StaticWallpaper, binding.live)
             binding.emptySupportAI.visibility = View.GONE
             binding.liveRecyclerview.visibility = View.GONE
 
@@ -156,7 +146,7 @@ class FavouriteFragment : Fragment() {
         } else if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
-            selector(binding.selfCreation, binding.aiWallpaper, binding.live)
+            selector(binding.StaticWallpaper, binding.aiWallpaper, binding.live)
             binding.progressBar.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
             binding.liveRecyclerview.visibility = View.GONE
@@ -164,22 +154,22 @@ class FavouriteFragment : Fragment() {
             initObservers()
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
-            binding.liveRecyclerview.visibility = View.VISIBLE
-            selector(binding.live, binding.selfCreation, binding.aiWallpaper)
+            binding.liveRecyclerview.visibility = VISIBLE
+            selector(binding.live, binding.StaticWallpaper, binding.aiWallpaper)
             binding.progressBar.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
             binding.emptySupportAI.visibility = View.GONE
         }
 
         binding.aiWallpaper.setOnClickListener {
-            loadData()
-            selector(binding.aiWallpaper, binding.selfCreation, binding.live)
+            //loadData()
+            selector(binding.aiWallpaper, binding.StaticWallpaper, binding.live)
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.aiRecyclerView.visibility = VISIBLE
             binding.emptySupportAI.visibility = View.GONE
             binding.liveRecyclerview.visibility = INVISIBLE
             if (cachedCatResponses?.isEmpty() == true) {
-                binding.emptySupport.visibility = View.VISIBLE
+                binding.emptySupport.visibility = VISIBLE
             }
             MySharePreference.setFavouriteSaveState(requireContext(), 1)
             if (!isLoadedData) {
@@ -188,22 +178,22 @@ class FavouriteFragment : Fragment() {
 
 
         }
-        binding.selfCreation.setOnClickListener {
+        binding.StaticWallpaper.setOnClickListener {
             loadDataFromRoomDB()
-            selector(binding.selfCreation, binding.aiWallpaper, binding.live)
+            selector(binding.StaticWallpaper, binding.aiWallpaper, binding.live)
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.aiRecyclerView.visibility = INVISIBLE
             binding.liveRecyclerview.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
             if (cachedIGList?.isEmpty() == true) {
-                binding.emptySupportAI.visibility = View.VISIBLE
+                binding.emptySupportAI.visibility = VISIBLE
             }
             MySharePreference.setFavouriteSaveState(requireContext(), 2)
             binding.progressBar.visibility = INVISIBLE
         }
 
         binding.live.setOnClickListener {
-            selector(binding.live, binding.selfCreation, binding.aiWallpaper)
+            selector(binding.live, binding.StaticWallpaper, binding.aiWallpaper)
             MySharePreference.setFavouriteSaveState(requireContext(), 3)
             initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
@@ -213,7 +203,6 @@ class FavouriteFragment : Fragment() {
             binding.emptySupportAI.visibility = View.GONE
             binding.progressBar.visibility = INVISIBLE
         }
-
 
         binding.addToFav.setOnClickListener {
 
@@ -226,6 +215,10 @@ class FavouriteFragment : Fragment() {
         binding.addToFavAI.setOnClickListener {
             sharedViewModel.selectTab(5)
             findNavController().popBackStack(R.id.homeTabsFragment, false)
+        }
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            loadData()
         }
 
     }
@@ -241,7 +234,8 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun loadData() {
-        myViewModel = ViewModelProvider(this)[MyFavouriteViewModel::class.java]
+
+        /*myViewModel = ViewModelProvider(this)[MyFavouriteViewModel::class.java]
         // Observe the LiveData in the ViewModel and update the UI accordingly
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
             if (catResponses != null) {
@@ -264,10 +258,9 @@ class FavouriteFragment : Fragment() {
             }
         }
         myViewModel.fetchWallpapers(
-            requireContext(),
-            MySharePreference.getDeviceID(requireContext())!!,
-            binding.progressBar
-        )
+            requireContext(), MySharePreference.getDeviceID(requireContext())!!, binding.progressBar
+        )*/
+
     }
 
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
@@ -321,7 +314,6 @@ class FavouriteFragment : Fragment() {
                     Log.e("TAG", "loadData: processing")
                 }
             }
-
         }
     }
 
@@ -335,8 +327,7 @@ class FavouriteFragment : Fragment() {
             }
         }, myActivity)
 
-        IKSdkController.loadNativeDisplayAd(
-            "mainscr_live_tab_scroll",
+        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll",
             object : IKLoadDisplayAdViewListener {
                 override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                     // Update UI on the main thread using coroutines
@@ -360,14 +351,13 @@ class FavouriteFragment : Fragment() {
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
+
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
         val list = addNullValueInsideArray(catResponses)
-        val adapter = ApiCategoriesListAdapter(list as ArrayList, object :
-            PositionCallback {
+        val adapter = ApiCategoriesListAdapter(list as ArrayList, object : PositionCallback {
             override fun getPosition(position: Int) {
 
-                interAd.showAd(
-                    requireActivity(),
+                interAd.showAd(requireActivity(),
                     "mainscr_favorite_tab_click_item",
                     adListener = object : IKShowAdListener {
                         override fun onAdsShowFail(error: IKAdError) {
@@ -381,12 +371,11 @@ class FavouriteFragment : Fragment() {
                                 navigateToDestination(list, position)
                             }
                         }
-                    }
-                )
+                    })
             }
 
             override fun getFavorites(position: Int) {
-                loadData()
+                //loadData()
             }
         }, myActivity, "favorites")
         adapter.setCoroutineScope(fragmentScope)
@@ -443,7 +432,6 @@ class FavouriteFragment : Fragment() {
             putString("wall", "home")
             findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
-        myViewModel.clear()
     }
 
     override fun onDestroyView() {
@@ -453,51 +441,53 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun loadDataFromRoomDB() {
-        roomViewModel.myFavouriteList.observe(viewLifecycleOwner) {
-            Log.d("tracingFavouriteList", "loadDataFromRoomDB: $it")
-            if (it.isNotEmpty()) {
+        val deviceId = MySharePreference.getDeviceID(requireContext())
+        // Trigger data load in the ViewModel
+        favouriteViewModel.loadFavourites(deviceId!!)
 
-                cachedIGList?.addAll(it)
-                val randomNumber = if (it.size > 1) {
-                    Random.nextInt(0, it.size - 1)
-                } else {
-                    0 // Handle the case where it.size is 0 or 1
-                }
-//                getBitmapFromGlide(it[randomNumber].image!!)
-                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
-                    binding.selfCreationRecyclerView.visibility = View.VISIBLE
-                }
-
-                binding.emptySupportAI.visibility = View.GONE
-                val adapter = MyCreationFavAdapter(it.reversed(), object : GetFavouriteImagePath {
-                    override fun getPath(path: String) {
-                        roomViewModel.deleteItem(path)
+        // Observe the data from the ViewModel
+        lifecycleScope.launch(Dispatchers.IO) {
+            favouriteViewModel.favourites.collect { response ->
+                when (response) {
+                    is Response.Processing<*> -> {
+                        // Show loading state (e.g., a progress bar)
                     }
 
-                    override fun getImageClick(position: Int, prompt: String?, imageId: Int) {
-                        val gson = Gson()
-                        val arrayListJson = gson.toJson(it.reversed())
-                        val bundle = Bundle().apply {
-                            putString("arrayListJson", arrayListJson)
-                            putInt("position", position)
+                    is Response.Success<*> -> {
+                        val data = response.data
+                        Log.d(TAG, "loadDataFromRoomDB:Data = $data")
+                        // Update the UI with the retrieved data
+
+                        val wallpapers =
+                            mutableListOf<SingleDatabaseResponse>() // List to hold wallpaper results
+
+                        // Fetch wallpaper details from Room for each ID
+                        for (id in data) {
+                            val wallpaper = appDatabase.wallpapersDao()
+                                .getFavouritesByDeviceId(id) // Assuming this method exists
+                            Log.d(TAG, "loadDataFromRoomDB:Wallpaper: $wallpaper ")
+                            wallpaper.let { wallpapers.add(it) } // Add the fetched wallpaper to the list
                         }
-                        findNavController().navigate(R.id.favouriteSliderViewFragment, bundle)
+                        val favourites =
+                            appDatabase.wallpapersDao().getFavouritesByDeviceId(data.toString())
+                        Log.d(TAG, "loadDataFromRoomDB:fav = ${favourites[0]} ")
+
                     }
-                })
-                binding.selfCreationRecyclerView.adapter = adapter
-            } else {
-                if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
-                    binding.emptySupportAI.visibility = View.VISIBLE
-                    binding.selfCreationRecyclerView.visibility = View.GONE
-//                    Toast.makeText(requireContext(),
-//                        getString(R.string.your_favorite_list_is_currently_empty_start_adding_items_by_tapping_the), Toast.LENGTH_SHORT).show()
+
+                    is Response.Error -> {
+                        Log.d(TAG, "Fav Frag Error: ${response.message}")
+                        // Update the UI with the retrieved data
+                    }
+
+                    Response.Loading -> {
+
+
+                    }
                 }
-
             }
-
         }
-    }
 
+    }
 
     override fun onResume() {
         super.onResume()
@@ -508,4 +498,5 @@ class FavouriteFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
+
 }

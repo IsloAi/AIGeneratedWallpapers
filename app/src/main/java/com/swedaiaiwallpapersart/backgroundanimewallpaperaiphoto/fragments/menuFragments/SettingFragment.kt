@@ -35,29 +35,34 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetS
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 
 class SettingFragment : Fragment() {
-   private var _binding: FragmentSettingBinding?=null
+    private var _binding: FragmentSettingBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentSettingBinding.inflate(inflater
-            ,container,false)
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSettingBinding.inflate(
+            inflater, container, false
+        )
         myCreated()
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         return binding.root
     }
+
     @SuppressLint("SuspiciousIndentation")
     private fun myCreated() {
-          binding.premiumCardButton.setOnClickListener {
-              requireParentFragment().findNavController().navigate(R.id.action_mainFragment_to_premiumPlanFragment)
-          }
+        binding.premiumCardButton.setOnClickListener {
+            requireParentFragment().findNavController()
+                .navigate(R.id.action_mainFragment_to_premiumPlanFragment)
+        }
 
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
 
-        val isServiceRunning = isServiceRunning(requireContext(), ChargingAnimationService::class.java)
+        val isServiceRunning =
+            isServiceRunning(requireContext(), ChargingAnimationService::class.java)
 
         binding.mySwitch.isChecked = isServiceRunning
 
@@ -70,31 +75,40 @@ class SettingFragment : Fragment() {
             .asGif()
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
-        binding.rateUsButton.setOnClickListener {feedback()}
-        binding.customerSupportButton.setOnClickListener {findNavController().navigate(R.id.feedbackFragment)}
+        binding.rateUsButton.setOnClickListener { feedback() }
+        binding.customerSupportButton.setOnClickListener { findNavController().navigate(R.id.feedbackFragment) }
         binding.shareAppButton.setOnClickListener {
-           shareApp(requireContext())
+            shareApp(requireContext())
         }
 
         binding.mySwitch.setOnCheckedChangeListener { compoundButton, b ->
-            if (b){
-                if (MySharePreference.getAnimationPath(requireContext()) != ""){
-                    val intent = Intent(requireContext(),ChargingAnimationService::class.java)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            if (b) {
+                if (MySharePreference.getAnimationPath(requireContext()) != "") {
+                    val intent = Intent(requireContext(), ChargingAnimationService::class.java)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         requireContext().startForegroundService(intent)
-                    }else{
+                    } else {
                         requireContext().startService(intent)
                     }
-                    Toast.makeText(requireContext(),"Animation Activated",Toast.LENGTH_SHORT).show()
-                }else{
+                    Toast.makeText(requireContext(), "Animation Activated", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
                     binding.mySwitch.isChecked = false
-                    Toast.makeText(requireContext(),"Please Set Animation first",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Please Set Animation first",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            }else{
-                if (isServiceRunning(requireContext(), ChargingAnimationService::class.java)){
-                    val intent = Intent(requireContext(),ChargingAnimationService::class.java)
+            } else {
+                if (isServiceRunning(requireContext(), ChargingAnimationService::class.java)) {
+                    val intent = Intent(requireContext(), ChargingAnimationService::class.java)
                     requireContext().stopService(intent)
-                    Toast.makeText(requireContext(),"Animation Deactivated Successfully",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Animation Deactivated Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
@@ -103,7 +117,7 @@ class SettingFragment : Fragment() {
 
         binding.privacyPolicyButton.setOnClickListener { openLink("https://bluell.net/privacy/") }
         binding.moreAppButton.setOnClickListener {
-            if (isAdded){
+            if (isAdded) {
                 val bundle = Bundle()
                 bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "More apps click")
                 bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, "More apps click")
@@ -114,7 +128,7 @@ class SettingFragment : Fragment() {
         }
         binding.logOutButton.setOnClickListener {
             findNavController().navigate(R.id.localizationFragment)
-            }
+        }
 
         binding.toolbar.setOnClickListener {
 
@@ -125,7 +139,7 @@ class SettingFragment : Fragment() {
         binding.favorites.setOnClickListener {
             findNavController().navigate(R.id.favouriteFragment)
         }
-        }
+    }
 
 
     fun isServiceRunning(context: Context, serviceClass: Class<ChargingAnimationService>): Boolean {
@@ -147,14 +161,21 @@ class SettingFragment : Fragment() {
             context.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             // If the Play Store app is not available, open the Play Store website
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=$developerId"))
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/developer?id=$developerId")
+            )
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
     }
+
     private fun feedback() {
         try {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=${requireActivity().packageName}"))
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("market://details?id=${requireActivity().packageName}")
+            )
             startActivity(intent)
         } catch (e: Exception) {
             val i = Intent(Intent.ACTION_VIEW)
@@ -180,7 +201,8 @@ class SettingFragment : Fragment() {
         chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(chooser)
     }
-    private fun openLink(url:String) {
+
+    private fun openLink(url: String) {
         try {
             if (InternetState.checkForInternet(requireContext())) {
                 val myWebLink = Intent(Intent.ACTION_VIEW)
@@ -193,13 +215,17 @@ class SettingFragment : Fragment() {
                 ).show()
             }
 
-        }catch (e: ActivityNotFoundException) {
+        } catch (e: ActivityNotFoundException) {
             val developerId = "6602716762126600526"
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/developer?id=$developerId"))
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/developer?id=$developerId")
+            )
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
     }
+
     private fun generateSharingLink(
         deepLink: Uri,
         previewImageLink: Uri,
@@ -210,7 +236,8 @@ class SettingFragment : Fragment() {
             domainUriPrefix = Constants.PREFIX
 
             setSocialMetaTagParameters(
-                DynamicLink.SocialMetaTagParameters.Builder().setImageUrl(previewImageLink).build())
+                DynamicLink.SocialMetaTagParameters.Builder().setImageUrl(previewImageLink).build()
+            )
             androidParameters {
                 build()
             }
@@ -234,12 +261,15 @@ class SettingFragment : Fragment() {
     private fun Fragment.shareDeepLink(deepLink: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
-        intent.putExtra(Intent.EXTRA_SUBJECT, "You have been shared an amazing meme, check it out ->")
+        intent.putExtra(
+            Intent.EXTRA_SUBJECT,
+            "You have been shared an amazing meme, check it out ->"
+        )
         intent.putExtra(Intent.EXTRA_TEXT, deepLink)
-         requireContext().startActivity(intent)
+        requireContext().startActivity(intent)
     }
 
-    fun createDynamicLink(){
+    fun createDynamicLink() {
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
             link = Uri.parse("http://example.com/")
             domainUriPrefix = "https://swedai.page.link/installapp"
@@ -261,7 +291,10 @@ class SettingFragment : Fragment() {
             val shortLink = shortLinkResult.shortLink
             val flowChartLink = shortLinkResult.previewLink
 
-            Log.d("createDynamicLink", "createDynamicLink: shortLink-$shortLink --- flowChartLink-$flowChartLink")
+            Log.d(
+                "createDynamicLink",
+                "createDynamicLink: shortLink-$shortLink --- flowChartLink-$flowChartLink"
+            )
 
             val welcomeMessage = "Welcome: $shortLink. Hi, this is a good app.\n"
             val intent = Intent(Intent.ACTION_SEND)
@@ -295,6 +328,7 @@ class SettingFragment : Fragment() {
 //            // ...
 //        }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -303,7 +337,7 @@ class SettingFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (isAdded){
+        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Settings Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)

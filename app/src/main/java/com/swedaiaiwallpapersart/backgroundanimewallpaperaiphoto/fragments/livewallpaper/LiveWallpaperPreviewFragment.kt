@@ -7,8 +7,6 @@ import android.app.WallpaperManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import android.media.MediaPlayer
-import android.media.MediaPlayer.OnCompletionListener
 import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
@@ -84,7 +82,6 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.UnknownHostException
 import javax.inject.Inject
-import kotlin.math.log
 
 @AndroidEntryPoint
 class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
@@ -129,9 +126,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         myActivity = activity as MainActivity
 
         if (!AdConfig.ISPAIDUSER) {
-
             loadRewardAd()
-
             interAd.attachLifecycle(this.lifecycle)
             interAd.loadAd("viewlivewallscr_click_set", object : IKLoadAdListener {
                 override fun onAdLoaded() {
@@ -710,7 +705,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         dialog.show()
     }
 
-
     fun copyFiles(source: File, destination: File) {
         try {
             val inputStream = FileInputStream(source)
@@ -754,7 +748,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             }
         })
     }
-
 
     @UnstableApi
     override fun onResume() {
@@ -826,7 +819,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                 renderersFactory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF)
-            }else{
+            } else {
                 renderersFactory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
             }
             val loadControl = DefaultLoadControl.Builder()
@@ -843,8 +836,10 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd())
 
             val exoPlayer = ExoPlayer
-                .Builder(requireContext(),
-                    renderersFactory)
+                .Builder(
+                    requireContext(),
+                    renderersFactory
+                )
                 .setLoadControl(loadControl)
                 .setTrackSelector(trackSelector)
                 .setUseLazyPreparation(true)
@@ -896,7 +891,10 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         _binding = null
     }
 
-    override fun onAdDismiss() { checkAppOpen = true }
+    override fun onAdDismiss() {
+        checkAppOpen = true
+    }
+
     override fun onAdLoading() {}
     override fun onAdsShowTimeout() {}
     override fun onShowAdComplete() {}

@@ -107,4 +107,5 @@ class FetchDataRepositoryImpl @Inject constructor(
         }
         awaitClose()
     }
+
 }

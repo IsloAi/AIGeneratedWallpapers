@@ -14,17 +14,20 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameR
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 
-@Database(entities = [GetResponseIGEntity::class,FavouriteListIGEntity::class,SingleDatabaseResponse::class,LiveWallpaperModel::class], version = 11)
+@Database(
+    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class],
+    version = 11
+)
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
+
     abstract fun getResponseIGDao(): GetResponseIGDao
+
     abstract fun getFavouriteList(): FavouriteListIGDao
 
-    abstract fun wallpapersDao():WallpapersDao
+    abstract fun wallpapersDao(): WallpapersDao
 
-
-    abstract fun liveWallpaperDao():LiveWallpaperDao
-
+    abstract fun liveWallpaperDao(): LiveWallpaperDao
 
     companion object {
         @Volatile
@@ -103,6 +106,7 @@ abstract class AppDatabase : RoomDatabase() {
                 }
             }
         }
+
         private fun buildDatabase(context: Context): AppDatabase {
             return Room.databaseBuilder(
                 context.applicationContext,

@@ -720,7 +720,7 @@ class HomeTabsFragment : Fragment() {
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab? ){
+            override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.text) {
                     "Live" -> {
                         if (isAdded) {
@@ -1041,8 +1041,8 @@ class HomeTabsFragment : Fragment() {
         /*if (!isDrawOverlaysPermissionGranted(requireContext())) {
             findNavController().navigate(R.id.chargingAnimationPermissionFragment)
         } else {*/
-            startService()
-            showRewardWallpaperScreen()
+        startService()
+        showRewardWallpaperScreen()
         //}
     }
 

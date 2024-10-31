@@ -57,7 +57,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val interAd = IKInterstitialAd()
-//    var checkAppOpen = false
+    //var checkAppOpen = false
 
     val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(

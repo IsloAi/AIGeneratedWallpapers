@@ -152,7 +152,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         readJsonAndSaveDataToDb()
 
-        initObservers()
         getSetTotallikes()
 
         if (deviceID != null) {
@@ -240,7 +239,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         mainActivityViewModel.updates.observe(this@MainActivity) { result ->
                             when (result) {
                                 is Response.Success -> {
-                                    Log.d(TAG, "updatedWalls: " + result.data)
+                                    //Log.d(TAG, "updatedWalls: " + result.data)
 
                                     result.data?.forEach { item ->
                                         val model = SingleDatabaseResponse(
@@ -287,12 +286,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         mainActivityViewModel.deletedIds.observe(this@MainActivity) { result ->
                             when (result) {
                                 is Response.Success -> {
-                                    Log.d(TAG, "updatedWalls: " + result.data)
+                                    //Log.d(TAG, "updatedWalls: " + result.data)
 
                                     result.data?.forEach { item ->
 
-                                        Log.d(TAG, "readJsonAndSaveDataToDb: $item")
-
+                                        //Log.d(TAG, "readJsonAndSaveDataToDb: $item")
 
                                         CoroutineScope(Dispatchers.IO).async {
                                             appDatabase.wallpapersDao()
@@ -452,8 +450,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach { wallpaper ->
-
-                            Log.d(TAG, "saveLiveWallpapersInDB: $wallpaper")
+                            //Log.d(TAG, "saveLiveWallpapersInDB: $wallpaper")
                             val model = wallpaper.copy(unlocked = true)
                             appDatabase.liveWallpaperDao().insert(model)
 
@@ -542,7 +539,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach { item ->
                             appDatabase.wallpapersDao().updateLikes(item.likes, item.id.toInt())
-
                         }
                     }
 
@@ -564,19 +560,15 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         }
 
-        myViewModel.allLiked.observe(this@MainActivity) { result ->
+        /*myViewModel.allLiked.observe(this@MainActivity) { result ->
             when (result) {
                 is Response.Success -> {
-
-
                     result.data?.forEach { item ->
-                        Log.d(TAG, "getSetTotalLikes: $item")
-                        //appDatabase.wallpapersDao().updateLiked(true, item.imageid.toInt())
+                        Log.w(TAG, "getSetTotalLikes: ${item.imageid}")
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            appDatabase.wallpapersDao().updateLiked(true, item.imageid.toInt())
+                        }
                     }
-
-                    /*lifecycleScope.launch(Dispatchers.IO) {
-                    }*/
-
                 }
 
                 is Response.Loading -> {
@@ -593,7 +585,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
             }
 
-        }
+        }*/
     }
 
     private fun isNetworkAvailable(): Boolean {
