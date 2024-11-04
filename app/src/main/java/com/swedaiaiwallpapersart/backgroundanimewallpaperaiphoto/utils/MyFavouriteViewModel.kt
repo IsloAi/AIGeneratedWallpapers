@@ -26,9 +26,10 @@ class MyFavouriteViewModel @Inject constructor(
             getFavouritesUseCase(deviceId).collect { response ->
                 when (response) {
                     is Response.Success -> {
-                        val ids = response.data?.map { it.imageid } ?: emptyList()
+                        // Convert to ArrayList before setting the value
+                        val ids = response.data?.map { it.imageid }?.let { ArrayList(it) } ?: ArrayList()
                         Log.d("FAVORITES", "loadFavourites: $ids")
-                        _favourites.value = Response.Success(ArrayList(ids))
+                        _favourites.value = Response.Success(ids)
                     }
 
                     is Response.Loading -> {
@@ -40,7 +41,7 @@ class MyFavouriteViewModel @Inject constructor(
                     }
 
                     is Response.Processing -> {
-
+                        // Handle processing state if needed
                     }
                 }
             }

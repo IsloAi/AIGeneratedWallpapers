@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -11,7 +12,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -62,6 +62,7 @@ class FavouriteFragment : Fragment() {
     private var _binding: FragmentFavouriteBinding? = null
     private val binding get() = _binding!!
     private val favouriteViewModel: MyFavouriteViewModel by activityViewModels()
+    private lateinit var wallpapers: MutableList<CatResponse>
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private lateinit var myActivity: MainActivity
     private lateinit var roomViewModel: RoomViewModel
@@ -119,21 +120,17 @@ class FavouriteFragment : Fragment() {
 
     private fun viewVisible() {
         binding.errorMessage.visibility = INVISIBLE
-        binding.aiRecyclerView.visibility = VISIBLE
         binding.selfCreationRecyclerView.visibility = VISIBLE
         binding.switchLayout.visibility = VISIBLE
         binding.progressBar.visibility = VISIBLE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
-        binding.aiRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
-        binding.aiRecyclerView.addItemDecoration(RvItemDecore(2, 20, false, 10000))
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2, 20, false, 10000))
         binding.liveRecyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveRecyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
-        if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
-            binding.selfCreationRecyclerView.visibility = INVISIBLE
-            binding.aiRecyclerView.visibility = VISIBLE
+ /*       if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
+            binding.selfCreationRecyclerView.visibility = VISIBLE
             selector(binding.aiWallpaper, binding.StaticWallpaper, binding.live)
             binding.emptySupportAI.visibility = View.GONE
             binding.liveRecyclerview.visibility = View.GONE
@@ -145,7 +142,6 @@ class FavouriteFragment : Fragment() {
 
         } else if (MySharePreference.getFavouriteSaveState(requireContext()) == 2) {
             binding.selfCreationRecyclerView.visibility = VISIBLE
-            binding.aiRecyclerView.visibility = INVISIBLE
             selector(binding.StaticWallpaper, binding.aiWallpaper, binding.live)
             binding.progressBar.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
@@ -153,7 +149,6 @@ class FavouriteFragment : Fragment() {
         } else if (MySharePreference.getFavouriteSaveState(requireContext()) == 3) {
             initObservers()
             binding.selfCreationRecyclerView.visibility = INVISIBLE
-            binding.aiRecyclerView.visibility = INVISIBLE
             binding.liveRecyclerview.visibility = VISIBLE
             selector(binding.live, binding.StaticWallpaper, binding.aiWallpaper)
             binding.progressBar.visibility = INVISIBLE
@@ -164,8 +159,7 @@ class FavouriteFragment : Fragment() {
         binding.aiWallpaper.setOnClickListener {
             //loadData()
             selector(binding.aiWallpaper, binding.StaticWallpaper, binding.live)
-            binding.selfCreationRecyclerView.visibility = INVISIBLE
-            binding.aiRecyclerView.visibility = VISIBLE
+            binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.emptySupportAI.visibility = View.GONE
             binding.liveRecyclerview.visibility = INVISIBLE
             if (cachedCatResponses?.isEmpty() == true) {
@@ -175,18 +169,16 @@ class FavouriteFragment : Fragment() {
             if (!isLoadedData) {
                 binding.progressBar.visibility = VISIBLE
             }
+        }*/
 
-
-        }
         binding.StaticWallpaper.setOnClickListener {
             loadDataFromRoomDB()
             selector(binding.StaticWallpaper, binding.aiWallpaper, binding.live)
             binding.selfCreationRecyclerView.visibility = VISIBLE
-            binding.aiRecyclerView.visibility = INVISIBLE
-            binding.liveRecyclerview.visibility = INVISIBLE
+            binding.liveRecyclerview.visibility = GONE
             binding.emptySupport.visibility = View.GONE
             if (cachedIGList?.isEmpty() == true) {
-                binding.emptySupportAI.visibility = VISIBLE
+                binding.emptySupportAI.visibility = GONE
             }
             MySharePreference.setFavouriteSaveState(requireContext(), 2)
             binding.progressBar.visibility = INVISIBLE
@@ -197,7 +189,6 @@ class FavouriteFragment : Fragment() {
             MySharePreference.setFavouriteSaveState(requireContext(), 3)
             initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
-            binding.aiRecyclerView.visibility = INVISIBLE
             binding.selfCreationRecyclerView.visibility = INVISIBLE
             binding.emptySupport.visibility = View.GONE
             binding.emptySupportAI.visibility = View.GONE
@@ -217,10 +208,6 @@ class FavouriteFragment : Fragment() {
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            loadData()
-        }
-
     }
 
     private fun selector(selector: TextView, unSelector: TextView, unselector1: TextView) {
@@ -234,32 +221,6 @@ class FavouriteFragment : Fragment() {
     }
 
     private fun loadData() {
-
-        /*myViewModel = ViewModelProvider(this)[MyFavouriteViewModel::class.java]
-        // Observe the LiveData in the ViewModel and update the UI accordingly
-        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
-                    binding.emptySupport.visibility = View.GONE
-                    binding.aiRecyclerView.visibility = VISIBLE
-                }
-                isLoadedData = true
-                cachedCatResponses = catResponses as ArrayList
-                if (view != null) {
-                    updateUIWithFetchedData(catResponses)
-                }
-            } else {
-                if (MySharePreference.getFavouriteSaveState(requireContext()) == 1) {
-                    isLoadedData = true
-                    binding.emptySupport.visibility = VISIBLE
-                    binding.aiRecyclerView.visibility = View.GONE
-                }
-
-            }
-        }
-        myViewModel.fetchWallpapers(
-            requireContext(), MySharePreference.getDeviceID(requireContext())!!, binding.progressBar
-        )*/
 
     }
 
@@ -315,6 +276,7 @@ class FavouriteFragment : Fragment() {
                 }
             }
         }
+
     }
 
     private fun updateUIWithFetchedDataLive(catResponses: ArrayList<LiveWallpaperModel?>) {
@@ -354,7 +316,7 @@ class FavouriteFragment : Fragment() {
 
     private fun updateUIWithFetchedData(catResponses: List<CatResponse?>) {
         val list = addNullValueInsideArray(catResponses)
-        val adapter = ApiCategoriesListAdapter(list as ArrayList, object : PositionCallback {
+        val adapter = ApiCategoriesListAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
 
                 interAd.showAd(requireActivity(),
@@ -375,12 +337,14 @@ class FavouriteFragment : Fragment() {
             }
 
             override fun getFavorites(position: Int) {
-                //loadData()
+
             }
         }, myActivity, "favorites")
         adapter.setCoroutineScope(fragmentScope)
-        binding.aiRecyclerView.adapter = adapter
 
+        binding.selfCreationRecyclerView.adapter = adapter
+        binding.progressBar.visibility = GONE
+        binding.noFavImg.visibility = GONE
     }
 
     private fun addNullValueInsideArrayLive(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
@@ -444,7 +408,7 @@ class FavouriteFragment : Fragment() {
         val deviceId = MySharePreference.getDeviceID(requireContext())
         // Trigger data load in the ViewModel
         favouriteViewModel.loadFavourites(deviceId!!)
-
+        wallpapers = mutableListOf() // Initialize as an empty mutable list
         // Observe the data from the ViewModel
         lifecycleScope.launch(Dispatchers.IO) {
             favouriteViewModel.favourites.collect { response ->
@@ -454,21 +418,23 @@ class FavouriteFragment : Fragment() {
                     }
 
                     is Response.Success<*> -> {
-                        val data = response.data
+                        val data = response.data as? ArrayList<String> ?: ArrayList()
                         Log.d(TAG, "loadDataFromRoomDB:Data = $data")
-                        // Update the UI with the retrieved data
 
-                        val wallpapers =
-                            mutableListOf<SingleDatabaseResponse>() // List to hold wallpaper results
 
-                        // Fetch wallpaper details from Room for each ID
-                        for (id in data) {
-                            val wallpaper = appDatabase.wallpapersDao()
-                                .getFavouritesByDeviceId(id) // Assuming this method exists
-                            Log.d(TAG, "loadDataFromRoomDB:Wallpaper: $wallpaper ")
-                            wallpaper.let { wallpapers.add(it) } // Add the fetched wallpaper to the list
+
+                        data.forEach { id ->
+                            val wallpaper =
+                                appDatabase.wallpapersDao().getFavouritesByWallpaperId(id)
+                            if (wallpaper != null) {
+                                wallpapers.add(wallpaper) // Now you can add to wallpapers
+                                Log.d(TAG, "LD: Wallpaper in Room = $wallpaper")
+                            } else {
+                                Log.d(TAG, "LD: No wallpaper found for ID $id")
+                            }
                         }
-                        Log.d(TAG, "loadDataFromRoomDB:fav = ${wallpapers} ")
+
+                        Log.d(TAG, "LD: All wallpapers = $wallpapers")
 
                     }
 
@@ -481,11 +447,12 @@ class FavouriteFragment : Fragment() {
 
 
                     }
-                }
-            }
-        }
 
-    }
+                }//End of when
+            }//End of viewmodel scope
+        }//End of LifeScope
+        wallpapers.let { updateUIWithFetchedData(wallpapers) }
+    }//End of function
 
     override fun onResume() {
         super.onResume()

@@ -6,9 +6,8 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.LikedResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.GetResponseIGEntity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 
 @Dao
 interface WallpapersDao {
@@ -34,8 +33,8 @@ interface WallpapersDao {
     @Query("UPDATE allWallpapers SET liked=:liked WHERE id=:Id")
     fun updateLiked(liked: Boolean, Id: Int)
 
-    @Query("SELECT * FROM allWallpapers WHERE id = :deviceId")
-    suspend fun getFavouritesByDeviceId(deviceId: String): List<SingleDatabaseResponse>
+    @Query("SELECT * FROM allWallpapers WHERE id = :wallpaperId")
+    suspend fun getFavouritesByWallpaperId(wallpaperId: String): CatResponse
 
     @Update
     suspend fun update(singleDatabaseResponse: SingleDatabaseResponse)
