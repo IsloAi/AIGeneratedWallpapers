@@ -171,7 +171,9 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
             </androidx.cardview.widget.CardView>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
@@ -206,7 +208,6 @@
                 android:layout_marginStart="0dp" />
 
         </RelativeLayout>
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/empty_support"

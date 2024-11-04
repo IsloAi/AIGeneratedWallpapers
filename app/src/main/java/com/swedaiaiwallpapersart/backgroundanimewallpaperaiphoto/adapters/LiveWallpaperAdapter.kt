@@ -89,19 +89,27 @@ class LiveWallpaperAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
-        val layoutManager = recyclerView.layoutManager as GridLayoutManager
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
-                    layoutManager.spanCount
-                } else {
-                    1
+        /*val layoutManager = recyclerView.layoutManager as GridLayoutManager
+        if (layoutManager != null){
+            layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                override fun getSpanSize(position: Int): Int {
+                    return if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
+                        layoutManager.spanCount
+                    } else {
+                        1
+                    }
                 }
             }
-        }
+        }else{
+            Log.e("LiveWallpaper", "RecyclerView is not using GridLayoutManager.")
+        }*/
+
     }
 
-    override fun getItemCount() = arrayList.size
+    override fun getItemCount() :Int {
+        Log.d("LiveWallpaper", "getItemCount: ${arrayList.size} ")
+        return arrayList.size
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

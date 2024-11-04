@@ -52,7 +52,6 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-
     val catListViewmodel: MyViewModel by activityViewModels()
 
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
@@ -63,14 +62,11 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     val interAd = IKInterstitialAd()
 
-//    var checkAppOpen = false
-
     val TAG = "CATEGORIES"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCategoryBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -309,50 +305,54 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     val categoriesJson = """
 [
-    {
-        "cat_name": "Heteroclite",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f28a9b7cd7f_Others.jpg"
-    },
-    {
-        "cat_name": "Love",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f171774585e_Love-8.jpg"
-    },
-    {
-        "cat_name": "Space",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f170f90444d_Space-2.jpg"
-    },
-    {
-        "cat_name": "Naruto",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f1701bbc604_Naruto.jpg"
-    },
-    {
-        "cat_name": "Nature",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f16eacc3109_Nature.jpg"
-    },
-    {
-        "cat_name": "Tech",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f15d4ce4285_Tech.jpg"
-    },
-    {
-        "cat_name": "Robotic",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f159494fce7_Robot.jpg"
-    },
-    {
-        "cat_name": "Roro'Noa Zoro",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f1546f1cbd1_Roronoa-Zoro.jpg"
-    },
-    {
-        "cat_name": "Anime",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f1530aa7599_256.jpg"
-    },
-    {
-        "cat_name": "Dragon Ball Z",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f151c571610_Dragon-Ball-Z.jpg"
-    },
-    {
-        "cat_name": "Cars",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f14b5595fdc_Car-1.jpg"
-    }
+  {
+    "cat_name": "Faces",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721ed0151a46_smilies.jpg"
+  },
+  {
+    "cat_name": "Heteroclite",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0d10d47d_hetroclite 2.jpg"
+  },
+  {
+    "cat_name": "Love",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721cfdcd8c61_Love.jpg"
+  },
+  {
+    "cat_name": "Space",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0ea7123b_space.jpg"
+  },
+  {
+    "cat_name": "Naruto",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0a18890a_naruto.jpg"
+  },
+  {
+    "cat_name": "Nature",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d07753306_nature.jpg"
+  },
+  {
+    "cat_name": "Tech",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721c8c43449f_tech 2.jpg"
+  },
+  {
+    "cat_name": "Robotic",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/67206957122f7_robotic 2.jpg"
+  },
+  {
+    "cat_name": "Roro'Noa Zoro",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/67207f040a575_rorozoro.jpg"
+  },
+  {
+    "cat_name": "Anime",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/672068ac40ed3_anime.jpg"
+  },
+  {
+    "cat_name": "Dragon Ball Z",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6720683db6e79_dragon ball.jpg"
+  },
+  {
+    "cat_name": "Cars",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/672067d7adc91_cars.jpg"
+  }
 ]
 """
 
@@ -373,35 +373,35 @@ class CategoryFragment : Fragment(), AdEventListener {
     }
 
 
-/*    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-            val firstLine = firstAdLineThreshold * 3
+    /*    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+            return withContext(Dispatchers.IO){
+                val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+                val firstLine = firstAdLineThreshold * 3
 
-            val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-            val lineC = lineCount * 3
-            val newData = arrayListOf<CatNameResponse?>()
+                val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+                val lineC = lineCount * 3
+                val newData = arrayListOf<CatNameResponse?>()
 
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null "+i )
+                for (i in data.indices){
+                    if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
+                        newData.add(null)
+                        Log.e("******NULL", "addNullValueInsideArray: null "+i )
 
-                }else if (i == firstLine){
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    }else if (i == firstLine){
+                        newData.add(null)
+                        Log.e("******NULL", "addNullValueInsideArray: null first "+i )
+                    }
+                    Log.e("******NULL", "addNullValueInsideArray: not null "+i )
+                    Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
+                    newData.add(data[i])
+
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-                Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
-                newData.add(data[i])
-
+                Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
+                 newData
             }
-            Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-             newData
-        }
 
 
-    }*/
+        }*/
 
 
     private fun setFragment(name: String) {
