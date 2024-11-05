@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 
@@ -15,6 +16,9 @@ class SharedViewModel : ViewModel() {
 
     private val _liveWallpaperResponseList = MutableLiveData<List<LiveWallpaperModel>>()
     val liveWallpaperResponseList: LiveData<List<LiveWallpaperModel>> = _liveWallpaperResponseList
+
+    private val _favLiveWallpaperResponseList = MutableLiveData<List<FavouriteLiveModel>>()
+    val favLiveWallpaperResponseList: LiveData<List<FavouriteLiveModel>> = _favLiveWallpaperResponseList
 
     private val _currentPosition = MutableLiveData<Int>()
     val currentPosition: LiveData<Int> = _currentPosition
@@ -69,6 +73,9 @@ class SharedViewModel : ViewModel() {
 
     fun setLiveWallpaper(catResponses: List<LiveWallpaperModel>){
         _liveWallpaperResponseList.value = catResponses
+    }
+    fun setFavLiveWallpaper(catResponses: List<FavouriteLiveModel>){
+        _favLiveWallpaperResponseList.value = catResponses
     }
 
     fun clearData() {

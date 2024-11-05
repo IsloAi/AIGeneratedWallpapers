@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -10,13 +11,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.LiveWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.WallpapersDao
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
-
 @Database(
-    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class],
-    version = 11
+    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class,FavouriteLiveModel::class],
+    version = 12
 )
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -86,6 +86,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private val MIGRATION_5_6 = object : Migration(5, 6) {
+            @SuppressLint("Range")
             override fun migrate(database: SupportSQLiteDatabase) {
                 val cursor = database.query("PRAGMA table_info(get_response_ig)")
                 var columnExists = false

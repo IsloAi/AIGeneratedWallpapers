@@ -284,6 +284,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         if (isAdded) {
             Bundle().apply {
                 putBoolean("adShowed", adShowd)
+                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
                 findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
             }
 

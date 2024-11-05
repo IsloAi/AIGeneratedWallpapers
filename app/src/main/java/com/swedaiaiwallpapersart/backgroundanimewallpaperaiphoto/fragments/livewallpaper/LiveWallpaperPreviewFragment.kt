@@ -55,10 +55,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavoruiteLiveWallpaperBody
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.LikeLiveWallpaper
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -72,10 +70,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -723,7 +717,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         context: Context,
         favouriteButton: ImageView
     ) {
-        val retrofit = RetrofitInstance.getInstance()
+        /*val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(LikeLiveWallpaper::class.java)
         val postData = FavoruiteLiveWallpaperBody(
             MySharePreference.getDeviceID(context)!!,
@@ -746,7 +740,23 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 Toast.makeText(context, "onFailure error", Toast.LENGTH_SHORT).show()
                 favouriteButton.isEnabled = true
             }
-        })
+        })*/
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            appDatabase.liveWallpaperDao().insertLiveFavourite(
+                FavouriteLiveModel(
+                    livewallpaper?.id.toString(),
+                    livewallpaper?.livewallpaper_url!!,
+                    livewallpaper?.thumnail_url!!,
+                    livewallpaper?.videoSize!!,
+                    livewallpaper?.liked!!,
+                    livewallpaper?.downloads!!,
+                    livewallpaper?.catname,
+                    livewallpaper?.likes!!,
+                    livewallpaper?.unlocked!!
+                )
+            )
+        }
     }
 
     @UnstableApi

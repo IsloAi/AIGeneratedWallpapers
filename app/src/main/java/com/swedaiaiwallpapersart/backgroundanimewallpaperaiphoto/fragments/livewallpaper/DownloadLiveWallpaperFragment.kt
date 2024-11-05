@@ -239,7 +239,44 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     }
 
     private fun initObservers() {
-        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        if (shouldObserveLiveWallpapers) {
+            sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+                if (wallpaper.isNotEmpty()) {
+
+                    Log.e("TAG", "initObservers: $wallpaper")
+
+                    if (BlurView.filePath == "") {
+                        Log.e(TAG, "initObservers123: " + wallpaper[0])
+                        Log.e(TAG, "initObservers123: " + AdConfig.BASE_URL_DATA)
+                        downloadVideo(
+                            AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].livewallpaper_url,
+                            wallpaper[0].videoSize
+                        )
+                    }
+                    getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
+                }
+            }
+        }
+
+        if (shouldObserveFavorites) {
+            sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+                if (wallpaper.isNotEmpty()) {
+
+                    Log.e("TAG", "initObservers: $wallpaper")
+
+                    if (BlurView.filePath == "") {
+                        Log.e(TAG, "initObservers123: " + wallpaper[0])
+                        Log.e(TAG, "initObservers123: " + AdConfig.BASE_URL_DATA)
+                        downloadVideo(
+                            AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].livewallpaper_url,
+                            wallpaper[0].videoSize
+                        )
+                    }
+                    getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
+                }
+            }
+        }
+        /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
                 Log.e("TAG", "initObservers: $wallpaper")
@@ -255,8 +292,23 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
             }
         }
-    }
+        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            if (wallpaper.isNotEmpty()) {
 
+                Log.e("TAG", "initObservers: $wallpaper")
+
+                if (BlurView.filePath == "") {
+                    Log.e(TAG, "initObservers123: " + wallpaper[0])
+                    Log.e(TAG, "initObservers123: " + AdConfig.BASE_URL_DATA)
+                    downloadVideo(
+                        AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].livewallpaper_url,
+                        wallpaper[0].videoSize
+                    )
+                }
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
+            }
+        }*/
+    }
 
     private fun getBitmapFromGlide(url: String) {
         Glide.with(requireContext()).asBitmap().load(url)
@@ -275,7 +327,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 }
             })
     }
-
 
     private fun downloadVideo(url: String, size: Float) {
         Log.e(TAG, "downloadVideo: $url")
@@ -408,5 +459,10 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onShowAdFail() {
 
+    }
+
+    companion object{
+        var shouldObserveFavorites = false
+        var shouldObserveLiveWallpapers = true
     }
 }

@@ -196,7 +196,12 @@
         android:id="@+id/downloadLiveWallpaperFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment"
         android:label="fragment_download_live_wallpaper"
-        tools:layout="@layout/fragment_download_live_wallpaper" />
+        tools:layout="@layout/fragment_download_live_wallpaper">
+        <argument
+            android:name="Fav"
+            app:argType="string" />
+
+    </fragment>
     <fragment
         android:id="@+id/liveWallpaperPreviewFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.LiveWallpaperPreviewFragment"
@@ -218,7 +223,11 @@
     <fragment
         android:id="@+id/favouriteFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.FavouriteFragment"
-        android:label="FavouriteFragment" />
+        android:label="FavouriteFragment">
+        <action
+            android:id="@+id/action_favouriteFragment_to_downloadLiveWallpaperFragment"
+            app:destination="@id/downloadLiveWallpaperFragment" />
+    </fragment>
     <fragment
         android:id="@+id/IAPFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.IAPFragment"

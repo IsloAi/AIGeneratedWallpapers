@@ -19,27 +19,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFavouriteBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.FavouriteAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.FavouriteLiveAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.FavouriteStaticAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FavouriteDownloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
@@ -54,8 +52,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -110,9 +108,6 @@ class FavouriteFragment : Fragment() {
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.liveRecyclerview.visibility = GONE
             binding.emptySupport.visibility = GONE
-            if (cachedIGList?.isEmpty() == true) {
-                binding.emptySupportAI.visibility = GONE
-            }
             MySharePreference.setFavouriteSaveState(requireContext(), 2)
             binding.progressBar.visibility = INVISIBLE
 
@@ -123,9 +118,7 @@ class FavouriteFragment : Fragment() {
             MySharePreference.setFavouriteSaveState(requireContext(), 3)
             initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
-            binding.selfCreationRecyclerView.visibility = INVISIBLE
-            binding.emptySupport.visibility = GONE
-            binding.emptySupportAI.visibility = GONE
+            binding.selfCreationRecyclerView.visibility = GONE
             binding.progressBar.visibility = INVISIBLE
         }
 
@@ -137,10 +130,10 @@ class FavouriteFragment : Fragment() {
 
         }
 
-        binding.addToFavAI.setOnClickListener {
+        /*binding.addToFavAI.setOnClickListener {
             sharedViewModel.selectTab(5)
             findNavController().popBackStack(R.id.homeTabsFragment, false)
-        }
+        }*/
 
         loadDataFromRoomDB()
     }
@@ -246,11 +239,22 @@ class FavouriteFragment : Fragment() {
     */
 
     fun initObservers() {
-        liveWallpaperViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
+        var favourites: List<FavouriteLiveModel>
+        lifecycleScope.launch(Dispatchers.IO) {
+            favourites = ArrayList()
+            favourites = appDatabase.liveWallpaperDao().getAllFavouriteWallpapers()
+            Log.d("LIVEADAPTER", "LIVE: favorites: $favourites")
+            withContext(Dispatchers.Main) {
+                updateUIWithFetchedDataLive(favourites)
+            }
+        }
+
+        /*liveWallpaperViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Success -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val filtered = result.data?.filter { it.liked }
+                        Log.d(TAG, "initObservers: filtered: $filtered")
 
                         val list = filtered?.let { addNullValueInsideArrayLive(it) }
                         Log.d("LiveWallpaper", "list: ${list?.size} ")
@@ -272,40 +276,65 @@ class FavouriteFragment : Fragment() {
                     Log.e("TAG", "loadData: processing")
                 }
             }
-        }
+        }*/
     }
 
-    private fun updateUIWithFetchedDataLive(catResponses: ArrayList<LiveWallpaperModel?>) {
-        val adapter = LiveWallpaperAdapter(catResponses, object : downloadCallback {
-            override fun getPosition(position: Int, model: LiveWallpaperModel) {
-                BlurView.filePath = ""
-                sharedViewModel.clearLiveWallpaper()
-                sharedViewModel.setLiveWallpaper(listOf(model))
-                findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-            }
-        }, myActivity)
+    private fun updateUIWithFetchedDataLive(list: List<FavouriteLiveModel>) {
+        if (list.isEmpty()) {
+            binding.emptySupport.visibility = VISIBLE
+            binding.noFavImg.visibility = VISIBLE
+        } else {
+            binding.emptySupport.visibility = GONE
+            binding.noFavImg.visibility = GONE
 
-        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll",
-            object : IKLoadDisplayAdViewListener {
-                override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                    // Update UI on the main thread using coroutines
-                    CoroutineScope(Dispatchers.Main).launch {
-                        if (isAdded && view != null) {
-                            adapter.nativeAdView = adObject
-                            binding.liveRecyclerview.adapter = adapter
-                        }
+            val adapter =
+                FavouriteLiveAdapter(list, myActivity, object : FavouriteDownloadCallback {
+                    override fun getPosition(position: Int, model: FavouriteLiveModel) {
+                        BlurView.filePath = ""
+                        sharedViewModel.clearLiveWallpaper()
+                        sharedViewModel.setFavLiveWallpaper(listOf(model))
+                        DownloadLiveWallpaperFragment.shouldObserveFavorites = true
+                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = false
+                        // Create the action using Safe Args
+                        findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+                    }
+                })
+            binding.liveRecyclerview.layoutManager = GridLayoutManager(requireContext(), 2)
+            binding.liveRecyclerview.adapter = adapter
+            binding.liveRecyclerview.addItemDecoration(RvItemDecore(2, 20, false, 10000))
+        }
+
+        //binding.liveRecyclerview.adapter = adapter
+        /*LiveWallpaperAdapter(catResponses, object : downloadCallback {
+        override fun getPosition(position: Int, model: LiveWallpaperModel) {
+            BlurView.filePath = ""
+            sharedViewModel.clearLiveWallpaper()
+            sharedViewModel.setLiveWallpaper(listOf(model))
+            findNavController().navigate(R.id.downloadLiveWallpaperFragment)
+        }
+    }, myActivity)
+
+    IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll",
+        object : IKLoadDisplayAdViewListener {
+            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                // Update UI on the main thread using coroutines
+                CoroutineScope(Dispatchers.Main).launch {
+                    if (isAdded && view != null) {
+                        adapter.nativeAdView = adObject
+                        binding.liveRecyclerview.adapter = adapter
                     }
                 }
+            }
 
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
+            override fun onAdLoadFail(error: IKAdError) {
+                // Handle ad load failure
+            }
+        })
 
-        // Update the RecyclerView adapter on the main thread
-        CoroutineScope(Dispatchers.Main).launch {
-            binding.liveRecyclerview.adapter = adapter
-        }
+    // Update the RecyclerView adapter on the main thread
+    CoroutineScope(Dispatchers.Main).launch {
+        binding.liveRecyclerview.adapter = adapter
+    }*/
     }
 
     private fun addNullValueInsideArrayLive(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
@@ -358,37 +387,39 @@ class FavouriteFragment : Fragment() {
     private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
         //val nonNullCatResponses = catResponses.filterNotNull()
         val adapter =
-            FavouriteAdapter(catResponses, myActivity, "favorites", object : PositionCallback {
-                override fun getPosition(position: Int) {
+            FavouriteStaticAdapter(
+                catResponses,
+                myActivity,
+                "favorites",
+                object : PositionCallback {
+                    override fun getPosition(position: Int) {
 
-                    interAd.showAd(requireActivity(),
-                        "mainscr_favorite_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded) {
-                                    navigateToDestination(ArrayList(catResponses), position)
+                        interAd.showAd(requireActivity(),
+                            "mainscr_favorite_tab_click_item",
+                            adListener = object : IKShowAdListener {
+                                override fun onAdsShowFail(error: IKAdError) {
+                                    if (isAdded) {
+                                        navigateToDestination(ArrayList(catResponses), position)
+                                    }
                                 }
-                            }
 
-                            override fun onAdsDismiss() {
-                                if (isAdded) {
-                                    navigateToDestination(ArrayList(catResponses), position)
+                                override fun onAdsDismiss() {
+                                    if (isAdded) {
+                                        navigateToDestination(ArrayList(catResponses), position)
+                                    }
                                 }
-                            }
-                        })
-                }
+                            })
+                    }
 
-                override fun getFavorites(position: Int) {
+                    override fun getFavorites(position: Int) {
 
-                }
-            })
+                    }
+                })
         //adapter.setCoroutineScope(fragmentScope)
 
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.selfCreationRecyclerView.adapter = adapter
         binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2, 20, false, 10000))
-        binding.progressBar.visibility = GONE
-        binding.noFavImg.visibility = GONE
     }
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
@@ -415,7 +446,6 @@ class FavouriteFragment : Fragment() {
 
     private fun loadDataFromRoomDB() {
         binding.emptySupport.visibility = GONE
-        binding.emptySupportAI.visibility = GONE
         val deviceId = MySharePreference.getDeviceID(requireContext())
         // Trigger data load in the ViewModel
         favouriteViewModel.loadFavourites(deviceId!!)
