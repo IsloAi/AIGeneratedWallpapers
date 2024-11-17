@@ -94,6 +94,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
+
     }
 
     override fun onStart() {

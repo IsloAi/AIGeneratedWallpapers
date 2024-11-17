@@ -26,7 +26,7 @@ android {
         create("release") {
             keyAlias = "swedai"
             keyPassword = "swedai"
-            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers\\SwedAi.jks")
+            storeFile = file("D:\\AIGeneratedWallpapers\\SwedAi.jks")
             storePassword = "swedai"
         }
     }

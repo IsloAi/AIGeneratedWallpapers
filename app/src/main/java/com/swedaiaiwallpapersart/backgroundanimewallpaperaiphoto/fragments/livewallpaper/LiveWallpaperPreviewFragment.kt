@@ -324,7 +324,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
 
         binding.downloadWallpaper.setOnClickListener {
-
+            //send tracking
             if (isAdded) {
                 sendTracking(
                     "click_button",
@@ -528,7 +528,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
     }
 
-
     private fun showSimpleDialog(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
         builder.setTitle(title)
@@ -645,8 +644,30 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         val getReward = dialog.findViewById<LinearLayout>(R.id.buttonGetReward)
         val dismiss = dialog.findViewById<TextView>(R.id.noThanks)
 
+        getReward.setOnClickListener {
+            rewardAd.showAd(
+                requireActivity(),
+                "viewlistwallscr_item_vip_reward",
+                object : IKShowRewardAdListener {
+                    override fun onAdsDismiss() {
+                        loadRewardAd()
+                    }
 
-        rewardAd.showAd(
+                    override fun onAdsRewarded() {
+                        copyFiles(source, destination)
+                        dialog.dismiss()
+                        loadRewardAd()
+                    }
+
+                    override fun onAdsShowFail(error: IKAdError) {
+                        Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
+                        loadRewardAd()
+                    }
+
+                })
+        }
+
+        /*rewardAd.showAd(
             requireActivity(),
             "viewlistwallscr_item_vip_reward",
             adListener = object : IKShowRewardAdListener {
@@ -656,7 +677,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
                 override fun onAdsShowFail(error: IKAdError) {
                     if (isAdded) {
-
+                        Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT).show()
                         interAd.showAd(
                             requireActivity(),
                             "mainscr_live_tab_click_item",
@@ -688,7 +709,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                                 }
                             }
                         )
-
+                        loadRewardAd()
                     }
                 }
 
@@ -696,7 +717,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     loadRewardAd()
                 }
             }
-        )
+        )*/
 
         dismiss?.setOnClickListener {
             dialog.dismiss()

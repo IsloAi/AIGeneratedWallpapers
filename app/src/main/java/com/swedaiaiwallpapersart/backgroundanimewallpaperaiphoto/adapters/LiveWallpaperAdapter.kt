@@ -38,7 +38,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class LiveWallpaperAdapter(
     private var arrayList: ArrayList<LiveWallpaperModel?>,
     private val positionCallback: downloadCallback,
@@ -89,7 +88,7 @@ class LiveWallpaperAdapter(
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         context = recyclerView.context
-        /*val layoutManager = recyclerView.layoutManager as GridLayoutManager
+        val layoutManager = recyclerView.layoutManager as GridLayoutManager
         if (layoutManager != null){
             layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                 override fun getSpanSize(position: Int): Int {
@@ -102,8 +101,7 @@ class LiveWallpaperAdapter(
             }
         }else{
             Log.e("LiveWallpaper", "RecyclerView is not using GridLayoutManager.")
-        }*/
-
+        }
     }
 
     override fun getItemCount() :Int {
