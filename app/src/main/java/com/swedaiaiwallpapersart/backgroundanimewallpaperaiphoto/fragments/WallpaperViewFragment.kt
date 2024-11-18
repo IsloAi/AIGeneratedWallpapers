@@ -96,7 +96,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.Retrof
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.ApiService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.SetMostDownloaded
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.GoogleLogin
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -282,7 +281,6 @@ class WallpaperViewFragment : Fragment() {
                     // Handle ad load failure
                 }
             })
-
             interAd.loadAd("viewlistwallscr_setdilog_set_button", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
@@ -446,12 +444,14 @@ class WallpaperViewFragment : Fragment() {
         }
         setViewPager()
         checkRedHeart(position)
-        if (from == "Vip") {
+        /*if (from == "Vip") {
             if (arrayList[position] != null) {
                 getLargImage =
                     AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[position]?.hd_image_url!!
+
                 getSmallImage =
                     AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[position] + "?class=custom"
+
                 if (isAdded) {
                     getBitmapFromGlide(getLargImage)
                 }
@@ -460,22 +460,23 @@ class WallpaperViewFragment : Fragment() {
             if (arrayList[position] != null) {
                 getLargImage =
                     AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[position]?.hd_image_url!!
+                Log.d("SET-WALL", "functionality: getLargeImage: $getLargImage ")
                 getSmallImage =
                     AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[position]?.compressed_image_url!!
+                Log.d("SET-WALL", "functionality: getSmallImage: $getSmallImage ")
                 if (isAdded) {
                     getBitmapFromGlide(getLargImage)
                 }
             }
-        }
+        }*/
 
         binding.buttonApplyWallpaper.setOnClickListener {
-
             if (bitmap != null) {
                 if (arrayList[position]?.unlockimges == true) {
                     val model = arrayList[position]
                     openPopupMenu(model!!)
                     Log.d(
-                        "WallpaperDebug",
+                        "SET-WALL",
                         "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
                     )
 
@@ -544,7 +545,6 @@ class WallpaperViewFragment : Fragment() {
             Constants.checkInter = false
             Constants.checkAppOpen = false
         }
-
         binding.shareAPp.setOnClickListener {
             if (isAdded) {
                 sendTracking(
@@ -569,7 +569,6 @@ class WallpaperViewFragment : Fragment() {
             chooser.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             requireContext().startActivity(chooser)
         }
-
         binding.wallpaperInfo.setOnClickListener {
             if (isAdded) {
                 sendTracking(
@@ -591,7 +590,6 @@ class WallpaperViewFragment : Fragment() {
             Constants.checkAppOpen = false
 
         }
-
         binding.unlockWallpaper.setOnClickListener {
 
             if (bitmap != null) {
@@ -729,6 +727,7 @@ class WallpaperViewFragment : Fragment() {
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun setViewPager() {
         adapter = WallpaperApiSliderAdapter(arrayList, object : FullViewImage {
+
             override fun getFullImageUrl(image: CatResponse) {
                 if (isAdded) {
                     sendTracking(
@@ -762,9 +761,8 @@ class WallpaperViewFragment : Fragment() {
             }
         })
         viewPager2?.adapter = adapter
-        Log.e(TAG, "setViewPager: " + position)
+        Log.d("SET-WALL", "setViewPager: $position")
         viewPager2?.setCurrentItem(position, false)
-
 
         if (arrayList[position]?.unlockimges == true) {
             binding.unlockWallpaper.visibility = View.GONE
@@ -778,8 +776,6 @@ class WallpaperViewFragment : Fragment() {
         viewPager2?.clipChildren = false
         viewPager2?.offscreenPageLimit = 3
 
-
-
         viewPager2?.getChildAt(0)!!.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         val transformer = CompositePageTransformer()
         transformer.addTransformer(MarginPageTransformer(50))
@@ -790,41 +786,57 @@ class WallpaperViewFragment : Fragment() {
         viewPager2?.setPageTransformer(transformer)
         val viewPagerChangeCallback = object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(positi: Int) {
+                Log.d("SET-WALL", "onPageSelected:POS $positi")
+
                 if (positi >= 0 && positi < arrayList.size) {
+                    /*getLargImage =
+                        AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[positi]?.hd_image_url!!
+                    getSmallImage =
+                        AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[positi]?.compressed_image_url!!
+
+                    Log.d("SET-WALL", "onPageSelected: large $getLargImage")
+                    Log.d("SET-WALL", "onPageSelected: small $getSmallImage")
+
+
+                    getBitmapFromGlide(getLargImage)*/
+
                     if (arrayList[positi]?.hd_image_url != null) {
                         if (from == "Vip") {
-                            if (arrayList[position] != null) {
+                            if (arrayList[positi] != null) {
                                 getLargImage =
-                                    AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[position]?.hd_image_url!!
+                                    AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[positi]?.hd_image_url!!
                                 getSmallImage =
-                                    AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[position] + "?class=custom"
+                                    AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[positi] + "?class=custom"
                                 getBitmapFromGlide(getLargImage)
                             }
                         } else {
-                            if (arrayList[position] != null) {
+                            if (arrayList[positi] != null) {
                                 getLargImage =
-                                    AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[position]?.hd_image_url!!
+                                    AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[positi]?.hd_image_url!!
                                 getSmallImage =
-                                    AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[position]?.compressed_image_url!!
+                                    AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[positi]?.compressed_image_url!!
+                                Log.d("SET-WALL", "onPageSelected: large $getLargImage")
+                                Log.d("SET-WALL", "onPageSelected: small $getSmallImage")
                                 getBitmapFromGlide(getLargImage)
                             }
                         }
                         position = positi
 
-
-                        if (arrayList[position]?.gems == 0 || arrayList[position]?.unlockimges == true) {
+                        /*if (arrayList[position]?.gems == 0 || arrayList[position]?.unlockimges == true) {
 
                             binding.unlockWallpaper.visibility = View.GONE
                             binding.buttonApplyWallpaper.visibility = View.VISIBLE
                         } else {
                             binding.unlockWallpaper.visibility = View.GONE
                             binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                        }
+                        }*/
+
+
                     } else {
                         position = positi
                     }
 
-                    if (arrayList[positi]?.hd_image_url == null) {
+                    /*if (arrayList[positi]?.hd_image_url == null) {
                         binding.unlockWallpaper.visibility = View.GONE
                         binding.buttonApplyWallpaper.visibility = View.GONE
                         binding.bottomMenu.visibility = View.GONE
@@ -834,23 +846,20 @@ class WallpaperViewFragment : Fragment() {
                         binding.bottomMenu.visibility = View.VISIBLE
                         if (AdConfig.ISPAIDUSER) {
                             binding.adsView.visibility = View.GONE
-
                         } else {
                             binding.adsView.visibility = View.VISIBLE
                         }
 
                         if (arrayList[position]?.gems == 0 || arrayList[position]?.unlockimges == true) {
-
                             binding.unlockWallpaper.visibility = View.GONE
                             binding.buttonApplyWallpaper.visibility = View.VISIBLE
                         } else {
                             binding.unlockWallpaper.visibility = View.GONE
                             binding.buttonApplyWallpaper.visibility = View.VISIBLE
                         }
-                    }
-                    Log.e(TAG, "onPageSelected: $position")
+                    }*/
+
                     checkRedHeart(position)
-                    getBitmapFromGlide(getLargImage)
                 }
             }
         }
@@ -1002,16 +1011,19 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private fun getBitmapFromGlide(url: String) {
-        Glide.with(requireContext()).asBitmap().load(url)
+        Log.d("SET-WALL", "getBitmapFromGlide: url: $url ")
+        Glide.with(requireContext())
+            .asBitmap()
+            .load(url)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
 
-                    if (isAdded) {
+                    /*if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
-                    }
+                    }*/
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -1099,9 +1111,9 @@ class WallpaperViewFragment : Fragment() {
                     response: Response<ResponseBody>
                 ) {
                     if (response.isSuccessful) {
-                        Log.e("TAG", "onResponse: success" + response.body().toString())
+                        Log.d("TAG", "onResponse: success" + response.body().toString())
                     } else {
-                        Log.e("TAG", "onResponse: not success")
+                        Log.d("TAG", "onResponse: not success")
                     }
                 }
 
@@ -1141,6 +1153,7 @@ class WallpaperViewFragment : Fragment() {
     private fun openPopupMenu(model: CatResponse) {
         if (!isAdded) return
 
+        Log.d("SET-WALL", "openPopupMenu: $model")
         val dialog = BottomSheetDialog(requireContext()).apply {
             setContentView(layoutInflater.inflate(R.layout.set_wallpaper_menu, null).also { view ->
                 view.setBackgroundColor(Color.TRANSPARENT)
@@ -1219,6 +1232,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private suspend fun setHomeScreen(dialog: BottomSheetDialog, model: CatResponse) {
+        Log.d("SET-WALL", "setHomeScreen: $dialog , $model ")
         myWallpaperManager.homeScreen(bitmap!!)
         onWallpaperSet(dialog, getString(R.string.set_successfully_on_home_screen), model)
     }
@@ -1245,7 +1259,7 @@ class WallpaperViewFragment : Fragment() {
         showRateApp()
     }
 
-    fun settrackingWallpaperType(model: CatResponse) {
+    private fun settrackingWallpaperType(model: CatResponse) {
         sendTracking("typewallpaper_used", Pair("typewallpaper", "regular"))
         sendTracking("category_used", Pair("category", model.cat_name))
     }
@@ -1622,7 +1636,7 @@ class WallpaperViewFragment : Fragment() {
         bottomSheetDialog.show()
     }
 
-    fun feedbackQuestionSheet() {
+    private fun feedbackQuestionSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackQuestionBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
@@ -1705,12 +1719,9 @@ class WallpaperViewFragment : Fragment() {
                 ColorStateList.valueOf(resources.getColor(R.color.button_bg))
         }
 
-
         binding.buttonApplyWallpaper.setOnClickListener {
             if (binding.feedbackEdt.text.isNotEmpty()) {
                 lifecycleScope.launch(Dispatchers.IO) {
-
-
                     MySharePreference.setReviewedSuccess(requireContext(), true)
 
                     try {

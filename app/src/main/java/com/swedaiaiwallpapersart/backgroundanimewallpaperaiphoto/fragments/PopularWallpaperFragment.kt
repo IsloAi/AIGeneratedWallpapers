@@ -123,19 +123,17 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         myActivity = activity as MainActivity
 
-
         populateOnbaordingItems()
         binding.sliderPager.adapter = welcomeAdapter
 
         interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
+        // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_all_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
@@ -166,7 +164,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             }
         })
 
-
         setIndicator()
         setCurrentIndicator(0)
         binding.sliderPager.registerOnPageChangeCallback(object :
@@ -178,9 +175,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             }
         })
 
-
         updateUIWithFetchedData()
-
         setEvents()
         initMostUsedRV()
     }
@@ -271,16 +266,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                         if (shouldShowInterAd) {
                             showInterAdForAllItems(allItems, position)
                         }
-
-                        /*if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-                            if (isAdded){
-                                checkAppOpen = false
-                                navigateToDestination(allItems!!, position)
-                                Log.e(TAG, "app open showed: ", )
-                            }
-                        }else{
-                            showInterAdForAllItems(allItems, position)
-                        }*/
                     }
                 }
 
@@ -899,7 +884,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             val sharedViewModel: SharedViewModel by activityViewModels()
 
             sharedViewModel.clearData()
-
             sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
 
             lifecycleScope.launch(Dispatchers.Main) {
@@ -914,8 +898,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                         .navigate(R.id.wallpaperViewFragment, this)
                 }
             }
-
-
 
             isNavigationInProgress = false
         } catch (e: IndexOutOfBoundsException) {

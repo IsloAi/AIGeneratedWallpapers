@@ -8,11 +8,13 @@ import android.graphics.Point
 import android.os.Build
 import android.os.TransactionTooLargeException
 import android.util.DisplayMetrics
+import android.util.Log
 import java.io.IOException
 
 class MyWallpaperManager(var context: Context, var activity: Activity) {
 
     fun homeScreen(bitmap:Bitmap) {
+        Log.d("SET-WALL", "homeScreen: Received Wallpaper $bitmap ")
         try {
             var newBitmap = bitmap
             val wallpaperManager = WallpaperManager.getInstance(context)
@@ -28,9 +30,7 @@ class MyWallpaperManager(var context: Context, var activity: Activity) {
                 activity.getWindowManager().getDefaultDisplay().getRealSize(size)
                 val w: Int = size.x
                 val h: Int = size.y
-//            if(!newBitmap.isRecycled){
                 newBitmap = Bitmap.createScaledBitmap(newBitmap, w, h, true)
-//            }
 
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

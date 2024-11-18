@@ -639,8 +639,66 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         val getReward = dialog.findViewById<LinearLayout>(R.id.buttonGetReward)
         val dismiss = dialog.findViewById<TextView>(R.id.noThanks)
 
+        getReward.setOnClickListener {
+            rewardAd.showAd(
+                requireActivity(),
+                "viewlistwallscr_item_vip_reward",
+                adListener = object : IKShowRewardAdListener {
+                    override fun onAdsRewarded() {
+                        copyFiles(source, destination)
+                        dialog.dismiss()
+                        loadRewardAd()
+                    }
 
-        rewardAd.showAd(
+                    override fun onAdsShowFail(error: IKAdError) {
+                        if (isAdded) {
+                            Toast.makeText(requireContext(), error.message, Toast.LENGTH_SHORT)
+                                .show()
+                            dialog.dismiss()
+                            /*interAd.showAd(
+                                requireActivity(),
+                                "mainscr_live_tab_click_item",
+                                adListener = object : IKShowAdListener {
+                                    override fun onAdsShowFail(error: IKAdError) {
+                                        if (isAdded) {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Ad not available, Please try again later",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                    }
+
+                                    override fun onAdsDismiss() {
+                                        copyFiles(source, destination)
+
+                                        try {
+                                            lifecycleScope.launch {
+                                                val requestBody = mapOf("imageid" to livewallpaper?.id)
+
+                                                webApiInterface.postDownloadedLive(requestBody)
+                                            }
+                                        } catch (e: Exception) {
+                                            e.printStackTrace()
+                                        } catch (e: UnknownHostException) {
+                                            e.printStackTrace()
+                                        }
+                                    }
+                                }
+                            )*/
+
+                        }
+                    }
+
+                    override fun onAdsDismiss() {
+                        loadRewardAd()
+                        dialog.dismiss()
+                    }
+                }
+            )
+        }
+
+        /*rewardAd.showAd(
             requireActivity(),
             "viewlistwallscr_item_vip_reward",
             adListener = object : IKShowRewardAdListener {
@@ -690,7 +748,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     loadRewardAd()
                 }
             }
-        )
+        )*/
 
         dismiss?.setOnClickListener {
             dialog.dismiss()
