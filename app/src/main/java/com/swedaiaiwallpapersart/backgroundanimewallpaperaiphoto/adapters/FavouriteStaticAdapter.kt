@@ -60,7 +60,7 @@ class FavouriteStaticAdapter(
             if (AdConfig.ISPAIDUSER) {
                 iapItem.visibility = View.GONE
             } else {
-                iapItem.visibility = View.VISIBLE
+                iapItem.visibility = VISIBLE
             }
         } else {
             iapItem.visibility = View.GONE
@@ -81,8 +81,8 @@ class FavouriteStaticAdapter(
                 ): Boolean {
                     Log.d("onLoadFailed", "Failed to load: ${e?.message}")
                     animationView.setAnimation(R.raw.no_data_image_found)
-                    animationView.visibility = View.VISIBLE
-                    errorImg.visibility = View.VISIBLE
+                    animationView.visibility = VISIBLE
+                    errorImg.visibility = VISIBLE
                     return false
                 }
 

@@ -16,7 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardBackgroundColor="@color/card"
-            app:cardCornerRadius="@dimen/_7sdp">
+            app:cardCornerRadius="@dimen/_7sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -26,7 +29,10 @@
                     android:id="@+id/wallpaper"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/loading"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/iap_ind"
@@ -42,9 +48,9 @@
                     android:id="@+id/loading"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:lottie_autoPlay="true"
                     app:lottie_loop="true"
-                    tools:layout_editor_absoluteX="0dp"
                     tools:layout_editor_absoluteY="0dp" />
 
                 <ImageView

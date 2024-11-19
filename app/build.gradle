@@ -27,7 +27,7 @@ android {
         create("release") {
             keyAlias = "swedai"
             keyPassword = "swedai"
-            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers\\SwedAi.jks")
+            storeFile = file("D:\\AIGeneratedWallpapers\\SwedAi.jks")
             storePassword = "swedai"
         }
     }
@@ -35,7 +35,6 @@ android {
     buildTypes {
         debug {
             debuggable true
-//            shrinkResources true
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

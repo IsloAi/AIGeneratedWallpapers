@@ -35,7 +35,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FavouriteDownloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
@@ -104,7 +103,7 @@ class FavouriteFragment : Fragment() {
 
         binding.StaticWallpaper.setOnClickListener {
             selector(binding.StaticWallpaper, binding.live, binding.aiWallpaper)
-            loadDataFromRoomDB()
+            loadStaticFavourite()
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.liveRecyclerview.visibility = GONE
             binding.emptySupport.visibility = GONE
@@ -135,7 +134,7 @@ class FavouriteFragment : Fragment() {
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }*/
 
-        loadDataFromRoomDB()
+        loadStaticFavourite()
     }
 
     private fun onCreateViewCalling() {
@@ -424,7 +423,7 @@ class FavouriteFragment : Fragment() {
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
         val gson = Gson()
-        val arrayListJson = gson.toJson(arrayList.filterNotNull())
+        gson.toJson(arrayList.filterNotNull())
 
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
@@ -434,6 +433,7 @@ class FavouriteFragment : Fragment() {
             putInt("position", position - countOfNulls)
             putString("from", "trending")
             putString("wall", "home")
+            putBoolean("Fav", true)
             findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
     }
@@ -444,9 +444,11 @@ class FavouriteFragment : Fragment() {
         fragmentScope.cancel()
     }*/
 
-    private fun loadDataFromRoomDB() {
+    //this function gets static fav wallpapers from the Room DB
+    private fun loadStaticFavourite() {
         binding.emptySupport.visibility = GONE
         val deviceId = MySharePreference.getDeviceID(requireContext())
+        Log.d(TAG, "loadDataFromRoomDB: $deviceId ")
         // Trigger data load in the ViewModel
         favouriteViewModel.loadFavourites(deviceId!!)
 
@@ -464,7 +466,7 @@ class FavouriteFragment : Fragment() {
 
                         // Create a new list to hold wallpapers
                         val newWallpapers =
-                            mutableListOf<CatResponse>() // Replace WallpaperType with your actual type
+                            mutableListOf<CatResponse>()
 
                         data.forEach { id ->
                             val wallpaper =
@@ -501,7 +503,6 @@ class FavouriteFragment : Fragment() {
             updateUIWithFetchedData(wallpapers)
         }, 1000)
 
-
     }//End of function
 
     override fun onResume() {
@@ -514,9 +515,4 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    override fun onPause() {
-        super.onPause()
-        // Make sure to release the surface if it exists
-
-    }
 }

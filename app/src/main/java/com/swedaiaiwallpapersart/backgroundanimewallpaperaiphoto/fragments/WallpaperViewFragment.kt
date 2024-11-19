@@ -153,7 +153,7 @@ class WallpaperViewFragment : Fragment() {
     private val googleLogin = GoogleLogin()
     private lateinit var myActivity: MainActivity
     private var from = ""
-
+    private var fav = false
     private var wall = ""
 
     var showInter = true
@@ -200,6 +200,8 @@ class WallpaperViewFragment : Fragment() {
                 from = arguments?.getString("from")!!
                 wall = arguments?.getString("wall")!!
 
+
+
                 adcount = pos!!
                 if (arrayListJson != null && pos != null) {
                     val arrayListOfImages = arrayListJson
@@ -234,6 +236,7 @@ class WallpaperViewFragment : Fragment() {
                 functionality()
             }
         }
+
         return binding.root
     }
 
@@ -263,6 +266,12 @@ class WallpaperViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (fav){
+            binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+        }else{
+            binding.favouriteButton.setImageResource(R.drawable.button_like)
+        }
 
         if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
@@ -1033,12 +1042,12 @@ class WallpaperViewFragment : Fragment() {
 
     private fun checkRedHeart(position: Int) {
         if (isAdded) {
-            Log.e(TAG, "checkRedHeart: " + arrayList[position]?.liked)
+            Log.d(TAG, "checkRedHeart: " + arrayList[position]?.liked)
             if (arrayList[position]?.liked == true) {
-                Log.e(TAG, "checkRedHeart: liked")
+                Log.d(TAG, "checkRedHeart: liked")
                 binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
             } else {
-                Log.e(TAG, "checkRedHeart: like")
+                Log.d(TAG, "checkRedHeart: like")
                 binding.favouriteButton.setImageResource(R.drawable.button_like)
             }
         }
