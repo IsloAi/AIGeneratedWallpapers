@@ -44,7 +44,6 @@ class SharedViewModel : ViewModel() {
 
     val selectedCat = MutableLiveData<CatResponse>()
 
-
     private val _chargingAnimationResponseList = MutableLiveData<List<ChargingAnimModel>>()
     val chargingAnimationResponseList: LiveData<List<ChargingAnimModel>> = _chargingAnimationResponseList
 

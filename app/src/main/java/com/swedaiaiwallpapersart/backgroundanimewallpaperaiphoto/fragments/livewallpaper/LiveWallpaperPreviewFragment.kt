@@ -89,6 +89,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private var adPosition = 0
 
     private lateinit var myActivity: MainActivity
+    var liveComingFrom:String = ""
 
     @Inject
     lateinit var webApiInterface: EndPointsInterface
@@ -215,7 +216,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             })
     }
 
-
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
             if (isAdded) {
@@ -291,6 +291,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         binding.setLiked.setOnClickListener {
+
             if (isAdded) {
                 sendTracking(
                     "click_button",
@@ -298,20 +299,31 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     Pair("action_name", "SetLiveWallScr_FavoriteBt_Click")
                 )
             }
-            binding.setLiked.isEnabled = false
-            if (livewallpaper?.liked == true) {
-                livewallpaper?.liked = false
+            liveComingFrom = MySharePreference.getLiveFrom(requireContext())
+            if (liveComingFrom == "Favourite"){
+                binding.setLiked.isEnabled = false
                 binding.setLiked.setImageResource(R.drawable.button_like)
                 Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
                     .show()
-            } else {
-                livewallpaper?.liked = true
-                binding.setLiked.setImageResource(R.drawable.button_like_selected)
-                Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
+
+
+            }else{
+                binding.setLiked.isEnabled = false
+                if (livewallpaper?.liked == true) {
+                    livewallpaper?.liked = false
+                    binding.setLiked.setImageResource(R.drawable.button_like)
+                    Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                        .show()
+
+                } else {
+                    livewallpaper?.liked = true
+                    binding.setLiked.setImageResource(R.drawable.button_like_selected)
+                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
+                }
+                checkInter = false
+                checkAppOpen = false
+                addFavourite(requireContext(), binding.setLiked)
             }
-            checkInter = false
-            checkAppOpen = false
-            addFavourite(requireContext(), binding.setLiked)
         }
 
         backHandle()
@@ -521,7 +533,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             }
         }
     }
-
 
     private fun showSimpleDialog(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)

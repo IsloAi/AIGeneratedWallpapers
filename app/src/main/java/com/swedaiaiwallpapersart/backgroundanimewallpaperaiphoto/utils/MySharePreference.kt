@@ -335,10 +335,12 @@ class MySharePreference {
             myEdit.putString("VIP_GIFT_DATE", System.currentTimeMillis().toString())
             myEdit.apply()
         }
+
         fun getVIPGiftDate(context: Context):String?{
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             return sp.getString("VIP_GIFT_DATE","")
         }
+
         fun isVIPGiftExpired(context: Context): Boolean {
             val savedDate = getVIPGiftDate(context)?.toLongOrNull()
 
@@ -350,5 +352,19 @@ class MySharePreference {
             }
             return true
         }
+
+        fun setLiveComingFrom(context:Context,value:String){
+            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyFAVLive", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("MyFAVLive",value)
+            myEdit.apply()
+        }
+
+        fun getLiveFrom(context:Context):String{
+            val sp: SharedPreferences = context.getSharedPreferences("MyFAVLive", MODE_PRIVATE)
+            return sp.getString("MyFAVLive","")!!
+        }
+
+
     }
 }
