@@ -165,10 +165,6 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
         "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f170f90444d_Space-2.jpg"
     },
     {
-        "cat_name": "Naruto",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f1701bbc604_Naruto.jpg"
-    },
-    {
         "cat_name": "Nature",
         "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f16eacc3109_Nature.jpg"
     },
@@ -179,18 +175,6 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
     {
         "cat_name": "Robotic",
         "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f159494fce7_Robot.jpg"
-    },
-    {
-        "cat_name": "Roro'Noa Zoro",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f1546f1cbd1_Roronoa-Zoro.jpg"
-    },
-    {
-        "cat_name": "Anime",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f1530aa7599_256.jpg"
-    },
-    {
-        "cat_name": "Dragon Ball Z",
-        "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f151c571610_Dragon-Ball-Z.jpg"
     },
     {
         "cat_name": "Cars",

@@ -42,6 +42,7 @@ import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.format.rewarded.IKRewardAd
+import com.ikame.android.sdk.listener.pub.IKAppOpenAdCallback
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
@@ -89,7 +90,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private var adPosition = 0
 
     private lateinit var myActivity: MainActivity
-    var liveComingFrom:String = ""
+    var liveComingFrom: String = ""
 
     @Inject
     lateinit var webApiInterface: EndPointsInterface
@@ -101,6 +102,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private val rewardAd = IKRewardAd()
     val interAd = IKInterstitialAd()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -244,7 +246,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     } else {
                         var shouldShowInterAd = true
 
-                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
+                        if (AdConfig.avoidPolicyRepeatingInter == 1 && checkInter) {
                             if (isAdded) {
                                 checkInter = false
                                 setWallpaper()
@@ -267,8 +269,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     }
                 }
             }
-
-
         }
 
         binding.toolbar.setOnClickListener {
@@ -300,14 +300,14 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 )
             }
             liveComingFrom = MySharePreference.getLiveFrom(requireContext())
-            if (liveComingFrom == "Favourite"){
+            if (liveComingFrom == "Favourite") {
                 binding.setLiked.isEnabled = false
                 binding.setLiked.setImageResource(R.drawable.button_like)
                 Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
                     .show()
 
 
-            }else{
+            } else {
                 binding.setLiked.isEnabled = false
                 if (livewallpaper?.liked == true) {
                     livewallpaper?.liked = false
@@ -318,7 +318,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 } else {
                     livewallpaper?.liked = true
                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
-                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 checkInter = false
                 checkAppOpen = false
@@ -327,7 +328,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         backHandle()
-
 
         binding.downloadWallpaper.setOnClickListener {
 
@@ -855,13 +855,13 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
                 if (currentWallpaperComponent != null && currentWallpaperComponent == wallpaperComponent) {
                     // The live wallpaper is set successfully, perform your action here
-
+                    IKSdkController.addActivityEnableShowResumeAd(LiveWallpaperPreviewFragment::class.java)
                     checkWallpaper = false
                     Log.d("LiveWallpaper", "Live wallpaper set successfully")
                     if (isAdded) {
                         MySharePreference.firstLiveWallpaper(requireContext(), true)
                     }
-                    findNavController().popBackStack(R.id.homeTabsFragment, false)
+                    //findNavController().popBackStack(R.id.homeTabsFragment, false)
 
                     if (isAdded) {
                         sendTracking(

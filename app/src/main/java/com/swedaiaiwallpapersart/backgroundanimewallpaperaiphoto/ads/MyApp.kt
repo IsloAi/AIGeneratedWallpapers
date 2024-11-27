@@ -68,9 +68,9 @@ class MyApp : IKBaseApplication() {
         super.onCreate()
 
         FirebaseApp.initializeApp(applicationContext)
+        //IKSdkController.setAutoReloadRewarded(true)
         IKSdkController.addActivityEnableShowResumeAd(MainActivity::class.java)
         IKSdkController.setEnableShowResumeAds(true)
-//        IKSdkController.setAutoReloadRewarded(true)
         IKSdkController.setEnableShowLoadingResumeAds(true)
 
         IKSdkController.setAppOpenAdsCallback(object : IKAppOpenAdCallback {
