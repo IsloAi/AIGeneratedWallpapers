@@ -63,7 +63,9 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     val interAd = IKInterstitialAd()
+
     //var checkAppOpen = false
+    var nativeAdView: IkmDisplayWidgetAdView? = null
 
     val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(
@@ -369,7 +371,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     return@withContext ArrayList(data)
                 }
             }
-
         }
     }
 
@@ -389,9 +390,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 iconView = findViewById(R.id.custom_app_icon)
                 mediaView = findViewById(R.id.custom_media)
             }
-
             withContext(Dispatchers.Main) {
-                binding.ikmWidgetAdView.let {
+                nativeAdView?.let {
                     // Attach the preloaded ad to the layout
                     binding.ikmWidgetAdView.showWithDisplayAdView(
                         R.layout.shimmer_loading_native, adLayout!!, "mainscr_live_tab_scroll",
@@ -409,6 +409,9 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                             }
                         }
                     )
+                } ?: run {
+                    // Retry loading ad if not preloaded
+                    preloadAd()
                 }
             }
         }
@@ -416,12 +419,12 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     private fun preloadAd() {
         fragmentScope.launch(Dispatchers.IO) {
-            if (binding.ikmWidgetAdView == null) {
+            if (nativeAdView == null) {
                 IKSdkController.loadNativeDisplayAd(
                     "mainscr_live_tab_scroll",
                     object : IKLoadDisplayAdViewListener {
                         override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                            binding.ikmWidgetAdView = adObject
+                            nativeAdView = adObject
                             Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
                         }
 

@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
@@ -101,6 +102,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     private val navController get() = _navController!!
     private var deviceID: String? = null
 
+    @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -108,7 +110,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         Log.d(TAG, "onCreate:deviceID - $deviceID")
 
         //MySharePreference.setDeviceID(this, deviceID)
-
         val lan = MySharePreference.getLanguage(this)
         (application as? MyApp)?.setConnectivityListener(this)
 
@@ -505,7 +506,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                 else -> {}
             }
-
         }
     }
 
@@ -891,10 +891,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     AdConfig.tabPositions = tabNamesArray
                     AdConfig.showOnboarding = onboarding
 
-                    /*val liveScrollType = remoteConfig["Live_tab_scroll_type"].asLong()
+                    val liveScrollType = remoteConfig["Live_tab_scroll_type"].asLong()
                     AdConfig.liveTabScrollType = liveScrollType.toInt()
-                    Log.d(TAG, "initFirebaseRemoteConfig: LiveScrollType: $liveScrollType")*/
-                    AdConfig.liveTabScrollType = 3
+                    Log.d(TAG, "initFirebaseRemoteConfig: LiveScrollType: $liveScrollType")
+                    //AdConfig.liveTabScrollType = 3
                     try {
                         val jsonObject = JSONObject(welcomeMessage)
                         val trendingScrollViewArray =
