@@ -1,10 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
-import android.graphics.Color
-import android.graphics.LinearGradient
-import android.graphics.Shader
 import android.os.Bundle
-import android.text.TextPaint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -63,8 +59,9 @@ class LocalizationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         posnew = MySharePreference.getLanguagePosition(requireContext())
-
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+
+        requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 
         if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
@@ -90,7 +87,7 @@ class LocalizationFragment : Fragment() {
     }
 
     private fun setGradienttext() {
-        val customColors = intArrayOf(
+        /*val customColors = intArrayOf(
             Color.parseColor("#FC9502"),
             Color.parseColor("#FF6726")
         )
@@ -101,7 +98,7 @@ class LocalizationFragment : Fragment() {
             0f, 0f, width, binding.applyLanguage.textSize,
             customColors, null, Shader.TileMode.CLAMP
         )
-        binding.applyLanguage.paint.shader = shader
+        binding.applyLanguage.paint.shader = shader*/
     }
 
     private fun sendTracking(
@@ -222,7 +219,14 @@ class LocalizationFragment : Fragment() {
         languagesList.add(DummyModelLanguages("French", "fr", R.drawable.flag_fr, false))
         languagesList.add(DummyModelLanguages("Thai", "th", R.drawable.flag_thai, false))
         languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
-        languagesList.add(DummyModelLanguages("Vietnamese ", "vi", R.drawable.flag_vietnamese,false))
+        languagesList.add(
+            DummyModelLanguages(
+                "Vietnamese ",
+                "vi",
+                R.drawable.flag_vietnamese,
+                false
+            )
+        )
         languagesList.add(DummyModelLanguages("Hindi", "hi", R.drawable.flag_hi, false))
         languagesList.add(DummyModelLanguages("Dutch", "nl", R.drawable.flag_ducth, false))
         languagesList.add(DummyModelLanguages("Indonesian", "in", R.drawable.flag_indona, false))

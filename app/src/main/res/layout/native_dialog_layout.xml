@@ -38,7 +38,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                app:layout_goneMarginStart="16dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_medium"
                 android:maxLines="1"
@@ -47,6 +46,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginStart="16dp"
                 tools:text="abv" />
 
             <TextView
@@ -90,8 +90,8 @@
             android:paddingHorizontal="16dp"
             android:textColor="@color/white"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="install" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -219,7 +219,7 @@ class SearchWallpapersFragment : Fragment() {
         },myActivity,"search")
         searchAdapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("searchscr_scroll_view", object :
+        /*IKSdkController.loadNativeDisplayAd("searchscr_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
@@ -230,7 +230,7 @@ class SearchWallpapersFragment : Fragment() {
 
             override fun onAdLoadFail(error: IKAdError) {
             }
-        })
+        })*/
         binding.recyclerviewAll.adapter = searchAdapter
 
 
@@ -443,7 +443,7 @@ class SearchWallpapersFragment : Fragment() {
             }
         },myActivity,"")
 
-        IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
+        /*IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
@@ -455,7 +455,7 @@ class SearchWallpapersFragment : Fragment() {
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure with view object
             }
-        })
+        })*/
 
         binding.recyclerviewCatgory.adapter = adapter
     }

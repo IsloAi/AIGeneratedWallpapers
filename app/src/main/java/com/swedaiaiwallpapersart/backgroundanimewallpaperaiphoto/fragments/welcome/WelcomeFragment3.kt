@@ -90,7 +90,9 @@ class WelcomeFragment3 : Fragment() {
 
         // Slight delay to ensure smooth rendering
         Handler(Looper.getMainLooper()).postDelayed({
-            binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout, "onboardscr_fullscreen",
+            binding.adsView.loadAd(R.layout.shimmer_loading_native,
+                adLayout,
+                "onboardscr_fullscreen",
                 object : IKShowWidgetAdListener {
                     override fun onAdShowFail(error: IKAdError) {
                         Log.e("WelcomeFragment3", "Ad failed to show: ${error.message}")

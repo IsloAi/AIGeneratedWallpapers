@@ -56,17 +56,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.format.rewarded.IKRewardAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
@@ -266,12 +263,6 @@ class WallpaperViewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (fav){
-            binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
-        }else{
-            binding.favouriteButton.setImageResource(R.drawable.button_like)
-        }
 
         if (AdConfig.ISPAIDUSER) {
             binding.adsView.visibility = View.GONE
@@ -755,7 +746,7 @@ class WallpaperViewFragment : Fragment() {
         }, myActivity, from)
         adapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
+        /*IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view != null) {
@@ -768,7 +759,7 @@ class WallpaperViewFragment : Fragment() {
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure with view object
             }
-        })
+        })*/
         viewPager2?.adapter = adapter
         Log.d("SET-WALL", "setViewPager: $position")
         viewPager2?.setCurrentItem(position, false)

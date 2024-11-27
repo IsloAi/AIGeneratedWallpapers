@@ -206,7 +206,7 @@ class ApiCategoriesNameAdapter(
             mediaView = findViewById(R.id.custom_media)
         }
 
-        IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
+        /*IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 nativeAdView = adObject
@@ -235,7 +235,7 @@ class ApiCategoriesNameAdapter(
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
                 if (statusAd == 0) binding.adsView.visibility = View.GONE
             }
-        })
+        })*/
     }
 
     private fun isNetworkAvailable(): Boolean {

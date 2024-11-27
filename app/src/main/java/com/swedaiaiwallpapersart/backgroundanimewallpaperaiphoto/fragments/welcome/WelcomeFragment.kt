@@ -3,20 +3,19 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.welc
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWelcomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -45,7 +44,7 @@ class WelcomeFragment : Fragment() {
 
         setIndicator()
         setCurrentIndicator(0)
-        if (!AdConfig.ISPAIDUSER){
+        if (!AdConfig.ISPAIDUSER) {
             IKSdkController.preloadNativeAd("onboardscr_bottom", object : IKLoadAdListener {
                 override fun onAdLoaded() {
                     // Ad loaded successfully
@@ -66,13 +65,13 @@ class WelcomeFragment : Fragment() {
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
             adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
             adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-            binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"onboardscr_bottom",
+            binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!, "onboardscr_bottom",
                 object : IKShowWidgetAdListener {
                     override fun onAdShowFail(error: IKAdError) {
-                        if (AdConfig.ISPAIDUSER){
+                        if (AdConfig.ISPAIDUSER) {
                             binding.adsView.visibility = View.GONE
                         }
-                        Log.e("TAG", "onAdsLoadFail: native failded " )
+                        Log.e("TAG", "onAdsLoadFail: native failded ")
                     }
 
                     override fun onAdShowed() {
@@ -80,7 +79,7 @@ class WelcomeFragment : Fragment() {
                     }
                 }
             )
-        }else{
+        } else {
             binding.adsView.visibility = View.GONE
         }
 

@@ -1,5 +1,9 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -18,8 +22,10 @@ import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
+import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -30,7 +36,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.down
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -48,6 +53,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private var _binding: FragmentLiveWallpaperBinding? = null
     private val binding get() = _binding!!
     private val myViewModel: LiveWallpaperViewModel by activityViewModels()
+    private val statusAd = AdConfig.adStatusViewListWallSRC
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
@@ -117,7 +123,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                             if (list != null) {
                                 ArrayList(list)
                             } else {
-                                ArrayList<LiveWallpaperModel?>()
+                                ArrayList()
                             }
                         }
 
@@ -151,6 +157,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         super.onResume()
 
         loadData()
+        preloadAd()
 
         Log.e(TAG, "onResume: ")
 
@@ -226,7 +233,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         }, myActivity)
 
 
-        IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
+        /*IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view != null) {
@@ -239,7 +246,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure with view object
             }
-        })
+        })*/
 
         binding.liveReccyclerview.adapter = adapter
         binding.liveReccyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -297,24 +304,146 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
 
         return withContext(Dispatchers.IO) {
-            val firstAdLineThreshold =
-                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-            val firstLine = firstAdLineThreshold * 3
-
-            val lineCount =
-                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-            val lineC = lineCount * 3
-            val newData = arrayListOf<LiveWallpaperModel?>()
-
-            for (i in data.indices) {
-                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
-                    newData.add(null)
-                } else if (i == firstLine) {
-                    newData.add(null)
+            Log.d(
+                TAG,
+                "addNullValueInsideArray: Live tab : ${AdConfig.liveTabScrollType} , ${data.size}"
+            )
+            when (AdConfig.liveTabScrollType) {
+                0 -> {
+                    Log.d(TAG, "addNullValueInsideArray: in 0 ")
+                    return@withContext ArrayList(data)
                 }
-                newData.add(data[i])
+
+                1 -> {
+                    Log.d(TAG, "addNullValueInsideArray: in 1 ")
+                    val firstAdLineThreshold =
+                        if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+                    val firstLine = firstAdLineThreshold * 3
+
+                    val lineCount =
+                        if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+                    val lineC = lineCount * 3
+                    val newData = arrayListOf<LiveWallpaperModel?>()
+
+                    for (i in data.indices) {
+                        if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                            newData.add(null)
+                        } else if (i == firstLine) {
+                            newData.add(null)
+                        }
+                        newData.add(data[i])
+                    }
+                    return@withContext ArrayList(newData)
+                }
+
+                2 -> {
+                    Log.d(TAG, "addNullValueInsideArray: in 2 ")
+                    val newData = arrayListOf<LiveWallpaperModel?>()
+
+                    val positionToInsertNull =
+                        if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC * 3 else 4 * 3
+
+                    for (i in data.indices) {
+                        if (i == positionToInsertNull) {
+                            newData.add(null) // Add a single null at the specified position.
+                        }
+                        newData.add(data[i]) // Add the original item to the list.
+                    }
+
+                    // If the position exceeds the list size, just append the null at the end.
+                    if (positionToInsertNull >= data.size) {
+                        newData.add(null)
+                    }
+                    Log.d(TAG, "addNullValueInsideArray:Array list size ${newData.size} ")
+                    return@withContext ArrayList(newData)
+                }
+
+                3 -> {
+                    Log.d(TAG, "addNullValueInsideArray: in 3 ")
+                    loadAd()
+                    binding.ikmWidgetAdView.visibility = View.VISIBLE
+                    return@withContext ArrayList(data)
+                }
+
+                else -> {
+                    return@withContext ArrayList(data)
+                }
             }
-            newData
+
+        }
+    }
+
+    private fun loadAd() {
+        fragmentScope.launch(Dispatchers.Main) {
+
+            var adLayout: IkmWidgetAdLayout? = null
+            adLayout = LayoutInflater.from(binding.root.context).inflate(
+                R.layout.native_dialog_layout,
+                null, false
+            ) as? IkmWidgetAdLayout
+
+            adLayout?.apply {
+                titleView = findViewById(R.id.custom_headline)
+                bodyView = findViewById(R.id.custom_body)
+                callToActionView = findViewById(R.id.custom_call_to_action)
+                iconView = findViewById(R.id.custom_app_icon)
+                mediaView = findViewById(R.id.custom_media)
+            }
+
+            withContext(Dispatchers.Main) {
+                binding.ikmWidgetAdView.let {
+                    // Attach the preloaded ad to the layout
+                    binding.ikmWidgetAdView.showWithDisplayAdView(
+                        R.layout.shimmer_loading_native, adLayout!!, "mainscr_live_tab_scroll",
+                        it,
+                        object : IKShowWidgetAdListener {
+                            override fun onAdShowFail(error: IKAdError) {
+                                Log.e("TAG", "onAdsLoadFail: native failed")
+                                binding.ikmWidgetAdView.visibility =
+                                    if (statusAd == 0 || !isNetworkAvailable()) View.GONE else View.VISIBLE
+                            }
+
+                            override fun onAdShowed() {
+                                binding.ikmWidgetAdView.visibility = View.VISIBLE
+                                Log.d("TAG", "onAdsLoaded: native loaded successfully.")
+                            }
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+    private fun preloadAd() {
+        fragmentScope.launch(Dispatchers.IO) {
+            if (binding.ikmWidgetAdView == null) {
+                IKSdkController.loadNativeDisplayAd(
+                    "mainscr_live_tab_scroll",
+                    object : IKLoadDisplayAdViewListener {
+                        override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                            binding.ikmWidgetAdView = adObject
+                            Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
+                        }
+
+                        override fun onAdLoadFail(error: IKAdError) {
+                            Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
+                        }
+                    })
+            }
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
         }
     }
 

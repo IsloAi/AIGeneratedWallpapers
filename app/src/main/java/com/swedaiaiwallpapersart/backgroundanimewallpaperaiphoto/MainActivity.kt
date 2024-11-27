@@ -1,21 +1,14 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.content.Context
-import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
-import android.view.View
 import android.view.Window
 import android.view.WindowInsets
-import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -27,9 +20,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
@@ -50,9 +40,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationViewmodel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.PromptListAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.interfaces.GetPromptDetails
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.Prompts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
@@ -386,8 +373,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             appDatabase.wallpapersDao().insert(model)
                         }
                     }
-
-
                 }
 
                 is Response.Error -> {
@@ -705,13 +690,13 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
                         val baseUrls = remoteConfig["dataUrl"].asString()
 
-                        //here we are getting the baseUrls to show wallpaper
-                        //For live to change we need to get the
-                        // different variable from the remote config and pass that
-                        // value for the Live wallpaper fragment
-                        //Log.d("usmanTAG", "onUpdate: baseURls: $baseUrls")
-                        //the current url for showing wallpaper is
-                        // https://4kwallpaper-zone.b-cdn.net/livewallpaper/
+                        /*here we are getting the baseUrls to show wallpaper
+                        For live to change we need to get the
+                         different variable from the remote config and pass that
+                         value for the Live wallpaper fragment
+                        Log.d("usmanTAG", "onUpdate: baseURls: $baseUrls")
+                        the current url for showing wallpaper is
+                         https://4kwallpaper-zone.b-cdn.net/livewallpaper/ */
 
                         AdConfig.BASE_URL_DATA = baseUrls
                         Log.d(TAG, "onUpdate:BaseURL: ${AdConfig.BASE_URL_DATA} ")
@@ -906,6 +891,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     AdConfig.tabPositions = tabNamesArray
                     AdConfig.showOnboarding = onboarding
 
+                    /*val liveScrollType = remoteConfig["Live_tab_scroll_type"].asLong()
+                    AdConfig.liveTabScrollType = liveScrollType.toInt()
+                    Log.d(TAG, "initFirebaseRemoteConfig: LiveScrollType: $liveScrollType")*/
+                    AdConfig.liveTabScrollType = 3
                     try {
                         val jsonObject = JSONObject(welcomeMessage)
                         val trendingScrollViewArray =
@@ -948,7 +937,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             AdConfig.firstAdLineTrending = threshold.toInt()
                             AdConfig.lineCountTrending = lineCount.toInt() + 1
                         }
-
 
                         val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
                         for (i in 0 until mostUsedScreen.length()) {

@@ -20,14 +20,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPopularWallpaperBinding
@@ -280,7 +277,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
         mostUsedWallpaperAdapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd(
+        /*IKSdkController.loadNativeDisplayAd(
             "mainscr_all_tab_scroll",
             object : IKLoadDisplayAdViewListener {
                 override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
@@ -293,7 +290,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 override fun onAdLoadFail(error: IKAdError) {
                     // Handle ad load failure with view object
                 }
-            })
+            })*/
 
         binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
 

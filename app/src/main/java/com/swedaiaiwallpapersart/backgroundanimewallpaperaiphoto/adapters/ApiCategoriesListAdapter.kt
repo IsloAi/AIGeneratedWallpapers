@@ -44,8 +44,7 @@ class ApiCategoriesListAdapter(
     var positionCallback: PositionCallback,
     private val myActivity: MainActivity,
     private val from: String
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastClickTime = 0L
     private val debounceThreshold = 2000L // 1 second
@@ -181,9 +180,7 @@ class ApiCategoriesListAdapter(
         } else {
             AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom"
         }
-        Glide.with(context!!)
-            .load(url)
-            .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
+        Glide.with(context!!).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -226,8 +223,7 @@ class ApiCategoriesListAdapter(
     fun loadad(binding: StaggeredNativeLayoutBinding) {
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(context).inflate(
-                R.layout.native_dialog_layout,
-                null, false
+                R.layout.native_dialog_layout, null, false
             ) as? IkmWidgetAdLayout
             adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
             adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
@@ -237,22 +233,22 @@ class ApiCategoriesListAdapter(
 
             if (nativeAdView == null) {
                 withContext(Dispatchers.IO) {  // Load ad on a background thread
-                    IKSdkController.loadNativeDisplayAd(tracking, object :
-                        IKLoadDisplayAdViewListener {
-                        override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                            nativeAdView = adObject
-                        }
+                    IKSdkController.loadNativeDisplayAd(
+                        tracking,
+                        object : IKLoadDisplayAdViewListener {
+                            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
+                                nativeAdView = adObject
+                            }
 
-                        override fun onAdLoadFail(error: IKAdError) {
-                            Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
-                        }
-                    })
+                            override fun onAdLoadFail(error: IKAdError) {
+                                Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
+                            }
+                        })
                 }
             }
 
             nativeAdView?.let {
-                binding.adsView.showWithDisplayAdView(
-                    R.layout.shimmer_loading_native,
+                binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,
                     adLayout!!,
                     tracking,
                     it,
@@ -271,8 +267,7 @@ class ApiCategoriesListAdapter(
                             binding.adsView.visibility = View.VISIBLE
                             Log.e("TAG", "onAdsLoaded: native loaded")
                         }
-                    }
-                )
+                    })
             }
         }
 
@@ -284,8 +279,9 @@ class ApiCategoriesListAdapter(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR
+            ))
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo
             networkInfo != null && networkInfo.isConnected
@@ -330,8 +326,7 @@ class ApiCategoriesListAdapter(
     }
 
     class CatResponseDiffCallback(
-        private val oldList: List<CatResponse?>,
-        private val newList: List<CatResponse?>
+        private val oldList: List<CatResponse?>, private val newList: List<CatResponse?>
     ) : DiffUtil.Callback() {
         override fun getOldListSize() = oldList.size
         override fun getNewListSize() = newList.size

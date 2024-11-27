@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/new_main_background"
+    android:background="#7a382c"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment">
 
     <ImageView
         android:id="@+id/backImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
@@ -35,6 +37,11 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:padding="@dimen/_4sdp"
                 android:src="@drawable/ic_back_arrow" />
         </RelativeLayout>
 
@@ -47,7 +54,7 @@
         android:progress="0"
         app:indicatorColor="@color/button_bg"
         app:indicatorSize="@dimen/_100sdp"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintBottom_toTopOf="@+id/loadingTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
@@ -59,37 +66,32 @@
         android:id="@+id/loadingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_2sdp"
         android:fontFamily="@font/poppins_medium"
         android:text="Downloading..."
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@id/buttonApplyWallpaper"
+        app:layout_constraintBottom_toTopOf="@+id/adsView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress" />
 
     <Button
         android:id="@+id/buttonApplyWallpaper"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_35sdp"
-        android:background="@drawable/new_button_bg"
-        android:fontFamily="@font/raleway_medium"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_45sdp"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:background="@drawable/live_download_btn_bg"
+        android:fontFamily="@font/poppins_bold"
         android:minWidth="@dimen/_160sdp"
-        android:shadowColor="@color/black"
-        android:shadowDx="1.8"
-        android:shadowDy="1.8"
-        android:shadowRadius="0.1"
-        android:text="Preview"
+        android:text="Set Wallpaper"
+        android:textAlignment="center"
         android:textAllCaps="false"
-        android:textColor="@color/mywhite"
-        android:textSize="15sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        android:textColor="#b96c00"
+        android:textSize="20sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress"
-        app:layout_constraintWidth_percent="0.7" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/progressTxt"
@@ -107,9 +109,11 @@
     <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
-
+        android:visibility="visible"
         android:layout_height="wrap_content"
         android:background="@drawable/ads_background"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolBar"
+        tools:layout_editor_absoluteX="0dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

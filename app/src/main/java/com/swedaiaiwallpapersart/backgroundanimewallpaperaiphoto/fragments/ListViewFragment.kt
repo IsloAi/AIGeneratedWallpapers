@@ -208,7 +208,7 @@ class ListViewFragment : Fragment(), AdEventListener {
 
         adapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("categoryscr_scroll_view", object :
+        /*IKSdkController.loadNativeDisplayAd("categoryscr_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view!= null){
@@ -218,7 +218,7 @@ class ListViewFragment : Fragment(), AdEventListener {
             }
 
             override fun onAdLoadFail(error: IKAdError) {}
-        })
+        })*/
 
 
         binding.recyclerviewAll.adapter = adapter

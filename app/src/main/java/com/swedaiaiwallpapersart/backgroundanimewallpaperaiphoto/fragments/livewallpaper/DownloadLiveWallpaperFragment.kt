@@ -17,7 +17,6 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -28,6 +27,7 @@ import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
@@ -319,7 +319,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
                     if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
-                        binding.backImage.setImageBitmap(blurImage)
+                        //binding.backImage.setImageBitmap(blurImage)
                     }
                 }
 
@@ -461,7 +461,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     }
 
-    companion object{
+    companion object {
         var shouldObserveFavorites = false
         var shouldObserveLiveWallpapers = true
     }

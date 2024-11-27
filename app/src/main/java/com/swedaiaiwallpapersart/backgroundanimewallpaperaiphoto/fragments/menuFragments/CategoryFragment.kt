@@ -158,7 +158,7 @@ class CategoryFragment : Fragment(), AdEventListener {
             }
         }, myActivity, "")
 
-        IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
+        /*IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
             IKLoadDisplayAdViewListener {
             override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                 if (isAdded && view != null) {
@@ -170,7 +170,7 @@ class CategoryFragment : Fragment(), AdEventListener {
             override fun onAdLoadFail(error: IKAdError) {
                 // Handle ad load failure with view object
             }
-        })
+        })*/
         binding.recyclerviewAll.adapter = adapter
 
         myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->

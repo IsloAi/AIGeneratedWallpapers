@@ -17,18 +17,15 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
+import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.SlideItemContainerBinding
@@ -109,7 +106,6 @@ class WallpaperApiSliderAdapter(
         }
 
     }
-
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
@@ -193,7 +189,7 @@ class WallpaperApiSliderAdapter(
 //            }
         }
 
-        var url: String ?= ""
+        var url: String? = ""
         if (from == "Vip") {
             url = AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url
         } else {
@@ -240,9 +236,9 @@ class WallpaperApiSliderAdapter(
                 }
             }).into(imageSlide)
 
-//        if (adapterPosition == arrayList.size - 1) {
-//            viewPager2.post(runable)
-//        }
+        /*if (adapterPosition == arrayList.size - 1) {
+            viewPager2.post(runable)
+        }*/
 
     }
 
@@ -250,7 +246,6 @@ class WallpaperApiSliderAdapter(
         arrayList.addAll(arrayList)
         notifyDataSetChanged()
     }
-
 
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager =
@@ -284,8 +279,7 @@ class WallpaperApiSliderAdapter(
             if (binding.adsView.isAdLoaded) {
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ")
             } else {
-
-                IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
+                /*IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
                     IKLoadDisplayAdViewListener {
                     override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                         nativeAdView = adObject
@@ -294,10 +288,10 @@ class WallpaperApiSliderAdapter(
                     override fun onAdLoadFail(error: IKAdError) {
                         // Handle ad load failure with view object
                     }
-                })
+                })*/
             }
             withContext(this.coroutineContext) {
-                nativeAdView?.let {
+                /*nativeAdView?.let {
 
                     binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,
                         adLayout!!,
@@ -324,10 +318,11 @@ class WallpaperApiSliderAdapter(
                             }
                         }
                     )
-                }
+                }*/
             }
 
         }
 
     }
+
 }

@@ -236,7 +236,7 @@ class MostUsedWallpaperAdapter(
                 Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
             }else{
 
-                IKSdkController.loadNativeDisplayAd("mainscr_all_tab_scroll", object :
+                /*IKSdkController.loadNativeDisplayAd("mainscr_all_tab_scroll", object :
                     IKLoadDisplayAdViewListener {
                     override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
                         nativeAdView = adObject
@@ -244,11 +244,11 @@ class MostUsedWallpaperAdapter(
 
                     override fun onAdLoadFail(error: IKAdError) {
                         Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+error )                    }
-                })
+                })*/
             }
 
             withContext(this.coroutineContext) {
-                nativeAdView?.let {
+                /*nativeAdView?.let {
                     binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,adLayout!!,"mainscr_all_tab_scroll",
                         it,
                         object : IKShowWidgetAdListener {
@@ -272,7 +272,7 @@ class MostUsedWallpaperAdapter(
                             }
                         }
                     )
-                }
+                }*/
             }
         }
 

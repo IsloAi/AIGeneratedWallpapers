@@ -13,10 +13,12 @@ object AdConfig {
     var lineCountViewListWallSRC = 0
     var adStatusViewListWallSRC = 1
 
-
     var firstAdLineMostUsed = 0
     var lineCountMostUsed = 0
     var adStatusMostUsed = 1
+
+    /* Added by usman */
+    var liveTabScrollType = 0
 
     var showOnboarding = true
 
@@ -24,11 +26,41 @@ object AdConfig {
 
     var tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
 
-    var categoryOrder:List<String> = listOf( "Sadness", "Car", "Motor Bike", "Fantasy", "Animal","New Year", "Christmas", "Travel", "Ocean", "Nature", "Mountains", "Music", "Love", "Art", "Space", "Adstract", "Tech", "Black And White", "Architecture", "Artistic", "Pattern", "City", "Minimal", "Vintage","4K", "Anime", "Super Heros", "IOS", "Dark")
+    var categoryOrder: List<String> = listOf(
+        "Sadness",
+        "Car",
+        "Motor Bike",
+        "Fantasy",
+        "Animal",
+        "New Year",
+        "Christmas",
+        "Travel",
+        "Ocean",
+        "Nature",
+        "Mountains",
+        "Music",
+        "Love",
+        "Art",
+        "Space",
+        "Adstract",
+        "Tech",
+        "Black And White",
+        "Architecture",
+        "Artistic",
+        "Pattern",
+        "City",
+        "Minimal",
+        "Vintage",
+        "4K",
+        "Anime",
+        "Super Heros",
+        "IOS",
+        "Dark"
+    )
 
-    var BASE_URL_DATA:String = ""
+    var BASE_URL_DATA: String = ""
 
-    var Noti_Widget:String = ""
+    var Noti_Widget: String = ""
 
     val BASE_URL = "https://vps.edecator.com/wallpaper_App/V4/"
     val HD_ImageUrl = "${BASE_URL_DATA}/images/"
@@ -41,11 +73,30 @@ object AdConfig {
 
     var regularWallpaperFlow = 0
 
-    var languagesOrder:List<String> = listOf("Spanish","English (US)","English (UK)","French","German","Japanese","Korean","Portuguese","Arabic","Chinese","Italian","Russian","Thai","Turkish","Vietnamese","Hindi","Dutch","Indonesian")
+    var languagesOrder: List<String> = listOf(
+        "Spanish",
+        "English (US)",
+        "English (UK)",
+        "French",
+        "German",
+        "Japanese",
+        "Korean",
+        "Portuguese",
+        "Arabic",
+        "Chinese",
+        "Italian",
+        "Russian",
+        "Thai",
+        "Turkish",
+        "Vietnamese",
+        "Hindi",
+        "Dutch",
+        "Indonesian"
+    )
 
     var languageLogicShowNative = 1
     var autoNext = false
-    var timeNext  = 5000L
+    var timeNext = 5000L
 
     var onboarding_Full_Native = 1
 

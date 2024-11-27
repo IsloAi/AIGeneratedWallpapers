@@ -38,7 +38,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
 class LiveWallpaperAdapter(
     private var arrayList: ArrayList<LiveWallpaperModel?>,
     private val positionCallback: downloadCallback,
@@ -99,8 +98,6 @@ class LiveWallpaperAdapter(
                 }
             }
         }
-
-
     }
 
     override fun getItemCount(): Int {
@@ -144,10 +141,7 @@ class LiveWallpaperAdapter(
         if (AdConfig.ISPAIDUSER) {
             return VIEW_TYPE_CONTAINER1
         }
-
-        val isAdPosition = (position + 1 == firstline + 1) ||
-                (position + 1 > firstline + 1 && (position + 1 - (firstline + 1)) % (lineC + 1) == 0)
-        return if (isAdPosition) VIEW_TYPE_NATIVE_AD else VIEW_TYPE_CONTAINER1
+        return if (arrayList[position] == null) VIEW_TYPE_NATIVE_AD else VIEW_TYPE_CONTAINER1
     }
 
     @SuppressLint("SetTextI18n")
@@ -229,10 +223,24 @@ class LiveWallpaperAdapter(
     private fun loadAd(binding: StaggeredNativeLayoutBinding) {
         coroutineScope?.launch(Dispatchers.Main) {
 
-            val adLayout = LayoutInflater.from(binding.root.context).inflate(
-                R.layout.native_dialog_layout,
-                null, false
-            ) as? IkmWidgetAdLayout
+            var adLayout: IkmWidgetAdLayout? = null
+            if (AdConfig.liveTabScrollType == 1) {
+                adLayout = LayoutInflater.from(binding.root.context).inflate(
+                    R.layout.native_dialog_layout,
+                    null, false
+                ) as? IkmWidgetAdLayout
+            } else if (AdConfig.liveTabScrollType == 2 || AdConfig.liveTabScrollType == 3) {
+                adLayout = LayoutInflater.from(binding.root.context).inflate(
+                    R.layout.native_dialog_layout_189,
+                    null, false
+                ) as? IkmWidgetAdLayout
+            } else {
+                adLayout = LayoutInflater.from(binding.root.context).inflate(
+                    R.layout.native_dialog_layout,
+                    null, false
+                ) as? IkmWidgetAdLayout
+            }
+
 
             adLayout?.apply {
                 titleView = findViewById(R.id.custom_headline)
