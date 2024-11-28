@@ -1,6 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments
 
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -13,20 +12,18 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ikame.android.sdk.IKSdkController
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveCategoriesHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
@@ -321,10 +318,7 @@ class CategoryFragment : Fragment(), AdEventListener {
     "cat_name": "Space",
     "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0ea7123b_space.jpg"
   },
-  {
-    "cat_name": "Naruto",
-    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0a18890a_naruto.jpg"
-  },
+
   {
     "cat_name": "Nature",
     "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d07753306_nature.jpg"
@@ -337,18 +331,7 @@ class CategoryFragment : Fragment(), AdEventListener {
     "cat_name": "Robotic",
     "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/67206957122f7_robotic 2.jpg"
   },
-  {
-    "cat_name": "Roro'Noa Zoro",
-    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/67207f040a575_rorozoro.jpg"
-  },
-  {
-    "cat_name": "Anime",
-    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/672068ac40ed3_anime.jpg"
-  },
-  {
-    "cat_name": "Dragon Ball Z",
-    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6720683db6e79_dragon ball.jpg"
-  },
+
   {
     "cat_name": "Cars",
     "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/672067d7adc91_cars.jpg"

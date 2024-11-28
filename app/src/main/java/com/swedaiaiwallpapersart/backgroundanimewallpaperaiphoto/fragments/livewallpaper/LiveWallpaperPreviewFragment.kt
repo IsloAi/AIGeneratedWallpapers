@@ -42,7 +42,6 @@ import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
 import com.ikame.android.sdk.format.rewarded.IKRewardAd
-import com.ikame.android.sdk.listener.pub.IKAppOpenAdCallback
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
@@ -61,7 +60,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWall
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
@@ -102,7 +100,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private val rewardAd = IKRewardAd()
     val interAd = IKInterstitialAd()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

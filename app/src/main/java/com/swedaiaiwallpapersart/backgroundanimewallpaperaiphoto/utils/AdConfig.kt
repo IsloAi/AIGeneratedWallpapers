@@ -19,6 +19,7 @@ object AdConfig {
 
     /* Added by usman */
     var liveTabScrollType = 0
+    var shouldRestoreCache = false
 
     var showOnboarding = true
 

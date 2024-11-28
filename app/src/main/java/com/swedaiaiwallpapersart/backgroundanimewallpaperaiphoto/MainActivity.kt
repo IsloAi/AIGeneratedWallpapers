@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -81,6 +82,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     companion object {
         var startTime: Long = 0
+        var isCacheCleared: Boolean = false
     }
 
     val TAG = "MainActivity"
@@ -895,6 +897,11 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     AdConfig.liveTabScrollType = liveScrollType.toInt()
                     Log.d(TAG, "initFirebaseRemoteConfig: LiveScrollType: $liveScrollType")
                     //AdConfig.liveTabScrollType = 3
+
+                    val restoreCache = remoteConfig["RestoreCache"].asBoolean()
+                    AdConfig.shouldRestoreCache = restoreCache
+                    Log.d(TAG, "initFirebaseRemoteConfig: restoreCache: $restoreCache")
+
                     try {
                         val jsonObject = JSONObject(welcomeMessage)
                         val trendingScrollViewArray =
@@ -953,8 +960,66 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     } catch (e: JSONException) {
                         e.printStackTrace()
                     }
+
+                    if (restoreCache) {
+                        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                        val isDataCleared = prefs.getBoolean("is_data_cleared", false)
+                        if (!isDataCleared) {
+                            clearAppData(this@MainActivity)
+                            // Mark data as cleared
+                            prefs.edit().putBoolean("is_data_cleared", true).apply()
+                        } else {
+                            Log.d(TAG, "App data already cleared, skipping...")
+                        }
+                        /*if (!isCacheCleared) {
+                            clearAppData(this@MainActivity)
+                        }*/
+                    }
                 }
             }
+    }
+
+    private fun clearAppData(context: Context) {
+        try {
+            // Clear cache
+            val cacheDir = context.cacheDir
+            cacheDir?.deleteRecursively()
+
+            // Clear app data (shared preferences, databases)
+            val appDir = context.filesDir.parentFile
+            appDir?.listFiles()?.forEach { dir ->
+                if (dir != null && dir.name != "lib") {
+                    dir.deleteRecursively()
+                }
+            }
+            Log.d(TAG, "App data and cache cleared successfully")
+
+            fetchData(deviceID.toString())
+
+            observefetechedData()
+
+            readJsonAndSaveDataToDb()
+
+            if (!isNetworkAvailable()) {
+                showNoInternetDialog()
+            }
+
+            getSetTotallikes()
+
+            if (deviceID != null) {
+                MySharePreference.setDeviceID(this, deviceID.toString())
+            }
+            //restartApp()
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to clear app data", e)
+        }
+    }
+
+    private fun restartApp() {
+        val intent = packageManager.getLaunchIntentForPackage(packageName)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
     }
 
     override fun onResume() {

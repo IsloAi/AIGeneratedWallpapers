@@ -233,7 +233,7 @@ class SplashOnFragment : Fragment() {
         Log.e("SPLASH", "onResume: ")
 
         val videoUri: Uri =
-            Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.splash_new)
+            Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.new_splash_video)
         binding.videoView.setVideoURI(videoUri)
         binding.videoView.start()
 
@@ -250,8 +250,6 @@ class SplashOnFragment : Fragment() {
             }
         }
         handleAppResume()
-
-
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
