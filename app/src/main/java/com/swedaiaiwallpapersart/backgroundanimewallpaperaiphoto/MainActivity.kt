@@ -2,7 +2,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -699,9 +698,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         Log.d("usmanTAG", "onUpdate: baseURls: $baseUrls")
                         the current url for showing wallpaper is
                          https://4kwallpaper-zone.b-cdn.net/livewallpaper/ */
-
+                        Log.d("usmanTAG", "onUpdate: baseURls: $baseUrls")
                         AdConfig.BASE_URL_DATA = baseUrls
-                        Log.d(TAG, "onUpdate:BaseURL: ${AdConfig.BASE_URL_DATA} ")
 
                         try {
                             val jsonObject = JSONObject(inAppConfig)
@@ -961,7 +959,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         e.printStackTrace()
                     }
 
-                    if (restoreCache) {
+                    /*if (restoreCache) {
                         val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
                         val isDataCleared = prefs.getBoolean("is_data_cleared", false)
                         if (!isDataCleared) {
@@ -971,16 +969,16 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         } else {
                             Log.d(TAG, "App data already cleared, skipping...")
                         }
-                        /*if (!isCacheCleared) {
+                        if (!isCacheCleared) {
                             clearAppData(this@MainActivity)
-                        }*/
-                    }
+                        }
+                    }*/
                 }
             }
     }
 
     private fun clearAppData(context: Context) {
-        try {
+        /*try {
             // Clear cache
             val cacheDir = context.cacheDir
             cacheDir?.deleteRecursively()
@@ -1010,16 +1008,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 MySharePreference.setDeviceID(this, deviceID.toString())
             }
             //restartApp()
+            
         } catch (e: Exception) {
             Log.e(TAG, "Failed to clear app data", e)
-        }
-    }
-
-    private fun restartApp() {
-        val intent = packageManager.getLaunchIntentForPackage(packageName)
-        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        Runtime.getRuntime().exit(0)
+        }*/
     }
 
     override fun onResume() {

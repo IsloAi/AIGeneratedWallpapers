@@ -925,7 +925,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             binding.liveWallpaper.player = exoPlayer
 
             // Prepare the media item
-            val mediaItem = MediaItem.fromUri(BlurView.filePath)
+            val mediaItem =
+                MediaItem.fromUri(BlurView.filePath)
             exoPlayer.setMediaItem(mediaItem)
 
             // Set event listeners for playback and error handling

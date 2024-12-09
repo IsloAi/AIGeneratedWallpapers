@@ -118,7 +118,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     lifecycleScope.launch(Dispatchers.IO) {
 
                         val list = result.data?.shuffled()
-
+                        Log.d("LIVE", "loadData: ${list?.size} ")
                         val listNullable = if (!AdConfig.ISPAIDUSER) {
                             list?.let { addNullValueInsideArray(it) }
                         } else {

@@ -65,8 +65,8 @@ object AdConfig {
 
     val BASE_URL = "https://vps.edecator.com/wallpaper_App/V4/"
     val HD_ImageUrl = "${BASE_URL_DATA}/images/"
-
     val Compressed_Image_url = "${BASE_URL_DATA}/compress/"
+
     var iapScreenType = 2
 
     var ISPAIDUSER = false

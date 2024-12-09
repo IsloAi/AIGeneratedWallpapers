@@ -276,6 +276,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                 }
             }
         }
+
         /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
@@ -333,7 +334,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".mp4"
-
         val filepath = File(file, fileName)
 
         BlurView.filePath = filepath.path
