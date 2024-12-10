@@ -72,8 +72,8 @@
         android:text="@string/next_txt"
         android:textColor="@color/white"
         android:textSize="@dimen/_14sdp"
-        app:layout_constraintBottom_toBottomOf="@+id/indi"
-        app:layout_constraintEnd_toStartOf="@+id/end_guide_line" />
+        app:layout_constraintEnd_toStartOf="@+id/end_guide_line"
+        app:layout_constraintTop_toTopOf="@+id/topguideline" />
 
     <!--<TextView
         android:id="@+id/next_btn"

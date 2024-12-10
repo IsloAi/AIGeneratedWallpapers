@@ -81,23 +81,16 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private var _binding: FragmentLiveWallpaperPreviewBinding? = null
     private val binding get() = _binding!!
-
     val sharedViewModel: SharedViewModel by activityViewModels()
-
     private var livewallpaper: LiveWallpaperModel? = null
     private var adPosition = 0
-
     private lateinit var myActivity: MainActivity
     var liveComingFrom: String = ""
-
     @Inject
     lateinit var webApiInterface: EndPointsInterface
-
     @Inject
     lateinit var appDatabase: AppDatabase
-
     private var checkWallpaper = false
-
     private val rewardAd = IKRewardAd()
     val interAd = IKInterstitialAd()
 
@@ -885,7 +878,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             }
         }
     }
-
 
     @UnstableApi
     private fun setWallpaperOnView() {
