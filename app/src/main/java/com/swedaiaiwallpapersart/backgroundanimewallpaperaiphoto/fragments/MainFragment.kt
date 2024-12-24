@@ -87,24 +87,23 @@ class MainFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        IKSdkController.getInstance()
-//            .loadBannerAds(
-//                requireActivity(),
-//                binding.adsWidget as? ViewGroup,
-//                "mainscr_bottom",
-//                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
-//                    override fun onAdsLoaded() {
-//                        super.onAdsLoaded()
-//                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
-//                    }
-//
-//                    override fun onAdsLoadFail() {
-//                        super.onAdsLoadFail()
-//                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
-//                    }
-//                }
-//            )
+        /*IKSdkController.getInstance()
+            .loadBannerAds(
+                requireActivity(),
+                binding.adsWidget as? ViewGroup,
+                "mainscr_bottom",
+                " mainscr_bottom", object : CustomSDKAdsListenerAdapter() {
+                    override fun onAdsLoaded() {
+                        super.onAdsLoaded()
+                        Log.e("*******ADS", "onAdsLoaded: Banner loaded", )
+                    }
 
+                    override fun onAdsLoadFail() {
+                        super.onAdsLoadFail()
+                        Log.e("*******ADS", "onAdsLoaded: Banner failed", )
+                    }
+                }
+            )*/
         backHandle()
         onViewCreatingCalling()
 
@@ -116,6 +115,7 @@ class MainFragment : Fragment(){
             }
         })
     }
+
     private fun onViewCreatingCalling(){
        myActivity = activity as MainActivity
         if (InternetState.checkForInternet(requireContext())){
@@ -182,6 +182,7 @@ class MainFragment : Fragment(){
 
 
     }
+
     private fun iconAndTitleSetting(whichClicked: Int){
       when(whichClicked){
           1->{
@@ -231,6 +232,7 @@ class MainFragment : Fragment(){
             homeButton.performClick()
         }
     }
+
     private fun setFragment(click: Int){
         val transaction = childFragmentManager.beginTransaction()
         when(click){
@@ -245,26 +247,28 @@ class MainFragment : Fragment(){
         }
             transaction.commit()
     }
-     private fun iconSelect(imageView: ImageView, drawable: Int, title: TextView){
+
+    private fun iconSelect(imageView: ImageView, drawable: Int, title: TextView){
          imageView.setImageResource(drawable)
          selectColor(title)
      }
+
     private fun iconUnselected(
         imageView1: ImageView, drawable1: Int,
         imageView2: ImageView,drawable2: Int,
         imageView3: ImageView,drawable3: Int,
         imageView4: ImageView,drawable4: Int
-
-    )
-    {
+    ) {
      imageView1.setImageResource(drawable1)
      imageView2.setImageResource(drawable2)
      imageView3.setImageResource(drawable3)
      imageView4.setImageResource(drawable4)
     }
+
     private fun selectColor(textView: TextView){
     textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.button_bg))
     }
+
     private fun unselectedColor(textView1: TextView,textView2: TextView,textView3: TextView,textView4: TextView){
         textView1.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         textView2.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
@@ -282,6 +286,5 @@ class MainFragment : Fragment(){
         super.onDestroyView()
         _binding = null
     }
-
 
 }

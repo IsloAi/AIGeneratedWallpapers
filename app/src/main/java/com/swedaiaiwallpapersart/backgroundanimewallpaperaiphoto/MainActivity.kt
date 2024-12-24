@@ -85,10 +85,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
     val TAG = "MainActivity"
-
     private var selectedPrompt: String? = null
     private var alertDialog: AlertDialog? = null
-
     private val liveViewModel: LiveWallpaperViewModel by viewModels()
     val myCatNameViewModel: MyCatNameViewModel by viewModels()
     private val mainActivityViewModel: MainActivityViewModel by viewModels()
@@ -98,7 +96,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     @Inject
     lateinit var appDatabase: AppDatabase
-
     private var _navController: NavController? = null
     private val navController get() = _navController!!
     private var deviceID: String? = null
@@ -109,11 +106,8 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d(TAG, "onCreate:deviceID - $deviceID")
-
-        //MySharePreference.setDeviceID(this, deviceID)
         val lan = MySharePreference.getLanguage(this)
         (application as? MyApp)?.setConnectivityListener(this)
-
         job = Job()
         val context = LocaleManager.setLocale(this, lan!!)
         val resources = context.resources
@@ -128,21 +122,14 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         setContentView(binding.root)
 
         initFirebaseRemoteConfig()
-
         handleBackPress()
-
         fetchData(deviceID.toString())
-
         observefetechedData()
-
         if (!isNetworkAvailable()) {
             showNoInternetDialog()
         }
-
         readJsonAndSaveDataToDb()
-
         getSetTotallikes()
-
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID.toString())
         }
@@ -167,11 +154,13 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     disableEdgeToEdge(window)
                     val windowInsetsController =
                         WindowCompat.getInsetsController(window, window.decorView)
-                    windowInsetsController.show(WindowInsetsCompat.Type.navigationBars())
+                    windowInsetsController.systemBarsBehavior =
+                        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
                 }
             }
-
         }
+
     }
 
     override fun onDestroy() {
@@ -425,8 +414,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     }
 
     private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
+        eventName: String, vararg param: Pair<String, String?>
     ) {
         IKTrackingHelper.sendTracking(eventName, *param)
     }
@@ -475,7 +463,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                     Log.e(TAG, "loadData: processing")
                 }
             }
-
         }
     }
 
@@ -527,7 +514,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             appDatabase.wallpapersDao().updateLikes(item.likes, item.id.toInt())
                         }
                     }
-
                 }
 
                 is Response.Loading -> {
@@ -543,7 +529,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 }
 
             }
-
         }
 
         /*myViewModel.allLiked.observe(this@MainActivity) { result ->
@@ -580,8 +565,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR
+            ))
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo
             networkInfo != null && networkInfo.isConnected
@@ -631,14 +617,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     private fun initFirebaseRemoteConfig() {
         val first = "position_ads"
-
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
-
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
         }
-        remoteConfig.setConfigSettingsAsync(configSettings)
 
+        remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.setDefaultsAsync(R.xml.remote_config)
 
         remoteConfig.addOnConfigUpdateListener(object : ConfigUpdateListener {
@@ -718,12 +702,12 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                         } catch (e: JSONException) {
                             e.printStackTrace()
                         }
-                        val tabNamesArray: Array<String> = positionTabs
-                            .replace("{", "")   // Remove the opening curly brace
-                            .replace("}", "")   // Remove the closing curly brace
-                            .replace("\"", "")
-                            .split(", ")        // Split the string into an array using ", " as the delimiter
-                            .toTypedArray()
+                        val tabNamesArray: Array<String> =
+                            positionTabs.replace("{", "")   // Remove the opening curly brace
+                                .replace("}", "")   // Remove the closing curly brace
+                                .replace("\"", "")
+                                .split(", ")        // Split the string into an array using ", " as the delimiter
+                                .toTypedArray()
 
                         for (element in tabNamesArray) {
                             Log.e(TAG, "onUpdate: $element")
@@ -803,178 +787,175 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 Log.e("TAG", "Config update error with code: " + error.code, error)
             }
         })
+        remoteConfig.fetchAndActivate().addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {
+                val updated = task.result
+                val welcomeMessage = remoteConfig[first].asString()
+                val onboarding = remoteConfig["onboarding_screen"].asBoolean()
+                val positionTabs = remoteConfig["tablist_156"].asString()
+                val categoryOrder = remoteConfig["category_order"].asString()
+                val languagesOrder = remoteConfig["languages"].asString()
+                val inAppConfig = remoteConfig["in_app_config"].asString()
 
-        remoteConfig.fetchAndActivate()
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val updated = task.result
-                    val welcomeMessage = remoteConfig[first].asString()
-                    val onboarding = remoteConfig["onboarding_screen"].asBoolean()
-                    val positionTabs = remoteConfig["tablist_156"].asString()
-                    val categoryOrder = remoteConfig["category_order"].asString()
-                    val languagesOrder = remoteConfig["languages"].asString()
-                    val inAppConfig = remoteConfig["in_app_config"].asString()
+                val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
+                if (fullOnboardingAutoNext.isNotEmpty()) {
+                    val jsonArray = JSONArray(fullOnboardingAutoNext)
+                    val jsonObject = jsonArray.getJSONObject(0)
+                    autoNext = jsonObject.getBoolean("auto_next")
+                    timeNext = jsonObject.getLong("time_next")
+                }
+                val baseUrls = remoteConfig["dataUrl"].asString()
+                AdConfig.BASE_URL_DATA = baseUrls
 
-                    val fullOnboardingAutoNext = remoteConfig["fullonboarding_auto_next"].asString()
-                    if (fullOnboardingAutoNext.isNotEmpty()) {
-                        val jsonArray = JSONArray(fullOnboardingAutoNext)
-                        val jsonObject = jsonArray.getJSONObject(0)
-                        autoNext = jsonObject.getBoolean("auto_next")
-                        timeNext = jsonObject.getLong("time_next")
-                    }
-                    val baseUrls = remoteConfig["dataUrl"].asString()
-                    AdConfig.BASE_URL_DATA = baseUrls
+                try {
+                    val categoryOrderArray =
+                        categoryOrder.substring(1, categoryOrder.length - 1).replace("\"", "")
+                            .split(", ").toList()
+                    AdConfig.categoryOrder = categoryOrderArray
+                } catch (e: StringIndexOutOfBoundsException) {
+                    e.printStackTrace()
+                }
+                AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
+                AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
+                try {
+                    val languagesOrderArray =
+                        languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
 
-                    try {
-                        val categoryOrderArray =
-                            categoryOrder.substring(1, categoryOrder.length - 1).replace("\"", "")
-                                .split(", ")
-                                .toList()
-                        AdConfig.categoryOrder = categoryOrderArray
-                    } catch (e: StringIndexOutOfBoundsException) {
-                        e.printStackTrace()
-                    }
-                    AdConfig.Noti_Widget = remoteConfig["Noti_Widget"].asString()
-                    AdConfig.Reward_Screen = remoteConfig.getBoolean("Reward_Screen")
-                    try {
-                        val languagesOrderArray =
-                            languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
+                    AdConfig.languagesOrder = languagesOrderArray
+                } catch (e: StringIndexOutOfBoundsException) {
+                    e.printStackTrace()
+                }
 
-                        AdConfig.languagesOrder = languagesOrderArray
-                    } catch (e: StringIndexOutOfBoundsException) {
-                        e.printStackTrace()
-                    }
+                val iap = remoteConfig["iap_config"].asString()
+                try {
+                    val jsonObject = JSONObject(inAppConfig)
+                    val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
+                    val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
 
-                    val iap = remoteConfig["iap_config"].asString()
-                    try {
-                        val jsonObject = JSONObject(inAppConfig)
-                        val languagescralwayshow = jsonObject.getBoolean("language_scr_alway_show")
-                        val regularWallpaperFlow = jsonObject.getInt("regular_wallpaper_flow")
+                    AdConfig.regularWallpaperFlow = regularWallpaperFlow
+                    AdConfig.inAppConfig = languagescralwayshow
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
 
-                        AdConfig.regularWallpaperFlow = regularWallpaperFlow
-                        AdConfig.inAppConfig = languagescralwayshow
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
+                try {
+                    val jsonObject = JSONObject(iap)
+                    val iapScreenType = jsonObject.optInt("IAPScreentype")
 
-                    try {
-                        val jsonObject = JSONObject(iap)
-                        val iapScreenType = jsonObject.optInt("IAPScreentype")
+                    AdConfig.iapScreenType = iapScreenType
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
 
-                        AdConfig.iapScreenType = iapScreenType
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
+                val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
+                AdConfig.languageLogicShowNative = languageShowNative.toInt()
+                val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
+                AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
 
-                    val languageShowNative = remoteConfig["Language_logic_show_native"].asLong()
-                    AdConfig.languageLogicShowNative = languageShowNative.toInt()
-                    val onboardingFullNative = remoteConfig["Onboarding_Full_Native"].asLong()
-                    AdConfig.onboarding_Full_Native = onboardingFullNative.toInt()
+                val policyOpenAd = remoteConfig["avoid_policy_openad_inter"].asLong()
+                AdConfig.avoidPolicyOpenAdInter = policyOpenAd.toInt()
 
-                    val policyOpenAd = remoteConfig["avoid_policy_openad_inter"].asLong()
-                    AdConfig.avoidPolicyOpenAdInter = policyOpenAd.toInt()
+                val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
+                AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
 
-                    val policyRepInter = remoteConfig["avoid_policy_repeating_inter"].asLong()
-                    AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
-
-                    val tabNamesArray: Array<String> = positionTabs
-                        .replace("{", "")   // Remove the opening curly brace
+                val tabNamesArray: Array<String> =
+                    positionTabs.replace("{", "")   // Remove the opening curly brace
                         .replace("}", "")   // Remove the closing curly brace
                         .replace("\"", "")
                         .split(", ")        // Split the string into an array using ", " as the delimiter
                         .toTypedArray()
 
-                    for (element in tabNamesArray) {
-                        Log.e(TAG, "onUpdate: $element")
-                    }
-
-                    AdConfig.tabPositions = tabNamesArray
-                    AdConfig.showOnboarding = onboarding
-
-                    val liveScrollType = remoteConfig["Live_tab_scroll_type"].asLong()
-                    AdConfig.liveTabScrollType = liveScrollType.toInt()
-                    Log.d(TAG, "initFirebaseRemoteConfig: LiveScrollType: $liveScrollType")
-                    //AdConfig.liveTabScrollType = 3
-
-                    val restoreCache = remoteConfig["RestoreCache"].asBoolean()
-                    AdConfig.shouldRestoreCache = restoreCache
-                    Log.d(TAG, "initFirebaseRemoteConfig: restoreCache: $restoreCache")
-
-                    try {
-                        val jsonObject = JSONObject(welcomeMessage)
-                        val trendingScrollViewArray =
-                            jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
-                        for (i in 0 until trendingScrollViewArray.length()) {
-                            val obj = trendingScrollViewArray.getJSONObject(i)
-                            val status = obj.getString("Status")
-                            val threshold = obj.getString("fisrt_ad_line_threshold")
-                            val lineCount = obj.getString("line_count")
-                            val designType = obj.getString("native_design_type")
-
-                            AdConfig.adStatusViewListWallSRC = status.toInt()
-                            AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
-                            AdConfig.lineCountViewListWallSRC = lineCount.toInt() + 1
-                        }
-
-                        val cateScrollViewArray =
-                            jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
-                        for (i in 0 until cateScrollViewArray.length()) {
-                            val obj = cateScrollViewArray.getJSONObject(i)
-                            val status = obj.getString("Status")
-                            val threshold = obj.getString("fisrt_ad_line_threshold")
-                            val lineCount = obj.getString("line_count")
-                            val designType = obj.getString("native_design_type")
-
-                            AdConfig.adStatusCategoryArt = status.toInt()
-                            AdConfig.firstAdLineCategoryArt = threshold.toInt()
-                            AdConfig.lineCountCategoryArt = lineCount.toInt()
-                        }
-
-                        val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
-                        for (i in 0 until mainScreenScroll.length()) {
-                            val obj = mainScreenScroll.getJSONObject(i)
-                            val status = obj.getString("Status")
-                            val threshold = obj.getString("fisrt_ad_line_threshold")
-                            val lineCount = obj.getString("line_count")
-                            val designType = obj.getString("native_design_type")
-
-                            AdConfig.adStatusTrending = status.toInt()
-                            AdConfig.firstAdLineTrending = threshold.toInt()
-                            AdConfig.lineCountTrending = lineCount.toInt() + 1
-                        }
-
-                        val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
-                        for (i in 0 until mostUsedScreen.length()) {
-                            val obj = mostUsedScreen.getJSONObject(i)
-                            val status = obj.getString("Status")
-                            val threshold = obj.getString("fisrt_ad_line_threshold")
-                            val lineCount = obj.getString("line_count")
-                            val designType = obj.getString("native_design_type")
-
-                            AdConfig.adStatusMostUsed = status.toInt()
-                            AdConfig.firstAdLineMostUsed = threshold.toInt()
-                            AdConfig.lineCountMostUsed = lineCount.toInt() + 1
-                        }
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
-
-                    /*if (restoreCache) {
-                        val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
-                        val isDataCleared = prefs.getBoolean("is_data_cleared", false)
-                        if (!isDataCleared) {
-                            clearAppData(this@MainActivity)
-                            // Mark data as cleared
-                            prefs.edit().putBoolean("is_data_cleared", true).apply()
-                        } else {
-                            Log.d(TAG, "App data already cleared, skipping...")
-                        }
-                        if (!isCacheCleared) {
-                            clearAppData(this@MainActivity)
-                        }
-                    }*/
+                for (element in tabNamesArray) {
+                    Log.e(TAG, "onUpdate: $element")
                 }
+
+                AdConfig.tabPositions = tabNamesArray
+                AdConfig.showOnboarding = onboarding
+
+                val liveScrollType = remoteConfig["Live_tab_scroll_type"].asLong()
+                AdConfig.liveTabScrollType = liveScrollType.toInt()
+                Log.d(TAG, "initFirebaseRemoteConfig: LiveScrollType: $liveScrollType")
+                //AdConfig.liveTabScrollType = 3
+
+                val restoreCache = remoteConfig["RestoreCache"].asBoolean()
+                AdConfig.shouldRestoreCache = restoreCache
+                Log.d(TAG, "initFirebaseRemoteConfig: restoreCache: $restoreCache")
+
+                try {
+                    val jsonObject = JSONObject(welcomeMessage)
+                    val trendingScrollViewArray =
+                        jsonObject.getJSONArray("mainscr_trending_tab_scroll_view")
+                    for (i in 0 until trendingScrollViewArray.length()) {
+                        val obj = trendingScrollViewArray.getJSONObject(i)
+                        val status = obj.getString("Status")
+                        val threshold = obj.getString("fisrt_ad_line_threshold")
+                        val lineCount = obj.getString("line_count")
+                        val designType = obj.getString("native_design_type")
+
+                        AdConfig.adStatusViewListWallSRC = status.toInt()
+                        AdConfig.firstAdLineViewListWallSRC = threshold.toInt()
+                        AdConfig.lineCountViewListWallSRC = lineCount.toInt() + 1
+                    }
+
+                    val cateScrollViewArray =
+                        jsonObject.getJSONArray("mainscr_cate_tab_scroll_view")
+                    for (i in 0 until cateScrollViewArray.length()) {
+                        val obj = cateScrollViewArray.getJSONObject(i)
+                        val status = obj.getString("Status")
+                        val threshold = obj.getString("fisrt_ad_line_threshold")
+                        val lineCount = obj.getString("line_count")
+                        val designType = obj.getString("native_design_type")
+
+                        AdConfig.adStatusCategoryArt = status.toInt()
+                        AdConfig.firstAdLineCategoryArt = threshold.toInt()
+                        AdConfig.lineCountCategoryArt = lineCount.toInt()
+                    }
+
+                    val mainScreenScroll = jsonObject.getJSONArray("viewlistwallscr_scrollview")
+                    for (i in 0 until mainScreenScroll.length()) {
+                        val obj = mainScreenScroll.getJSONObject(i)
+                        val status = obj.getString("Status")
+                        val threshold = obj.getString("fisrt_ad_line_threshold")
+                        val lineCount = obj.getString("line_count")
+                        val designType = obj.getString("native_design_type")
+
+                        AdConfig.adStatusTrending = status.toInt()
+                        AdConfig.firstAdLineTrending = threshold.toInt()
+                        AdConfig.lineCountTrending = lineCount.toInt() + 1
+                    }
+
+                    val mostUsedScreen = jsonObject.getJSONArray("mainscr_all_tab_scroll")
+                    for (i in 0 until mostUsedScreen.length()) {
+                        val obj = mostUsedScreen.getJSONObject(i)
+                        val status = obj.getString("Status")
+                        val threshold = obj.getString("fisrt_ad_line_threshold")
+                        val lineCount = obj.getString("line_count")
+                        val designType = obj.getString("native_design_type")
+
+                        AdConfig.adStatusMostUsed = status.toInt()
+                        AdConfig.firstAdLineMostUsed = threshold.toInt()
+                        AdConfig.lineCountMostUsed = lineCount.toInt() + 1
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+
+                /*if (restoreCache) {
+                    val prefs = getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+                    val isDataCleared = prefs.getBoolean("is_data_cleared", false)
+                    if (!isDataCleared) {
+                        clearAppData(this@MainActivity)
+                        // Mark data as cleared
+                        prefs.edit().putBoolean("is_data_cleared", true).apply()
+                    } else {
+                        Log.d(TAG, "App data already cleared, skipping...")
+                    }
+                    if (!isCacheCleared) {
+                        clearAppData(this@MainActivity)
+                    }
+                }*/
             }
+        }
     }
 
     private fun clearAppData(context: Context) {

@@ -86,8 +86,10 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private var adPosition = 0
     private lateinit var myActivity: MainActivity
     var liveComingFrom: String = ""
+
     @Inject
     lateinit var webApiInterface: EndPointsInterface
+
     @Inject
     lateinit var appDatabase: AppDatabase
     private var checkWallpaper = false

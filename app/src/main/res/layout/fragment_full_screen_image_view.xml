@@ -5,14 +5,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background">
+
     <com.ortiz.touchview.TouchImageView
         android:id="@+id/fullViewImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
         android:clickable="false"
         android:focusable="false"
-        />
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RelativeLayout
         android:id="@+id/closeButton"
         android:layout_width="@dimen/_35sdp"
@@ -22,12 +27,13 @@
         android:layout_marginTop="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         >
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/cross"
             android:padding="@dimen/_5sdp"
-            />
+            android:src="@drawable/cross" />
+
     </RelativeLayout>
 
 

@@ -43,7 +43,8 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
         val lan = MySharePreference.getLanguage(requireContext())
         val context = LocaleManager.setLocale(requireContext(), lan!!)
         val resources = context.resources
@@ -55,6 +56,7 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
         resources1.updateConfiguration(configuration, resources.displayMetrics)
         _binding = FragmentOnBoardingBinding.inflate(inflater, container, false)
         return binding.root
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -240,6 +242,7 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
                 }
             }
         }
+
     }
 
     private fun backHandle() {

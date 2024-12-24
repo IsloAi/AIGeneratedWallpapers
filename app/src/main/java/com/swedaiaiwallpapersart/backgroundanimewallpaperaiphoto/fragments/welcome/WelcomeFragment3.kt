@@ -107,7 +107,7 @@ class WelcomeFragment3 : Fragment() {
                     }
                 }
             )
-        }, 200)  // Delay can be adjusted for smoother performance
+        }, 500)  // Delay can be adjusted for smoother performance
 
 
         /*binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout, "onboardscr_fullscreen",
