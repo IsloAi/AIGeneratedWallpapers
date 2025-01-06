@@ -1,15 +1,0 @@
-
-nkotlin:S1172•"(Remove these unused function parameters.(™Ó®œ8æçÒÌè1J$5c3af273-e43d-413c-9774-d37dd2deec0d
-ckotlin:S125š"Remove this commented out code.(Ê¬ÿ8÷çÒÌè1J$c99bcf2a-45ac-434c-9b31-5338c2bf08fe
-“kotlin:S117•"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(™Ó®œ8€èÒÌè1J$18572d91-1e20-49af-aba9-f66f2bad012b
-gkotlin:S6310ß"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8èÒÌè1J$304ac9d6-258b-4f2f-889c-a1594ec3fb51
-tkotlin:S1481s"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8“èÒÌè1J$ce979c75-a384-41f1-9d19-75c465b46e4c
-ukotlin:S1481ˆ"/Remove this unused "adPosition" local variable.(²úÒ8“èÒÌè1J$9e4f0a02-7f49-44fe-92c1-fcd4bf401074
-_kotlin:S1128"Remove this unused import.(¦ğ¤Ê8—èÒÌè1J$02e26411-60e8-4a08-b3f1-c55257636188
-dkotlin:S1128"Remove this unused import.(±ğ«éşÿÿÿÿ8—èÒÌè1J$2b5b45a7-38dc-45a6-adec-532c2682b375
-kotlin:S101¹"SRename class "downloadCallback" to match the regular expression ^[A-Z][a-zA-Z0-9]*$(½Û¹ûÿÿÿÿ8˜èÒÌè1J$a67d8262-2c61-4be4-9eb6-8c618fbac83f
-mkotlin:S1874H"#Deprecated code should not be used.(Í‚¬ûıÿÿÿÿ8šèÒÌè1J$6ad5db8a-314c-4e7b-afce-df216054e9ca
-nkotlin:S1874ê"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8šèÒÌè1J$b8d78345-05a7-40ea-8c5c-44d5ee9e07e3
-nkotlin:S1874•"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8šèÒÌè1J$8bd198cc-4716-489e-a495-1fc5af7fc2e2
-hkotlin:S1874–"#Deprecated code should not be used.(àü8šèÒÌè1J$0903b8cc-cdc0-4119-8901-d55ce258b8c9
-kotlin:S6517¹"BMake this interface functional or replace it with a function type.(½Û¹ûÿÿÿÿ8 èÒÌè1J$03b100a2-fce3-47ab-8f94-db6ad8fc8965

@@ -8,28 +8,20 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission
-        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission
-        android:name="android.permission.BIND_WALLPAPER"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.READ_PRIVILEGED_PHONE_STATE" tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.BIND_WALLPAPER" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32"
-        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="32" tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission
-        android:name="android.permission.BATTERY_STATS"
-        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.BATTERY_STATS" tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp"
@@ -51,12 +43,10 @@
             android:exported="false"
             android:theme="@style/Theme.Transparent"
             android:windowSoftInputMode="stateHidden|adjustResize" />
-
         <activity
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.BatteryAnimationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity"
             android:exported="true"
@@ -67,7 +57,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:autoVerify="true">
+            <intent-filter
+                android:autoVerify="true"
+                tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -82,7 +74,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.LiveWallpaperService"
             android:enabled="true"
@@ -128,20 +119,12 @@
         </receiver>
 
         <service
-            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService"
-            android:enabled="true"
-            android:exported="true"
-            android:foregroundServiceType="specialUse"
-            tools:ignore="ForegroundServicePermission">
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.CustomFCMHandler"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.FOREGROUND_SERVICE" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-
-            <property
-                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="@string/fgs_notification_widget_description" />
         </service>
-
     </application>
 
 </manifest>

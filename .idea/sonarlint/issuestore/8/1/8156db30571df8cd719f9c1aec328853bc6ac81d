@@ -1,35 +1,0 @@
-
-Ykotlin:S899İ":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8£”Ï’õ1
-\kotlin:S6619á"<Remove this useless null-safe access ?., it always succeeds.(‹ÛŞ8’¡şÛ÷1
-\kotlin:S6619â"<Remove this useless null-safe access ?., it always succeeds.(Ö³“Á8”¡şÛ÷1
-\kotlin:S6619ç"<Remove this useless null-safe access ?., it always succeeds.(ù›Û“8–¡şÛ÷1
-akotlin:S6619ò"<Remove this useless null-safe access ?., it always succeeds.(ö´À¨ıÿÿÿÿ8˜¡şÛ÷1
-[kotlin:S6619“"<Remove this useless null-safe access ?., it always succeeds.(ÿø¦
-8š¡şÛ÷1
-akotlin:S6619–"<Remove this useless null-safe access ?., it always succeeds.(êŒ¼“ıÿÿÿÿ8œ¡şÛ÷1
-akotlin:S6619š"<Remove this useless null-safe access ?., it always succeeds.(µòÿøÿÿÿÿ8¡şÛ÷1
-\kotlin:S6619 "<Remove this useless null-safe access ?., it always succeeds.(‹ÛŞ8 ¡şÛ÷1
-\kotlin:S6619¡"<Remove this useless null-safe access ?., it always succeeds.(µßñô8¢¡şÛ÷1
-\kotlin:S6619¦"<Remove this useless null-safe access ?., it always succeeds.(ù›Û“8¤¡şÛ÷1
-akotlin:S6619è"<Remove this useless null-safe access ?., it always succeeds.(µòÿøÿÿÿÿ8¦¡şÛ÷1
-akotlin:S6619§"<Remove this useless null-safe access ?., it always succeeds.(šö—ÿÿÿÿÿ8¨¡şÛ÷1
-\kotlin:S6619¨"<Remove this useless null-safe access ?., it always succeeds.(¬ÁÜì8ª¡şÛ÷1
-akotlin:S6619å"<Remove this useless null-safe access ?., it always succeeds.(ÏÂüæÿÿÿÿÿ8¬¡şÛ÷1
-akotlin:S6619æ"<Remove this useless null-safe access ?., it always succeeds.(ğ†·Öşÿÿÿÿ8®¡şÛ÷1
-akotlin:S6619¤"<Remove this useless null-safe access ?., it always succeeds.(ÏÂüæÿÿÿÿÿ8®¡şÛ÷1
-akotlin:S6619¥"<Remove this useless null-safe access ?., it always succeeds.(ğ†·Öşÿÿÿÿ8¯¡şÛ÷1
-akotlin:S6619—"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8°¡şÛ÷1
-akotlin:S6619«"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8°¡şÛ÷1
-akotlin:S6619å"<Remove this useless null-safe access ?., it always succeeds.(×íõ¨ûÿÿÿÿ8±¡şÛ÷1
-=kotlin:S125ï"Remove this commented out code.(§íËf8ª”Ï’õ1
-Ckotlin:S125ú"Remove this commented out code.(±š¡®ûÿÿÿÿ8«”Ï’õ1
->kotlin:S125ÿ"Remove this commented out code.(Ïİş8«”Ï’õ1
-;kotlin:S6310ì"Avoid hardcoded dispatchers.(©ÓœW8´”Ï’õ1
-;kotlin:S6310Á"Avoid hardcoded dispatchers.(©ÓœW8µ”Ï’õ1
-<kotlin:S6310Ä"Avoid hardcoded dispatchers.(Í¡·Ş8µ”Ï’õ1
-Mkotlin:S1481¤"-Remove this unused "behavior" local variable.(Ø¦š¾8Õ”Ï’õ1
-qkotlin:S1192ø"LDefine a constant instead of duplicating this literal "********ADS" 9 times.(™ù£êøÿÿÿÿ8á”Ï’õ1
-pkotlin:S1192‰"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 5 times.(±È÷®8á”Ï’õ1
-qkotlin:S3776›"RRefactor this method to reduce its Cognitive Complexity from 28 to the 15 allowed.(ò†Ê,8å”Ï’õ1
-rkotlin:S3776œ"RRefactor this method to reduce its Cognitive Complexity from 27 to the 15 allowed.(ò¡®í8æ”Ï’õ1
-zkotlin:S1186ò"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8ì”Ï’õ1

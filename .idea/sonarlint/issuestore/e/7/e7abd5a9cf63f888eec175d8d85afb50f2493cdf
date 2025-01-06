@@ -1,9 +1,0 @@
-
-^kotlin:S6619–">Remove this useless non-null assertion !!, it always succeeds.(­—ªº8÷ä–ß÷1
->kotlin:S125Æ"Remove this commented out code.(îßóı8ŞİŠî1
->kotlin:S1128"Remove this unused import.(µ““ûÿÿÿÿ8ıİŠî1
-Gkotlin:S1874m"#Deprecated code should not be used.(ı‚º¾şÿÿÿÿ8‚ŞŠî1
-Hkotlin:S1874å"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8‚ŞŠî1
-Hkotlin:S1874"#Deprecated code should not be used.(İ‘Ïôûÿÿÿÿ8‚ŞŠî1
-Hkotlin:S1874Ô"#Deprecated code should not be used.(ş¡¬ôûÿÿÿÿ8‚ŞŠî1
-rkotlin:S3776À"RRefactor this method to reduce its Cognitive Complexity from 64 to the 15 allowed.(ñàõà8ƒŞŠî1

@@ -1,10 +1,0 @@
-
-ikotlin:S125‡"Remove this commented out code.(Õ½Ì‰üÿÿÿÿ8Ë˜»Æê1J$91eb1028-f1fd-4023-b48e-1cca85e4a899
-“kotlin:S117–"NRename this parameter to match the regular expression ^`?[_a-z][a-zA-Z0-9]*`?$(™±£‹8Î˜»Æê1J$a4425f74-43c6-47cf-9779-6a211aacae77
-gkotlin:S6310İ"Avoid hardcoded dispatchers.(ªäúîúÿÿÿÿ8Ï˜»Æê1J$b4b63754-a8d6-47e6-8279-aac0c5cfbaa3
-tkotlin:S1481t"*Remove this unused "model" local variable.(ÄÒñ×ıÿÿÿÿ8Ü˜»Æê1J$e21adadc-c09c-499d-ae7d-fef3b07c211f
-ukotlin:S1481‰"/Remove this unused "adPosition" local variable.(²úÒ8Ü˜»Æê1J$0416a0b2-61f1-4fbf-a6b3-88bd33e6d8bc
-mkotlin:S1874I"#Deprecated code should not be used.(úâç¹ùÿÿÿÿ8ã˜»Æê1J$4e21e674-59fc-45ff-94f2-8de38f73e7df
-nkotlin:S1874£"#Deprecated code should not be used.(€™¶¯ûÿÿÿÿ8çÀºÆê1J$24b2d7dd-ca9b-424d-b58b-f63ed834b557
-hkotlin:S1874¤"#Deprecated code should not be used.(àü8ã˜»Æê1J$61a2608f-34b5-460d-b0f4-f55d8f29a6d2
-˜kotlin:S3776Û"RRefactor this method to reduce its Cognitive Complexity from 16 to the 15 allowed.(×¡–8ä˜»Æê1J$97c42954-599e-4a4e-9775-7ab55d9fee56

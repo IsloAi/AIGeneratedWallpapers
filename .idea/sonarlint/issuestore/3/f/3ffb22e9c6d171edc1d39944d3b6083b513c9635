@@ -1,13 +1,0 @@
-
-]kotlin:S1172Ù"8Use "_" instead of this unused lambda parameter "task1".(íçÇĞüÿÿÿÿ8Ë»¿ÅÅ1
-Jkotlin:S6508Ø"*Replace this usage of Void type with Unit.(àŒÄÜ8Ì»¿ÅÅ1
-Ykotlin:S899ô":Do something with the "Boolean" value returned by "mkdir".(©Ç•µ8Í»¿ÅÅ1
-Vkotlin:S1144Š"1Remove this unused private "loadingPopup" method.(Êˆåİùÿÿÿÿ8è»¿ÅÅ1
-Mkotlin:S1481ó"-Remove this unused "behavior" local variable.(Ø¦š¾8ÿ»¿ÅÅ1
-qkotlin:S1192†"LDefine a constant instead of duplicating this literal "********ADS" 6 times.(à Öÿÿÿÿÿÿ8‰¼¿ÅÅ1
-ukotlin:S1192†"PDefine a constant instead of duplicating this literal "onAdsShowFail: " 4 times.(à Öÿÿÿÿÿÿ8‰¼¿ÅÅ1
-…kotlin:S1192‡"eDefine a constant instead of duplicating this literal "Ad not available,Please try again..." 3 times.(š­ğì8‰¼¿ÅÅ1
-Hkotlin:S1874Ù"#Deprecated code should not be used.(ĞÕ¢Áøÿÿÿÿ8Œ¼¿ÅÅ1
-Hkotlin:S1874€"#Deprecated code should not be used.(´¾ø½ıÿÿÿÿ8¼¿ÅÅ1
-wkotlin:S3776„"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(¨€›¾úÿÿÿÿ8çì¿ÅÅ1
-zkotlin:S1186ç"ZAdd a nested comment explaining why this function is empty or complete the implementation.(®¹‘8”¼¿ÅÅ1

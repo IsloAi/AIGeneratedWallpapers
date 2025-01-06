@@ -859,10 +859,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 AdConfig.avoidPolicyRepeatingInter = policyRepInter.toInt()
 
                 val tabNamesArray: Array<String> =
-                    positionTabs.replace("{", "")   // Remove the opening curly brace
-                        .replace("}", "")   // Remove the closing curly brace
+                    positionTabs.replace("{", "")
+                        .replace("}", "")
                         .replace("\"", "")
-                        .split(", ")        // Split the string into an array using ", " as the delimiter
+                        .split(", ")
                         .toTypedArray()
 
                 for (element in tabNamesArray) {

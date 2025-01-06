@@ -1,17 +1,0 @@
-
-ikotlin:S125€"Remove this commented out code.(¼Ú–¶ùÿÿÿÿ8“ó¹Šã1J$1bd46b5c-dec0-497e-9a92-1247d7143f9f
-ikotlin:S125Î"Remove this commented out code.(ã™ïşÿÿÿÿ8Ë¿Øóû1J$2aa9c308-3c41-460e-8dc1-a9352a4f9432
-bkotlin:S6310»"Avoid hardcoded dispatchers.(©ÒÕò8—ó¹Šã1J$65cb4aa1-358c-4dde-bfe0-f30ca7c7dfdb
-bkotlin:S6310Û"Avoid hardcoded dispatchers.(ÏÃâ8˜ó¹Šã1J$b558a58a-6817-4a21-a62a-cb06cce74417
-akotlin:S6310À"Avoid hardcoded dispatchers.(©ÓœW8˜ó¹Šã1J$b7a3a19d-2d93-4936-8993-71c48e47e330
-bkotlin:S6310È"Avoid hardcoded dispatchers.(Í¡·Ş8˜ó¹Šã1J$5efb3064-4514-4803-aa98-277d71b19845
-akotlin:S6310ç"Avoid hardcoded dispatchers.(©ÓœW8òÛğû1J$341dc07b-056b-4438-ad35-2f7bd3486287
-bkotlin:S6310ø"Avoid hardcoded dispatchers.(Í¡·Ş8™ó¹Šã1J$d3a20d89-8fab-4f83-aecd-1e249f98c48f
-nkotlin:S108à")Either remove or fill this block of code.(·Úøš8¢ó¹Šã1J$ea2ac87a-338a-4d9b-a9af-e70a5e1cf1ba
-mkotlin:S108…")Either remove or fill this block of code.(›Ñû08ªÆµŠã1J$bb19204e-2b3f-45d6-bf98-a886a8218766
-skotlin:S108‰")Either remove or fill this block of code.(€¸¦’üÿÿÿÿ8Ö´æóû1J$3543df3c-c7a3-45e5-8b07-8a4d49868621
-dkotlin:S1128'"Remove this unused import.(ÌëÉÚşÿÿÿÿ8èÈşå1J$4d4e4c6a-ab83-4873-8407-12ddfef59545
-“kotlin:S1871ç"MThis branch's code block is the same as the block for the branch on line 356.(°È¥8–„ñû1J$3c8dcac7-3907-489e-b551-a80674b3c6cb
- kotlin:S1186‹"ZAdd a nested comment explaining why this function is empty or complete the implementation.(™Å¾8¸ó¹Šã1J$4f9093d9-6a65-4430-917c-c407a371780c
-ykotlin:S1066Ÿ".Merge this "if" statement with the nested one.(Ğğïıÿÿÿÿ8“ßÁ‡ä1J$b056e665-bf2a-495c-b117-2a40d1177aa3
-Œkotlin:S6510‘"AMove "return" statements from all branches before "if" statement.(Æ„ÒÆÿÿÿÿÿ8¹ó¹Šã1J$0d28908e-48f8-416e-b695-67ef2f635db3

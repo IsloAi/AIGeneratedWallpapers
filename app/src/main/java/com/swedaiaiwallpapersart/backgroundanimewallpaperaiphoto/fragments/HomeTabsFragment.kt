@@ -233,7 +233,7 @@ class HomeTabsFragment : Fragment() {
             })
         }
 
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (isAdded) {
                 try {
                     if (!NotificationManagerCompat.from(requireContext())
@@ -247,8 +247,7 @@ class HomeTabsFragment : Fragment() {
                     Log.d("usmanTAG", "OVC:HomeTabsFrag: ${e.localizedMessage} ")
                 }
             }
-        }*/
-
+        }
     }
 
     private fun sendTracking(

@@ -1,36 +1,0 @@
-
-kotlin:S1172Ή"4Remove this unused function parameter "notSelected".(ώπ‹ύÿÿÿÿ8‚ερυό1J$06690431-5ba6-4bbc-afbb-14cc0462a1fd
-bkotlin:S6310ν"Avoid hardcoded dispatchers.(ΟΓβ8²ερυό1J$15506373-2cab-4084-a167-7477971e55e5
-bkotlin:S6310ϊ"Avoid hardcoded dispatchers.(ΟΓβ8²ερυό1J$9482d080-560e-42c1-b352-9690cdb760eb
-bkotlin:S6310"Avoid hardcoded dispatchers.(ΟΓβ8²ερυό1J$83af65c8-06ed-4dab-8aa9-b2a4a2457738
-bkotlin:S6310’
-"Avoid hardcoded dispatchers.(©ÒΥς8²ερυό1J$3e672992-11e1-45c1-ba4f-5986ab1a8920
-bkotlin:S6310£
-"Avoid hardcoded dispatchers.(©ÒΥς8²ερυό1J$ab9685c8-e650-4a44-986f-5aca2506100b
-akotlin:S6310Α"Avoid hardcoded dispatchers.(©ΣW8΄ερυό1J$a515122d-509d-4989-9d48-3fcffdec350c
-akotlin:S6310©"Avoid hardcoded dispatchers.(©ΣW8΄ερυό1J$29163d1a-843b-4f57-99e1-d94ba9266a6c
-akotlin:S6310Ε"Avoid hardcoded dispatchers.(©ΣW8µερυό1J$7e682763-841a-425b-b2f9-fd657fb8024b
-akotlin:S6310ό"Avoid hardcoded dispatchers.(©ΣW8µερυό1J$5045b0ad-310a-4c0c-bd1a-84c91b80fccd
-skotlin:S108")Either remove or fill this block of code.(€Έ¦’όÿÿÿÿ8θερυό1J$30f7a8ee-de71-471c-9265-89dec0f2162d
-nkotlin:S108²")Either remove or fill this block of code.(·Ϊψ8ιερυό1J$098d3dee-6475-4c52-854b-cde207e5eb81
-mkotlin:S108¶")Either remove or fill this block of code.(›Ρϋ08ιερυό1J$a46e4ffe-c1a8-4ce7-8365-080109ee8a8f
-skotlin:S108Ή")Either remove or fill this block of code.(ρ»›ϊÿÿÿÿ8ιερυό1J$59377c74-21ac-4ddb-987a-f9f6e552e176
-nkotlin:S108Ο")Either remove or fill this block of code.(·Ϊψ8ιερυό1J$84948d28-9704-4ccb-b532-2bcb6027943c
-mkotlin:S108Σ")Either remove or fill this block of code.(›Ρϋ08ιερυό1J$0e9a162d-e249-4ab5-af76-0ea9ffdb47cb
-skotlin:S108Φ")Either remove or fill this block of code.(ρ»›ϊÿÿÿÿ8ιερυό1J$ec395002-123b-404e-8adb-7f4de6df799c
-kotlin:S6306•"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(£ϊÿÿÿÿ8περυό1J$8fbae771-da4a-4652-b062-c5abf7af18a8
-kotlin:S6306²"TUsing "GlobalScope" here leads to the breaking of structured concurrency principles.(£ϊÿÿÿÿ8τερυό1J$dd84c9ba-36a1-40f1-9a82-59fe95b788ea
-skotlin:S1481Ί".Remove this unused "deferreds" local variable.(«ώΧv8’ζρυό1J$a0776dfc-8e2e-404c-a395-75aeac4eaecb
-qkotlin:S1481"+Remove this unused "params" local variable.(Φμ8”ζρυό1J$8966aa82-7d59-4d06-ab6a-a47ad79451c9
-dkotlin:S1128"Remove this unused import.(£“Χ”ύÿÿÿÿ8¬ζρυό1J$560a5ce5-2ea7-466b-966b-740f9f47e378
-dkotlin:S1128"Remove this unused import.(ΊΝ—Τώÿÿÿÿ8®ζρυό1J$3d00b7a8-3209-468e-85a1-649f8e651387
-dkotlin:S1128"Remove this unused import.(Μ­Ευόÿÿÿÿ8®ζρυό1J$fdd50705-acc3-41b2-a8db-dc59740b2193
-dkotlin:S1128"Remove this unused import.(ς°Ι„ÿÿÿÿÿ8®ζρυό1J$246451f2-2486-483e-8fe4-5465dd1d7c13
-_kotlin:S1128"Remove this unused import.(ª»¦Ϋ8®ζρυό1J$62a13795-198a-40d6-bcf8-f247bfbbf410
-–kotlin:S1192­"KDefine a constant instead of duplicating this literal "onUpdate: " 8 times.(ΈϊώΙψÿÿÿÿ8Έζρυό1J$8da9b2dc-2058-40dd-8683-39a4f5631441
-mkotlin:S1874|"#Deprecated code should not be used.(έ‘Οτϋÿÿÿÿ8Εζρυό1J$aa05260f-13a3-46b5-a0c0-a69ff4434ef0
-nkotlin:S1874η"#Deprecated code should not be used.(€™¶―ϋÿÿÿÿ8Εζρυό1J$77d282de-f9b0-48b6-997d-e15c561a97c9
-hkotlin:S1874θ"#Deprecated code should not be used.(ΰό8Εζρυό1J$ac2fd6d1-7c86-4982-af7b-787c73259c70
-kotlin:S3776”"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(ÿ™ά»8Θζρυό1J$3f5bb86c-407e-4e3f-8287-611ef3af8f84
-kotlin:S3776™"RRefactor this method to reduce its Cognitive Complexity from 45 to the 15 allowed.(„φχΰψÿÿÿÿ8Κζρυό1J$08572a92-40bc-4a2f-8938-3c5f3a8d834f
-kotlin:S3776§"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ΔΤμώÿÿÿÿ8Ξζρυό1J$2065f061-3694-4faf-9765-63224452b66f
