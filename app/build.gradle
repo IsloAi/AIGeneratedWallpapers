@@ -17,7 +17,7 @@ android {
         minSdk 24
         targetSdk 34
         versionCode 154
-        versionName "1.9.4"
+        versionName "1.9.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode

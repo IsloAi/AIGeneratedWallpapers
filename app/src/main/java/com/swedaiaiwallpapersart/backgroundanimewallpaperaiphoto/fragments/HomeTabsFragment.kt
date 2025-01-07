@@ -233,21 +233,11 @@ class HomeTabsFragment : Fragment() {
             })
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (isAdded) {
-                try {
-                    if (!NotificationManagerCompat.from(requireContext())
-                            .canUseFullScreenIntent()
-                    ) {
-                        val intent = Intent(ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT)
-                        intent.putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
-                        requireContext().startActivity(intent)
-                    }
-                } catch (e: ActivityNotFoundException) {
-                    Log.d("usmanTAG", "OVC:HomeTabsFrag: ${e.localizedMessage} ")
-                }
-            }
+        val selectedTab = arguments?.getString("selected_tab")
+        selectedTab?.let {
+            navigateTOTabs(it)
         }
+
     }
 
     private fun sendTracking(
@@ -906,10 +896,28 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val endtime = System.currentTimeMillis()
+        /*val endtime = System.currentTimeMillis()
         val startTime = MainActivity.startTime
         val time = endtime - startTime
-        Log.d("ColdStartTime", "Cold start duration: $time ms")
+        Log.d("ColdStartTime", "Cold start duration: $time ms")*/
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationManager = NotificationManagerCompat.from(requireContext())
+            if (!notificationManager.canUseFullScreenIntent()) {
+                try {
+                    val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
+                        putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
+                    }
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    Log.e("usmanTAG", "Activity not found: ${e.localizedMessage}")
+                } catch (e: Exception) {
+                    Log.e("usmanTAG", "Error launching intent: ${e.localizedMessage}")
+                }
+            } else {
+                Log.d("usmanTAG", "Full-screen intent permission already granted.")
+            }
+        }
 
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
@@ -1036,20 +1044,20 @@ class HomeTabsFragment : Fragment() {
         requireActivity().startForegroundService(serviceIntent)*/
     }
 
-    private fun checkPermissionAndAllow() {
-        /*if (!isDrawOverlaysPermissionGranted(requireContext())) {
+    /*private fun checkPermissionAndAllow() {
+        if (!isDrawOverlaysPermissionGranted(requireContext())) {
             findNavController().navigate(R.id.chargingAnimationPermissionFragment)
-        } else {*/
+        } else {
         startService()
         showRewardWallpaperScreen()
-        //}
-    }
+        }
+    }*/
 
     private fun showRewardWallpaperScreen() {
         // Use a flag to avoid multiple calls if needed
         if (!Constants.hasShownRewardScreen && !AdConfig.ISPAIDUSER) {
             lifecycleScope.launch {
-                //delay(200)
+                delay(200)
                 if (AdConfig.Reward_Screen) {
                     if (!MySharePreference.getVIPGiftBool(requireActivity())) {
                         if (findNavController().currentDestination?.id == R.id.homeTabsFragment) {

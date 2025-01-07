@@ -8,52 +8,53 @@ import java.util.Date
 import java.util.Locale
 
 class MySharePreference {
-    companion object{
+    companion object {
         private const val LAST_DISMISSED_TIME = "lastDismissedTime"
 
-        fun setDeviceID(context: Context,value:String){
-        val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-        val myEdit = sharedPreferences.edit()
-        myEdit.putString("key",value)
-        myEdit.apply()
-    }
-
-    fun getDeviceID(context: Context):String?{
-        val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-        return sp.getString("key","")
-    }
-
-
-        fun setAnimationPath(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setDeviceID(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putString("battery",value)
+            myEdit.putString("key", value)
             myEdit.apply()
         }
 
-        fun getAnimationPath(context: Context):String?{
+        fun getDeviceID(context: Context): String? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getString("battery","")
+            return sp.getString("key", "")
         }
 
-
-        fun setFireBaseToken(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setAnimationPath(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putString("token",value)
+            myEdit.putString("battery", value)
             myEdit.apply()
         }
 
-        fun getFirebaseToken(context: Context):String?{
+        fun getAnimationPath(context: Context): String? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getString("token","")
+            return sp.getString("battery", "")
         }
 
-
-        fun setLanguage(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setFireBaseToken(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putString("language",value)
+            myEdit.putString("token", value)
+            myEdit.apply()
+        }
+
+        fun getFirebaseToken(context: Context): String? {
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getString("token", "")
+        }
+
+        fun setLanguage(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("language", value)
             myEdit.apply()
         }
 
@@ -97,218 +98,236 @@ class MySharePreference {
             editor.apply()
         }
 
-        fun getLanguage(context: Context):String?{
+        fun getLanguage(context: Context): String? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getString("language","")
+            return sp.getString("language", "")
         }
 
-
-        fun setLanguagePosition(context: Context, value:Int){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setLanguagePosition(context: Context, value: Int) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putInt("position",value)
+            myEdit.putInt("position", value)
             myEdit.apply()
         }
 
-        fun getLanguagePosition(context: Context):Int{
+        fun getLanguagePosition(context: Context): Int {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getInt("position",0)
+            return sp.getInt("position", 0)
         }
-        fun setGemsValue(context: Context,value:Int){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+
+        fun setGemsValue(context: Context, value: Int) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putInt("gems",value)
+            myEdit.putInt("gems", value)
             myEdit.apply()
         }
 
-        fun getGemsValue(context: Context):Int?{
+        fun getGemsValue(context: Context): Int? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getInt("gems",0)
+            return sp.getInt("gems", 0)
         }
 
-        fun setCounterValue(context: Context,value:Int){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setCounterValue(context: Context, value: Int) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putInt("counter",value)
+            myEdit.putInt("counter", value)
             myEdit.apply()
         }
 
-        fun getCounterValue(context: Context):Int?{
+        fun getCounterValue(context: Context): Int? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getInt("counter",0)
+            return sp.getInt("counter", 0)
         }
 
-        fun setFeedbackValue(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setFeedbackValue(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("feedback",value)
+            myEdit.putBoolean("feedback", value)
             myEdit.apply()
         }
 
-        fun getFeedbackValue(context: Context):Boolean{
+        fun getFeedbackValue(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("feedback",false)
+            return sp.getBoolean("feedback", false)
         }
 
-        fun setOnboarding(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setOnboarding(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("onboard",value)
+            myEdit.putBoolean("onboard", value)
             myEdit.apply()
         }
 
-        fun getOnboarding(context: Context):Boolean{
+        fun getOnboarding(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("onboard",false)
+            return sp.getBoolean("onboard", false)
         }
 
-        fun setUserIsSaved(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setUserIsSaved(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("setuser",value)
+            myEdit.putBoolean("setuser", value)
             myEdit.apply()
         }
 
-        fun getUserIsSaved(context: Context):Boolean{
+        fun getUserIsSaved(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("setuser",false)
+            return sp.getBoolean("setuser", false)
         }
 
-        fun setDailyRewardCounter(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setDailyRewardCounter(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("dailyRewardCounter",value)
+            myEdit.putBoolean("dailyRewardCounter", value)
             myEdit.apply()
         }
 
-        fun getDailyRewardCounter(context: Context):Boolean{
+        fun getDailyRewardCounter(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("dailyRewardCounter",false)
+            return sp.getBoolean("dailyRewardCounter", false)
         }
 
-        fun setDate(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setDate(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putString("date",value)
+            myEdit.putString("date", value)
             myEdit.apply()
         }
-        fun getDate(context: Context):String?{
+
+        fun getDate(context: Context): String? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getString("date","")
+            return sp.getString("date", "")
         }
 
-
-        fun setFileName(context: Context,value:String){
-            val sharedPreferences: SharedPreferences = context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
+        fun setFileName(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
             sharedPreferences.edit().clear().apply()
             val myEdit = sharedPreferences.edit()
-            myEdit.putString("video",value)
+            myEdit.putString("video", value)
             myEdit.apply()
         }
-        fun getFileName(context: Context):String?{
-            val sp: SharedPreferences = context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
-            return sp.getString("video","")
+
+        fun getFileName(context: Context): String? {
+            val sp: SharedPreferences =
+                context.applicationContext.getSharedPreferences("Shared", MODE_PRIVATE)
+            return sp.getString("video", "")
         }
 
-        fun setFavouriteSaveState(context: Context,setFavouriteSaveState:Int){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setFavouriteSaveState(context: Context, setFavouriteSaveState: Int) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putInt("setFavouriteSaveState",setFavouriteSaveState)
+            myEdit.putInt("setFavouriteSaveState", setFavouriteSaveState)
             myEdit.apply()
         }
-        fun getFavouriteSaveState(context: Context):Int{
+
+        fun getFavouriteSaveState(context: Context): Int {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getInt("setFavouriteSaveState",1)
+            return sp.getInt("setFavouriteSaveState", 1)
         }
 
-
-        fun firstLiveWallpaper(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun firstLiveWallpaper(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("Live",value)
+            myEdit.putBoolean("Live", value)
             myEdit.apply()
         }
 
-        fun getfirstLiveWallpaper(context: Context):Boolean{
+        fun getfirstLiveWallpaper(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("Live",false)
+            return sp.getBoolean("Live", false)
         }
 
-        fun firstWallpaperSet(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun firstWallpaperSet(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("regular",value)
+            myEdit.putBoolean("regular", value)
             myEdit.apply()
         }
 
-        fun getfirstWallpaperSet(context: Context):Boolean{
+        fun getfirstWallpaperSet(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("regular",false)
+            return sp.getBoolean("regular", false)
         }
 
-        fun artGeneratedFirst(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun artGeneratedFirst(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("art",value)
+            myEdit.putBoolean("art", value)
             myEdit.apply()
         }
 
-        fun getartGeneratedFirst(context: Context):Boolean{
+        fun getartGeneratedFirst(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("art",false)
+            return sp.getBoolean("art", false)
         }
 
-
-        fun setFeedbackSession1Completed(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setFeedbackSession1Completed(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("session1",value)
+            myEdit.putBoolean("session1", value)
             myEdit.apply()
         }
 
-        fun getFeedbackSession1Completed(context: Context):Boolean{
+        fun getFeedbackSession1Completed(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("session1",false)
+            return sp.getBoolean("session1", false)
         }
 
-
-        fun setFeedbackSession2Completed(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setFeedbackSession2Completed(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("session2",value)
+            myEdit.putBoolean("session2", value)
             myEdit.apply()
         }
 
-        fun getFeedbackSession2Completed(context: Context):Boolean{
+        fun getFeedbackSession2Completed(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("session2",false)
+            return sp.getBoolean("session2", false)
         }
-        fun setReviewedSuccess(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+
+        fun setReviewedSuccess(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("reviewed",value)
+            myEdit.putBoolean("reviewed", value)
             myEdit.apply()
         }
 
-        fun getReviewedSuccess(context: Context):Boolean{
+        fun getReviewedSuccess(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("reviewed",false)
+            return sp.getBoolean("reviewed", false)
         }
 
-        fun setUserCancelledprocess(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setUserCancelledprocess(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("cancel",value)
+            myEdit.putBoolean("cancel", value)
             myEdit.apply()
         }
 
-        fun getUserCancelledprocess(context: Context):Boolean{
+        fun getUserCancelledprocess(context: Context): Boolean {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getBoolean("cancel",false)
+            return sp.getBoolean("cancel", false)
         }
 
         fun setLastDismissedTime(context: Context, time: Long) {
-            val sharedPreferences = context.getSharedPreferences("MySpValue",MODE_PRIVATE)
+            val sharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             sharedPreferences.edit().putLong(LAST_DISMISSED_TIME, time).apply()
         }
 
@@ -317,10 +336,11 @@ class MySharePreference {
             return sharedPreferences.getLong(LAST_DISMISSED_TIME, 0L)
         }
 
-        fun setVIPGiftBool(context: Context,value:Boolean){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setVIPGiftBool(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putBoolean("VIP_GIFT",value)
+            myEdit.putBoolean("VIP_GIFT", value)
             myEdit.apply()
         }
 
@@ -329,16 +349,17 @@ class MySharePreference {
             return sharedPreferences.getBoolean("VIP_GIFT", false)
         }
 
-        fun setVIPGiftDate(context: Context){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+        fun setVIPGiftDate(context: Context) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
             myEdit.putString("VIP_GIFT_DATE", System.currentTimeMillis().toString())
             myEdit.apply()
         }
 
-        fun getVIPGiftDate(context: Context):String?{
+        fun getVIPGiftDate(context: Context): String? {
             val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            return sp.getString("VIP_GIFT_DATE","")
+            return sp.getString("VIP_GIFT_DATE", "")
         }
 
         fun isVIPGiftExpired(context: Context): Boolean {
@@ -353,18 +374,30 @@ class MySharePreference {
             return true
         }
 
-        fun setLiveComingFrom(context:Context,value:String){
-            val sharedPreferences: SharedPreferences = context.getSharedPreferences("MyFAVLive", MODE_PRIVATE)
+        fun setLiveComingFrom(context: Context, value: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MyFAVLive", MODE_PRIVATE)
             val myEdit = sharedPreferences.edit()
-            myEdit.putString("MyFAVLive",value)
+            myEdit.putString("MyFAVLive", value)
             myEdit.apply()
         }
 
-        fun getLiveFrom(context:Context):String{
+        fun getLiveFrom(context: Context): String {
             val sp: SharedPreferences = context.getSharedPreferences("MyFAVLive", MODE_PRIVATE)
-            return sp.getString("MyFAVLive","")!!
+            return sp.getString("MyFAVLive", "")!!
         }
 
+        fun getFCMFragment(context: Context): String {
+            val sp: SharedPreferences = context.getSharedPreferences("FCMFragment", MODE_PRIVATE)
+            return sp.getString("FCMFragment", "")!!
+        }
 
+        fun setFCMFragment(context: Context, fragName: String) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putString("FCMFragment", fragName)
+            myEdit.apply()
+        }
     }
 }
