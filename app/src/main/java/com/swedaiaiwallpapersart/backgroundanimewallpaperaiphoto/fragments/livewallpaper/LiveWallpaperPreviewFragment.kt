@@ -143,7 +143,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         setEvents()
 
-
         if (isAdded) {
             sendTracking(
                 "screen_active",

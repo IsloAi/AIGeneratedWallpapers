@@ -11,6 +11,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Window
 import android.view.WindowInsets
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -158,56 +159,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 }
             }
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        intent.let {
-            val feature = intent.getStringExtra("ik_notify_feature")
-
-            when (feature) {
-                "live_wallpaper_tab" -> openLiveWallpaperTab()
-                "tab_popular" -> openPopularScreen()
-                "tab_double" -> openDoubleScreen()
-                "tab_car" -> openCarScreen()
-                "tab_charging" -> openChargingScreen()
-                else -> {
-                    // Handle other cases or log unhandled features
-                    Log.d("FCM", "onNewIntent:else-Case: $feature ")
-                }
-            }
-        }
-    }
-
-    private fun openLiveWallpaperTab() {
-        Log.d("FCM", "openLiveWallpaperTab: will open live tab")
-        val bundle = Bundle().apply {
-            putString("selected_tab","Live")
-        }
-        if (navController != null){
-            navController.navigate(R.id.homeTabsFragment,bundle)
-        }else{
-            val navHostFragment =
-                supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-            _navController = navHostFragment.navController
-            navController.navigate(R.id.homeTabsFragment,bundle)
-        }
-    }
-
-    private fun openPopularScreen() {
-        Log.d("FCM", "openPopularWallpaperTab: will open popular tab")
-    }
-
-    private fun openDoubleScreen() {
-        Log.d("FCM", "openDoubleWallpaperTab: will open Double tab")
-    }
-
-    private fun openCarScreen() {
-        Log.d("FCM", "openCarWallpaperTab: will open Car tab")
-    }
-
-    private fun openChargingScreen() {
-        Log.d("FCM", "openChargingWallpaperTab: will open Charging tab")
     }
 
     override fun onDestroy() {

@@ -15,7 +15,6 @@ import android.graphics.Shader
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.provider.Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT
 import android.text.TextPaint
 import android.util.Log
 import android.view.LayoutInflater
@@ -36,12 +35,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
-import com.ikame.android.sdk.IKSdkController
-
-import com.ikame.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
@@ -54,9 +49,11 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.ikame.android.sdk.IKSdkController
 import com.ikame.android.sdk.data.dto.pub.IKAdError
 import com.ikame.android.sdk.data.dto.pub.UpdateAppDto
 import com.ikame.android.sdk.format.intertial.IKInterstitialAd
+import com.ikame.android.sdk.listener.keep.SDKNewVersionUpdateCallback
 import com.ikame.android.sdk.listener.pub.IKLoadAdListener
 import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
@@ -101,14 +98,10 @@ import javax.inject.Inject
 class HomeTabsFragment : Fragment() {
     private var _binding: FragmentHomeTabsBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel: SaveStateViewModel by viewModels()
-
     private var existDialog = MyDialogs()
     private lateinit var myActivity: MainActivity
-
     val sharedViewModel: SharedViewModel by activityViewModels()
-
     private var isBottomSheetVisible = false
 
     @Inject
@@ -116,9 +109,7 @@ class HomeTabsFragment : Fragment() {
 
     @Inject
     lateinit var endPointsInterface: EndPointsInterface
-
     private var reviewManager: ReviewManager? = null
-
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val rewardedViewModel: RewardedViewModel by activityViewModels()
 
@@ -127,7 +118,6 @@ class HomeTabsFragment : Fragment() {
     }
 
     val interAd = IKInterstitialAd(lifecycle)
-
     val images = arrayOf(
         R.drawable.tab_icon_popular,
         R.drawable.tab_icon_trending,
@@ -154,7 +144,9 @@ class HomeTabsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeTabsBinding.inflate(inflater, container, false)
+
         return binding.root
+
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -176,7 +168,6 @@ class HomeTabsFragment : Fragment() {
             }
         }
 
-        showRewardWallpaperScreen()
 
         interAd.loadAd("exitapp_inter", object : IKLoadAdListener {
             override fun onAdLoaded() {}
@@ -203,6 +194,7 @@ class HomeTabsFragment : Fragment() {
         loadbannerAd()
         setGradienttext()
         setViewPager()
+        handleIntentNotification()
         setEvents()
 
         lifecycleScope.launch {
@@ -233,12 +225,55 @@ class HomeTabsFragment : Fragment() {
             })
         }
 
-        val selectedTab = arguments?.getString("selected_tab")
-        selectedTab?.let {
-            navigateTOTabs(it)
+    }
+
+    private fun handleIntentNotification() {
+        val feature = activity?.intent?.getStringExtra("ik_notify_feature")
+
+        Toast.makeText(requireContext(), "Intent feature: $feature", Toast.LENGTH_SHORT).show()
+        when (feature) {
+            "live_wallpaper_tab" -> openLiveWallpaperTab()
+            "tab_popular" -> openPopularScreen()
+            "tab_double" -> openDoubleScreen()
+            "tab_car" -> openCarScreen()
+            "tab_charging" -> openChargingScreen()
+            else -> {
+                showRewardWallpaperScreen()
+            }
         }
 
     }
+
+    private fun openLiveWallpaperTab() {
+        Log.d("FCM", "openLiveWallpaperTab: will open live tab")
+        Toast.makeText(requireContext(), "going to live tab", Toast.LENGTH_SHORT).show()
+        navigateTOTabs("Live")
+    }
+
+    private fun openPopularScreen() {
+        Toast.makeText(requireContext(), "going to Popular tab", Toast.LENGTH_SHORT).show()
+        Log.d("FCM", "openPopularWallpaperTab: will open popular tab")
+        navigateTOTabs("Popular")
+    }
+
+    private fun openDoubleScreen() {
+        Toast.makeText(requireContext(), "going to Double tab", Toast.LENGTH_SHORT).show()
+        Log.d("FCM", "openDoubleWallpaperTab: will open Double tab")
+        navigateTOTabs("Double")
+    }
+
+    private fun openCarScreen() {
+        Log.d("FCM", "openCarWallpaperTab: will open Car tab")
+        Toast.makeText(requireContext(), "going to Car tab", Toast.LENGTH_SHORT).show()
+        navigateTOTabs("Car")
+    }
+
+    private fun openChargingScreen() {
+        Toast.makeText(requireContext(), "going to Charging tab", Toast.LENGTH_SHORT).show()
+        Log.d("FCM", "openChargingWallpaperTab: will open Charging tab")
+        navigateTOTabs("Charging")
+    }
+
 
     private fun sendTracking(
         eventName: String,
@@ -1019,7 +1054,7 @@ class HomeTabsFragment : Fragment() {
 
     fun navigateTOTabs(tabName: String) {
         val tabPos = getTabPositionByName(tabName)
-        Log.d("USMAN", "navigateTOTabs: $tabPos ")
+        Toast.makeText(requireContext(), "Received tab:$tabName", Toast.LENGTH_SHORT).show()
         if (isAdded) {
             navigateToTrending(tabPos)
         }
