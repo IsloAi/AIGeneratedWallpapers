@@ -511,7 +511,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     }
 
                     // Hide ProgressBar on the main thread
-                    withContext(Dispatchers.Main) {
+                    withContext(Dispatchers.Main)   {
                         binding.progressBar.visibility = View.GONE
                     }
                 }

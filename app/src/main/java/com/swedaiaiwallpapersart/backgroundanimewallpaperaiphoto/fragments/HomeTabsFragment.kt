@@ -200,7 +200,6 @@ class HomeTabsFragment : Fragment() {
         lifecycleScope.launch {
             IKSdkController.checkUpdateApp(object : SDKNewVersionUpdateCallback {
                 override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
-
                     try {
                         val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(
                             requireContext().packageName,
@@ -230,7 +229,6 @@ class HomeTabsFragment : Fragment() {
     private fun handleIntentNotification() {
         val feature = activity?.intent?.getStringExtra("ik_notify_feature")
 
-        Toast.makeText(requireContext(), "Intent feature: $feature", Toast.LENGTH_SHORT).show()
         when (feature) {
             "live_wallpaper_tab" -> openLiveWallpaperTab()
             "tab_popular" -> openPopularScreen()
@@ -1092,7 +1090,7 @@ class HomeTabsFragment : Fragment() {
         // Use a flag to avoid multiple calls if needed
         if (!Constants.hasShownRewardScreen && !AdConfig.ISPAIDUSER) {
             lifecycleScope.launch {
-                delay(200)
+                //delay(200)
                 if (AdConfig.Reward_Screen) {
                     if (!MySharePreference.getVIPGiftBool(requireActivity())) {
                         if (findNavController().currentDestination?.id == R.id.homeTabsFragment) {

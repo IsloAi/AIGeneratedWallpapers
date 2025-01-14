@@ -219,14 +219,7 @@ class LocalizationFragment : Fragment() {
         languagesList.add(DummyModelLanguages("French", "fr", R.drawable.flag_fr, false))
         languagesList.add(DummyModelLanguages("Thai", "th", R.drawable.flag_thai, false))
         languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
-        languagesList.add(
-            DummyModelLanguages(
-                "Vietnamese ",
-                "vi",
-                R.drawable.flag_vietnamese,
-                false
-            )
-        )
+        languagesList.add(DummyModelLanguages("Vietnamese ","vi",R.drawable.flag_vietnamese, false))
         languagesList.add(DummyModelLanguages("Hindi", "hi", R.drawable.flag_hi, false))
         languagesList.add(DummyModelLanguages("Dutch", "nl", R.drawable.flag_ducth, false))
         languagesList.add(DummyModelLanguages("Indonesian", "in", R.drawable.flag_indona, false))
@@ -240,7 +233,7 @@ class LocalizationFragment : Fragment() {
         if (posnew == 0 && pos.isNotEmpty()) {
             posnew = languagesList.indexOfFirst { it.lan_code == pos }
             if (posnew == -1) {
-                posnew = 0 // Default to the first language if the device language is not found
+                posnew = 0
             }
         }
         Log.e(TAG, "getLanguageList: $posnew")

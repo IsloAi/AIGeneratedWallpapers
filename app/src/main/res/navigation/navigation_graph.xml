@@ -136,7 +136,7 @@
         android:id="@+id/splashOnFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment"
         android:label="fragment_splash_on"
-        tools:layout="@layout/fragment_splash_on">
+        tools:layout="@layout/newsplash_fragment">
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
             app:destination="@id/mainFragment"
@@ -151,6 +151,9 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_splashOnFragment_to_getStartedFragment"
+            app:destination="@id/getStartedFragment" />
 
     </fragment>
     <fragment
@@ -273,4 +276,9 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.reward.RewardDetailsFragment"
         android:label="fragment_reward_details"
         tools:layout="@layout/fragment_reward_details" />
+    <fragment
+        android:id="@+id/getStartedFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.getStartedFragment.GetStartedFragment"
+        android:label="fragment_get_started"
+        tools:layout="@layout/fragment_get_started" />
 </navigation>

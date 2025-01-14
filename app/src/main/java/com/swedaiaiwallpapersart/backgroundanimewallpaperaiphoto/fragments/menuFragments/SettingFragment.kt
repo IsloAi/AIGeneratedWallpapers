@@ -115,7 +115,7 @@ class SettingFragment : Fragment() {
 
         }
 
-        binding.privacyPolicyButton.setOnClickListener { openLink("https://bluell.net/privacy/") }
+        binding.privacyPolicyButton.setOnClickListener { openLink("https://isloai.com/privacy/") }
         binding.moreAppButton.setOnClickListener {
             if (isAdded) {
                 val bundle = Bundle()

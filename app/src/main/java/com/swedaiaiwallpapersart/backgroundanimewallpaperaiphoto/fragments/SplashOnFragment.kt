@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -190,8 +193,30 @@ class SplashOnFragment : Fragment() {
         animateLoadingText()
 
     }
-
     private fun navigateToNextScreen() {
+        /*if (lan.isEmpty() && isAdded) {
+            hasNavigated = true
+            findNavController().navigate(R.id.getStartedFragment)
+        } else {*/
+            if (isAdded) {
+                if (AdConfig.inAppConfig) {
+                    hasNavigated = true
+                    findNavController().navigate(R.id.getStartedFragment)
+                } else {
+                    hasNavigated = true
+                    if (checkAppDefaultHome()){
+                        Toast.makeText(requireContext(), "App is Default Home", Toast.LENGTH_SHORT).show()
+                        //findNavController().navigate(R.id.homeTabsFragment)
+                        // TODO: take the user to the launcher HomeScreen
+                    }else{
+                        Toast.makeText(requireContext(), "App is not Default Home", Toast.LENGTH_SHORT).show()
+                        // TODO: take the user to the second screen for setting the app to default
+                    }
+                }
+            }
+        //}
+    }
+    /*private fun navigateToNextScreen() {
         if (lan.isEmpty() && isAdded) {
             hasNavigated = true
             findNavController().navigate(R.id.localizationFragment)
@@ -206,6 +231,15 @@ class SplashOnFragment : Fragment() {
                 }
             }
         }
+    }*/
+
+    fun checkAppDefaultHome(): Boolean {
+        val packageManager = requireContext().packageManager
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+        }
+        val resolveInfo = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfo?.activityInfo?.packageName == requireContext().packageName
     }
 
     private fun animateLoadingText() {
@@ -229,7 +263,6 @@ class SplashOnFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         Log.e("SPLASH", "onResume: ")
 
         val videoUri: Uri =
