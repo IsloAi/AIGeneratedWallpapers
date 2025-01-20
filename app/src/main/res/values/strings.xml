@@ -158,9 +158,8 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
-    <string name="getStarted_txt">Set 4K Wallpapers App As Your Default Home App</string>
-    <string name="getStarted_txt2">One-Swipe Access</string>
-    <string name="get_started_txt">Get Started</string>
+    <string name="get_started_btn">Get Started</string>
+    <string name="set_default_txt">Set as default app</string>
     <string name="terms">Terms of Service</string>
 
 </resources>

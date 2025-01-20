@@ -41,16 +41,16 @@ class GetStartedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.viewPager2.adapter = pagerAdapter(requireContext())
-        binding.viewPager2.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback(){
+        binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             @SuppressLint("SetTextI18n")
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position==0){
+                if (position == 0) {
                     setCurrentIndicator(0)
-                    binding.topText.text = "Set 4K Wallpapers App As Your Default Home App"
-                }else{
+                    binding.topText.setImageResource(R.drawable.txt1)
+                } else {
                     setCurrentIndicator(1)
-                    binding.topText.text = "One-Swipe Access"
+                    binding.topText.setImageResource(R.drawable.txt2)
                 }
             }
         })

@@ -193,6 +193,7 @@ class SplashOnFragment : Fragment() {
         animateLoadingText()
 
     }
+
     private fun navigateToNextScreen() {
         /*if (lan.isEmpty() && isAdded) {
             hasNavigated = true
@@ -206,11 +207,10 @@ class SplashOnFragment : Fragment() {
                     hasNavigated = true
                     if (checkAppDefaultHome()){
                         Toast.makeText(requireContext(), "App is Default Home", Toast.LENGTH_SHORT).show()
-                        //findNavController().navigate(R.id.homeTabsFragment)
-                        // TODO: take the user to the launcher HomeScreen
+                        findNavController().navigate(R.id.launcherHomeFragment)
                     }else{
-                        Toast.makeText(requireContext(), "App is not Default Home", Toast.LENGTH_SHORT).show()
-                        // TODO: take the user to the second screen for setting the app to default
+                        //Toast.makeText(requireContext(), "App is not Default Home", Toast.LENGTH_SHORT).show()
+                        findNavController().navigate(R.id.defaultSetterFragment)
                     }
                 }
             }

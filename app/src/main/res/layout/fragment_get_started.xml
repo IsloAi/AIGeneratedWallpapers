@@ -7,15 +7,12 @@
     android:background="@drawable/bg_image"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.getStartedFragment.GetStartedFragment">
     <!--Top text -->
-    <androidx.appcompat.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/topText"
-        android:layout_width="@dimen/_250sdp"
-        android:layout_height="@dimen/_100sdp"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/_120sdp"
         android:layout_marginTop="@dimen/_25sdp"
-        android:text="@string/getStarted_txt"
-        android:textAlignment="viewStart"
-        android:textColor="@color/white"
-        android:textSize="@dimen/_28sdp"
+        android:src="@drawable/txt1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.178"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
-            android:text="@string/get_started_txt"
+            android:text="@string/get_started_btn"
             android:textColor="@color/white"
             android:textSize="@dimen/_19sdp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -96,7 +93,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Btn_getStarted" />
+        app:layout_constraintTop_toBottomOf="@+id/Btn_setDefault" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -281,4 +281,19 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.getStartedFragment.GetStartedFragment"
         android:label="fragment_get_started"
         tools:layout="@layout/fragment_get_started" />
+    <fragment
+        android:id="@+id/defaultSetterFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.defaultSetterFragment.DefaultSetterFragment"
+        android:label="fragment_default_setter"
+        tools:layout="@layout/fragment_default_setter" />
+    <fragment
+        android:id="@+id/launcherHomeFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.launcherHomeFragment.LauncherHomeFragment"
+        android:label="fragment_launcher_home"
+        tools:layout="@layout/fragment_launcher_home" />
+    <fragment
+        android:id="@+id/appsDrawerFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment.AppsDrawerFragment"
+        android:label="fragment_apps_drawer"
+        tools:layout="@layout/fragment_apps_drawer" />
 </navigation>

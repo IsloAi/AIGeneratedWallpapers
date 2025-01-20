@@ -110,7 +110,7 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.1.1'
     //Image picker
     implementation "com.github.dhaval2404:imagepicker:2.1"
-    implementation "com.github.MikeOrtiz:TouchImageView:1.4.1"
+    implementation("com.github.MikeOrtiz:TouchImageView:3.6")
 
     //viewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5'
@@ -159,7 +159,7 @@ dependencies {
     releaseImplementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:3.0.440") {
         exclude group: 'com.squareup.okio'
     }*/
-    releaseImplementation("com.ikame.android-sdk:pub-gamicans-wallpaper-hp:3.00.582") {
+    releaseImplementation("com.ikame.android-sdk:pub-gamicans-wallpaper-hp:3.00.583") {
         exclude group: 'com.squareup.okio'
     }
 
