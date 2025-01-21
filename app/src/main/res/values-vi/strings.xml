@@ -107,5 +107,6 @@
     <string name="category">Danh mục</string>
     <string name="gen_ai">Thế hệ AI</string>
     <string name="more">Thêm</string>
+    <string name="not_now">Not Now</string>
 
-    </resources>
+</resources>

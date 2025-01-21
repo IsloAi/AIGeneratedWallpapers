@@ -59,6 +59,7 @@ class SplashOnFragment : Fragment() {
     private var animationJob: Job? = null
 
     private var lan: String = ""
+    private var firstTime: Boolean = true
 
     var counter = 0
 
@@ -91,6 +92,7 @@ class SplashOnFragment : Fragment() {
         myActivity = activity as MainActivity
 
         lan = MySharePreference.getLanguage(requireContext()).toString()
+        firstTime = MySharePreference.getFirstTime(requireContext())
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
 
@@ -195,26 +197,22 @@ class SplashOnFragment : Fragment() {
     }
 
     private fun navigateToNextScreen() {
-        /*if (lan.isEmpty() && isAdded) {
-            hasNavigated = true
-            findNavController().navigate(R.id.getStartedFragment)
-        } else {*/
-            if (isAdded) {
-                if (AdConfig.inAppConfig) {
-                    hasNavigated = true
-                    findNavController().navigate(R.id.getStartedFragment)
+        if (isAdded) {
+            if (!firstTime) {
+                hasNavigated = true
+                findNavController().navigate(R.id.getStartedFragment)
+            } else {
+                hasNavigated = true
+                if (checkAppDefaultHome()) {
+                    Toast.makeText(requireContext(), "App is Default Home", Toast.LENGTH_SHORT)
+                        .show()
+                    findNavController().navigate(R.id.launcherHomeFragment)
                 } else {
-                    hasNavigated = true
-                    if (checkAppDefaultHome()){
-                        Toast.makeText(requireContext(), "App is Default Home", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.launcherHomeFragment)
-                    }else{
-                        //Toast.makeText(requireContext(), "App is not Default Home", Toast.LENGTH_SHORT).show()
-                        findNavController().navigate(R.id.defaultSetterFragment)
-                    }
+                    //Toast.makeText(requireContext(), "App is not Default Home", Toast.LENGTH_SHORT).show()
+                    findNavController().navigate(R.id.defaultSetterFragment)
                 }
             }
-        //}
+        }
     }
     /*private fun navigateToNextScreen() {
         if (lan.isEmpty() && isAdded) {
@@ -233,7 +231,7 @@ class SplashOnFragment : Fragment() {
         }
     }*/
 
-    fun checkAppDefaultHome(): Boolean {
+    private fun checkAppDefaultHome(): Boolean {
         val packageManager = requireContext().packageManager
         val intent = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_HOME)

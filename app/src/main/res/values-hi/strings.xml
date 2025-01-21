@@ -104,5 +104,6 @@
     <string name="category">वर्ग</string>
     <string name="gen_ai">जनरल ए.आई</string>
     <string name="more">अधिक</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

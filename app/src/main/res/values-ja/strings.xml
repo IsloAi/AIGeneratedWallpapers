@@ -107,5 +107,6 @@
     <string name="category">カテゴリ</string>
     <string name="gen_ai">AI 世代</string>
     <string name="more">詳細</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

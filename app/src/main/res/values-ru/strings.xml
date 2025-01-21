@@ -107,5 +107,6 @@
     <string name="category">Категория</string>
     <string name="gen_ai">Поколение ИИ</string>
     <string name="more">Еще</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

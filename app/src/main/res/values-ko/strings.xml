@@ -107,5 +107,6 @@
     <string name="category">범주</string>
     <string name="gen_ai">세대 AI</string>
     <string name="more">더보기</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

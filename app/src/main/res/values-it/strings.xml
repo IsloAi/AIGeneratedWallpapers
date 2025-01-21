@@ -107,5 +107,6 @@
     <string name="category">Categoria</string>
     <string name="gen_ai">Generazione AI</string>
     <string name="more">Altro</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

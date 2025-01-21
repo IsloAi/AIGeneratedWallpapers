@@ -108,5 +108,6 @@
     <string name="category">หมวดหมู่</string>
     <string name="gen_ai">เจนเอไอ</string>
     <string name="more">เพิ่มเติม</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

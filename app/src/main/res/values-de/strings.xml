@@ -106,4 +106,5 @@
     <string name="category">Kategorie</string>
     <string name="gen_ai">Gen AI</string>
     <string name="more">Mehr</string>
+    <string name="not_now">Not Now</string>
 </resources>

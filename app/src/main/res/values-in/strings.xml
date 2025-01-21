@@ -107,5 +107,6 @@
     <string name="category">Kategori</string>
     <string name="gen_ai">Gen AI</string>
     <string name="more">Lainnya</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

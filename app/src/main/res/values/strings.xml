@@ -161,5 +161,6 @@
     <string name="get_started_btn">Get Started</string>
     <string name="set_default_txt">Set as default app</string>
     <string name="terms">Terms of Service</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

@@ -11,6 +11,19 @@ class MySharePreference {
     companion object {
         private const val LAST_DISMISSED_TIME = "lastDismissedTime"
 
+        fun setFirstTime(context: Context, value: Boolean) {
+            val sharedPreferences: SharedPreferences =
+                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            val myEdit = sharedPreferences.edit()
+            myEdit.putBoolean("FirstTime", value)
+            myEdit.apply()
+        }
+
+        fun getFirstTime(context: Context): Boolean {
+            val sp: SharedPreferences = context.getSharedPreferences("MySpValue", MODE_PRIVATE)
+            return sp.getBoolean("FirstTime", false)
+        }
+
         fun setDeviceID(context: Context, value: String) {
             val sharedPreferences: SharedPreferences =
                 context.getSharedPreferences("MySpValue", MODE_PRIVATE)
@@ -387,17 +400,5 @@ class MySharePreference {
             return sp.getString("MyFAVLive", "")!!
         }
 
-        fun getFCMFragment(context: Context): String {
-            val sp: SharedPreferences = context.getSharedPreferences("FCMFragment", MODE_PRIVATE)
-            return sp.getString("FCMFragment", "")!!
-        }
-
-        fun setFCMFragment(context: Context, fragName: String) {
-            val sharedPreferences: SharedPreferences =
-                context.getSharedPreferences("MySpValue", MODE_PRIVATE)
-            val myEdit = sharedPreferences.edit()
-            myEdit.putString("FCMFragment", fragName)
-            myEdit.apply()
-        }
     }
 }

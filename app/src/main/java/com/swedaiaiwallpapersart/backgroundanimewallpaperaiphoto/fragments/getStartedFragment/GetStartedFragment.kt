@@ -19,6 +19,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGetStartedBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 
 
 class GetStartedFragment : Fragment() {
@@ -39,6 +40,8 @@ class GetStartedFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        MySharePreference.setFirstTime(requireContext(), true)
 
         binding.viewPager2.adapter = pagerAdapter(requireContext())
         binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
