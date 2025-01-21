@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.launcherHomeFragment.LauncherHomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LauncherActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +25,7 @@ class LauncherActivity : AppCompatActivity() {
 
         loadFragment(LauncherHomeFragment())
     }
+
     fun loadFragment(fragment: Fragment?): Boolean {
         if (fragment != null) {
             supportFragmentManager
@@ -33,4 +36,5 @@ class LauncherActivity : AppCompatActivity() {
         }
         return false
     }
+
 }
