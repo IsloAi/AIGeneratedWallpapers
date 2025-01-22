@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.Window
@@ -80,10 +81,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var job: Job
-    /*companion object {
-        var startTime: Long = 0
-        var isCacheCleared: Boolean = false
-    }*/
     val TAG = "MainActivity"
     private var selectedPrompt: String? = null
     private var alertDialog: AlertDialog? = null
@@ -1013,6 +1010,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 }
             }, false)
         }
+
     }
 
     override fun onNetworkAvailable() {

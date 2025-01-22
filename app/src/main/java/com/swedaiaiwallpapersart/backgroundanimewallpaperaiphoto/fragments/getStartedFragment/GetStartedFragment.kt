@@ -15,6 +15,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentGetStartedBinding
@@ -69,6 +70,15 @@ class GetStartedFragment : Fragment() {
 
         setIndicator()
         setCurrentIndicator(0)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (MySharePreference.getFirstTime(requireContext())){
+            findNavController().navigate(R.id.launcherHomeFragment)
+        }else{
+            findNavController().navigate(R.id.defaultSetterFragment)
+        }
     }
 
     private fun setCurrentIndicator(index: Int) {

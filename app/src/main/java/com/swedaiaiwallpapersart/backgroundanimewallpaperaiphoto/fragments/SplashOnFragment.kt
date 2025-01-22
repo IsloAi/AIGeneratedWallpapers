@@ -214,6 +214,7 @@ class SplashOnFragment : Fragment() {
             }
         }
     }
+
     /*private fun navigateToNextScreen() {
         if (lan.isEmpty() && isAdded) {
             hasNavigated = true
@@ -261,32 +262,38 @@ class SplashOnFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.e("SPLASH", "onResume: ")
 
-        val videoUri: Uri =
-            Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.new_splash_video)
-        binding.videoView.setVideoURI(videoUri)
-        binding.videoView.start()
+        if (MySharePreference.getFirstTime(requireContext())) {
+            Log.e("SPLASH", "onResume: ")
+            val videoUri: Uri =
+                Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.new_splash_video)
+            binding.videoView.setVideoURI(videoUri)
+            binding.videoView.start()
 
-        binding.videoView.setOnCompletionListener {
-            if (isAdded) {
-                binding.videoView.start()
+            binding.videoView.setOnCompletionListener {
+                if (isAdded) {
+                    binding.videoView.start()
+                }
             }
-        }
-        val lan = MySharePreference.getLanguage(requireContext())
+            val lan = MySharePreference.getLanguage(requireContext())
 
-        if (counter > 0) {
-            if (isAdded) {
-                navigateToNextScreen()
+            if (counter > 0) {
+                if (isAdded) {
+                    navigateToNextScreen()
+                }
             }
+            handleAppResume()
+            if (isAdded) {
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
+                bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+            }
+
+        } else {
+            findNavController().navigate(R.id.launcherHomeFragment)
         }
-        handleAppResume()
-        if (isAdded) {
-            val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
+
     }
 
     private fun handleAppResume() {

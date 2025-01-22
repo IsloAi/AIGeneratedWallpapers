@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -53,7 +54,7 @@
         android:supportsRtl="true"
         android:theme="@style/Base.Theme.HDWallpaper"
         tools:targetApi="31">
-        <activity
+        <!--<activity
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.LauncherActivity"
             android:clearTaskOnLaunch="true"
             android:exported="true"
@@ -61,15 +62,15 @@
             android:launchMode="singleTask"
             android:stateNotNeeded="true">
             <intent-filter>
-                <!--action android:name="android.intent.action.MAIN" />
+                &lt;!&ndash;action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" /-->
+                <category android:name="android.intent.category.LAUNCHER" /&ndash;&gt;
 
                 <category android:name="android.intent.category.HOME" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
+        </activity>-->
 
         <activity
             android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotiWidgetActivity"

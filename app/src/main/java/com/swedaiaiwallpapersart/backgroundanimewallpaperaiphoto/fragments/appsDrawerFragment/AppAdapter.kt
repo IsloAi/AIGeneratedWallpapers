@@ -41,7 +41,10 @@ class AppAdapter(var context: Context ,var list:List<AppInfo>) : RecyclerView.Ad
         }
 
     }
-
+    fun updateList(newList: List<AppInfo>) {
+        list = newList
+        notifyDataSetChanged()  // Notify that data has changed
+    }
 
     override fun getItemCount(): Int {
         return list.size

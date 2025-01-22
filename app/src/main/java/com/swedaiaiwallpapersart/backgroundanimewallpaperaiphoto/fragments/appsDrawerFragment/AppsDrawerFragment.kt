@@ -9,16 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentAppsDrawerBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 class AppsDrawerFragment : Fragment() {
     private lateinit var appList: List<AppInfo>
+    lateinit var adapter: AppAdapter
     lateinit var binding: FragmentAppsDrawerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,20 +31,20 @@ class AppsDrawerFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            getAllApps()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            adapter = AppAdapter(requireContext(), getAllApps())
+            binding.Apps.adapter = adapter
+            binding.Apps.layoutManager = GridLayoutManager(requireContext(), 4)
         }
-        binding.Apps.adapter = AppAdapter(requireContext(), appList)
-        binding.Apps.layoutManager = GridLayoutManager(requireContext(), 4)
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-    fun getAllApps() {
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun getAllApps(): List<AppInfo> {
         val pManager = context?.packageManager
         appList = ArrayList()
 
@@ -67,6 +64,7 @@ class AppsDrawerFragment : Fragment() {
                 (appList as ArrayList<AppInfo>).add(app)
             }
         }
-
+        return appList
     }
+
 }

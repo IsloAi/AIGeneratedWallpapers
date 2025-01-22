@@ -9,12 +9,28 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 
 //Created on 14-1-2025 by U5M4N-K071N
 /*It's the fear of the bug unseen 
 that makes coding harder to begin.*/
 
+class HomePagerAdapter(
+    fragmentActivity: FragmentActivity,
+    private val fragments: List<Fragment>
+) : FragmentStateAdapter(fragmentActivity) {
+
+    override fun getItemCount(): Int {
+        return fragments.size
+    }
+
+    override fun createFragment(position: Int): Fragment {
+        return fragments[position]
+    }
+}
+
+/*
 class HomePagerAdapter(
     val context: FragmentActivity,
     private val fragments: List<Fragment>
@@ -44,4 +60,4 @@ class HomePagerAdapter(
         }
     }
 
-}
+}*/
