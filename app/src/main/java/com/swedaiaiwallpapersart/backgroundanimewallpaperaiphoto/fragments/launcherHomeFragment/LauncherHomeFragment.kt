@@ -14,16 +14,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLauncherHomeBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.launcherHomeFragment.homeScreen.HomeScreen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 
 class LauncherHomeFragment : Fragment() {
 
     lateinit var binding: FragmentLauncherHomeBinding
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +49,7 @@ class LauncherHomeFragment : Fragment() {
         val fragments = listOf(
             HomeTabsFragment(),
             HomeScreen(),
-
-            )
+        )
         binding.homePager.adapter = HomePagerAdapter(requireActivity(), fragments)
         binding.homePager.setCurrentItem(1, false)
         binding.homePager.offscreenPageLimit = 1
@@ -63,6 +65,10 @@ class LauncherHomeFragment : Fragment() {
 
         checkAndRequestPermission()
 
+        // Observe the currentPage LiveData and update the ViewPager2
+        sharedViewModel.currentPage.observe(viewLifecycleOwner) { page ->
+            binding.homePager.setCurrentItem(page, true)
+        }
     }
 
     private fun checkAndRequestPermission() {
@@ -87,6 +93,14 @@ class LauncherHomeFragment : Fragment() {
             }
         } else {
             // For Android versions below R, just run setWallpaper()
+            setWallpaper()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Check permission again when the app resumes
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             setWallpaper()
         }
     }

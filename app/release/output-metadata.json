@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 156,
+      "versionName": "1.9.5",
+      "outputFile": "Ai Wallpapers -1.9.5 build 156-release.apk"
+    }
+  ],
+  "elementType": "File"
+}

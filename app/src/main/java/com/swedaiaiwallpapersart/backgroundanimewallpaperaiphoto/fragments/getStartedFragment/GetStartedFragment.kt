@@ -3,10 +3,12 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.getS
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePr
 class GetStartedFragment : Fragment() {
 
     lateinit var binding: FragmentGetStartedBinding
+    var firsTime: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,7 @@ class GetStartedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        MySharePreference.setFirstTime(requireContext(), true)
+        firsTime = MySharePreference.getFirstTime(requireContext())
 
         binding.viewPager2.adapter = pagerAdapter(requireContext())
         binding.viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -74,11 +77,29 @@ class GetStartedFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (MySharePreference.getFirstTime(requireContext())){
-            findNavController().navigate(R.id.launcherHomeFragment)
-        }else{
-            findNavController().navigate(R.id.defaultSetterFragment)
+        firsTime = MySharePreference.getFirstTime(requireContext())
+
+        if (!checkAppDefaultHome()) { // App is not set as default home
+            if (firsTime) {
+                Log.d("Launcher", "onResume: Navigating to DefaultSetterFragment (First Time)")
+                findNavController().navigate(R.id.defaultSetterFragment)
+            } else {
+                Log.d("Launcher", "onResume: Staying on GetStartedFragment")
+                // Stay on GetStartedFragment
+            }
+        } else {
+            // Handle the case where the app is already the default home
+            Log.d("Launcher", "onResume: App is Default Home, navigating if required")
         }
+    }
+
+    private fun checkAppDefaultHome(): Boolean {
+        val packageManager = requireContext().packageManager
+        val intent = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+        }
+        val resolveInfo = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfo?.activityInfo?.packageName == requireContext().packageName
     }
 
     private fun setCurrentIndicator(index: Int) {
@@ -156,6 +177,8 @@ class GetStartedFragment : Fragment() {
         try {
             val intent = Intent(Settings.ACTION_HOME_SETTINGS)
             startActivity(intent)
+            // Set 'firstTime' to true when the user interacts with this screen
+            MySharePreference.setFirstTime(requireContext(), true)
         } catch (e: Exception) {
             e.printStackTrace()
             // Fallback: Open general settings if the specific screen can't be opened

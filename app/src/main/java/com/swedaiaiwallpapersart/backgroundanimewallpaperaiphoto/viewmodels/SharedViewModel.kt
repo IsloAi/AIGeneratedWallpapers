@@ -11,6 +11,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWall
 
 
 class SharedViewModel : ViewModel() {
+    val currentPage = MutableLiveData<Int>()
+
+
+
     private val _catResponseList = MutableLiveData<List<CatResponse>>()
     val catResponseList: LiveData<List<CatResponse>> = _catResponseList
 

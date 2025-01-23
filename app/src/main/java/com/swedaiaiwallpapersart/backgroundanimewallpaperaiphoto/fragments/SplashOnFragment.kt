@@ -198,19 +198,20 @@ class SplashOnFragment : Fragment() {
 
     private fun navigateToNextScreen() {
         if (isAdded) {
-            if (!firstTime) {
-                hasNavigated = true
+            val isDefaultHome = checkAppDefaultHome()
+            val firstTime = MySharePreference.getFirstTime(requireContext())
+
+            Log.d("Launcher", "navigateToNextScreen: isDefaultHome=$isDefaultHome, firstTime=$firstTime")
+
+            if (!isDefaultHome && !firstTime) {
+                // First launch, navigate to GetStartedFragment
                 findNavController().navigate(R.id.getStartedFragment)
-            } else {
-                hasNavigated = true
-                if (checkAppDefaultHome()) {
-                    Toast.makeText(requireContext(), "App is Default Home", Toast.LENGTH_SHORT)
-                        .show()
-                    findNavController().navigate(R.id.launcherHomeFragment)
-                } else {
-                    //Toast.makeText(requireContext(), "App is not Default Home", Toast.LENGTH_SHORT).show()
-                    findNavController().navigate(R.id.defaultSetterFragment)
-                }
+            } else if (!isDefaultHome && firstTime) {
+                // Subsequent launches, navigate to DefaultSetterFragment
+                findNavController().navigate(R.id.defaultSetterFragment)
+            } else if (isDefaultHome) {
+                // App is already default home, navigate to home
+                findNavController().navigate(R.id.launcherHomeFragment)
             }
         }
     }
@@ -262,9 +263,10 @@ class SplashOnFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if (MySharePreference.getFirstTime(requireContext())) {
-            Log.e("SPLASH", "onResume: ")
+        firstTime = MySharePreference.getFirstTime(requireContext())
+        Log.d("Launcher", "onResume: FirstTime: $firstTime")
+        if (!firstTime) {
+            Log.d("Launcher", "onResume: ")
             val videoUri: Uri =
                 Uri.parse("android.resource://" + requireContext().packageName + "/" + R.raw.new_splash_video)
             binding.videoView.setVideoURI(videoUri)
@@ -279,10 +281,11 @@ class SplashOnFragment : Fragment() {
 
             if (counter > 0) {
                 if (isAdded) {
+                    Log.d("Launcher", "onResume:Navigating counter ")
                     navigateToNextScreen()
                 }
             }
-            handleAppResume()
+            //handleAppResume()
             if (isAdded) {
                 val bundle = Bundle()
                 bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
