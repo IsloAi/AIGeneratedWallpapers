@@ -53,7 +53,7 @@ class AppsDrawerFragment : Fragment() {
         }
 
         val allApps = pManager?.queryIntentActivities(i, 0)
-        if (allApps != null) {
+        /*if (allApps != null) {
             for (ri in allApps) {
                 val app = AppInfo(
                     ri.loadLabel(pManager),
@@ -63,7 +63,7 @@ class AppsDrawerFragment : Fragment() {
                 Log.i("Log", app.packageName.toString())
                 (appList as ArrayList<AppInfo>).add(app)
             }
-        }
+        }*/
         return appList
     }
 

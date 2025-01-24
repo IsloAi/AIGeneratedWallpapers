@@ -156,6 +156,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 }
             }
         }
+
     }
 
     override fun onDestroy() {

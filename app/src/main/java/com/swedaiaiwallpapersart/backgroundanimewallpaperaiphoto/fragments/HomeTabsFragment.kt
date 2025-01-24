@@ -168,7 +168,6 @@ class HomeTabsFragment : Fragment() {
             }
         }
 
-
         interAd.loadAd("exitapp_inter", object : IKLoadAdListener {
             override fun onAdLoaded() {}
             override fun onAdLoadFail(error: IKAdError) {}
@@ -271,7 +270,6 @@ class HomeTabsFragment : Fragment() {
         Log.d("FCM", "openChargingWallpaperTab: will open Charging tab")
         navigateTOTabs("Charging")
     }
-
 
     private fun sendTracking(
         eventName: String,

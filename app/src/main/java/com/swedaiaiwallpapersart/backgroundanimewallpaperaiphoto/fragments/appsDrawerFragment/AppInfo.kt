@@ -1,9 +1,14 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment
 
-import android.graphics.drawable.Drawable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
+@Entity(tableName = "AppsInfo")
 data class AppInfo(
-    var label: CharSequence,
-    var packageName: CharSequence,
-    var icon: Drawable
+    @PrimaryKey(autoGenerate = false)
+    @ColumnInfo("AppLabel")
+    var label: String,
+    @ColumnInfo("packageName")
+    var packageName: String
 )

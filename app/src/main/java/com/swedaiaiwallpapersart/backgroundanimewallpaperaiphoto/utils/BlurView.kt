@@ -10,7 +10,7 @@ import android.renderscript.ScriptIntrinsicBlur
 
 object BlurView {
 
-    fun blurImage(context: Context?, image: Bitmap): Bitmap? {
+    fun blurImage(context: Context?, image: Bitmap): Bitmap {
         val BITMAP_SCALE = 0.1f
         val BLUR_RADIUS = 20f
         val width = Math.round(image.width * BITMAP_SCALE)
@@ -28,10 +28,8 @@ object BlurView {
         return outputBitmap
     }
 
-
     var filePath = ""
     var fileName = ""
-
     var filePathBattery = ""
     var fileNameBattery = ""
 

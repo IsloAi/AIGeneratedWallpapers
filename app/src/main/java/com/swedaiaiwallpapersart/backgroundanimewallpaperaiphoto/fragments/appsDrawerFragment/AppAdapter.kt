@@ -1,7 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
@@ -11,13 +10,15 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.UIUtils
 
 //Created on 10/1/2025 by U5M4N-K071N
 /*It's the fear of the bug unseen 
 that makes coding harder to begin.*/
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-class AppAdapter(var context: Context ,var list:List<AppInfo>) : RecyclerView.Adapter<AppAdapter.Viewholder>() {
+class AppAdapter(var context: Context, var list: List<AppInfo>) :
+    RecyclerView.Adapter<AppAdapter.Viewholder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Viewholder {
         val view: View =
@@ -26,14 +27,13 @@ class AppAdapter(var context: Context ,var list:List<AppInfo>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: Viewholder, position: Int) {
-        val appLabel: String = list[position].label.toString()
-        val appPackage: String = list[position].packageName.toString()
-        val appIcon: Drawable = list[position].icon
+        val appLabel: String = list[position].label
+        val appPackage: String = list[position].packageName
 
         val textView: TextView = holder.name
         textView.text = appLabel
         val imageView: ImageView = holder.image
-        imageView.setImageDrawable(appIcon)
+        imageView.setImageDrawable(UIUtils.getAppIcon(appPackage, context))
 
         holder.itemView.setOnClickListener {
             val launchIntent = context.packageManager.getLaunchIntentForPackage(appPackage)
@@ -41,6 +41,7 @@ class AppAdapter(var context: Context ,var list:List<AppInfo>) : RecyclerView.Ad
         }
 
     }
+
     fun updateList(newList: List<AppInfo>) {
         list = newList
         notifyDataSetChanged()  // Notify that data has changed

@@ -9,14 +9,16 @@ import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.AppInfoDAO
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.LiveWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.WallpapersDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment.AppInfo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 @Database(
-    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class,FavouriteLiveModel::class],
-    version = 12
+    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class, FavouriteLiveModel::class,AppInfo::class],
+    version = 13
 )
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -28,6 +30,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun wallpapersDao(): WallpapersDao
 
     abstract fun liveWallpaperDao(): LiveWallpaperDao
+
+    abstract fun AppsDAO(): AppInfoDAO
 
     companion object {
         @Volatile
