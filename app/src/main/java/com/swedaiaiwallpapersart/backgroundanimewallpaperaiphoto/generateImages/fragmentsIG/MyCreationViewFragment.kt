@@ -29,9 +29,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
-import com.ikame.android.sdk.widgets.IkmWidgetAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -43,6 +40,7 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
+import com.ikame.android.sdk.widgets.IkmWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
@@ -58,7 +56,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.utilsIG.ImageGenerateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.DummyFavorite
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ImageListViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import dagger.hilt.android.AndroidEntryPoint
@@ -72,23 +69,23 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyCreationViewFragment : Fragment() {
-    private var _binding: FragmentMyCreationViewBinding?= null
+    private var _binding: FragmentMyCreationViewBinding? = null
     private val binding get() = _binding!!
 
     private var bindingRef: WeakReference<FragmentMyCreationViewBinding>? = null
 
-    private var timer:CountDownTimer ?= null
+    private var timer: CountDownTimer? = null
 
-    private var myContext: Context?= null
+    private var myContext: Context? = null
     private lateinit var listViewModel: ImageListViewModel
     private var timeDisplay = 0
-    private lateinit var  viewModel:RoomViewModel
+    private lateinit var viewModel: RoomViewModel
 
     private var reviewManager: ReviewManager? = null
 
     private var mLastClickTime: Long = 0
     private var myId = 0
-    private var myActivity : MainActivity? = null
+    private var myActivity: MainActivity? = null
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private var getLargImage: String = ""
 
@@ -97,36 +94,42 @@ class MyCreationViewFragment : Fragment() {
 
     var isClickInProgress = false
 
-    private var  dialog: Dialog? = null
-    var prommpt:String = ""
+    private var dialog: Dialog? = null
+    var prommpt: String = ""
 
-    private var favouriteListIGEntity : ArrayList<FavouriteListIGEntity>? = ArrayList()
-    private var imagesList:ArrayList<DummyFavorite> = ArrayList()
-    private var imgList:ArrayList<String> = ArrayList()
+    @Inject
+    lateinit var appDatabase: AppDatabase
+
+    private var favouriteListIGEntity: ArrayList<FavouriteListIGEntity>? = ArrayList()
+    private var imagesList: ArrayList<DummyFavorite> = ArrayList()
+    private var imgList: ArrayList<String> = ArrayList()
 
     private lateinit var imageGenerateViewModel: ImageGenerateViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val roomDatabase = AppDatabase.getInstance(requireContext())
+        val roomDatabase = appDatabase
         listViewModel = ViewModelProvider(requireActivity())[ImageListViewModel::class.java]
         myId = arguments?.getInt("listId")!!
-        val  getTime= arguments?.getInt("timeDisplay")!!
-        viewModel = ViewModelProvider(this,ViewModelFactory(roomDatabase,myId))[RoomViewModel::class.java]
+        val getTime = arguments?.getInt("timeDisplay")!!
+        viewModel =
+            ViewModelProvider(this, ViewModelFactory(roomDatabase, myId))[RoomViewModel::class.java]
         imageGenerateViewModel = ViewModelProvider(this)[ImageGenerateViewModel::class.java]
-        if(getTime>0){
-            timeDisplay = getTime+5
-        }else{
+        if (getTime > 0) {
+            timeDisplay = getTime + 5
+        } else {
             timeDisplay = 0
         }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?): View{
+        savedInstanceState: Bundle?
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentMyCreationViewBinding.inflate(inflater,container,false)
+        _binding = FragmentMyCreationViewBinding.inflate(inflater, container, false)
         bindingRef = WeakReference(_binding)
-        return  binding.root
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -154,11 +157,12 @@ class MyCreationViewFragment : Fragment() {
             binding.prompt.isFocusable = true
             binding.prompt.isFocusableInTouchMode = true
             binding.prompt.requestFocus()
-            val inputMethodManager = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.showSoftInput(binding.prompt, InputMethodManager.SHOW_IMPLICIT)
 
         }
-        if(myContext!= null){
+        if (myContext != null) {
             onCreateCalling()
             initObservers()
 
@@ -170,23 +174,26 @@ class MyCreationViewFragment : Fragment() {
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         myContext = context
     }
-    private fun onCreateCalling(){
+
+    private fun onCreateCalling() {
         myActivity = activity as MainActivity
         swipeRefreshLayout = binding.swipeLayout
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
-        val clipboardManager = myContext?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboardManager =
+            myContext?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         binding.copyButton.visibility = INVISIBLE
-        if(timeDisplay==0){
+        if (timeDisplay == 0) {
             binding.notificationLayout.visibility = GONE
             binding.copyButton.visibility = VISIBLE
         }
-        val time = (timeDisplay*1000)
+        val time = (timeDisplay * 1000)
         binding.notificationMessage.text = getString(R.string.estimated_time_to_load)
-        startCountdown(timeDisplay,binding.textCounter)
+        startCountdown(timeDisplay, binding.textCounter)
         loadDate()
 
         lifecycleScope.launch(Dispatchers.Main) {
@@ -195,31 +202,30 @@ class MyCreationViewFragment : Fragment() {
             val binding = bindingRef?.get()
             binding?.copyButton?.visibility = VISIBLE
         }
-        binding.backButton.setOnClickListener { findNavController().navigateUp()}
+        binding.backButton.setOnClickListener { findNavController().navigateUp() }
         swipeRefreshLayout.setOnRefreshListener {
             loadDate()
         }
 
         binding.addToFav1.setOnClickListener {
 
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
 
             getLargImage = imagesList[0].url
-            if(favouriteListIGEntity!!.isEmpty()){
-                addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            if (favouriteListIGEntity!!.isEmpty()) {
+                addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                 imagesList[0].isFavorite = true
                 binding.fav1.setImageResource(R.drawable.heart_red)
-            }else{
-                val image = favouriteListIGEntity!!.any {it.image == getLargImage}
-                if(!image){
-                    addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            } else {
+                val image = favouriteListIGEntity!!.any { it.image == getLargImage }
+                if (!image) {
+                    addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                     binding.fav1.setImageResource(R.drawable.heart_red)
                     imagesList[0].isFavorite = true
-                }
-                else{
+                } else {
                     viewModel.deleteItem(getLargImage)
                     binding.fav1.setImageResource(R.drawable.heart_unsel)
                     imagesList[0].isFavorite = false
@@ -230,24 +236,23 @@ class MyCreationViewFragment : Fragment() {
 
         binding.addToFav2.setOnClickListener {
 
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
 
             getLargImage = imagesList[1].url
-            if(favouriteListIGEntity!!.isEmpty()){
-                addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            if (favouriteListIGEntity!!.isEmpty()) {
+                addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                 imagesList[1].isFavorite = true
                 binding.fav2.setImageResource(R.drawable.heart_red)
-            }else{
-                val image = favouriteListIGEntity!!.any {it.image == getLargImage}
-                if(!image){
-                    addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            } else {
+                val image = favouriteListIGEntity!!.any { it.image == getLargImage }
+                if (!image) {
+                    addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                     binding.fav2.setImageResource(R.drawable.heart_red)
                     imagesList[1].isFavorite = true
-                }
-                else{
+                } else {
                     viewModel.deleteItem(getLargImage)
                     binding.fav2.setImageResource(R.drawable.heart_unsel)
                     imagesList[1].isFavorite = false
@@ -258,25 +263,24 @@ class MyCreationViewFragment : Fragment() {
 
         binding.addToFav3.setOnClickListener {
 
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
 
 
             getLargImage = imagesList[2].url
-            if(favouriteListIGEntity!!.isEmpty()){
-                addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            if (favouriteListIGEntity!!.isEmpty()) {
+                addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                 imagesList[2].isFavorite = true
                 binding.fav3.setImageResource(R.drawable.heart_red)
-            }else{
-                val image = favouriteListIGEntity!!.any {it.image == getLargImage}
-                if(!image){
-                    addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            } else {
+                val image = favouriteListIGEntity!!.any { it.image == getLargImage }
+                if (!image) {
+                    addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                     binding.fav3.setImageResource(R.drawable.heart_red)
                     imagesList[2].isFavorite = true
-                }
-                else{
+                } else {
                     viewModel.deleteItem(getLargImage)
                     binding.fav3.setImageResource(R.drawable.heart_unsel)
                     imagesList[2].isFavorite = false
@@ -287,24 +291,23 @@ class MyCreationViewFragment : Fragment() {
         binding.addToFav4.setOnClickListener {
 
 
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
 
             getLargImage = imagesList[3].url
-            if(favouriteListIGEntity!!.isEmpty()){
-                addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            if (favouriteListIGEntity!!.isEmpty()) {
+                addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                 imagesList[3].isFavorite = true
                 binding.fav4.setImageResource(R.drawable.heart_red)
-            }else{
-                val image = favouriteListIGEntity!!.any {it.image == getLargImage}
-                if(!image){
-                    addFavouriteList(myId!!,binding.prompt.text.toString()!!)
+            } else {
+                val image = favouriteListIGEntity!!.any { it.image == getLargImage }
+                if (!image) {
+                    addFavouriteList(myId!!, binding.prompt.text.toString()!!)
                     binding.fav4.setImageResource(R.drawable.heart_red)
                     imagesList[3].isFavorite = true
-                }
-                else{
+                } else {
                     viewModel.deleteItem(getLargImage)
                     binding.fav4.setImageResource(R.drawable.heart_unsel)
                     imagesList[3].isFavorite = true
@@ -314,19 +317,21 @@ class MyCreationViewFragment : Fragment() {
 
 
         binding.copyButton.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             val textToCopy = binding.prompt.text.toString()
             val clip = ClipData.newPlainText("Copied Text", textToCopy)
             clipboardManager.setPrimaryClip(clip)
-            Toast.makeText(myContext,
-                getString(R.string.text_copied_to_clipboard), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                myContext,
+                getString(R.string.text_copied_to_clipboard), Toast.LENGTH_SHORT
+            ).show()
         }
 
         binding.reGenerateBtn.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
@@ -385,7 +390,7 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.newGenerate.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
@@ -463,7 +468,6 @@ class MyCreationViewFragment : Fragment() {
 //        )
 
 
-
         val image = dialog?.findViewById<ImageView>(R.id.generationAnimation)
 
         Glide.with(dialog?.context!!)
@@ -476,12 +480,12 @@ class MyCreationViewFragment : Fragment() {
         val animation = AnimationUtils.loadAnimation(dialog?.context, android.R.anim.fade_in)
         animation.duration = 1000
         // Initial update
-        updateTextAndAnimate(animatedText!!,animation, dialog?.context!!)
+        updateTextAndAnimate(animatedText!!, animation, dialog?.context!!)
 
         CoroutineScope(Dispatchers.Main).launch {
             while (true) {
                 delay(3000)
-                updateTextAndAnimate(animatedText!!,animation,dialog?.context!!)
+                updateTextAndAnimate(animatedText!!, animation, dialog?.context!!)
             }
         }
 
@@ -490,7 +494,7 @@ class MyCreationViewFragment : Fragment() {
 
     var textIndex = 0
 
-    fun updateTextAndAnimate(animatedText:TextView,animation: Animation,context: Context) {
+    fun updateTextAndAnimate(animatedText: TextView, animation: Animation, context: Context) {
         val texts = listOf(
             context.getString(R.string.hold_tight_your_masterpiece_is_rendering),
             context.getString(R.string.loading_the_beauty_just_for_you),
@@ -507,40 +511,40 @@ class MyCreationViewFragment : Fragment() {
         textIndex = (textIndex + 1) % texts.size
     }
 
-    private fun addFavouriteList(myId:Int,prompt:String){
+    private fun addFavouriteList(myId: Int, prompt: String) {
         val data = FavouriteListIGEntity(imageId = myId, image = getLargImage, prompt = prompt)
         viewModel.insertFavourite(data)
 //        binding.addToFav1.setImageResource(R.drawable.heart_red)
     }
 
-    private fun loadDate(){
-            viewModel.getResponseIGById.observe(viewLifecycleOwner){
-                it.let {response ->
-                    Log.e("TAG", "loadDate: "+it )
-                    response?.prompt?.let { prompt ->
-                        binding.prompt.setText(prompt.trimStart())
-                        prommpt = prompt
-                    }
-                    if (response?.output != null){
-                        if(response?.output?.size!! >= 3){
-                            Log.d("imageLists", "future_links is Empty")
-                            imagesList.clear()
-                            for (i in 0 until response.output!!.size){
-                                imagesList.add(DummyFavorite(response.output!![i],false))
-                                imgList.add(response.output!![i])
+    private fun loadDate() {
+        viewModel.getResponseIGById.observe(viewLifecycleOwner) {
+            it.let { response ->
+                Log.e("TAG", "loadDate: " + it)
+                response?.prompt?.let { prompt ->
+                    binding.prompt.setText(prompt.trimStart())
+                    prommpt = prompt
+                }
+                if (response?.output != null) {
+                    if (response?.output?.size!! >= 3) {
+                        Log.d("imageLists", "future_links is Empty")
+                        imagesList.clear()
+                        for (i in 0 until response.output!!.size) {
+                            imagesList.add(DummyFavorite(response.output!![i], false))
+                            imgList.add(response.output!![i])
 
-                            }
-
-                            setImage(response?.output!!,response.prompt,myId)
-
-
-                            checkfavorites()
                         }
-                    }
 
+                        setImage(response?.output!!, response.prompt, myId)
+
+
+                        checkfavorites()
+                    }
                 }
 
             }
+
+        }
 
         swipeRefreshLayout.isRefreshing = false
     }
@@ -552,7 +556,7 @@ class MyCreationViewFragment : Fragment() {
         binding.fav4.setImageResource(getFavoriteIcon(imagesList[3].isFavorite))
     }
 
-    fun checkfavorites(){
+    fun checkfavorites() {
         viewModel.myFavouriteList.observe(viewLifecycleOwner) { list ->
             favouriteListIGEntity?.clear()
             favouriteListIGEntity?.addAll(list)
@@ -566,7 +570,6 @@ class MyCreationViewFragment : Fragment() {
         }
     }
 
-
     private fun getFavoriteIcon(isFavorited: Boolean): Int {
         return if (isFavorited) {
             R.drawable.heart_red
@@ -574,19 +577,36 @@ class MyCreationViewFragment : Fragment() {
             R.drawable.heart_unsel
         }
     }
-    fun initObservers(){
-        val roomDatabase = AppDatabase.getInstance(requireContext())
+
+    fun initObservers() {
+        val roomDatabase = appDatabase
         imageGenerateViewModel.responseData.observe(viewLifecycleOwner) { response ->
             response?.let {
                 val timeDisplay = it.eta?.toInt()
                 Log.d("imageLists", "time Display: $timeDisplay")
                 var data: GetResponseIGEntity? = null
-                if(it.output.isNotEmpty()){
-                    refreshFragment(it.id!!,timeDisplay)
-                    data = GetResponseIGEntity(it.id!!,it.status,it.generationTime,it.output,it.webhook_status, future_links = null,it.meta?.prompt)
-                }else if(it.future_links.isNotEmpty()){
-                    refreshFragment(it.id!!,timeDisplay)
-                    data = GetResponseIGEntity(it.id!!,it.status,it.generationTime, output = null,it.webhook_status,it.future_links,it.meta?.prompt)
+                if (it.output.isNotEmpty()) {
+                    refreshFragment(it.id!!, timeDisplay)
+                    data = GetResponseIGEntity(
+                        it.id!!,
+                        it.status,
+                        it.generationTime,
+                        it.output,
+                        it.webhook_status,
+                        future_links = null,
+                        it.meta?.prompt
+                    )
+                } else if (it.future_links.isNotEmpty()) {
+                    refreshFragment(it.id!!, timeDisplay)
+                    data = GetResponseIGEntity(
+                        it.id!!,
+                        it.status,
+                        it.generationTime,
+                        output = null,
+                        it.webhook_status,
+                        it.future_links,
+                        it.meta?.prompt
+                    )
                 }
                 CoroutineScope(Dispatchers.IO).launch {
                     if (data != null) {
@@ -597,20 +617,21 @@ class MyCreationViewFragment : Fragment() {
         }
     }
 
-    private fun refreshFragment(listId: Int, timeDisplay: Int?){
-        if(timeDisplay != null){
+    private fun refreshFragment(listId: Int, timeDisplay: Int?) {
+        if (timeDisplay != null) {
             val bundle = Bundle().apply {
-                putInt("listId",listId)
+                putInt("listId", listId)
                 putInt("timeDisplay", timeDisplay)
             }
             findNavController().popBackStack(R.id.myViewCreationFragment, true)
 
-            findNavController().navigate(R.id.myViewCreationFragment,bundle)
-        }else{
+            findNavController().navigate(R.id.myViewCreationFragment, bundle)
+        } else {
             Toast.makeText(requireContext(), "Error please try again", Toast.LENGTH_SHORT).show()
         }
     }
-    private fun setImage(list: ArrayList<String>, prompt: String?, id: Int){
+
+    private fun setImage(list: ArrayList<String>, prompt: String?, id: Int) {
         Glide.with(requireContext())
             .load(list[0])
             .listener(object : RequestListener<Drawable> {
@@ -631,20 +652,35 @@ class MyCreationViewFragment : Fragment() {
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    if (isAdded){
-                        if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(requireContext()) || MySharePreference.getfirstLiveWallpaper(requireContext())){
-                            Log.e("TAG", "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper", )
-                            if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(requireContext())){
-                                if (isAdded){
-                                    Log.e("TAG", "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper", )
+                    if (isAdded) {
+                        if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(
+                                requireContext()
+                            ) || MySharePreference.getfirstLiveWallpaper(requireContext())
+                        ) {
+                            Log.e(
+                                "TAG",
+                                "onResume: getartGeneratedFirst || getfirstWallpaperSet  ||getfirstLiveWallpaper",
+                            )
+                            if (!MySharePreference.getReviewedSuccess(requireContext()) && !MySharePreference.getFeedbackSession1Completed(
+                                    requireContext()
+                                )
+                            ) {
+                                if (isAdded) {
+                                    Log.e(
+                                        "TAG",
+                                        "onResume: getReviewedSuccess && getfirstWallpaperSet  ||getfirstLiveWallpaper",
+                                    )
                                     feedback1Sheet()
                                 }
                             }
 
                         }
 
-                        if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(requireContext()) && !MySharePreference.getFeedbackSession2Completed(requireContext())){
-                            if (isAdded){
+                        if (!MySharePreference.getReviewedSuccess(requireContext()) && MySharePreference.getFeedbackSession1Completed(
+                                requireContext()
+                            ) && !MySharePreference.getFeedbackSession2Completed(requireContext())
+                        ) {
+                            if (isAdded) {
                                 feedback1Sheet()
                             }
                         }
@@ -669,28 +705,28 @@ class MyCreationViewFragment : Fragment() {
         Glide.with(myContext!!).load(list[2]).into(binding.imageView3)
         Glide.with(myContext!!).load(list[3]).into(binding.imageView4)
         binding.imageView1.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             navigate(0, list, prompt, id)
         }
         binding.imageView2.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             navigate(1, list, prompt, id)
         }
         binding.imageView3.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
             navigate(2, list, prompt, id)
         }
         binding.imageView4.setOnClickListener {
-            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+            if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
                 return@setOnClickListener
             }
             mLastClickTime = SystemClock.elapsedRealtime();
@@ -703,27 +739,27 @@ class MyCreationViewFragment : Fragment() {
         val binding = DialogFeedbackMomentBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
         binding.feedbackHappy.setOnClickListener {
-            MySharePreference.setFeedbackSession1Completed(requireContext(),true)
+            MySharePreference.setFeedbackSession1Completed(requireContext(), true)
             bottomSheetDialog.dismiss()
             feedbackRateSheet()
         }
 
         binding.feedbacksad.setOnClickListener {
-            MySharePreference.setFeedbackSession1Completed(requireContext(),true)
+            MySharePreference.setFeedbackSession1Completed(requireContext(), true)
             bottomSheetDialog.dismiss()
             feedbackQuestionSheet()
         }
 
-        if (isAdded){
-            if (MySharePreference.getFeedbackSession1Completed(requireContext())){
-                MySharePreference.setFeedbackSession2Completed(requireContext(),true)
+        if (isAdded) {
+            if (MySharePreference.getFeedbackSession1Completed(requireContext())) {
+                MySharePreference.setFeedbackSession2Completed(requireContext(), true)
             }
         }
 
 
         binding.cancel.setOnClickListener {
-            if (isAdded){
-                MySharePreference.setUserCancelledprocess(requireContext(),true)
+            if (isAdded) {
+                MySharePreference.setUserCancelledprocess(requireContext(), true)
             }
             bottomSheetDialog.dismiss()
         }
@@ -760,7 +796,6 @@ class MyCreationViewFragment : Fragment() {
     }
 
 
-
     fun feedbackRateSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = DialogFeedbackRateBinding.inflate(layoutInflater)
@@ -770,7 +805,7 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.buttonApplyWallpaper.setOnClickListener {
-            MySharePreference.setReviewedSuccess(requireContext(),true)
+            MySharePreference.setReviewedSuccess(requireContext(), true)
             bottomSheetDialog.dismiss()
             if (binding.simpleRatingBar.rating >= 4) {
                 googleInAppRate()
@@ -780,7 +815,7 @@ class MyCreationViewFragment : Fragment() {
         }
 
         binding.cancel.setOnClickListener {
-            MySharePreference.setUserCancelledprocess(requireContext(),true)
+            MySharePreference.setUserCancelledprocess(requireContext(), true)
             bottomSheetDialog.dismiss()
         }
         bottomSheetDialog.show()
@@ -794,7 +829,7 @@ class MyCreationViewFragment : Fragment() {
         var subject = ""
 
         binding.exitBtn.setOnClickListener {
-            MySharePreference.setUserCancelledprocess(requireContext(),true)
+            MySharePreference.setUserCancelledprocess(requireContext(), true)
             bottomSheetDialog.dismiss()
         }
 
@@ -871,16 +906,20 @@ class MyCreationViewFragment : Fragment() {
 
 
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (binding.feedbackEdt.text.isNotEmpty()){
+            if (binding.feedbackEdt.text.isNotEmpty()) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    MySharePreference.setReviewedSuccess(requireContext(),true)
+                    MySharePreference.setReviewedSuccess(requireContext(), true)
                     endPointsInterface.postData(
-                        FeedbackModel("From Review","In app review",subject,binding.feedbackEdt.text.toString(),
+                        FeedbackModel(
+                            "From Review",
+                            "In app review",
+                            subject,
+                            binding.feedbackEdt.text.toString(),
                             MySharePreference.getDeviceID(requireContext())!!
                         )
                     )
-                    withContext(Dispatchers.Main){
-                        Toast.makeText(requireContext(),"Thank you!",Toast.LENGTH_SHORT).show()
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(requireContext(), "Thank you!", Toast.LENGTH_SHORT).show()
                         bottomSheetDialog.dismiss()
                     }
                 }
@@ -888,34 +927,39 @@ class MyCreationViewFragment : Fragment() {
         }
         bottomSheetDialog.show()
     }
-    private fun navigate(click: Int, list: ArrayList<String>, prompt: String?, id: Int){
 
-            timeDisplay = 0
-            val gson = Gson()
-            val arrayListJson = gson.toJson(list)
-            val bundle =  Bundle().apply {
-                putString("arrayListJson", arrayListJson)
-                putInt("position", click)
-                putString("prompt", prompt)
-                putInt("id", id)
-            }
-            findNavController().navigate(R.id.action_myViewCreationFragment_to_creationSliderViewFragment, bundle)
+    private fun navigate(click: Int, list: ArrayList<String>, prompt: String?, id: Int) {
+
+        timeDisplay = 0
+        val gson = Gson()
+        val arrayListJson = gson.toJson(list)
+        val bundle = Bundle().apply {
+            putString("arrayListJson", arrayListJson)
+            putInt("position", click)
+            putString("prompt", prompt)
+            putInt("id", id)
+        }
+        findNavController().navigate(
+            R.id.action_myViewCreationFragment_to_creationSliderViewFragment,
+            bundle
+        )
     }
 
-    private fun startCountdown(initialSeconds: Int,textView:TextView) {
-      timer = object : CountDownTimer((initialSeconds * 1000).toLong(), 1000) {
+    private fun startCountdown(initialSeconds: Int, textView: TextView) {
+        timer = object : CountDownTimer((initialSeconds * 1000).toLong(), 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 // Update the UI with the remaining seconds
                 val binding = bindingRef?.get()
                 val remainingSeconds = (millisUntilFinished / 1000).toInt()
-                if (binding != null){
+                if (binding != null) {
                     textView.text = "$remainingSeconds sec"
 
                 }
             }
+
             override fun onFinish() {
                 val binding = bindingRef?.get()
-                if (binding!=null){
+                if (binding != null) {
                     textView.text = ""
                     binding.notificationMessage.text =
                         getString(R.string.if_still_not_loaded_then_swipe_down_to_refresh_after_few_second)
@@ -927,9 +971,6 @@ class MyCreationViewFragment : Fragment() {
 
 
     }
-
-
-
 
 
     override fun onDestroyView() {

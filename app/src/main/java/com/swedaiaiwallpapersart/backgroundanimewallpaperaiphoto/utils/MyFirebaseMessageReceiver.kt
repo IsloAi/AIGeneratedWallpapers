@@ -10,43 +10,48 @@ import android.os.Build
 import android.util.Log
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.ikame.android.sdk.core.fcm.BaseIkFirebaseMessagingService
-import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.google.gson.Gson
+import com.ikame.android.sdk.core.fcm.BaseIkFirebaseMessagingService
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.webHookGenericResponse
+import javax.inject.Inject
 
 class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
+    @Inject
+    lateinit var appDatabases: AppDatabase
+
     override fun onNewToken(token: String) {
         Log.d("tracingToken", "Refreshed token: $token")
-        MySharePreference.setFireBaseToken(applicationContext,token)
+        MySharePreference.setFireBaseToken(applicationContext, token)
     }
 
     override fun splashActivityClass(): Class<*>? {
         return MainActivity::class.java
 //okay, yeah it's the activity which holds all the fragments. yes.
-    // i want activity can start can show first open ad. it ok. right?Yeah that's right
-    // oke, well done. tthanks you
+        // i want activity can start can show first open ad. it ok. right?Yeah that's right
+        // oke, well done. tthanks you
     }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.e("tracingToken", "onMessageReceived: $remoteMessage")
         val data = remoteMessage.data
-        val appDatabase = AppDatabase.getInstance(applicationContext)
-        Log.e("*******Message", "onMessageReceived: "+data )
+        val appDatabase = appDatabases
+        Log.e("*******Message", "onMessageReceived: " + data)
 
         val type = data["type"]
         if (type?.lowercase() == "a") {
             val body = data["body"]
             val webHookGenericResponse = Gson().fromJson(body, webHookGenericResponse::class.java)
             Log.e("TAG", "onMessageReceived: $webHookGenericResponse")
-            val oldData = appDatabase.getResponseIGDao()?.getCreationsByIdNotLive(webHookGenericResponse.id)
+            val oldData =
+                appDatabase.getResponseIGDao()?.getCreationsByIdNotLive(webHookGenericResponse.id)
             val mutableLIst: ArrayList<String> = arrayListOf()
             mutableLIst.addAll(webHookGenericResponse.output)
             oldData?.output = mutableLIst
-            if (oldData!=null){
+            if (oldData != null) {
                 appDatabase.getResponseIGDao()?.UpdateData(oldData)
             }
             Log.e("TAG", "onMessageReceived: $body")
@@ -58,6 +63,7 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
             )
         }
     }
+
     @SuppressLint("RemoteViewLayout")
     private fun getCustomDesign(title: String?, message: String?): RemoteViews {
         val remoteViews = RemoteViews(applicationContext.packageName, R.layout.notification)
@@ -66,6 +72,7 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
         remoteViews.setImageViewResource(R.id.icon, R.drawable.app_icon)
         return remoteViews
     }
+
     private fun showNotification(title: String?, message: String?) {
         val intent = Intent(this, MainActivity::class.java)
         val channel_id = "notification_channel"
@@ -80,7 +87,8 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
             val notificationChannel = NotificationChannel(
                 channel_id, "web_app", NotificationManager.IMPORTANCE_HIGH
             )
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(notificationChannel)
 
             builder = NotificationCompat.Builder(this, channel_id)
@@ -88,7 +96,7 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
             builder = NotificationCompat.Builder(this)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             builder.setSmallIcon(R.drawable.app_icon)
                 .setContentTitle(title)
                 .setContentText(message)
@@ -97,7 +105,7 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
                 .setOnlyAlertOnce(true)
                 .setContentIntent(pendingIntent)
                 .setContent(getCustomDesign(title, message))
-        }else{
+        } else {
             builder.setSmallIcon(R.drawable.app_icon)
                 .setContentTitle(title)
                 .setContentText(message)
@@ -108,7 +116,8 @@ class MyFirebaseMessageReceiver : BaseIkFirebaseMessagingService() {
                 .setContentTitle(title)
                 .setContentText(message)
         }
-        val notificationManagerCompat = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManagerCompat =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManagerCompat.notify(0, builder.build())
     }
 }

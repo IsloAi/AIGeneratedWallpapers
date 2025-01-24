@@ -24,53 +24,60 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.Retrof
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.PostDataOnServer
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
+import javax.inject.Inject
 
 class ViewAllCreations : Fragment() {
-    private var _binding: FragmentViewAllCreationsBinding?=  null
+    private var _binding: FragmentViewAllCreationsBinding? = null
     private val binding get() = _binding!!
-    var roomDatabase:AppDatabase ?= null
-    var viewModel:RoomViewModel ?= null
+    var roomDatabase: AppDatabase? = null
+    var viewModel: RoomViewModel? = null
 
-    private var existGems:Int? = null
+    private var existGems: Int? = null
     private val postDataOnServer = PostDataOnServer()
 
 
     private var isSelectionMode = false
-    var adapter:CreationsAdapter ?= null
-    private var  dialog: Dialog? = null
+    var adapter: CreationsAdapter? = null
+    private var dialog: Dialog? = null
 
-    var mlist:ArrayList<GetResponseIGEntity> = ArrayList()
+    var mlist: ArrayList<GetResponseIGEntity> = ArrayList()
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentViewAllCreationsBinding.inflate(inflater,container,false)
+        _binding = FragmentViewAllCreationsBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         existGems = MySharePreference.getGemsValue(requireContext())
-        roomDatabase = AppDatabase.getInstance(requireContext())
-        viewModel = ViewModelProvider(this,ViewModelFactory(roomDatabase!!,0))[RoomViewModel::class.java]
+        roomDatabase = appDatabase
+        viewModel =
+            ViewModelProvider(this, ViewModelFactory(roomDatabase!!, 0))[RoomViewModel::class.java]
         initHistory()
         setEvents()
     }
 
-
-    fun setEvents(){
+    fun setEvents() {
         binding.deleteAllHistory.setOnClickListener {
-            if (mlist.size > 0){
+            if (mlist.size > 0) {
                 binding.deleteAllHistory.visibility = View.GONE
                 binding.selectAll.visibility = View.VISIBLE
                 binding.selectAll.text = getString(R.string.select_all)
                 isSelectionMode = true
                 adapter?.updateSelectionMode(isSelectionMode)
-            }else{
-                Toast.makeText(requireContext(),"Please generate some art to delete",Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Please generate some art to delete",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
         }
@@ -78,33 +85,33 @@ class ViewAllCreations : Fragment() {
 
 
         binding.backButton.setOnClickListener {
-            if (isSelectionMode){
+            if (isSelectionMode) {
 
                 isSelectionMode = false
                 adapter?.updateSelectionMode(isSelectionMode)
                 binding.deleteAllHistory.visibility = View.VISIBLE
                 binding.selectAll.visibility = View.GONE
                 binding.deleteCreations.visibility = View.GONE
-            }else{
+            } else {
                 findNavController().navigateUp()
             }
         }
 
 
         binding.deleteCreations.setOnClickListener {
-           getUserIdDialog()
+            getUserIdDialog()
 
         }
 
 
         binding.selectAll.setOnClickListener {
 
-            if (binding.selectAll.text == getString(R.string.unselect_all)){
-                binding.selectAll.text =  "Select All"
+            if (binding.selectAll.text == getString(R.string.unselect_all)) {
+                binding.selectAll.text = "Select All"
                 adapter?.unselectAll()
                 binding.deleteCreations.visibility = View.GONE
-            }else{
-                binding.selectAll.text =  "Unselect All"
+            } else {
+                binding.selectAll.text = "Unselect All"
                 adapter?.selectAll()
                 binding.deleteCreations.visibility = View.VISIBLE
             }
@@ -112,8 +119,7 @@ class ViewAllCreations : Fragment() {
         }
     }
 
-
-    fun initHistory(){
+    fun initHistory() {
 
         binding.historyRecyclerView.addItemDecoration(
             RvItemDecore(
@@ -124,35 +130,41 @@ class ViewAllCreations : Fragment() {
             )
         )
 
-        viewModel?.allGetResponseIG?.observe(viewLifecycleOwner){myList->
-            if(myList.isNotEmpty()){
+        viewModel?.allGetResponseIG?.observe(viewLifecycleOwner) { myList ->
+            if (myList.isNotEmpty()) {
                 mlist.clear()
                 mlist.addAll(myList)
                 binding.emptySupport.visibility = View.GONE
                 binding.historyRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-                adapter  = CreationsAdapter(myList,isSelectionMode,object: CreationsAdapter.CreationSelectionInterface {
+                adapter = CreationsAdapter(
+                    myList,
+                    isSelectionMode,
+                    object : CreationsAdapter.CreationSelectionInterface {
 
-                    override fun setOnClick(id: Int, getResponseIGEntity: GetResponseIGEntity) {
+                        override fun setOnClick(id: Int, getResponseIGEntity: GetResponseIGEntity) {
 //                        viewModel!!.deleteSingleImage(getResponseIGEntity)
-                    }
-
-                    override fun viewMyCreations(id: Int, list: ArrayList<GetResponseIGEntity>) {
-                        if (isSelectionMode){
-                            if (list.size > 0){
-                                binding.deleteCreations.visibility = View.VISIBLE
-                            }else{
-                                binding.deleteCreations.visibility = View.GONE
-                            }
-                        }else{
-                            navigate(id,0)
-
                         }
-                    }
-                })
+
+                        override fun viewMyCreations(
+                            id: Int,
+                            list: ArrayList<GetResponseIGEntity>
+                        ) {
+                            if (isSelectionMode) {
+                                if (list.size > 0) {
+                                    binding.deleteCreations.visibility = View.VISIBLE
+                                } else {
+                                    binding.deleteCreations.visibility = View.GONE
+                                }
+                            } else {
+                                navigate(id, 0)
+
+                            }
+                        }
+                    })
 
 
                 binding.historyRecyclerView.adapter = adapter
-            }else{
+            } else {
                 mlist.clear()
                 binding.historyRecyclerView.visibility = View.GONE
                 binding.emptySupport.visibility = View.VISIBLE
@@ -161,27 +173,32 @@ class ViewAllCreations : Fragment() {
         }
     }
 
-
     @SuppressLint("SuspiciousIndentation")
-    private fun postGems(){
+    private fun postGems() {
         val totalGems = existGems?.minus(10)
-        postDataOnServer.gemsPostData(requireContext(), MySharePreference.getDeviceID(requireContext())!!,
-            RetrofitInstance.getInstance(),totalGems!!, PostDataOnServer.isPlan)
-        MySharePreference.setGemsValue(requireContext(),totalGems)
+        postDataOnServer.gemsPostData(
+            requireContext(), MySharePreference.getDeviceID(requireContext())!!,
+            RetrofitInstance.getInstance(), totalGems!!, PostDataOnServer.isPlan
+        )
+        MySharePreference.setGemsValue(requireContext(), totalGems)
     }
-    private fun navigate(listId: Int, timeDisplay: Int?){
-        if(timeDisplay != null){
-            if(timeDisplay>0){
+
+    private fun navigate(listId: Int, timeDisplay: Int?) {
+        if (timeDisplay != null) {
+            if (timeDisplay > 0) {
                 postGems()
             }
             val bundle = Bundle().apply {
-                putInt("listId",listId)
+                putInt("listId", listId)
                 putInt("timeDisplay", timeDisplay)
             }
-            requireParentFragment().findNavController().navigate(R.id.myViewCreationFragment,bundle)
-        }else{
-            Toast.makeText(requireContext(),
-                getString(R.string.error_please_try_again), Toast.LENGTH_SHORT).show()
+            requireParentFragment().findNavController()
+                .navigate(R.id.myViewCreationFragment, bundle)
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.error_please_try_again), Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -199,7 +216,7 @@ class ViewAllCreations : Fragment() {
         val NoBtn = dialog?.findViewById<Button>(R.id.btnNo)
 
         deleteBtn?.setOnClickListener {
-            if (adapter?.getSelectedlist()?.size!! > 0){
+            if (adapter?.getSelectedlist()?.size!! > 0) {
                 viewModel?.deleteAll(adapter?.getSelectedlist()!!)
 
                 binding.deleteAllHistory.visibility = View.VISIBLE
@@ -227,9 +244,6 @@ class ViewAllCreations : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
-
 
 
 }

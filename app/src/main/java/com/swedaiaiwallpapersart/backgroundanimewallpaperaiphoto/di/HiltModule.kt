@@ -1,16 +1,22 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.di
 
 import android.content.Context
+import androidx.room.Room
 import androidx.work.WorkManager
 
 import com.google.gson.GsonBuilder
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.AppInfoDAO
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.LiveWallpaperDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.WallpapersDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.FetchDataRepositoryImpl
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repositry.WallpaperRepositoryImp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.FetchDataRepository
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repositry.WallpaperRepositry
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.GetResponseIGDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import dagger.Module
 import dagger.Provides
@@ -38,9 +44,7 @@ object HiltModule {
         val logging = HttpLoggingInterceptor()
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
         val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
-//        if (BuildConfig.DEBUG) {
-//            httpClient.addInterceptor(logging)
-//        }
+
         httpClient.addInterceptor(logging)
         val gson = GsonBuilder()
             .setLenient()
@@ -74,15 +78,45 @@ object HiltModule {
         return WallpaperRepositoryImp(webApiInterface)
     }
 
-    @Provides
+    /*@Provides
     fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase(context)
+    }*/
+
+    @Provides
+    @Singleton
+    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "appDatabase"
+        ).fallbackToDestructiveMigration()
+            .build()
     }
 
-//    @Provides
-//    fun provideUpdateGemsRepository(firestore: FirebaseFirestore):UpdateGemsRepository{
-//        return UpdateGemsRespositryImpl(firestore = firestore)
-//    }
+    @Provides
+    fun providesAppDao(appDatabase: AppDatabase): AppInfoDAO {
+        return appDatabase.AppsDAO()
+    }
+    @Provides
+    fun providesGetResponseIGDao(appDatabase: AppDatabase): GetResponseIGDao {
+        return appDatabase.getResponseIGDao()
+    }
+
+    @Provides
+    fun providesFavouriteListIGDao(appDatabase: AppDatabase): FavouriteListIGDao {
+        return appDatabase.getFavouriteList()
+    }
+
+    @Provides
+    fun providesWallpapersDao(appDatabase: AppDatabase): WallpapersDao {
+        return appDatabase.wallpapersDao()
+    }
+
+    @Provides
+    fun providesLiveWallpaperDao(appDatabase: AppDatabase): LiveWallpaperDao {
+        return appDatabase.liveWallpaperDao()
+    }
 
     @Provides
     fun provideFetchDataRepository(
@@ -91,35 +125,11 @@ object HiltModule {
         return FetchDataRepositoryImpl(appDatabase)
     }
 
-//    @Provides
-//    fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
-//        return AppDatabase(context)
-//    }
-
-//    @Provides
-//    fun providesCustomProgressBar(): CustomProgressBar {
-//        return CustomProgressBar()
-//    }
-
-//    @Provides
-//    @Singleton
-//    fun providesDatabaseReference(): FirebaseFirestore {
-//        return FirebaseFirestore.getInstance()
-//    }
-
-
-
     @Provides
     @Singleton
     fun providesApplication(@ApplicationContext app: Context): MyApp {
         return app as MyApp
     }
-
-//    @Provides
-//    fun provideDialogInterfaces(): DialogInterfaces {
-//        return DialogInterfacesImpl()
-//    }
-
 
 }
 

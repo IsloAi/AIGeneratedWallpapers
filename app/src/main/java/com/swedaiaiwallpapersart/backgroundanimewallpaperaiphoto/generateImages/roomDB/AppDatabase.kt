@@ -1,13 +1,8 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB
 
-import android.annotation.SuppressLint
-import android.content.Context
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.AppInfoDAO
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.dao.LiveWallpaperDao
@@ -16,6 +11,23 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FavouriteLiveModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
+
+@Database(
+    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class, FavouriteLiveModel::class, AppInfo::class],
+    version = 13
+)
+@TypeConverters(ArrayListStringConverter::class)
+abstract class AppDatabase : RoomDatabase() {
+
+    abstract fun getResponseIGDao(): GetResponseIGDao
+    abstract fun getFavouriteList(): FavouriteListIGDao
+    abstract fun wallpapersDao(): WallpapersDao
+    abstract fun liveWallpaperDao(): LiveWallpaperDao
+    abstract fun AppsDAO(): AppInfoDAO
+
+}
+
+/*
 @Database(
     entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class, FavouriteLiveModel::class,AppInfo::class],
     version = 13
@@ -123,4 +135,4 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
     }
-}
+}*/

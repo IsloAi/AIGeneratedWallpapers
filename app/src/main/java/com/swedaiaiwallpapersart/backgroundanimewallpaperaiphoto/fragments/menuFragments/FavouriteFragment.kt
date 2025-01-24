@@ -132,7 +132,7 @@ class FavouriteFragment : Fragment() {
 
     private fun onCreateViewCalling() {
 
-        val roomDatabase = AppDatabase.getInstance(requireContext())
+        val roomDatabase = appDatabase
         roomViewModel =
             ViewModelProvider(this, ViewModelFactory(roomDatabase, 0))[RoomViewModel::class.java]
         myActivity = activity as MainActivity

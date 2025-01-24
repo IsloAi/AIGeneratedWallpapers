@@ -40,7 +40,7 @@ class LauncherHomeFragment : Fragment() {
     private lateinit var appList: List<AppInfo>
 
     @Inject
-    private lateinit var appDatabase: AppDatabase
+    lateinit var appDatabase: AppDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,6 +56,11 @@ class LauncherHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            lifecycleScope.launch {
+                getAllApps()
+            }
+        }
 
         binding.menuIcon.setOnClickListener {
             val bottomSheetDialog = BottomSheetDialog(requireContext())
@@ -157,9 +162,6 @@ class LauncherHomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
         super.onResume()
-        lifecycleScope.launch {
-            getAllApps()
-        }
         // Check permission again when the app resumes
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             setWallpaper()
