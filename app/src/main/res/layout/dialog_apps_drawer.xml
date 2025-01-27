@@ -15,10 +15,10 @@
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
         android:src="@drawable/icon_cancel"
-        android:tint="@color/button_bg"
         app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/button_bg" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/appCompatTextView2"
@@ -48,5 +48,15 @@
         app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2"
         app:spanCount="4"
         tools:listitem="@layout/item_apps" />
+
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:progressTint="@color/card_selector_pre"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/Apps"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/Apps" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

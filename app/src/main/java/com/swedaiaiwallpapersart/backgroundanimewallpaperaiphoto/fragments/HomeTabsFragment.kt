@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Activity
+import android.app.AlarmManager
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -12,6 +13,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -30,7 +32,9 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -78,7 +82,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -997,7 +1000,10 @@ class HomeTabsFragment : Fragment() {
         }
 
         checkPermissionAndAllow()
+
     }
+
+
 
     private fun shouldShowReviewDialog(context: Context): Boolean {
         val lastDismissedTime = MySharePreference.getLastDismissedTime(context)
@@ -1049,25 +1055,10 @@ class HomeTabsFragment : Fragment() {
         return Settings.canDrawOverlays(context)
     }
 
-    private fun startService() {
-        val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // For Android 8.0+ (API level 26 and above)
-            requireActivity().startForegroundService(serviceIntent)
-        } else {
-            // For below Android 8.0
-            requireActivity().startService(serviceIntent)
-        }
-        /*val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
-        requireActivity().startForegroundService(serviceIntent)*/
-    }
-
     private fun checkPermissionAndAllow() {
         if (!isDrawOverlaysPermissionGranted(requireContext())) {
             findNavController().navigate(R.id.chargingAnimationPermissionFragment)
         } else {
-            startService()
             showRewardWallpaperScreen()
         }
     }
