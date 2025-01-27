@@ -7,12 +7,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.provider.Settings
 import android.util.Log
 import android.view.Window
 import android.view.WindowInsets
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -43,6 +41,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment.AppInfo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
@@ -90,6 +89,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     private val myViewModel: MyHomeViewModel by viewModels()
     private val chargingAnimationViewmodel: ChargingAnimationViewmodel by viewModels()
     private val doubleWallpaperVideModel: DoubeWallpaperViewModel by viewModels()
+
     @Inject
     lateinit var appDatabase: AppDatabase
     private var _navController: NavController? = null
@@ -126,6 +126,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
         readJsonAndSaveDataToDb()
         getSetTotallikes()
+        lifecycleScope.launch {
+            getAllApps()
+        }
         if (deviceID != null) {
             MySharePreference.setDeviceID(this, deviceID.toString())
         }
@@ -157,6 +160,30 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             }
         }
 
+    }
+
+    private suspend fun getAllApps(): List<AppInfo> {
+        val pManager = this.packageManager
+        val appList: List<AppInfo> = ArrayList()
+
+        val i = Intent(Intent.ACTION_MAIN, null).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+        }
+
+        val allApps = pManager?.queryIntentActivities(i, 0)
+        if (allApps != null) {
+            for (ri in allApps) {
+                val app = AppInfo(
+                    ri.loadLabel(pManager).toString(),
+                    ri.activityInfo.packageName
+                )
+                Log.i("Log", app.packageName)
+                (appList as ArrayList<AppInfo>).add(app)
+                appDatabase.AppsDAO().insertApp(app)
+            }
+
+        }
+        return appList
     }
 
     override fun onDestroy() {

@@ -2,6 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.da
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment.AppInfo
 
@@ -12,7 +13,7 @@ interface AppInfoDAO {
     @Query("Select * from AppsInfo")
     suspend fun getAllApps(): List<AppInfo>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertApp(app: AppInfo)
 
 

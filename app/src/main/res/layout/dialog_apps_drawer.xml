@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_500sdp"
+    android:layout_marginHorizontal="@dimen/_2sdp"
     android:background="@drawable/exit_bottom_bg">
 
     <ImageView
         android:id="@+id/cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/icon_cancel"
         android:paddingVertical="@dimen/_3sdp"
         android:paddingStart="@dimen/_8sdp"
         android:paddingEnd="@dimen/_8sdp"
+        android:src="@drawable/icon_cancel"
         android:tint="@color/button_bg"
         app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView2"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,8 +27,9 @@
         android:fontFamily="@font/microgramma"
         android:paddingVertical="@dimen/_5sdp"
         android:text="Apps"
-        android:textSize="@dimen/_15sdp"
         android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
+        app:layout_constraintBottom_toTopOf="@+id/Apps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,10 +37,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/Apps"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/_460sdp"
         android:elevation="@dimen/_15sdp"
-        android:paddingTop="@dimen/_10sdp"
         android:foregroundGravity="center_horizontal"
+        android:paddingTop="@dimen/_10sdp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

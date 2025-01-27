@@ -93,7 +93,6 @@ import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
 class HomeTabsFragment : Fragment() {
     private var _binding: FragmentHomeTabsBinding? = null
@@ -144,9 +143,7 @@ class HomeTabsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeTabsBinding.inflate(inflater, container, false)
-
         return binding.root
-
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
@@ -157,7 +154,6 @@ class HomeTabsFragment : Fragment() {
         reviewManager = ReviewManagerFactory.create(requireContext())
         SplashOnFragment.exit = false
         myActivity = activity as MainActivity
-
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
         } else {
@@ -167,22 +163,18 @@ class HomeTabsFragment : Fragment() {
                 binding.goPremium.visibility = View.VISIBLE
             }
         }
-
         interAd.loadAd("exitapp_inter", object : IKLoadAdListener {
             override fun onAdLoaded() {}
             override fun onAdLoadFail(error: IKAdError) {}
         })
-
         if (AdConfig.tabPositions[0].isEmpty()) {
             Log.e("TAG", "onViewCreated: " + AdConfig.tabPositions)
             AdConfig.tabPositions =
                 arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
         }
-
         if (AdConfig.BASE_URL_DATA == "") {
             AdConfig.BASE_URL_DATA = "https://4k-pullzone.b-cdn.net"
         }
-
         if (isAdded) {
             sendTracking(
                 "screen_active",
@@ -195,7 +187,6 @@ class HomeTabsFragment : Fragment() {
         setViewPager()
         handleIntentNotification()
         setEvents()
-
         lifecycleScope.launch {
             IKSdkController.checkUpdateApp(object : SDKNewVersionUpdateCallback {
                 override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
@@ -222,7 +213,6 @@ class HomeTabsFragment : Fragment() {
                 override fun onUpdateFail() {}
             })
         }
-
     }
 
     private fun handleIntentNotification() {
@@ -238,7 +228,6 @@ class HomeTabsFragment : Fragment() {
                 showRewardWallpaperScreen()
             }
         }
-
     }
 
     private fun openLiveWallpaperTab() {
@@ -1007,7 +996,7 @@ class HomeTabsFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
-        //checkPermissionAndAllow()
+        checkPermissionAndAllow()
     }
 
     private fun shouldShowReviewDialog(context: Context): Boolean {
@@ -1070,19 +1059,18 @@ class HomeTabsFragment : Fragment() {
             // For below Android 8.0
             requireActivity().startService(serviceIntent)
         }
-
         /*val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
         requireActivity().startForegroundService(serviceIntent)*/
     }
 
-    /*private fun checkPermissionAndAllow() {
+    private fun checkPermissionAndAllow() {
         if (!isDrawOverlaysPermissionGranted(requireContext())) {
             findNavController().navigate(R.id.chargingAnimationPermissionFragment)
         } else {
-        startService()
-        showRewardWallpaperScreen()
+            startService()
+            showRewardWallpaperScreen()
         }
-    }*/
+    }
 
     private fun showRewardWallpaperScreen() {
         // Use a flag to avoid multiple calls if needed
@@ -1099,6 +1087,5 @@ class HomeTabsFragment : Fragment() {
             }
         }
     }
-
 
 }
