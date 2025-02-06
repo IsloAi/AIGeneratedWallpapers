@@ -68,11 +68,11 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     var nativeAdView: IkmDisplayWidgetAdView? = null
 
     val TAG = "LIVE_WALL_SCREEN"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
+    ): View {
         _binding = FragmentLiveWallpaperBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -82,9 +82,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         myActivity = activity as MainActivity
-
         myViewModel.getAllTrendingWallpapers()
-
         interAd.attachLifecycle(this.lifecycle)
         // Load ad with a specific screen ID, considered as a unitId
         interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
@@ -96,7 +94,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 // Handle ad load failure
             }
         })
-
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         (binding.liveReccyclerview.layoutManager as GridLayoutManager).isItemPrefetchEnabled = false
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))

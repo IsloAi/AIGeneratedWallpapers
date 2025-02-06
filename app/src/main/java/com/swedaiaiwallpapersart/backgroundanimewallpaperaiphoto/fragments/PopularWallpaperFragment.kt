@@ -57,7 +57,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class PopularWallpaperFragment() : Fragment(), AdEventListener {
-
     private var _binding: FragmentPopularWallpaperBinding? = null
     private val binding get() = _binding!!
 
@@ -74,8 +73,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
         var hasToNavigate = false
         var wallFromPopular = false
     }
-
-//    var checkAppOpen = false
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
@@ -140,7 +137,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 // Handle ad load failure
             }
         })
-
         interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
@@ -150,7 +146,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 // Handle ad load failure
             }
         })
-
         interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
             override fun onAdLoaded() {
                 // Ad loaded successfully
@@ -168,13 +163,131 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 setCurrentIndicator(position)
-
             }
         })
 
         updateUIWithFetchedData()
         setEvents()
         initMostUsedRV()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded) {
+            sendTracking(
+                "screen_active",
+                Pair("action_type", "Tab"),
+                Pair("action_name", "MainScr_PopTab_View")
+            )
+        }
+
+        if (wallFromPopular) {
+            if (isAdded) {
+                congratulationsDialog()
+            }
+        }
+
+        initTrendingData()
+        initMostDownloadedData()
+
+        if (datasetTrending) {
+            if (cachedCatResponses?.isEmpty() == true) {
+                Log.e(TAG, "onResume: " + cachedCatResponses.size)
+
+
+            }
+            adapter?.updateMoreData(cachedCatResponses)
+
+        }
+
+        if (dataset) {
+            Log.e("TAG", "onResume: Data set $dataset")
+            Log.e("TAG", "onResume: Data set ${addedItems?.size}")
+
+            if (addedItems?.isEmpty() == true) {
+                Log.e("TAG", "onResume: " + cachedMostDownloaded.size)
+            }
+            mostUsedWallpaperAdapter?.updateMoreData(addedItems!!)
+
+            binding.recyclerviewMostUsed.layoutManager?.scrollToPosition(oldPosition)
+        }
+
+        if (isAdded) {
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Popular Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            delay(1500)
+            if (!isNavigated && hasToNavigate) {
+                navigateToDestination(addedItems!!, oldPosition)
+            }
+        }
+
+    }
+
+    private fun initTrendingData() {
+        viewModel.getAllTrendingWallpapers()
+
+        viewModel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Response.Loading -> {
+
+                }
+
+                is Response.Success -> {
+                    if (view != null) {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            if (!datasetTrending) {
+                                val list = result.data?.take(100)
+
+                                list?.forEach { item ->
+                                    val model = CatResponse(
+                                        item.id,
+                                        item.image_name,
+                                        item.cat_name,
+                                        item.hd_image_url,
+                                        item.compressed_image_url,
+                                        null,
+                                        item.likes,
+                                        item.liked,
+                                        item.unlocked,
+                                        item.size,
+                                        item.Tags,
+                                        item.capacity
+                                    )
+                                    if (!cachedCatResponses.contains(model)) {
+                                        cachedCatResponses.add(model)
+                                    }
+                                }
+                                Log.e("TAG", "initMostDownloadedData: " + list)
+
+                                Log.e("TAG", "initTrendingData: " + cachedCatResponses)
+
+
+                                withContext(Dispatchers.Main) {
+                                    adapter?.updateMoreData(cachedCatResponses)
+                                }
+
+                                datasetTrending = true
+                            }
+                        }
+                    }
+                }
+
+                is Response.Error -> {
+                    Log.e("TAG", "error: innit-Trending ${result.message}")
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                else -> {
+                }
+            }
+
+        }
     }
 
     private fun setEvents() {
@@ -347,14 +460,13 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     }
 
     private fun initMostDownloadedData() {
-
+        viewModel.getAllCreations()
         viewModel.allCreations.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
                 }
 
                 is Response.Success -> {
-
                     if (!result.data.isNullOrEmpty()) {
                         val list = arrayListOf<CatResponse>()
                         result.data.forEach { item ->
@@ -375,43 +487,35 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                             if (!list.contains(model)) {
                                 list.add(model)
                             }
-
                         }
-
-
                         if (view != null) {
                             lifecycleScope.launch {
                                 if (!dataset) {
-                                    Log.e(TAG, "initMostDownloadedData: DataSet= $dataset")
-
+                                    Log.e("TAG", "initMostDownloadedData: DataSet= $dataset")
                                     val newList = if (AdConfig.ISPAIDUSER) {
                                         list.shuffled() as ArrayList<*>
                                     } else {
                                         addNullValueInsideArray(list.shuffled())
                                     }
-
                                     cachedMostDownloaded = newList as ArrayList<CatResponse?>
-
                                     val initialItems = getItems(0, 30)
-
-                                    Log.e(TAG, "initMostDownloadedData:initialItems= $initialItems")
-
+                                    Log.e(
+                                        "TAG",
+                                        "initMostDownloadedData:initialItems= $initialItems"
+                                    )
                                     lifecycleScope.launch(Dispatchers.Main) {
                                         mostUsedWallpaperAdapter?.updateMoreData(initialItems)
                                         startIndex += 30
                                     }
-
                                     dataset = true
                                 }
                             }
-
                         }
                     }
                 }
 
                 is Response.Error -> {
-
-                    Log.e("TAG", "error: ${result.message}")
+                    Log.e("TAG", "error: innit mostDwnloaded ${result.message}")
                     Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
                         .show()
                 }
@@ -421,21 +525,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 }
             }
         }
-
-
-//        appDatabase.wallpapersDao()?.getAllWallpapersLive()?.observe(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//                it?.let { data ->
-//                    cachedMostDownloaded = arrayListOf()
-//                    data.forEachIndexed { _, genericResponseModel ->
-//                        cachedMostDownloaded.add(genericResponseModel)
-//
-//                    }
-//                }
-//            }
-//        }
-
-
     }
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
@@ -491,69 +580,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (wallFromPopular) {
-            if (isAdded) {
-                congratulationsDialog()
-            }
-        }
-
-
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "Tab"),
-                Pair("action_name", "MainScr_PopTab_View")
-            )
-        }
-
-        initMostDownloadedData()
-
-        initTrendingData()
-
-        if (datasetTrending) {
-            if (cachedCatResponses?.isEmpty() == true) {
-                Log.e(TAG, "onResume: " + cachedCatResponses.size)
-
-
-            }
-            adapter?.updateMoreData(cachedCatResponses)
-
-        }
-
-
-
-        if (dataset) {
-
-            Log.e(TAG, "onResume: Data set $dataset")
-            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
-
-            if (addedItems?.isEmpty() == true) {
-                Log.e(TAG, "onResume: " + cachedMostDownloaded.size)
-            }
-            mostUsedWallpaperAdapter?.updateMoreData(addedItems!!)
-
-            binding.recyclerviewMostUsed.layoutManager?.scrollToPosition(oldPosition)
-
-        }
-
-        if (isAdded) {
-            val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Popular Screen")
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
-
-        lifecycleScope.launch(Dispatchers.Main) {
-            delay(1500)
-            if (!isNavigated && hasToNavigate) {
-                navigateToDestination(addedItems!!, oldPosition)
-            }
-        }
-
-    }
 
     private fun sendTracking(
         eventName: String,
@@ -667,130 +693,65 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
         }
     }
 
-    private fun initTrendingData() {
-        viewModel.getAllTrendingWallpapers()
-
-        viewModel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Response.Loading -> {
-
-                }
-
-                is Response.Success -> {
-                    if (view != null) {
-
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            if (!datasetTrending) {
-
-                                val list = result.data?.take(100)
-
-                                list?.forEach { item ->
-                                    val model = CatResponse(
-                                        item.id,
-                                        item.image_name,
-                                        item.cat_name,
-                                        item.hd_image_url,
-                                        item.compressed_image_url,
-                                        null,
-                                        item.likes,
-                                        item.liked,
-                                        item.unlocked,
-                                        item.size,
-                                        item.Tags,
-                                        item.capacity
-                                    )
-                                    if (!cachedCatResponses.contains(model)) {
-                                        cachedCatResponses.add(model)
-                                    }
-                                }
-                                Log.e(TAG, "initMostDownloadedData: " + list)
-
-                                Log.e(TAG, "initTrendingData: " + cachedCatResponses)
-
-
-                                withContext(Dispatchers.Main) {
-                                    adapter?.updateMoreData(cachedCatResponses)
-                                }
-
-                                datasetTrending = true
-                            }
-                        }
-                    }
-                }
-
-                is Response.Error -> {
-                    Log.e("TAG", "error: ${result.message}")
-                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                else -> {
-                }
-            }
-
-        }
-    }
 
     private fun updateUIWithFetchedData() {
 
         val list = ArrayList<CatResponse?>()
 
-        adapter =
-            ApicategoriesListHorizontalAdapter(list, object :
-                PositionCallback {
-                override fun getPosition(position: Int) {
-                    if (!isNavigationInProgress) {
-                        isNavigationInProgress = true
-                        val allItems = adapter?.getAllItems()
+        adapter = ApicategoriesListHorizontalAdapter(list, object : PositionCallback {
+            override fun getPosition(position: Int) {
+                if (!isNavigationInProgress) {
+                    isNavigationInProgress = true
+                    val allItems = adapter?.getAllItems()
 
-                        if (AdConfig.ISPAIDUSER) {
+                    if (AdConfig.ISPAIDUSER) {
+                        if (isAdded) {
+                            navigateToDestination(allItems!!, position)
+                        }
+                    } else {
+                        var shouldShowInterAd = true
+
+                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
                             if (isAdded) {
+                                Constants.checkInter = false
                                 navigateToDestination(allItems!!, position)
+                                shouldShowInterAd = false // Skip showing the ad for this action
                             }
-                        } else {
-                            var shouldShowInterAd = true
-
-                            if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                                if (isAdded) {
-                                    Constants.checkInter = false
-                                    navigateToDestination(allItems!!, position)
-                                    shouldShowInterAd = false // Skip showing the ad for this action
-                                }
-                            }
-
-                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                                if (isAdded) {
-                                    checkAppOpen = false
-                                    navigateToDestination(allItems!!, position)
-                                    Log.e(TAG, "app open showed")
-                                    shouldShowInterAd = false // Skip showing the ad for this action
-                                }
-                            }
-
-                            if (shouldShowInterAd) {
-                                showInterAdForHorizontalList(allItems, position)
-                            }
-//                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                                    if (isAdded){
-//                                        checkAppOpen = false
-//                                        navigateToDestination(allItems!!, position)
-//                                        Log.e(TAG, "app open showed: ", )
-//                                    }
-//
-//                            }else{
-//                                showInterAdForHorizontalList(allItems, position)
-//                            }
                         }
 
+                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
+                            if (isAdded) {
+                                checkAppOpen = false
+                                navigateToDestination(allItems!!, position)
+                                Log.e(TAG, "app open showed")
+                                shouldShowInterAd = false // Skip showing the ad for this action
+                            }
+                        }
+
+                        if (shouldShowInterAd) {
+                            showInterAdForHorizontalList(allItems, position)
+                        }
+                        /*if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
+                                if (isAdded){
+                                    checkAppOpen = false
+                                    navigateToDestination(allItems!!, position)
+                                    Log.e(TAG, "app open showed: ", )
+                                }
+
+                        }else{
+                            showInterAdForHorizontalList(allItems, position)
+                        }*/
                     }
 
-
                 }
 
-                override fun getFavorites(position: Int) {
-                    //
-                }
-            }, myActivity)
+
+            }
+
+            override fun getFavorites(position: Int) {
+
+            }
+        }, myActivity)
 
         binding.recyclerviewTrending.adapter = adapter
         binding.recyclerviewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -931,6 +892,4 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     override fun onShowAdFail() {
 
     }
-
-
 }

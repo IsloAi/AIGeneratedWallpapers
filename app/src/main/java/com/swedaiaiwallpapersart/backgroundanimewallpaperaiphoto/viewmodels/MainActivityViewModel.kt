@@ -59,12 +59,12 @@ class MainActivityViewModel @Inject constructor(
     }
 
     private var _deletedIds =
-        MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<DeletedImagesResponse>>>(
-            com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
+        MutableLiveData<Response<ArrayList<DeletedImagesResponse>>>(
+            Response.Success(
                 arrayListOf()
             )
         )
-    val deletedIds: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<ArrayList<DeletedImagesResponse>>> =
+    val deletedIds: LiveData<Response<ArrayList<DeletedImagesResponse>>> =
         _deletedIds
 
     fun getDeletedImagesID() {
@@ -72,11 +72,9 @@ class MainActivityViewModel @Inject constructor(
             getDeletedWallpaperImagesUseCase.invoke().collect() {
                 Log.e("TAG", "getAllModels: " + it)
                 _deletedIds.value = it
-
             }
         }
     }
-
 
     fun getMostUsed(page: String, record: String) {
         viewModelScope.launch {

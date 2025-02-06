@@ -1,7 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Activity
-import android.app.AlarmManager
 import android.app.Dialog
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -13,7 +12,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -32,9 +30,7 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -1002,8 +998,6 @@ class HomeTabsFragment : Fragment() {
         checkPermissionAndAllow()
 
     }
-
-
 
     private fun shouldShowReviewDialog(context: Context): Boolean {
         val lastDismissedTime = MySharePreference.getLastDismissedTime(context)

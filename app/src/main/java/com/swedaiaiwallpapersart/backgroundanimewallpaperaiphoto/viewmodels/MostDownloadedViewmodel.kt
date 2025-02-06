@@ -23,7 +23,7 @@ class MostDownloadedViewmodel@Inject constructor(private val getAllWallpapersUse
 
     fun getAllCreations(){
         viewModelScope.launch {
-            getAllWallpapersUsecase.invoke().collect(){
+            getAllWallpapersUsecase.invoke().collect {
                 _allCreations.value=it
             }
         }
@@ -44,7 +44,7 @@ class MostDownloadedViewmodel@Inject constructor(private val getAllWallpapersUse
 
     fun getAllTrendingWallpapers(){
         viewModelScope.launch {
-            getTrendingWallpaperUseCase.invoke().collect(){
+            getTrendingWallpaperUseCase.invoke().collect {
                 _trendingWallpapers.value=it
             }
         }

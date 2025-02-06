@@ -415,9 +415,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
 
         chargingAnimationViewmodel.getChargingAnimations()
-
         doubleWallpaperVideModel.getDoubleWallpapers()
-
         mainActivityViewModel.getAllModels("1", "4000", "5332")
 
     }
@@ -525,13 +523,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         myViewModel.getAllLikes()
         myViewModel.getAllLiked(deviceID.toString())
 
-        /*MySharePreference.getDeviceID(this@MainActivity)?.let {
-            myViewModel.getAllLiked(it) }*/
-
         myViewModel.allLikes.observe(this@MainActivity) { result ->
             when (result) {
                 is Response.Success -> {
-
                     lifecycleScope.launch(Dispatchers.IO) {
                         result.data?.forEach { item ->
                             appDatabase.wallpapersDao().updateLikes(item.likes, item.id.toInt())
@@ -553,33 +547,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
             }
         }
-
-        /*myViewModel.allLiked.observe(this@MainActivity) { result ->
-            when (result) {
-                is Response.Success -> {
-                    result.data?.forEach { item ->
-                        Log.w(TAG, "getSetTotalLikes: ${item.imageid}")
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            appDatabase.wallpapersDao().updateLiked(true, item.imageid.toInt())
-                        }
-                    }
-                }
-
-                is Response.Loading -> {
-
-                }
-
-                is Response.Error -> {
-                    Log.e(TAG, "TLikesError : ${result.message} ")
-                }
-
-                is Response.Processing -> {
-
-                }
-
-            }
-
-        }*/
     }
 
     private fun isNetworkAvailable(): Boolean {
@@ -1012,7 +979,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 MySharePreference.setDeviceID(this, deviceID.toString())
             }
             //restartApp()
-            
+
         } catch (e: Exception) {
             Log.e(TAG, "Failed to clear app data", e)
         }*/

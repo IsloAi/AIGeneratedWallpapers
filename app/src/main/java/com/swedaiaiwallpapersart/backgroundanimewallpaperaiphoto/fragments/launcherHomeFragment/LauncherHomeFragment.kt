@@ -79,7 +79,7 @@ class LauncherHomeFragment : Fragment() {
                 val recyclerview = dialogBinding.Apps
                 if (appList.isEmpty()) {
                     dialogBinding.loading.visibility = View.VISIBLE
-                    dialogBinding.Apps.visibility = View.GONE
+                    dialogBinding.Apps.visibility = View.VISIBLE
                 } else {
                     dialogBinding.loading.visibility = View.GONE
                     dialogBinding.Apps.visibility = View.VISIBLE
@@ -113,6 +113,12 @@ class LauncherHomeFragment : Fragment() {
                 super.onPageSelected(position)
                 if (position == 1) {
                     binding.menuIcon.visibility = View.VISIBLE
+                    binding.main.background = null
+                    setWallpaper()
+                }
+                if (position == 0){
+                    binding.menuIcon.visibility = View.GONE
+                    binding.main.setBackgroundColor(resources.getColor(R.color.new_main_background))
                 }
             }
         })
