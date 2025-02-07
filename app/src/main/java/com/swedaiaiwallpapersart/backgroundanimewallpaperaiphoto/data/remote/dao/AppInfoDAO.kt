@@ -16,5 +16,15 @@ interface AppInfoDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertApp(app: AppInfo)
 
+    @Query("Select * from AppsInfo where AppLabel = 'Phone'")
+    suspend fun getPhoneApp(): AppInfo
 
+    @Query("Select * from AppsInfo where AppLabel = 'Camera'")
+    suspend fun getContactsApp(): AppInfo
+
+    @Query("Select * from AppsInfo where AppLabel = 'Messages'")
+    suspend fun getMessagesApp(): AppInfo
+
+    @Query("Select * from AppsInfo where AppLabel = 'Chrome'")
+    suspend fun getBrowserApp(): AppInfo
 }

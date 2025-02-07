@@ -151,7 +151,7 @@ class HomeTabsFragment : Fragment() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         reviewManager = ReviewManagerFactory.create(requireContext())
-        SplashOnFragment.exit = false
+        exit = false
         myActivity = activity as MainActivity
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE

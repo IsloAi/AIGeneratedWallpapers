@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import okhttp3.Dispatcher
 import javax.inject.Inject
 
 class FetchDataRepositoryImpl @Inject constructor(
@@ -66,7 +67,9 @@ class FetchDataRepositoryImpl @Inject constructor(
 
                 trySend(Response.Loading)
 
-                val creations = appDatabase.wallpapersDao().getCategoryWallpaper(cat)
+                val creations = withContext(Dispatchers.IO) {
+                    appDatabase.wallpapersDao().getCategoryWallpaper(cat)
+                }
                 if (creations.isNotEmpty()) {
                     trySend(Response.Success(creations))
                 } else {

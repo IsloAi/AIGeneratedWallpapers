@@ -181,7 +181,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 (appList as ArrayList<AppInfo>).add(app)
                 appDatabase.AppsDAO().insertApp(app)
             }
-
         }
         return appList
     }
@@ -417,7 +416,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         chargingAnimationViewmodel.getChargingAnimations()
         doubleWallpaperVideModel.getDoubleWallpapers()
         mainActivityViewModel.getAllModels("1", "4000", "5332")
-
     }
 
     private fun handleBackPress() {
@@ -564,7 +562,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         }
     }
 
-    suspend fun parseJson(jsonString: String): ListResponse? {
+    private suspend fun parseJson(jsonString: String): ListResponse? {
         return withContext(Dispatchers.IO) {
             try {
                 val gson = Gson()

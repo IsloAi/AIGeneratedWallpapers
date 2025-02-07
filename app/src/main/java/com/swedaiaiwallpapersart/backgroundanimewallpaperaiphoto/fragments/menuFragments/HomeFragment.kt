@@ -153,8 +153,6 @@ class HomeFragment : Fragment(), AdEventListener {
     }
 
     private fun onCreatingCalling() {
-        Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
-//        checkDailyReward()
 
         navController = findNavController()
 
@@ -162,9 +160,7 @@ class HomeFragment : Fragment(), AdEventListener {
         binding.recyclerviewAll.layoutManager = layoutManager
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
-
         setAdapter()
-
 
         binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -194,7 +190,6 @@ class HomeFragment : Fragment(), AdEventListener {
     }
 
     private fun loadData() {
-
         myViewModel.getAllCreations("Car")
 
         myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
@@ -205,12 +200,9 @@ class HomeFragment : Fragment(), AdEventListener {
 
                 is Response.Success -> {
                     if (view != null) {
-
                         lifecycleScope.launch(Dispatchers.IO) {
                             if (!dataset) {
-
                                 val tempList = ArrayList<CatResponse>()
-
                                 result.data?.forEach { item ->
                                     val model = CatResponse(
                                         item.id,
@@ -230,24 +222,18 @@ class HomeFragment : Fragment(), AdEventListener {
                                         tempList.add(model)
                                     }
                                 }
-
                                 val list = if (AdConfig.ISPAIDUSER) {
                                     tempList.shuffled() as ArrayList<CatResponse?>
                                 } else {
                                     addNullValueInsideArray(tempList.shuffled())
                                 }
-
                                 cachedCatResponses = list
-
                                 val initialItems = getItems(0, 30)
-
                                 Log.e(TAG, "initMostDownloadedData: $initialItems")
-
                                 withContext(Dispatchers.Main) {
                                     adapter.updateMoreData(initialItems)
                                     startIndex += 30
                                 }
-
                                 dataset = true
                             }
                         }
@@ -256,7 +242,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
                 is Response.Error -> {
                     Log.e("TAG", "error: ${result.message}")
-                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), result.message, Toast.LENGTH_SHORT)
                         .show()
                 }
 

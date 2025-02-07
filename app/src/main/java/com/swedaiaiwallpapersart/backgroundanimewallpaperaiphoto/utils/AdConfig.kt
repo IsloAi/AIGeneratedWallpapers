@@ -25,7 +25,7 @@ object AdConfig {
 
     var inAppConfig = true
 
-    var tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
+    var tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Car", "Charging")
 
     var categoryOrder: List<String> = listOf(
         "Sadness",

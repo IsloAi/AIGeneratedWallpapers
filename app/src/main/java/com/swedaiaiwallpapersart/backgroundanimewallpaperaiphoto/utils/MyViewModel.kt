@@ -24,27 +24,31 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class MyViewModel @Inject constructor(private val getCategoryWallpapersUseCase: GetCategoryWallpapersUseCase): ViewModel()  {
+class MyViewModel @Inject constructor(private val getCategoryWallpapersUseCase: GetCategoryWallpapersUseCase) :
+    ViewModel() {
     private val wallpaperData = MutableLiveData<List<CatResponse>?>()
     fun getWallpapers(): MutableLiveData<List<CatResponse>?> {
         return wallpaperData
     }
+
     fun fetchWallpapers(
         context: Context,
         catName: String,
     ) {
         clear()
         val retrofit = RetrofitInstance.getInstance()
-        val service = retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getDeviceID(context)!!)
-
-
+        val service = retrofit.create(ListResponseInterface::class.java)
+            .getList(catName, MySharePreference.getDeviceID(context)!!)
 
         service.enqueue(object : Callback<List<CatResponse>> {
-            override fun onResponse(call: Call<List<CatResponse>>, response: Response<List<CatResponse>>) {
+            override fun onResponse(
+                call: Call<List<CatResponse>>,
+                response: Response<List<CatResponse>>
+            ) {
                 if (response.isSuccessful) {
                     val catResponses: List<CatResponse>? = response.body()
                     if (catResponses != null) {
-                        Log.d("responseOk", "onResponse: response  "+catResponses)
+                        Log.d("responseOk", "onResponse: response  " + catResponses)
                         wallpaperData.value = catResponses
                     }
                 } else {
@@ -62,22 +66,25 @@ class MyViewModel @Inject constructor(private val getCategoryWallpapersUseCase: 
         })
     }
 
+    private var _catWalls =
+        MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>>(
+            com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
+                emptyList()
+            )
+        )
+    val catWallpapers: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>> =
+        _catWalls
 
-    private var _catWalls = MutableLiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>>(
-        com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response.Success(
-            emptyList()
-        ))
-    val catWallpapers: LiveData<com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response<List<SingleDatabaseResponse>>> = _catWalls
-
-    fun getAllCreations(cat:String){
+    fun getAllCreations(cat: String) {
         viewModelScope.launch {
-            getCategoryWallpapersUseCase.invoke(cat).collect(){
-                _catWalls.value=it
+            getCategoryWallpapersUseCase.invoke(cat).collect {
+                _catWalls.value = it
             }
         }
     }
 
-    fun clear(){
+    fun clear() {
         wallpaperData.value = null
     }
+
 }

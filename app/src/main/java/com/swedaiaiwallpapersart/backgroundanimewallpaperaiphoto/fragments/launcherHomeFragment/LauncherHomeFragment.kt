@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +26,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.ikame.android.sdk.IKSdkController
+import com.ikame.android.sdk.data.dto.IKSdkViewSize
+import com.ikame.android.sdk.data.dto.pub.IKAdError
+import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogAppsDrawerBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLauncherHomeBinding
@@ -33,6 +38,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment.AppInfo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.launcherHomeFragment.homeScreen.HomeScreen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.UIUtils
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -49,6 +55,10 @@ class LauncherHomeFragment : Fragment() {
     private lateinit var appList: List<AppInfo>
     private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
     private lateinit var gestureDetector: GestureDetectorCompat
+    private lateinit var phoneApp: AppInfo
+    private lateinit var contactsApp: AppInfo
+    private lateinit var messageApp: AppInfo
+    private lateinit var browserApp: AppInfo
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -87,7 +97,6 @@ class LauncherHomeFragment : Fragment() {
                 recyclerview.adapter = adapter
                 recyclerview.layoutManager = GridLayoutManager(requireContext(), 4)
                 lifecycleScope.launch(Dispatchers.IO) {
-
                     appList = appDatabase.AppsDAO().getAllApps()
                     withContext(Dispatchers.Main) {
                         adapter.updateList(appList)
@@ -116,7 +125,7 @@ class LauncherHomeFragment : Fragment() {
                     binding.main.background = null
                     setWallpaper()
                 }
-                if (position == 0){
+                if (position == 0) {
                     binding.menuIcon.visibility = View.GONE
                     binding.main.setBackgroundColor(resources.getColor(R.color.new_main_background))
                 }
@@ -126,8 +135,31 @@ class LauncherHomeFragment : Fragment() {
         checkAndRequestPermission()
 
         sharedViewModel.currentPage.observe(viewLifecycleOwner) { page ->
-            binding.homePager.setCurrentItem(page, true)
-            binding.menuIcon.visibility = View.GONE
+            lifecycleScope.launch {
+                IKSdkController.loadAndShowSplashScreenAd(requireActivity(),
+                    object : IKShowAdListener {
+                        override fun onAdsDismiss() {
+                            Log.d("Launcher", "onAdsDismiss: ")
+                            binding.homePager.setCurrentItem(page, true)
+                            binding.menuIcon.visibility = View.GONE
+                        }
+
+                        override fun onAdsShowFail(error: IKAdError) {
+                            Log.d("Launcher", "onAdsShowFail: ")
+                            binding.homePager.setCurrentItem(page, true)
+                            binding.menuIcon.visibility = View.GONE
+                        }
+
+                        override fun onAdsShowTimeout() {
+                            super.onAdsShowTimeout()
+                        }
+
+                        override fun onAdsShowed() {
+                            super.onAdsShowed()
+                        }
+                    })
+            }
+
         }
     }
 
@@ -151,7 +183,6 @@ class LauncherHomeFragment : Fragment() {
                 // Permission is already granted; run setWallpaper()
                 setWallpaper()
                 checkNotificationPermission()
-
             }
         } else {
             // For Android versions below R, just run setWallpaper()
@@ -163,6 +194,43 @@ class LauncherHomeFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
         super.onResume()
+        lifecycleScope.launch(Dispatchers.IO) {
+            phoneApp = appDatabase.AppsDAO().getPhoneApp()
+            contactsApp = appDatabase.AppsDAO().getContactsApp()
+            messageApp = appDatabase.AppsDAO().getMessagesApp()
+            browserApp = appDatabase.AppsDAO().getBrowserApp()
+
+            if (phoneApp != null && contactsApp != null && messageApp != null && browserApp != null) {
+                withContext(Dispatchers.Main) {
+                    binding.PhoneIcon.setImageDrawable(
+                        UIUtils.getAppIcon(
+                            phoneApp.packageName,
+                            requireContext()
+                        )
+                    )
+                    binding.ContactsIcon.setImageDrawable(
+                        UIUtils.getAppIcon(
+                            contactsApp.packageName,
+                            requireContext()
+                        )
+                    )
+                    binding.messagesIcon.setImageDrawable(
+                        UIUtils.getAppIcon(
+                            messageApp.packageName,
+                            requireContext()
+                        )
+                    )
+                    binding.browserIcon.setImageDrawable(
+                        UIUtils.getAppIcon(
+                            browserApp.packageName,
+                            requireContext()
+                        )
+                    )
+                }
+            }
+
+        }
+
         // Check permission again when the app resumes
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             setWallpaper()
@@ -177,7 +245,6 @@ class LauncherHomeFragment : Fragment() {
                 )
                 != PackageManager.PERMISSION_GRANTED
             ) {
-
                 // Request permission
                 ActivityCompat.requestPermissions(
                     requireActivity(),
