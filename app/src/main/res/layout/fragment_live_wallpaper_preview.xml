@@ -93,7 +93,7 @@
 
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent" />
-    
+
     <RelativeLayout
         android:id="@+id/progressBar"
         android:layout_width="0dp"

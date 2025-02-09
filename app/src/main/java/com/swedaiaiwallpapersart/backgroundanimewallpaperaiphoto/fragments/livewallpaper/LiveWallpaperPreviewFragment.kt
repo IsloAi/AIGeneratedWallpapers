@@ -272,7 +272,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             }
             checkInter = false
             checkAppOpen = false
-            findNavController().popBackStack(R.id.homeTabsFragment, false)
+            findNavController().navigate(R.id.homeTabsFragment)
+
         }
 
         if (livewallpaper?.liked == true) {
@@ -282,7 +283,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         binding.setLiked.setOnClickListener {
-
             if (isAdded) {
                 sendTracking(
                     "click_button",
@@ -296,8 +296,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 binding.setLiked.setImageResource(R.drawable.button_like)
                 Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
                     .show()
-
-
             } else {
                 binding.setLiked.isEnabled = false
                 if (livewallpaper?.liked == true) {
@@ -305,7 +303,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     binding.setLiked.setImageResource(R.drawable.button_like)
                     Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
                         .show()
-
                 } else {
                     livewallpaper?.liked = true
                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
@@ -317,9 +314,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 addFavourite(requireContext(), binding.setLiked)
             }
         }
-
         backHandle()
-
         binding.downloadWallpaper.setOnClickListener {
 
             if (isAdded) {
@@ -361,7 +356,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                             e.printStackTrace()
                         }
                     } else {
-
                         getUserIdDialog()
                     }
                 }
@@ -511,7 +505,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     }
 
                     // Hide ProgressBar on the main thread
-                    withContext(Dispatchers.Main)   {
+                    withContext(Dispatchers.Main) {
                         binding.progressBar.visibility = View.GONE
                     }
                 }

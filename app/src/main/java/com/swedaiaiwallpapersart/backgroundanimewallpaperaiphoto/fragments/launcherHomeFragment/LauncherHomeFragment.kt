@@ -68,8 +68,7 @@ class LauncherHomeFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLauncherHomeBinding.inflate(inflater, container, false)
         return binding.root
@@ -122,11 +121,20 @@ class LauncherHomeFragment : Fragment() {
                 super.onPageSelected(position)
                 if (position == 1) {
                     binding.menuIcon.visibility = View.VISIBLE
+                    binding.PhoneIcon.visibility = View.VISIBLE
+                    binding.ContactsIcon.visibility = View.VISIBLE
+                    binding.messagesIcon.visibility = View.VISIBLE
+                    binding.browserIcon.visibility = View.VISIBLE
                     binding.main.background = null
                     setWallpaper()
                 }
                 if (position == 0) {
                     binding.menuIcon.visibility = View.GONE
+                    binding.PhoneIcon.visibility = View.GONE
+                    binding.ContactsIcon.visibility = View.GONE
+                    binding.messagesIcon.visibility = View.GONE
+                    binding.browserIcon.visibility = View.GONE
+
                     binding.main.setBackgroundColor(resources.getColor(R.color.new_main_background))
                 }
             }
@@ -136,7 +144,8 @@ class LauncherHomeFragment : Fragment() {
 
         sharedViewModel.currentPage.observe(viewLifecycleOwner) { page ->
             lifecycleScope.launch {
-                IKSdkController.loadAndShowSplashScreenAd(requireActivity(),
+                IKSdkController.loadAndShowSplashScreenAd(
+                    requireActivity(),
                     object : IKShowAdListener {
                         override fun onAdsDismiss() {
                             Log.d("Launcher", "onAdsDismiss: ")
@@ -160,6 +169,27 @@ class LauncherHomeFragment : Fragment() {
                     })
             }
 
+        }
+
+        binding.PhoneIcon.setOnClickListener {
+            val launchIntent =
+                requireContext().packageManager.getLaunchIntentForPackage(phoneApp.packageName)
+            requireContext().startActivity(launchIntent)
+        }
+        binding.ContactsIcon.setOnClickListener {
+            val launchIntent =
+                requireContext().packageManager.getLaunchIntentForPackage(contactsApp.packageName)
+            requireContext().startActivity(launchIntent)
+        }
+        binding.messagesIcon.setOnClickListener {
+            val launchIntent =
+                requireContext().packageManager.getLaunchIntentForPackage(messageApp.packageName)
+            requireContext().startActivity(launchIntent)
+        }
+        binding.browserIcon.setOnClickListener {
+            val launchIntent =
+                requireContext().packageManager.getLaunchIntentForPackage(browserApp.packageName)
+            requireContext().startActivity(launchIntent)
         }
     }
 
@@ -204,26 +234,22 @@ class LauncherHomeFragment : Fragment() {
                 withContext(Dispatchers.Main) {
                     binding.PhoneIcon.setImageDrawable(
                         UIUtils.getAppIcon(
-                            phoneApp.packageName,
-                            requireContext()
+                            phoneApp.packageName, requireContext()
                         )
                     )
                     binding.ContactsIcon.setImageDrawable(
                         UIUtils.getAppIcon(
-                            contactsApp.packageName,
-                            requireContext()
+                            contactsApp.packageName, requireContext()
                         )
                     )
                     binding.messagesIcon.setImageDrawable(
                         UIUtils.getAppIcon(
-                            messageApp.packageName,
-                            requireContext()
+                            messageApp.packageName, requireContext()
                         )
                     )
                     binding.browserIcon.setImageDrawable(
                         UIUtils.getAppIcon(
-                            browserApp.packageName,
-                            requireContext()
+                            browserApp.packageName, requireContext()
                         )
                     )
                 }
@@ -240,10 +266,8 @@ class LauncherHomeFragment : Fragment() {
     private fun checkNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
             if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    android.Manifest.permission.POST_NOTIFICATIONS
-                )
-                != PackageManager.PERMISSION_GRANTED
+                    requireContext(), android.Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 // Request permission
                 ActivityCompat.requestPermissions(
