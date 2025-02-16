@@ -151,9 +151,6 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
-        <action
-            android:id="@+id/action_splashOnFragment_to_getStartedFragment"
-            app:destination="@id/getStartedFragment" />
 
     </fragment>
     <fragment
@@ -296,4 +293,9 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.appsDrawerFragment.AppsDrawerFragment"
         android:label="fragment_apps_drawer"
         tools:layout="@layout/fragment_apps_drawer" />
+    <fragment
+        android:id="@+id/permissionFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PermissionFragment"
+        android:label="fragment_permission"
+        tools:layout="@layout/fragment_permission" />
 </navigation>

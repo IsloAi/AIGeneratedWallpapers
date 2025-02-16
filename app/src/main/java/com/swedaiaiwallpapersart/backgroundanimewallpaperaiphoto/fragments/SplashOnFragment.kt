@@ -196,7 +196,7 @@ class SplashOnFragment : Fragment() {
 
     }
 
-    private fun navigateToNextScreen() {
+    /*private fun navigateToNextScreen() {
         if (isAdded) {
             val isDefaultHome = checkAppDefaultHome()
             val firstTime = MySharePreference.getFirstTime(requireContext())
@@ -214,9 +214,9 @@ class SplashOnFragment : Fragment() {
                 findNavController().navigate(R.id.launcherHomeFragment)
             }
         }
-    }
+    }*/
 
-    /*private fun navigateToNextScreen() {
+    private fun navigateToNextScreen() {
         if (lan.isEmpty() && isAdded) {
             hasNavigated = true
             findNavController().navigate(R.id.localizationFragment)
@@ -227,11 +227,12 @@ class SplashOnFragment : Fragment() {
                     findNavController().navigate(R.id.localizationFragment)
                 } else {
                     hasNavigated = true
-                    findNavController().navigate(R.id.homeTabsFragment)
+                    //findNavController().navigate(R.id.homeTabsFragment)
+                    findNavController().navigate(R.id.launcherHomeFragment)
                 }
             }
         }
-    }*/
+    }
 
     private fun checkAppDefaultHome(): Boolean {
         val packageManager = requireContext().packageManager

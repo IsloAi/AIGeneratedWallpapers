@@ -237,7 +237,8 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
                 lifecycleScope.launch {
                     delay(100)  // Short delay before navigating
                     if (findNavController().currentDestination?.id != R.id.homeTabsFragment) {
-                        findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                        //findNavController().navigate(R.id.action_onBoardingFragment_to_homeTabsFragment)
+                        findNavController().navigate(R.id.getStartedFragment)
                     }
                 }
             }

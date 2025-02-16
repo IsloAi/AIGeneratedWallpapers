@@ -211,6 +211,30 @@ class HomeTabsFragment : Fragment() {
 
                 override fun onUpdateFail() {}
             })
+            /*IKSdkController.checkUpdateApp(object : SDKNewVersionUpdateCallback {
+                override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
+                    try {
+                        val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(
+                            requireContext().packageName,
+                            0
+                        )
+                        val version = pInfo.versionName
+                        val versionCode = pInfo.versionCode
+
+                        if (versionCode < updateDto?.minVersionCode!!) {
+                            if (updateDto.forceUpdateApp) {
+                                getUserIdDialog()
+                            } else {
+                                launchUpdateFlow()
+                            }
+                        }
+                    } catch (e: PackageManager.NameNotFoundException) {
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onUpdateFail() {}
+            })*/
         }
     }
 
@@ -995,7 +1019,7 @@ class HomeTabsFragment : Fragment() {
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
 
-        checkPermissionAndAllow()
+        //checkPermissionAndAllow()
 
     }
 

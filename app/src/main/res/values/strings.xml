@@ -162,5 +162,12 @@
     <string name="set_default_txt">Set as default app</string>
     <string name="terms">Terms of Service</string>
     <string name="not_now">Not Now</string>
+    <string name="permissions">Permissions</string>
+    <string name="please_allow_access">Please allow access</string>
+    <string name="permission_sub_text">In order for app to work best please allow access to all permissions other wise app may not work properly</string>
+    <string name="notifications_permission">Notification Permission</string>
+    <string name="grant">Grant</string>
+    <string name="display_permission">Overlay Permission</string>
+    <string name="AllFile_permission">All File Access Permission</string>
 
 </resources>

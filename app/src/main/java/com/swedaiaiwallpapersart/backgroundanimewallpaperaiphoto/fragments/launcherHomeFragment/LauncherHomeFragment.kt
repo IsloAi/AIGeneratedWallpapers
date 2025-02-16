@@ -53,7 +53,6 @@ class LauncherHomeFragment : Fragment() {
     private val sharedViewModel: SharedViewModel by activityViewModels()
     private lateinit var adapter: AppAdapter
     private lateinit var appList: List<AppInfo>
-    private val NOTIFICATION_PERMISSION_REQUEST_CODE = 1001
     private lateinit var gestureDetector: GestureDetectorCompat
     private lateinit var phoneApp: AppInfo
     private lateinit var contactsApp: AppInfo
@@ -140,11 +139,11 @@ class LauncherHomeFragment : Fragment() {
             }
         })
 
-        checkAndRequestPermission()
+        //checkAndRequestPermission()
 
         sharedViewModel.currentPage.observe(viewLifecycleOwner) { page ->
             lifecycleScope.launch {
-                IKSdkController.loadAndShowSplashScreenAd(
+                /*IKSdkController.loadAndShowSplashScreenAd(
                     requireActivity(),
                     object : IKShowAdListener {
                         override fun onAdsDismiss() {
@@ -166,9 +165,12 @@ class LauncherHomeFragment : Fragment() {
                         override fun onAdsShowed() {
                             super.onAdsShowed()
                         }
-                    })
-            }
+                    })*/
 
+                binding.homePager.setCurrentItem(page, true)
+                binding.menuIcon.visibility = View.GONE
+
+            }
         }
 
         binding.PhoneIcon.setOnClickListener {
@@ -193,33 +195,6 @@ class LauncherHomeFragment : Fragment() {
         }
     }
 
-    private fun checkAndRequestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!Environment.isExternalStorageManager()) {
-                // Permission is not granted; request it
-                try {
-                    val intent =
-                        Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
-                            data = Uri.parse("package:${requireContext().packageName}")
-                        }
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    // Fallback if the intent is not supported
-                    e.printStackTrace()
-                    Toast.makeText(context, "Permission settings not available", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            } else {
-                // Permission is already granted; run setWallpaper()
-                setWallpaper()
-                checkNotificationPermission()
-            }
-        } else {
-            // For Android versions below R, just run setWallpaper()
-            setWallpaper()
-            checkNotificationPermission()
-        }
-    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onResume() {
@@ -260,28 +235,6 @@ class LauncherHomeFragment : Fragment() {
         // Check permission again when the app resumes
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && Environment.isExternalStorageManager()) {
             setWallpaper()
-        }
-    }
-
-    private fun checkNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // Android 13+
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(), android.Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // Request permission
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
-                    NOTIFICATION_PERMISSION_REQUEST_CODE
-                )
-            } else {
-                // Permission already granted, you can proceed with showing notifications
-                checkAlramPermission()
-            }
-        } else {
-            // Below Android 13, no permission is required
-            checkAlramPermission()
         }
     }
 
