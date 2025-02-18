@@ -1,7 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -196,26 +193,6 @@ class SplashOnFragment : Fragment() {
 
     }
 
-    /*private fun navigateToNextScreen() {
-        if (isAdded) {
-            val isDefaultHome = checkAppDefaultHome()
-            val firstTime = MySharePreference.getFirstTime(requireContext())
-
-            Log.d("Launcher", "navigateToNextScreen: isDefaultHome=$isDefaultHome, firstTime=$firstTime")
-
-            if (!isDefaultHome && !firstTime) {
-                // First launch, navigate to GetStartedFragment
-                findNavController().navigate(R.id.getStartedFragment)
-            } else if (!isDefaultHome && firstTime) {
-                // Subsequent launches, navigate to DefaultSetterFragment
-                findNavController().navigate(R.id.defaultSetterFragment)
-            } else if (isDefaultHome) {
-                // App is already default home, navigate to home
-                findNavController().navigate(R.id.launcherHomeFragment)
-            }
-        }
-    }*/
-
     private fun navigateToNextScreen() {
         if (lan.isEmpty() && isAdded) {
             hasNavigated = true
@@ -232,15 +209,6 @@ class SplashOnFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun checkAppDefaultHome(): Boolean {
-        val packageManager = requireContext().packageManager
-        val intent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-        }
-        val resolveInfo = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        return resolveInfo?.activityInfo?.packageName == requireContext().packageName
     }
 
     private fun animateLoadingText() {
@@ -295,7 +263,32 @@ class SplashOnFragment : Fragment() {
             }
 
         } else {
-            findNavController().navigate(R.id.launcherHomeFragment)
+            viewLifecycleOwner.lifecycleScope.launch {
+                IKSdkController.loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
+                    override fun onAdsDismiss() {
+                        if (isAdded) {
+                            Constants.checkAppOpen = true
+                            IKSdkController.setEnableShowResumeAds(true)
+                            findNavController().navigate(R.id.launcherHomeFragment)
+                        }
+                    }
+
+                    override fun onAdsShowFail(error: IKAdError) {
+                        Log.e(TAG, "onAdsShowFail: $error")
+                        if (isAdded) {
+                            findNavController().navigate(R.id.launcherHomeFragment)
+                            IKSdkController.setEnableShowResumeAds(true)
+                        }
+                    }
+
+                    override fun onAdsShowed() {
+                        counter++
+                        if (isAdded) {
+                            binding.adsView.visibility = View.GONE
+                        }
+                    }
+                })
+            }
         }
 
     }

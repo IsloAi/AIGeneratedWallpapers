@@ -13,7 +13,7 @@ import java.io.IOException
 
 class MyWallpaperManager(var context: Context, var activity: Activity) {
 
-    fun homeScreen(bitmap:Bitmap) {
+    fun homeScreen(bitmap: Bitmap) {
         Log.d("SET-WALL", "homeScreen: Received Wallpaper $bitmap ")
         try {
             var newBitmap = bitmap
@@ -24,8 +24,7 @@ class MyWallpaperManager(var context: Context, var activity: Activity) {
                 val heigh = metrics.heightPixels
                 val widt = metrics.widthPixels
                 newBitmap = Bitmap.createScaledBitmap(newBitmap, widt, heigh, true)
-            }
-            else {
+            } else {
                 val size = Point()
                 activity.getWindowManager().getDefaultDisplay().getRealSize(size)
                 val w: Int = size.x
@@ -51,14 +50,15 @@ class MyWallpaperManager(var context: Context, var activity: Activity) {
                     e.printStackTrace()
                 }
             }
-        }catch (e: TransactionTooLargeException){
+        } catch (e: TransactionTooLargeException) {
             e.printStackTrace()
         }
 
 
     }
+
     fun lockScreen(bit: Bitmap) {
-        var bitmap= bit
+        var bitmap = bit
         val wallpaperManager = WallpaperManager.getInstance(context)
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
             val metrics = DisplayMetrics()
@@ -82,7 +82,8 @@ class MyWallpaperManager(var context: Context, var activity: Activity) {
             }
         }
     }
-    fun homeAndLockScreen(bit:Bitmap) {
+
+    fun homeAndLockScreen(bit: Bitmap) {
         var bitmap = bit
         val wallpaperManager = WallpaperManager.getInstance(context)
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
@@ -132,8 +133,10 @@ class MyWallpaperManager(var context: Context, var activity: Activity) {
             }
         }
 
-        val bitmapLock = Bitmap.createScaledBitmap(bitLock, metrics.widthPixels, metrics.heightPixels, true)
-        val bitmapHome = Bitmap.createScaledBitmap(bitHome, metrics.widthPixels, metrics.heightPixels, true)
+        val bitmapLock =
+            Bitmap.createScaledBitmap(bitLock, metrics.widthPixels, metrics.heightPixels, true)
+        val bitmapHome =
+            Bitmap.createScaledBitmap(bitHome, metrics.widthPixels, metrics.heightPixels, true)
 
         try {
             wallpaperManager.setBitmap(bitmapHome, null, true, WallpaperManager.FLAG_SYSTEM)
