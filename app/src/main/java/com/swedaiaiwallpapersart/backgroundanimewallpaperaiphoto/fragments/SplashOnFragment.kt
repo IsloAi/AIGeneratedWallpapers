@@ -78,7 +78,6 @@ class SplashOnFragment : Fragment() {
             override fun onFail() {}
         })
         if (isAdded) {
-
             sendTracking(
                 "screen_active",
                 Pair("action_type", "screen"),

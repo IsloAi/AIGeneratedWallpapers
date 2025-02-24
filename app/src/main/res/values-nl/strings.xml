@@ -108,5 +108,13 @@
     <string name="gen_ai">Gen AI</string>
     <string name="more">Meer</string>
     <string name="not_now">Not Now</string>
+    <string name="consent">Consent</string>
+    <string name="consent_tittle">Welcome to the 4K Wallpapers - Live Wallpapers</string>
+    <string name="PrivacyConsent">4K Privacy consent</string>
+    <string name="agree_amp_continue"><![CDATA[Agree &amp; Continue]]></string>
+    <string name="disagree">Disagree</string>
+    <string name="if_you_disagree_you_will_be_unable_to_use_this_app">If you disagree, you will not be able to use the app</string>
+    <string name="continue_text">Continue</string>
+    <string name="quit">Quit</string>
 
 </resources>

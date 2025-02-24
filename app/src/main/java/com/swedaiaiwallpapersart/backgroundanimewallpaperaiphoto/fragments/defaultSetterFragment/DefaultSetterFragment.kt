@@ -6,7 +6,6 @@ import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -34,7 +33,7 @@ class DefaultSetterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.appCompatTextView.setOnClickListener {
-            findNavController().navigate(R.id.permissionFragment)
+            findNavController().navigate(R.id.consentFragment)
         }
         binding.BtnSetDefault.setOnClickListener {
             openSetDefaultHomeScreen()

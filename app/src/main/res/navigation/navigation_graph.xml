@@ -298,4 +298,9 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PermissionFragment"
         android:label="fragment_permission"
         tools:layout="@layout/fragment_permission" />
+    <fragment
+        android:id="@+id/consentFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.ConsentFragment"
+        android:label="fragment_consent"
+        tools:layout="@layout/fragment_consent" />
 </navigation>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/btn_bg_getstart_fragment"
+        android:backgroundTint="@color/white"
+        android:padding="@dimen/_15sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499">
+
+
+        <ImageView
+            android:id="@+id/dismissal_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_consent_dismissal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_15sdp"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="@string/if_you_disagree_you_will_be_unable_to_use_this_app"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dismissal_icon" />
+
+        <TextView
+            android:id="@+id/confirmationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/by_continuing_to_use_this_app_you_accept_our_privacy_policy_and_terms_of_service"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_10sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textView10" />
+
+        <TextView
+            android:id="@+id/quit"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="17dp"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:background="@drawable/dialog_native_bg"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/quit"
+            android:textColor="@color/black"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toStartOf="@+id/continue_btn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/confirmationText" />
+
+        <TextView
+            android:id="@+id/continue_btn"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/btn_bg_getstart_fragment"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/continue_text"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/quit"
+            app:layout_constraintTop_toBottomOf="@+id/confirmationText" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

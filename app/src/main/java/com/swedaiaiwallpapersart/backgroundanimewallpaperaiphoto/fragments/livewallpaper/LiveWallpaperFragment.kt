@@ -99,6 +99,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
+
     }
 
     override fun onStart() {
@@ -167,7 +168,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 Pair("action_name", "MainScr_LiveTab_View")
             )
         }
-
 
         if (isAdded) {
             val bundle = Bundle()

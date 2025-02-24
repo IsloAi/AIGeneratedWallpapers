@@ -169,5 +169,24 @@
     <string name="grant">Grant</string>
     <string name="display_permission">Overlay Permission</string>
     <string name="AllFile_permission">All File Access Permission</string>
+    <string name="consent">Consent</string>
+    <string name="consent_tittle">Welcome to the\n4K Wallpapers-Live Wallpapers App</string>
+    <string name="PrivacyConsent">4K Privacy consent</string>
+
+    <string name="permission_notice">
+    <b>Manage External Storage:</b>\nWe require this permission to securely access the applied wallpaper so that you can view your wallpaper in launcher feature.\n\n
+    <b>System Alert Window:</b>\nThis permission allows us to display a Battery Animation on homeScreen or on lockscreen whenever you plug your charger\n\n
+    <b>Query All Packages:</b>\nThis permission is necessary for us to list all installed apps on your device. It enables us to offer functionalities such as opening another app from our launcher.\n\n
+    Rest assured, your data is handled with the utmost care and is completely secure!
+    </string>
+    <string name="by_continuing_to_use_this_app_you_accept_our_privacy_policy_and_terms_of_service">
+    <![CDATA[By continuing to use this app, you accept our <a href="">privacy policy</a> and <a href="https://isloai.com/terms/">terms of service</a>.]]>
+    </string>
+
+    <string name="agree_amp_continue"><![CDATA[Agree & Continue]]></string>
+    <string name="disagree">Disagree</string>
+    <string name="if_you_disagree_you_will_be_unable_to_use_this_app">If you disagree, you will be unable to use the app</string>
+    <string name="continue_text">Continue</string>
+    <string name="quit">Quit</string>
 
 </resources>
