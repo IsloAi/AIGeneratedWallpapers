@@ -74,13 +74,4 @@
         android:textSize="@dimen/_14sdp"
         app:layout_constraintEnd_toStartOf="@+id/end_guide_line"
         app:layout_constraintTop_toTopOf="@+id/topguideline" />
-
-    <!--<TextView
-        android:id="@+id/next_btn"
-        style="@style/onboarding_text_style"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/next"
-        app:layout_constraintBottom_toTopOf="@id/bottom_guide_line"
-        app:layout_constraintEnd_toStartOf="@id/end_guide_line" />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

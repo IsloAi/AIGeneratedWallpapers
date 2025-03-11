@@ -11,18 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.CatNameListBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
@@ -30,7 +24,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 
 class ApiCategoriesNameAdapter(
     private val arrayList: ArrayList<CatNameResponse?>,
@@ -43,17 +36,17 @@ class ApiCategoriesNameAdapter(
     private val VIEW_TYPE_NATIVE_AD = 1
     private val debounceThreshold = 2000L // 2 seconds
 
-    private val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+    private val firstAdLineThreshold =
+        if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
     private val firstLine = firstAdLineThreshold * 3
 
-    private val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
+    private val lineCount =
+        if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
     private val lineC = lineCount * 3
     private val statusAd = AdConfig.adStatusCategoryArt
 
     private var lastClickTime = 0L
     private var context: Context? = null
-
-    var nativeAdView: IkmDisplayWidgetAdView? = null
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
@@ -73,8 +66,22 @@ class ApiCategoriesNameAdapter(
         context = parent.context
         val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            VIEW_TYPE_CONTAINER1 -> ViewHolderContainerItem(CatNameListBinding.inflate(inflater, parent, false))
-            VIEW_TYPE_NATIVE_AD -> ViewHolderContainer3(StaggeredNativeLayoutBinding.inflate(inflater, parent, false))
+            VIEW_TYPE_CONTAINER1 -> ViewHolderContainerItem(
+                CatNameListBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+
+            VIEW_TYPE_NATIVE_AD -> ViewHolderContainer3(
+                StaggeredNativeLayoutBinding.inflate(
+                    inflater,
+                    parent,
+                    false
+                )
+            )
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
@@ -90,9 +97,13 @@ class ApiCategoriesNameAdapter(
                         (holder as ViewHolderContainerItem).bind(model)
                     } else {
                         // Handle null model case (e.g., show a placeholder or do nothing)
-                        Log.e("ApiCategoriesNameAdapter", "Null model at position: $adjustedPosition")
+                        Log.e(
+                            "ApiCategoriesNameAdapter",
+                            "Null model at position: $adjustedPosition"
+                        )
                     }
                 }
+
                 VIEW_TYPE_NATIVE_AD -> {
                     (holder as ViewHolderContainer3).bind()
                 }
@@ -139,7 +150,8 @@ class ApiCategoriesNameAdapter(
         }
     }
 
-    inner class ViewHolderContainerItem(private val binding: CatNameListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainerItem(private val binding: CatNameListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(model: CatNameResponse) {
             binding.loading.visibility = View.VISIBLE
             binding.loading.setAnimation(R.raw.main_loading_animation)
@@ -185,61 +197,15 @@ class ApiCategoriesNameAdapter(
         }
     }
 
-    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            if (!binding.adsView.isAdLoaded) {
-                loadAd(binding)
-            }
         }
-    }
-
-    private fun loadAd(binding: StaggeredNativeLayoutBinding) {
-        val adLayout = LayoutInflater.from(context).inflate(
-            R.layout.native_dialog_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.apply {
-            titleView = findViewById(R.id.custom_headline)
-            bodyView = findViewById(R.id.custom_body)
-            callToActionView = findViewById(R.id.custom_call_to_action)
-            iconView = findViewById(R.id.custom_app_icon)
-            mediaView = findViewById(R.id.custom_media)
-        }
-
-        /*IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                nativeAdView = adObject
-                nativeAdView?.let {
-                    binding.adsView.showWithDisplayAdView(
-                        R.layout.shimmer_loading_native,
-                        adLayout!!,
-                        "mainscr_cate_tab_scroll_view",
-                        it,
-                        object : IKShowWidgetAdListener {
-                            override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failed ")
-                                binding.adsView.visibility = if (statusAd == 0) View.GONE else View.VISIBLE
-                            }
-
-                            override fun onAdShowed() {
-                                binding.adsView.visibility = View.VISIBLE
-                                Log.e("TAG", "onAdsLoaded: native loaded")
-                            }
-                        }
-                    )
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
-                if (statusAd == 0) binding.adsView.visibility = View.GONE
-            }
-        })*/
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
@@ -251,7 +217,7 @@ class ApiCategoriesNameAdapter(
         }
     }
 
-    fun updateData(newData:List<CatNameResponse?>){
+    fun updateData(newData: List<CatNameResponse?>) {
         arrayList.clear()
         arrayList.addAll(newData)
         Log.d("LiveWallpaperCategory", "updateData1223: ${newData.size}")

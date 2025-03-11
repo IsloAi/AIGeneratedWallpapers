@@ -12,12 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -55,10 +49,6 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
     val TAG = "ChargingAnimation"
 
-    val interAd = IKInterstitialAd()
-//    var checkAppOpen = false
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -73,18 +63,6 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         myActivity = activity as MainActivity
-
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
 
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
@@ -148,28 +126,12 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         loadData()
 
         if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "Tab"),
-                Pair("action_name", "MainScr_ChargingTab_View")
-            )
-        }
-
-        if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
     }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
-    }
-
 
     private fun updateUIWithFetchedData() {
 
@@ -186,78 +148,25 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 sharedViewModel.setChargingAdPosition(newPosition)
                 Log.e(TAG, "getPosition:$position odd ")
 
-                if (AdConfig.ISPAIDUSER) {
-                    setPathandNavigate(model, false)
-                } else {
-                    var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            setPathandNavigate(model, false)
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            setPathandNavigate(model, false)
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showInterAd(model)
-                    }
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            setPathandNavigate(model, false)
-//                            Log.e(TAG, "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd(model)
-//                    }
-
-
-                }
-
+                setPathandNavigate(model, false)
             }
         }, myActivity)
 
         binding.recyclerviewAll.adapter = adapter
-        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+        binding.recyclerviewAll.addOnScrollListener(
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
 
-                // Set the boolean to true when the RecyclerView is scrolled
-                if (dy != 0 || dx != 0) {
-                    Constants.checkInter = false
-                    checkAppOpen = false
-                }
-            }
-        })
-    }
-
-    private fun showInterAd(model: ChargingAnimModel) {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_live_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        setPathandNavigate(model, false)
+                    // Set the boolean to true when the RecyclerView is scrolled
+                    if (dy != 0 || dx != 0) {
+                        Constants.checkInter = false
+                        checkAppOpen = false
                     }
                 }
+            })
 
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    setPathandNavigate(model, true)
-                }
-            }
-        )
     }
 
     private fun setPathandNavigate(model: ChargingAnimModel, adShowd: Boolean) {
@@ -271,7 +180,6 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
             }
         }
     }
-
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 

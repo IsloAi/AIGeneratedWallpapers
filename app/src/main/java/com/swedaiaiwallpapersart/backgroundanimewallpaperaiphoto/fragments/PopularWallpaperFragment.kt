@@ -20,11 +20,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPopularWallpaperBinding
@@ -101,8 +96,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     val TAG = "POPULARTAB"
     var isNavigationInProgress = false
 
-    val interAd = IKInterstitialAd()
-
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -128,38 +121,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
         populateOnbaordingItems()
         binding.sliderPager.adapter = welcomeAdapter
-
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_all_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
-
-        interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
-
-        interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
 
         setIndicator()
         setCurrentIndicator(0)
@@ -236,33 +197,9 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
                     oldPosition = position
 
-                    if (AdConfig.ISPAIDUSER) {
-                        if (isAdded) {
-                            navigateToDestination(allItems!!, position)
-                        }
-                    } else {
-                        var shouldShowInterAd = true
 
-                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                            if (isAdded) {
-                                Constants.checkInter = false
-                                navigateToDestination(allItems!!, position)
-                                shouldShowInterAd = false // Skip showing the ad for this action
-                            }
-                        }
-
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                            if (isAdded) {
-                                checkAppOpen = false
-                                navigateToDestination(allItems!!, position)
-                                Log.e(TAG, "app open showed")
-                                shouldShowInterAd = false // Skip showing the ad for this action
-                            }
-                        }
-
-                        if (shouldShowInterAd) {
-                            showInterAdForAllItems(allItems, position)
-                        }
+                    if (isAdded) {
+                        navigateToDestination(allItems!!, position)
                     }
                 }
 
@@ -322,28 +259,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
             }
         })
-    }
-
-    private fun showInterAdForAllItems(
-        allItems: ArrayList<CatResponse?>?,
-        position: Int
-    ) {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_all_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        navigateToDestination(allItems!!, position)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    // Handle ad dismissal
-                }
-            }
-        )
     }
 
     private fun initMostDownloadedData() {
@@ -500,15 +415,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             }
         }
 
-
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "Tab"),
-                Pair("action_name", "MainScr_PopTab_View")
-            )
-        }
-
         initMostDownloadedData()
 
         initTrendingData()
@@ -522,8 +428,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             adapter?.updateMoreData(cachedCatResponses)
 
         }
-
-
 
         if (dataset) {
 
@@ -553,13 +457,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             }
         }
 
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun congratulationsDialog() {
@@ -627,25 +524,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
                         2 -> {
                             catListViewmodel.getAllCreations("4K")
-                            if (AdConfig.ISPAIDUSER) {
-                                setFragment("4K")
-                            } else {
-                                interAd.showAd(
-                                    requireActivity(),
-                                    "mainscr_cate_tab_click_item",
-                                    adListener = object : IKShowAdListener {
-                                        override fun onAdsShowFail(error: IKAdError) {
-                                            if (isAdded) {
-                                                setFragment("4K")
-                                            }
-                                        }
-
-                                        override fun onAdsDismiss() {
-                                            setFragment("4K")
-                                        }
-                                    }
-                                )
-                            }
+                            setFragment("4K")
                         }
                     }
                 }
@@ -742,44 +621,8 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                     if (!isNavigationInProgress) {
                         isNavigationInProgress = true
                         val allItems = adapter?.getAllItems()
-
-                        if (AdConfig.ISPAIDUSER) {
-                            if (isAdded) {
-                                navigateToDestination(allItems!!, position)
-                            }
-                        } else {
-                            var shouldShowInterAd = true
-
-                            if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                                if (isAdded) {
-                                    Constants.checkInter = false
-                                    navigateToDestination(allItems!!, position)
-                                    shouldShowInterAd = false // Skip showing the ad for this action
-                                }
-                            }
-
-                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                                if (isAdded) {
-                                    checkAppOpen = false
-                                    navigateToDestination(allItems!!, position)
-                                    Log.e(TAG, "app open showed")
-                                    shouldShowInterAd = false // Skip showing the ad for this action
-                                }
-                            }
-
-                            if (shouldShowInterAd) {
-                                showInterAdForHorizontalList(allItems, position)
-                            }
-//                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                                    if (isAdded){
-//                                        checkAppOpen = false
-//                                        navigateToDestination(allItems!!, position)
-//                                        Log.e(TAG, "app open showed: ", )
-//                                    }
-//
-//                            }else{
-//                                showInterAdForHorizontalList(allItems, position)
-//                            }
+                        if (isAdded) {
+                            navigateToDestination(allItems!!, position)
                         }
 
                     }
@@ -804,32 +647,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 }
             }
         })
-    }
-
-    private fun showInterAdForHorizontalList(
-        allItems: ArrayList<CatResponse?>?,
-        position: Int
-    ) {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_trending_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        if (isAdded) {
-                            navigateToDestination(allItems!!, position)
-                        }
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    if (isAdded) {
-                        Constants.checkInter = true
-                        navigateToDestination(allItems!!, position)
-                    }
-                }
-            }
-        )
     }
 
     private fun setIndicator() {

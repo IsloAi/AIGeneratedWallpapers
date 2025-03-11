@@ -13,12 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLocalizationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
@@ -49,8 +43,7 @@ class LocalizationFragment : Fragment() {
     var adnext = false
     val TAG = "Localization"
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLocalizationBinding.inflate(inflater, container, false)
         return binding.root
@@ -62,17 +55,6 @@ class LocalizationFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         requireActivity().window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        }
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "screen"),
-                Pair("action_name", "LanguageScr_View")
-            )
-        }
 
         lifecycleScope.launch {
             delay(200)
@@ -86,8 +68,7 @@ class LocalizationFragment : Fragment() {
         backHandle()
     }
 
-    private fun setGradienttext() {
-        /*val customColors = intArrayOf(
+    private fun setGradienttext() {/*val customColors = intArrayOf(
             Color.parseColor("#FC9502"),
             Color.parseColor("#FF6726")
         )
@@ -101,39 +82,6 @@ class LocalizationFragment : Fragment() {
         binding.applyLanguage.paint.shader = shader*/
     }
 
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
-    }
-
-    fun loadNativeAd() {
-        binding.adsView.attachLifecycle(this.lifecycle)
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.new_native_language,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-        binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!, "languagescr_bottom",
-            object : IKShowWidgetAdListener {
-                override fun onAdShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        binding.adsView.visibility = View.GONE
-                    }
-                }
-
-                override fun onAdShowed() {
-
-                }
-            }
-        )
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         //_binding = null
@@ -141,13 +89,6 @@ class LocalizationFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-            binding.adsView.visibility = View.VISIBLE
-            loadNativeAd()
-        }
-
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Language Screen")
@@ -169,19 +110,11 @@ class LocalizationFragment : Fragment() {
 
 
         val arrayList: ArrayList<DummyModelLanguages> = sortedList.toCollection(ArrayList())
-        adapter =
-            LocalizationAdapter(arrayList, getSelectedLanguagePosition(arrayList), object :
-                LocalizationAdapter.OnLanguageChangeListener {
+        adapter = LocalizationAdapter(arrayList,
+            getSelectedLanguagePosition(arrayList),
+            object : LocalizationAdapter.OnLanguageChangeListener {
 
                 override fun onLanguageItemClick(language: DummyModelLanguages?, position: Int) {
-
-                    if (AdConfig.languageLogicShowNative == 1 && !AdConfig.ISPAIDUSER) {
-                        if (!adnext) {
-                            adnext = true
-                            loadNativeAd()
-                        }
-                    }
-
                     selectedItem = language
                     selected = position
                 }
@@ -221,10 +154,7 @@ class LocalizationFragment : Fragment() {
         languagesList.add(DummyModelLanguages("Turkish", "tr", R.drawable.flag_tr, false))
         languagesList.add(
             DummyModelLanguages(
-                "Vietnamese ",
-                "vi",
-                R.drawable.flag_vietnamese,
-                false
+                "Vietnamese ", "vi", R.drawable.flag_vietnamese, false
             )
         )
         languagesList.add(DummyModelLanguages("Hindi", "hi", R.drawable.flag_hi, false))
@@ -248,8 +178,7 @@ class LocalizationFragment : Fragment() {
     }
 
     private fun sortLanguages(
-        languages: ArrayList<DummyModelLanguages>,
-        order: List<String>
+        languages: ArrayList<DummyModelLanguages>, order: List<String>
     ): List<DummyModelLanguages> {
         val orderMap = order.withIndex().associate { it.value.trim() to it.index }
 
@@ -260,33 +189,8 @@ class LocalizationFragment : Fragment() {
     private fun setEvents() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
 
-        if (!onBoard) {
-            IKSdkController.preloadNativeAd("onboardscr_bottom", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-
-                override fun onAdLoadFail(error: IKAdError) {
-                    Log.e(TAG, "onAdLoadFail: ")
-                }
-            })
-        }
-
         binding.applyLanguage.setOnClickListener {
-
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "LanguageScr_Next_Click")
-                )
-
-            }
-
             if (selectedItem != null) {
-                if (isAdded) {
-                    sendTracking("language_selected", Pair("language", selectedItem?.lan_name))
-                }
                 MySharePreference.setLanguage(requireContext(), selectedItem!!.lan_code)
                 MySharePreference.setLanguagePosition(requireContext(), selected)
                 val context = LocaleManager.setLocale(requireContext(), selectedItem!!.lan_code)
@@ -320,9 +224,6 @@ class LocalizationFragment : Fragment() {
                     }
                 }
             } else {
-                if (isAdded) {
-                    sendTracking("language_selected", Pair("language", "English"))
-                }
                 MySharePreference.setLanguage(requireContext(), "en")
                 MySharePreference.setLanguagePosition(requireContext(), 0)
                 val context = LocaleManager.setLocale(requireContext(), "en")
@@ -368,13 +269,6 @@ class LocalizationFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (isAdded) {
-                        sendTracking(
-                            "click_button",
-                            Pair("action_type", "button"),
-                            Pair("action_name", "Sytem_BackButton_Click")
-                        )
-                    }
                     if (exit) {
                         findNavController().navigate(R.id.onBoardingFragment)
                     } else {

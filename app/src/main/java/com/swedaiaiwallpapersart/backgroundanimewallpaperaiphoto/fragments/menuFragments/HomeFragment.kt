@@ -18,14 +18,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
@@ -39,7 +31,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.Wallp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -85,8 +76,6 @@ class HomeFragment : Fragment(), AdEventListener {
 
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
 
-    val interAd = IKInterstitialAd()
-
     //var checkAppOpen = false
 
     override fun onCreateView(
@@ -108,17 +97,6 @@ class HomeFragment : Fragment(), AdEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
         onCreatingCalling()
         setEvents()
     }
@@ -343,36 +321,11 @@ class HomeFragment : Fragment(), AdEventListener {
                         addedItems = allItems
 
                         oldPosition = position
-                        if (AdConfig.ISPAIDUSER) {
-                            if (isAdded) {
-                                navigateToDestination(allItems, position)
-                            }
-                        } else {
-                            var shouldShowInterAd = true
 
-                            if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                                if (isAdded) {
-                                    Constants.checkInter = false
-                                    navigateToDestination(allItems, position)
-                                    shouldShowInterAd = false // Skip showing the ad for this action
-                                }
-                            }
-
-                            if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                                if (isAdded) {
-                                    checkAppOpen = false
-                                    navigateToDestination(allItems, position)
-                                    Log.e(TAG, "app open showed")
-                                    shouldShowInterAd = false // Skip showing the ad for this action
-                                }
-                            }
-                            if (shouldShowInterAd) {
-                                showInterAd(
-                                    allItems,
-                                    position
-                                ) // Show the interstitial ad if no conditions were met
-                            }
+                        if (isAdded) {
+                            navigateToDestination(allItems, position)
                         }
+
                     }
                 }
             }
@@ -383,47 +336,10 @@ class HomeFragment : Fragment(), AdEventListener {
         }, myActivity, "trending")
         adapter.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("mainscr_trending_tab_scroll_view", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view != null) {
-                    adapter.nativeAdView = adObject
-                    if (binding.recyclerviewAll.adapter == null) {
-                        binding.recyclerviewAll.adapter = adapter
-                    }
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })
         if (binding.recyclerviewAll.adapter == null) {
             binding.recyclerviewAll.adapter = adapter
         }
 
-    }
-
-    private fun showInterAd(
-        allItems: ArrayList<CatResponse?>,
-        position: Int
-    ) {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_trending_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        navigateToDestination(allItems!!, position)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    // Handle ad dismissal
-                }
-            }
-        )
     }
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
@@ -488,14 +404,6 @@ class HomeFragment : Fragment(), AdEventListener {
             }
         }
 
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "Tab"),
-                Pair("action_name", "MainScr_CarTab_View")
-            )
-        }
-
         loadData()
         if (dataset) {
 
@@ -529,13 +437,6 @@ class HomeFragment : Fragment(), AdEventListener {
             }
         }
 
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     companion object {

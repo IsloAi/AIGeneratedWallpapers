@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ikame.android.sdk.widgets.IkmWidgetAdLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,8 +16,8 @@
             android:id="@+id/custom_containerAds"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintHeight_percent="0.2"
             android:layout_marginTop="@dimen/_15sdp"
+            app:layout_constraintHeight_percent="0.2"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -36,7 +36,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                app:layout_goneMarginStart="16dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_medium"
                 android:maxLines="1"
@@ -45,6 +44,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginStart="16dp"
                 tools:text="abv" />
 
             <TextView
@@ -63,14 +63,6 @@
                 tools:text="adadad" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.ikame.android.sdk.widgets.IkmWidgetMediaView
-            android:id="@+id/custom_media"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/_300sdp"
-
-            app:layout_constraintBottom_toTopOf="@id/custom_call_to_action"
-            app:layout_constraintTop_toBottomOf="@+id/custom_containerAds" />
-
         <TextView
             android:id="@+id/custom_call_to_action"
             android:layout_width="match_parent"
@@ -86,8 +78,8 @@
             android:paddingHorizontal="16dp"
             android:textColor="@color/white"
             android:textSize="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="install" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -105,4 +97,4 @@
         android:textColor="@color/white"
         android:textSize="10dp" />
 
-</com.ikame.android.sdk.widgets.IkmWidgetAdLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

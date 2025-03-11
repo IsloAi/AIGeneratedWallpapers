@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/new_main_background">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,79 +15,68 @@
             android:id="@+id/toolBar"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHeight_percent=".091"
             android:background="@color/new_main_background"
             android:paddingHorizontal="@dimen/_10sdp"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".091"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RelativeLayout
                 android:id="@+id/toolbar"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintTop_toTopOf="parent"
                 android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_back_arrow"
-                    />
+                    android:src="@drawable/ic_back_arrow" />
             </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:fontFamily="@font/poppins_semibold"
+                android:gravity="center"
                 android:text="@string/settings"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                app:layout_constraintTop_toTopOf="@id/toolbar"
+                android:textSize="@dimen/_14sdp"
                 app:layout_constraintBottom_toBottomOf="@id/toolbar"
                 app:layout_constraintStart_toEndOf="@id/toolbar"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:textSize="@dimen/_14sdp"
-                android:gravity="center"
-                />
+                app:layout_constraintTop_toTopOf="@id/toolbar" />
 
 
             <ImageView
+                android:id="@+id/shareAPp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/share_app"
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/shareAPp"
-                android:visibility="gone"
-                android:padding="@dimen/_5sdp"
+                app:layout_constraintTop_toTopOf="parent"
 
                 />
-
 
 
             <ImageView
+                android:id="@+id/wallpaperInfo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:padding="@dimen/_5sdp"
                 android:src="@drawable/information_wallpaper"
-                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/shareAPp"
-                android:id="@+id/wallpaperInfo"
-                android:visibility="gone"
-                android:padding="@dimen/_5sdp"
-                android:layout_marginEnd="@dimen/_3sdp"
-                />
-
-
-
-
-
-
-
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -96,144 +86,146 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHeight_percent=".1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
 
             >
+
             <TextView
                 android:id="@+id/premium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:text="@string/settings"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/white"
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
+                android:text="@string/settings"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
-                tools:ignore="HardcodedText"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/gemsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/gems_color"
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
                 android:text="0"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/animationDdd"
+                android:textColor="@color/gems_color"
                 android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
-                tools:ignore="HardcodedText"/>
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/animationDdd"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <ImageView
                 android:id="@+id/animationDdd"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/_2sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/premiumCardLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-           app:layout_constraintTop_toBottomOf="@+id/toolBar"
             app:layout_constraintBottom_toTopOf="@+id/settingCardLayout"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent=".2"
-            >
-           <RelativeLayout
-               android:id="@+id/premiumCardButton"
-               android:layout_width="0dp"
-               android:layout_height="0dp"
-               android:background="@drawable/settings_header_image"
-              app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintTop_toTopOf="parent"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintHeight_percent=".8"
-               app:layout_constraintWidth_percent=".85"
-               >
-               <TextView
-                   android:id="@+id/text"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:textColor="@color/white"
-                   android:fontFamily="@font/raleway_medium"
-                   android:gravity="start"
-                   android:textSize="13sp"
-                   android:textStyle="bold"
-                   android:paddingHorizontal="@dimen/_15sdp"
-                   android:layout_alignParentStart="true"
-                   android:layout_centerVertical="true"
-                   android:layout_toStartOf="@+id/animation"
-                   android:text="Unlock a universe of HD visuals with our exclusive premium membership."
-                   />
-               <ImageView
-                   android:id="@+id/animation"
-                   android:layout_width="@dimen/_70sdp"
-                   android:layout_height="@dimen/_70sdp"
-                   android:layout_alignParentEnd="true"
-                   android:layout_centerVertical="true"
-                   android:layout_marginEnd="@dimen/_10sdp"
-                   />
-           </RelativeLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolBar">
+
+            <RelativeLayout
+                android:id="@+id/premiumCardButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/settings_header_image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent=".8"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".85">
+
+                <TextView
+                    android:id="@+id/text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/animation"
+                    android:fontFamily="@font/raleway_medium"
+                    android:gravity="start"
+                    android:paddingHorizontal="@dimen/_15sdp"
+                    android:text="Unlock a universe of HD visuals with our exclusive premium membership."
+                    android:textColor="@color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/animation"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_70sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/_10sdp" />
+            </RelativeLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/settingCardLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/premiumCardLayout"
 
             >
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintWidth_percent=".85"
-                app:layout_constraintHeight_percent=".9"
                 android:background="@drawable/card"
-                android:paddingVertical="@dimen/_10sdp"
-                android:paddingHorizontal="@dimen/_20sdp"
                 android:orientation="vertical"
-                >
+                android:paddingHorizontal="@dimen/_20sdp"
+                android:paddingVertical="@dimen/_10sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent=".9"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent=".85">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Charging Animation"
-                    android:textColor="@color/white"
                     android:fontFamily="@font/raleway_medium"
                     android:gravity="center"
+                    android:text="Charging Animation"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/animationLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -242,51 +234,50 @@
                         android:fontFamily="@font/raleway_medium"
                         android:text="Animation"
                         android:textColor="@color/white"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:textSize="14sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        android:textSize="14sp"
-                        />
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <androidx.appcompat.widget.SwitchCompat
                         android:id="@+id/mySwitch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:track="@drawable/switch_track_on"
+                        android:layout_gravity="center_vertical|end"
+                        android:checked="false"
+                        android:gravity="end"
+                        android:thumb="@drawable/thumb_switch"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        android:thumb="@drawable/thumb_switch"
-                        android:checked="false"
-                        android:layout_gravity="center_vertical|end"
-                        android:gravity="end"
-                        />
+                        app:track="@drawable/switch_track_on" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/rate"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/raleway_medium"
                     android:gravity="center"
+                    android:text="@string/rate"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:layout_marginTop="@dimen/_20sdp"
                     android:textStyle="bold" />
+
                 <LinearLayout
                     android:id="@+id/rateUsButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_15sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
-                      <ImageView
-                          android:layout_width="@dimen/_17sdp"
-                          android:layout_height="@dimen/_17sdp"
-                          android:src="@drawable/rate_us"
-                          android:layout_gravity="center_vertical"
-                          />
+                    android:layout_marginTop="@dimen/_15sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_17sdp"
+                        android:layout_height="@dimen/_17sdp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/rate_us" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -296,123 +287,122 @@
                         android:fontFamily="@font/raleway_medium"
                         android:text="@string/rate_us"
                         android:textColor="@color/white"
-                        android:textSize="14sp"
-                         />
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/customerSupportButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
                     <ImageView
                         android:layout_width="@dimen/_17sdp"
                         android:layout_height="@dimen/_17sdp"
-                        android:src="@drawable/feedback"
                         android:layout_gravity="center_vertical"
-                        />
+                        android:src="@drawable/feedback" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:fontFamily="@font/raleway_medium"
                         android:text="@string/customer_support"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/raleway_medium"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        />
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/shareAppButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
                     <ImageView
                         android:layout_width="@dimen/_17sdp"
                         android:layout_height="@dimen/_17sdp"
-                        android:src="@drawable/share"
                         android:layout_gravity="center_vertical"
-                        />
+                        android:src="@drawable/share" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:fontFamily="@font/raleway_medium"
                         android:text="@string/share_app"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/raleway_medium"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        />
+                        android:textSize="14sp" />
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/other"
-                    android:textColor="@color/white"
+                    android:layout_marginTop="@dimen/_20sdp"
                     android:fontFamily="@font/raleway_medium"
                     android:gravity="center"
+                    android:text="@string/other"
+                    android:textColor="@color/white"
                     android:textSize="18sp"
-                    android:layout_marginTop="@dimen/_20sdp"
                     android:textStyle="bold" />
+
                 <LinearLayout
                     android:id="@+id/privacyPolicyButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_13sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_13sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
                     <ImageView
                         android:layout_width="@dimen/_17sdp"
                         android:layout_height="@dimen/_17sdp"
-                        android:src="@drawable/privacy_p"
                         android:layout_gravity="center_vertical"
-                        />
+                        android:src="@drawable/privacy_p" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:fontFamily="@font/raleway_medium"
                         android:text="@string/privacy_policy"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/raleway_medium"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        />
+                        android:textSize="14sp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/moreAppButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
                     <ImageView
                         android:layout_width="@dimen/_17sdp"
                         android:layout_height="@dimen/_17sdp"
-                        android:src="@drawable/more_app"
                         android:layout_gravity="center_vertical"
-                        />
+                        android:src="@drawable/more_app" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:fontFamily="@font/raleway_medium"
                         android:text="@string/more_app"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/raleway_medium"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -420,27 +410,27 @@
                     android:id="@+id/favorites"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
                     <ImageView
                         android:layout_width="@dimen/_17sdp"
                         android:layout_height="@dimen/_17sdp"
-                        android:src="@drawable/heart_unsel"
                         android:layout_gravity="center_vertical"
+                        android:src="@drawable/heart_unsel"
                         app:tint="@color/white" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:fontFamily="@font/raleway_medium"
                         android:text="@string/favourites"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/raleway_medium"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -448,27 +438,26 @@
                     android:id="@+id/logOutButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_10sdp"
-                    android:paddingVertical="@dimen/_2sdp"
                     android:layout_marginStart="@dimen/_7sdp"
-                    >
+                    android:layout_marginTop="@dimen/_10sdp"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/_2sdp">
+
                     <ImageView
                         android:layout_width="@dimen/_17sdp"
                         android:layout_height="@dimen/_17sdp"
-                        android:src="@drawable/language_icon"
                         android:layout_gravity="center_vertical"
-                        />
+                        android:src="@drawable/language_icon" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/_15sdp"
+                        android:fontFamily="@font/raleway_medium"
                         android:text="@string/change_language"
                         android:textColor="@color/white"
-                        android:fontFamily="@font/raleway_medium"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="14sp"
-                        android:layout_marginStart="@dimen/_15sdp"
-                        />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 

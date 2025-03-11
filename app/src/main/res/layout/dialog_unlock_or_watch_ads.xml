@@ -1,166 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="@dimen/_40sdp"
-        android:id="@+id/content"
         android:layout_marginHorizontal="@dimen/_15sdp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="@dimen/_40sdp"
         android:background="@drawable/dialog_background"
-        >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.8"
-            android:layout_height="@dimen/_170sdp"
-            android:src="@drawable/dialog_vector"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:padding="@dimen/_7sdp"
             android:id="@+id/vector_image"
-            />
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_170sdp"
+            android:padding="@dimen/_7sdp"
+            android:src="@drawable/dialog_vector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Unlock Premium "
-            app:layout_constraintTop_toBottomOf="@id/vector_image"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="@dimen/_15sdp"
-            android:textColor="#D9690D"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/headTxt"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unlock preferred wallpapers effortlessly through\n short ads for a personalized touch"
-            android:gravity="center"
-            android:fontFamily="@font/poppins_medium"
-            android:textSize="@dimen/_11sdp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Unlock Premium "
+            android:textColor="#D9690D"
+            android:textSize="@dimen/_15sdp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/headTxt"
-            android:textColor="#927E5B"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/vector_image" />
+
+        <TextView
             android:id="@+id/descriptionTxt"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="Unlock preferred wallpapers effortlessly through\n short ads for a personalized touch"
+            android:textColor="#927E5B"
+            android:textSize="@dimen/_11sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headTxt" />
 
 
         <LinearLayout
+            android:id="@+id/watchAds"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/ads_button_background"
             android:layout_marginHorizontal="@dimen/_15sdp"
+            android:background="@drawable/ads_button_background"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/descriptionTxt"
             android:orientation="horizontal"
-            android:id="@+id/watchAds"
-            >
+            app:layout_constraintTop_toBottomOf="@id/descriptionTxt">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ads_icon_dialog"
-                />
+                android:src="@drawable/ads_icon_dialog" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Watch ads"
                 android:textAllCaps="true"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_13sdp"
                 android:textColor="@color/white"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_gravity="center"/>
+                android:textSize="@dimen/_13sdp" />
         </LinearLayout>
 
         <View
+            android:id="@+id/dividerStart"
             android:layout_width="0dp"
             android:layout_height="@dimen/_1sdp"
             android:background="#806A3800"
-            app:layout_constraintWidth_percent="0.4"
-            app:layout_constraintTop_toTopOf="@id/orTxt"
             app:layout_constraintBottom_toBottomOf="@id/orTxt"
             app:layout_constraintStart_toStartOf="@id/watchAds"
-            android:id="@+id/dividerStart"
-            />
+            app:layout_constraintTop_toTopOf="@id/orTxt"
+            app:layout_constraintWidth_percent="0.4" />
 
         <TextView
+            android:id="@+id/orTxt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/watchAds"
-            android:text="OR"
-            app:layout_constraintStart_toEndOf="@id/dividerStart"
-            app:layout_constraintEnd_toStartOf="@id/dividerEnd"
-            android:id="@+id/orTxt"
             android:fontFamily="@font/poppins_medium"
-            android:textSize="@dimen/_11sdp"
+            android:text="OR"
             android:textColor="#CC6A3800"
+            android:textSize="@dimen/_11sdp"
+            app:layout_constraintEnd_toStartOf="@id/dividerEnd"
+            app:layout_constraintStart_toEndOf="@id/dividerStart"
+            app:layout_constraintTop_toBottomOf="@id/watchAds"
 
             />
 
 
         <View
+            android:id="@+id/dividerEnd"
             android:layout_width="0dp"
             android:layout_height="@dimen/_1sdp"
             android:background="#806A3800"
-            app:layout_constraintWidth_percent="0.4"
-            app:layout_constraintTop_toTopOf="@id/orTxt"
             app:layout_constraintBottom_toBottomOf="@id/orTxt"
-
             app:layout_constraintEnd_toEndOf="@id/watchAds"
-            android:id="@+id/dividerEnd"
-            />
 
+            app:layout_constraintTop_toTopOf="@id/orTxt"
+            app:layout_constraintWidth_percent="0.4" />
 
 
         <LinearLayout
+            android:id="@+id/upgradeButton"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
-            android:background="@drawable/iap_button_bg"
             android:layout_marginHorizontal="@dimen/_15sdp"
+            android:layout_marginBottom="@dimen/_15sdp"
+            android:background="@drawable/iap_button_bg"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/orTxt"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="@dimen/_15sdp"
-            android:id="@+id/upgradeButton"
-            >
+            app:layout_constraintTop_toBottomOf="@id/orTxt">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/premium_icon_dialog"
-                />
+                android:src="@drawable/premium_icon_dialog" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Upgrade now"
                 android:textAllCaps="true"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_13sdp"
                 android:textColor="@color/white"
-                android:layout_marginStart="@dimen/_5sdp"
-                android:layout_gravity="center"/>
+                android:textSize="@dimen/_13sdp" />
         </LinearLayout>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <ImageView
         android:layout_width="@dimen/_170sdp"
@@ -168,19 +157,15 @@
         android:src="@drawable/gift_icon_dialog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
-
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/cancel_Dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_7sdp"
         android:src="@drawable/icon_cancel"
         app:layout_constraintEnd_toEndOf="@id/content"
-        android:layout_marginTop="@dimen/_7sdp"
-        app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/cancel_Dialog"/>
-
-
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

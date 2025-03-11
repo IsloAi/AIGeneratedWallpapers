@@ -56,14 +56,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.format.rewarded.IKRewardAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowRewardAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
@@ -167,9 +159,6 @@ class WallpaperViewFragment : Fragment() {
     @Inject
     lateinit var appDatabase: AppDatabase
 
-    val rewardAd = IKRewardAd()
-    val interAd = IKInterstitialAd()
-
     companion object {
         var isNavigated = false
     }
@@ -237,78 +226,8 @@ class WallpaperViewFragment : Fragment() {
         return binding.root
     }
 
-    private fun loadRewardAd() {
-        rewardAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        rewardAd.loadAd("viewlistwallscr_item_vip_reward", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
-
-        rewardAd.loadAd("viewlistwallscr_download_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-
-            loadRewardAd()
-
-            interAd.attachLifecycle(this.lifecycle)
-            // Load ad with a specific screen ID, considered as a unitId
-            interAd.loadAd("viewlistwallscr_item_vip_inter", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
-            interAd.loadAd("viewlistwallscr_setdilog_set_button", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("viewlistwallscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-                    Log.d(TAG, "onAdShowFailWallpaperViewPagerFragment: $error")
-//                    binding.adsView?.visibility = View.GONE
-                }
-
-            })
-        }
-
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "screen"),
-                Pair("action_name", "ViewListWallScr_View")
-            )
-        }
-
         backHandle()
     }
 
@@ -317,13 +236,6 @@ class WallpaperViewFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (isAdded) {
-                        sendTracking(
-                            "click_button",
-                            Pair("action_type", "button"),
-                            Pair("action_name", "Sytem_BackButton_Click")
-                        )
-                    }
                     firstTime = true
                     isNavigated = false
                     hasToNavigate = false
@@ -338,13 +250,6 @@ class WallpaperViewFragment : Fragment() {
             requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
-                if (isAdded) {
-                    sendTracking(
-                        "click_button",
-                        Pair("action_type", "button"),
-                        Pair("action_name", "Sytem_BackButton_Click")
-                    )
-                }
                 firstTime = true
                 isNavigated = false
                 hasToNavigate = false
@@ -425,13 +330,6 @@ class WallpaperViewFragment : Fragment() {
         viewPager2 = binding.viewPager
         binding.toolbar.setOnClickListener {
             // Set up the onBackPressed callback
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_BackBT_Click")
-                )
-            }
             firstTime = true
             isNavigated = false
             hasToNavigate = false
@@ -497,13 +395,6 @@ class WallpaperViewFragment : Fragment() {
         }
         binding.favouriteButton.setOnClickListener {
 
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_FavoriteBT_Click")
-                )
-            }
             binding.favouriteButton.isEnabled = false
             if (arrayList[position]?.liked == true) {
                 arrayList[position]?.liked = false
@@ -546,13 +437,6 @@ class WallpaperViewFragment : Fragment() {
             Constants.checkAppOpen = false
         }
         binding.shareAPp.setOnClickListener {
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_ShareBT_Click")
-                )
-            }
             val appPackageName = requireContext().packageName
             val appName = requireContext().getString(R.string.app_name)
 
@@ -570,13 +454,6 @@ class WallpaperViewFragment : Fragment() {
             requireContext().startActivity(chooser)
         }
         binding.wallpaperInfo.setOnClickListener {
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_InfoBT_Click")
-                )
-            }
             if (arrayList[position]?.id != null) {
                 imageDetailsSheet()
             } else {
@@ -591,79 +468,26 @@ class WallpaperViewFragment : Fragment() {
 
         }
         binding.unlockWallpaper.setOnClickListener {
-
             if (bitmap != null) {
+                if (isAdded) {
+                    Log.e("********ADS", "onAdsRewarded: ")
+                    val postData = PostDataOnServer()
+                    val model = arrayList[position]
+                    arrayList[position]?.unlockimges = true
+                    arrayList[position]?.gems = 0
 
-                rewardAd.showAd(
-                    requireActivity(),
-                    "viewlistwallscr_item_vip_reward",
-                    adListener = object : IKShowRewardAdListener {
-                        override fun onAdsRewarded() {
-                            if (isAdded) {
-                                Log.e("********ADS", "onAdsRewarded: ")
-                                val postData = PostDataOnServer()
-                                val model = arrayList[position]
-                                arrayList[position]?.unlockimges = true
-                                arrayList[position]?.gems = 0
-
-                                val model1 = arrayList[position]
-                                postData.unLocking(
-                                    MySharePreference.getDeviceID(requireContext())!!,
-                                    model1!!, requireContext(), 0
-                                )
-                                showInter = false
-                                binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                                binding.unlockWallpaper.visibility = View.GONE
-                                adapter?.notifyItemChanged(position)
-                                viewPager2?.invalidate()
-                                binding.viewPager.setCurrentItem(position, true)
-                            }
-                        }
-
-                        override fun onAdsShowFail(error: IKAdError) {
-                            if (isAdded) {
-                                interAd.showAd(
-                                    requireActivity(),
-                                    "viewlistwallscr_item_vip_inter",
-                                    adListener = object : IKShowAdListener {
-                                        override fun onAdsShowFail(error: IKAdError) {
-                                            if (isAdded) {
-                                                Toast.makeText(
-                                                    requireContext(),
-                                                    "Ad not available, Please try again later",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                        }
-
-                                        override fun onAdsDismiss() {
-                                            val postData = PostDataOnServer()
-                                            val model = arrayList[position]
-                                            arrayList[position]?.unlockimges = true
-                                            arrayList[position]?.gems = 0
-
-                                            val model1 = arrayList[position]
-                                            postData.unLocking(
-                                                MySharePreference.getDeviceID(requireContext())!!,
-                                                model1!!, requireContext(), 0
-                                            )
-                                            showInter = false
-                                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                                            binding.unlockWallpaper.visibility = View.GONE
-                                            adapter?.notifyItemChanged(position)
-                                            viewPager2?.invalidate()
-                                            binding.viewPager.setCurrentItem(position, true)
-                                        }
-                                    }
-                                )
-                            }
-                        }
-
-                        override fun onAdsDismiss() {
-                            loadRewardAd()
-                        }
-                    }
-                )
+                    val model1 = arrayList[position]
+                    postData.unLocking(
+                        MySharePreference.getDeviceID(requireContext())!!,
+                        model1!!, requireContext(), 0
+                    )
+                    showInter = false
+                    binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                    binding.unlockWallpaper.visibility = View.GONE
+                    adapter?.notifyItemChanged(position)
+                    viewPager2?.invalidate()
+                    binding.viewPager.setCurrentItem(position, true)
+                }
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -673,18 +497,10 @@ class WallpaperViewFragment : Fragment() {
 
             Constants.checkInter = false
             Constants.checkAppOpen = false
-
         }
         binding.downloadWallpaper.setOnClickListener {
             Log.e("TAG", "functionality: inside click")
 
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_SaveBT_Click")
-                )
-            }
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                 if (ContextCompat.checkSelfPermission(
                         requireContext(),
@@ -729,13 +545,6 @@ class WallpaperViewFragment : Fragment() {
         adapter = WallpaperApiSliderAdapter(arrayList, object : FullViewImage {
 
             override fun getFullImageUrl(image: CatResponse) {
-                if (isAdded) {
-                    sendTracking(
-                        "click_button",
-                        Pair("action_type", "ITEM"),
-                        Pair("action_name", "ViewListWallScr_Item_Click")
-                    )
-                }
 
                 sharedViewModel.selectCat(image)
                 sharedViewModel.setPosition(position)
@@ -746,20 +555,6 @@ class WallpaperViewFragment : Fragment() {
         }, myActivity, from)
         adapter!!.setCoroutineScope(fragmentScope)
 
-        /*IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view != null) {
-                    adapter?.nativeAdView = adObject
-                    viewPager2?.adapter = adapter
-                    viewPager2?.setCurrentItem(position, false)
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })*/
         viewPager2?.adapter = adapter
         Log.d("SET-WALL", "setViewPager: $position")
         viewPager2?.setCurrentItem(position, false)
@@ -887,46 +682,21 @@ class WallpaperViewFragment : Fragment() {
         bindingDialog.watchAds.setOnClickListener {
             dialog.dismiss()
             if (bitmap != null) {
+                val postData = PostDataOnServer()
+                val model = arrayList[position]
+                arrayList[position]?.unlockimges = true
+                arrayList[position]?.gems = 0
 
-                rewardAd.showAd(
-                    requireActivity(),
-                    "viewlistwallscr_item_vip_reward",
-                    adListener = object : IKShowRewardAdListener {
-                        override fun onAdsRewarded() {
-                            val postData = PostDataOnServer()
-                            val model = arrayList[position]
-                            arrayList[position]?.unlockimges = true
-                            arrayList[position]?.gems = 0
-
-                            model?.id?.let { it1 ->
-                                appDatabase.wallpapersDao().updateLocked(
-                                    true,
-                                    it1
-                                )
-                            }
-                            adapter?.notifyItemChanged(position)
-                            viewPager2?.invalidate()
-                            binding.viewPager.setCurrentItem(position, true)
-                            openPopupMenu(model!!)
-                        }
-
-                        override fun onAdsShowFail(error: IKAdError) {
-                            if (isAdded) {
-                                if (isAdded) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Ad not available, Try again",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-                        }
-
-                        override fun onAdsDismiss() {
-                            loadRewardAd()
-                        }
-                    }
-                )
+                model?.id?.let { it1 ->
+                    appDatabase.wallpapersDao().updateLocked(
+                        true,
+                        it1
+                    )
+                }
+                adapter?.notifyItemChanged(position)
+                viewPager2?.invalidate()
+                binding.viewPager.setCurrentItem(position, true)
+                openPopupMenu(model!!)
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -960,47 +730,10 @@ class WallpaperViewFragment : Fragment() {
 
         getReward?.setOnClickListener {
             dialog?.dismiss()
+            mSaveMediaToStorage(bitmap)
+            val model = arrayList[position]
 
-            rewardAd.showAd(
-                requireActivity(),
-                "viewlistwallscr_download_item",
-                adListener = object : IKShowRewardAdListener {
-                    override fun onAdsRewarded() {
-                        mSaveMediaToStorage(bitmap)
-                        val model = arrayList[position]
-
-                        model?.let { it1 -> setDownloaded(it1) }
-                    }
-
-                    override fun onAdsShowFail(error: IKAdError) {
-                        interAd.showAd(
-                            requireActivity(),
-                            "viewlistwallscr_download_item_inter",
-                            adListener = object : IKShowAdListener {
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded) {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Ad not available, Please try again later",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-
-                                override fun onAdsDismiss() {
-                                    mSaveMediaToStorage(bitmap)
-                                    val model = arrayList[position]
-                                    model?.let { it1 -> setDownloaded(it1) }
-                                }
-                            }
-                        )
-                    }
-
-                    override fun onAdsDismiss() {
-                        loadRewardAd()
-                    }
-                }
-            )
+            model?.let { it1 -> setDownloaded(it1) }
         }
 
         dismiss?.setOnClickListener {
@@ -1166,11 +899,6 @@ class WallpaperViewFragment : Fragment() {
                 buttonLock.setOnClickListener { onButtonClick(model, this, ::setLockScreen) }
                 buttonBothScreen.setOnClickListener { onButtonClick(model, this, ::setBothScreens) }
                 closeButton.setOnClickListener {
-                    sendTracking(
-                        "click_button",
-                        "action_type" to "button",
-                        "action_name" to "SetWallpaperDlg_Xbt_Click"
-                    )
                     dismiss()
                 }
             })
@@ -1181,12 +909,6 @@ class WallpaperViewFragment : Fragment() {
                 WindowManager.LayoutParams.WRAP_CONTENT
             )
             show()
-
-            sendTracking(
-                "screen_active",
-                "action_type" to "layout",
-                "action_name" to "SetWallpaperDlg_View"
-            )
         }
     }
 
@@ -1199,35 +921,8 @@ class WallpaperViewFragment : Fragment() {
             dialog.dismiss()
             return
         }
-
-        sendTracking(
-            "click_button", "action_type" to "button", "action_name" to when (action) {
-                ::setHomeScreen -> "SetWallpaperDlg_Homebt_Click"
-                ::setLockScreen -> "SetWallpaperDlg_Lockbt_Click"
-                ::setBothScreens -> "SetWallpaperDlg_Bothbt_Click"
-                else -> "SetWallpaperDlg_Unknown_Click"
-            }
-        )
-        settrackingWallpaperType(model)
-
         lifecycleScope.launch(Dispatchers.IO) {
-            if (showInter && !AdConfig.ISPAIDUSER) {
-                interAd.showAd(
-                    requireActivity(),
-                    "viewlistwallscr_setdilog_set_button",
-                    object : IKShowAdListener {
-                        override fun onAdsShowFail(error: IKAdError) {
-                            Log.e("********ADS", "onAdsShowFail: $error")
-                            lifecycleScope.launch { action(dialog, model) }
-                        }
-
-                        override fun onAdsDismiss() {
-                            lifecycleScope.launch { action(dialog, model) }
-                        }
-                    })
-            } else {
-                action(dialog, model)
-            }
+            action(dialog, model)
         }
     }
 
@@ -1257,11 +952,6 @@ class WallpaperViewFragment : Fragment() {
         }
         setDownloaded(model)
         showRateApp()
-    }
-
-    private fun settrackingWallpaperType(model: CatResponse) {
-        sendTracking("typewallpaper_used", Pair("typewallpaper", "regular"))
-        sendTracking("category_used", Pair("category", model.cat_name))
     }
 
     fun resizeBitmap(originalBitmap: Bitmap): Bitmap {
@@ -1371,13 +1061,6 @@ class WallpaperViewFragment : Fragment() {
                 ).show()
             }
         }
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun loadingPopup() {

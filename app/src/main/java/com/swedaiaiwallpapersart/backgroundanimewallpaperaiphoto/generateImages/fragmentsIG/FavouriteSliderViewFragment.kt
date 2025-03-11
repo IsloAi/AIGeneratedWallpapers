@@ -18,7 +18,6 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,6 +31,7 @@ import android.widget.Toast
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -39,12 +39,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
-import com.ikame.android.sdk.IKSdkController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.CreationWallpaperSliderAdapter
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.play.core.review.ReviewInfo
@@ -53,15 +51,13 @@ import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding
-.FragmentCreationSliderViewBinding
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCreationSliderViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.adaptersIG.FavouriteWallpaperSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.FavouriteListIGEntity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.RoomViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.ViewModelFactory
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.InterstitialAdDismiss
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyWallpaperManager
 import java.io.File

@@ -6,8 +6,6 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.content.pm.PackageInfo
-import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.LinearGradient
@@ -49,16 +47,6 @@ import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManager
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.data.dto.pub.UpdateAppDto
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.keep.SDKNewVersionUpdateCallback
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.utils.IKUtils
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackMomentBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogFeedbackQuestionBinding
@@ -78,7 +66,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuF
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.HomeFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.FeedbackModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.notiWidget.NotificationWidgetService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyDialogs
@@ -92,7 +79,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.net.UnknownHostException
 import javax.inject.Inject
-
 
 @AndroidEntryPoint
 class HomeTabsFragment : Fragment() {
@@ -117,7 +103,6 @@ class HomeTabsFragment : Fragment() {
         var navigationInProgress = false
     }
 
-    val interAd = IKInterstitialAd(lifecycle)
     val images = arrayOf(
         R.drawable.tab_icon_popular,
         R.drawable.tab_icon_trending,
@@ -161,18 +146,8 @@ class HomeTabsFragment : Fragment() {
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
         } else {
-            if (AdConfig.ISPAIDUSER) {
-                binding.goPremium.visibility = View.GONE
-            } else {
-                binding.goPremium.visibility = View.VISIBLE
-            }
+            binding.goPremium.visibility = View.GONE
         }
-
-
-        interAd.loadAd("exitapp_inter", object : IKLoadAdListener {
-            override fun onAdLoaded() {}
-            override fun onAdLoadFail(error: IKAdError) {}
-        })
 
         if (AdConfig.tabPositions[0].isEmpty()) {
             Log.e("TAG", "onViewCreated: " + AdConfig.tabPositions)
@@ -184,46 +159,10 @@ class HomeTabsFragment : Fragment() {
             AdConfig.BASE_URL_DATA = "https://4k-pullzone.b-cdn.net"
         }
 
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "screen"),
-                Pair("action_name", "MainScr_View")
-            )
-        }
-        loadbannerAd()
         setGradienttext()
         setViewPager()
         handleIntentNotification()
         setEvents()
-
-        lifecycleScope.launch {
-            IKSdkController.checkUpdateApp(object : SDKNewVersionUpdateCallback {
-                override fun onUpdateAvailable(updateDto: UpdateAppDto?) {
-
-                    try {
-                        val pInfo: PackageInfo = requireContext().packageManager.getPackageInfo(
-                            requireContext().packageName,
-                            0
-                        )
-                        val version = pInfo.versionName
-                        val versionCode = pInfo.versionCode
-
-                        if (versionCode < updateDto?.minVersionCode!!) {
-                            if (updateDto.forceUpdateApp) {
-                                getUserIdDialog()
-                            } else {
-                                launchUpdateFlow()
-                            }
-                        }
-                    } catch (e: PackageManager.NameNotFoundException) {
-                        e.printStackTrace()
-                    }
-                }
-
-                override fun onUpdateFail() {}
-            })
-        }
 
     }
 
@@ -272,14 +211,6 @@ class HomeTabsFragment : Fragment() {
         Toast.makeText(requireContext(), "going to Charging tab", Toast.LENGTH_SHORT).show()
         Log.d("FCM", "openChargingWallpaperTab: will open Charging tab")
         navigateTOTabs("Charging")
-    }
-
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun feedback1Sheet() {
@@ -556,19 +487,6 @@ class HomeTabsFragment : Fragment() {
         }
     }
 
-    private fun loadbannerAd() {
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-                }
-            })
-        }
-    }
-
     private fun setEvents() {
 
         if (AdConfig.Reward_Screen && MySharePreference.getVIPGiftBool(requireActivity()) && !MySharePreference.isVIPGiftExpired(
@@ -588,42 +506,18 @@ class HomeTabsFragment : Fragment() {
         }
 
         binding.settings.setOnClickListener {
-            IKUtils.closeOldCollapse()
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "MainScr_SettingBT_Click")
-                )
-            }
             Constants.checkInter = false
             Constants.checkAppOpen = false
             findNavController().navigate(R.id.settingFragment)
         }
 
         binding.search.setOnClickListener {
-            IKUtils.closeOldCollapse()
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "MainScr_SearchBT_Click")
-                )
-            }
             Constants.checkInter = false
             Constants.checkAppOpen = false
             findNavController().navigate(R.id.searchWallpapersFragment)
         }
 
         binding.goPremium.setOnClickListener {
-            IKUtils.closeOldCollapse()
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "MainScr_IAPBT_Click")
-                )
-            }
             findNavController().navigate(R.id.IAPFragment)
         }
         backHandle()
@@ -639,45 +533,16 @@ class HomeTabsFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if (isAdded) {
-                        sendTracking(
-                            "click_button",
-                            Pair("action_type", "button"),
-                            Pair("action_name", "Sytem_BackButton_Click")
-                        )
-                    }
                     if (binding.viewPager.currentItem != 0) {
                         binding.viewPager.setCurrentItem(0)
                     } else {
-                        if (AdConfig.ISPAIDUSER) {
-                            if (isAdded) {
-                                exit = true
-                                existDialog.exitPopup(
-                                    requireContext(),
-                                    requireActivity(),
-                                    myActivity
-                                )
-                            }
-                        } else {
-                            interAd.showAdBackApp(requireActivity(), object : IKShowAdListener {
-                                override fun onAdsDismiss() {
-                                    exit = true
-                                    if (isAdded) {
-                                        thankyouDialog()
-                                    }
-                                }
-
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded) {
-                                        exit = true
-                                        existDialog.exitPopup(
-                                            requireContext(),
-                                            requireActivity(),
-                                            myActivity
-                                        )
-                                    }
-                                }
-                            })
+                        if (isAdded) {
+                            exit = true
+                            existDialog.exitPopup(
+                                requireContext(),
+                                requireActivity(),
+                                myActivity
+                            )
                         }
                     }
                 }
@@ -747,101 +612,45 @@ class HomeTabsFragment : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab?.text) {
                     "Live" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_LiveTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: " + tab.text)
                     }
 
                     "Popular" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_PopularTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: " + tab.text)
                     }
 
                     "Category" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_CategoryTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: " + tab.text)
                     }
 
                     "Anime" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_AnimeTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                         Log.e("TABS", "onTabSelected: " + tab.text)
                     }
 
                     "Car" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_CarTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                     }
 
                     "Charging" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_ChargingTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                     }
 
                     "Gen AI" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_GenAITab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                     }
 
                     "Double" -> {
-                        if (isAdded) {
-                            sendTracking(
-                                "click_button",
-                                Pair("action_type", "button"),
-                                Pair("action_name", "MainScr_DoubleTab_Click")
-                            )
-                        }
                         Constants.checkInter = false
                         Constants.checkAppOpen = false
                     }
@@ -904,7 +713,6 @@ class HomeTabsFragment : Fragment() {
             "Live" -> LiveWallpaperFragment()
             "Anime" -> AnimeWallpaperFragment()
             "Category" -> CategoryFragment()
-            //"Gen AI" -> GenerateImageFragment()
             "Charging" -> ChargingAnimationFragment()
             "Double" -> DoubleWallpaperFragment()
 
@@ -931,10 +739,6 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        /*val endtime = System.currentTimeMillis()
-        val startTime = MainActivity.startTime
-        val time = endtime - startTime
-        Log.d("ColdStartTime", "Cold start duration: $time ms")*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val notificationManager = NotificationManagerCompat.from(requireContext())
@@ -951,16 +755,6 @@ class HomeTabsFragment : Fragment() {
                 }
             } else {
                 Log.d("usmanTAG", "Full-screen intent permission already granted.")
-            }
-        }
-
-        if (AdConfig.iapScreenType == 0) {
-            binding.goPremium.visibility = View.GONE
-        } else {
-            if (AdConfig.ISPAIDUSER) {
-                binding.goPremium.visibility = View.GONE
-            } else {
-                binding.goPremium.visibility = View.VISIBLE
             }
         }
         sharedViewModel.selectTab.observe(viewLifecycleOwner) {
@@ -1010,8 +804,6 @@ class HomeTabsFragment : Fragment() {
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
-
-        //checkPermissionAndAllow()
     }
 
     private fun shouldShowReviewDialog(context: Context): Boolean {
@@ -1064,30 +856,6 @@ class HomeTabsFragment : Fragment() {
         return Settings.canDrawOverlays(context)
     }
 
-    private fun startService() {
-        val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // For Android 8.0+ (API level 26 and above)
-            requireActivity().startForegroundService(serviceIntent)
-        } else {
-            // For below Android 8.0
-            requireActivity().startService(serviceIntent)
-        }
-
-        /*val serviceIntent = Intent(requireActivity(), NotificationWidgetService::class.java)
-        requireActivity().startForegroundService(serviceIntent)*/
-    }
-
-    /*private fun checkPermissionAndAllow() {
-        if (!isDrawOverlaysPermissionGranted(requireContext())) {
-            findNavController().navigate(R.id.chargingAnimationPermissionFragment)
-        } else {
-        startService()
-        showRewardWallpaperScreen()
-        }
-    }*/
-
     private fun showRewardWallpaperScreen() {
         // Use a flag to avoid multiple calls if needed
         if (!Constants.hasShownRewardScreen && !AdConfig.ISPAIDUSER) {
@@ -1103,6 +871,5 @@ class HomeTabsFragment : Fragment() {
             }
         }
     }
-
 
 }

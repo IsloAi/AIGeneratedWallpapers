@@ -3,7 +3,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batt
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,10 +16,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPreviewChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -54,7 +49,6 @@ class PreviewChargingAnimationFragment : Fragment() {
     @Inject
     lateinit var appDatabase: AppDatabase
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,19 +63,6 @@ class PreviewChargingAnimationFragment : Fragment() {
 
 
         myActivity = activity as MainActivity
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-//                    binding.adsView?.visibility = View.GONE
-                }
-
-            })
-        }
 
         initObservers()
         setWallpaperOnView()
@@ -117,59 +98,50 @@ class PreviewChargingAnimationFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
             Log.e("TAG", "setEvents: clicked")
             /*if (isDrawOverlaysPermissionGranted(requireContext())) {*/
-                if (isAdded) {
-                    val intent = Intent(requireContext(), ChargingAnimationService::class.java)
-                    MySharePreference.setAnimationPath(requireContext(), BlurView.filePathBattery)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        Log.e("TAG", "setEvents: service start Q")
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                            var dialog: Dialog = AlertDialog.Builder(requireContext())
-                                .setTitle("Foreground Service Required")
-                                .setMessage("To continue playing the animation, the app needs to run in the foreground. This means that the app will continue to run even when you close it.")
-                                .setPositiveButton(
-                                    "Allow"
-                                ) { dialog, which -> // Start the foreground service
-                                    requireContext().startForegroundService(intent)
-                                    sendTracking(
-                                        "typewallpaper_used",
-                                        Pair("typewallpaper", "Charging")
-                                    )
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Charging animation Applied Successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                                .setNegativeButton(
-                                    "Cancel"
-                                ) { dialog, which -> dialog.dismiss() }
-                                .show()
+            if (isAdded) {
+                val intent = Intent(requireContext(), ChargingAnimationService::class.java)
+                MySharePreference.setAnimationPath(requireContext(), BlurView.filePathBattery)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Log.e("TAG", "setEvents: service start Q")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        var dialog: Dialog = AlertDialog.Builder(requireContext())
+                            .setTitle("Foreground Service Required")
+                            .setMessage("To continue playing the animation, the app needs to run in the foreground. This means that the app will continue to run even when you close it.")
+                            .setPositiveButton(
+                                "Allow"
+                            ) { dialog, which -> // Start the foreground service
+                                requireContext().startForegroundService(intent)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Charging animation Applied Successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            .setNegativeButton(
+                                "Cancel"
+                            ) { dialog, which -> dialog.dismiss() }
+                            .show()
 
-
-                        } else {
-                            sendTracking("typewallpaper_used", Pair("typewallpaper", "Charging"))
-                            Toast.makeText(
-                                requireContext(),
-                                "Charging animation Applied Successfully",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            requireContext().startForegroundService(intent)
-                        }
 
                     } else {
-                        Log.e("TAG", "setEvents: service start else")
-                        requireContext().startService(intent)
-                        sendTracking("typewallpaper_used", Pair("typewallpaper", "Charging"))
                         Toast.makeText(
                             requireContext(),
                             "Charging animation Applied Successfully",
                             Toast.LENGTH_SHORT
                         ).show()
+                        requireContext().startForegroundService(intent)
                     }
+
+                } else {
+                    Log.e("TAG", "setEvents: service start else")
+                    requireContext().startService(intent)
+                    Toast.makeText(
+                        requireContext(),
+                        "Charging animation Applied Successfully",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-            /*} else {
-                findNavController().navigate(R.id.chargingAnimationPermissionFragment)
-            }*/
+            }
         }
 
         binding.toolbar.setOnClickListener {
@@ -181,23 +153,14 @@ class PreviewChargingAnimationFragment : Fragment() {
         backHandle()
     }
 
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
-    }
-
     private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
         return Settings.canDrawOverlays(context)
     }
-
 
     override fun onResume() {
         super.onResume()
         setWallpaperOnView()
     }
-
 
     private fun setWallpaperOnView() {
         if (isAdded) {

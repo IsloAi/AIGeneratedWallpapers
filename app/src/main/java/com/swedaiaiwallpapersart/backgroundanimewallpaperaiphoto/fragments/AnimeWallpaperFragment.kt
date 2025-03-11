@@ -14,14 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentAnimeWallpaperBinding
@@ -46,15 +38,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class AnimeWallpaperFragment : Fragment() , AdEventListener {
+
     private var _binding:FragmentAnimeWallpaperBinding ?= null
     private val binding get() = _binding!!
-
     private lateinit var myActivity : MainActivity
-
     var adapter:ApiCategoriesListAdapter ?= null
-
     val sharedViewModel: SharedViewModel by activityViewModels()
-
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
     var dataset = false
@@ -68,12 +57,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
     var isNavigationInProgress = false
     val myViewModel: AnimeViewmodel by activityViewModels()
 
-
     val TAG = "ANIME"
-
-    val interAd = IKInterstitialAd()
-
-//    var checkAppOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,19 +70,6 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("categoryscr_fantasy_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                Log.d(TAG, "onAdLoadedLoaded: categoryscr_fantasy_click_item")
-                // Ad loaded successfully
-            }
-            override fun onAdLoadFail(error: IKAdError) {
-                Log.d(TAG, "onAdLoadedFailed: categoryscr_fantasy_click_item")
-                // Handle ad load failure
-            }
-        })
         onCreateViewCalling()
 
     }
@@ -135,39 +106,6 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
                     if (AdConfig.ISPAIDUSER){
                         navigateToDestination(allItems!!, position)
-                    }else{
-                        var shouldShowInterAd = true
-
-                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                            if (isAdded) {
-                                Constants.checkInter = false
-                                navigateToDestination(allItems!!, position)
-                                shouldShowInterAd = false // Skip showing the ad for this action
-                            }
-                        }
-
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                            if (isAdded) {
-                                checkAppOpen = false
-                                navigateToDestination(allItems!!, position)
-                                Log.e(TAG, "app open showed")
-                                shouldShowInterAd = false // Skip showing the ad for this action
-                            }
-                        }
-
-                        if (shouldShowInterAd) {
-                        showInterAd(allItems, position)
-                        }
-
-//                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                            if (isAdded){
-//                                checkAppOpen = false
-//                                navigateToDestination(allItems!!, position)
-//                                Log.e(TAG, "app open showed: ", )
-//                            }
-//                        }else{
-//                            showInterAd(allItems, position)
-//                        }
                     }
                 }
             }
@@ -176,23 +114,8 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
             }
         },myActivity,"category")
 
-
         adapter!!.setCoroutineScope(fragmentScope)
 
-
-        IKSdkController.loadNativeDisplayAd("mainscr_sub_cate_tab_scroll", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    adapter?.nativeAdView = adObject
-                    binding.recyclerviewAll.adapter = adapter
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })
         binding.recyclerviewAll.adapter = adapter
 
 
@@ -255,28 +178,6 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
 
-    }
-
-    private fun showInterAd(
-        allItems: ArrayList<CatResponse?>?,
-        position: Int
-    ) {
-        interAd.showAd(
-            requireActivity(),
-            "categoryscr_fantasy_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        navigateToDestination(allItems!!, position)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    // Handle ad dismissal
-                }
-            }
-        )
     }
 
     private fun loadData() {
@@ -361,10 +262,6 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
         loadData()
 
-        if (isAdded){
-            sendTracking("screen_active",Pair("action_type", "Tab"), Pair("action_name", "MainScr_AnimeTab_View"))
-        }
-
         if (dataset){
 
             Log.e(TAG, "onResume: Data set $dataset")
@@ -388,14 +285,6 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
             }
         }
 
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
     }
     override fun onPause() {
         super.onPause()

@@ -20,12 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
@@ -34,16 +28,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-
 
 class MostUsedWallpaperAdapter(
     var arrayList: ArrayList<CatResponse?>,
     var positionCallback: PositionCallback,
     private val myActivity: MainActivity
-):
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastClickTime = 0L
@@ -58,27 +48,35 @@ class MostUsedWallpaperAdapter(
     var row = 0
 
 
-    private val firstAdLineThreshold = if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
+    private val firstAdLineThreshold =
+        if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
 
-    val firstline = firstAdLineThreshold *3
+    val firstline = firstAdLineThreshold * 3
     private val lineCount = if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
-    val lineC = lineCount*3
-    private val statusAd =  AdConfig.adStatusMostUsed
+    val lineC = lineCount * 3
+    private val statusAd = AdConfig.adStatusMostUsed
 
     private var coroutineScope: CoroutineScope? = null
 
-    inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(modela: ArrayList<CatResponse?>, holder: RecyclerView.ViewHolder, position: Int) {
             val model = modela[position]
-            Log.e(TAG, "bind: content place", )
+            Log.e(TAG, "bind: content place")
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage,binding.iapInd)
+                model!!,
+                adapterPosition,
+                binding.loading,
+                binding.wallpaper,
+                binding.errorImage,
+                binding.iapInd
+            )
         }
     }
-    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: RecyclerView.ViewHolder){
-            Log.e(TAG, "bind: ad place", )
-            loadad(holder,binding)
+
+    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(holder: RecyclerView.ViewHolder) {
         }
     }
 
@@ -106,14 +104,17 @@ class MostUsedWallpaperAdapter(
                 val binding = WallpaperRowBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
+
             VIEW_TYPE_NATIVE_AD -> {
-                val binding = StaggeredNativeLayoutBinding.inflate(inflater,parent,false)
+                val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
 
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
+
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = arrayList[position]
@@ -121,12 +122,13 @@ class MostUsedWallpaperAdapter(
             VIEW_TYPE_CONTAINER1 -> {
                 try {
                     val viewHolderContainer1 = holder as ViewHolderContainer1
-                    viewHolderContainer1.bind(arrayList,viewHolderContainer1,position)
-                }catch (e: NullPointerException){
+                    viewHolderContainer1.bind(arrayList, viewHolderContainer1, position)
+                } catch (e: NullPointerException) {
                     e.printStackTrace()
                 }
 
             }
+
             VIEW_TYPE_NATIVE_AD -> {
 
                 val viewHolderContainer3 = holder as ViewHolderContainer3
@@ -134,47 +136,42 @@ class MostUsedWallpaperAdapter(
             }
         }
     }
-    override fun getItemViewType(position: Int): Int {
-        if (AdConfig.ISPAIDUSER){
-            return VIEW_TYPE_CONTAINER1
-        }else{
-            row = position / 2
-            Log.e("TAG", "getItemViewType: "+row )
-            return if ((position + 1) == (firstline + 1)){
-                Log.e("TAG", "getItemViewType: "+row )
-                lastAdShownPosition = row
-                VIEW_TYPE_NATIVE_AD
-            }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
-                VIEW_TYPE_NATIVE_AD
-            }  else {
-                VIEW_TYPE_CONTAINER1
-            }
-        }
 
+    override fun getItemViewType(position: Int): Int {
+        return VIEW_TYPE_CONTAINER1
     }
+
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: CatResponse, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView,  error_img: ImageView,iapItem:ImageView
-    ){
+    private fun setAllData(
+        model: CatResponse,
+        position: Int,
+        animationView: LottieAnimationView,
+        wallpaperMainImage: ImageView,
+        error_img: ImageView,
+        iapItem: ImageView
+    ) {
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
-        Log.e("TAG", "*******MostUsed: "+model.compressed_image_url )
+        Log.e("TAG", "*******MostUsed: " + model.compressed_image_url)
 
-        if (model.unlockimges == false){
-            if (AdConfig.ISPAIDUSER){
+        if (model.unlockimges == false) {
+            if (AdConfig.ISPAIDUSER) {
                 iapItem.visibility = View.GONE
-            }else{
+            } else {
                 iapItem.visibility = View.VISIBLE
             }
 
-        }else{
+        } else {
             iapItem.visibility = View.GONE
         }
 
 
 
-        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" +model.hd_image_url +"?class=custom").diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
-            .listener(object: RequestListener<Drawable> {
+        Glide.with(context!!)
+            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")
+            .diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
+            .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
@@ -213,82 +210,13 @@ class MostUsedWallpaperAdapter(
         }
     }
 
-    var nativeAdView: IkmDisplayWidgetAdView?= null
-
-    fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
-
-        Log.e(TAG, "loadad: inside methodd" )
-        coroutineScope?.launch(Dispatchers.Main) {
-            val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
-                R.layout.native_dialog_layout,
-                null, false
-            ) as? IkmWidgetAdLayout
-            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-
-            Log.e(TAG, "loadad: inside layout set" )
-
-            if (nativeAdView!=null){
-                Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ", )
-            }else{
-
-                /*IKSdkController.loadNativeDisplayAd("mainscr_all_tab_scroll", object :
-                    IKLoadDisplayAdViewListener {
-                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                        nativeAdView = adObject
-                    }
-
-                    override fun onAdLoadFail(error: IKAdError) {
-                        Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: "+error )                    }
-                })*/
-            }
-
-            withContext(this.coroutineContext) {
-                /*nativeAdView?.let {
-                    binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,adLayout!!,"mainscr_all_tab_scroll",
-                        it,
-                        object : IKShowWidgetAdListener {
-                            override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failded " )
-                                if (statusAd == 0){
-                                    binding.adsView.visibility = View.GONE
-                                }else{
-                                    if (isNetworkAvailable()){
-                                        //                                    loadad(holder,binding)
-                                        binding.adsView.visibility = View.VISIBLE
-                                    }else{
-                                        binding.adsView.visibility = View.GONE
-                                    }
-                                }
-                            }
-
-                            override fun onAdShowed() {
-                                binding.adsView.visibility = View.VISIBLE
-                                Log.e("TAG", "onAdsLoaded: native loaded" )
-                            }
-                        }
-                    )
-                }*/
-            }
-        }
-
-
-
-
-
-
-    }
-
     fun setCoroutineScope(scope: CoroutineScope) {
         coroutineScope = scope
     }
 
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
@@ -300,34 +228,29 @@ class MostUsedWallpaperAdapter(
         }
     }
 
-
-    fun addNewData(){
+    fun addNewData() {
         arrayList.clear()
         notifyDataSetChanged()
 
     }
 
-
-    fun updateMoreData(list:ArrayList<CatResponse?>){
+    fun updateMoreData(list: ArrayList<CatResponse?>) {
 
 
         val startPosition = arrayList.size
 
-        for(i in 0 until list.size){
-            if (arrayList.contains(list[i])){
-                Log.e("********new Data", "updateMoreData: already in list", )
-            }else{
+        for (i in 0 until list.size) {
+            if (arrayList.contains(list[i])) {
+                Log.e("********new Data", "updateMoreData: already in list")
+            } else {
                 arrayList.add(list[i])
             }
         }
         notifyItemRangeInserted(startPosition, list.size)
     }
 
-
-    fun getAllItems():ArrayList<CatResponse?>{
+    fun getAllItems(): ArrayList<CatResponse?> {
         return arrayList
     }
-
-
 
 }

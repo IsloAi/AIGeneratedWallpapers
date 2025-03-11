@@ -21,20 +21,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -63,7 +55,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     var showAd: Boolean? = false
 
-    val interAd = IKInterstitialAd()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,34 +70,10 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         Log.e(TAG, "onViewCreated: $showAd")
 
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-            loadAd()
-            interAd.attachLifecycle(this.lifecycle)
-            interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
-        }
         AndroidNetworking.initialize(requireContext())
 
         setEvents()
         initObservers()
-
-
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "screen"),
-                Pair("action_name", "Downloadscr_View")
-            )
-        }
     }
 
     override fun onStart() {
@@ -115,120 +82,16 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     }
 
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
-    }
-
-    fun loadAd() {
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.large_native_layout,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        binding.adsView.loadAd(R.layout.shimmer_loading_native,
-            adLayout!!,
-            "downloadscr_native_bottom",
-            object : IKShowWidgetAdListener {
-                override fun onAdShowFail(error: IKAdError) {
-                    if (AdConfig.ISPAIDUSER) {
-                        binding.adsView.visibility = View.GONE
-                    }
-                    Log.e("TAG", "onAdsLoadFail: native failded ")
-                }
-
-                override fun onAdShowed() {
-                    if (isAdded && view != null) {
-                        binding.adsView.visibility = View.VISIBLE
-                    }
-                }
-            }
-        )
-    }
-
     fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "Downloadscr_Previewbt_click")
-                )
-            }
-
-            if (AdConfig.ISPAIDUSER) {
-                navigateToPreview()
-            } else {
-                if (showAd == true) {
-                    navigateToPreview()
-                } else {
-                    var shouldShowInterAd = true
-
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && checkInter) {
-                        if (isAdded) {
-                            checkInter = false
-                            navigateToPreview()
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            navigateToPreview()
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showInterAd()
-                    }
-                }
-            }
+            navigateToPreview()
         }
 
         binding.toolbar.setOnClickListener {
-
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "Downloadscr_Backbutton_click")
-                )
-            }
-
             checkInter = false
             checkAppOpen = false
             findNavController().popBackStack()
         }
-    }
-
-    private fun showInterAd() {
-        interAd.showAd(
-            requireActivity(),
-            "downloadscr_set_click",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        navigateToPreview()
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    navigateToPreview()
-                }
-
-            }
-        )
     }
 
     private fun navigateToPreview() {
@@ -378,19 +241,8 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                                 binding.progressTxt.text = "100%"
                                 binding.progress.progress = 100
                                 binding.buttonApplyWallpaper.visibility = View.VISIBLE
-
                                 animationJob?.cancel()
-
                                 binding.loadingTxt.text = "Download Successfull"
-
-
-                                if (isAdded) {
-                                    sendTracking(
-                                        "click_button",
-                                        Pair("action_type", "button"),
-                                        Pair("action_name", "Downloadscr_Successful")
-                                    )
-                                }
                             }
                         }
                     }

@@ -1,4 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
+
 import android.app.Dialog
 import android.os.Bundle
 import android.util.Log
@@ -14,14 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
@@ -30,7 +23,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.SaveStateViewMo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.RewardedAllResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -56,14 +48,14 @@ class ListViewFragment : Fragment(), AdEventListener {
     val myViewModel: MyViewModel by activityViewModels()
     private var name = ""
     private var from = ""
-    private lateinit var myActivity : MainActivity
+    private lateinit var myActivity: MainActivity
     var isNavigationInProgress = false
 
     private val viewModel: SaveStateViewModel by activityViewModels()
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
-    var adapter:ApiCategoriesListAdapter ?= null
+    var adapter: ApiCategoriesListAdapter? = null
 
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
@@ -80,11 +72,12 @@ class ListViewFragment : Fragment(), AdEventListener {
 
     private val mostDownloadedViewmodel: MostDownloadedViewmodel by activityViewModels()
 
-    val interAd = IKInterstitialAd()
     private val rewardedViewModel: RewardedViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        _binding = FragmentListViewBinding.inflate(inflater,container,false)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentListViewBinding.inflate(inflater, container, false)
         onCreateViewCalling()
         return binding.root
     }
@@ -92,30 +85,6 @@ class ListViewFragment : Fragment(), AdEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (AdConfig.ISPAIDUSER){
-            binding.adsView.visibility = View.GONE
-        }else{
-            interAd.attachLifecycle(this.lifecycle)
-            interAd.loadAd("categoryscr_click_item", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    Log.d(TAG, "onAdLoaded: ")
-                    // Ad loaded successfully
-                }
-                override fun onAdLoadFail(error: IKAdError) {
-                    Log.d(TAG, "onAdLoadFail1: $error")
-                    // Handle ad load failure
-                }
-            })
-
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("categoryscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-                    Log.d(TAG, "onAdLoadFail2: $error")
-                }
-
-            })
-        }
 
     }
 
@@ -123,7 +92,8 @@ class ListViewFragment : Fragment(), AdEventListener {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
     }
-    private fun onCreateViewCalling(){
+
+    private fun onCreateViewCalling() {
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
@@ -135,12 +105,14 @@ class ListViewFragment : Fragment(), AdEventListener {
             "Trending" -> {
                 initTrendingData()
             }
+
             "Vip" -> {
                 sharedViewModel.clearData()
                 loadRewardedData()
             }
+
             else -> {
-                viewModel.selectedTab.observe(viewLifecycleOwner){
+                viewModel.selectedTab.observe(viewLifecycleOwner) {
                     name = name.ifEmpty {
                         it.also { loadData() }
                     }
@@ -151,14 +123,13 @@ class ListViewFragment : Fragment(), AdEventListener {
         binding.catTitle.text = name
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
 
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
         val list = ArrayList<CatResponse?>()
-        adapter = ApiCategoriesListAdapter(list, object :
-            PositionCallback {
+        adapter = ApiCategoriesListAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
 
-                if (!isNavigationInProgress){
+                if (!isNavigationInProgress) {
 
                     hasToNavigateList = true
 
@@ -169,41 +140,17 @@ class ListViewFragment : Fragment(), AdEventListener {
                         addedItems?.clear()
                     }
 
-
                     addedItems = allItems
                     oldPosition = position
 
-                    if (AdConfig.ISPAIDUSER){
-                        navigateToDestination(allItems!!, position)
-                    }else{
-                        var shouldShowInterAd = true
+                    navigateToDestination(allItems!!, position)
 
-                        if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                            if (isAdded) {
-                                Constants.checkInter = false
-                                navigateToDestination(allItems!!, position)
-                                shouldShowInterAd = false
-                            }
-                        }
-
-                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                            if (isAdded) {
-                                checkAppOpen = false
-                                navigateToDestination(allItems!!, position)
-                                Log.e(TAG, "app open showed")
-                                shouldShowInterAd = false
-                            }
-                        }
-
-                        if (shouldShowInterAd) {
-                            showInterAd(allItems, position)
-                        }
-                    }
                 }
             }
+
             override fun getFavorites(position: Int) {
             }
-        },myActivity,from)
+        }, myActivity, from)
 
 
         adapter!!.setCoroutineScope(fragmentScope)
@@ -258,9 +205,9 @@ class ListViewFragment : Fragment(), AdEventListener {
         binding.swipeLayout.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val newData = cachedCatResponses.filterNotNull().shuffled()
-                val nullAdd = if (AdConfig.ISPAIDUSER){
+                val nullAdd = if (AdConfig.ISPAIDUSER) {
                     newData as ArrayList<CatResponse?>
-                }else{
+                } else {
                     addNullValueInsideArray(newData.shuffled())
                 }
 
@@ -268,7 +215,7 @@ class ListViewFragment : Fragment(), AdEventListener {
                 cachedCatResponses = nullAdd
                 val initialItems = getItems(0, 30)
                 startIndex = 0
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     adapter?.addNewData()
                     Log.e(TAG, "initMostDownloadedData: " + initialItems)
                     adapter?.updateMoreData(initialItems)
@@ -282,36 +229,11 @@ class ListViewFragment : Fragment(), AdEventListener {
             }
 
 
-
         }
     }
 
-    private fun showInterAd(
-        allItems: ArrayList<CatResponse?>?,
-        position: Int
-    ) {
-        interAd.showAd(
-            requireActivity(),
-            "categoryscr_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        //IKAdError(code=8018, message=No screen ID associated with the ad.)
-                        Log.d(TAG, "onAdsShowFail: $error")
-                        navigateToDestination(allItems!!, position)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    // Handle ad dismissal
-                }
-            }
-        )
-    }
-
     private fun initTrendingData() {
-        mostDownloadedViewmodel.trendingWallpapers.observe(viewLifecycleOwner){result ->
+        mostDownloadedViewmodel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
 
@@ -323,17 +245,30 @@ class ListViewFragment : Fragment(), AdEventListener {
                         lifecycleScope.launch(Dispatchers.IO) {
                             var tempList = ArrayList<CatResponse>()
 
-                            result.data?.forEach {item ->
-                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                                if (!tempList.contains(model)){
+                            result.data?.forEach { item ->
+                                val model = CatResponse(
+                                    item.id,
+                                    item.image_name,
+                                    item.cat_name,
+                                    item.hd_image_url,
+                                    item.compressed_image_url,
+                                    null,
+                                    item.likes,
+                                    item.liked,
+                                    item.unlocked,
+                                    item.size,
+                                    item.Tags,
+                                    item.capacity
+                                )
+                                if (!tempList.contains(model)) {
                                     tempList.add(model)
                                 }
                             }
 
 
-                            val list = if (AdConfig.ISPAIDUSER){
+                            val list = if (AdConfig.ISPAIDUSER) {
                                 tempList.shuffled() as ArrayList<CatResponse?>
-                            }else{
+                            } else {
                                 addNullValueInsideArray(tempList.shuffled())
                             }
 
@@ -342,7 +277,7 @@ class ListViewFragment : Fragment(), AdEventListener {
                             val initialItems = getItems(0, 30)
 
                             Log.e(TAG, "initMostDownloadedData: $initialItems")
-                            withContext(Dispatchers.Main){
+                            withContext(Dispatchers.Main) {
                                 adapter?.updateMoreData(initialItems)
                                 startIndex += 30
                                 dataset = true
@@ -357,8 +292,7 @@ class ListViewFragment : Fragment(), AdEventListener {
 
                 is Response.Error -> {
                     Log.e("TAG", "error: ${result.message}")
-                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT).show()
                 }
 
                 else -> {
@@ -368,15 +302,15 @@ class ListViewFragment : Fragment(), AdEventListener {
         }
     }
 
-
-    private fun loadRewardedData(){
+    private fun loadRewardedData() {
 
         lifecycleScope.launch {
-            rewardedViewModel.allWallpapers.observe(viewLifecycleOwner){result ->
-                when(result){
+            rewardedViewModel.allWallpapers.observe(viewLifecycleOwner) { result ->
+                when (result) {
                     is Response.Error -> {
 
                     }
+
                     is Response.Success -> {
                         val tempList = ArrayList<CatResponse>()
                         result.data?.forEach { item ->
@@ -406,41 +340,55 @@ class ListViewFragment : Fragment(), AdEventListener {
                         }
                         sharedViewModel.setCatResponseList(processedList)
                     }
-                    else -> { }
+
+                    else -> {}
                 }
             }
         }
         sharedViewModel.catResponseList.observe(viewLifecycleOwner) { catResponses ->
 
-           if (catResponses.isNotEmpty()){
-               cachedCatResponses = ArrayList(catResponses)
-               val initialItems = getItems(0, 30)
-               adapter?.updateMoreData(initialItems)
-               startIndex += 30
-               dataset = true
-           }
+            if (catResponses.isNotEmpty()) {
+                cachedCatResponses = ArrayList(catResponses)
+                val initialItems = getItems(0, 30)
+                adapter?.updateMoreData(initialItems)
+                startIndex += 30
+                dataset = true
+            }
         }
     }
 
     private fun loadData() {
-        myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->
-            when(result){
-                is Response.Success ->{
+        myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
+            when (result) {
+                is Response.Success -> {
                     if (!dataset) {
 
                         lifecycleScope.launch(Dispatchers.IO) {
                             var tempList = ArrayList<CatResponse>()
 
-                            result.data?.forEach {item ->
-                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                                if (!tempList.contains(model)){
+                            result.data?.forEach { item ->
+                                val model = CatResponse(
+                                    item.id,
+                                    item.image_name,
+                                    item.cat_name,
+                                    item.hd_image_url,
+                                    item.compressed_image_url,
+                                    null,
+                                    item.likes,
+                                    item.liked,
+                                    item.unlocked,
+                                    item.size,
+                                    item.Tags,
+                                    item.capacity
+                                )
+                                if (!tempList.contains(model)) {
                                     tempList.add(model)
                                 }
                             }
 
-                            val list = if (AdConfig.ISPAIDUSER){
+                            val list = if (AdConfig.ISPAIDUSER) {
                                 ArrayList(tempList.shuffled())
-                            }else{
+                            } else {
                                 addNullValueInsideArray(tempList.shuffled())
                             }
 
@@ -449,7 +397,7 @@ class ListViewFragment : Fragment(), AdEventListener {
                             val initialItems = getItems(0, 30)
 
                             Log.e(TAG, "initMostDownloadedData: $initialItems")
-                            withContext(Dispatchers.Main){
+                            withContext(Dispatchers.Main) {
                                 adapter?.updateMoreData(initialItems)
                                 startIndex += 30
                                 dataset = true
@@ -458,7 +406,7 @@ class ListViewFragment : Fragment(), AdEventListener {
                     }
                 }
 
-                is Response.Error ->{}
+                is Response.Error -> {}
                 else -> {}
             }
 
@@ -471,8 +419,7 @@ class ListViewFragment : Fragment(), AdEventListener {
             return arrayListOf()
         } else {
             val subList = cachedCatResponses.subList(
-                startIndex1,
-                endIndex.coerceAtMost(cachedCatResponses.size)
+                startIndex1, endIndex.coerceAtMost(cachedCatResponses.size)
             )
             return ArrayList(subList)
         }
@@ -481,35 +428,35 @@ class ListViewFragment : Fragment(), AdEventListener {
     override fun onResume() {
         super.onResume()
 
-        if (wallFromList){
-            if (isAdded){
+        if (wallFromList) {
+            if (isAdded) {
                 congratulationsDialog()
             }
         }
 
 
-        if (name == "Trending"){
+        if (name == "Trending") {
             initTrendingData()
-        }else{
+        } else {
             loadData()
         }
 
 
-        if (dataset){
+        if (dataset) {
 
             Log.e(TAG, "onResume: Data set $dataset")
             Log.e(TAG, "onResume: Data set ${addedItems?.size}")
 
-            if (addedItems?.isEmpty() == true){
-                Log.e(TAG, "onResume: "+cachedCatResponses.size )
+            if (addedItems?.isEmpty() == true) {
+                Log.e(TAG, "onResume: " + cachedCatResponses.size)
             }
             adapter?.updateMoreData(addedItems!!)
             binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
         }
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
-            if (!WallpaperViewFragment.isNavigated && hasToNavigateList){
-                navigateToDestination(addedItems!!,oldPosition)
+            if (!WallpaperViewFragment.isNavigated && hasToNavigateList) {
+                navigateToDestination(addedItems!!, oldPosition)
             }
         }
 
@@ -518,23 +465,25 @@ class ListViewFragment : Fragment(), AdEventListener {
     override fun onPause() {
         super.onPause()
         val allItems = adapter?.getAllItems()
-        if (allItems?.isNotEmpty() == true){
+        if (allItems?.isNotEmpty() == true) {
             addedItems = allItems
         }
     }
 
-    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+        return withContext(Dispatchers.IO) {
+            val firstAdLineThreshold =
+                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
             val firstLine = firstAdLineThreshold * 3
-            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineCount =
+                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
             val newData = arrayListOf<CatResponse?>()
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+            for (i in data.indices) {
+                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
                     totalADs++
-                }else if (i == firstLine){
+                } else if (i == firstLine) {
                     newData.add(null)
                     totalADs++
                 }
@@ -545,12 +494,12 @@ class ListViewFragment : Fragment(), AdEventListener {
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
         if (position >= arrayList.size) {
             Log.e(TAG, "navigateToDestination: Position $position out of bounds ${arrayList.size} ")
 
             addedItems?.clear()
-            addedItems = getItems(0,30)
+            addedItems = getItems(0, 30)
             adapter?.updateData(addedItems!!)
             isNavigationInProgress = false
             return
@@ -561,17 +510,18 @@ class ListViewFragment : Fragment(), AdEventListener {
 
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         Bundle().apply {
-            putString("from",from)
-            putString("wall","list")
-            putInt("position",position - countOfNulls)
-            findNavController().navigate(R.id.wallpaperViewFragment,this)
+            putString("from", from)
+            putString("wall", "list")
+            putInt("position", position - countOfNulls)
+            findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
         isNavigationInProgress = false
     }
 
     private fun congratulationsDialog() {
         val dialog = Dialog(requireContext())
-        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        val bindingDialog =
+            DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
@@ -587,18 +537,21 @@ class ListViewFragment : Fragment(), AdEventListener {
         dialog.show()
     }
 
-    companion object{
+    companion object {
         var hasToNavigateList = false
         var wallFromList = false
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
         fragmentScope.cancel()
     }
+
     override fun onAdDismiss() {
         checkAppOpen = true
     }
+
     override fun onAdLoading() {}
     override fun onAdsShowTimeout() {}
     override fun onShowAdComplete() {}

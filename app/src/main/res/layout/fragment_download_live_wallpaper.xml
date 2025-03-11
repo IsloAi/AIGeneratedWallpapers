@@ -105,15 +105,4 @@
         app:layout_constraintEnd_toEndOf="@id/progress"
         app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintTop_toTopOf="@id/progress" />
-
-    <com.ikame.android.sdk.widgets.IkmWidgetAdView
-        android:id="@+id/adsView"
-        android:layout_width="match_parent"
-        android:visibility="visible"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ads_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolBar"
-        tools:layout_editor_absoluteX="0dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

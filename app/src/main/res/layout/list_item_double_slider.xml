@@ -1,84 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardBackgroundColor="@color/background"
     android:elevation="@dimen/_15sdp"
-    app:cardCornerRadius="@dimen/_10sdp"
-    >
+    app:cardBackgroundColor="@color/background"
+    app:cardCornerRadius="@dimen/_10sdp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSlideLock"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.49"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintWidth_percent="0.49" />
 
         <ProgressBar
+            android:id="@+id/progressLock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/imageSlideLock"
-            app:layout_constraintBottom_toBottomOf="@id/imageSlideLock"
-            app:layout_constraintStart_toStartOf="@id/imageSlideLock"
-            app:layout_constraintEnd_toEndOf="@id/imageSlideLock"
-            android:visibility="gone"
             android:indeterminateTint="@color/button_bg"
-            android:id="@+id/progressLock"
-            />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/imageSlideLock"
+            app:layout_constraintEnd_toEndOf="@id/imageSlideLock"
+            app:layout_constraintStart_toStartOf="@id/imageSlideLock"
+            app:layout_constraintTop_toTopOf="@id/imageSlideLock" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imageSlideHome"
             android:layout_width="0dp"
-            app:layout_constraintWidth_percent="0.49"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintWidth_percent="0.49" />
 
         <ProgressBar
+            android:id="@+id/progressHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/imageSlideHome"
-            app:layout_constraintBottom_toBottomOf="@id/imageSlideHome"
-            app:layout_constraintStart_toStartOf="@id/imageSlideHome"
-            app:layout_constraintEnd_toEndOf="@id/imageSlideHome"
             android:indeterminateTint="@color/button_bg"
             android:visibility="gone"
-            android:id="@+id/progressHome"
-            />
+            app:layout_constraintBottom_toBottomOf="@id/imageSlideHome"
+            app:layout_constraintEnd_toEndOf="@id/imageSlideHome"
+            app:layout_constraintStart_toStartOf="@id/imageSlideHome"
+            app:layout_constraintTop_toTopOf="@id/imageSlideHome" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:src="@drawable/wallpaper_lock"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageSlideLock"
             app:layout_constraintEnd_toEndOf="@+id/imageSlideLock"
-            android:layout_marginBottom="@dimen/_10sdp"
-            />
+            app:layout_constraintStart_toStartOf="@+id/imageSlideLock" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_10sdp"
             android:src="@drawable/wallpaper_unlock"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/imageSlideHome"
             app:layout_constraintEnd_toEndOf="@+id/imageSlideHome"
-            android:layout_marginBottom="@dimen/_10sdp"
-            />
+            app:layout_constraintStart_toStartOf="@+id/imageSlideHome" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </androidx.cardview.widget.CardView>

@@ -1,79 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="@dimen/_200sdp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:elevation="@dimen/_10sdp"
-    app:cardCornerRadius="@dimen/_7sdp"
+    app:cardCornerRadius="@dimen/_7sdp">
 
-    >
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="@dimen/_7sdp"
-            >
+            app:cardCornerRadius="@dimen/_7sdp">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
                 <ImageView
                     android:id="@+id/catIconImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    />
+                    android:scaleType="centerCrop" />
+
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/loading"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
                     android:scaleType="fitCenter"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:lottie_autoPlay="true"
+                    app:lottie_loop="true" />
 
                 <View
+                    android:id="@+id/textBG"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_30sdp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@drawable/category_name_bg"
-                    android:id="@+id/textBG"
-                    />
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <TextView
                     android:id="@+id/catName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/textBG"
-                    app:layout_constraintTop_toTopOf="@id/textBG"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:textSize="@dimen/_10sdp"
-                    android:maxLines="1"
+                    android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
+                    android:maxLines="1"
                     android:textAlignment="center"
                     android:textColor="@color/mywhite"
-                    android:fontFamily="@font/poppins_semibold"
-                    />
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintBottom_toBottomOf="@id/textBG"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/textBG" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageView
+                android:id="@+id/live"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/video_icon"
-                android:id="@+id/live"
-                android:visibility="gone"
                 android:layout_gravity="center"
-                />
+                android:src="@drawable/video_icon"
+                android:visibility="gone" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,12 +21,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
@@ -35,9 +29,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.Posi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class ApiCategoriesListAdapter(
     var arrayList: ArrayList<CatResponse?>,
@@ -83,7 +74,7 @@ class ApiCategoriesListAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            loadad(binding)
+            //loadad(binding)
         }
     }
 
@@ -141,15 +132,11 @@ class ApiCategoriesListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (AdConfig.ISPAIDUSER) {
-            return VIEW_TYPE_CONTAINER1
+        row = position / 2
+        return if ((position + 1) == (firstline + 1) || (position + 1) > firstline + 1 && (position + 1 - (firstline + 1)) % (lineC + 1) == 0) {
+            VIEW_TYPE_NATIVE_AD
         } else {
-            row = position / 2
-            return if ((position + 1) == (firstline + 1) || (position + 1) > firstline + 1 && (position + 1 - (firstline + 1)) % (lineC + 1) == 0) {
-                VIEW_TYPE_NATIVE_AD
-            } else {
-                VIEW_TYPE_CONTAINER1
-            }
+            VIEW_TYPE_CONTAINER1
         }
     }
 
@@ -218,13 +205,8 @@ class ApiCategoriesListAdapter(
         }
     }
 
-    var nativeAdView: IkmDisplayWidgetAdView? = null
-
-    fun loadad(binding: StaggeredNativeLayoutBinding) {
+    /*fun loadad(binding: StaggeredNativeLayoutBinding) {
         coroutineScope?.launch(Dispatchers.Main) {
-            val adLayout = LayoutInflater.from(context).inflate(
-                R.layout.native_dialog_layout, null, false
-            ) as? IkmWidgetAdLayout
             adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
             adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
             adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
@@ -271,7 +253,7 @@ class ApiCategoriesListAdapter(
             }
         }
 
-    }
+    }*/
 
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager =

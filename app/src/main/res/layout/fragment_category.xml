@@ -1,119 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/new_main_background"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    android:background="@color/new_main_background">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        android:layout_height="wrap_content">
+
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progressBar"
             android:layout_width="@dimen/_150sdp"
             android:layout_height="@dimen/_150sdp"
             android:layout_centerInParent="true"
-            app:lottie_autoPlay="true"
-            android:visibility="gone"
-            app:lottie_loop="true"
             android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
 
         <TextView
             android:id="@+id/trendingHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Live Wallpaper"
-            android:fontFamily="@font/poppins_bold"
-            android:textSize="@dimen/_15sdp"
-            android:textColor="#FFFFFF"
-            android:shadowColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            android:shadowDx="0"
-            app:layout_constraintTop_toTopOf="parent"
-            android:shadowDy="0"
             android:layout_marginTop="@dimen/_7sdp"
-            android:shadowRadius="10" />
+            android:fontFamily="@font/poppins_bold"
+            android:shadowColor="@color/white"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="10"
+            android:text="Live Wallpaper"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/trendingHeading"
+            android:gravity="center"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="@id/trendingHeading"
             app:layout_constraintEnd_toEndOf="parent"
-            android:gravity="center"
-            android:id="@+id/more"
-            android:orientation="horizontal">
+            app:layout_constraintTop_toTopOf="@id/trendingHeading">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/more"
-                android:fontFamily="@font/poppins_regular"
-                android:textSize="@dimen/_12sdp"
-                android:textColor="@color/button_bg"
                 android:layout_marginEnd="@dimen/_7sdp"
-                />
-
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/more"
+                android:textColor="@color/button_bg"
+                android:textSize="@dimen/_12sdp" />
 
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/icon"
                 android:padding="@dimen/_5sdp"
-                />
+                android:src="@drawable/icon" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerviewTrending"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/trendingHeading"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/list_item_trending_hroizontal"
-            android:id="@+id/recyclerviewTrending"
-            />
+            app:layout_constraintTop_toBottomOf="@id/trendingHeading"
+            tools:listitem="@layout/list_item_trending_hroizontal" />
 
 
         <TextView
             android:id="@+id/wallpaper4kHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4k Wallpapers"
-            app:layout_constraintTop_toBottomOf="@id/recyclerviewTrending"
+            android:layout_marginTop="@dimen/_7sdp"
             android:fontFamily="@font/poppins_bold"
-            android:textSize="@dimen/_15sdp"
-            android:textColor="#FFFFFF"
             android:shadowColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
             android:shadowDx="0"
             android:shadowDy="0"
-            android:layout_marginTop="@dimen/_7sdp"
-            android:shadowRadius="10" />
+            android:shadowRadius="10"
+            android:text="4k Wallpapers"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerviewTrending" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/recyclerViewLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/wallpaper4kHeading"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/wallpaper4kHeading">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewAll"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_5sdp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
@@ -121,11 +116,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/error_lotti"
                 android:layout_width="@dimen/_150sdp"
@@ -134,23 +129,20 @@
                 android:scaleType="centerCrop"
                 app:lottie_autoPlay="true"
                 app:lottie_loop="true" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/error_lotti"
+                android:layout_centerHorizontal="true"
                 android:layout_marginStart="@dimen/_7sdp"
                 android:layout_marginTop="@dimen/_6sdp"
                 android:gravity="center"
                 android:text="Server not respond right now\n Please try again!"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:layout_below="@+id/error_lotti"
-                android:layout_centerHorizontal="true"
-                />
+                android:textStyle="bold" />
 
         </RelativeLayout>
-
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

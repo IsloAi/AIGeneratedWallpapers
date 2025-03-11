@@ -1,30 +1,29 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.ViewAllCreations">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintHeight_percent="0.09"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="@dimen/_10sdp"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
         <RelativeLayout
             android:id="@+id/backButton"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:layout_width="@dimen/_15sdp"
@@ -38,113 +37,105 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textSize="@dimen/_13sdp"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:fontFamily="@font/raleway_medium"
             android:text="@string/ai_generated_wallpapers"
             android:textColor="@color/mywhite"
-            app:layout_constraintStart_toEndOf="@id/backButton"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginStart="@dimen/_5sdp"
+            android:textSize="@dimen/_13sdp"
             android:textStyle="bold"
-            android:fontFamily="@font/raleway_medium"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/backButton"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
+            android:id="@+id/selectAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_5sdp"
+            android:fontFamily="@font/raleway_medium"
             android:text="@string/select_all"
             android:textColor="@color/button_bg"
-            android:fontFamily="@font/raleway_medium"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginEnd="@dimen/_5sdp"
-            android:visibility="gone"
             android:textSize="@dimen/_10sdp"
-            android:id="@+id/selectAll"
-            />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/deleteAllHistory"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            app:layout_constraintEnd_toEndOf="parent"
             android:padding="@dimen/_5sdp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:id="@+id/deleteAllHistory"
             android:src="@drawable/trash_light"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/empty_support"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:id="@+id/empty_support"
-        app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintBottom_toTopOf="@id/deleteCreations"
-        >
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header">
+
         <ImageView
+            android:id="@+id/empty_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/empty_image"
-            android:id="@+id/empty_image"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_creations_found"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/empty_image"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="@color/white"
             android:layout_marginTop="@dimen/_10sdp"
             android:fontFamily="@font/raleway_medium"
+            android:text="@string/no_creations_found"
+            android:textColor="@color/white"
             android:textSize="@dimen/_14sdp"
-            />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/empty_image" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/historyRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintBottom_toTopOf="@id/deleteCreations"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:layout_marginHorizontal="@dimen/_5sdp"
-        android:id="@+id/historyRecyclerView"/>
-
+        android:layout_marginBottom="@dimen/_10sdp"
+        app:layout_constraintBottom_toTopOf="@id/deleteCreations"
+        app:layout_constraintTop_toBottomOf="@id/header" />
 
     <Button
         android:id="@+id/deleteCreations"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp"
-        android:layout_marginHorizontal="@dimen/_25sdp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginHorizontal="@dimen/_25sdp"
         android:layout_marginTop="@dimen/_10sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/yellow_frame"
         android:fontFamily="@font/raleway_medium"
         android:gravity="center"
         android:paddingHorizontal="@dimen/_30sdp"
         android:text="@string/delete"
-        android:visibility="gone"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="19sp"
         android:textStyle="bold"
-        android:layout_marginBottom="@dimen/_10sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

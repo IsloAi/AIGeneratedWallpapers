@@ -16,16 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -62,11 +52,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
-    val interAd = IKInterstitialAd()
-
-    //var checkAppOpen = false
-    var nativeAdView: IkmDisplayWidgetAdView? = null
-
     val TAG = "LIVE_WALL_SCREEN"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -84,18 +69,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         myActivity = activity as MainActivity
 
         myViewModel.getAllTrendingWallpapers()
-
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_live_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
 
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         (binding.liveReccyclerview.layoutManager as GridLayoutManager).isItemPrefetchEnabled = false
@@ -157,34 +130,14 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
-
         loadData()
-        preloadAd()
-
         Log.e(TAG, "onResume: ")
-
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "Tab"),
-                Pair("action_name", "MainScr_LiveTab_View")
-            )
-        }
-
-
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun updateUIWithFetchedData() {
@@ -194,61 +147,13 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
 
-                if (isAdded) {
-                    sendTracking(
-                        "click_item",
-                        Pair("action_type", "ITEM"),
-                        Pair("action_name", "MainScr_LiveTab_LiveItem_Click")
-                    )
-                }
                 val newPosition = position + 1
 
                 sharedViewModel.setAdPosition(newPosition)
+                setDownloadAbleWallpaperAndNavigate(model, false)
 
-                if (AdConfig.ISPAIDUSER) {
-                    setDownloadAbleWallpaperAndNavigate(model, false)
-                } else {
-                    var shouldShowInterAd = true
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            setDownloadAbleWallpaperAndNavigate(model, false)
-                            Log.e(TAG, "App open condition handled, skipping ad")
-                            shouldShowInterAd = false
-                        }
-                    }
-
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && checkInter) {
-                        if (isAdded) {
-                            checkInter = false
-                            setDownloadAbleWallpaperAndNavigate(model, false)
-                            shouldShowInterAd = false
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showInterAd(model)
-                    }
-                }
             }
         }, myActivity)
-
-
-        /*IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view != null) {
-                    adapter?.nativeAdView = adObject
-                    binding.liveReccyclerview.adapter = adapter
-                    binding.liveReccyclerview.setHasFixedSize(true)
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })*/
 
         binding.liveReccyclerview.adapter = adapter
         binding.liveReccyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -262,28 +167,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
             }
         })
-    }
-
-    private fun showInterAd(model: LiveWallpaperModel) {
-
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_live_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        setDownloadAbleWallpaperAndNavigate(model, false)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    if (isAdded) {
-                        checkInter = true
-                        setDownloadAbleWallpaperAndNavigate(model, true)
-                    }
-                }
-            }
-        )
     }
 
     private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel, adShowd: Boolean) {
@@ -306,10 +189,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
 
         return withContext(Dispatchers.IO) {
-            Log.d(
-                TAG,
-                "addNullValueInsideArray: Live tab : ${AdConfig.liveTabScrollType} , ${data.size}"
-            )
             when (AdConfig.liveTabScrollType) {
                 0 -> {
                     Log.d(TAG, "addNullValueInsideArray: in 0 ")
@@ -362,76 +241,12 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
                 3 -> {
                     Log.d(TAG, "addNullValueInsideArray: in 3 ")
-                    loadAd()
-                    binding.ikmWidgetAdView.visibility = View.VISIBLE
                     return@withContext ArrayList(data)
                 }
 
                 else -> {
                     return@withContext ArrayList(data)
                 }
-            }
-        }
-    }
-
-    private fun loadAd() {
-        fragmentScope.launch(Dispatchers.Main) {
-
-            var adLayout: IkmWidgetAdLayout? = null
-            adLayout = LayoutInflater.from(binding.root.context).inflate(
-                R.layout.native_dialog_layout,
-                null, false
-            ) as? IkmWidgetAdLayout
-
-            adLayout?.apply {
-                titleView = findViewById(R.id.custom_headline)
-                bodyView = findViewById(R.id.custom_body)
-                callToActionView = findViewById(R.id.custom_call_to_action)
-                iconView = findViewById(R.id.custom_app_icon)
-                mediaView = findViewById(R.id.custom_media)
-            }
-            withContext(Dispatchers.Main) {
-                nativeAdView?.let {
-                    // Attach the preloaded ad to the layout
-                    binding.ikmWidgetAdView.showWithDisplayAdView(
-                        R.layout.shimmer_loading_native, adLayout!!, "mainscr_live_tab_scroll",
-                        it,
-                        object : IKShowWidgetAdListener {
-                            override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failed")
-                                binding.ikmWidgetAdView.visibility =
-                                    if (statusAd == 0 || !isNetworkAvailable()) View.GONE else View.VISIBLE
-                            }
-
-                            override fun onAdShowed() {
-                                binding.ikmWidgetAdView.visibility = View.VISIBLE
-                                Log.d("TAG", "onAdsLoaded: native loaded successfully.")
-                            }
-                        }
-                    )
-                } ?: run {
-                    // Retry loading ad if not preloaded
-                    preloadAd()
-                }
-            }
-        }
-    }
-
-    private fun preloadAd() {
-        fragmentScope.launch(Dispatchers.IO) {
-            if (nativeAdView == null) {
-                IKSdkController.loadNativeDisplayAd(
-                    "mainscr_live_tab_scroll",
-                    object : IKLoadDisplayAdViewListener {
-                        override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                            nativeAdView = adObject
-                            Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
-                        }
-
-                        override fun onAdLoadFail(error: IKAdError) {
-                            Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
-                        }
-                    })
             }
         }
     }

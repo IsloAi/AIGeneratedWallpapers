@@ -2,7 +2,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
@@ -11,7 +10,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Window
 import android.view.WindowInsets
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -33,10 +31,6 @@ import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.billing.IKBillingController
-import com.ikame.android.sdk.listener.pub.IKBillingListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
@@ -80,10 +74,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     lateinit var binding: ActivityMainBinding
     private lateinit var job: Job
-    /*companion object {
-        var startTime: Long = 0
-        var isCacheCleared: Boolean = false
-    }*/
     val TAG = "MainActivity"
     private var selectedPrompt: String? = null
     private var alertDialog: AlertDialog? = null
@@ -401,20 +391,9 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 Log.e(TAG, "handleOnBackPressed: ")
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "Sytem_BackButton_Click")
-                )
                 navController.popBackStack()
             }
         })
-    }
-
-    private fun sendTracking(
-        eventName: String, vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     private fun saveLiveWallpapersInDB() {
@@ -995,24 +974,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
     override fun onResume() {
         super.onResume()
-        /*startTime = System.currentTimeMillis()
-        Log.d("ColdStartTime", "App start time: $startTime")*/
-
-        lifecycleScope.launch {
-            IKBillingController.reCheckIAP(object : IKBillingListener {
-                override fun onBillingFail() {
-                    AdConfig.ISPAIDUSER = false
-                    IKSdkController.setEnableShowResumeAds(false)
-                    Log.e(TAG, "InAppPurchase15: false")
-                }
-
-                override fun onBillingSuccess() {
-                    AdConfig.ISPAIDUSER = true
-                    IKSdkController.setEnableShowResumeAds(true)
-                    Log.e(TAG, "InAppPurchase15: true")
-                }
-            }, false)
-        }
     }
 
     override fun onNetworkAvailable() {

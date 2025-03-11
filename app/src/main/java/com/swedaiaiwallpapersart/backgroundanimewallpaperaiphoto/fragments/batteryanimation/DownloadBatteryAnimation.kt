@@ -16,17 +16,10 @@ import com.androidnetworking.AndroidNetworking
 import com.androidnetworking.common.Priority
 import com.androidnetworking.error.ANError
 import com.androidnetworking.interfaces.DownloadListener
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
@@ -59,18 +52,14 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     var adShowed: Boolean? = false
 
-//    var checkAppOpen = false
-
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
     private var job: Job? = null
 
-    val interAd = IKInterstitialAd()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDownloadBatteryAnimationBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -80,29 +69,11 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         super.onViewCreated(view, savedInstanceState)
 
         adShowed = arguments?.getBoolean("adShowed")
-        if (AdConfig.ISPAIDUSER) {
-            binding.adsView.visibility = View.GONE
-        } else {
-            loadAd()
-        }
-
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
 
         AndroidNetworking.initialize(requireContext())
 
         setEvents()
         initObservers()
-
     }
 
     override fun onStart() {
@@ -111,104 +82,15 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     }
 
-    fun loadAd() {
-        val adLayout = LayoutInflater.from(activity).inflate(
-            R.layout.new_native_language,
-            null, false
-        ) as? IkmWidgetAdLayout
-        adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-        adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-        adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-        adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-        adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-        binding.adsView.loadAd(R.layout.shimmer_loading_native,
-            adLayout!!,
-            "downloadscr_native_bottom",
-            object : IKShowWidgetAdListener {
-                override fun onAdShowFail(error: IKAdError) {
-                    if (AdConfig.ISPAIDUSER) {
-                        binding.adsView.visibility = View.GONE
-                    }
-                    Log.e("TAG", "onAdsLoadFail: native failded ")
-                }
-
-                override fun onAdShowed() {
-                    if (isAdded && view != null && !AdConfig.ISPAIDUSER) {
-                        // Modify view visibility here
-                        binding.adsView.visibility = View.VISIBLE
-                    }
-                }
-            }
-        )
-    }
-
     fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            if (AdConfig.ISPAIDUSER) {
-                navigateToNext()
-            } else if (adShowed == true) {
-                navigateToNext()
-            } else {
-                var shouldShowInterAd = true
-
-                if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                    if (isAdded) {
-                        Constants.checkInter = false
-                        navigateToNext()
-                        shouldShowInterAd = false // Skip showing the ad for this action
-                    }
-                }
-
-                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                    if (isAdded) {
-                        checkAppOpen = false
-                        navigateToNext()
-                        Log.e(TAG, "app open showed")
-                        shouldShowInterAd = false // Skip showing the ad for this action
-                    }
-                }
-
-                if (shouldShowInterAd) {
-                    showInterAd()
-                }
-//                if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                    if (isAdded){
-//                        checkAppOpen = false
-//                        navigateToNext()
-//                        Log.e(TAG, "app open showed: ", )
-//                    }
-//                }else{
-//                    showInterAd()
-//                }
-
-
-            }
+            navigateToNext()
         }
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
             Constants.checkInter = false
             checkAppOpen = false
         }
-    }
-
-    private fun showInterAd() {
-        interAd.showAd(
-            requireActivity(),
-            "downloadscr_set_click",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        navigateToNext()
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    navigateToNext()
-                }
-            }
-        )
     }
 
     private fun navigateToNext() {

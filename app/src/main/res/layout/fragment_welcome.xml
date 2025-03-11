@@ -47,9 +47,8 @@
         android:id="@+id/backView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/_10sdp"
         android:background="@drawable/blur"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/onBoardImg"
         app:layout_constraintStart_toStartOf="@id/onBoardImg"
         app:layout_constraintTop_toTopOf="@id/onBoardImg" />
@@ -104,13 +103,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/onbaord_texts" />
-
-    <com.ikame.android.sdk.widgets.IkmWidgetAdView
-        android:id="@+id/adsView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

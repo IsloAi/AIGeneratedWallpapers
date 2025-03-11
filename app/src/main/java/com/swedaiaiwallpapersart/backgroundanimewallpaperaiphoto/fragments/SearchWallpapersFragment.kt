@@ -1,6 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,20 +14,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.ikame.android.sdk.IKSdkController
-import com.google.gson.Gson
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentSearchWallpapersBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
@@ -50,16 +40,14 @@ import kotlinx.coroutines.withContext
 @AndroidEntryPoint
 class SearchWallpapersFragment : Fragment() {
 
-    private var _binding:FragmentSearchWallpapersBinding ?= null
+    private var _binding: FragmentSearchWallpapersBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var myActivity : MainActivity
-
-
+    private lateinit var myActivity: MainActivity
 
     val catlist = ArrayList<CatNameResponse?>()
-    var adapter: ApiCategoriesNameAdapter?= null
-    var searchAdapter:ApiCategoriesListAdapter ?= null
+    var adapter: ApiCategoriesNameAdapter? = null
+    var searchAdapter: ApiCategoriesListAdapter? = null
 
     val catListViewmodel: MyViewModel by activityViewModels()
 
@@ -71,11 +59,9 @@ class SearchWallpapersFragment : Fragment() {
 
     val TAG = "SEARCH"
 
-
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
-    private  val myViewModel: AllWallpapersViewmodel by viewModels()
+    private val myViewModel: AllWallpapersViewmodel by viewModels()
 
-    val interAd = IKInterstitialAd()
     private val lock = Any()
 
     override fun onCreateView(
@@ -83,7 +69,7 @@ class SearchWallpapersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentSearchWallpapersBinding.inflate(inflater,container,false)
+        _binding = FragmentSearchWallpapersBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -92,75 +78,33 @@ class SearchWallpapersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         myActivity = activity as MainActivity
 
-        if (AdConfig.ISPAIDUSER){
-            binding.adsView.visibility = View.GONE
-        }else{
-
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("searchscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-                }
-
-            })
-
-            interAd.attachLifecycle(this.lifecycle)
-            interAd.loadAd("mainscr_trending_tab_click_item", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
-
-            interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
-
-
-
-        }
-
-
         initCatgories()
-
         initDataObserver()
         initSearchData()
-
         initSearchRv()
         setEvents()
-
-
-
 
     }
 
     override fun onResume() {
         super.onResume()
 
-        if (addedItems?.isNotEmpty() == true){
+        if (addedItems?.isNotEmpty() == true) {
             searchAdapter?.addNewData()
             searchAdapter?.updateMoreData(addedItems!!)
-//            searchAdapter?.updateData(addedItems!!)
         }
 
-        if (isAdded){
-            if (catgories){
+        if (isAdded) {
+            if (catgories) {
                 binding.searchSuggestions.visibility = View.GONE
                 binding.recyclerviewCatgory.visibility = View.VISIBLE
                 binding.recyclerviewAll.visibility = View.GONE
                 editTextLayoutsFocus()
-            }else{
+            } else {
 
-                if (addedItems?.isNotEmpty() == true){
+                if (addedItems?.isNotEmpty() == true) {
                     binding.searchSuggestions.visibility = View.GONE
-                }else{
+                } else {
                     binding.searchSuggestions.visibility = View.VISIBLE
                 }
                 binding.recyclerviewCatgory.visibility = View.GONE
@@ -170,10 +114,10 @@ class SearchWallpapersFragment : Fragment() {
         }
     }
 
-    private fun initSearchRv(){
+    private fun initSearchRv() {
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         searchAdapter = ApiCategoriesListAdapter(arrayListOf(), object :
             PositionCallback {
             override fun getPosition(position: Int) {
@@ -184,62 +128,23 @@ class SearchWallpapersFragment : Fragment() {
 
                 catgories = false
 
-                if (AdConfig.ISPAIDUSER){
-                    if (isAdded){
-                        navigateToDestination(items!!,position)
-                    }
-                }else{
-
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_trending_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    navigateToDestination(items!!,position)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                if (isAdded){
-                                    navigateToDestination(items!!,position)
-                                }
-                            }
-                        }
-                    )
+                if (isAdded) {
+                    navigateToDestination(items!!, position)
                 }
-
-
-
-
             }
 
             override fun getFavorites(position: Int) {
                 //
             }
-        },myActivity,"search")
+        }, myActivity, "search")
         searchAdapter!!.setCoroutineScope(fragmentScope)
 
-        /*IKSdkController.loadNativeDisplayAd("searchscr_scroll_view", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    searchAdapter?.nativeAdView = adObject
-                    binding.recyclerviewAll.adapter = searchAdapter
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-            }
-        })*/
         binding.recyclerviewAll.adapter = searchAdapter
-
-
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-
-    fun setEvents(){
+    fun setEvents() {
         binding.suggestCar.setOnClickListener {
             binding.searchEdt.setText("Car")
         }
@@ -268,65 +173,56 @@ class SearchWallpapersFragment : Fragment() {
         }
 
         binding.searchEdt.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                }
+            }
 
-                override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-                }
+            }
 
-                override fun afterTextChanged(p0: Editable?) {
+            override fun afterTextChanged(p0: Editable?) {
 
-                        if (p0.isNullOrBlank()) {
-                            binding.searchSuggestions.visibility = View.VISIBLE
-                            binding.recyclerviewCatgory.visibility = View.GONE
-                            binding.recyclerviewAll.visibility = View.GONE
-                            binding.emptySupport.visibility = View.GONE
-                        } else {
-                            if (!searched){
-                                sendTracking("search_keyword",Pair("search_keyword", p0.toString()))
-                                searchInList(p0.toString(), cachedCatResponses) { filteredList ->
+                if (p0.isNullOrBlank()) {
+                    binding.searchSuggestions.visibility = View.VISIBLE
+                    binding.recyclerviewCatgory.visibility = View.GONE
+                    binding.recyclerviewAll.visibility = View.GONE
+                    binding.emptySupport.visibility = View.GONE
+                } else {
+                    if (!searched) {
+                        searchInList(p0.toString(), cachedCatResponses) { filteredList ->
 
-                                    Log.e("TAG", "afterTextChanged: " + filteredList)
+                            Log.e("TAG", "afterTextChanged: " + filteredList)
 
 
-                                    if (filteredList.isNotEmpty()) {
-                                        binding.searchSuggestions.visibility = View.GONE
-                                        binding.recyclerviewCatgory.visibility = View.GONE
-                                        binding.recyclerviewAll.visibility = View.VISIBLE
-                                        binding.emptySupport.visibility = View.GONE
+                            if (filteredList.isNotEmpty()) {
+                                binding.searchSuggestions.visibility = View.GONE
+                                binding.recyclerviewCatgory.visibility = View.GONE
+                                binding.recyclerviewAll.visibility = View.VISIBLE
+                                binding.emptySupport.visibility = View.GONE
 
-                                        searchAdapter?.addNewData()
-                                        searchAdapter?.updateMoreData(filteredList)
+                                searchAdapter?.addNewData()
+                                searchAdapter?.updateMoreData(filteredList)
 //                                        searchAdapter?.updateData(filteredList)
-                                    } else {
-                                        binding.searchSuggestions.visibility = View.GONE
-                                        binding.recyclerviewCatgory.visibility = View.GONE
-                                        binding.recyclerviewAll.visibility = View.GONE
-                                        binding.emptySupport.visibility = View.VISIBLE
-                                    }
-
-
-                                }
-                            }else{
-                                searched = false
+                            } else {
+                                binding.searchSuggestions.visibility = View.GONE
+                                binding.recyclerviewCatgory.visibility = View.GONE
+                                binding.recyclerviewAll.visibility = View.GONE
+                                binding.emptySupport.visibility = View.VISIBLE
                             }
 
 
                         }
+                    } else {
+                        searched = false
+                    }
+
+
                 }
+            }
 
-            })
+        })
 
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    )
-    {
-        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     fun searchInList(
@@ -356,8 +252,8 @@ class SearchWallpapersFragment : Fragment() {
         }
     }
 
-    private fun initSearchData(){
-        myViewModel.allCreations.observe(viewLifecycleOwner){result ->
+    private fun initSearchData() {
+        myViewModel.allCreations.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
                 }
@@ -365,8 +261,21 @@ class SearchWallpapersFragment : Fragment() {
                 is Response.Success -> {
                     if (!result.data.isNullOrEmpty()) {
                         result.data.forEach { item ->
-                            val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                            if (cachedCatResponses?.contains(model) != true){
+                            val model = CatResponse(
+                                item.id,
+                                item.image_name,
+                                item.cat_name,
+                                item.hd_image_url,
+                                item.compressed_image_url,
+                                null,
+                                item.likes,
+                                item.liked,
+                                item.unlocked,
+                                item.size,
+                                item.Tags,
+                                item.capacity
+                            )
+                            if (cachedCatResponses?.contains(model) != true) {
                                 cachedCatResponses?.add(model)
                             }
 
@@ -386,16 +295,14 @@ class SearchWallpapersFragment : Fragment() {
         }
 
 
-
     }
 
-
-    private fun editTextLayoutsFocus(){
+    private fun editTextLayoutsFocus() {
         binding.searchEdt.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
-                if (addedItems?.isNotEmpty() == true){
+                if (addedItems?.isNotEmpty() == true) {
                     binding.searchSuggestions.visibility = View.GONE
-                }else{
+                } else {
                     binding.searchSuggestions.visibility = View.VISIBLE
                 }
                 binding.recyclerviewCatgory.visibility = View.GONE
@@ -406,68 +313,29 @@ class SearchWallpapersFragment : Fragment() {
         }
     }
 
-
-
-
-    private fun initCatgories(){
-        binding.recyclerviewCatgory.layoutManager = GridLayoutManager(requireContext(),3)
-        binding.recyclerviewCatgory.addItemDecoration(RvItemDecore(3,5  ,false,10000))
-        adapter = ApiCategoriesNameAdapter(catlist,object : StringCallback {
+    private fun initCatgories() {
+        binding.recyclerviewCatgory.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewCatgory.addItemDecoration(RvItemDecore(3, 5, false, 10000))
+        adapter = ApiCategoriesNameAdapter(catlist, object : StringCallback {
             override fun getStringCall(string: String) {
 
                 catgories = true
 
                 catListViewmodel.getAllCreations(string)
-
-                if (AdConfig.ISPAIDUSER){
-                    setFragment(string)
-                }else{
-
-                    interAd.showAd(
-                        requireActivity(),
-                        "mainscr_cate_tab_click_item",
-                        adListener = object : IKShowAdListener {
-                            override fun onAdsShowFail(error: IKAdError) {
-                                if (isAdded){
-                                    setFragment(string)
-                                }
-                            }
-                            override fun onAdsDismiss() {
-                                setFragment(string)
-                            }
-                        }
-                    )
-                }
-
-
+                setFragment(string)
             }
-        },myActivity,"")
-
-        /*IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    adapter?.nativeAdView = adObject
-                    binding.recyclerviewCatgory.adapter = adapter
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })*/
-
+        }, myActivity, "")
         binding.recyclerviewCatgory.adapter = adapter
     }
 
-    fun initDataObserver(){
+    fun initDataObserver() {
         myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
-            Log.e("TAG", "onCustomCreateView: no data exists" )
-            if (wallpapersList?.size!! > 0){
-                Log.e("TAG", "onCustomCreateView: data exists" )
-                val list = if (AdConfig.ISPAIDUSER){
+            Log.e("TAG", "onCustomCreateView: no data exists")
+            if (wallpapersList?.size!! > 0) {
+                Log.e("TAG", "onCustomCreateView: data exists")
+                val list = if (AdConfig.ISPAIDUSER) {
                     wallpapersList
-                }else{
+                } else {
                     addNullValueInsideArray(wallpapersList)
                 }
                 adapter?.updateData(newData = list)
@@ -488,26 +356,27 @@ class SearchWallpapersFragment : Fragment() {
 
         Bundle().apply {
             putString("from", "trending")
-            putString("wall","home")
+            putString("wall", "home")
             putInt("position", position - countOfNulls)
             findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
     }
 
-    private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
+    private fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?> {
 
-        val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
+        val firstAdLineThreshold =
+            if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
         val firstLine = firstAdLineThreshold * 3
 
         val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
         val lineC = lineCount * 3
         val newData = arrayListOf<CatNameResponse?>()
 
-        for (i in data.indices){
-            if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
+        for (i in data.indices) {
+            if (i > firstLine && (i - firstLine) % (lineC) == 0) {
                 newData.add(null)
 
-            }else if (i == firstLine){
+            } else if (i == firstLine) {
                 newData.add(null)
             }
             newData.add(data[i])
@@ -515,14 +384,14 @@ class SearchWallpapersFragment : Fragment() {
         return newData
     }
 
-    private fun setFragment(name:String){
-        val bundle =  Bundle().apply {
-            putString("name",name)
-            putString("from","category")
+    private fun setFragment(name: String) {
+        val bundle = Bundle().apply {
+            putString("name", name)
+            putString("from", "category")
 
         }
 
-        if (isAdded ){
+        if (isAdded) {
             if (findNavController().currentDestination?.id != R.id.listViewFragment) {
                 findNavController().navigate(R.id.listViewFragment, bundle)
             }

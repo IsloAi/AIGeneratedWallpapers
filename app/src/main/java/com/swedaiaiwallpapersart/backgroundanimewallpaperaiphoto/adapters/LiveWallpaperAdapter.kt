@@ -20,12 +20,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
@@ -34,9 +28,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.down
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LiveWallpaperAdapter(
     private var arrayList: ArrayList<LiveWallpaperModel?>,
@@ -49,7 +40,6 @@ class LiveWallpaperAdapter(
     private val debounceThreshold = 2000L // 2 seconds
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    private val loadedAds = mutableMapOf<Int, IkmDisplayWidgetAdView?>()
 
     private val firstAdLineThreshold =
         if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
@@ -80,9 +70,7 @@ class LiveWallpaperAdapter(
 
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind() {
-            loadAd(binding)
-        }
+        fun bind() {}
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -195,84 +183,6 @@ class LiveWallpaperAdapter(
             if (currentTime - lastClickTime >= debounceThreshold) {
                 positionCallback.getPosition(position, model)
                 lastClickTime = currentTime
-            }
-        }
-    }
-
-    var nativeAdView: IkmDisplayWidgetAdView? = null
-
-    private fun preloadAd() {
-        coroutineScope?.launch(Dispatchers.IO) {
-            if (nativeAdView == null) {
-                IKSdkController.loadNativeDisplayAd(
-                    "mainscr_live_tab_scroll",
-                    object : IKLoadDisplayAdViewListener {
-                        override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                            nativeAdView = adObject
-                            Log.d("LIVE_WALL_SCREEN_ADAPTER", "Ad preloaded successfully.")
-                        }
-
-                        override fun onAdLoadFail(error: IKAdError) {
-                            Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdLoadFail: $error")
-                        }
-                    })
-            }
-        }
-    }
-
-    private fun loadAd(binding: StaggeredNativeLayoutBinding) {
-        coroutineScope?.launch(Dispatchers.Main) {
-
-            var adLayout: IkmWidgetAdLayout? = null
-            if (AdConfig.liveTabScrollType == 1) {
-                adLayout = LayoutInflater.from(binding.root.context).inflate(
-                    R.layout.native_dialog_layout,
-                    null, false
-                ) as? IkmWidgetAdLayout
-            } else if (AdConfig.liveTabScrollType == 2 || AdConfig.liveTabScrollType == 3) {
-                adLayout = LayoutInflater.from(binding.root.context).inflate(
-                    R.layout.native_dialog_layout_189,
-                    null, false
-                ) as? IkmWidgetAdLayout
-            } else {
-                adLayout = LayoutInflater.from(binding.root.context).inflate(
-                    R.layout.native_dialog_layout,
-                    null, false
-                ) as? IkmWidgetAdLayout
-            }
-
-
-            adLayout?.apply {
-                titleView = findViewById(R.id.custom_headline)
-                bodyView = findViewById(R.id.custom_body)
-                callToActionView = findViewById(R.id.custom_call_to_action)
-                iconView = findViewById(R.id.custom_app_icon)
-                mediaView = findViewById(R.id.custom_media)
-            }
-
-            withContext(Dispatchers.Main) {
-                nativeAdView?.let {
-                    // Attach the preloaded ad to the layout
-                    binding.adsView.showWithDisplayAdView(
-                        R.layout.shimmer_loading_native, adLayout!!, "mainscr_live_tab_scroll",
-                        it,
-                        object : IKShowWidgetAdListener {
-                            override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failed")
-                                binding.adsView.visibility =
-                                    if (statusAd == 0 || !isNetworkAvailable()) View.GONE else View.VISIBLE
-                            }
-
-                            override fun onAdShowed() {
-                                binding.adsView.visibility = View.VISIBLE
-                                Log.d("TAG", "onAdsLoaded: native loaded successfully.")
-                            }
-                        }
-                    )
-                } ?: run {
-                    // Retry loading ad if not preloaded
-                    preloadAd()
-                }
             }
         }
     }

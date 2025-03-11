@@ -11,21 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.billing.IKBillingController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.data.dto.pub.IKRemoteConfigValue
-import com.ikame.android.sdk.listener.pub.IKBillingListener
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKRemoteConfigCallback
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -70,109 +59,12 @@ class SplashOnFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        IKSdkController.setEnableShowResumeAds(false)
-
-        IKSdkController.setOnRemoteConfigDataListener(object : IKRemoteConfigCallback {
-            override fun onSuccess(data: HashMap<String, IKRemoteConfigValue>) {}
-            override fun onFail() {}
-        })
-        if (isAdded) {
-
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "screen"),
-                Pair("action_name", "SplashScr_View")
-            )
-        }
 
         myActivity = activity as MainActivity
 
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-
-            IKBillingController.reCheckIAP(object : IKBillingListener {
-                override fun onBillingFail() {
-                    if (isAdded) {
-                        AdConfig.ISPAIDUSER = false
-                        binding.adsView.visibility = View.VISIBLE
-                        binding.adsView.attachLifecycle(lifecycle)
-                        binding.adsView.loadAd("splashscr_bottom", object : IKShowWidgetAdListener {
-                            override fun onAdShowed() {}
-                            override fun onAdShowFail(error: IKAdError) {
-                                if (isAdded) {
-                                    binding.adsView.visibility = View.GONE
-                                }
-                            }
-                        })
-
-                        IKSdkController.preloadNativeAd(
-                            "languagescr_bottom",
-                            object : IKLoadAdListener {
-                                override fun onAdLoaded() {}
-                                override fun onAdLoadFail(error: IKAdError) {}
-                            })
-
-                        IKSdkController.preloadNativeAd(
-                            "languagescr_bottom2",
-                            object : IKLoadAdListener {
-                                override fun onAdLoaded() {}
-                                override fun onAdLoadFail(error: IKAdError) {}
-                            })
-
-                        IKSdkController.preloadNativeAdFullScreen(
-                            "onboardscr_fullscreen",
-                            object : IKLoadAdListener {
-                                override fun onAdLoaded() {}
-                                override fun onAdLoadFail(error: IKAdError) {}
-                            })
-
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            IKSdkController
-                                .loadAndShowSplashScreenAd(myActivity, object : IKShowAdListener {
-                                    override fun onAdsDismiss() {
-                                        if (isAdded) {
-                                            moveNext = true
-                                            Constants.checkAppOpen = true
-                                            navigateToNextScreen()
-                                            IKSdkController.setEnableShowResumeAds(true)
-                                        }
-                                    }
-
-                                    override fun onAdsShowFail(error: IKAdError) {
-                                        Log.e(TAG, "onAdsShowFail: $error")
-                                        if (isAdded) {
-                                            navigateToNextScreen()
-                                            IKSdkController.setEnableShowResumeAds(true)
-                                        }
-                                    }
-
-                                    override fun onAdsShowed() {
-                                        counter++
-                                        if (isAdded) {
-                                            binding.adsView.visibility = View.GONE
-                                        }
-                                    }
-                                })
-                        }
-                    }
-                }
-
-                override fun onBillingSuccess() {
-                    if (isAdded) {
-                        AdConfig.ISPAIDUSER = true
-                        binding.adsView.visibility = View.GONE
-                        viewLifecycleOwner.lifecycleScope.launch {
-                            if (AdConfig.ISPAIDUSER) {
-                                delay(3000)
-                            }
-                            if (isAdded) {
-                                navigateToNextScreen()
-                            }
-                        }
-                    }
-                }
-            }, false)
 
             val duration = 2000
             val interval = 20
@@ -266,13 +158,6 @@ class SplashOnFragment : Fragment() {
         } else {
             Log.e("TAG", "handleAppResume: ")
         }
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     override fun onDestroyView() {

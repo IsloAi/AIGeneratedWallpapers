@@ -1,26 +1,22 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.ikame.android.sdk.billing.IKBillingController
-import com.ikame.android.sdk.data.dto.pub.IKBillingError
-import com.ikame.android.sdk.listener.pub.IKBillingPurchaseListener
-import com.ikame.android.sdk.listener.pub.IKBillingValueListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentIAPBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class IAPFragment : Fragment() {
 
@@ -41,14 +37,9 @@ class IAPFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val isavailable = IKBillingController.isIabServiceAvailable(requireContext())
-        Log.e("TAG", "onViewCreated: "+isavailable )
-
-        IKBillingController.initBilling(requireContext())
-
         binding.close.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -57,85 +48,7 @@ class IAPFragment : Fragment() {
 
 
         lifecycleScope.launch {
-            delay(1000)
-            IKBillingController.getPriceSubscribe(
-                "unlock_all_premium_wallpaper_weekly_1",
-                object: IKBillingValueListener {
-                    override fun onResult(price: String, salePrice: String) {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            price.let {
-
-                                if (isAdded){
-
-                                    binding.priceWeekly.text = it
-                                }
-
-                                priceWeekly = it
-
-                            }
-                        }
-                        Log.e("TAG", "onResult: $price$salePrice" )
-                    }
-
-                }
-            )
-
-            IKBillingController.getPriceSubscribe(
-                "unlock_all_premium_wallpaper_monthly_1",
-                object: IKBillingValueListener{
-                    override fun onResult(price: String, salePrice: String) {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            price.let {
-                                priceMonthly = it
-                            }
-                        }
-                        Log.e("TAG", "onResult: $price$salePrice" )
-                    }
-
-                }
-            )
-
-            IKBillingController.getPriceSubscribe(
-                "unlock_all_premium_wallpaper_yearly_2",
-                object: IKBillingValueListener{
-                    override fun onResult(price: String, salePrice: String) {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            price.let {
-                                if (isAdded){
-                                    binding.priceYearly.text = it
-                                }
-
-                                priceYearly = it
-                            }
-                        }
-                        Log.e("TAG", "onResult: $price$salePrice" )
-                    }
-
-                }
-            )
-
-            IKBillingController.getPricePurchase(
-                "unlock_all_premium_lifetime",
-                object: IKBillingValueListener{
-                    override fun onResult(price: String, salePrice: String) {
-                        lifecycleScope.launch(Dispatchers.Main){
-                            price.let {
-                                if (isAdded){
-                                    binding.pricelifeTime.text = it
-                                }
-
-                                priceLife = it
-                            }
-                        }
-                        Log.e("TAG", "onResult: $price$salePrice" )
-                    }
-
-                }
-            )
-
-
             delay(2000)
-
             if (isAdded){
                 binding.terms.text = "- Subscribed users have unlimited use and access to all of its Premium features, without any ads.\n" +
                         "- Non-subscribed users can continuously use the app with advertisements, and have a limited for use of Premium features.\n" +
@@ -158,22 +71,22 @@ class IAPFragment : Fragment() {
 
 
         binding.iapYearlyCard.setOnClickListener {
-            val billingHelper = IKBillingController
-            startPay(billingHelper,"unlock_all_premium_wallpaper_yearly_2","sub")
+            /*val billingHelper = IKBillingController
+            startPay(billingHelper,"unlock_all_premium_wallpaper_yearly_2","sub")*/
         }
 
         binding.iapLifeCard.setOnClickListener {
-            val billingHelper = IKBillingController
-            startPay(billingHelper,"unlock_all_premium_lifetime","pur")
+            /*val billingHelper = IKBillingController
+            startPay(billingHelper,"unlock_all_premium_lifetime","pur")*/
         }
 
         binding.upgradeButton.setOnClickListener {
-            val billingHelper = IKBillingController
-            startPay(billingHelper,"unlock_all_premium_wallpaper_weekly_1","sub")
+            /*val billingHelper = IKBillingController
+            startPay(billingHelper,"unlock_all_premium_wallpaper_weekly_1","sub")*/
         }
     }
 
-    private fun startPay(billingHelper: IKBillingController,id:String,type:String) {
+    /*private fun startPay(billingHelper: IKBillingController,id:String,type:String) {
 
         if (type == "sub"){
             billingHelper.subscribe(requireActivity(),id, object :
@@ -230,7 +143,7 @@ class IAPFragment : Fragment() {
 
             })
         }
-    }
+    }*/
 
     override fun onDestroyView() {
         super.onDestroyView()

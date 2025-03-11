@@ -1,11 +1,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/new_main_background"
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SearchWallpapersFragment">
-
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topGuideline"
@@ -35,276 +34,259 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.97" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
         app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHeight_percent=".091"
-        >
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
 
+            android:id="@+id/back_btn"
             android:layout_width="@dimen/_30sdp"
             android:layout_height="@dimen/_30sdp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:padding="@dimen/_7sdp"
-            app:layout_constraintTop_toTopOf="parent"
             android:gravity="center"
-            android:id="@+id/back_btn"
+            android:padding="@dimen/_7sdp"
             android:src="@drawable/ic_back_arrow"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <EditText
+            android:id="@+id/searchEdt"
             android:layout_width="0dp"
             android:layout_height="@dimen/_32sdp"
             android:background="@color/new_main_background"
-            app:layout_constraintStart_toEndOf="@id/back_btn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:paddingHorizontal="@dimen/_7sdp"
-            android:hint="Search"
-            android:textCursorDrawable="@drawable/search_edt_cursor"
-            android:textColorHint="#888888"
-            android:textColor="@color/white"
             android:fontFamily="@font/poppins_medium"
-            android:textSize="@dimen/_15sdp"
-            android:maxLines="1"
-            android:inputType="text"
+            android:hint="Search"
             android:imeOptions="actionDone"
-            android:id="@+id/searchEdt"
-            />
-
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingHorizontal="@dimen/_7sdp"
+            android:textColor="@color/white"
+            android:textColorHint="#888888"
+            android:textCursorDrawable="@drawable/search_edt_cursor"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/back_btn"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/searchSuggestions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
-        android:id="@+id/searchSuggestions"
-        >
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/toolBar">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/suggest_AIWallpapers"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardCornerRadius="@dimen/_30sdp"
             app:cardBackgroundColor="@color/tabs_bg"
+            app:cardCornerRadius="@dimen/_30sdp"
             app:cardElevation="@dimen/_7sdp"
-            android:id="@+id/suggest_AIWallpapers"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:text="AI wallpaper"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/suggest_dark"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40sdp"
-            android:minWidth="@dimen/_70sdp"
-            app:layout_constraintStart_toEndOf="@id/suggest_AIWallpapers"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardCornerRadius="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_10sdp"
+            android:minWidth="@dimen/_70sdp"
             app:cardBackgroundColor="@color/tabs_bg"
+            app:cardCornerRadius="@dimen/_30sdp"
             app:cardElevation="@dimen/_7sdp"
-            android:id="@+id/suggest_dark"
-            >
+            app:layout_constraintStart_toEndOf="@id/suggest_AIWallpapers"
+            app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:text="Dark"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/suggest_neon"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40sdp"
-            app:layout_constraintStart_toEndOf="@id/suggest_dark"
-            app:layout_constraintTop_toTopOf="parent"
-            app:cardCornerRadius="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_10sdp"
             android:minWidth="@dimen/_70sdp"
             app:cardBackgroundColor="@color/tabs_bg"
+            app:cardCornerRadius="@dimen/_30sdp"
             app:cardElevation="@dimen/_7sdp"
-            android:id="@+id/suggest_neon"
-            >
+            app:layout_constraintStart_toEndOf="@id/suggest_dark"
+            app:layout_constraintTop_toTopOf="parent">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:text="Neon"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/suggest_car"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/suggest_AIWallpapers"
             android:layout_marginTop="@dimen/_7sdp"
             android:minWidth="@dimen/_70sdp"
-            app:cardCornerRadius="@dimen/_30sdp"
             app:cardBackgroundColor="@color/tabs_bg"
+            app:cardCornerRadius="@dimen/_30sdp"
             app:cardElevation="@dimen/_7sdp"
-            android:id="@+id/suggest_car"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/suggest_AIWallpapers">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:text="Car"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/suggest_Horoscope"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_40sdp"
-            android:layout_marginTop="@dimen/_7sdp"
-            app:layout_constraintStart_toEndOf="@id/suggest_car"
-            app:layout_constraintTop_toBottomOf="@id/suggest_AIWallpapers"
-            app:cardCornerRadius="@dimen/_30sdp"
             android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_7sdp"
             app:cardBackgroundColor="@color/tabs_bg"
+            app:cardCornerRadius="@dimen/_30sdp"
             app:cardElevation="@dimen/_7sdp"
-            android:id="@+id/suggest_Horoscope"
-            >
+            app:layout_constraintStart_toEndOf="@id/suggest_car"
+            app:layout_constraintTop_toBottomOf="@id/suggest_AIWallpapers">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:text="Horoscope"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/_40sdp"
-
-            android:layout_marginTop="@dimen/_7sdp"
-            app:layout_constraintStart_toEndOf="@id/suggest_Horoscope"
-            app:layout_constraintTop_toBottomOf="@id/suggest_AIWallpapers"
-            app:cardCornerRadius="@dimen/_30sdp"
-            app:cardBackgroundColor="@color/tabs_bg"
-            android:layout_marginStart="@dimen/_10sdp"
-            app:cardElevation="@dimen/_7sdp"
             android:id="@+id/suggest_Game_LOL"
-            >
+            android:layout_width="wrap_content"
+
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginTop="@dimen/_7sdp"
+            app:cardBackgroundColor="@color/tabs_bg"
+            app:cardCornerRadius="@dimen/_30sdp"
+            app:cardElevation="@dimen/_7sdp"
+            app:layout_constraintStart_toEndOf="@id/suggest_Horoscope"
+            app:layout_constraintTop_toBottomOf="@id/suggest_AIWallpapers">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semibold"
+                android:paddingHorizontal="@dimen/_10sdp"
                 android:text="Game LOL"
                 android:textColor="@color/white"
-                android:fontFamily="@font/poppins_semibold"
-                android:textSize="@dimen/_12sdp"
-                android:layout_gravity="center"
-                android:paddingHorizontal="@dimen/_10sdp"
-                />
+                android:textSize="@dimen/_12sdp" />
         </androidx.cardview.widget.CardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewCatgory"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/adsView"        />
-
+        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/toolBar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerviewAll"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
         android:layout_height="0dp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/adsView"
-        />
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/toolBar" />
 
     <com.ikame.android.sdk.widgets.IkmWidgetAdView
         android:id="@+id/adsView"
         android:layout_width="match_parent"
 
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/emptySupport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
-        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
-        app:layout_constraintStart_toStartOf="@id/startGuideline"
-        app:layout_constraintEnd_toEndOf="@id/endGuideline"
         android:visibility="gone"
-        android:id="@+id/emptySupport"
+        app:layout_constraintBottom_toBottomOf="@id/bottomGuideline"
+        app:layout_constraintEnd_toEndOf="@id/endGuideline"
+        app:layout_constraintStart_toStartOf="@id/startGuideline"
+        app:layout_constraintTop_toBottomOf="@id/toolBar"
 
         >
+
         <ImageView
+            android:id="@+id/empImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/empty_image_search"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/empImage"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No images Found"
+            android:layout_marginTop="@dimen/_7sdp"
             android:fontFamily="@font/poppins_medium"
+            android:text="No images Found"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"
-            app:layout_constraintTop_toBottomOf="@id/empImage"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="@dimen/_7sdp"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/empImage" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

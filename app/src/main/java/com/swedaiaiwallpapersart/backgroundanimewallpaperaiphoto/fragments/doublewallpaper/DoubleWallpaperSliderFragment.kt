@@ -25,16 +25,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.format.rewarded.IKRewardAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKLoadDisplayAdViewListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.BottomSheetInfoBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperSliderBinding
@@ -58,7 +48,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class DoubleWallpaperSliderFragment : Fragment() {
 
-    private var _binding:FragmentDoubleWallpaperSliderBinding ?= null
+    private var _binding: FragmentDoubleWallpaperSliderBinding? = null
     private val binding get() = _binding!!
 
     private var isFragmentAttached: Boolean = false
@@ -91,24 +81,18 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
     var adapter: DoubleWallpaperSliderAdapter? = null
 
-
     var firstTime = true
     var oldPosition = 0
 
     val TAG = "SLIDERFRAGMENT"
 
-    var homeScreenBitmap:Bitmap ?= null
-    var lockScreenBitmap:Bitmap ?= null
-
-    val interAd = IKInterstitialAd()
-
-
+    var homeScreenBitmap: Bitmap? = null
+    var lockScreenBitmap: Bitmap? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDoubleWallpaperSliderBinding.inflate(inflater,container,false)
+        _binding = FragmentDoubleWallpaperSliderBinding.inflate(inflater, container, false)
 
         return binding.root
     }
@@ -119,42 +103,16 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
         navController = findNavController()
 
-        if(AdConfig.ISPAIDUSER){
-            binding.adsView.visibility = View.GONE
-        }else{
-
-            interAd.attachLifecycle(this.lifecycle)
-// Load ad with a specific screen ID, considered as a unitId
-            interAd.loadAd("downloadscr_set_click", object : IKLoadAdListener {
-                override fun onAdLoaded() {
-                    // Ad loaded successfully
-                }
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure
-                }
-            })
-
-            binding.adsView.attachLifecycle(lifecycle)
-            binding.adsView.loadAd("viewlistdoublewallscr_bottom", object : IKShowWidgetAdListener {
-                override fun onAdShowed() {}
-                override fun onAdShowFail(error: IKAdError) {
-//                    binding.adsView?.visibility = View.GONE
-                }
-
-            })
-        }
-
-
         getWallpapers()
     }
 
-    fun getWallpapers(){
+    fun getWallpapers() {
         var arrayListJson: ArrayList<DoubleWallModel> = ArrayList()
         sharedViewModel.doubleWallResponseList.observe(viewLifecycleOwner) { catResponses ->
             if (catResponses.isNotEmpty()) {
                 arrayListJson.clear()
 
-                Log.e(TAG, "getWallpapers: "+catResponses )
+                Log.e(TAG, "getWallpapers: " + catResponses)
                 arrayListJson = catResponses as ArrayList<DoubleWallModel>
                 val pos = arguments?.getInt("position")
                 from = arguments?.getString("from")!!
@@ -171,9 +129,9 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     Log.e(TAG, "onCreate: " + arrayListOfImages.size)
                     Log.e(TAG, "onCreate: " + arrayListOfImages)
 
-                    arrayList = if (AdConfig.ISPAIDUSER){
+                    arrayList = if (AdConfig.ISPAIDUSER) {
                         arrayListOfImages as ArrayList<DoubleWallModel?>
-                    }else{
+                    } else {
                         addNullValueInsideArray(arrayListOfImages)
                     }
 
@@ -184,10 +142,10 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     // Calculate the adjusted position by considering the null ads in the array
                     if (firstTime) {
                         position = 0
-                        position = if (AdConfig.ISPAIDUSER){
+                        position = if (AdConfig.ISPAIDUSER) {
                             pos
-                        }else{
-                             if (pos == firstAdLineThreshold) {
+                        } else {
+                            if (pos == firstAdLineThreshold) {
                                 pos + totalADs
                             } else if (pos < firstAdLineThreshold) {
                                 pos
@@ -221,8 +179,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
     private fun getBitmapFromGlide(url: String) {
         Glide.with(requireContext()).asBitmap().load(url)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .into(object : CustomTarget<Bitmap>() {
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
 
@@ -238,19 +195,11 @@ class DoubleWallpaperSliderFragment : Fragment() {
                 }
             })
     }
+
     private fun functionality() {
         myActivity = activity as MainActivity
         viewPager2 = binding.viewPager
         binding.toolbar.setOnClickListener {
-            // Set up the onBackPressed callback
-
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_BackBT_Click")
-                )
-            }
             firstTime = true
             navController?.popBackStack()
             Constants.checkInter = false
@@ -258,104 +207,55 @@ class DoubleWallpaperSliderFragment : Fragment() {
         }
         setViewPager()
         if (arrayList[position] != null) {
-            getLargImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[position]?.hd_url1!!
-            getSmallImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[position]?.compress_url1!!
+            getLargImage =
+                AdConfig.BASE_URL_DATA + "/doublewallpaper/" + arrayList[position]?.hd_url1!!
+            getSmallImage =
+                AdConfig.BASE_URL_DATA + "/doublewallpaper/" + arrayList[position]?.compress_url1!!
             getBitmapFromGlide(getLargImage)
             arrayList[position]?.let { loadBitmapsAndPerformAction(it) }
         }
 
-        if (arrayList[position]?.downloaded == true){
+        if (arrayList[position]?.downloaded == true) {
             binding.buttonApplyWallpaper.text = "Set Wallpaper"
-        }else{
+        } else {
             binding.buttonApplyWallpaper.text = "Download"
         }
 
-
         binding.buttonApplyWallpaper.setOnClickListener {
-//           if(arrayList[position]?.gems==0 || arrayList[position]?.unlockimges==true){
             if (bitmap != null) {
-
-                if (binding.buttonApplyWallpaper.text == "Download"){
+                if (binding.buttonApplyWallpaper.text == "Download") {
                     sharedViewModel.clearChargeAnimation()
                     sharedViewModel.setchargingAnimation(listOf(arrayList[position]))
                     findNavController().navigate(R.id.doubleWallpaperDownloadFragment)
-                }else{
-                    if (homeScreenBitmap != null && lockScreenBitmap != null){
-                        if (AdConfig.ISPAIDUSER){
-                            if (isAdded){
-                                myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
-                                    homeScreenBitmap!!
-                                ) }
+                } else {
+                    if (homeScreenBitmap != null && lockScreenBitmap != null) {
+                        if (isAdded) {
+                            myExecutor.execute {
+                                myWallpaperManager.doubleWallpaper(
+                                    lockScreenBitmap!!, homeScreenBitmap!!
+                                )
+                            }
 
-                                myHandler.post {
-                                    if (isAdded) {
-                                        interstitialAdWithToast(
-                                            "Double Wallpaper applied successfully"
-                                        )
-                                    }
+                            myHandler.post {
+                                if (isAdded) {
+                                    interstitialAdWithToast(
+                                        "Double Wallpaper applied successfully"
+                                    )
                                 }
                             }
-                        }else{
-
-                            interAd.showAd(
-                                requireActivity(),
-                                "downloadscr_set_click",
-                                adListener = object : IKShowAdListener {
-                                    override fun onAdsShowFail(error: IKAdError) {
-                                        if (isAdded){
-                                            myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
-                                                homeScreenBitmap!!
-                                            ) }
-                                            myHandler.post {
-                                                if (isAdded) {
-                                                    interstitialAdWithToast(
-                                                        "Double Wallpaper applied successfully"
-                                                    )
-                                                }
-                                            }
-
-                                        }
-                                    }
-                                    override fun onAdsDismiss() {
-                                        if (isAdded){
-                                            myExecutor.execute { myWallpaperManager.doubleWallpaper(lockScreenBitmap!!,
-                                                homeScreenBitmap!!
-                                            ) }
-
-                                            myHandler.post {
-                                                if (isAdded) {
-                                                    interstitialAdWithToast(
-                                                        "Double Wallpaper applied successfully"
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            )
                         }
-
-
                     }
                 }
-
-
             } else {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                    getString(R.string.your_image_not_fetched_properly),
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
 
         binding.shareAPp.setOnClickListener {
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_ShareBT_Click")
-                )
-            }
             val appPackageName = requireContext().packageName
             val appName = requireContext().getString(R.string.app_name)
 
@@ -373,29 +273,18 @@ class DoubleWallpaperSliderFragment : Fragment() {
             Constants.checkAppOpen = false
         }
 
-
         binding.wallpaperInfo.setOnClickListener {
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "ViewListWallScr_InfoBT_Click")
-                )
-            }
             if (arrayList[position]?.id != null) {
                 imageDetailsSheet()
             } else {
                 Toast.makeText(
-                    requireContext(),
-                    "This is Ad position,No info Available",
-                    Toast.LENGTH_SHORT
+                    requireContext(), "This is Ad position,No info Available", Toast.LENGTH_SHORT
                 ).show()
             }
             Constants.checkInter = false
             Constants.checkAppOpen = false
 
         }
-
     }
 
     fun imageDetailsSheet() {
@@ -409,14 +298,13 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
         if (arrayList[position] != null) {
             binding.imageName.text = "Double Wallpaper"
-            binding.imageSize.text = (arrayList[position]?.size1!! + arrayList[position]?.size2!!).toString() + " Kb"
+            binding.imageSize.text =
+                (arrayList[position]?.size1!! + arrayList[position]?.size2!!).toString() + " Kb"
             binding.imageCapacity.text = "832 X 1456"
             binding.imageTags.text = ""
         } else {
             Toast.makeText(
-                requireContext(),
-                "This is Ad position,No info Available",
-                Toast.LENGTH_SHORT
+                requireContext(), "This is Ad position,No info Available", Toast.LENGTH_SHORT
             ).show()
         }
 
@@ -424,28 +312,16 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
         bottomSheetDialog.show()
     }
+
     private fun interstitialAdWithToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
+
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun setViewPager() {
         adapter = DoubleWallpaperSliderAdapter(arrayList, myActivity)
         adapter!!.setCoroutineScope(fragmentScope)
 
-        IKSdkController.loadNativeDisplayAd("viewlistdoublewallscr_scroll", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    adapter?.nativeAdView = adObject
-                    viewPager2?.adapter = adapter
-                    viewPager2?.setCurrentItem(position, false)
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })
         viewPager2?.adapter = adapter
         Log.e(TAG, "setViewPager: " + position)
         viewPager2?.setCurrentItem(position, false)
@@ -468,42 +344,33 @@ class DoubleWallpaperSliderFragment : Fragment() {
             override fun onPageSelected(positi: Int) {
                 if (positi >= 0 && positi < arrayList.size) {
                     if (arrayList[positi]?.hd_url1 != null) {
-                        getLargImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[positi]?.hd_url1!!
-                        getSmallImage = AdConfig.BASE_URL_DATA + "/doublewallpaper/" +arrayList[positi]?.compress_url1!!
+                        getLargImage =
+                            AdConfig.BASE_URL_DATA + "/doublewallpaper/" + arrayList[positi]?.hd_url1!!
+                        getSmallImage =
+                            AdConfig.BASE_URL_DATA + "/doublewallpaper/" + arrayList[positi]?.compress_url1!!
 
                         position = positi
                     } else {
                         position = positi
                     }
-
-
-
 
                     if (arrayList[positi]?.hd_url1 == null) {
                         binding.unlockWallpaper.visibility = View.GONE
                         binding.buttonApplyWallpaper.visibility = View.GONE
                         binding.bottomMenu.visibility = View.GONE
 
-                        binding.adsView.visibility = View.GONE
                     } else {
                         binding.bottomMenu.visibility = View.VISIBLE
-                        if (AdConfig.ISPAIDUSER){
-
-                            binding.adsView.visibility = View.GONE
-                        }else{
-                            binding.adsView.visibility = View.VISIBLE
-
-                        }
                         binding.buttonApplyWallpaper.visibility = View.VISIBLE
 
                     }
 
-                    if (arrayList[position]?.downloaded == true){
+                    if (arrayList[position]?.downloaded == true) {
                         binding.buttonApplyWallpaper.text = "Set Wallpaper"
-                    }else{
+                    } else {
                         binding.buttonApplyWallpaper.text = "Download"
                     }
-                    Log.e(TAG, "onPageSelected: "+position )
+                    Log.e(TAG, "onPageSelected: " + position)
                     getBitmapFromGlide(getLargImage)
                     arrayList[positi]?.let { loadBitmapsAndPerformAction(it) }
                 }
@@ -513,12 +380,13 @@ class DoubleWallpaperSliderFragment : Fragment() {
     }
 
     fun loadBitmapsAndPerformAction(doubleWallModelList: DoubleWallModel) {
-        if (isAdded){
-            Glide.with(requireContext())
-                .asBitmap()
-                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +doubleWallModelList.hd_url1)
+        if (isAdded) {
+            Glide.with(requireContext()).asBitmap()
+                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" + doubleWallModelList.hd_url1)
                 .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    override fun onResourceReady(
+                        resource: Bitmap, transition: Transition<in Bitmap>?
+                    ) {
                         // Store the first bitmap and increment the counter
                         lockScreenBitmap = resource
                     }
@@ -528,11 +396,12 @@ class DoubleWallpaperSliderFragment : Fragment() {
                     }
                 })
 
-            Glide.with(requireContext())
-                .asBitmap()
-                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" +doubleWallModelList.hd_url2)
+            Glide.with(requireContext()).asBitmap()
+                .load(AdConfig.BASE_URL_DATA + "/doublewallpaper/" + doubleWallModelList.hd_url2)
                 .into(object : CustomTarget<Bitmap>() {
-                    override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    override fun onResourceReady(
+                        resource: Bitmap, transition: Transition<in Bitmap>?
+                    ) {
                         // Store the second bitmap and increment the counter
                         homeScreenBitmap = resource
 
@@ -548,7 +417,6 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
 
     }
-
 
     private fun addNullValueInsideArray(data: List<DoubleWallModel?>): ArrayList<DoubleWallModel?> {
 
@@ -612,14 +480,6 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
 
         return newData
-    }
-
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking( eventName, *param)
     }
 
     override fun onDestroyView() {

@@ -11,10 +11,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperCategoriesBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -23,10 +19,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventList
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.ForegroundWorker.Companion.TAG
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.GetLiveWallpaperByCategoryViewmodel
 
@@ -37,13 +31,9 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
     private lateinit var myActivity: MainActivity
     private var categoriesJson = ""
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
-    val interAd = IKInterstitialAd()
-
-//    var checkAppOpen = false
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         _binding = FragmentLiveWallpaperCategoriesBinding.inflate(inflater, container, false)
@@ -60,22 +50,10 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
 
         Log.d("LiveWallpaperCategory", "onViewCreated: categoryList: $categoryList")
 
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         val adapter = ApiCategoriesNameAdapter(categoryList, object : StringCallback {
             override fun getStringCall(string: String) {
-//                catListViewmodel.getAllCreations(string)
                 if (string == "Roro'Noa Zoro") {
                     myViewModel.getMostUsed("Roro")
 
@@ -84,33 +62,8 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
                     myViewModel.getMostUsed(string)
                 }
 
-                if (AdConfig.ISPAIDUSER) {
-                    if (isAdded) {
-                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                    }
-                } else {
-                    var shouldShowInterAd = true
-
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showInterAd()
-                    }
+                if (isAdded) {
+                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                 }
             }
         }, myActivity, "live")
@@ -122,25 +75,6 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
             Constants.checkAppOpen = false
         }
 
-    }
-
-    private fun showInterAd() {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_cate_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    Constants.checkInter = true
-                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                }
-            }
-        )
     }
 
     override fun onStart() {

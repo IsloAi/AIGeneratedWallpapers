@@ -20,20 +20,13 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.listener.pub.IKShowWidgetAdListener
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class ChargingAnimationAdapter  (
@@ -73,7 +66,6 @@ class ChargingAnimationAdapter  (
     }
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder){
-            loadad(holder,binding)
         }
     }
 
@@ -222,7 +214,7 @@ class ChargingAnimationAdapter  (
 
     }
 
-    fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
+    /*fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
         Log.e("TAG", "loadad: inside method")
         coroutineScope?.launch(Dispatchers.Main) {
             val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
@@ -264,7 +256,8 @@ class ChargingAnimationAdapter  (
 
         }
 
-    }
+    }*/
+
     private fun isNetworkAvailable(): Boolean {
         val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -277,7 +270,6 @@ class ChargingAnimationAdapter  (
             networkInfo != null && networkInfo.isConnected
         }
     }
-
 
     fun updateMoreData(list:ArrayList<ChargingAnimModel?>){
         val startPosition = arrayList.size
@@ -308,8 +300,8 @@ class ChargingAnimationAdapter  (
         notifyDataSetChanged()
     }
 
-
     interface downloadCallback {
         fun getPosition(position:Int,model: ChargingAnimModel)
     }
+
 }

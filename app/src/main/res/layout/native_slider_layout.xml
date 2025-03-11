@@ -3,11 +3,5 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <com.ikame.android.sdk.widgets.IkmWidgetAdView
-        android:id="@+id/adsView"
-        android:background="@color/transparent_background"
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

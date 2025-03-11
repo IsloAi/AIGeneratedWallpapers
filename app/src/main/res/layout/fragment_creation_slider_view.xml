@@ -1,166 +1,160 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.CreationSliderViewFragment"
     android:background="@color/black"
-    >
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.CreationSliderViewFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/rootContainer"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolBar"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/viewPager"
-            app:layout_constraintHeight_percent=".1"
             android:layout_marginHorizontal="@dimen/_10sdp"
-            >
+            app:layout_constraintBottom_toTopOf="@+id/viewPager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent=".1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
             <RelativeLayout
                 android:id="@+id/backButton"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:gravity="center"
-                app:layout_constraintStart_toStartOf="parent">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/back"
-                    />
+                    android:src="@drawable/back" />
             </RelativeLayout>
+
             <TextView
                 android:id="@+id/premium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/backButton"
-                android:text="@string/wallpapers"
                 android:layout_marginStart="@dimen/_5sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/white"
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
+                android:text="@string/wallpapers"
+                android:textColor="@color/white"
                 android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
-                tools:ignore="HardcodedText"/>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/backButton"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <TextView
                 android:id="@+id/gemsText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:textColor="@color/gems_color"
                 android:fontFamily="@font/raleway_medium"
                 android:gravity="center"
                 android:text="22"
-                android:visibility="gone"
-                app:layout_constraintEnd_toStartOf="@+id/animationDdd"
+                android:textColor="@color/gems_color"
                 android:textSize="@dimen/_13sdp"
                 android:textStyle="bold"
-                tools:ignore="HardcodedText"/>
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/animationDdd"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="HardcodedText" />
 
             <ImageView
                 android:id="@+id/animationDdd"
                 android:layout_width="@dimen/_40sdp"
                 android:layout_height="@dimen/_40sdp"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginStart="@dimen/_2sdp"
                 android:layout_marginBottom="@dimen/_10sdp"
-                />
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_menu"
-            app:layout_constraintTop_toBottomOf="@+id/toolBar"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:paddingStart="@dimen/_40sdp"
             android:paddingEnd="@dimen/_40sdp"
-            android:clipToPadding="false"
-            android:clipChildren="false"
-            />
+            app:layout_constraintBottom_toTopOf="@+id/bottom_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/progressBar"
             android:layout_width="@dimen/_80sdp"
             android:layout_height="@dimen/_80sdp"
             android:layout_gravity="center"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_menu"
             android:layout_width="0dp"
             android:layout_height="@dimen/_60sdp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewPager"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginHorizontal="@dimen/_20sdp"
             android:layout_marginBottom="@dimen/_15sdp"
-            >
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager">
 
             <Button
                 android:id="@+id/buttonApplyWallpaper"
                 android:layout_width="@dimen/_130sdp"
                 android:layout_height="@dimen/_35sdp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:text="@string/apply_wallpaper"
-                android:fontFamily="@font/raleway_medium"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                android:textColor="@color/mywhite"
                 android:background="@drawable/select_bg"
-                />
+                android:fontFamily="@font/raleway_medium"
+                android:text="@string/apply_wallpaper"
+                android:textAllCaps="false"
+                android:textColor="@color/mywhite"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/favouriteButton"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
+                android:src="@drawable/heart_unsel"
                 android:textAllCaps="false"
                 android:textSize="15sp"
-                android:src="@drawable/heart_unsel"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/buttonApplyWallpaper"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/downloadWallpaper"
                 android:layout_width="@dimen/_30sdp"
                 android:layout_height="@dimen/_30sdp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/buttonApplyWallpaper"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:src="@drawable/download"
-                />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/buttonApplyWallpaper"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

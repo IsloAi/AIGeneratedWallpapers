@@ -15,11 +15,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -57,8 +52,6 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     var isNavigationInProgress = false
 
-    val interAd = IKInterstitialAd()
-
     val TAG = "CATEGORIES"
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -70,17 +63,6 @@ class CategoryFragment : Fragment(), AdEventListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_cate_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
         onCustomCreateView()
     }
 
@@ -103,71 +85,15 @@ class CategoryFragment : Fragment(), AdEventListener {
         val adapter = ApiCategoriesNameAdapter(catlist, object : StringCallback {
             override fun getStringCall(string: String) {
 
-                if (isAdded) {
-                    sendTracking(
-                        "click_item",
-                        Pair("action_type", "ITEM"),
-                        Pair("action_name", "MainScr_CategoryTab_Item_Click")
-                    )
-                }
-
                 catListViewmodel.getAllCreations(string)
 
                 if (AdConfig.ISPAIDUSER) {
                     setFragment(string)
-                } else {
-                    var shouldShowInterAd = true
-
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            setFragment(string)
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            setFragment(string)
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showInterAd(string) // Show the interstitial ad if no conditions were met
-                    }
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            setFragment(string)
-//                            Log.e(TAG, "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd(string)
-//                    }
-
-
                 }
-
 
             }
         }, myActivity, "")
 
-        /*IKSdkController.loadNativeDisplayAd("mainscr_cate_tab_scroll_view", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view != null) {
-                    adapter?.nativeAdView = adObject
-                    binding.recyclerviewAll.adapter = adapter
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure with view object
-            }
-        })*/
         binding.recyclerviewAll.adapter = adapter
 
         myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
@@ -195,27 +121,6 @@ class CategoryFragment : Fragment(), AdEventListener {
         }
     }
 
-    private fun showInterAd(string: String) {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_cate_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        setFragment(string)
-                    }
-                }
-
-                override fun onAdsDismiss() {
-                    if (isAdded) {
-                        Constants.checkInter = true
-                        setFragment(string)
-                    }
-                }
-            }
-        )
-    }
-
     private fun updateUIWithFetchedData() {
         val gson = Gson()
         val categoryList: ArrayList<CatNameResponse> =
@@ -228,10 +133,6 @@ class CategoryFragment : Fragment(), AdEventListener {
                     myViewModel.getMostUsed("Roro")
                 } else {
                     myViewModel.getMostUsed(string)
-                }
-
-                if (isAdded) {
-                    sendTracking("categorymainscr_click", Pair("categorymainscr", "$string Live"))
                 }
 
                 if (AdConfig.ISPAIDUSER) {
@@ -259,16 +160,6 @@ class CategoryFragment : Fragment(), AdEventListener {
                     if (shouldShowInterAd) {
                         showIntersAd() // Show the interstitial ad if no conditions were met
                     }
-//                        if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                            if (isAdded){
-//                                checkAppOpen = false
-//                                findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-//                                Log.e(TAG, "app open showed: ", )
-//                            }
-//                        }else{
-//                            showIntersAd()
-//                        }
-
 
                 }
 
@@ -280,24 +171,10 @@ class CategoryFragment : Fragment(), AdEventListener {
     }
 
     private fun showIntersAd() {
-        interAd.showAd(
-            requireActivity(),
-            "mainscr_cate_tab_click_item",
-            adListener = object : IKShowAdListener {
-                override fun onAdsShowFail(error: IKAdError) {
-                    if (isAdded) {
-                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                    }
-                }
 
-                override fun onAdsDismiss() {
-                    if (isAdded) {
-                        Constants.checkInter = true
-                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                    }
-                }
-            }
-        )
+        if (isAdded) {
+            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+        }
     }
 
     val categoriesJson = """
@@ -355,40 +232,7 @@ class CategoryFragment : Fragment(), AdEventListener {
         return categories.sortedWith(compareBy { orderMap[it.cat_name] ?: Int.MAX_VALUE })
     }
 
-
-    /*    suspend fun addNullValueInsideArray(data: List<CatNameResponse?>): ArrayList<CatNameResponse?>{
-            return withContext(Dispatchers.IO){
-                val firstAdLineThreshold = if (AdConfig.firstAdLineCategoryArt != 0) AdConfig.firstAdLineCategoryArt else 4
-                val firstLine = firstAdLineThreshold * 3
-
-                val lineCount = if (AdConfig.lineCountCategoryArt != 0) AdConfig.lineCountCategoryArt else 5
-                val lineC = lineCount * 3
-                val newData = arrayListOf<CatNameResponse?>()
-
-                for (i in data.indices){
-                    if (i > firstLine && (i - firstLine) % (lineC)  == 0) {
-                        newData.add(null)
-                        Log.e("******NULL", "addNullValueInsideArray: null "+i )
-
-                    }else if (i == firstLine){
-                        newData.add(null)
-                        Log.e("******NULL", "addNullValueInsideArray: null first "+i )
-                    }
-                    Log.e("******NULL", "addNullValueInsideArray: not null "+i )
-                    Log.e("******NULL", "addNullValueInsideArray: "+data[i] )
-                    newData.add(data[i])
-
-                }
-                Log.e("******NULL", "addNullValueInsideArray:size "+newData.size )
-                 newData
-            }
-
-
-        }*/
-
-
     private fun setFragment(name: String) {
-        sendTracking("categorymainscr_click", Pair("categorymainscr", name))
         val bundle = Bundle().apply {
             putString("name", name)
             putString("from", "category")
@@ -402,15 +246,6 @@ class CategoryFragment : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
-
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "Tab"),
-                Pair("action_name", "MainScr_CateTab_View")
-            )
-        }
-
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Categories Screen")
@@ -419,18 +254,10 @@ class CategoryFragment : Fragment(), AdEventListener {
         }
     }
 
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
 
     override fun onAdDismiss() {
         checkAppOpen = true

@@ -23,9 +23,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.widgets.IkmDisplayWidgetAdView
-import com.ikame.android.sdk.widgets.IkmWidgetAdLayout
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.SlideItemContainerBinding
@@ -37,7 +34,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
 
 class WallpaperApiSliderAdapter(
     private val arrayList: ArrayList<CatResponse?>,
@@ -84,26 +80,7 @@ class WallpaperApiSliderAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (AdConfig.ISPAIDUSER) {
-            VIEW_TYPE_CONTAINER1
-        } else if (!isNetworkAvailable() && statusAd == 0) {
-            VIEW_TYPE_CONTAINER1
-        } else {
-            when {
-                (position == firstAdLineThreshold) -> {
-                    return VIEW_TYPE_NATIVE_AD // First ad
-                }
-
-                position > firstAdLineThreshold && (position - firstAdLineThreshold) % lineCount == 0 -> {
-                    return VIEW_TYPE_NATIVE_AD // Subsequent ads
-
-                }
-
-                else -> {
-                    return VIEW_TYPE_CONTAINER1
-                }
-            }
-        }
+        return VIEW_TYPE_CONTAINER1
 
     }
 
@@ -113,20 +90,12 @@ class WallpaperApiSliderAdapter(
         val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                IKSdkController.setEnableShowResumeAds(false)
                 val viewHolderContainer1 = holder as ViewHolderContainer1
                 try {
                     viewHolderContainer1.bind(arrayList, position)
                 } catch (e: NullPointerException) {
                     e.printStackTrace()
                 }
-
-            }
-
-            VIEW_TYPE_NATIVE_AD -> {
-                IKSdkController.setEnableShowResumeAds(false)
-                val viewHolderContainer3 = holder as ViewHolderContainer3
-                viewHolderContainer3.bind(viewHolderContainer3)
             }
         }
         Log.d("tracingImageId", "free: list ${arrayList}")
@@ -156,7 +125,6 @@ class WallpaperApiSliderAdapter(
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
-            loadad(holder, binding)
         }
     }
 
@@ -259,70 +227,6 @@ class WallpaperApiSliderAdapter(
             val networkInfo = connectivityManager.activeNetworkInfo
             networkInfo != null && networkInfo.isConnected
         }
-    }
-
-    var nativeAdView: IkmDisplayWidgetAdView? = null
-    fun loadad(holder: RecyclerView.ViewHolder, binding: NativeSliderLayoutBinding) {
-
-        coroutineScope?.launch(Dispatchers.Main) {
-            val adLayout = LayoutInflater.from(binding.root.context).inflate(
-                R.layout.custom_native_slider_layout,
-                null, false
-            ) as? IkmWidgetAdLayout
-            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-
-            if (binding.adsView.isAdLoaded) {
-                Log.e("LIVE_WALL_SCREEN_ADAPTER", "loadad: ")
-            } else {
-                /*IKSdkController.loadNativeDisplayAd("viewlistwallscr_scrollview", object :
-                    IKLoadDisplayAdViewListener {
-                    override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                        nativeAdView = adObject
-                    }
-
-                    override fun onAdLoadFail(error: IKAdError) {
-                        // Handle ad load failure with view object
-                    }
-                })*/
-            }
-            withContext(this.coroutineContext) {
-                /*nativeAdView?.let {
-
-                    binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,
-                        adLayout!!,
-                        "viewlistwallscr_scrollview",
-                        it,
-                        object : IKShowWidgetAdListener {
-                            override fun onAdShowFail(error: IKAdError) {
-                                Log.e("TAG", "onAdsLoadFail: native failded ")
-                                if (statusAd == 0) {
-                                    binding.adsView.visibility = View.GONE
-                                } else {
-                                    if (isNetworkAvailable()) {
-                                        //                                    loadad(holder,binding)
-                                        binding.adsView.visibility = View.VISIBLE
-                                    } else {
-                                        binding.adsView.visibility = View.GONE
-                                    }
-                                }
-                            }
-
-                            override fun onAdShowed() {
-                                binding.adsView.visibility = View.VISIBLE
-                                Log.e("TAG", "onAdsLoaded: native loaded")
-                            }
-                        }
-                    )
-                }*/
-            }
-
-        }
-
     }
 
 }

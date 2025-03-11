@@ -7,21 +7,21 @@
     tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.PopularWallpaperFragment">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/new_main_background"
-        android:id="@+id/topBar"
-        >
+        android:background="@color/new_main_background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll|enterAlwaysCollapsed">
+
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/sliderPager"
                 android:layout_width="match_parent"
-                android:layout_marginTop="@dimen/_7sdp"
                 android:layout_height="@dimen/_150sdp"
+                android:layout_marginTop="@dimen/_7sdp"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
@@ -42,127 +42,114 @@
                 android:id="@+id/trendingHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trending"
-                android:fontFamily="@font/poppins_bold"
-                android:textSize="@dimen/_15sdp"
-                android:textColor="#FFFFFF"
-                android:shadowColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
-                android:shadowDx="0"
-                app:layout_constraintTop_toBottomOf="@id/layoutOnboardingIndicators"
-                android:shadowDy="0"
                 android:layout_marginTop="@dimen/_7sdp"
-                android:shadowRadius="10" />
+                android:fontFamily="@font/poppins_bold"
+                android:shadowColor="@color/white"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="10"
+                android:text="@string/trending"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_15sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/layoutOnboardingIndicators" />
 
 
             <LinearLayout
+                android:id="@+id/more"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="@id/trendingHeading"
+                android:gravity="center"
+                android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@id/trendingHeading"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:gravity="center"
-                android:id="@+id/more"
-                android:orientation="horizontal">
+                app:layout_constraintTop_toTopOf="@id/trendingHeading">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/more"
-                    android:fontFamily="@font/poppins_regular"
-                    android:textSize="@dimen/_12sdp"
-                    android:textColor="@color/button_bg"
                     android:layout_marginEnd="@dimen/_7sdp"
-                    />
-
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="@string/more"
+                    android:textColor="@color/button_bg"
+                    android:textSize="@dimen/_12sdp" />
 
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/icon"
                     android:padding="@dimen/_5sdp"
-                    />
+                    android:src="@drawable/icon" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerviewTrending"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@id/trendingHeading"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/list_item_trending_hroizontal"
-                android:id="@+id/recyclerviewTrending"
-                />
+                app:layout_constraintTop_toBottomOf="@id/trendingHeading"
+                tools:listitem="@layout/list_item_trending_hroizontal" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-
-
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/progressBar"
-            android:layout_width="@dimen/_50sdp"
-            android:layout_height="@dimen/_50sdp"
-            android:layout_centerInParent="true"
-            app:lottie_autoPlay="true"
-            android:translationZ="@dimen/_10sdp"
-            app:lottie_loop="true"
-            android:visibility="gone"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="@id/recyclerviewTrending"
-            app:layout_constraintEnd_toEndOf="@id/recyclerviewTrending"
-            app:layout_constraintTop_toTopOf="@id/recyclerviewTrending"
-            app:layout_constraintBottom_toBottomOf="@id/recyclerviewTrending"
-            />
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressBar"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:translationZ="@dimen/_10sdp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerviewTrending"
+        app:layout_constraintEnd_toEndOf="@id/recyclerviewTrending"
+        app:layout_constraintStart_toStartOf="@id/recyclerviewTrending"
+        app:layout_constraintTop_toTopOf="@id/recyclerviewTrending"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
-        android:id="@+id/refresh"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_scrollFlags="scroll|enterAlways|snap">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             >
+
             <TextView
                 android:id="@+id/wallpaper4kHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4k Wallpapers"
-                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/_7sdp"
                 android:fontFamily="@font/poppins_bold"
-                android:textSize="@dimen/_15sdp"
-                android:textColor="#FFFFFF"
                 android:shadowColor="@color/white"
-                app:layout_constraintStart_toStartOf="parent"
                 android:shadowDx="0"
                 android:shadowDy="0"
-                android:layout_marginTop="@dimen/_7sdp"
-                android:shadowRadius="10" />
+                android:shadowRadius="10"
+                android:text="4k Wallpapers"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/_15sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerviewMostUsed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toBottomOf="@+id/wallpaper4kHeading"
-                tools:listitem="@layout/wallpaper_row"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/wallpaper4kHeading"
                 app:spanCount="3"
-                />
+                tools:listitem="@layout/wallpaper_row" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-
-
-
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

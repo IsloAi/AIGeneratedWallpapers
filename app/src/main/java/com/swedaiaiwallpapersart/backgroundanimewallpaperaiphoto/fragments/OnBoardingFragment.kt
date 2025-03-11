@@ -13,8 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.ikame.android.sdk.IKSdkController
-import com.ikame.android.sdk.tracking.IKTrackingHelper
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentOnBoardingBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -68,144 +66,23 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
 
         populateOnbaordingItems()
 
-        if (isAdded) {
-            sendTracking(
-                "screen_active",
-                Pair("action_type", "screen"),
-                Pair("action_name", "OnboardingScr1_View")
-            )
-        }
-
         binding.onboardingViewPager.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-//                setCurrentIndicator(position)
-                if (AdConfig.ISPAIDUSER) {
-                    when (position) {
-                        0 -> {
-                            if (isAdded) {
-                                sendTracking(
-                                    "screen_active",
-                                    Pair("action_type", "screen"),
-                                    Pair("action_name", "OnboardingScr1_View")
-                                )
-                            }
-                            binding.skipBtn.visibility = View.VISIBLE
-                        }
-
-                        1 -> {
-                            if (isAdded) {
-                                sendTracking(
-                                    "screen_active",
-                                    Pair("action_type", "screen"),
-                                    Pair("action_name", "OnboardingScr2_View")
-                                )
-                            }
-                            binding.skipBtn.visibility = View.VISIBLE
-
-                        }
-
-                        2 -> {
-                            if (isAdded) {
-                                sendTracking(
-                                    "screen_active",
-                                    Pair("action_type", "screen"),
-                                    Pair("action_name", "OnboardingScr3_View")
-                                )
-                            }
-                            binding.skipBtn.visibility = View.GONE
-                        }
+                when (position) {
+                    0 -> {
+                        binding.skipBtn.visibility = View.VISIBLE
                     }
-                } else {
-                    if (AdConfig.onboarding_Full_Native != 1) {
-                        when (position) {
-                            0 -> {
-                                if (isAdded) {
-                                    sendTracking(
-                                        "screen_active",
-                                        Pair("action_type", "screen"),
-                                        Pair("action_name", "OnboardingScr1_View")
-                                    )
-                                }
-                                binding.skipBtn.visibility = View.VISIBLE
-                            }
 
-                            1 -> {
-                                if (isAdded) {
-                                    sendTracking(
-                                        "screen_active",
-                                        Pair("action_type", "screen"),
-                                        Pair("action_name", "OnboardingScr2_View")
-                                    )
-                                }
-                                binding.skipBtn.visibility = View.VISIBLE
+                    1 -> {
+                        binding.skipBtn.visibility = View.VISIBLE
+                    }
 
-                            }
-
-                            2 -> {
-                                if (isAdded) {
-                                    sendTracking(
-                                        "screen_active",
-                                        Pair("action_type", "screen"),
-                                        Pair("action_name", "OnboardingScr3_View")
-                                    )
-                                }
-                                binding.skipBtn.visibility = View.GONE
-                            }
-                        }
-                    } else {
-                        when (position) {
-                            0 -> {
-                                if (isAdded) {
-                                    sendTracking(
-                                        "screen_active",
-                                        Pair("action_type", "screen"),
-                                        Pair("action_name", "OnboardingScr1_View")
-                                    )
-                                }
-                                binding.nextBtn.visibility = View.VISIBLE
-                                binding.skipBtn.visibility = View.VISIBLE
-                                IKSdkController.setEnableShowResumeAds(true)
-                            }
-
-                            1 -> {
-                                if (isAdded) {
-                                    sendTracking(
-                                        "screen_active",
-                                        Pair("action_type", "screen"),
-                                        Pair("action_name", "OnboardingScr2_View")
-                                    )
-                                }
-                                binding.nextBtn.visibility = View.VISIBLE
-                                binding.skipBtn.visibility = View.VISIBLE
-                                IKSdkController.setEnableShowResumeAds(true)
-
-                            }
-
-                            2 -> {
-                                IKSdkController.setEnableShowResumeAds(false)
-                                binding.nextBtn.visibility = View.GONE
-                                binding.skipBtn.visibility = View.GONE
-                            }
-
-                            3 -> {
-                                if (isAdded) {
-                                    sendTracking(
-                                        "screen_active",
-                                        Pair("action_type", "screen"),
-                                        Pair("action_name", "OnboardingScr3_View")
-                                    )
-                                }
-                                binding.nextBtn.visibility = View.VISIBLE
-                                binding.skipBtn.visibility = View.GONE
-                                IKSdkController.setEnableShowResumeAds(true)
-                            }
-                        }
+                    2 -> {
+                        binding.skipBtn.visibility = View.GONE
                     }
                 }
-
-
             }
         })
 
@@ -219,16 +96,6 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
             val currentItem = binding.onboardingViewPager.currentItem
             val lastItemIndex = (binding.onboardingViewPager.adapter?.itemCount ?: 0) - 1
             Log.e("TAG", "onViewCreated: " + currentItem)
-
-
-            if (isAdded) {
-                sendTracking(
-                    "click_button",
-                    Pair("action_type", "button"),
-                    Pair("action_name", "OnboardingScr1_Next_Click")
-                )
-            }
-
 
             if (currentItem < lastItemIndex) {
                 // Move to the next item
@@ -250,14 +117,6 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
 
         val backPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (isAdded) {
-                    sendTracking(
-                        "click_button",
-                        Pair("action_type", "button"),
-                        Pair("action_name", "Sytem_BackButton_Click")
-                    )
-                }
-
                 when (binding.onboardingViewPager.currentItem) {
                     3 -> binding.onboardingViewPager.currentItem = 2
                     2 -> binding.onboardingViewPager.currentItem = 1
@@ -280,14 +139,6 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
             requireActivity().onBackInvokedDispatcher.registerOnBackInvokedCallback(
                 OnBackInvokedDispatcher.PRIORITY_DEFAULT
             ) {
-                if (isAdded) {
-                    sendTracking(
-                        "click_button",
-                        Pair("action_type", "button"),
-                        Pair("action_name", "Sytem_BackButton_Click")
-                    )
-                }
-
                 when (binding.onboardingViewPager.currentItem) {
                     3 -> binding.onboardingViewPager.currentItem = 2
                     2 -> binding.onboardingViewPager.currentItem = 1
@@ -300,13 +151,6 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
                 }
             }
         }
-    }
-
-    private fun sendTracking(
-        eventName: String,
-        vararg param: Pair<String, String?>
-    ) {
-        IKTrackingHelper.sendTracking(eventName, *param)
     }
 
     override fun onDestroyView() {

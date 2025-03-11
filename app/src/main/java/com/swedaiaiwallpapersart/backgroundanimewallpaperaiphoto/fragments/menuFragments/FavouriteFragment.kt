@@ -19,10 +19,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
-import com.ikame.android.sdk.data.dto.pub.IKAdError
-import com.ikame.android.sdk.format.intertial.IKInterstitialAd
-import com.ikame.android.sdk.listener.pub.IKLoadAdListener
-import com.ikame.android.sdk.listener.pub.IKShowAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFavouriteBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
@@ -62,7 +58,6 @@ class FavouriteFragment : Fragment() {
     private lateinit var roomViewModel: RoomViewModel
     private var cachedIGList: ArrayList<FavouriteListIGEntity>? = ArrayList()
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    val interAd = IKInterstitialAd()
     val sharedViewModel: SharedViewModel by activityViewModels()
     val TAG = "FAVORITES"
 
@@ -81,17 +76,6 @@ class FavouriteFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         wallpapers = mutableListOf()
-        interAd.attachLifecycle(this.lifecycle)
-        // Load ad with a specific screen ID, considered as a unitId
-        interAd.loadAd("mainscr_favorite_tab_click_item", object : IKLoadAdListener {
-            override fun onAdLoaded() {
-                // Ad loaded successfully
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
         onCreateViewCalling()
 
         binding.StaticWallpaper.setOnClickListener {
@@ -174,7 +158,7 @@ class FavouriteFragment : Fragment() {
                         sharedViewModel.setFavLiveWallpaper(listOf(model))
                         DownloadLiveWallpaperFragment.shouldObserveFavorites = true
                         DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = false
-                        MySharePreference.setLiveComingFrom(requireContext(),"Favourite")
+                        MySharePreference.setLiveComingFrom(requireContext(), "Favourite")
                         // Create the action using Safe Args
                         findNavController().navigate(R.id.downloadLiveWallpaperFragment)
                     }
@@ -236,29 +220,15 @@ class FavouriteFragment : Fragment() {
                 "favorites",
                 object : PositionCallback {
                     override fun getPosition(position: Int) {
-
-                        interAd.showAd(requireActivity(),
-                            "mainscr_favorite_tab_click_item",
-                            adListener = object : IKShowAdListener {
-                                override fun onAdsShowFail(error: IKAdError) {
-                                    if (isAdded) {
-                                        navigateToDestination(ArrayList(catResponses), position)
-                                    }
-                                }
-
-                                override fun onAdsDismiss() {
-                                    if (isAdded) {
-                                        navigateToDestination(ArrayList(catResponses), position)
-                                    }
-                                }
-                            })
+                        if (isAdded) {
+                            navigateToDestination(ArrayList(catResponses), position)
+                        }
                     }
 
                     override fun getFavorites(position: Int) {
 
                     }
                 })
-        //adapter.setCoroutineScope(fragmentScope)
 
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.selfCreationRecyclerView.adapter = adapter
