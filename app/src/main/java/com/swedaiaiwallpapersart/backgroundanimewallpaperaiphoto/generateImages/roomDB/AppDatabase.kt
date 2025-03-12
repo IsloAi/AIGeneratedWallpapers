@@ -15,8 +15,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.Favourit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 
 @Database(
-    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class,FavouriteLiveModel::class],
-    version = 12
+    entities = [GetResponseIGEntity::class, FavouriteListIGEntity::class, SingleDatabaseResponse::class, LiveWallpaperModel::class, FavouriteLiveModel::class],
+    version = 13,
+    exportSchema = false
 )
 @TypeConverters(ArrayListStringConverter::class)
 abstract class AppDatabase : RoomDatabase() {

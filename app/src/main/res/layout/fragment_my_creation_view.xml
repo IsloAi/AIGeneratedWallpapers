@@ -472,13 +472,12 @@
             android:layout_marginHorizontal="@dimen/_15sdp"
             android:paddingVertical="@dimen/_5sdp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/adsView"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.08"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/promptDeatils"
 
-            >
+            app:layout_constraintTop_toBottomOf="@id/promptDeatils">
 
             <Button
                 android:id="@+id/reGenerateBtn"
@@ -508,13 +507,6 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <com.ikame.android.sdk.widgets.IkmWidgetAdView
-            android:id="@+id/adsView"
-            android:layout_width="match_parent"
-
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

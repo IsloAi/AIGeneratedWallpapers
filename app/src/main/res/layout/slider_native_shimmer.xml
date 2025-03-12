@@ -18,8 +18,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_centerVertical="true"
-            android:adjustViewBounds="true"
             android:layout_marginStart="6dp"
+            android:adjustViewBounds="true"
             android:background="@color/color_shimmer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

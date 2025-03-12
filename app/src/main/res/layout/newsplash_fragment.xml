@@ -101,12 +101,11 @@
         android:id="@+id/loadingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_3sdp"
         android:fontFamily="@font/poppins_medium"
         android:text="@string/loading"
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@id/activeProgress"
+        app:layout_constraintBottom_toTopOf="@+id/activeProgress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -116,22 +115,22 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_20sdp"
+        android:layout_marginBottom="@dimen/_10sdp"
         android:indeterminateDuration="5000"
         android:progress="0"
         android:progressDrawable="@drawable/progress_drawable_new"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintBottom_toTopOf="@+id/maxAdView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.6" />
 
-
-    <com.ikame.android.sdk.widgets.IkmWidgetAdView
-        android:id="@+id/adsView"
+    <com.applovin.mediation.ads.MaxAdView
+        android:id="@+id/BannerMaxAdView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:layout_height="@dimen/_50sdp"
+        app:layout_constraintBottom_toBottomOf="@+id/videoView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

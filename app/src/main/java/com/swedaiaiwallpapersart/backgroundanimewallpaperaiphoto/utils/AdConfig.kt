@@ -99,10 +99,19 @@ object AdConfig {
     var autoNext = false
     var timeNext = 5000L
 
-    var onboarding_Full_Native = 1
+    var onboarding_Full_Native = 0
 
     var avoidPolicyOpenAdInter = 0
     var avoidPolicyRepeatingInter = 0
+
+    var applovinSdkKey: String = ""
+    var applovinAndroidBanner: String = ""
+    var applovinAndroidInterstitial: String = ""
+    var applovinAndroidReward: String = ""
+    var admobAndroidAppOpen: String = "ca-app-pub-3940256099942544/9257395921"
+    var admobAndroidNative: String = "ca-app-pub-3940256099942544/2247696110"
+
+
 }
 
 

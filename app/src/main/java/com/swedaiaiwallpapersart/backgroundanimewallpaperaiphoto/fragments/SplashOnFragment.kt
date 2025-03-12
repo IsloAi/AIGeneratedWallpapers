@@ -14,7 +14,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -64,20 +64,20 @@ class SplashOnFragment : Fragment() {
 
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
+        binding.BannerMaxAdView.loadAd()
+        MaxInterstitialAds.loadInterstitialAd(requireContext())
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-
             val duration = 2000
             val interval = 20
-
             val steps = duration / interval
             val progressIncrement = 100 / steps
-
             for (currentProgress in 0..100 step progressIncrement) {
                 if (isAdded) {
                     binding.activeProgress.progress = currentProgress
                 }
                 delay(interval.toLong())
             }
+            navigateToNextScreen()
         }
         animateLoadingText()
 
@@ -86,14 +86,13 @@ class SplashOnFragment : Fragment() {
     private fun navigateToNextScreen() {
         if (lan.isEmpty() && isAdded) {
             hasNavigated = true
-            findNavController().navigate(R.id.localizationFragment)
+            MaxInterstitialAds.showInterstitial(requireActivity()) {
+                findNavController().navigate(R.id.localizationFragment)
+            }
         } else {
             if (isAdded) {
-                if (AdConfig.inAppConfig) {
-                    hasNavigated = true
-                    findNavController().navigate(R.id.localizationFragment)
-                } else {
-                    hasNavigated = true
+                hasNavigated = true
+                MaxInterstitialAds.showInterstitial(requireActivity()) {
                     findNavController().navigate(R.id.homeTabsFragment)
                 }
             }
@@ -135,28 +134,11 @@ class SplashOnFragment : Fragment() {
             }
         }
         val lan = MySharePreference.getLanguage(requireContext())
-
-        if (counter > 0) {
-            if (isAdded) {
-                navigateToNextScreen()
-            }
-        }
-        handleAppResume()
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
-    }
-
-    private fun handleAppResume() {
-        if (moveNext && !hasNavigated) {
-            if (isAdded) {
-                navigateToNextScreen()
-            }
-        } else {
-            Log.e("TAG", "handleAppResume: ")
         }
     }
 

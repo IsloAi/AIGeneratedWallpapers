@@ -10,7 +10,11 @@
         android:id="@+id/backImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
@@ -47,7 +51,6 @@
         android:progress="0"
         app:indicatorColor="@color/button_bg"
         app:indicatorSize="@dimen/_100sdp"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolBar"
@@ -85,10 +88,10 @@
         android:textColor="@color/mywhite"
         android:textSize="15sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/progress"
+        app:layout_constraintTop_toBottomOf="@+id/progress"
         app:layout_constraintWidth_percent="0.7" />
 
     <TextView

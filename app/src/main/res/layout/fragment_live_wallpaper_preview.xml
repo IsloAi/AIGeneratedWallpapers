@@ -60,6 +60,7 @@
         android:id="@+id/buttonApplyWallpaper"
         android:layout_width="0dp"
         android:layout_height="@dimen/_35sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
         android:background="@drawable/new_button_bg"
         android:fontFamily="@font/raleway_medium"
         android:minWidth="@dimen/_160sdp"
@@ -93,7 +94,7 @@
         android:background="#4D000000"
         android:clickable="false"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintBottom_toTopOf="@+id/buttonApplyWallpaper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

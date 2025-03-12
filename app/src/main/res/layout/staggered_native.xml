@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.ikame.android.sdk.widgets.IkmWidgetAdLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -19,17 +18,17 @@
             android:gravity="center"
 
             android:text="@string/txt_ad"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             android:textColor="@color/white"
-            android:textSize="10dp" />
+            android:textSize="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginHorizontal="@dimen/_8sdp"
-            android:layout_marginVertical="@dimen/_8sdp">
+            android:layout_marginVertical="@dimen/_8sdp"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/custom_containerAds"
@@ -53,7 +52,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    app:layout_goneMarginStart="16dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins_medium"
                     android:maxLines="1"
@@ -62,7 +60,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/custom_app_icon"
                     app:layout_constraintTop_toTopOf="parent"
-                     />
+                    app:layout_goneMarginStart="16dp" />
 
                 <TextView
                     android:id="@+id/custom_body"
@@ -75,21 +73,8 @@
                     android:textSize="10dp"
                     app:layout_constraintEnd_toEndOf="@+id/custom_headline"
                     app:layout_constraintStart_toStartOf="@+id/custom_headline"
-                    app:layout_constraintTop_toBottomOf="@+id/custom_headline"
-                     />
+                    app:layout_constraintTop_toBottomOf="@+id/custom_headline" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <com.ikame.android.sdk.widgets.IkmWidgetMediaView
-                android:id="@+id/custom_media"
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/_6sdp"
-                android:layout_marginTop="4dp"
-                app:layout_constraintTop_toBottomOf="@+id/custom_containerAds"
-                app:layout_constraintBottom_toTopOf="@id/custom_call_to_action"
-                />
 
             <TextView
                 android:id="@+id/custom_call_to_action"
@@ -106,12 +91,11 @@
                 android:paddingHorizontal="16dp"
                 android:textColor="@color/white"
                 android:textSize="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-</com.ikame.android.sdk.widgets.IkmWidgetAdLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

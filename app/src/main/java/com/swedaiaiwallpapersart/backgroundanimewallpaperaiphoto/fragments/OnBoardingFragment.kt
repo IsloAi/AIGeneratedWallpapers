@@ -174,10 +174,9 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
 
         welcomeAdapter.addFragment(WelcomeFragment(), "1")
         welcomeAdapter.addFragment(welcomeFragment2(), "2")
-        if (AdConfig.onboarding_Full_Native == 1 && !AdConfig.ISPAIDUSER) {
+        if (AdConfig.onboarding_Full_Native == 1) {
             welcomeAdapter.addFragment(WelcomeFragment3(), "4")
         }
-
         welcomeAdapter.addFragment(WelcomeFragment4(), "3")
 
         binding.onboardingViewPager.adapter = welcomeAdapter

@@ -126,10 +126,7 @@ class LiveWallpaperAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (AdConfig.ISPAIDUSER) {
-            return VIEW_TYPE_CONTAINER1
-        }
-        return if (arrayList[position] == null) VIEW_TYPE_NATIVE_AD else VIEW_TYPE_CONTAINER1
+        return VIEW_TYPE_CONTAINER1
     }
 
     @SuppressLint("SetTextI18n")

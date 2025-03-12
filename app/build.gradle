@@ -72,10 +72,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'com.google.firebase:firebase-crashlytics:19.0.3'
-    implementation 'com.google.firebase:firebase-analytics:22.1.0'
-    implementation 'com.google.firebase:firebase-messaging-ktx:24.0.1'
-    implementation 'androidx.lifecycle:lifecycle-process:2.8.5'
+    implementation 'com.google.firebase:firebase-crashlytics:19.4.1'
+    implementation 'com.google.firebase:firebase-analytics:22.3.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx:24.1.0'
+    implementation 'androidx.lifecycle:lifecycle-process:2.8.7'
     implementation("com.google.firebase:firebase-config")
     implementation 'androidx.hilt:hilt-common:1.2.0'
     testImplementation 'junit:junit:4.13.2'
@@ -101,16 +101,15 @@ dependencies {
     // define any required OkHttp artifacts without version
     implementation("com.squareup.okhttp3:okhttp")
     //coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0"
 
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
 
     //screen Sizing
     implementation 'com.intuit.sdp:sdp-android:1.1.1'
     //Image picker
     implementation "com.github.dhaval2404:imagepicker:2.1"
-    //implementation "com.github.MikeOrtiz:TouchImageView:1.4.1"
 
     //viewModel
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5'
@@ -126,22 +125,24 @@ dependencies {
     //roomDatabase
     implementation "androidx.room:room-runtime:2.6.1"
     implementation "androidx.room:room-ktx:2.6.1"
+    //noinspection KaptUsageInsteadOfKsp
     kapt "androidx.room:room-compiler:2.6.1"
 
     //work manager
     implementation 'androidx.work:work-runtime-ktx:2.9.1'
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
 
     //firebase for google login
-    implementation(platform("com.google.firebase:firebase-bom:33.4.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
     // Dependency for Firebase Dynamic Links
     implementation 'com.google.firebase:firebase-dynamic-links-ktx:22.1.0'
     // Official Firebase documentation suggests adding this dependency as well.
-    implementation 'com.google.firebase:firebase-analytics-ktx:22.1.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:22.3.0'
 
     //In-App Review
     implementation("com.google.android.play:review:2.0.1")
     // For Kotlin users also import the Kotlin extensions library for Play In-App Review:
-    implementation("com.google.android.play:review-ktx:2.0.1")
+    implementation("com.google.android.play:review-ktx:2.0.2")
     implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
 
     // swape layout
@@ -151,20 +152,8 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.9.2")
     implementation 'androidx.multidex:multidex:2.0.1'
 
-    //ikame global SDK
-    /*debugImplementation("com.ikame.android-sdk:pub-gamicans-wallpaper-hp:3.00.582") {
-        exclude group: 'com.squareup.okio'
-    }
-    //old SDK
-   releaseImplementation("com.ikame.android-sdk:pub-gamicans-ai-wallpaper-release:3.0.440") {
-       exclude group: 'com.squareup.okio'
-   }
-    releaseImplementation("com.ikame.android-sdk:pub-gamicans-wallpaper-hp:3.00.582") {
-        exclude group: 'com.squareup.okio'
-    }*/
-
     //networking
-    implementation 'com.amitshekhar.android:android-networking:1.0.2'
+    //implementation 'com.amitshekhar.android:android-networking:1.0.2'
 
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.51.1"
@@ -182,5 +171,8 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer:1.4.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
     implementation("androidx.media3:media3-ui:1.4.1")
+
+    implementation("com.applovin:applovin-sdk:13.1.0")
+    implementation("com.google.android.gms:play-services-ads:24.0.0")
 
 }

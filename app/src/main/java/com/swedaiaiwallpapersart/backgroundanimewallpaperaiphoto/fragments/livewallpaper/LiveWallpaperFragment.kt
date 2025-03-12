@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,10 +32,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDec
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.LiveWallpaperViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class LiveWallpaperFragment : Fragment(), AdEventListener {
 
@@ -84,29 +80,16 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     }
 
     private fun loadData() {
-        Log.d("functionCallingTest", "onCreateCustom:  home on create")
         myViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Success -> {
-                    lifecycleScope.launch(Dispatchers.IO) {
 
-                        val list = result.data?.shuffled()
-                        Log.d("LIVE", "loadData: ${list?.size} ")
-                        val listNullable = if (!AdConfig.ISPAIDUSER) {
-                            list?.let { addNullValueInsideArray(it) }
-                        } else {
-                            if (list != null) {
-                                ArrayList(list)
-                            } else {
-                                ArrayList()
-                            }
-                        }
+                    val list = result.data?.shuffled()
+                    Log.d("LIVE", "loadData: ${list?.size} ")
+                    val listNullable = list?.let { addNullValueInsideArray(it) }
+                    listNullable?.let { adapter?.updateData(it) }
+                    adapter!!.setCoroutineScope(fragmentScope)
 
-                        withContext(Dispatchers.Main) {
-                            listNullable?.let { adapter?.updateData(it) }
-                            adapter!!.setCoroutineScope(fragmentScope)
-                        }
-                    }
                 }
 
                 is Response.Loading -> {
@@ -186,69 +169,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-    private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
-
-        return withContext(Dispatchers.IO) {
-            when (AdConfig.liveTabScrollType) {
-                0 -> {
-                    Log.d(TAG, "addNullValueInsideArray: in 0 ")
-                    return@withContext ArrayList(data)
-                }
-
-                1 -> {
-                    Log.d(TAG, "addNullValueInsideArray: in 1 ")
-                    val firstAdLineThreshold =
-                        if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-                    val firstLine = firstAdLineThreshold * 3
-
-                    val lineCount =
-                        if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-                    val lineC = lineCount * 3
-                    val newData = arrayListOf<LiveWallpaperModel?>()
-
-                    for (i in data.indices) {
-                        if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
-                            newData.add(null)
-                        } else if (i == firstLine) {
-                            newData.add(null)
-                        }
-                        newData.add(data[i])
-                    }
-                    return@withContext ArrayList(newData)
-                }
-
-                2 -> {
-                    Log.d(TAG, "addNullValueInsideArray: in 2 ")
-                    val newData = arrayListOf<LiveWallpaperModel?>()
-
-                    val positionToInsertNull =
-                        if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC * 3 else 4 * 3
-
-                    for (i in data.indices) {
-                        if (i == positionToInsertNull) {
-                            newData.add(null) // Add a single null at the specified position.
-                        }
-                        newData.add(data[i]) // Add the original item to the list.
-                    }
-
-                    // If the position exceeds the list size, just append the null at the end.
-                    if (positionToInsertNull >= data.size) {
-                        newData.add(null)
-                    }
-                    Log.d(TAG, "addNullValueInsideArray:Array list size ${newData.size} ")
-                    return@withContext ArrayList(newData)
-                }
-
-                3 -> {
-                    Log.d(TAG, "addNullValueInsideArray: in 3 ")
-                    return@withContext ArrayList(data)
-                }
-
-                else -> {
-                    return@withContext ArrayList(data)
-                }
-            }
-        }
+    private fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
+        return ArrayList(data)
     }
 
     private fun isNetworkAvailable(): Boolean {

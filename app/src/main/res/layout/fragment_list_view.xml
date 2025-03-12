@@ -212,12 +212,11 @@
             android:id="@+id/recyclerviewAll"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/adsView"
+            app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@+id/toolBar"
 
-            />
+            app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
         <RelativeLayout
             android:id="@+id/error_message"

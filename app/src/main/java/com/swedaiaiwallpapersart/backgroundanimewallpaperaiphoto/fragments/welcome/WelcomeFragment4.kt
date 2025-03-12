@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWelcome4Binding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
 class WelcomeFragment4 : Fragment() {
     private var _binding: FragmentWelcome4Binding? = null
@@ -32,6 +34,8 @@ class WelcomeFragment4 : Fragment() {
         setIndicator()
         setCurrentIndicator(2)
 
+        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        nativeAd.loadNativeAd(binding.NativeAdOB3)
     }
 
     private fun setIndicator() {

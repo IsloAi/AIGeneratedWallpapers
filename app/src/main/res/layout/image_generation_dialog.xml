@@ -49,17 +49,6 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-        <com.ikame.android.sdk.widgets.IkmWidgetAdView
-            android:id="@+id/adsView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-
-            android:paddingHorizontal="@dimen/_15sdp"
-            android:paddingVertical="@dimen/_5sdp"
-            app:layout_constraintTop_toBottomOf="@id/mainContentLayout"
-            app:layout_constraintWidth_percent="0.9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

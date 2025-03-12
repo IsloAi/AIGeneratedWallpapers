@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.09"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -36,10 +38,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_5sdp"
             android:fontFamily="@font/poppins_bold"
+            android:padding="@dimen/_5sdp"
             android:text="Next"
             android:textColor="@color/white"
             android:textSize="@dimen/_12sdp"
-            android:padding="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,11 +54,19 @@
         android:layout_height="0dp"
         android:layout_marginHorizontal="@dimen/_10sdp"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="@dimen/_10sdp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/adsView"
+        app:layout_constraintBottom_toTopOf="@+id/NativeAd"
         app:layout_constraintTop_toBottomOf="@id/tool_bar"
         app:spanCount="2"
+        tools:layout_editor_absoluteX="13dp"
         tools:listitem="@layout/list_item_languages" />
+
+    <FrameLayout
+        android:id="@+id/NativeAd"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/rv_languages"
+        app:layout_constraintStart_toStartOf="@+id/rv_languages" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

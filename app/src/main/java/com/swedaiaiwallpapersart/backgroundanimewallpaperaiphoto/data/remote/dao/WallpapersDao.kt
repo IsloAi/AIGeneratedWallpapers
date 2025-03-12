@@ -5,6 +5,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
+import androidx.room.RoomWarnings
 import androidx.room.Update
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -33,6 +35,7 @@ interface WallpapersDao {
     @Query("UPDATE allWallpapers SET liked=:liked WHERE id=:Id")
     fun updateLiked(liked: Boolean, Id: Int)
 
+    @SuppressWarnings(RoomWarnings.CURSOR_MISMATCH) // Suppress warning
     @Query("SELECT * FROM allWallpapers WHERE id = :wallpaperId")
     suspend fun getFavouritesByWallpaperId(wallpaperId: String): CatResponse
 
