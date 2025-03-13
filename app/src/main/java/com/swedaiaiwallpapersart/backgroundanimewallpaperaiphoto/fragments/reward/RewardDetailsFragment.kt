@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +13,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.MaxReward
+import com.applovin.mediation.MaxRewardedAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentRewardDetailsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.LayoutWallpaperGiftDialogBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.RewardedViewModel
@@ -47,10 +54,76 @@ class RewardDetailsFragment : Fragment() {
         }
 
         binding.watchAd.setOnClickListener {
-            if (isAdded){
-                MySharePreference.setVIPGiftBool(requireActivity(),true)
+            if (isAdded) {
+                MySharePreference.setVIPGiftBool(requireActivity(), true)
                 MySharePreference.setVIPGiftDate(requireActivity())
-                showCustomAlertDialog()
+                MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {
+                        Log.d("Reward", "onAdLoaded: Loaded ")
+                        MaxRewardAds.showRewardAd(
+                            requireActivity(),
+                            object : MaxRewardedAdListener {
+                                override fun onAdLoaded(p0: MaxAd) {
+                                }
+
+                                override fun onAdDisplayed(p0: MaxAd) {
+                                }
+
+                                override fun onAdHidden(p0: MaxAd) {
+                                    showCustomAlertDialog()
+                                    MaxRewardAds.loadRewardAds(
+                                        requireActivity(),
+                                        AdConfig.applovinAndroidReward
+                                    )
+                                }
+
+                                override fun onAdClicked(p0: MaxAd) {}
+
+                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Ad is not available",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    MaxRewardAds.loadRewardAds(
+                                        requireActivity(),
+                                        AdConfig.applovinAndroidReward
+                                    )
+                                }
+
+                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                                }
+
+                                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                                    showCustomAlertDialog()
+                                }
+                            })
+                    }
+
+                    override fun onAdDisplayed(p0: MaxAd) {
+                    }
+
+                    override fun onAdHidden(p0: MaxAd) {
+                        showCustomAlertDialog()
+                        MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+                    }
+
+                    override fun onAdClicked(p0: MaxAd) {}
+
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                        Toast.makeText(requireContext(), "Ad is not available", Toast.LENGTH_SHORT)
+                            .show()
+                        MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+                    }
+
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                        MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+                    }
+
+                    override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                        showCustomAlertDialog()
+                    }
+                })
             }
         }
     }
@@ -65,7 +138,7 @@ class RewardDetailsFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialogBinding.viewWallpapers.setOnClickListener {
-            if (isAdded){
+            if (isAdded) {
                 val bundle = Bundle().apply {
                     putString("name", "Vip")
                     putString("from", "Vip")
@@ -89,7 +162,6 @@ class RewardDetailsFragment : Fragment() {
 
         dialog.show()
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

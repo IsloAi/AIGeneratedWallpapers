@@ -12,7 +12,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 object MaxInterstitialAds {
 
     private var interstitialAd: MaxInterstitialAd? = null
-    private var adDismissCallback: (() -> Unit)? = null
 
 
     fun loadInterstitialAd(context: Context) {
@@ -40,13 +39,13 @@ object MaxInterstitialAds {
         interstitialAd?.loadAd()
     }
 
-    fun showInterstitial(context: Activity, onAdDismissed: () -> Unit) {
+    fun showInterstitial(context: Activity, listener: MaxAdListener) {
         if (interstitialAd?.isReady == true) {
-            adDismissCallback = onAdDismissed // Store the callback
+            interstitialAd!!!!.setListener(listener)
             interstitialAd?.showAd(context)
         } else {
             Log.d("AppLovin", "Interstitial Ad Not Ready Yet")
-            onAdDismissed() // Immediately execute callback if ad is not available
+            interstitialAd?.setListener(listener)
         }
     }
 

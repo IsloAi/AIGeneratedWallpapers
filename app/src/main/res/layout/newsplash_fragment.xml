@@ -119,12 +119,12 @@
         android:indeterminateDuration="5000"
         android:progress="0"
         android:progressDrawable="@drawable/progress_drawable_new"
-        app:layout_constraintBottom_toTopOf="@+id/maxAdView"
+        app:layout_constraintBottom_toTopOf="@+id/BannerMaxAdView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.6" />
 
-    <com.applovin.mediation.ads.MaxAdView
+    <FrameLayout
         android:id="@+id/BannerMaxAdView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"

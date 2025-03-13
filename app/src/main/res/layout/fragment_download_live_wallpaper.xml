@@ -57,7 +57,7 @@
         app:layout_constraintBottom_toTopOf="@+id/loadingTxt"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolBar"
+        app:layout_constraintTop_toTopOf="parent"
         app:trackColor="#26C7C7C7"
         app:trackCornerRadius="@dimen/_100sdp"
         app:trackThickness="@dimen/_10sdp" />
@@ -70,10 +70,19 @@
         android:text="Downloading..."
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonApplyWallpaper"
+        app:layout_constraintBottom_toTopOf="@+id/NativeAd"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress" />
+
+    <FrameLayout
+        android:id="@+id/NativeAd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/buttonApplyWallpaper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loadingTxt" />
 
     <Button
         android:id="@+id/buttonApplyWallpaper"

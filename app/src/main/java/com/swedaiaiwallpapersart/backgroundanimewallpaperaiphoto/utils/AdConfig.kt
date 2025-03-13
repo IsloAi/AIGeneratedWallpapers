@@ -70,7 +70,7 @@ object AdConfig {
     var iapScreenType = 2
 
     var ISPAIDUSER = false
-    var Reward_Screen = false
+    var Reward_Screen = true
 
     var regularWallpaperFlow = 0
 
@@ -105,11 +105,15 @@ object AdConfig {
     var avoidPolicyRepeatingInter = 0
 
     var applovinSdkKey: String = ""
-    var applovinAndroidBanner: String = ""
-    var applovinAndroidInterstitial: String = ""
-    var applovinAndroidReward: String = ""
+    var applovinAndroidBanner: String = "28a977ac3117328e"
+    var applovinAndroidInterstitial: String = "2118cd1883ce90b3"
+    var applovinAndroidReward: String = "2ffa4cee789785d6"
     var admobAndroidAppOpen: String = "ca-app-pub-3940256099942544/9257395921"
     var admobAndroidNative: String = "ca-app-pub-3940256099942544/2247696110"
+
+    var appPrivacy: String = ""
+    var appTermsOfServices: String = ""
+    var appSupportMail: String = ""
 
 
 }

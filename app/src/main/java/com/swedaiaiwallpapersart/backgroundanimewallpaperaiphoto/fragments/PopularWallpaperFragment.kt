@@ -70,18 +70,11 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
         var wallFromPopular = false
     }
 
-//    var checkAppOpen = false
-
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
-
     val orignalList = arrayListOf<CatResponse?>()
-
     private lateinit var myActivity: MainActivity
-
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-
-
     private var mostUsedWallpaperAdapter: MostUsedWallpaperAdapter? = null
     private var adapter: ApicategoriesListHorizontalAdapter? = null
     var cachedMostDownloaded = ArrayList<CatResponse?>()
@@ -386,20 +379,17 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
 
 
-                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
+                    Log.e("Popular", "addNullValueInsideArray: null " + i)
 
                 } else if (i == firstLine) {
                     newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
+                    Log.e("Popular", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
+                Log.e("Popular", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
-
-
-
+            Log.e("Popular", "addNullValueInsideArray:size " + newData.size)
 
             newData
         }
@@ -701,7 +691,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
 
             lifecycleScope.launch(Dispatchers.Main) {
-
                 Bundle().apply {
                     putString("from", "trending")
                     putString("wall", "popular")

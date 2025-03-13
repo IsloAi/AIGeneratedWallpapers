@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.ads.MaxAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
@@ -50,28 +52,21 @@ class ListViewFragment : Fragment(), AdEventListener {
     private var from = ""
     private lateinit var myActivity: MainActivity
     var isNavigationInProgress = false
-
     private val viewModel: SaveStateViewModel by activityViewModels()
-
     val sharedViewModel: SharedViewModel by activityViewModels()
-
     var adapter: ApiCategoriesListAdapter? = null
-
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
     var dataset = false
     var oldPosition = 0
-
     var adcount = 0
     var totalADs = 0
     var externalOpen = false
-
     var startIndex = 0
-
     val TAG = "LISTVIEWCAT"
+    private lateinit var adView: MaxAdView
 
     private val mostDownloadedViewmodel: MostDownloadedViewmodel by activityViewModels()
-
     private val rewardedViewModel: RewardedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -81,7 +76,6 @@ class ListViewFragment : Fragment(), AdEventListener {
         onCreateViewCalling()
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -230,6 +224,8 @@ class ListViewFragment : Fragment(), AdEventListener {
 
 
         }
+
+
     }
 
     private fun initTrendingData() {
@@ -427,7 +423,7 @@ class ListViewFragment : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
-
+        createBannerAd()
         if (wallFromList) {
             if (isAdded) {
                 congratulationsDialog()
@@ -540,6 +536,27 @@ class ListViewFragment : Fragment(), AdEventListener {
     companion object {
         var hasToNavigateList = false
         var wallFromList = false
+    }
+
+    private fun createBannerAd() {
+        adView = MaxAdView(AdConfig.applovinAndroidBanner, requireContext())
+
+        // Stretch to the width of the screen for banners to be fully functional
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+
+        // Banner height on phones and tablets is 50 and 90, respectively
+        val heightPx = resources.getDimensionPixelSize(R.dimen.banner_height)
+
+        adView.layoutParams = FrameLayout.LayoutParams(width, heightPx)
+
+        // Set background color for banners to be fully functional
+        adView.setBackgroundColor(resources.getColor(R.color.new_main_background))
+
+        val rootView = binding.bannerAd
+        rootView.addView(adView)
+
+        // Load the ad
+        adView?.loadAd()
     }
 
     override fun onDestroyView() {

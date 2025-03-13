@@ -1,7 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.content.Context
-/*import android.util.Log
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
@@ -15,7 +15,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R*/
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 
 //Created on 6/3/25 by U5M4N-K071N
 /*It's the fear of the bug unseen 
@@ -23,7 +23,7 @@ that makes coding harder to begin.*/
 
 class NativeAdManager(private val context: Context, private val adUnitId: String) {
 
-/*    private var nativeAd: NativeAd? = null
+    private var nativeAd: NativeAd? = null
 
     fun loadNativeAd(adContainer: FrameLayout) {
         val adLoader = AdLoader.Builder(context, adUnitId)
@@ -90,5 +90,5 @@ class NativeAdManager(private val context: Context, private val adUnitId: String
         }
 
         adView.setNativeAd(nativeAd)
-    }*/
+    }
 }

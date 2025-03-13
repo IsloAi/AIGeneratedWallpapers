@@ -18,6 +18,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -38,11 +39,17 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.navigation.fragment.findNavController
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.MaxReward
+import com.applovin.mediation.MaxRewardedAdListener
+import com.applovin.mediation.ads.MaxAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
@@ -77,6 +84,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private var adPosition = 0
     private lateinit var myActivity: MainActivity
     var liveComingFrom: String = ""
+    private lateinit var adView: MaxAdView
 
     @Inject
     lateinit var webApiInterface: EndPointsInterface
@@ -86,8 +94,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private var checkWallpaper = false
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLiveWallpaperPreviewBinding.inflate(inflater, container, false)
         return binding.root
@@ -96,6 +103,27 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     override fun onStart() {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
+    }
+
+    private fun createBannerAd() {
+        adView = MaxAdView(AdConfig.applovinAndroidBanner, requireContext())
+
+        // Stretch to the width of the screen for banners to be fully functional
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
+
+        // Banner height on phones and tablets is 50 and 90, respectively
+        val heightPx = resources.getDimensionPixelSize(R.dimen.banner_height)
+
+        adView.layoutParams = FrameLayout.LayoutParams(width, heightPx)
+
+        // Set background color for banners to be fully functional
+        adView.setBackgroundColor(resources.getColor(R.color.new_main_background))
+
+        val rootView = binding.BannerLivePreview
+        rootView.addView(adView)
+
+        // Load the ad
+        adView.loadAd()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -134,8 +162,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
     private fun backHandle() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     findNavController().popBackStack(R.id.homeTabsFragment, false)
@@ -207,15 +234,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             val destination = File(file, BlurView.fileName)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                 if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
                     Log.e("TAG", "functionality: inside click permission")
                     ActivityCompat.requestPermissions(
-                        myActivity,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        1
+                        myActivity, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1
                     )
                 } else {
                     Log.e("TAG", "functionality: inside click dialog")
@@ -346,8 +370,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private fun showSimpleDialog(context: Context, title: String, message: String) {
         val builder = AlertDialog.Builder(context)
-        builder.setTitle(title)
-            .setMessage(message)
+        builder.setTitle(title).setMessage(message)
 
         builder.setPositiveButton(
             "Yes"
@@ -410,9 +433,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
     private fun notifyFileNameChanged(
-        context: Context?,
-        oldFilePath: String?,
-        newFilePath: String?
+        context: Context?, oldFilePath: String?, newFilePath: String?
     ) {
         val oldFile = File(oldFilePath!!)
         val newFile = File(newFilePath!!)
@@ -430,9 +451,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             ) { _, _ ->
 
                 Toast.makeText(
-                    context,
-                    "renaming a file may take sometime to take effect.",
-                    Toast.LENGTH_SHORT
+                    context, "renaming a file may take sometime to take effect.", Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -444,7 +463,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
     private fun getUserIdDialog() {
-
         val source = File(BlurView.filePath)
         val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val destination = File(file, BlurView.fileName)
@@ -460,18 +478,76 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         val dismiss = dialog.findViewById<TextView>(R.id.noThanks)
 
         getReward.setOnClickListener {
-            copyFiles(source, destination)
-            dialog.dismiss()
-        }
+            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                        override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                            copyFiles(source, destination)
+                            dialog.dismiss()
+                        }
 
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+
+                        }
+
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {
+
+                        }
+
+                        override fun onAdClicked(p0: MaxAd) {
+
+                        }
+
+                        override fun onAdHidden(p0: MaxAd) {
+
+                        }
+
+                        override fun onAdLoaded(p0: MaxAd) {
+
+                        }
+
+                        override fun onAdDisplayed(p0: MaxAd) {
+                        }
+                    })
+                }
+
+                override fun onAdDisplayed(p0: MaxAd) {
+
+                }
+
+                override fun onAdHidden(p0: MaxAd) {
+                    copyFiles(source, destination)
+                    dialog.dismiss()
+                }
+
+                override fun onAdClicked(p0: MaxAd) {
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(
+                        requireContext(),
+                        "AD not available Try again later",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                }
+
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    copyFiles(source, destination)
+                    dialog.dismiss()
+                }
+            })
+
+        }
         dismiss?.setOnClickListener {
             dialog.dismiss()
         }
-
         dialog.show()
     }
 
-    fun copyFiles(source: File, destination: File) {
+    private fun copyFiles(source: File, destination: File) {
         try {
             val inputStream = FileInputStream(source)
             val outputStream = FileOutputStream(destination)
@@ -486,10 +562,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
     private fun addFavourite(
-        context: Context,
-        favouriteButton: ImageView
-    ) {
-        /*val retrofit = RetrofitInstance.getInstance()
+        context: Context, favouriteButton: ImageView
+    ) {/*val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(LikeLiveWallpaper::class.java)
         val postData = FavoruiteLiveWallpaperBody(
             MySharePreference.getDeviceID(context)!!,
@@ -565,17 +639,13 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     }
 
                     Toast.makeText(
-                        requireContext(),
-                        "Wallpaper set successfully",
-                        Toast.LENGTH_SHORT
+                        requireContext(), "Wallpaper set successfully", Toast.LENGTH_SHORT
                     ).show()
                 } else {
                     // The live wallpaper is not set successfully
                     Log.e("LiveWallpaper", "Failed to set live wallpaper")
                     Toast.makeText(
-                        requireContext(),
-                        "Failed to set live wallpaper",
-                        Toast.LENGTH_SHORT
+                        requireContext(), "Failed to set live wallpaper", Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -585,43 +655,34 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     @UnstableApi
     private fun setWallpaperOnView() {
         if (isAdded) {
-            val renderersFactory = DefaultRenderersFactory(requireContext())
-                .setEnableDecoderFallback(true) // Fallback to software decoding if hardware fails
+            val renderersFactory =
+                DefaultRenderersFactory(requireContext()).setEnableDecoderFallback(true) // Fallback to software decoding if hardware fails
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
                 renderersFactory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF)
             } else {
                 renderersFactory.setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_PREFER)
             }
-            val loadControl = DefaultLoadControl.Builder()
-                .setBufferDurationsMs(
-                    DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
-                    DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
-                    DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
-                    DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
-                )
-                .setPrioritizeTimeOverSizeThresholds(true)
-                .build()
+            val loadControl = DefaultLoadControl.Builder().setBufferDurationsMs(
+                DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
+                DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
+                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_MS,
+                DefaultLoadControl.DEFAULT_BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+            ).setPrioritizeTimeOverSizeThresholds(true).build()
 
             val trackSelector = DefaultTrackSelector(requireContext())
             trackSelector.setParameters(trackSelector.buildUponParameters().setMaxVideoSizeSd())
 
-            val exoPlayer = ExoPlayer
-                .Builder(
-                    requireContext(),
-                    renderersFactory
-                )
-                .setLoadControl(loadControl)
-                .setTrackSelector(trackSelector)
-                .setUseLazyPreparation(true)
-                .build()
+            val exoPlayer = ExoPlayer.Builder(
+                requireContext(), renderersFactory
+            ).setLoadControl(loadControl).setTrackSelector(trackSelector)
+                .setUseLazyPreparation(true).build()
 
             // Bind the player to the PlayerView (your binding.liveWallpaper)
             binding.liveWallpaper.player = exoPlayer
 
             // Prepare the media item
-            val mediaItem =
-                MediaItem.fromUri(BlurView.filePath)
+            val mediaItem = MediaItem.fromUri(BlurView.filePath)
             exoPlayer.setMediaItem(mediaItem)
 
             // Set event listeners for playback and error handling

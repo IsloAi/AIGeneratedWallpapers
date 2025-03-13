@@ -151,7 +151,7 @@ dependencies {
     implementation 'androidx.multidex:multidex:2.0.1'
 
     //networking
-    //implementation 'com.amitshekhar.android:android-networking:1.0.2'
+    implementation("com.github.amitshekhariitbhu.Fast-Android-Networking:android-networking:1.0.4")
 
     //Dagger - Hilt
     implementation "com.google.dagger:hilt-android:2.51.1"
@@ -172,5 +172,6 @@ dependencies {
 
     implementation("com.applovin:applovin-sdk:13.1.0")
     implementation("com.google.android.gms:play-services-ads:23.0.0")
+
 
 }

@@ -60,7 +60,6 @@
             app:lottie_autoPlay="true"
             app:lottie_loop="true" />
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolBar"
             android:layout_width="0dp"
@@ -131,91 +130,15 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--        <androidx.constraintlayout.widget.ConstraintLayout-->
-        <!--            android:id="@+id/header"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            app:layout_constraintHeight_percent="0.07"-->
-        <!--            app:layout_constraintTop_toTopOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintBottom_toTopOf="@+id/recyclerviewAll"-->
-        <!--            >-->
-        <!--&lt;!&ndash;            <ImageView&ndash;&gt;-->
-        <!--&lt;!&ndash;                android:id="@+id/backButton"&ndash;&gt;-->
-        <!--&lt;!&ndash;                android:layout_width="@dimen/_35sdp"&ndash;&gt;-->
-        <!--&lt;!&ndash;                android:layout_height="@dimen/_30sdp"&ndash;&gt;-->
-        <!--&lt;!&ndash;                &ndash;&gt;-->
-        <!--&lt;!&ndash;                android:src="@drawable/back"&ndash;&gt;-->
-        <!--&lt;!&ndash;                android:padding="@dimen/_5sdp"&ndash;&gt;-->
-        <!--&lt;!&ndash;                />&ndash;&gt;-->
-        <!--            <TextView-->
-        <!--                android:id="@+id/catTitle"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_centerInParent="true"-->
-        <!--                android:textSize="@dimen/_13sdp"-->
-        <!--                android:textColor="@color/mywhite"-->
-        <!--               app:layout_constraintStart_toEndOf="@id/backButton"-->
-        <!--                app:layout_constraintTop_toTopOf="parent"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                android:textStyle="bold"-->
-        <!--                android:layout_marginStart="@dimen/_5sdp"-->
-        <!--                android:fontFamily="@font/raleway_medium"-->
-        <!--                />-->
-
-        <!--            <RelativeLayout-->
-        <!--                android:id="@+id/backButton"-->
-        <!--                android:layout_width="@dimen/_30sdp"-->
-        <!--                android:layout_height="@dimen/_30sdp"-->
-        <!--                app:layout_constraintStart_toStartOf="parent"-->
-        <!--                app:layout_constraintTop_toTopOf="parent"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                android:gravity="center">-->
-        <!--                <ImageView-->
-        <!--                    android:layout_width="@dimen/_15sdp"-->
-        <!--                    android:layout_height="@dimen/_15sdp"-->
-        <!--                    android:src="@drawable/back"-->
-        <!--                    />-->
-        <!--            </RelativeLayout>-->
-
-        <!--            <TextView-->
-        <!--                android:id="@+id/gemsText"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                app:layout_constraintTop_toTopOf="parent"-->
-        <!--                android:text="200"-->
-        <!--                android:visibility="gone"-->
-        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--                android:textColor="@color/gems_color"-->
-        <!--                android:fontFamily="@font/raleway_medium"-->
-        <!--                android:gravity="center"-->
-        <!--                app:layout_constraintEnd_toStartOf="@+id/animationDdd"-->
-        <!--                android:textSize="@dimen/_13sdp"-->
-        <!--                android:textStyle="bold"-->
-        <!--                tools:ignore="HardcodedText"/>-->
-
-        <!--            <ImageView-->
-        <!--                android:id="@+id/animationDdd"-->
-        <!--                android:layout_width="@dimen/_40sdp"-->
-        <!--                android:layout_height="@dimen/_40sdp"-->
-        <!--                android:visibility="gone"-->
-        <!--                app:layout_constraintTop_toTopOf="parent"-->
-        <!--                app:layout_constraintEnd_toEndOf="parent"-->
-        <!--                android:layout_marginStart="@dimen/_2sdp"-->
-        <!--                android:layout_marginBottom="@dimen/_10sdp"-->
-        <!--                />-->
-
-        <!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerviewAll"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/bottomGuideline"
+            app:layout_constraintBottom_toTopOf="@+id/bannerAd"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
-            app:layout_constraintStart_toStartOf="@id/startGuideline"
 
+            app:layout_constraintStart_toStartOf="@id/startGuideline"
             app:layout_constraintTop_toBottomOf="@+id/toolBar" />
 
         <RelativeLayout
@@ -250,6 +173,14 @@
                 android:textStyle="bold" />
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/bannerAd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/backImage"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

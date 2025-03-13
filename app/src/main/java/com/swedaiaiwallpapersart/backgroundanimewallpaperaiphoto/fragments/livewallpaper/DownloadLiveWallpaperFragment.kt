@@ -13,6 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.DownloadListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -21,6 +25,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
@@ -52,8 +57,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     var showAd: Boolean? = false
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentDownloadLiveWallpaperBinding.inflate(inflater, container, false)
         return binding.root
@@ -68,6 +72,9 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         setEvents()
         initObservers()
+
+        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        nativeAd.loadNativeAd(binding.NativeAd)
     }
 
     override fun onStart() {
@@ -170,8 +177,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
     private fun getBitmapFromGlide(url: String) {
         Glide.with(requireContext()).asBitmap().load(url)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .into(object : CustomTarget<Bitmap>() {
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
 
@@ -200,12 +206,9 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         val totalSize = (size * 1024).toLong()
         animateLoadingText()
-        /*lifecycleScope.launch(Dispatchers.IO) {
-            AndroidNetworking.download(url, file.path, fileName)
-                .setTag("downloadTest")
-                .setPriority(Priority.HIGH)
-                .doNotCacheResponse()
-                .build()
+        lifecycleScope.launch(Dispatchers.IO) {
+            AndroidNetworking.download(url, file.path, fileName).setTag("downloadTest")
+                .setPriority(Priority.HIGH).doNotCacheResponse().build()
                 .setDownloadProgressListener { bytesDownloaded, totalBytes ->
                     Log.e("TAG", "downloadVideo: $bytesDownloaded")
                     Log.e("TAG", "downloadVideo total bytes: $totalBytes")
@@ -217,8 +220,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                         if (isAdded) {
                             val currentCount = (bytesDownloaded * 100 / totalSize)
                             if (currentCount <= 100) {
-                                binding.progressTxt.text =
-                                    currentCount.toString() + "%"
+                                binding.progressTxt.text = currentCount.toString() + "%"
                             } else {
                                 Log.e(TAG, "downloadVideo: $currentCount")
                             }
@@ -227,8 +229,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
 
                     }
-                }
-                .startDownload(object : DownloadListener {
+                }.startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
                         lifecycleScope.launch(Dispatchers.Main) {
                             if (isAdded) {
@@ -255,7 +256,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                         }
                     }
                 })
-        }*/
+        }
     }
 
     private fun animateLoadingText() {

@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -35,6 +36,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
+import com.applovin.mediation.ads.MaxAdView
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
@@ -98,6 +100,7 @@ class HomeTabsFragment : Fragment() {
     private var reviewManager: ReviewManager? = null
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private val rewardedViewModel: RewardedViewModel by activityViewModels()
+    private lateinit var adView: MaxAdView
 
     companion object {
         var navigationInProgress = false
@@ -125,8 +128,7 @@ class HomeTabsFragment : Fragment() {
     )
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeTabsBinding.inflate(inflater, container, false)
 
@@ -140,7 +142,7 @@ class HomeTabsFragment : Fragment() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         reviewManager = ReviewManagerFactory.create(requireContext())
-        SplashOnFragment.exit = false
+        exit = false
         myActivity = activity as MainActivity
 
         if (AdConfig.iapScreenType == 0) {
@@ -161,56 +163,30 @@ class HomeTabsFragment : Fragment() {
 
         setGradienttext()
         setViewPager()
-        handleIntentNotification()
         setEvents()
-
+        showRewardWallpaperScreen()
+        createBannerAd()
     }
 
-    private fun handleIntentNotification() {
-        val feature = activity?.intent?.getStringExtra("ik_notify_feature")
+    private fun createBannerAd() {
+        adView = MaxAdView(AdConfig.applovinAndroidBanner, requireContext())
 
-        Toast.makeText(requireContext(), "Intent feature: $feature", Toast.LENGTH_SHORT).show()
-        when (feature) {
-            "live_wallpaper_tab" -> openLiveWallpaperTab()
-            "tab_popular" -> openPopularScreen()
-            "tab_double" -> openDoubleScreen()
-            "tab_car" -> openCarScreen()
-            "tab_charging" -> openChargingScreen()
-            else -> {
-                showRewardWallpaperScreen()
-            }
-        }
+        // Stretch to the width of the screen for banners to be fully functional
+        val width = ViewGroup.LayoutParams.MATCH_PARENT
 
-    }
+        // Banner height on phones and tablets is 50 and 90, respectively
+        val heightPx = resources.getDimensionPixelSize(R.dimen.banner_height)
 
-    private fun openLiveWallpaperTab() {
-        Log.d("FCM", "openLiveWallpaperTab: will open live tab")
-        Toast.makeText(requireContext(), "going to live tab", Toast.LENGTH_SHORT).show()
-        navigateTOTabs("Live")
-    }
+        adView.layoutParams = FrameLayout.LayoutParams(width, heightPx)
 
-    private fun openPopularScreen() {
-        Toast.makeText(requireContext(), "going to Popular tab", Toast.LENGTH_SHORT).show()
-        Log.d("FCM", "openPopularWallpaperTab: will open popular tab")
-        navigateTOTabs("Popular")
-    }
+        // Set background color for banners to be fully functional
+        adView.setBackgroundColor(resources.getColor(R.color.new_main_background))
 
-    private fun openDoubleScreen() {
-        Toast.makeText(requireContext(), "going to Double tab", Toast.LENGTH_SHORT).show()
-        Log.d("FCM", "openDoubleWallpaperTab: will open Double tab")
-        navigateTOTabs("Double")
-    }
+        val rootView = binding.BannerAD
+        rootView.addView(adView)
 
-    private fun openCarScreen() {
-        Log.d("FCM", "openCarWallpaperTab: will open Car tab")
-        Toast.makeText(requireContext(), "going to Car tab", Toast.LENGTH_SHORT).show()
-        navigateTOTabs("Car")
-    }
-
-    private fun openChargingScreen() {
-        Toast.makeText(requireContext(), "going to Charging tab", Toast.LENGTH_SHORT).show()
-        Log.d("FCM", "openChargingWallpaperTab: will open Charging tab")
-        navigateTOTabs("Charging")
+        // Load the ad
+        adView.loadAd()
     }
 
     private fun feedback1Sheet() {
@@ -447,14 +423,16 @@ class HomeTabsFragment : Fragment() {
             val appUpdateInfoTask = appUpdateManager.appUpdateInfo
 
             appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE && appUpdateInfo.isUpdateTypeAllowed(
+                        AppUpdateType.IMMEDIATE
+                    )
                 ) {
                     try {
                         appUpdateManager.startUpdateFlowForResult(
                             appUpdateInfo,
                             updateResultStarter,
-                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(), 150
+                            AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
+                            150
                         )
                     } catch (exception: IntentSender.SendIntentException) {
                         Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT)
@@ -468,10 +446,8 @@ class HomeTabsFragment : Fragment() {
 
     private val updateResultStarter =
         IntentSenderForResultStarter { intent, _, fillInIntent, flagsMask, flagsValues, _, _ ->
-            val request = IntentSenderRequest.Builder(intent)
-                .setFillInIntent(fillInIntent)
-                .setFlags(flagsValues, flagsMask)
-                .build()
+            val request = IntentSenderRequest.Builder(intent).setFillInIntent(fillInIntent)
+                .setFlags(flagsValues, flagsMask).build()
             updateLauncher.launch(request)
         }
 
@@ -529,8 +505,7 @@ class HomeTabsFragment : Fragment() {
     }
 
     private fun backHandle() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (binding.viewPager.currentItem != 0) {
@@ -539,9 +514,7 @@ class HomeTabsFragment : Fragment() {
                         if (isAdded) {
                             exit = true
                             existDialog.exitPopup(
-                                requireContext(),
-                                requireActivity(),
-                                myActivity
+                                requireContext(), requireActivity(), myActivity
                             )
                         }
                     }
@@ -570,15 +543,13 @@ class HomeTabsFragment : Fragment() {
 
     private fun setGradienttext() {
         val customColors = intArrayOf(
-            Color.parseColor("#FC9502"),
-            Color.parseColor("#FF6726")
+            Color.parseColor("#FC9502"), Color.parseColor("#FF6726")
         )
         val paint: TextPaint = binding.toolTxt.paint
         val width: Float = paint.measureText("4K, Wallpaper")
 
         val shader = LinearGradient(
-            0f, 0f, width, binding.toolTxt.textSize,
-            customColors, null, Shader.TileMode.CLAMP
+            0f, 0f, width, binding.toolTxt.textSize, customColors, null, Shader.TileMode.CLAMP
         )
         binding.toolTxt.paint.shader = shader
     }
@@ -690,9 +661,7 @@ class HomeTabsFragment : Fragment() {
 
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
+                position: Int, positionOffset: Float, positionOffsetPixels: Int
             ) {
             }
 
@@ -739,24 +708,6 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val notificationManager = NotificationManagerCompat.from(requireContext())
-            if (!notificationManager.canUseFullScreenIntent()) {
-                try {
-                    val intent = Intent(Settings.ACTION_MANAGE_APP_USE_FULL_SCREEN_INTENT).apply {
-                        putExtra(Intent.EXTRA_PACKAGE_NAME, requireContext().packageName)
-                    }
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    Log.e("usmanTAG", "Activity not found: ${e.localizedMessage}")
-                } catch (e: Exception) {
-                    Log.e("usmanTAG", "Error launching intent: ${e.localizedMessage}")
-                }
-            } else {
-                Log.d("usmanTAG", "Full-screen intent permission already granted.")
-            }
-        }
         sharedViewModel.selectTab.observe(viewLifecycleOwner) {
             if (it != null && it != 0) {
                 navigateToTrending(it)
@@ -858,7 +809,7 @@ class HomeTabsFragment : Fragment() {
 
     private fun showRewardWallpaperScreen() {
         // Use a flag to avoid multiple calls if needed
-        if (!Constants.hasShownRewardScreen && !AdConfig.ISPAIDUSER) {
+        if (!Constants.hasShownRewardScreen) {
             lifecycleScope.launch {
                 delay(200)
                 if (AdConfig.Reward_Screen) {

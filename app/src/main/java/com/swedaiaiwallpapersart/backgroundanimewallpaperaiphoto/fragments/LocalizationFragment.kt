@@ -1,6 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
+import android.graphics.Color
+import android.graphics.LinearGradient
+import android.graphics.Shader
 import android.os.Bundle
+import android.text.TextPaint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -61,8 +65,9 @@ class LocalizationFragment : Fragment() {
             delay(200)
             Log.e(TAG, "getLanguageList: " + getDefaultLocaleInfo())
         }
-        /*val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
-        nativeAd.loadNativeAd(binding.NativeAd)*/
+
+        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        nativeAd.loadNativeAd(binding.NativeAd)
 
         setGradienttext()
 
@@ -71,7 +76,8 @@ class LocalizationFragment : Fragment() {
         backHandle()
     }
 
-    private fun setGradienttext() {/*val customColors = intArrayOf(
+    private fun setGradienttext() {
+        val customColors = intArrayOf(
             Color.parseColor("#FC9502"),
             Color.parseColor("#FF6726")
         )
@@ -82,12 +88,7 @@ class LocalizationFragment : Fragment() {
             0f, 0f, width, binding.applyLanguage.textSize,
             customColors, null, Shader.TileMode.CLAMP
         )
-        binding.applyLanguage.paint.shader = shader*/
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        //_binding = null
+        binding.applyLanguage.paint.shader = shader
     }
 
     override fun onResume() {

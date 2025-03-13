@@ -30,6 +30,10 @@ buildscript {
         classpath 'com.google.firebase:perf-plugin:1.4.2'
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.51.1"
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.8.8")
+       /* classpath("com.applovin.mediation:google-adapter:+")
+        classpath("com.applovin.mediation:vungle-adapter:+")
+        classpath("com.applovin.mediation:mintegral-adapter:+")
+        classpath("com.applovin.mediation:bytedance-adapter:+")*/
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

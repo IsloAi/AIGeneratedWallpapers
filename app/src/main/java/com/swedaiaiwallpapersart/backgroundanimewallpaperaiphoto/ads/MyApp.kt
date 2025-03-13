@@ -1,9 +1,11 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
+import com.applovin.sdk.AppLovinMediationProvider
 import com.applovin.sdk.AppLovinSdk
-import com.applovin.sdk.AppLovinSdkSettings
+import com.applovin.sdk.AppLovinSdkInitializationConfiguration
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
@@ -28,10 +30,9 @@ class MyApp : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(applicationContext)
-        innitRemoteConfig()
-       /* MobileAds.initialize(
-            this
-        ) { }*/
+        innitRemoteConfig()/* MobileAds.initialize(
+             this
+         ) { }*/
 
     }
 
@@ -47,14 +48,38 @@ class MyApp : Application() {
         remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val jsonString = remoteConfig.getString("ads") // Get the JSON as a string
-                Log.d("RemoteConfig", "Fetched JSON: $jsonString")
-
+                val jsonStringAppInfo =
+                    remoteConfig.getString("app_info") // Get the JSON as a string
+                Log.d("RemoteConfig", "Fetched JSON: $jsonString, AppInfo = $jsonStringAppInfo")
                 // Parse JSON to extract values
                 parseAdConfig(jsonString)
-
+                parseAppInfo(jsonStringAppInfo)
             } else {
                 Log.e("RemoteConfig", "Failed to fetch Remote Config")
             }
+        }
+    }
+
+    private fun parseAppInfo(jsonStringAppInfo: String) {
+        try {
+            val jsonObject = JSONObject(jsonStringAppInfo)
+
+            // Extract values from JSON
+            val privacyUri = jsonObject.optString("privacy_url", "")
+            val termsOfService = jsonObject.optString("tos_url", "")
+            val supportMail = jsonObject.optString("support_mail", "")
+
+            Log.d("AdConfig", "AppLovin SDK Key: $privacyUri")
+            Log.d("AdConfig", "AppLovin Banner ID: $termsOfService")
+            Log.d("AdConfig", "AppLovin Interstitial ID: $supportMail")
+
+            AdConfig.appPrivacy = privacyUri
+            AdConfig.appTermsOfServices = termsOfService
+            AdConfig.appSupportMail = supportMail
+
+            initAppLovinSDK()
+        } catch (e: JSONException) {
+            Log.e("RemoteConfig", "JSON Parsing Error: ${e.message}")
         }
     }
 
@@ -79,10 +104,6 @@ class MyApp : Application() {
 
             // Initialize AppLovin SDK with fetched key
             if (applovinSdkKey.isNotEmpty()) {
-                AppLovinSdk.getInstance(this@MyApp).setMediationProvider("max")
-                val sdk = AppLovinSdk.getInstance(applovinSdkKey, AppLovinSdkSettings(this), this)
-                sdk.initializeSdk()
-
                 AdConfig.applovinSdkKey = applovinSdkKey
                 AdConfig.applovinAndroidBanner = applovinBannerId
                 AdConfig.applovinAndroidInterstitial = applovinInterstitialId
@@ -94,6 +115,26 @@ class MyApp : Application() {
         } catch (e: JSONException) {
             Log.e("RemoteConfig", "JSON Parsing Error: ${e.message}")
         }
+    }
+
+    private fun initAppLovinSDK() {
+        val sdk = AppLovinSdkInitializationConfiguration.builder(AdConfig.applovinSdkKey, this)
+            .setMediationProvider(AppLovinMediationProvider.MAX).build()
+        val settings = AppLovinSdk.getInstance(this).settings
+        settings.termsAndPrivacyPolicyFlowSettings.apply {
+            isEnabled = true
+            privacyPolicyUri = Uri.parse(AdConfig.appPrivacy)
+            termsOfServiceUri = Uri.parse(AdConfig.appTermsOfServices)
+        }
+
+        AppLovinSdk.getInstance(this).initialize(sdk) { sdkConfig ->
+            // Start loading ads
+            MaxInterstitialAds.loadInterstitialAd(this@MyApp)
+            MaxRewardAds.loadRewardAds(this@MyApp, AdConfig.applovinAndroidReward)
+
+        }
+        //AppLovinSdk.getInstance(this).showMediationDebugger()
+
     }
 
     private var adEventListener: AdEventListener? = null

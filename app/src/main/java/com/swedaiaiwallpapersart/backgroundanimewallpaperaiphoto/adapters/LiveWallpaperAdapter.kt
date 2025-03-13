@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +23,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -70,7 +70,10 @@ class LiveWallpaperAdapter(
 
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind() {}
+        fun bind() {
+            val nativeAd = NativeAdManager(context, AdConfig.admobAndroidNative)
+            nativeAd.loadNativeAd(binding.NativeAd)
+        }
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
@@ -89,7 +92,7 @@ class LiveWallpaperAdapter(
     }
 
     override fun getItemCount(): Int {
-        Log.d("LiveWallpaper", "getItemCount: ${arrayList.size} ")
+        //Log.d("LiveWallpaper", "getItemCount: ${arrayList.size} ")
         return arrayList.size
     }
 
@@ -126,7 +129,11 @@ class LiveWallpaperAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return VIEW_TYPE_CONTAINER1
+        return if (arrayList[position] == null) {
+            VIEW_TYPE_NATIVE_AD // Define a constant for null items
+        } else {
+            VIEW_TYPE_CONTAINER1 // Define a constant for normal items
+        }
     }
 
     @SuppressLint("SetTextI18n")

@@ -9,17 +9,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
@@ -157,12 +162,89 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         sharedViewModel.clearLiveWallpaper()
         sharedViewModel.setLiveWallpaper(listOf(model))
         if (isAdded) {
-            Bundle().apply {
-                putBoolean("adShowed", adShowd)
-                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
-            }
+            MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                        override fun onAdLoaded(p0: MaxAd) {}
+
+                        override fun onAdDisplayed(p0: MaxAd) {}
+
+                        override fun onAdHidden(p0: MaxAd) {
+                            Bundle().apply {
+                                putBoolean("adShowed", adShowd)
+                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                findNavController().navigate(
+                                    R.id.downloadLiveWallpaperFragment,
+                                    this
+                                )
+                            }
+                        }
+
+                        override fun onAdClicked(p0: MaxAd) {}
+
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                            Bundle().apply {
+                                putBoolean("adShowed", adShowd)
+                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                findNavController().navigate(
+                                    R.id.downloadLiveWallpaperFragment,
+                                    this
+                                )
+                            }
+                        }
+
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                            Bundle().apply {
+                                putBoolean("adShowed", adShowd)
+                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                findNavController().navigate(
+                                    R.id.downloadLiveWallpaperFragment,
+                                    this
+                                )
+                            }
+                        }
+                    })
+                }
+
+                override fun onAdDisplayed(p0: MaxAd) {
+
+                }
+
+                override fun onAdHidden(p0: MaxAd) {
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                        findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                    }
+                }
+
+                override fun onAdClicked(p0: MaxAd) {
+
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                        findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                    }
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                        findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                    }
+                }
+            })
 
         }
     }
@@ -170,7 +252,18 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
     private fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
-        return ArrayList(data)
+        val modifiedList = ArrayList<LiveWallpaperModel?>()
+
+        for (i in data.indices) {
+            modifiedList.add(data[i]) // Add the current item
+
+            // After every 15 items, add a null value (excluding the last item)
+            if ((i + 1) % 15 == 0) {
+                modifiedList.add(null)
+            }
+        }
+
+        return modifiedList
     }
 
     private fun isNetworkAvailable(): Boolean {
