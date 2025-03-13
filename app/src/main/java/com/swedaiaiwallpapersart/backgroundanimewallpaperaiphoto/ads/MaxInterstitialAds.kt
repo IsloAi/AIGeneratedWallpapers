@@ -39,13 +39,14 @@ object MaxInterstitialAds {
         interstitialAd?.loadAd()
     }
 
-    fun showInterstitial(context: Activity, listener: MaxAdListener) {
+    fun showInterstitial(context: Activity, listener: MaxAdListener, listener2: MaxAD) {
         if (interstitialAd?.isReady == true) {
             interstitialAd!!!!.setListener(listener)
             interstitialAd?.showAd(context)
         } else {
             Log.d("AppLovin", "Interstitial Ad Not Ready Yet")
             interstitialAd?.setListener(listener)
+            listener2.adNotReady("Ad Not Ready")
         }
     }
 

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,6 +21,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MySharePreference
@@ -143,6 +145,12 @@ class SplashOnFragment : Fragment() {
                                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
                                     TODO("Not yet implemented")
                                 }
+                            },
+                            object : MaxAD {
+                                override fun adNotReady(type: String) {
+                                    findNavController().navigate(R.id.localizationFragment)
+                                    MaxInterstitialAds.loadInterstitialAd(requireContext())
+                                }
                             })
                     }
 
@@ -173,6 +181,13 @@ class SplashOnFragment : Fragment() {
                         findNavController().navigate(R.id.localizationFragment)
                         MaxInterstitialAds.loadInterstitialAd(requireContext())
                     }
+                }, object : MaxAD {
+                    override fun adNotReady(type: String) {
+                        Toast.makeText(requireContext(), "Ad not Available", Toast.LENGTH_SHORT)
+                            .show()
+                        findNavController().navigate(R.id.localizationFragment)
+                        MaxInterstitialAds.loadInterstitialAd(requireContext())
+                    }
                 })
             }, 4000)
         } else {
@@ -182,29 +197,36 @@ class SplashOnFragment : Fragment() {
                     MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
                         override fun onAdLoaded(p0: MaxAd) {
                             Log.d("AppLovin", "Interstitial Loaded")
-                            MaxInterstitialAds.showInterstitial(requireActivity(),object:MaxAdListener{
-                                override fun onAdLoaded(p0: MaxAd) {
+                            MaxInterstitialAds.showInterstitial(requireActivity(),
+                                object : MaxAdListener {
+                                    override fun onAdLoaded(p0: MaxAd) {
 
-                                }
+                                    }
 
-                                override fun onAdDisplayed(p0: MaxAd) {
+                                    override fun onAdDisplayed(p0: MaxAd) {
 
-                                }
+                                    }
 
-                                override fun onAdHidden(p0: MaxAd) {
-                                    findNavController().navigate(R.id.homeTabsFragment)
-                                    MaxInterstitialAds.loadInterstitialAd(requireContext())
-                                }
+                                    override fun onAdHidden(p0: MaxAd) {
+                                        findNavController().navigate(R.id.homeTabsFragment)
+                                        MaxInterstitialAds.loadInterstitialAd(requireContext())
+                                    }
 
-                                override fun onAdClicked(p0: MaxAd) {
-                                }
+                                    override fun onAdClicked(p0: MaxAd) {
+                                    }
 
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                                }
+                                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                                    }
 
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                                }
-                            })
+                                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                                    }
+                                },
+                                object : MaxAD {
+                                    override fun adNotReady(type: String) {
+                                        findNavController().navigate(R.id.localizationFragment)
+                                        MaxInterstitialAds.loadInterstitialAd(requireContext())
+                                    }
+                                })
                         }
 
                         override fun onAdDisplayed(p0: MaxAd) {
@@ -227,6 +249,11 @@ class SplashOnFragment : Fragment() {
 
                         override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
                             findNavController().navigate(R.id.homeTabsFragment)
+                            MaxInterstitialAds.loadInterstitialAd(requireContext())
+                        }
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {
+                            findNavController().navigate(R.id.localizationFragment)
                             MaxInterstitialAds.loadInterstitialAd(requireContext())
                         }
                     })

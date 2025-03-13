@@ -37,8 +37,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
@@ -290,7 +294,7 @@ class FullScreenImageViewFragment : DialogFragment() {
         } else {
             AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + responseData!!.hd_image_url
         }
-        /*Glide.with(requireContext())
+        Glide.with(requireContext())
             .load(url)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -316,7 +320,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                     return false
                 }
             })
-            .into(binding.fullViewImage)*/
+            .into(binding.fullViewImage)
     }
 
     private fun isFragmentVisibleAndBindingAvailable(): Boolean {
@@ -458,8 +462,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
             })
         }
-
-
     }
 
     private fun addFavourite(

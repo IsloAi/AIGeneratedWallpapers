@@ -71,6 +71,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.hasToNavigateAnime
@@ -486,6 +487,33 @@ class WallpaperViewFragment : Fragment() {
                                 ).show()
                             }
                         }
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {
+                            if (bitmap != null) {
+                                if (arrayList[position]?.unlockimges == true) {
+                                    val model = arrayList[position]
+                                    openPopupMenu(model!!)
+                                    Log.d(
+                                        "SET-WALL",
+                                        "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                                    )
+
+                                } else {
+                                    if (AdConfig.ISPAIDUSER) {
+                                        val model = arrayList[position]
+                                        openPopupMenu(model!!)
+                                    } else {
+                                        unlockDialog()
+                                    }
+                                }
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.your_image_not_fetched_properly),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
                     })
                 }
 
@@ -547,6 +575,32 @@ class WallpaperViewFragment : Fragment() {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    if (bitmap != null) {
+                        if (arrayList[position]?.unlockimges == true) {
+                            val model = arrayList[position]
+                            openPopupMenu(model!!)
+                            Log.d(
+                                "SET-WALL",
+                                "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                            )
+
+                        } else {
+                            if (AdConfig.ISPAIDUSER) {
+                                val model = arrayList[position]
+                                openPopupMenu(model!!)
+                            } else {
+                                unlockDialog()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
                     if (bitmap != null) {
                         if (arrayList[position]?.unlockimges == true) {
                             val model = arrayList[position]

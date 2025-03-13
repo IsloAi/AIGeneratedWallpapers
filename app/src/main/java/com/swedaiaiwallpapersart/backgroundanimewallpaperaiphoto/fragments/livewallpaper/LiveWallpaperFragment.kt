@@ -24,6 +24,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
@@ -206,6 +207,18 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                                 )
                             }
                         }
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {
+                            Bundle().apply {
+                                putBoolean("adShowed", adShowd)
+                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                findNavController().navigate(
+                                    R.id.downloadLiveWallpaperFragment,
+                                    this
+                                )
+                            }
+                        }
                     })
                 }
 
@@ -237,6 +250,15 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                        findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                    }
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
