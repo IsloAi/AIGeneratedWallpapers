@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkSettings
-import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
@@ -30,9 +29,9 @@ class MyApp : Application() {
 
         FirebaseApp.initializeApp(applicationContext)
         innitRemoteConfig()
-        MobileAds.initialize(
+       /* MobileAds.initialize(
             this
-        ) { }
+        ) { }*/
 
     }
 

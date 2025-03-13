@@ -34,8 +34,8 @@ class welcomeFragment2 : Fragment() {
 
         setIndicator()
         setCurrentIndicator(1)
-        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
-        nativeAd.loadNativeAd(binding.NativeAdOB2)
+        /*val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        nativeAd.loadNativeAd(binding.NativeAdOB2)*/
     }
 
     override fun onDestroyView() {

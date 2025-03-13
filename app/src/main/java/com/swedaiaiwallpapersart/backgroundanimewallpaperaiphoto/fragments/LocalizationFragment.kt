@@ -61,8 +61,8 @@ class LocalizationFragment : Fragment() {
             delay(200)
             Log.e(TAG, "getLanguageList: " + getDefaultLocaleInfo())
         }
-        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
-        nativeAd.loadNativeAd(binding.NativeAd)
+        /*val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        nativeAd.loadNativeAd(binding.NativeAd)*/
 
         setGradienttext()
 

@@ -37,8 +37,8 @@ class WelcomeFragment : Fragment() {
         setIndicator()
         setCurrentIndicator(0)
 
-        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
-        nativeAd.loadNativeAd(binding.NativeAdOB1)
+        /*val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        nativeAd.loadNativeAd(binding.NativeAdOB1)*/
     }
 
     private fun setIndicator() {

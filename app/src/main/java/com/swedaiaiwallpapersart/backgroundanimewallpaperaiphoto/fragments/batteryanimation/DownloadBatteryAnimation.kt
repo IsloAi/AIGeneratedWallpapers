@@ -12,10 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.DownloadListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -69,8 +65,6 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         super.onViewCreated(view, savedInstanceState)
 
         adShowed = arguments?.getBoolean("adShowed")
-
-        AndroidNetworking.initialize(requireContext())
 
         setEvents()
         initObservers()
@@ -195,24 +189,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
         animateLoadingText()
         lifecycleScope.launch(Dispatchers.IO) {
-            AndroidNetworking.download(url, file.path, fileName)
-                .setTag("downloadTest")
-                .setPriority(Priority.HIGH)
-                .doNotCacheResponse()
-                .build()
-                .setDownloadProgressListener { bytesDownloaded, totalBytes ->
-                    Log.e("TAG", "downloadVideo: $bytesDownloaded")
-                    Log.e("TAG", "downloadVideo total bytes: $totalBytes")
-                }
-                .startDownload(object : DownloadListener {
-                    override fun onDownloadComplete() {
-                    }
 
-                    override fun onError(error: ANError?) {
-                        Log.e(TAG, "onError: ")
-                        // handle error
-                    }
-                })
         }
     }
 

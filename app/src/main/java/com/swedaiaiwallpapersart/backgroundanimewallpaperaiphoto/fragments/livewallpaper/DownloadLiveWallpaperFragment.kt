@@ -13,10 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.androidnetworking.AndroidNetworking
-import com.androidnetworking.common.Priority
-import com.androidnetworking.error.ANError
-import com.androidnetworking.interfaces.DownloadListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
@@ -69,8 +65,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         showAd = arguments?.getBoolean("adShowed")
 
         Log.e(TAG, "onViewCreated: $showAd")
-
-        AndroidNetworking.initialize(requireContext())
 
         setEvents()
         initObservers()
@@ -206,7 +200,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
 
         val totalSize = (size * 1024).toLong()
         animateLoadingText()
-        lifecycleScope.launch(Dispatchers.IO) {
+        /*lifecycleScope.launch(Dispatchers.IO) {
             AndroidNetworking.download(url, file.path, fileName)
                 .setTag("downloadTest")
                 .setPriority(Priority.HIGH)
@@ -261,7 +255,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                         }
                     }
                 })
-        }
+        }*/
     }
 
     private fun animateLoadingText() {
