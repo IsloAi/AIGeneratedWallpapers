@@ -253,7 +253,9 @@ class SplashOnFragment : Fragment() {
                         }
                     }, object : MaxAD {
                         override fun adNotReady(type: String) {
-                            findNavController().navigate(R.id.localizationFragment)
+                            Toast.makeText(requireContext(), "Ad not Available", Toast.LENGTH_SHORT)
+                                .show()
+                            findNavController().navigate(R.id.homeTabsFragment)
                             MaxInterstitialAds.loadInterstitialAd(requireContext())
                         }
                     })

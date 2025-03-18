@@ -21,7 +21,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 /*It's the fear of the bug unseen 
 that makes coding harder to begin.*/
 
-class NativeAdManager(private val context: Context, private val adUnitId: String) {
+class NativeAdManager(private val context: Context, private val adUnitId: String, val layout: Int) {
 
     private var nativeAd: NativeAd? = null
 
@@ -33,7 +33,7 @@ class NativeAdManager(private val context: Context, private val adUnitId: String
                 }
                 nativeAd = ad
                 val adView =
-                    View.inflate(context, R.layout.new_native_language, null) as NativeAdView
+                    View.inflate(context, layout, null) as NativeAdView
                 populateNativeAdView(ad, adView)
                 adContainer.removeAllViews()
                 adContainer.addView(adView)
@@ -56,13 +56,15 @@ class NativeAdManager(private val context: Context, private val adUnitId: String
 
     private fun populateNativeAdView(nativeAd: NativeAd, adView: NativeAdView) {
         adView.headlineView = adView.findViewById(R.id.custom_headline)
-        adView.callToActionView = adView.findViewById(R.id.custom_call_to_action)
+        adView.callToActionView = adView.findViewById(R.id.custom_call_to_actionNew)
         adView.iconView = adView.findViewById(R.id.custom_app_icon)
         adView.bodyView = adView.findViewById(R.id.custom_body)
         adView.mediaView = adView.findViewById(R.id.mediaView2)
 
         (adView.headlineView as? TextView)?.text = nativeAd.headline
         (adView.callToActionView as? Button)?.text = nativeAd.callToAction
+
+        Log.d("NativeAd", "populateNativeAdView: ${nativeAd.callToAction} ")
         if (nativeAd.icon != null) {
             (adView.iconView as? ImageView)?.setImageDrawable(nativeAd.icon?.drawable)
         } else {

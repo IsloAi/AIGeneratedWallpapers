@@ -73,7 +73,11 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         setEvents()
         initObservers()
 
-        val nativeAd = NativeAdManager(requireContext(), AdConfig.admobAndroidNative)
+        val nativeAd = NativeAdManager(
+            requireContext(),
+            AdConfig.admobAndroidNative,
+            R.layout.new_native_language
+        )
         nativeAd.loadNativeAd(binding.NativeAd)
     }
 
@@ -126,11 +130,11 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
             sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
                 if (wallpaper.isNotEmpty()) {
 
-                    Log.e("TAG", "initObservers: $wallpaper")
+                    Log.e("Favourite", "initObservers: $wallpaper")
 
                     if (BlurView.filePath == "") {
-                        Log.e(TAG, "initObservers123: " + wallpaper[0])
-                        Log.e(TAG, "initObservers123: " + AdConfig.BASE_URL_DATA)
+                        Log.e("Favourite", "initObservers123: " + wallpaper[0])
+                        Log.e("Favourite", "initObservers123: " + AdConfig.BASE_URL_DATA)
                         downloadVideo(
                             AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].livewallpaper_url,
                             wallpaper[0].videoSize

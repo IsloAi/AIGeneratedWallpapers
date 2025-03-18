@@ -318,6 +318,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
+
     private fun setViewPager() {
         adapter = DoubleWallpaperSliderAdapter(arrayList, myActivity)
         adapter!!.setCoroutineScope(fragmentScope)

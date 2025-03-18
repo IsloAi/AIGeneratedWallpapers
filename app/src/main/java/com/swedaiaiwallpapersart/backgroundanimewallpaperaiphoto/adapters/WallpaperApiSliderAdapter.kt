@@ -3,9 +3,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,13 +24,11 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.SlideItemContainerBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class WallpaperApiSliderAdapter(
     private val arrayList: ArrayList<CatResponse?>,
@@ -59,8 +54,6 @@ class WallpaperApiSliderAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
         return when (viewType) {
@@ -80,13 +73,18 @@ class WallpaperApiSliderAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return VIEW_TYPE_CONTAINER1
+        return when (arrayList[position]) {
+            null -> {
+                VIEW_TYPE_NATIVE_AD
+            }
 
+            else -> {
+                VIEW_TYPE_CONTAINER1
+            }
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
         val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
@@ -95,6 +93,15 @@ class WallpaperApiSliderAdapter(
                     viewHolderContainer1.bind(arrayList, position)
                 } catch (e: NullPointerException) {
                     e.printStackTrace()
+                }
+            }
+
+            VIEW_TYPE_NATIVE_AD -> {
+                val viewHolder = holder as ViewHolderContainer3
+                try {
+                    viewHolder.bind(holder)
+                } catch (_: NullPointerException) {
+
                 }
             }
         }
@@ -108,8 +115,6 @@ class WallpaperApiSliderAdapter(
     inner class ViewHolderContainer1(val binding: SlideItemContainerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(arrayList: ArrayList<CatResponse?>, position: Int) {
-
-
             val model = arrayList[position]
             dataSet(
                 model!!,
@@ -125,6 +130,9 @@ class WallpaperApiSliderAdapter(
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
+            val native =
+                NativeAdManager(context!!, AdConfig.admobAndroidNative, R.layout.native_ad_slider)
+            native.loadNativeAd(binding.sliderNative)
         }
     }
 
@@ -164,18 +172,7 @@ class WallpaperApiSliderAdapter(
             url = AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url
         }
 
-        /*val url = if (from == "Vip") {
-            AdConfig.BASE_URL_DATA+"/rewardwallpaper/hd/"+ model.hd_image_url
-        } else {
-
-            AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url
-            Log.d(
-                "usmanTAG",
-                "dataSet: ${AdConfig.BASE_URL_DATA}/staticwallpaper/hd/${model.hd_image_url}"
-            )
-        }*/
-
-        Log.d("usmanTAG", "dataSet:url = $url ")
+        Log.d("Wallpaper", "dataSet:url = $url ")
         Glide.with(context!!).load(url).diskCacheStrategy(DiskCacheStrategy.ALL)
             .listener(object :
                 RequestListener<Drawable> {
@@ -204,29 +201,6 @@ class WallpaperApiSliderAdapter(
                 }
             }).into(imageSlide)
 
-        /*if (adapterPosition == arrayList.size - 1) {
-            viewPager2.post(runable)
-        }*/
-
-    }
-
-    private val runable = Runnable {
-        arrayList.addAll(arrayList)
-        notifyDataSetChanged()
-    }
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            mActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork
-            val capabilities = connectivityManager.getNetworkCapabilities(network)
-            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo
-            networkInfo != null && networkInfo.isConnected
-        }
     }
 
 }

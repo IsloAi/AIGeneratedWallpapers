@@ -43,6 +43,7 @@
             android:layout_margin="@dimen/_10sdp"
             android:scaleType="centerCrop"
             android:src="@drawable/iap_item"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -81,6 +81,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     private val binding get() = _binding!!
     val sharedViewModel: SharedViewModel by activityViewModels()
     private var livewallpaper: LiveWallpaperModel? = null
+    private var favLivewallpaper: FavouriteLiveModel? = null
     private var adPosition = 0
     private lateinit var myActivity: MainActivity
     var liveComingFrom: String = ""
@@ -141,16 +142,30 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
-                Log.e("TAG", "initObservers: $wallpaper")
+                Log.e("Favourite", "initObservers: $wallpaper")
 
                 livewallpaper = wallpaper[0]
 
                 if (livewallpaper?.liked == true) {
-                    Log.e("TAG", "initObservers: liked" + livewallpaper?.liked)
+                    Log.e("Favourite", "initObservers: liked" + livewallpaper?.liked)
                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
                 } else {
                     binding.setLiked.setImageResource(R.drawable.button_like)
-                    Log.e("TAG", "initObservers: unliked" + livewallpaper?.liked)
+                    Log.e("Favourite", "initObservers: unliked" + livewallpaper?.liked)
+                }
+            }
+        }
+
+        sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            if (wallpaper.isNotEmpty()) {
+                Log.e("Favourite", "initObservers: $wallpaper")
+                favLivewallpaper = wallpaper[0]
+                if (favLivewallpaper?.liked == true) {
+                    Log.e("Favourite", "initObservers: liked" + favLivewallpaper?.liked)
+                    binding.setLiked.setImageResource(R.drawable.button_like_selected)
+                } else {
+                    binding.setLiked.setImageResource(R.drawable.button_like)
+                    Log.e("Favourite", "initObservers: unliked" + favLivewallpaper?.liked)
                 }
             }
         }
@@ -159,6 +174,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         sharedViewModel.liveAdPosition.observe(viewLifecycleOwner) {
             adPosition = it
         }
+
     }
 
     private fun backHandle() {
@@ -171,6 +187,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
     }
 
     private fun setEvents() {
+        backHandle()
+
         binding.buttonApplyWallpaper.setOnClickListener {
             Log.e("TAG", "setEvents: $livewallpaper")
 
@@ -199,13 +217,18 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         binding.setLiked.setOnClickListener {
             liveComingFrom = MySharePreference.getLiveFrom(requireContext())
+            Log.d("Favourite", "setEvents:liveComingFrom: $liveComingFrom")
             if (liveComingFrom == "Favourite") {
                 binding.setLiked.isEnabled = false
                 binding.setLiked.setImageResource(R.drawable.button_like)
                 Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
                     .show()
-
-
+                Log.d("Favourite", "setEvents: Id ${favLivewallpaper?.id}")
+                lifecycleScope.launch {
+                    appDatabase.liveWallpaperDao()
+                        .deleteLiveFavourite(favLivewallpaper?.id.toString())
+                }
+                MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
             } else {
                 binding.setLiked.isEnabled = false
                 if (livewallpaper?.liked == true) {
@@ -213,20 +236,19 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     binding.setLiked.setImageResource(R.drawable.button_like)
                     Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
                         .show()
-
                 } else {
                     livewallpaper?.liked = true
                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
                     Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
                         .show()
+                    Log.d("Favourite", "setEvents: Id ${livewallpaper?.id}")
+                    addFavourite(requireContext(), binding.setLiked)
                 }
                 checkInter = false
                 checkAppOpen = false
-                addFavourite(requireContext(), binding.setLiked)
+
             }
         }
-
-        backHandle()
 
         binding.downloadWallpaper.setOnClickListener {
             val source = File(BlurView.filePath)
@@ -258,14 +280,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                             e.printStackTrace()
                         }
                     } else {
-
                         getUserIdDialog()
                     }
                 }
             } else {
                 if (AdConfig.ISPAIDUSER) {
                     copyFiles(source, destination)
-
                     try {
                         lifecycleScope.launch {
                             val requestBody = mapOf("imageid" to livewallpaper?.id)
@@ -278,7 +298,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                         e.printStackTrace()
                     }
                 } else {
-
                     getUserIdDialog()
                 }
             }
@@ -307,6 +326,40 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         bindingDialog.watchAds.setOnClickListener {
+            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    setWallpaper()
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {}
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                        override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                            setWallpaper()
+                        }
+
+                        override fun onAdLoaded(p0: MaxAd) {}
+                        override fun onAdDisplayed(p0: MaxAd) {}
+                        override fun onAdHidden(p0: MaxAd) {}
+                        override fun onAdClicked(p0: MaxAd) {}
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                    })
+                }
+            })
             dialog.dismiss()
         }
         bindingDialog.upgradeButton.setOnClickListener {
@@ -487,11 +540,19 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                         }
 
                         override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-
+                            Toast.makeText(
+                                requireContext(),
+                                "AD not available Try again later",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         override fun onAdLoadFailed(p0: String, p1: MaxError) {
-
+                            Toast.makeText(
+                                requireContext(),
+                                "AD not available Try again later",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         override fun onAdClicked(p0: MaxAd) {
@@ -532,6 +593,11 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Toast.makeText(
+                        requireContext(),
+                        "AD not available Try again later",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
 
                 override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
@@ -539,7 +605,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     dialog.dismiss()
                 }
             })
-
         }
         dismiss?.setOnClickListener {
             dialog.dismiss()
@@ -563,7 +628,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
     private fun addFavourite(
         context: Context, favouriteButton: ImageView
-    ) {/*val retrofit = RetrofitInstance.getInstance()
+    ) {
+        /*val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(LikeLiveWallpaper::class.java)
         val postData = FavoruiteLiveWallpaperBody(
             MySharePreference.getDeviceID(context)!!,
@@ -587,7 +653,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 favouriteButton.isEnabled = true
             }
         })*/
-
+        Log.d("LivePreview", "addFavourite: Id ${livewallpaper?.id}")
         lifecycleScope.launch(Dispatchers.IO) {
             appDatabase.liveWallpaperDao().insertLiveFavourite(
                 FavouriteLiveModel(

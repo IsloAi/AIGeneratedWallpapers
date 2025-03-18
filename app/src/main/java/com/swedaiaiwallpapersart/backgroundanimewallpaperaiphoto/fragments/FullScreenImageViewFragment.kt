@@ -64,6 +64,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -141,13 +143,7 @@ class FullScreenImageViewFragment : DialogFragment() {
     fun setEvents() {
         binding.favouriteButton.setOnClickListener {
             binding.favouriteButton.isEnabled = false
-            if (responseData?.liked == true) {
-                responseData?.liked = false
-                binding.favouriteButton.setImageResource(R.drawable.button_like)
-            } else {
-                responseData?.liked = true
-                binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
-            }
+            // Send request to the server without changing UI immediately
             addFavourite(requireContext(), binding.favouriteButton)
         }
 
@@ -313,7 +309,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    if (isFragmentVisibleAndBindingAvailable()){
+                    if (isFragmentVisibleAndBindingAvailable()) {
                         binding.fullViewImage.isEnabled = true
                         binding.bottomMenu.visibility = View.VISIBLE
                     }
@@ -447,7 +443,6 @@ class FullScreenImageViewFragment : DialogFragment() {
     }
 
     private fun setDownloaded(model: CatResponse) {
-
         lifecycleScope.launch(Dispatchers.IO) {
             val retrofit = RetrofitInstance.getInstance()
             val apiService = retrofit.create(SetMostDownloaded::class.java)
@@ -464,37 +459,41 @@ class FullScreenImageViewFragment : DialogFragment() {
         }
     }
 
-    private fun addFavourite(
-        context: Context,
-        favouriteButton: ImageView
-    ) {
+    private fun addFavourite(context: Context, favouriteButton: ImageView) {
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
         val postData =
             PostData(MySharePreference.getDeviceID(context)!!, responseData?.id.toString())
+
         val call = apiService.postData(postData)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
                     val message = response.body()?.string()
-                    if (message == "Liked") {
-                        responseData?.liked = true
-                        favouriteButton.setImageResource(R.drawable.button_like_selected)
-                    } else {
-                        favouriteButton.setImageResource(R.drawable.button_like)
-                        responseData?.liked = false
+                    Log.d("Favourite", "onResponse:getLikedResponse: $message")
+
+                    try {
+                        val jsonObject = JSONObject(message) // Parse JSON
+                        val message = jsonObject.getString("message") // Extract "message" field
+
+                        if (message == "Liked") {
+                            responseData?.liked = true
+                            favouriteButton.setImageResource(R.drawable.button_like_selected)
+                        } else {
+                            responseData?.liked = false
+                            favouriteButton.setImageResource(R.drawable.button_like)
+                        }
+                    } catch (e: JSONException) {
+                        Log.e("Favourite", "JSON Parsing Error: ${e.message}")
                     }
-                    favouriteButton.isEnabled = true
                 } else {
-                    favouriteButton.isEnabled = true
-                    Toast.makeText(context, "onResponse error", Toast.LENGTH_SHORT).show()
-                    favouriteButton.setImageResource(R.drawable.button_like)
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Error updating favorite", Toast.LENGTH_SHORT).show()
                 }
+                favouriteButton.isEnabled = true
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "onFailure error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
                 favouriteButton.isEnabled = true
             }
         })

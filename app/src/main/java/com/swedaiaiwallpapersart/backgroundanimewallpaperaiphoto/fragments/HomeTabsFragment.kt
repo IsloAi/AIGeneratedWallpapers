@@ -2,9 +2,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.content.IntentSender
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -29,7 +27,6 @@ import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
-import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -677,13 +674,13 @@ class HomeTabsFragment : Fragment() {
 
     private fun getFragmentForTab(tabName: String): Fragment {
         return when (tabName.trim()) {
-            "Popular" -> PopularWallpaperFragment()
-            "Car" -> HomeFragment()
             "Live" -> LiveWallpaperFragment()
-            "Anime" -> AnimeWallpaperFragment()
-            "Category" -> CategoryFragment()
-            "Charging" -> ChargingAnimationFragment()
+            "Popular" -> PopularWallpaperFragment()
             "Double" -> DoubleWallpaperFragment()
+            "Category" -> CategoryFragment()
+            "Anime" -> AnimeWallpaperFragment()
+            "Car" -> HomeFragment()
+            "Charging" -> ChargingAnimationFragment()
 
             else -> {
                 HomeFragment()

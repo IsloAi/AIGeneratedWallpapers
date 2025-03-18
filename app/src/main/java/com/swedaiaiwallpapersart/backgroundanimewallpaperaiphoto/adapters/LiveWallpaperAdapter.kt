@@ -71,7 +71,8 @@ class LiveWallpaperAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            val nativeAd = NativeAdManager(context, AdConfig.admobAndroidNative)
+            val nativeAd =
+                NativeAdManager(context, AdConfig.admobAndroidNative, R.layout.new_native_language)
             nativeAd.loadNativeAd(binding.NativeAd)
         }
     }
@@ -150,10 +151,8 @@ class LiveWallpaperAdapter(
 
         iap.visibility = if (!model.unlocked && !AdConfig.ISPAIDUSER) View.VISIBLE else View.GONE
 
-        Glide.with(context)
-            .load("${AdConfig.BASE_URL_DATA}/livewallpaper/${model.thumnail_url}")
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
-            .thumbnail(0.1f)
+        Glide.with(context).load("${AdConfig.BASE_URL_DATA}/livewallpaper/${model.thumnail_url}")
+            .diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
 
                 override fun onLoadFailed(
@@ -197,8 +196,9 @@ class LiveWallpaperAdapter(
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
-            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR
+            ))
         } else {
             val networkInfo = connectivityManager.activeNetworkInfo
             networkInfo != null && networkInfo.isConnected

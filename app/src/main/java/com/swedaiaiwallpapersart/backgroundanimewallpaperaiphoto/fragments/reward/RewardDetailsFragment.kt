@@ -104,7 +104,6 @@ class RewardDetailsFragment : Fragment() {
                     }
 
                     override fun onAdHidden(p0: MaxAd) {
-                        showCustomAlertDialog()
                         MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
                     }
 
@@ -130,13 +129,10 @@ class RewardDetailsFragment : Fragment() {
 
     private fun showCustomAlertDialog() {
         val dialogBinding = LayoutWallpaperGiftDialogBinding.inflate(layoutInflater)
-
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setView(dialogBinding.root)
-
         val dialog = dialogBuilder.create()
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-
         dialogBinding.viewWallpapers.setOnClickListener {
             if (isAdded) {
                 val bundle = Bundle().apply {
@@ -154,12 +150,10 @@ class RewardDetailsFragment : Fragment() {
             }
 
         }
-
         dialogBinding.close.setOnClickListener {
             findNavController().navigateUp()
             dialog.dismiss()
         }
-
         dialog.show()
     }
 

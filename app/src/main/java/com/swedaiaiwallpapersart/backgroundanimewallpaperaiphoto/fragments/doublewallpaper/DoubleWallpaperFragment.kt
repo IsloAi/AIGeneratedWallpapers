@@ -133,7 +133,6 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
         }
     }
 
-
     private fun updateUIWithFetchedData() {
 
         val list = ArrayList<DoubleWallModel?>()
@@ -148,8 +147,6 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 if (isAdded) {
                     navigateToDestination(allItems!!, position)
                 }
-
-
             }
         }, myActivity)
         binding.rvDouble.adapter = adapter
@@ -166,7 +163,6 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 }
             })
     }
-
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
@@ -207,26 +203,17 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
         }
     }
 
-
     private fun navigateToDestination(arrayList: ArrayList<DoubleWallModel?>, position: Int) {
         val countOfNulls = arrayList.subList(0, position).count { it == null }
-//        val sharedViewModel: SharedViewModel by activityViewModels()
         val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
-
-
         sharedViewModel.setDoubleWalls(arrayList.filterNotNull())
-
-
-
         Bundle().apply {
             Log.e(TAG, "navigateToDestination: inside bundle")
-
             putString("from", "trending")
             putString("wall", "home")
             putInt("position", position - countOfNulls)
             findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
         }
-
     }
 
     override fun onDestroyView() {

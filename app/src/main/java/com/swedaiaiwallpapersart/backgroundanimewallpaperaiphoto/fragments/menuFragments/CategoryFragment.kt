@@ -69,7 +69,6 @@ class CategoryFragment : Fragment(), AdEventListener {
     override fun onStart() {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
-
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -84,13 +83,8 @@ class CategoryFragment : Fragment(), AdEventListener {
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         val adapter = ApiCategoriesNameAdapter(catlist, object : StringCallback {
             override fun getStringCall(string: String) {
-
                 catListViewmodel.getAllCreations(string)
-
-                if (AdConfig.ISPAIDUSER) {
-                    setFragment(string)
-                }
-
+                setFragment(string)
             }
         }, myActivity, "")
 
@@ -101,20 +95,14 @@ class CategoryFragment : Fragment(), AdEventListener {
             if (wallpapersList?.size!! > 0) {
                 Log.e("TAG", "onCustomCreateView: data exists")
                 lifecycleScope.launch(Dispatchers.IO) {
-
-
-                    Log.e("TAG", "onCustomCreateView: " + wallpapersList)
-
+                    Log.e("TAG", "onCustomCreateView: $wallpapersList")
                     val list = wallpapersList.shuffled()
-
                     withContext(Dispatchers.Main) {
                         adapter.updateData(newData = list)
                     }
                 }
-
             }
         }
-
 
         binding.more.setOnClickListener {
             findNavController().navigate(R.id.liveWallpaperCategoriesFragment)
@@ -138,27 +126,10 @@ class CategoryFragment : Fragment(), AdEventListener {
                 if (AdConfig.ISPAIDUSER) {
                     findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                 } else {
-                    var shouldShowInterAd = true
 
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
-
-                    if (shouldShowInterAd) {
-                        showIntersAd() // Show the interstitial ad if no conditions were met
+                    if (isAdded) {
+                        Constants.checkInter = false
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
 
                 }
@@ -227,7 +198,6 @@ class CategoryFragment : Fragment(), AdEventListener {
             Log.e("TAG", "sortWallpaperCategories: " + it)
         }
         val orderMap = order.withIndex().associate { it.value.trim() to it.index }
-
         // Sort the categories based on the order specified in the map
         return categories.sortedWith(compareBy { orderMap[it.cat_name] ?: Int.MAX_VALUE })
     }
@@ -239,7 +209,6 @@ class CategoryFragment : Fragment(), AdEventListener {
 
         }
         if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-
             findNavController().navigate(R.id.listViewFragment, bundle)
         }
     }
@@ -279,5 +248,6 @@ class CategoryFragment : Fragment(), AdEventListener {
     override fun onShowAdFail() {
 
     }
+
 }
 

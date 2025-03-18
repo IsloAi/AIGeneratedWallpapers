@@ -77,9 +77,65 @@ class FavouriteFragment : Fragment() {
 
         wallpapers = mutableListOf()
         onCreateViewCalling()
+        binding.selfCreationRecyclerView.visibility = GONE
+        Handler().postDelayed({
+            binding.selfCreationRecyclerView.visibility = VISIBLE
+        }, 4000)
+
+        //for loading staticWallpapers
+        val deviceId = MySharePreference.getDeviceID(requireContext())
+        Log.d(TAG, "loadDataFromRoomDB: $deviceId ")
+        // Trigger data load in the ViewModel
+        favouriteViewModel.loadFavourites(deviceId!!)
+        // Observe the data from the ViewModel
+        lifecycleScope.launch(Dispatchers.IO) {
+            favouriteViewModel.favourites.collect { response ->
+                when (response) {
+                    is Response.Processing<*> -> {
+                        // Show loading state (e.g., a progress bar)
+                    }
+
+                    is Response.Success<*> -> {
+                        val data = response.data as? ArrayList<String> ?: ArrayList()
+                        Log.d(TAG, "loadDataFromRoomDB: Data = $data")
+
+                        // Create a new list to hold wallpapers
+                        val newWallpapers = mutableListOf<CatResponse>()
+
+                        data.forEach { id ->
+                            val wallpaper =
+                                appDatabase.wallpapersDao().getFavouritesByWallpaperId(id)
+                            if (wallpaper != null) {
+                                newWallpapers.add(wallpaper) // Add to the new list
+                                Log.d(TAG, "LD: Wallpaper in Room = $wallpaper")
+                            } else {
+                                Log.d(TAG, "LD: No wallpaper found for ID $id")
+                            }
+                        }
+
+                        // Now update the wallpapers list
+                        wallpapers.clear() // Clear the existing list
+                        wallpapers.addAll(newWallpapers) // Add all from the new list
+
+                        Log.d(TAG, "LD: All wallpapers = $wallpapers")
+                    }
+
+                    is Response.Error -> {
+                        Log.d(TAG, "Fav Frag Error: ${response.message}")
+                        // Update the UI with the retrieved data
+                    }
+
+                    Response.Loading -> {
+
+
+                    }
+
+                }//End of when
+            }//End of viewmodel scope
+        }//End of LifeScope
 
         binding.StaticWallpaper.setOnClickListener {
-            selector(binding.StaticWallpaper, binding.live, binding.aiWallpaper)
+            selector(binding.StaticWallpaper, binding.live)
             loadStaticFavourite()
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.liveRecyclerview.visibility = GONE
@@ -88,16 +144,14 @@ class FavouriteFragment : Fragment() {
             binding.progressBar.visibility = INVISIBLE
 
         }
-
         binding.live.setOnClickListener {
-            selector(binding.live, binding.StaticWallpaper, binding.aiWallpaper)
+            selector(binding.live, binding.StaticWallpaper)
             MySharePreference.setFavouriteSaveState(requireContext(), 3)
             initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
             binding.selfCreationRecyclerView.visibility = GONE
             binding.progressBar.visibility = INVISIBLE
         }
-
         binding.addToFav.setOnClickListener {
 
             sharedViewModel.selectTab(1)
@@ -167,68 +221,32 @@ class FavouriteFragment : Fragment() {
             binding.liveRecyclerview.adapter = adapter
             binding.liveRecyclerview.addItemDecoration(RvItemDecore(2, 20, false, 10000))
         }
-
-        //binding.liveRecyclerview.adapter = adapter
-        /*LiveWallpaperAdapter(catResponses, object : downloadCallback {
-        override fun getPosition(position: Int, model: LiveWallpaperModel) {
-            BlurView.filePath = ""
-            sharedViewModel.clearLiveWallpaper()
-            sharedViewModel.setLiveWallpaper(listOf(model))
-            findNavController().navigate(R.id.downloadLiveWallpaperFragment)
-        }
-    }, myActivity)
-
-    IKSdkController.loadNativeDisplayAd("mainscr_live_tab_scroll",
-        object : IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                // Update UI on the main thread using coroutines
-                CoroutineScope(Dispatchers.Main).launch {
-                    if (isAdded && view != null) {
-                        adapter.nativeAdView = adObject
-                        binding.liveRecyclerview.adapter = adapter
-                    }
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {
-                // Handle ad load failure
-            }
-        })
-
-    // Update the RecyclerView adapter on the main thread
-    CoroutineScope(Dispatchers.Main).launch {
-        binding.liveRecyclerview.adapter = adapter
-    }*/
     }
 
-    private fun selector(selector: TextView, unSelector: TextView, unselector1: TextView) {
+    private fun selector(selector: TextView, unSelector: TextView) {
         selector.setBackgroundResource(R.drawable.text_selector)
         unSelector.setBackgroundResource(0)
-        unselector1.setBackgroundResource(0)
         selector.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         unSelector.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-        unselector1.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
     }
 
     private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
         //val nonNullCatResponses = catResponses.filterNotNull()
-        val adapter =
-            FavouriteStaticAdapter(
-                catResponses,
-                myActivity,
-                "favorites",
-                object : PositionCallback {
-                    override fun getPosition(position: Int) {
-                        if (isAdded) {
-                            navigateToDestination(ArrayList(catResponses), position)
-                        }
+        val adapter = FavouriteStaticAdapter(catResponses,
+            myActivity,
+            "favorites",
+            object : PositionCallback {
+                override fun getPosition(position: Int) {
+                    if (isAdded) {
+                        navigateToDestination(ArrayList(catResponses), position)
                     }
+                }
 
-                    override fun getFavorites(position: Int) {
+                override fun getFavorites(position: Int) {
 
-                    }
-                })
+                }
+            })
 
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.selfCreationRecyclerView.adapter = adapter
@@ -255,61 +273,9 @@ class FavouriteFragment : Fragment() {
     //this function gets static fav wallpapers from the Room DB
     private fun loadStaticFavourite() {
         binding.emptySupport.visibility = GONE
-        val deviceId = MySharePreference.getDeviceID(requireContext())
-        Log.d(TAG, "loadDataFromRoomDB: $deviceId ")
-        // Trigger data load in the ViewModel
-        favouriteViewModel.loadFavourites(deviceId!!)
-
-        // Observe the data from the ViewModel
-        lifecycleScope.launch(Dispatchers.IO) {
-            favouriteViewModel.favourites.collect { response ->
-                when (response) {
-                    is Response.Processing<*> -> {
-                        // Show loading state (e.g., a progress bar)
-                    }
-
-                    is Response.Success<*> -> {
-                        val data = response.data as? ArrayList<String> ?: ArrayList()
-                        Log.d(TAG, "loadDataFromRoomDB: Data = $data")
-
-                        // Create a new list to hold wallpapers
-                        val newWallpapers =
-                            mutableListOf<CatResponse>()
-
-                        data.forEach { id ->
-                            val wallpaper =
-                                appDatabase.wallpapersDao().getFavouritesByWallpaperId(id)
-                            if (wallpaper != null) {
-                                newWallpapers.add(wallpaper) // Add to the new list
-                                Log.d(TAG, "LD: Wallpaper in Room = $wallpaper")
-                            } else {
-                                Log.d(TAG, "LD: No wallpaper found for ID $id")
-                            }
-                        }
-
-                        // Now update the wallpapers list
-                        wallpapers.clear() // Clear the existing list
-                        wallpapers.addAll(newWallpapers) // Add all from the new list
-
-                        Log.d(TAG, "LD: All wallpapers = $wallpapers")
-                    }
-
-                    is Response.Error -> {
-                        Log.d(TAG, "Fav Frag Error: ${response.message}")
-                        // Update the UI with the retrieved data
-                    }
-
-                    Response.Loading -> {
-
-
-                    }
-
-                }//End of when
-            }//End of viewmodel scope
-        }//End of LifeScope
         Handler().postDelayed({
             updateUIWithFetchedData(wallpapers)
-        }, 1000)
+        }, 500)
 
     }//End of function
 

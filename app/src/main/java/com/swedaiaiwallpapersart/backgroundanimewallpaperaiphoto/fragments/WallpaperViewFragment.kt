@@ -51,6 +51,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxAdListener
 import com.applovin.mediation.MaxError
+import com.applovin.mediation.MaxReward
+import com.applovin.mediation.MaxRewardedAdListener
 import com.applovin.mediation.ads.MaxAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -73,6 +75,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.hasToNavigateAnime
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.AnimeWallpaperFragment.Companion.wallFromAnime
@@ -289,10 +292,6 @@ class WallpaperViewFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     private fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
         totalADs = 0
         val firstAdLineThreshold =
@@ -307,20 +306,20 @@ class WallpaperViewFragment : Fragment() {
                     newData.add(null)
                     if (i <= adcount) {
                         totalADs++
-                        Log.e("******NULL", "addNullValueInsideArray adcount: $adcount")
-                        Log.e("******NULL", "addNullValueInsideArray adcount: $totalADs")
+                        Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: $adcount")
+                        Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: $totalADs")
                     }
-                    Log.e("******NULL", "addNullValueInsideArray: null $i")
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray: null $i")
 
                 } else if (i == firstAdLineThreshold) {
                     newData.add(null)
                     totalADs++
-                    Log.e("******NULL", "addNullValueInsideArray adcount: " + adcount)
-                    Log.e("******NULL", "addNullValueInsideArray adcount: " + totalADs)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: " + adcount)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: " + totalADs)
 
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null $i")
+                Log.e("SLIDERFRAGMENT", "addNullValueInsideArray: not null $i")
                 newData.add(data[i])
 
             }
@@ -331,23 +330,23 @@ class WallpaperViewFragment : Fragment() {
                     newData.add(null)
                     if (i <= adcount) {
                         totalADs++
-                        Log.e("******NULL", "addNullValueInsideArray adcount: " + adcount)
-                        Log.e("******NULL", "addNullValueInsideArray adcount: " + totalADs)
+                        Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: " + adcount)
+                        Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: " + totalADs)
                     }
-                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray: null " + i)
 
                 } else if (i == firstAdLineThreshold) {
                     newData.add(null)
                     totalADs++
-                    Log.e("******NULL", "addNullValueInsideArray adcount: " + adcount)
-                    Log.e("******NULL", "addNullValueInsideArray adcount: " + totalADs)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: " + adcount)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray adcount: " + totalADs)
 
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
+                    Log.e("SLIDERFRAGMENT", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
+                Log.e("SLIDERFRAGMENT", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
             }
-            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
+            Log.e("SLIDERFRAGMENT", "addNullValueInsideArray:size " + newData.size)
         }
 
         return newData
@@ -370,32 +369,6 @@ class WallpaperViewFragment : Fragment() {
         }
         setViewPager()
         checkRedHeart(position)
-
-        /*if (from == "Vip") {
-            if (arrayList[position] != null) {
-                getLargImage =
-                    AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[position]?.hd_image_url!!
-
-                getSmallImage =
-                    AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + arrayList[position] + "?class=custom"
-
-                if (isAdded) {
-                    getBitmapFromGlide(getLargImage)
-                }
-            }
-        } else {
-            if (arrayList[position] != null) {
-                getLargImage =
-                    AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[position]?.hd_image_url!!
-                Log.d("SET-WALL", "functionality: getLargeImage: $getLargImage ")
-                getSmallImage =
-                    AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[position]?.compressed_image_url!!
-                Log.d("SET-WALL", "functionality: getSmallImage: $getSmallImage ")
-                if (isAdded) {
-                    getBitmapFromGlide(getLargImage)
-                }
-            }
-        }*/
 
         binding.buttonApplyWallpaper.setOnClickListener {
             MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
@@ -540,7 +513,8 @@ class WallpaperViewFragment : Fragment() {
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                            getString(R.string.your_image_not_fetched_properly),
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -569,7 +543,8 @@ class WallpaperViewFragment : Fragment() {
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                            getString(R.string.your_image_not_fetched_properly),
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -595,7 +570,8 @@ class WallpaperViewFragment : Fragment() {
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                            getString(R.string.your_image_not_fetched_properly),
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -621,7 +597,8 @@ class WallpaperViewFragment : Fragment() {
                     } else {
                         Toast.makeText(
                             requireContext(),
-                            getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                            getString(R.string.your_image_not_fetched_properly),
+                            Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -634,8 +611,7 @@ class WallpaperViewFragment : Fragment() {
                 arrayList[position]?.liked = false
                 arrayList[position]?.id?.let { it1 ->
                     appDatabase.wallpapersDao().updateLiked(
-                        false,
-                        it1
+                        false, it1
                     )
                 }
                 binding.favouriteButton.setImageResource(R.drawable.button_like)
@@ -643,8 +619,7 @@ class WallpaperViewFragment : Fragment() {
                 arrayList[position]?.liked = true
                 arrayList[position]?.id?.let { it1 ->
                     appDatabase.wallpapersDao().updateLiked(
-                        true,
-                        it1
+                        true, it1
                     )
                 }
 
@@ -657,8 +632,7 @@ class WallpaperViewFragment : Fragment() {
                 val countOfNulls = arrayList.subList(0, position).count { it == null }
                 arrayList[position]?.let { it1 ->
                     sharedViewModel.updateCatResponseAtIndex(
-                        it1,
-                        countOfNulls
+                        it1, countOfNulls
                     )
                 }
             } catch (e: IndexOutOfBoundsException) {
@@ -692,9 +666,7 @@ class WallpaperViewFragment : Fragment() {
                 imageDetailsSheet()
             } else {
                 Toast.makeText(
-                    requireContext(),
-                    "This is Ad position,No info Available",
-                    Toast.LENGTH_SHORT
+                    requireContext(), "This is Ad position,No info Available", Toast.LENGTH_SHORT
                 ).show()
             }
             Constants.checkInter = false
@@ -713,7 +685,9 @@ class WallpaperViewFragment : Fragment() {
                     val model1 = arrayList[position]
                     postData.unLocking(
                         MySharePreference.getDeviceID(requireContext())!!,
-                        model1!!, requireContext(), 0
+                        model1!!,
+                        requireContext(),
+                        0
                     )
                     showInter = false
                     binding.buttonApplyWallpaper.visibility = View.VISIBLE
@@ -725,7 +699,8 @@ class WallpaperViewFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                    getString(R.string.your_image_not_fetched_properly),
+                    Toast.LENGTH_SHORT
                 ).show()
             }
 
@@ -737,8 +712,7 @@ class WallpaperViewFragment : Fragment() {
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                 if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
                     Log.e("TAG", "functionality: inside click permission")
@@ -748,42 +722,23 @@ class WallpaperViewFragment : Fragment() {
                         STORAGE_PERMISSION_CODE
                     )
                 } else {
-                    Log.e("TAG", "functionality: inside click dialog")
-                    if (AdConfig.ISPAIDUSER) {
-                        mSaveMediaToStorage(bitmap)
-                        val model = arrayList[position]
-                        model?.let { it1 -> setDownloaded(it1) }
-                    } else {
-
-                        getUserIdDialog()
-                    }
-                }
-            } else {
-                if (AdConfig.ISPAIDUSER) {
-                    mSaveMediaToStorage(bitmap)
-                    val model = arrayList[position]
-                    model?.let { it1 -> setDownloaded(it1) }
-                } else {
-
                     getUserIdDialog()
                 }
+            } else {
+                getUserIdDialog()
             }
             Constants.checkInter = false
             Constants.checkAppOpen = false
-
         }
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private fun setViewPager() {
         adapter = WallpaperApiSliderAdapter(arrayList, object : FullViewImage {
-
             override fun getFullImageUrl(image: CatResponse) {
-
                 sharedViewModel.selectCat(image)
                 sharedViewModel.setPosition(position)
                 sharedViewModel.setWallpaperFromType(from)
-
                 navController?.navigate(R.id.fullScreenImageViewFragment)
             }
         }, myActivity, from)
@@ -817,8 +772,7 @@ class WallpaperViewFragment : Fragment() {
             override fun onPageSelected(positi: Int) {
                 Log.d("SET-WALL", "onPageSelected:POS $positi")
 
-                if (positi >= 0 && positi < arrayList.size) {
-                    /*getLargImage =
+                if (positi >= 0 && positi < arrayList.size) {/*getLargImage =
                         AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[positi]?.hd_image_url!!
                     getSmallImage =
                         AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[positi]?.compressed_image_url!!
@@ -923,8 +877,7 @@ class WallpaperViewFragment : Fragment() {
 
                 model?.id?.let { it1 ->
                     appDatabase.wallpapersDao().updateLocked(
-                        true,
-                        it1
+                        true, it1
                     )
                 }
                 adapter?.notifyItemChanged(position)
@@ -934,7 +887,8 @@ class WallpaperViewFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                    getString(R.string.your_image_not_fetched_properly),
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -959,31 +913,47 @@ class WallpaperViewFragment : Fragment() {
         dialog?.window!!.setLayout(width, height)
         dialog?.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog?.setCancelable(false)
-        var getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
-        var dismiss = dialog?.findViewById<TextView>(R.id.noThanks)
-
+        val getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
+        val dismiss = dialog?.findViewById<TextView>(R.id.noThanks)
         getReward?.setOnClickListener {
             dialog?.dismiss()
-            mSaveMediaToStorage(bitmap)
-            val model = arrayList[position]
+            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    mSaveMediaToStorage(bitmap)
+                    val model = arrayList[position]
+                    model?.let { it1 -> setDownloaded(it1) }
+                }
 
-            model?.let { it1 -> setDownloaded(it1) }
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                }
+
+                override fun onAdClicked(p0: MaxAd) {
+                }
+
+                override fun onAdHidden(p0: MaxAd) {
+                    MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+                }
+
+                override fun onAdDisplayed(p0: MaxAd) {
+                }
+
+                override fun onAdLoaded(p0: MaxAd) {
+                }
+            })
         }
-
         dismiss?.setOnClickListener {
             dialog?.dismiss()
         }
-
         dialog?.show()
     }
 
     private fun getBitmapFromGlide(url: String) {
         Log.d("SET-WALL", "getBitmapFromGlide: url: $url ")
-        Glide.with(requireContext())
-            .asBitmap()
-            .load(url)
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .into(object : CustomTarget<Bitmap>() {
+        Glide.with(requireContext()).asBitmap().load(url)
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
 
@@ -1012,9 +982,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private fun addFavourite(
-        context: Context,
-        position: Int,
-        favouriteButton: ImageView
+        context: Context, position: Int, favouriteButton: ImageView
     ) {
 
         val id = arrayList[position]?.id.toString()
@@ -1022,8 +990,7 @@ class WallpaperViewFragment : Fragment() {
 
         val retrofit = RetrofitInstance.getInstance()
         val apiService = retrofit.create(ApiService::class.java)
-        val postData =
-            PostData(MySharePreference.getDeviceID(context)!!, id)
+        val postData = PostData(MySharePreference.getDeviceID(context)!!, id)
         val call = apiService.postData(postData)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
@@ -1074,8 +1041,7 @@ class WallpaperViewFragment : Fragment() {
             val call = apiService.setDownloaded(model.id.toString())
             call.enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
+                    call: Call<ResponseBody>, response: Response<ResponseBody>
                 ) {
                     if (response.isSuccessful) {
                         Log.d("TAG", "onResponse: success" + response.body().toString())
@@ -1139,8 +1105,7 @@ class WallpaperViewFragment : Fragment() {
 
             setCancelable(false)
             window?.setLayout(
-                WindowManager.LayoutParams.MATCH_PARENT,
-                WindowManager.LayoutParams.WRAP_CONTENT
+                WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT
             )
             show()
         }
@@ -1177,9 +1142,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private suspend fun onWallpaperSet(
-        dialog: BottomSheetDialog,
-        message: String,
-        model: CatResponse
+        dialog: BottomSheetDialog, message: String, model: CatResponse
     ) {
         withContext(Dispatchers.Main) {
             interstitialAdWithToast(message, dialog)
@@ -1232,8 +1195,7 @@ class WallpaperViewFragment : Fragment() {
             }
         } else {
             if (ContextCompat.checkSelfPermission(
-                    requireActivity(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    requireActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_DENIED
             ) {
                 ActivityCompat.requestPermissions(
@@ -1262,10 +1224,7 @@ class WallpaperViewFragment : Fragment() {
         if (file.exists()) {
             val mimeType = getMimeType(filePath)
             MediaScannerConnection.scanFile(
-                context,
-                arrayOf(file.absolutePath),
-                arrayOf(mimeType),
-                null
+                context, arrayOf(file.absolutePath), arrayOf(mimeType), null
             )
         }
     }
@@ -1276,9 +1235,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String?>,
-        grantResults: IntArray
+        requestCode: Int, permissions: Array<String?>, grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == STORAGE_PERMISSION_CODE) {
@@ -1291,7 +1248,8 @@ class WallpaperViewFragment : Fragment() {
             } else {
                 Toast.makeText(
                     requireContext(),
-                    getString(R.string.storage_permission_denied), Toast.LENGTH_SHORT
+                    getString(R.string.storage_permission_denied),
+                    Toast.LENGTH_SHORT
                 ).show()
             }
         }
@@ -1684,9 +1642,7 @@ class WallpaperViewFragment : Fragment() {
             binding.imageTags.text = arrayList[position]?.Tags
         } else {
             Toast.makeText(
-                requireContext(),
-                "This is Ad position,No info Available",
-                Toast.LENGTH_SHORT
+                requireContext(), "This is Ad position,No info Available", Toast.LENGTH_SHORT
             ).show()
         }
 

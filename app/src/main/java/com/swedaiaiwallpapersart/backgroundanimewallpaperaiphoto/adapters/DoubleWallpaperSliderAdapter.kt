@@ -23,12 +23,10 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemDoubleSliderBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DoubleWallpaperSliderAdapter(
     private val arrayList: ArrayList<DoubleWallModel?>,
@@ -52,8 +50,6 @@ class DoubleWallpaperSliderAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-
-
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
         return when (viewType) {
@@ -73,12 +69,13 @@ class DoubleWallpaperSliderAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return VIEW_TYPE_CONTAINER1
+        when (arrayList[position]) {
+            null -> return VIEW_TYPE_NATIVE_AD
+            else -> return VIEW_TYPE_CONTAINER1
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
         val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
@@ -122,6 +119,13 @@ class DoubleWallpaperSliderAdapter(
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
+            val native =
+                NativeAdManager(
+                    context!!,
+                    AdConfig.admobAndroidNative,
+                    R.layout.native_ad_slider
+                )
+            native.loadNativeAd(binding.sliderNative)
         }
     }
 

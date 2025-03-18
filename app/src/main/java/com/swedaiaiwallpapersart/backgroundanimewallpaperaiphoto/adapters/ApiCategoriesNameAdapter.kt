@@ -21,6 +21,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.CatNameListBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -89,27 +90,25 @@ class ApiCategoriesNameAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val adjustedPosition = calculateAdjustedPosition(position)
 
+        Log.d("Adapter", "Binding position: $position, Adjusted Position: $adjustedPosition")
+
         if (adjustedPosition >= 0 && adjustedPosition < arrayList.size) {
             when (holder.itemViewType) {
                 VIEW_TYPE_CONTAINER1 -> {
                     val model = arrayList[adjustedPosition]
+                    Log.d("Adapter", "Category Name: ${model?.cat_name}")
                     if (model != null) {
                         (holder as ViewHolderContainerItem).bind(model)
-                    } else {
-                        // Handle null model case (e.g., show a placeholder or do nothing)
-                        Log.e(
-                            "ApiCategoriesNameAdapter",
-                            "Null model at position: $adjustedPosition"
-                        )
                     }
                 }
 
                 VIEW_TYPE_NATIVE_AD -> {
+                    Log.d("Adapter", "Ad Inserted at position: $position")
                     (holder as ViewHolderContainer3).bind()
                 }
             }
         } else {
-            Log.e("ApiCategoriesNameAdapter", "Adjusted position out of bounds: $adjustedPosition")
+            Log.e("Adapter", "Adjusted position out of bounds: $adjustedPosition")
         }
     }
 
@@ -141,12 +140,15 @@ class ApiCategoriesNameAdapter(
     }
 
     private fun calculateAdjustedPosition(position: Int): Int {
-        return if (!AdConfig.ISPAIDUSER && getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
-            position - ((position - firstLine) / (lineC + 1) + 1)
-        } else if (!AdConfig.ISPAIDUSER) {
-            position - (position / (lineC + 1))
+        if (AdConfig.ISPAIDUSER) return position // If no ads, return original position.
+
+        // Count the number of ads inserted before this position
+        val adsBefore = (position - firstLine) / (lineC + 1)
+
+        return if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
+            -1 // Return -1 for ads, so we don't count them as categories.
         } else {
-            position
+            position - adsBefore // Adjust position by subtracting inserted ads.
         }
     }
 
@@ -200,6 +202,12 @@ class ApiCategoriesNameAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
+            val native = NativeAdManager(
+                context!!,
+                AdConfig.admobAndroidNative,
+                R.layout.new_native_language
+            )
+            native.loadNativeAd(binding.NativeAd)
         }
     }
 
@@ -219,9 +227,13 @@ class ApiCategoriesNameAdapter(
 
     fun updateData(newData: List<CatNameResponse?>) {
         arrayList.clear()
-        arrayList.addAll(newData)
-        Log.d("LiveWallpaperCategory", "updateData1223: ${newData.size}")
-        notifyDataSetChanged()
 
+        // Remove duplicate categories
+        val uniqueData = newData.distinctBy { it?.cat_name }
+        arrayList.addAll(uniqueData)
+
+        Log.d("Adapter", "updateData: ${arrayList.size} items added")
+        notifyDataSetChanged()
     }
+
 }

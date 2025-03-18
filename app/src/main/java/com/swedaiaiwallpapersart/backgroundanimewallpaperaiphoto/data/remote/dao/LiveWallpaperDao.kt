@@ -33,6 +33,12 @@ interface LiveWallpaperDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertLiveFavourite(databaseResponse: FavouriteLiveModel)
 
+    @Query("DELETE FROM LiveFavourite WHERE id = :wallpaperId")
+    suspend fun deleteLiveFavourite(wallpaperId: String)
+
+    @Query("DELETE FROM LiveFavourite")
+    suspend fun deleteAllLiveFavourites()
+
     @Query("SELECT * FROM LiveFavourite")
     fun getAllFavouriteWallpapers(): List<FavouriteLiveModel>
 
