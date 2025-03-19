@@ -217,10 +217,8 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                     Log.e("TAG", "downloadVideo: $bytesDownloaded")
                     Log.e("TAG", "downloadVideo total bytes: $totalBytes")
                     lifecycleScope.launch(Dispatchers.Main) {
-
                         val percentage = (bytesDownloaded * 100 / totalSize).toInt()
                         Log.e("TAG", "downloadVideo: $percentage")
-
                         if (isAdded) {
                             val currentCount = (bytesDownloaded * 100 / totalSize)
                             if (currentCount <= 100) {
@@ -230,8 +228,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
                             }
                             binding.progress.progress = percentage
                         }
-
-
                     }
                 }.startDownload(object : DownloadListener {
                     override fun onDownloadComplete() {
@@ -296,21 +292,13 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         Log.e(TAG, "app open dismissed: ")
     }
 
-    override fun onAdLoading() {
+    override fun onAdLoading() {}
 
-    }
+    override fun onAdsShowTimeout() {}
 
-    override fun onAdsShowTimeout() {
+    override fun onShowAdComplete() {}
 
-    }
-
-    override fun onShowAdComplete() {
-
-    }
-
-    override fun onShowAdFail() {
-
-    }
+    override fun onShowAdFail() {}
 
     companion object {
         var shouldObserveFavorites = false

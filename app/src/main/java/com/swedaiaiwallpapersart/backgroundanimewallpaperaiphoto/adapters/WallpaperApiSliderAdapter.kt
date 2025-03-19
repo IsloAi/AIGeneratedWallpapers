@@ -34,7 +34,7 @@ class WallpaperApiSliderAdapter(
     private val arrayList: ArrayList<CatResponse?>,
     private val fullViewImage: FullViewImage,
     private val mActivity: MainActivity,
-    private val from: String
+    private val from: String,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     var context: Context? = null
 
@@ -65,7 +65,6 @@ class WallpaperApiSliderAdapter(
             VIEW_TYPE_NATIVE_AD -> {
                 val binding = NativeSliderLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
-
             }
 
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
@@ -115,6 +114,7 @@ class WallpaperApiSliderAdapter(
     inner class ViewHolderContainer1(val binding: SlideItemContainerBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(arrayList: ArrayList<CatResponse?>, position: Int) {
+
             val model = arrayList[position]
             dataSet(
                 model!!,
@@ -130,6 +130,7 @@ class WallpaperApiSliderAdapter(
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
+
             val native =
                 NativeAdManager(context!!, AdConfig.admobAndroidNative, R.layout.native_ad_slider)
             native.loadNativeAd(binding.sliderNative)
@@ -203,4 +204,7 @@ class WallpaperApiSliderAdapter(
 
     }
 
+    interface posCallback {
+        fun positionCallback(isNull: String)
+    }
 }

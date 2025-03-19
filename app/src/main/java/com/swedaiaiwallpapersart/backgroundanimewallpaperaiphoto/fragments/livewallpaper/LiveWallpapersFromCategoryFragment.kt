@@ -5,17 +5,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpapersFromCategoryBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
@@ -133,37 +139,49 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
                 if (AdConfig.ISPAIDUSER) {
                     setDownloadAbleWallpaperAndNavigate(model, true)
                 } else {
-                    var shouldShowInterAd = true
+                    if (isAdded) {
+                        Constants.checkInter = false
+                        MaxInterstitialAds.showInterstitial(requireActivity(),
+                            object : MaxAdListener {
+                                override fun onAdLoaded(p0: MaxAd) {}
 
-                    if (AdConfig.avoidPolicyRepeatingInter == 1 && Constants.checkInter) {
-                        if (isAdded) {
-                            Constants.checkInter = false
-                            setDownloadAbleWallpaperAndNavigate(model, false)
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
+                                override fun onAdDisplayed(p0: MaxAd) {}
 
-                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen) {
-                        if (isAdded) {
-                            checkAppOpen = false
-                            setDownloadAbleWallpaperAndNavigate(model, false)
-                            Log.e(TAG, "app open showed")
-                            shouldShowInterAd = false // Skip showing the ad for this action
-                        }
-                    }
+                                override fun onAdHidden(p0: MaxAd) {
+                                    setDownloadAbleWallpaperAndNavigate(model, false)
+                                }
 
-                    if (shouldShowInterAd) {
-                        showInterAd(model) // Show the interstitial ad if no conditions were met
+                                override fun onAdClicked(p0: MaxAd) {
+                                    TODO("Not yet implemented")
+                                }
+
+                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Ad not available",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Ad not available",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            }, object : MaxAD {
+                                override fun adNotReady(type: String) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Ad not available",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    setDownloadAbleWallpaperAndNavigate(model, true)
+                                }
+                            })
+
                     }
-//                    if (AdConfig.avoidPolicyOpenAdInter == 1 && checkAppOpen){
-//                        if (isAdded){
-//                            checkAppOpen = false
-//                            setDownloadAbleWallpaperAndNavigate(model,true)
-//                            Log.e(TAG, "app open showed: ", )
-//                        }
-//                    }else{
-//                        showInterAd(model)
-//                    }
                 }
             }
         }, myActivity)

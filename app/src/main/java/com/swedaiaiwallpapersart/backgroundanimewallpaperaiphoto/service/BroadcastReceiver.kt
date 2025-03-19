@@ -11,7 +11,7 @@ open class BroadcastReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         val action = intent.action
         if (action == Intent.ACTION_POWER_CONNECTED) {
-            Log.e("TAG", "onReceive: connected$action")
+            Log.e("Battery", "onReceive: connected$action")
             val intent1 = Intent(context, BatteryAnimationActivity::class.java)
             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -19,7 +19,7 @@ open class BroadcastReceiver: BroadcastReceiver() {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             context?.startActivity(intent1)
         } else if (action == Intent.ACTION_POWER_DISCONNECTED) {
-            Log.e("TAG", "onReceive: disconnected"+action )
+            Log.e("Battery", "onReceive: disconnected" + action)
             val local = Intent()
             local.setAction("closeAction")
             context!!.sendBroadcast(local)

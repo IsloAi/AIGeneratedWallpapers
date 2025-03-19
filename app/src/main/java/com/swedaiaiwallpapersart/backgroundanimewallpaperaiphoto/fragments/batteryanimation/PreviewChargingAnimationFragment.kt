@@ -61,12 +61,10 @@ class PreviewChargingAnimationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         myActivity = activity as MainActivity
 
         initObservers()
         setWallpaperOnView()
-
         setEvents()
     }
 

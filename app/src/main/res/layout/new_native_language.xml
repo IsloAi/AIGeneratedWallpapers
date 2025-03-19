@@ -87,13 +87,12 @@
         <com.google.android.gms.ads.nativead.MediaView
             android:id="@+id/mediaView2"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:maxHeight="@dimen/_150sdp"
+            android:layout_height="@dimen/_150sdp"
             app:layout_constraintEnd_toEndOf="@+id/custom_call_to_actionNew"
             app:layout_constraintStart_toStartOf="@+id/custom_call_to_actionNew"
             app:layout_constraintTop_toBottomOf="@+id/custom_containerAds" />
 
-        <TextView
+        <Button
             android:id="@+id/custom_call_to_actionNew"
             android:layout_width="match_parent"
             android:layout_height="40dp"

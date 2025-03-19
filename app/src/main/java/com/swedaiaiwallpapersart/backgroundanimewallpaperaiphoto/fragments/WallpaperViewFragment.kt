@@ -733,6 +733,7 @@ class WallpaperViewFragment : Fragment() {
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
+
     private fun setViewPager() {
         adapter = WallpaperApiSliderAdapter(arrayList, object : FullViewImage {
             override fun getFullImageUrl(image: CatResponse) {
@@ -747,7 +748,6 @@ class WallpaperViewFragment : Fragment() {
         viewPager2?.adapter = adapter
         Log.d("SET-WALL", "setViewPager: $position")
         viewPager2?.setCurrentItem(position, false)
-
         if (arrayList[position]?.unlockimges == true) {
             binding.unlockWallpaper.visibility = View.GONE
             binding.buttonApplyWallpaper.visibility = View.VISIBLE
@@ -755,6 +755,7 @@ class WallpaperViewFragment : Fragment() {
             binding.unlockWallpaper.visibility = View.GONE
             binding.buttonApplyWallpaper.visibility = View.VISIBLE
         }
+
 
         viewPager2?.clipToPadding = false
         viewPager2?.clipChildren = false
@@ -772,7 +773,8 @@ class WallpaperViewFragment : Fragment() {
             override fun onPageSelected(positi: Int) {
                 Log.d("SET-WALL", "onPageSelected:POS $positi")
 
-                if (positi >= 0 && positi < arrayList.size) {/*getLargImage =
+                if (positi >= 0 && positi < arrayList.size) {
+                    /*getLargImage =
                         AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[positi]?.hd_image_url!!
                     getSmallImage =
                         AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[positi]?.compressed_image_url!!
@@ -844,7 +846,19 @@ class WallpaperViewFragment : Fragment() {
 
                     checkRedHeart(position)
                 }
+                if (arrayList[position] == null) {
+                    binding.BannerAD.visibility = View.GONE
+                    binding.downloadWallpaper.visibility = View.GONE
+                    binding.buttonApplyWallpaper.visibility = View.GONE
+                    binding.favouriteButton.visibility = View.GONE
+                } else {
+                    binding.BannerAD.visibility = View.VISIBLE
+                    binding.downloadWallpaper.visibility = View.VISIBLE
+                    binding.buttonApplyWallpaper.visibility = View.VISIBLE
+                    binding.favouriteButton.visibility = View.VISIBLE
+                }
             }
+
         }
         viewPager2?.registerOnPageChangeCallback(viewPagerChangeCallback)
     }
@@ -925,9 +939,11 @@ class WallpaperViewFragment : Fragment() {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad Not available", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad Not available", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onAdClicked(p0: MaxAd) {
@@ -941,6 +957,11 @@ class WallpaperViewFragment : Fragment() {
                 }
 
                 override fun onAdLoaded(p0: MaxAd) {
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+                    Toast.makeText(requireContext(), "Ad not Available", Toast.LENGTH_SHORT).show()
                 }
             })
         }

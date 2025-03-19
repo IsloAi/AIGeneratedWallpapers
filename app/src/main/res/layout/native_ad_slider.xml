@@ -93,7 +93,7 @@
             app:layout_constraintStart_toStartOf="@+id/custom_call_to_actionNew"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
+        <Button
             android:id="@+id/custom_call_to_actionNew"
             android:layout_width="match_parent"
             android:layout_height="40dp"

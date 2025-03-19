@@ -1,83 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/new_main_background"
     android:fitsSystemWindows="true"
-    android:windowTranslucentStatus="true"
     android:windowTranslucentNavigation="true"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/new_main_background">
+    android:windowTranslucentStatus="true">
 
     <TextView
+        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_15sdp"
+        android:fontFamily="@font/poppins_bold"
+        android:text="16:00"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_24sdp"
         android:timeZone="GMT5"
         android:translationZ="@dimen/_10sdp"
-        android:textColor="@color/white"
-        android:layout_marginTop="@dimen/_15sdp"
-        android:textSize="@dimen/_24sdp"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="16:00"
-        android:fontFamily="@font/poppins_bold"
-        android:id="@+id/time"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Wednesday, 28th Mar 2024"
-        android:translationZ="@dimen/_10sdp"
         android:fontFamily="@font/poppins_medium"
-        app:layout_constraintTop_toBottomOf="@id/time"
-        app:layout_constraintStart_toStartOf="@id/time"
-        app:layout_constraintEnd_toEndOf="@id/time"
-        android:textSize="@dimen/_15sdp"
+        android:text="Wednesday, 28th Mar 2024"
         android:textColor="@color/white"
-        android:id="@+id/date"
-        />
-
+        android:textSize="@dimen/_15sdp"
+        android:translationZ="@dimen/_10sdp"
+        app:layout_constraintEnd_toEndOf="@id/time"
+        app:layout_constraintStart_toStartOf="@id/time"
+        app:layout_constraintTop_toBottomOf="@id/time" />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animationView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/batteryPercentage"
         app:layout_constraintHeight_percent="0.5"
         app:layout_constraintTop_toBottomOf="@id/date"
-        app:layout_constraintBottom_toTopOf="@id/batteryPercentage"
-        android:id="@+id/animationView"
         app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        />
+        app:lottie_loop="true" />
 
     <TextView
+        android:id="@+id/batteryPercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_15sdp"
+        android:fontFamily="@font/poppins_bold"
         android:text="69%"
         android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:fontFamily="@font/poppins_bold"
         android:textSize="@dimen/_16sdp"
         android:translationZ="@dimen/_10sdp"
         app:layout_constraintBottom_toTopOf="@id/charging"
-        android:layout_marginBottom="@dimen/_15sdp"
-        android:id="@+id/batteryPercentage"
-        />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/charging"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_60sdp"
-        app:lottie_rawRes="@raw/charging_anim"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        android:id="@+id/charging"
-        />
-
-
+        app:lottie_rawRes="@raw/charging_anim" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

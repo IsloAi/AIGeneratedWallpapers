@@ -59,6 +59,7 @@ class NativeAdManager(private val context: Context, private val adUnitId: String
         adView.callToActionView = adView.findViewById(R.id.custom_call_to_actionNew)
         adView.iconView = adView.findViewById(R.id.custom_app_icon)
         adView.bodyView = adView.findViewById(R.id.custom_body)
+        adView.starRatingView = adView.findViewById(R.id.rating_bar)
         adView.mediaView = adView.findViewById(R.id.mediaView2)
 
         (adView.headlineView as? TextView)?.text = nativeAd.headline

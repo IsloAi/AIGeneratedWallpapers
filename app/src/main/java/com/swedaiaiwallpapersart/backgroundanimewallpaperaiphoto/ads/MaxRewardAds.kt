@@ -34,15 +34,19 @@ object MaxRewardAds {
 
             override fun onAdDisplayFailed(ad: MaxAd, error: MaxError) {}
 
-            override fun onUserRewarded(ad: MaxAd, reward: MaxReward) {}
+            override fun onUserRewarded(ad: MaxAd, reward: MaxReward) {
+                rewardedAd?.loadAd()
+            }
         })
         rewardedAd?.loadAd()
     }
 
-    fun showRewardAd(context: Activity, listener: MaxRewardedAdListener) {
+    fun showRewardAd(context: Activity, listener: MaxRewardedAdListener, listener2: MaxAD) {
         if (rewardedAd?.isReady == true) {
             rewardedAd?.setListener(listener)
             rewardedAd?.showAd(context)
+        } else {
+            listener2.adNotReady("Rewarded")
         }
     }
 }

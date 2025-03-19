@@ -25,7 +25,8 @@
                     android:id="@+id/wallpaper"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="@+id/loading" />
 
                 <com.airbnb.lottie.LottieAnimationView
                     android:id="@+id/animationView"

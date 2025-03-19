@@ -72,7 +72,7 @@ class LiveWallpaperAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
             val nativeAd =
-                NativeAdManager(context, AdConfig.admobAndroidNative, R.layout.new_native_language)
+                NativeAdManager(context, AdConfig.admobAndroidNative, R.layout.native_layout_small)
             nativeAd.loadNativeAd(binding.NativeAd)
         }
     }

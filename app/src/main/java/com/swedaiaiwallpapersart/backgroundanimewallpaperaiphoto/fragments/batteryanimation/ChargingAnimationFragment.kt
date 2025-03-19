@@ -78,23 +78,18 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         chargingAnimationViewmodel.chargingAnimList.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Success -> {
-
                     Log.e(TAG, "ChargingAnimation: " + result.data)
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data
-
                         val data = if (AdConfig.ISPAIDUSER) {
                             list as ArrayList<ChargingAnimModel?>
                         } else {
                             list?.let { addNullValueInsideArray(it.shuffled()) }
                         }
-
                         withContext(Dispatchers.Main) {
                             data?.let { adapter?.updateMoreData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
-
-
                     }
                 }
 

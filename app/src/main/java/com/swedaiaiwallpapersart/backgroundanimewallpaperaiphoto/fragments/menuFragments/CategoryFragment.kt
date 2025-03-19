@@ -107,6 +107,7 @@ class CategoryFragment : Fragment(), AdEventListener {
         binding.more.setOnClickListener {
             findNavController().navigate(R.id.liveWallpaperCategoriesFragment)
         }
+
     }
 
     private fun updateUIWithFetchedData() {

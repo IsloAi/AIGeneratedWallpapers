@@ -90,7 +90,6 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
     private fun navigateToNext() {
         if (isAdded) {
             findNavController().navigate(R.id.previewChargingAnimationFragment)
-
         }
     }
 

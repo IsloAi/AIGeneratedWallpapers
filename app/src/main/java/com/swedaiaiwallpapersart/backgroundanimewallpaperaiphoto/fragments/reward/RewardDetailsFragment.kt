@@ -20,6 +20,7 @@ import com.applovin.mediation.MaxRewardedAdListener
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentRewardDetailsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.LayoutWallpaperGiftDialogBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
@@ -97,6 +98,14 @@ class RewardDetailsFragment : Fragment() {
                                 override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                                     showCustomAlertDialog()
                                 }
+                            }, object : MaxAD {
+                                override fun adNotReady(type: String) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Ad not available",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             })
                     }
 
@@ -121,6 +130,11 @@ class RewardDetailsFragment : Fragment() {
 
                     override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                         showCustomAlertDialog()
+                    }
+                }, object : MaxAD {
+                    override fun adNotReady(type: String) {
+                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 })
             }
