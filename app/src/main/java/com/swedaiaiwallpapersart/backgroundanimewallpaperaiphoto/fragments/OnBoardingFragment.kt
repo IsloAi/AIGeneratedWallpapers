@@ -81,6 +81,12 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
 
                     2 -> {
                         binding.skipBtn.visibility = View.GONE
+                        binding.nextBtn.visibility = View.GONE
+                    }
+
+                    3->{
+                        binding.skipBtn.visibility = View.VISIBLE
+                        binding.nextBtn.visibility = View.VISIBLE
                     }
                 }
             }
