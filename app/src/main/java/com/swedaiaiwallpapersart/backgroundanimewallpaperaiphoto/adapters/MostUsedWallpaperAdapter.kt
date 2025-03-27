@@ -24,6 +24,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -77,6 +78,13 @@ class MostUsedWallpaperAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
+            val nativeAd =
+                NativeAdManager(
+                    context!!,
+                    AdConfig.admobAndroidNative,
+                    R.layout.native_layout_small
+                )
+            nativeAd.loadNativeAd(binding.NativeAd)
         }
     }
 
@@ -96,6 +104,7 @@ class MostUsedWallpaperAdapter(
     }
 
     override fun getItemCount() = arrayList.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
@@ -138,7 +147,11 @@ class MostUsedWallpaperAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return VIEW_TYPE_CONTAINER1
+        return if (arrayList[position] == null) {
+            VIEW_TYPE_NATIVE_AD
+        } else {
+            VIEW_TYPE_CONTAINER1
+        }
     }
 
     @SuppressLint("SetTextI18n")

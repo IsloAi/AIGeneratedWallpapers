@@ -401,7 +401,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             //Log.d(TAG, "saveLiveWallpapersInDB: $wallpaper")
                             val model = wallpaper.copy(unlocked = true)
                             appDatabase.liveWallpaperDao().insert(model)
-
                         }
 
                         val percent = (result.data?.size?.times(0.3))?.toInt()
@@ -645,7 +644,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 val positionTabs = remoteConfig["tablist_156"].asString()
                 val languagesOrder = remoteConfig["languages"].asString()
                 val baseUrls = remoteConfig["dataUrl"].asString()
+                val appFree = remoteConfig["wholeAppFree"].asBoolean()
                 AdConfig.BASE_URL_DATA = baseUrls
+                AdConfig.inAppConfig = appFree
+                //AdConfig.Reward_Screen = appFree
 
                 try {
                     val languagesOrderArray =

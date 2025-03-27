@@ -56,6 +56,10 @@ class WelcomeFragment3 : Fragment() {
         )
         native.loadNativeAd(binding.NativeFullOB3)
 
+        binding.nextBtn.setOnClickListener {
+            viewPagerCallback?.swipe()
+        }
+
     }
 
     override fun onPause() {

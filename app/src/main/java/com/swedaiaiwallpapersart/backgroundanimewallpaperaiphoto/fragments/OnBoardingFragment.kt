@@ -80,11 +80,16 @@ class OnBoardingFragment : Fragment(), ViewPagerCallback {
                     }
 
                     2 -> {
-                        binding.skipBtn.visibility = View.GONE
-                        binding.nextBtn.visibility = View.GONE
+                        if (AdConfig.onboarding_Full_Native == 0) {
+                            binding.skipBtn.visibility = View.VISIBLE
+                            binding.nextBtn.visibility = View.VISIBLE
+                        } else {
+                            binding.skipBtn.visibility = View.GONE
+                            binding.nextBtn.visibility = View.GONE
+                        }
                     }
 
-                    3->{
+                    3 -> {
                         binding.skipBtn.visibility = View.VISIBLE
                         binding.nextBtn.visibility = View.VISIBLE
                     }

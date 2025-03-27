@@ -7,11 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -21,6 +25,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveCategoriesHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
@@ -94,6 +100,7 @@ class CategoryFragment : Fragment(), AdEventListener {
             Log.e("TAG", "onCustomCreateView: no data exists")
             if (wallpapersList?.size!! > 0) {
                 Log.e("TAG", "onCustomCreateView: data exists")
+
                 lifecycleScope.launch(Dispatchers.IO) {
                     Log.e("TAG", "onCustomCreateView: $wallpapersList")
                     val list = wallpapersList.shuffled()
@@ -142,13 +149,6 @@ class CategoryFragment : Fragment(), AdEventListener {
         binding.recyclerviewTrending.adapter = adapter
     }
 
-    private fun showIntersAd() {
-
-        if (isAdded) {
-            findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
-        }
-    }
-
     val categoriesJson = """
 [
   {
@@ -189,8 +189,7 @@ class CategoryFragment : Fragment(), AdEventListener {
 """
 
     fun sortWallpaperCategories(
-        categories: List<CatNameResponse>,
-        order: List<String>
+        categories: List<CatNameResponse>, order: List<String>
     ): List<CatNameResponse> {
         // Create a map to store the order of categories based on their names
         Log.e("TAG", "sortWallpaperCategories: " + categories)
@@ -204,14 +203,84 @@ class CategoryFragment : Fragment(), AdEventListener {
     }
 
     private fun setFragment(name: String) {
-        val bundle = Bundle().apply {
-            putString("name", name)
-            putString("from", "category")
+        Log.d("Categories", "setFragment:string: $name ")
+        MaxInterstitialAds.showInterstitial(requireActivity(),
+            object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                        override fun onAdLoaded(p0: MaxAd) {}
 
-        }
-        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-            findNavController().navigate(R.id.listViewFragment, bundle)
-        }
+                        override fun onAdDisplayed(p0: MaxAd) {}
+
+                        override fun onAdHidden(p0: MaxAd) {
+                            val bundle = Bundle().apply {
+                                putString("name", name)
+                                putString("from", "category")
+                            }
+                            if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                                findNavController().navigate(R.id.listViewFragment, bundle)
+                            }
+                        }
+
+                        override fun onAdClicked(p0: MaxAd) {}
+
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {}
+                    })
+                }
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {
+                    val bundle = Bundle().apply {
+                        putString("name", name)
+                        putString("from", "category")
+                    }
+                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                        findNavController().navigate(R.id.listViewFragment, bundle)
+                    }
+                }
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    val bundle = Bundle().apply {
+                        putString("name", name)
+                        putString("from", "category")
+                    }
+                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                        findNavController().navigate(R.id.listViewFragment, bundle)
+                    }
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    val bundle = Bundle().apply {
+                        putString("name", name)
+                        putString("from", "category")
+                    }
+                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                        findNavController().navigate(R.id.listViewFragment, bundle)
+                    }
+                }
+            },
+            object : MaxAD {
+                override fun adNotReady(type: String) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    val bundle = Bundle().apply {
+                        putString("name", name)
+                        putString("from", "category")
+                    }
+                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                        findNavController().navigate(R.id.listViewFragment, bundle)
+                    }
+                }
+            })
+
     }
 
     override fun onResume() {

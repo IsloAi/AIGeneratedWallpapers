@@ -23,7 +23,7 @@ object AdConfig {
 
     var showOnboarding = true
 
-    var inAppConfig = true
+    var inAppConfig = false
 
     var tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
 
@@ -70,7 +70,7 @@ object AdConfig {
     var iapScreenType = 2
 
     var ISPAIDUSER = false
-    var Reward_Screen = true
+    var Reward_Screen = false
 
     var regularWallpaperFlow = 0
 
@@ -99,7 +99,7 @@ object AdConfig {
     var autoNext = false
     var timeNext = 5000L
 
-    var onboarding_Full_Native = 1
+    var onboarding_Full_Native = 0
 
     var avoidPolicyOpenAdInter = 0
     var avoidPolicyRepeatingInter = 0

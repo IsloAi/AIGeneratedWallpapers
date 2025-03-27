@@ -69,9 +69,9 @@ class MyApp : Application() {
             val termsOfService = jsonObject.optString("tos_url", "")
             val supportMail = jsonObject.optString("support_mail", "")
 
-            Log.d("AdConfig", "AppLovin SDK Key: $privacyUri")
+            /*Log.d("AdConfig", "AppLovin SDK Key: $privacyUri")
             Log.d("AdConfig", "AppLovin Banner ID: $termsOfService")
-            Log.d("AdConfig", "AppLovin Interstitial ID: $supportMail")
+            Log.d("AdConfig", "AppLovin Interstitial ID: $supportMail")*/
 
             AdConfig.appPrivacy = privacyUri
             AdConfig.appTermsOfServices = termsOfService
@@ -89,27 +89,27 @@ class MyApp : Application() {
 
             // Extract values from JSON
             val applovinSdkKey = jsonObject.optString("applovinSdkKey", "")
-            val applovinBannerId = jsonObject.optString("applovinAndroidBanner", "")
+            /*val applovinBannerId = jsonObject.optString("applovinAndroidBanner", "")
             val applovinInterstitialId = jsonObject.optString("applovinAndroidInterstitial", "")
             val applovinRewardedId = jsonObject.optString("applovinAndroidRewarded", "")
             val admobAppOpen = jsonObject.optString("admobAndroidAppOpen", "")
-            val admobNative = jsonObject.optString("admobAndroidNative", "")
+            val admobNative = jsonObject.optString("admobAndroidNative", "")*/
 
-            Log.d("AdConfig", "AppLovin SDK Key: $applovinSdkKey")
+            /*Log.d("AdConfig", "AppLovin SDK Key: $applovinSdkKey")
             Log.d("AdConfig", "AppLovin Banner ID: $applovinBannerId")
             Log.d("AdConfig", "AppLovin Interstitial ID: $applovinInterstitialId")
             Log.d("AdConfig", "AppLovin Rewarded ID: $applovinRewardedId")
             Log.d("AdConfig", "AdMob App Open ID: $admobAppOpen")
-            Log.d("AdConfig", "AdMob Native ID: $admobNative")
+            Log.d("AdConfig", "AdMob Native ID: $admobNative")*/
 
             // Initialize AppLovin SDK with fetched key
             if (applovinSdkKey.isNotEmpty()) {
                 AdConfig.applovinSdkKey = applovinSdkKey
-                AdConfig.applovinAndroidBanner = applovinBannerId
+                /*AdConfig.applovinAndroidBanner = applovinBannerId
                 AdConfig.applovinAndroidInterstitial = applovinInterstitialId
                 AdConfig.applovinAndroidReward = applovinRewardedId
                 AdConfig.admobAndroidAppOpen = admobAppOpen
-                AdConfig.admobAndroidNative = admobNative
+                AdConfig.admobAndroidNative = admobNative*/
             }
 
         } catch (e: JSONException) {

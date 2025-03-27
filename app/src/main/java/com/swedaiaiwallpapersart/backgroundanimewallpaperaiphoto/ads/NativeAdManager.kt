@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.RatingBar
 import android.widget.TextView
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
@@ -59,7 +58,7 @@ class NativeAdManager(private val context: Context, private val adUnitId: String
         adView.callToActionView = adView.findViewById(R.id.custom_call_to_actionNew)
         adView.iconView = adView.findViewById(R.id.custom_app_icon)
         adView.bodyView = adView.findViewById(R.id.custom_body)
-        adView.starRatingView = adView.findViewById(R.id.rating_bar)
+        //adView.starRatingView = adView.findViewById(R.id.rating_bar)
         adView.mediaView = adView.findViewById(R.id.mediaView2)
 
         (adView.headlineView as? TextView)?.text = nativeAd.headline
@@ -71,11 +70,11 @@ class NativeAdManager(private val context: Context, private val adUnitId: String
         } else {
             adView.iconView?.visibility = View.GONE
         }
-        if (nativeAd.starRating != null) {
+        /*if (nativeAd.starRating != null) {
             (adView.starRatingView as? RatingBar)?.rating = nativeAd.starRating?.toFloat() ?: 0f
         } else {
             adView.starRatingView?.visibility = View.GONE
-        }
+        }*/
         if (nativeAd.store != null) {
             (adView.storeView as? TextView)?.text = nativeAd.store
         } else {

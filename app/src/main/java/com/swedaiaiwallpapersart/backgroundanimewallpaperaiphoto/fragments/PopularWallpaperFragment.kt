@@ -19,6 +19,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
@@ -28,6 +31,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.Apicat
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment.Companion.isNavigated
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
@@ -185,11 +190,9 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                         addedItems?.clear()
                     }
                     isNavigationInProgress = true
-
                     addedItems = allItems
 
                     oldPosition = position
-
 
                     if (isAdded) {
                         navigateToDestination(allItems!!, position)
@@ -206,21 +209,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
         }, myActivity)
 
         mostUsedWallpaperAdapter!!.setCoroutineScope(fragmentScope)
-
-        /*IKSdkController.loadNativeDisplayAd(
-            "mainscr_all_tab_scroll",
-            object : IKLoadDisplayAdViewListener {
-                override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                    if (isAdded && view != null) {
-                        mostUsedWallpaperAdapter?.nativeAdView = adObject
-                        binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
-                    }
-                }
-
-                override fun onAdLoadFail(error: IKAdError) {
-                    // Handle ad load failure with view object
-                }
-            })*/
 
         binding.recyclerviewMostUsed.adapter = mostUsedWallpaperAdapter
 
@@ -690,17 +678,117 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             sharedViewModel.clearData()
             sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
 
-            lifecycleScope.launch(Dispatchers.Main) {
-                Bundle().apply {
-                    putString("from", "trending")
-                    putString("wall", "popular")
-                    putInt("position", position - countOfNulls)
-                    Log.e(TAG, "navigateToDestination: inside bundle")
+            MaxInterstitialAds.loadInterstitialAd(requireContext())
+            MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                        override fun onAdLoaded(p0: MaxAd) {}
 
-                    requireParentFragment().findNavController()
-                        .navigate(R.id.wallpaperViewFragment, this)
+                        override fun onAdDisplayed(p0: MaxAd) {}
+
+                        override fun onAdHidden(p0: MaxAd) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                Bundle().apply {
+                                    putString("from", "trending")
+                                    putString("wall", "popular")
+                                    putInt("position", position - countOfNulls)
+                                    Log.e(TAG, "navigateToDestination: inside bundle")
+
+                                    requireParentFragment().findNavController()
+                                        .navigate(R.id.wallpaperViewFragment, this)
+                                }
+                            }
+                            MaxInterstitialAds.loadInterstitialAd(requireContext())
+                        }
+
+                        override fun onAdClicked(p0: MaxAd) {}
+
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {
+                            Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                                .show()
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                Bundle().apply {
+                                    putString("from", "trending")
+                                    putString("wall", "popular")
+                                    putInt("position", position - countOfNulls)
+                                    Log.e(TAG, "navigateToDestination: inside bundle")
+
+                                    requireParentFragment().findNavController()
+                                        .navigate(R.id.wallpaperViewFragment, this)
+                                }
+                            }
+                        }
+                    })
                 }
-            }
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Bundle().apply {
+                            putString("from", "trending")
+                            putString("wall", "popular")
+                            putInt("position", position - countOfNulls)
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+
+                            requireParentFragment().findNavController()
+                                .navigate(R.id.wallpaperViewFragment, this)
+                        }
+                    }
+                    MaxInterstitialAds.loadInterstitialAd(requireContext())
+                }
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Bundle().apply {
+                            putString("from", "trending")
+                            putString("wall", "popular")
+                            putInt("position", position - countOfNulls)
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+
+                            requireParentFragment().findNavController()
+                                .navigate(R.id.wallpaperViewFragment, this)
+                        }
+                    }
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Bundle().apply {
+                            putString("from", "trending")
+                            putString("wall", "popular")
+                            putInt("position", position - countOfNulls)
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+
+                            requireParentFragment().findNavController()
+                                .navigate(R.id.wallpaperViewFragment, this)
+                        }
+                    }
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Bundle().apply {
+                            putString("from", "trending")
+                            putString("wall", "popular")
+                            putInt("position", position - countOfNulls)
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+
+                            requireParentFragment().findNavController()
+                                .navigate(R.id.wallpaperViewFragment, this)
+                        }
+                    }
+                }
+            })
 
             isNavigationInProgress = false
         } catch (e: IndexOutOfBoundsException) {

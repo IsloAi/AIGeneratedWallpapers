@@ -1,35 +1,34 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils
+
 import android.util.Log
-import android.view.View.GONE
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
-import com.airbnb.lottie.LottieAnimationView
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.CatResponseInterface
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatNameResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.RetrofitInstance
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ratrofit.endpoints.CatResponseInterface
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MyCatNameViewModel: ViewModel()  {
+class MyCatNameViewModel : ViewModel() {
 
     private var _wallpaperData = MutableLiveData<List<CatNameResponse>>()
-    val wallpaper:LiveData<List<CatNameResponse>> = _wallpaperData
+    val wallpaper: LiveData<List<CatNameResponse>> = _wallpaperData
     fun fetchWallpapers() {
         viewModelScope.launch(Dispatchers.IO) {
             val retrofit = RetrofitInstance.getInstance()
             val service = retrofit.create(CatResponseInterface::class.java)
             val call: Call<ArrayList<CatNameResponse>> = service.getCategories()
             call.enqueue(object : Callback<ArrayList<CatNameResponse>> {
-                override fun onResponse(call: Call<ArrayList<CatNameResponse>>, response: Response<ArrayList<CatNameResponse>>) {
+                override fun onResponse(
+                    call: Call<ArrayList<CatNameResponse>>,
+                    response: Response<ArrayList<CatNameResponse>>
+                ) {
                     if (response.isSuccessful) {
                         val catNameResponses: ArrayList<CatNameResponse>? = response.body()
                         if (catNameResponses != null) {
@@ -38,12 +37,15 @@ class MyCatNameViewModel: ViewModel()  {
                         }
                     } else {
                         // Handle error case
-                        viewModelScope.launch {
+                        /*viewModelScope.launch {
                             val gson = Gson()
-                            val categoryList: List<CatNameResponse> = gson.fromJson(categoriesJson, object : TypeToken<List<CatNameResponse>>() {}.type)
+                            val categoryList: List<CatNameResponse> = gson.fromJson(
+                                categoriesJson,
+                                object : TypeToken<List<CatNameResponse>>() {}.type
+                            )
 
                             _wallpaperData.value = categoryList
-                        }
+                        }*/
                         Log.e("responseOk", "onResponse: response not Empty ")
                     }
                 }
@@ -53,9 +55,9 @@ class MyCatNameViewModel: ViewModel()  {
                     Log.e("responseOk", "onResponse: response onFailure ")
                     viewModelScope.launch {
                         val gson = Gson()
-                        val categoryList: List<CatNameResponse> = gson.fromJson(categoriesJson, object : TypeToken<List<CatNameResponse>>() {}.type)
+                        //val categoryList: List<CatNameResponse> = gson.fromJson(categoriesJson, object : TypeToken<List<CatNameResponse>>() {}.type)
 
-                        _wallpaperData.value = categoryList
+                        //_wallpaperData.value = categoryList
                     }
                 }
 

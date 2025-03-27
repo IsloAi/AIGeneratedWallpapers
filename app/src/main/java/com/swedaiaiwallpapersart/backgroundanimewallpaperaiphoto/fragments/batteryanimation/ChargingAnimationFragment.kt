@@ -5,18 +5,24 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ChargingAnimationAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -50,8 +56,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
     val TAG = "ChargingAnimation"
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentChargingAnimationBinding.inflate(inflater, container, false)
 
@@ -131,36 +136,35 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
     private fun updateUIWithFetchedData() {
 
         val list = ArrayList<ChargingAnimModel?>()
-        adapter = ChargingAnimationAdapter(list, object :
-            ChargingAnimationAdapter.downloadCallback {
-            override fun getPosition(position: Int, model: ChargingAnimModel) {
-                val newPosition = position + 1
+        adapter =
+            ChargingAnimationAdapter(list, object : ChargingAnimationAdapter.downloadCallback {
+                override fun getPosition(position: Int, model: ChargingAnimModel) {
+                    val newPosition = position + 1
 
-                Log.e(TAG, "getPosition: " + model)
+                    Log.e(TAG, "getPosition: " + model)
 
-                Log.e(TAG, "getPosition: " + position)
+                    Log.e(TAG, "getPosition: " + position)
 
-                sharedViewModel.setChargingAdPosition(newPosition)
-                Log.e(TAG, "getPosition:$position odd ")
+                    sharedViewModel.setChargingAdPosition(newPosition)
+                    Log.e(TAG, "getPosition:$position odd ")
 
 
-                setPathandNavigate(model, false)
-            }
-        }, myActivity)
+                    setPathandNavigate(model, false)
+                }
+            }, myActivity)
 
         binding.recyclerviewAll.adapter = adapter
-        binding.recyclerviewAll.addOnScrollListener(
-            object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
+        binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-                    // Set the boolean to true when the RecyclerView is scrolled
-                    if (dy != 0 || dx != 0) {
-                        Constants.checkInter = false
-                        checkAppOpen = false
-                    }
+                // Set the boolean to true when the RecyclerView is scrolled
+                if (dy != 0 || dx != 0) {
+                    Constants.checkInter = false
+                    checkAppOpen = false
                 }
-            })
+            }
+        })
 
     }
 
@@ -169,17 +173,70 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         sharedViewModel.clearChargeAnimation()
         sharedViewModel.setchargingAnimation(listOf(model))
         if (isAdded) {
-            Bundle().apply {
-                putBoolean("adShowed", adShowd)
-                findNavController().navigate(R.id.downloadBatteryAnimation, this)
-            }
+            MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxInterstitialAds.showInterstitial(
+                        requireActivity(),
+                        object : MaxAdListener {
+                            override fun onAdLoaded(p0: MaxAd) {}
+
+                            override fun onAdDisplayed(p0: MaxAd) {}
+
+                            override fun onAdHidden(p0: MaxAd) {}
+
+                            override fun onAdClicked(p0: MaxAd) {}
+
+                            override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                        },
+                        object : MaxAD {
+                            override fun adNotReady(type: String) {}
+                        })
+                }
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {
+                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                    }
+                }
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                    }
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                    }
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT).show()
+                    Bundle().apply {
+                        putBoolean("adShowed", adShowd)
+                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                    }
+                }
+            })
         }
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
     private suspend fun addNullValueInsideArray(data: List<ChargingAnimModel?>): ArrayList<ChargingAnimModel?> {
-
         return withContext(Dispatchers.IO) {
             val firstAdLineThreshold =
                 if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
@@ -206,15 +263,8 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 newData.add(data[i])
 
             }
-            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
-
-
-
-
             newData
         }
-
-
     }
 
     override fun onDestroyView() {
