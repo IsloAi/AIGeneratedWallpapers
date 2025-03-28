@@ -16,8 +16,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 159
-        versionName "1.9.8"
+        versionCode 164
+        versionName "2.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
