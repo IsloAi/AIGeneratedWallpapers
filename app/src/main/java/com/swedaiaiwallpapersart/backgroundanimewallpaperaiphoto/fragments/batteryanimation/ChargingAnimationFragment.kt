@@ -25,7 +25,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
@@ -86,13 +85,10 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                     Log.e(TAG, "ChargingAnimation: " + result.data)
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data
-                        val data = if (AdConfig.ISPAIDUSER) {
-                            list as ArrayList<ChargingAnimModel?>
-                        } else {
-                            list?.let { addNullValueInsideArray(it.shuffled()) }
-                        }
+                        val data = list?.let { addNullValueInsideArray(it.shuffled()) }
+
                         withContext(Dispatchers.Main) {
-                            data?.let { adapter?.updateMoreData(it) }
+                            data?.let { adapter?.updateData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
                     }
@@ -175,24 +171,21 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         if (isAdded) {
             MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
                 override fun onAdLoaded(p0: MaxAd) {
-                    MaxInterstitialAds.showInterstitial(
-                        requireActivity(),
-                        object : MaxAdListener {
-                            override fun onAdLoaded(p0: MaxAd) {}
+                    MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                        override fun onAdLoaded(p0: MaxAd) {}
 
-                            override fun onAdDisplayed(p0: MaxAd) {}
+                        override fun onAdDisplayed(p0: MaxAd) {}
 
-                            override fun onAdHidden(p0: MaxAd) {}
+                        override fun onAdHidden(p0: MaxAd) {}
 
-                            override fun onAdClicked(p0: MaxAd) {}
+                        override fun onAdClicked(p0: MaxAd) {}
 
-                            override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                        },
-                        object : MaxAD {
-                            override fun adNotReady(type: String) {}
-                        })
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {}
+                    })
                 }
 
                 override fun onAdDisplayed(p0: MaxAd) {}
@@ -224,10 +217,18 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 }
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
-                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT).show()
-                    Bundle().apply {
-                        putBoolean("adShowed", adShowd)
-                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                            .show()
+                        Bundle().apply {
+                            putBoolean("adShowed", adShowd)
+                            findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                        }
+                    } else {
+                        Bundle().apply {
+                            putBoolean("adShowed", adShowd)
+                            findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                        }
                     }
                 }
             })
@@ -238,30 +239,13 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
     private suspend fun addNullValueInsideArray(data: List<ChargingAnimModel?>): ArrayList<ChargingAnimModel?> {
         return withContext(Dispatchers.IO) {
-            val firstAdLineThreshold =
-                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-            val firstLine = firstAdLineThreshold * 3
-
-            val lineCount =
-                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-            val lineC = lineCount * 3
             val newData = arrayListOf<ChargingAnimModel?>()
-
             for (i in data.indices) {
-                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                newData.add(data[i]) // Add the current item
+                // After every 15 items, add a null value (excluding the last item)
+                if ((i + 1) % 15 == 0) {
                     newData.add(null)
-
-
-
-                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
-                } else if (i == firstLine) {
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
-                newData.add(data[i])
-
             }
             newData
         }

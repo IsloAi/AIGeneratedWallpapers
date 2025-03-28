@@ -26,7 +26,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxIntersti
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -74,8 +73,8 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
         binding.rvDouble.layoutManager = layoutManager
         binding.rvDouble.addItemDecoration(RvItemDecore(2, 5, false, 10000))
 
-        updateUIWithFetchedData()
-        adapter!!.setCoroutineScope(fragmentScope)
+        //updateUIWithFetchedData()
+
 
     }
 
@@ -95,18 +94,12 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data
 
-                        val data = if (AdConfig.ISPAIDUSER) {
-                            list as ArrayList<DoubleWallModel?>
-                        } else {
-                            list?.let { addNullValueInsideArray(it) }
-                        }
+                        val data = list?.let { addNullValueInsideArray(it) }
 
                         withContext(Dispatchers.Main) {
-                            data?.let { adapter?.updateMoreData(it) }
+                            data?.let { adapter?.updateData(it) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
-
-
                     }
                 }
 
@@ -129,8 +122,9 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
+        updateUIWithFetchedData()
         loadData()
-
+        adapter!!.setCoroutineScope(fragmentScope)
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
@@ -175,33 +169,20 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
     private suspend fun addNullValueInsideArray(data: List<DoubleWallModel?>): ArrayList<DoubleWallModel?> {
 
         return withContext(Dispatchers.IO) {
-            val firstAdLineThreshold =
-                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-            val firstLine = firstAdLineThreshold * 3
-
-            val lineCount =
-                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-            val lineC = lineCount * 3
             val newData = arrayListOf<DoubleWallModel?>()
 
             for (i in data.indices) {
-                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                newData.add(data[i]) // Add the current item
+
+                if ((i + 1) % 12 == 0) { // Add null every 15th item
                     newData.add(null)
-
-
-
-                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
-                } else if (i == firstLine) {
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
+                    Log.e(
+                        TAG,
+                        "addNullValueInsideArray: Added null at position ${newData.size - 1}"
+                    )
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
-                newData.add(data[i])
-
             }
-            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
-
+            Log.e(TAG, "addNullValueInsideArray: Final size = ${newData.size}")
 
 
 
@@ -277,14 +258,26 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
             },
             object : MaxAD {
                 override fun adNotReady(type: String) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                    Bundle().apply {
-                        Log.e(TAG, "navigateToDestination: inside bundle")
-                        putString("from", "trending")
-                        putString("wall", "home")
-                        putInt("position", position - countOfNulls)
-                        findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()
+                        Bundle().apply {
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+                            putString("from", "trending")
+                            putString("wall", "home")
+                            putInt("position", position - countOfNulls)
+                            findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
+                        }
+                    } else {
+                        Bundle().apply {
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+                            putString("from", "trending")
+                            putString("wall", "home")
+                            putInt("position", position - countOfNulls)
+                            findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
+                        }
                     }
+
                 }
             })
 

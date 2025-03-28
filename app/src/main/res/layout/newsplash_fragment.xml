@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/new_main_background">
 
-
     <ImageView
         android:id="@+id/spalsh_bg_image"
         android:layout_width="match_parent"
@@ -15,7 +14,6 @@
         android:visibility="gone"
         app:layout_constraintHeight_percent="0.65"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ImageView
         android:id="@+id/splash_main_image"
@@ -27,12 +25,10 @@
         app:layout_constraintHeight_percent="0.65"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <VideoView
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 
     <View
         android:layout_width="match_parent"
@@ -40,7 +36,6 @@
         android:background="@drawable/overlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.5" />
-
 
     <LinearLayout
         android:id="@+id/text4k"
@@ -81,7 +76,6 @@
             app:layout_constraintTop_toTopOf="parent" />
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/splash_welcome_text"
         android:layout_width="wrap_content"
@@ -96,7 +90,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text4k" />
 
-
     <TextView
         android:id="@+id/loadingTxt"
         android:layout_width="wrap_content"
@@ -108,7 +101,6 @@
         app:layout_constraintBottom_toTopOf="@+id/activeProgress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
 
     <ProgressBar
         android:id="@+id/activeProgress"
@@ -128,6 +120,7 @@
         android:id="@+id/BannerMaxAdView"
         android:layout_width="match_parent"
         android:layout_height="@dimen/_50sdp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/videoView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

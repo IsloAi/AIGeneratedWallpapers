@@ -270,14 +270,26 @@ class CategoryFragment : Fragment(), AdEventListener {
             },
             object : MaxAD {
                 override fun adNotReady(type: String) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                    val bundle = Bundle().apply {
-                        putString("name", name)
-                        putString("from", "category")
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()
+                        val bundle = Bundle().apply {
+                            putString("name", name)
+                            putString("from", "category")
+                        }
+                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                            findNavController().navigate(R.id.listViewFragment, bundle)
+                        }
+                    } else {
+                        val bundle = Bundle().apply {
+                            putString("name", name)
+                            putString("from", "category")
+                        }
+                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                            findNavController().navigate(R.id.listViewFragment, bundle)
+                        }
                     }
-                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                        findNavController().navigate(R.id.listViewFragment, bundle)
-                    }
+
                 }
             })
 

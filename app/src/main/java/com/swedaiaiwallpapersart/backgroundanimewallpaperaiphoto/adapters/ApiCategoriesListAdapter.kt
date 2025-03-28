@@ -25,6 +25,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -74,7 +75,12 @@ class ApiCategoriesListAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            //loadad(binding)
+            val nativeAdView = NativeAdManager(
+                context!!,
+                AdConfig.admobAndroidNative,
+                R.layout.native_layout_small
+            )
+            nativeAdView.loadNativeAd(binding.NativeAd)
         }
     }
 
@@ -132,8 +138,7 @@ class ApiCategoriesListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        row = position / 2
-        return if ((position + 1) == (firstline + 1) || (position + 1) > firstline + 1 && (position + 1 - (firstline + 1)) % (lineC + 1) == 0) {
+        return if (arrayList[position] == null) {
             VIEW_TYPE_NATIVE_AD
         } else {
             VIEW_TYPE_CONTAINER1

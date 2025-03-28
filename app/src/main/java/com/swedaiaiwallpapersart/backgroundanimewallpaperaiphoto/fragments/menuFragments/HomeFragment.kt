@@ -120,12 +120,7 @@ class HomeFragment : Fragment(), AdEventListener {
                 withContext(Dispatchers.Main) {
                     cachedCatResponses.clear()
                     cachedCatResponses = nullAdd
-                    val initialItems = getItems(0, 30)
-                    startIndex = 0
-                    adapter.addNewData()
-                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
-                    adapter.updateMoreData(initialItems)
-                    startIndex += 30
+                    adapter.updateData(nullAdd)
 
                     binding.swipeLayout.isRefreshing = false
                 }
@@ -153,7 +148,7 @@ class HomeFragment : Fragment(), AdEventListener {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
-                val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
+                /*val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                 val totalItemCount = adapter.itemCount
                 Log.e(TAG, "onScrolled: insdie scroll listener")
@@ -163,13 +158,13 @@ class HomeFragment : Fragment(), AdEventListener {
                     val nextItems = getItems(startIndex, 30)
                     if (nextItems.isNotEmpty()) {
                         Log.e(TAG, "onScrolled: inside 3 coondition")
-                        adapter.updateMoreData(nextItems)
+                        adapter.updateData(nextItems)
                         startIndex += 30 // Update startIndex for the next batch of data
                     } else {
                         Log.e(TAG, "onScrolled: inside 4 coondition")
                     }
 
-                }
+                }*/
 
 
             }
@@ -222,12 +217,8 @@ class HomeFragment : Fragment(), AdEventListener {
 
                                 cachedCatResponses = list
 
-                                val initialItems = getItems(0, 30)
-
-                                Log.e(TAG, "initMostDownloadedData: $initialItems")
-
                                 withContext(Dispatchers.Main) {
-                                    adapter.updateMoreData(initialItems)
+                                    adapter.updateData(cachedCatResponses)
                                     startIndex += 30
                                 }
 
@@ -264,42 +255,19 @@ class HomeFragment : Fragment(), AdEventListener {
     }
 
     private suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
-
         return withContext(Dispatchers.IO) {
-            val firstAdLineThreshold =
-                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-            val firstLine = firstAdLineThreshold * 3
-
-            val lineCount =
-                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-            val lineC = lineCount * 3
             val newData = arrayListOf<CatResponse?>()
 
             for (i in data.indices) {
-                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                newData.add(data[i]) // Add the current item
+
+                // After every 15 items, add a null value (excluding the last item)
+                if ((i + 1) % 15 == 0) {
                     newData.add(null)
-
-
-
-                    Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
-                } else if (i == firstLine) {
-                    newData.add(null)
-                    Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
-                Log.e("******NULL", "addNullValueInsideArray: not null " + i)
-                newData.add(data[i])
-
             }
-            Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
-
-
-
-
             newData
         }
-
-
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
@@ -423,15 +391,27 @@ class HomeFragment : Fragment(), AdEventListener {
             }
         }, object : MaxAD {
             override fun adNotReady(type: String) {
-                Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
-                Bundle().apply {
-                    Log.e(TAG, "navigateToDestination: inside bundle")
-                    putString("from", "trending")
-                    putString("wall", "home")
-                    putInt("position", position - countOfNulls)
-                    findNavController().navigate(R.id.wallpaperViewFragment, this)
-                    navigationInProgress = false
+                if (MaxInterstitialAds.willIntAdShow) {
+                    Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
+                    Bundle().apply {
+                        Log.e(TAG, "navigateToDestination: inside bundle")
+                        putString("from", "trending")
+                        putString("wall", "home")
+                        putInt("position", position - countOfNulls)
+                        findNavController().navigate(R.id.wallpaperViewFragment, this)
+                        navigationInProgress = false
+                    }
+                } else {
+                    Bundle().apply {
+                        Log.e(TAG, "navigateToDestination: inside bundle")
+                        putString("from", "trending")
+                        putString("wall", "home")
+                        putInt("position", position - countOfNulls)
+                        findNavController().navigate(R.id.wallpaperViewFragment, this)
+                        navigationInProgress = false
+                    }
                 }
+
             }
         })
 
@@ -481,7 +461,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
 
             }
-            adapter.updateMoreData(addedItems!!)
+            adapter.updateData(addedItems!!)
 
             binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
 

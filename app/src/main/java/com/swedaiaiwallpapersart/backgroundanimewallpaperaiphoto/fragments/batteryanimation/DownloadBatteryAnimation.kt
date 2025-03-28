@@ -20,6 +20,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
@@ -66,6 +67,12 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
         adShowed = arguments?.getBoolean("adShowed")
 
+        val native = NativeAdManager(
+            requireContext(),
+            AdConfig.admobAndroidNative,
+            R.layout.new_native_language
+        )
+        native.loadNativeAd(binding.NativeAD)
         setEvents()
         initObservers()
     }

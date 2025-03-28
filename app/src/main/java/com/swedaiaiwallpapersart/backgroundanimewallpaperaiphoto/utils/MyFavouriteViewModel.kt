@@ -20,9 +20,6 @@ class MyFavouriteViewModel @Inject constructor(
 
     fun loadFavourites(deviceId: String) {
         viewModelScope.launch {
-            /*getFavouritesUseCase(deviceId).collect { response ->
-                _favourites.value = response
-            }*/
             getFavouritesUseCase(deviceId).collect { response ->
                 when (response) {
                     is Response.Success -> {

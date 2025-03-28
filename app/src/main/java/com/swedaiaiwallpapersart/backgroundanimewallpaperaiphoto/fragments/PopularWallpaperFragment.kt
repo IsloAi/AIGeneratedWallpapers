@@ -38,7 +38,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.Wallp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyViewModel
@@ -141,11 +140,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
             lifecycleScope.launch {
                 val newData = cachedMostDownloaded.filterNotNull()
-                val nullAdd = if (AdConfig.ISPAIDUSER) {
-                    newData as ArrayList<CatResponse?>
-                } else {
-                    addNullValueInsideArray(newData.shuffled())
-                }
+                val nullAdd = addNullValueInsideArray(newData)
                 cachedMostDownloaded.clear()
                 cachedMostDownloaded = nullAdd
                 val initialItems = getItems(0, 30)
@@ -280,20 +275,21 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                                 if (!dataset) {
                                     Log.e(TAG, "initMostDownloadedData: DataSet= $dataset")
 
-                                    val newList = if (AdConfig.ISPAIDUSER) {
-                                        list.shuffled() as ArrayList<*>
-                                    } else {
-                                        addNullValueInsideArray(list.shuffled())
-                                    }
+                                    val newList = addNullValueInsideArray(list)
 
-                                    cachedMostDownloaded = newList as ArrayList<CatResponse?>
+                                    cachedMostDownloaded = newList
 
                                     val initialItems = getItems(0, 30)
 
-                                    Log.e(TAG, "initMostDownloadedData:initialItems= $initialItems")
+                                    Log.e(
+                                        TAG,
+                                        "initMostDownloadedData:initialItems= $cachedMostDownloaded"
+                                    )
 
                                     lifecycleScope.launch(Dispatchers.Main) {
-                                        mostUsedWallpaperAdapter?.updateMoreData(initialItems)
+                                        mostUsedWallpaperAdapter?.updateMoreData(
+                                            cachedMostDownloaded
+                                        )
                                         startIndex += 30
                                     }
 
@@ -335,6 +331,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     }
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
+        var modifiedList = arrayListOf<CatResponse?>()
         val endIndex = startIndex1 + chunkSize
         if (startIndex1 >= cachedMostDownloaded.size) {
             return arrayListOf()
@@ -344,41 +341,30 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 startIndex1,
                 endIndex.coerceAtMost(cachedMostDownloaded.size)
             )
-            return ArrayList(subList)
+            lifecycleScope.launch {
+                modifiedList = addNullValueInsideArray(subList) // Add ads in every batch
+            }
+
+            return ArrayList(modifiedList)
         }
     }
 
     suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
         return withContext(Dispatchers.IO) {
-            Log.e(TAG, "addNullValueInsideArray:DataSize= " + data.size)
-
-            val firstAdLineThreshold =
-                if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
-            val firstLine = firstAdLineThreshold * 3
-
-            val lineCount =
-                if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
-            val lineC = lineCount * 3
+            Log.e(TAG, "addNullValueInsideArray: DataSize = ${data.size}")
             val newData = arrayListOf<CatResponse?>()
-
             for (i in data.indices) {
-                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                newData.add(data[i]) // Add the current item
+
+                if ((i + 1) % 15 == 0) { // Add null every 15th item
                     newData.add(null)
-
-
-
-                    Log.e("Popular", "addNullValueInsideArray: null " + i)
-
-                } else if (i == firstLine) {
-                    newData.add(null)
-                    Log.e("Popular", "addNullValueInsideArray: null first " + i)
+                    Log.e(
+                        TAG,
+                        "addNullValueInsideArray: Added null at position ${newData.size - 1}"
+                    )
                 }
-                Log.e("Popular", "addNullValueInsideArray: not null " + i)
-                newData.add(data[i])
-
             }
-            Log.e("Popular", "addNullValueInsideArray:size " + newData.size)
-
+            Log.e(TAG, "addNullValueInsideArray: Final size = ${newData.size}")
             newData
         }
 
@@ -708,19 +694,38 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                         override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
                     }, object : MaxAD {
                         override fun adNotReady(type: String) {
-                            Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                                .show()
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                Bundle().apply {
-                                    putString("from", "trending")
-                                    putString("wall", "popular")
-                                    putInt("position", position - countOfNulls)
-                                    Log.e(TAG, "navigateToDestination: inside bundle")
+                            if (MaxInterstitialAds.willIntAdShow) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Ad not available",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    Bundle().apply {
+                                        putString("from", "trending")
+                                        putString("wall", "popular")
+                                        putInt("position", position - countOfNulls)
+                                        Log.e(TAG, "navigateToDestination: inside bundle")
 
-                                    requireParentFragment().findNavController()
-                                        .navigate(R.id.wallpaperViewFragment, this)
+                                        requireParentFragment().findNavController()
+                                            .navigate(R.id.wallpaperViewFragment, this)
+                                    }
+                                }
+                            } else {
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    Bundle().apply {
+                                        putString("from", "trending")
+                                        putString("wall", "popular")
+                                        putInt("position", position - countOfNulls)
+                                        Log.e(TAG, "navigateToDestination: inside bundle")
+
+                                        requireParentFragment().findNavController()
+                                            .navigate(R.id.wallpaperViewFragment, this)
+                                    }
                                 }
                             }
+
                         }
                     })
                 }
@@ -775,18 +780,34 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 }
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        Bundle().apply {
-                            putString("from", "trending")
-                            putString("wall", "popular")
-                            putInt("position", position - countOfNulls)
-                            Log.e(TAG, "navigateToDestination: inside bundle")
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            Bundle().apply {
+                                putString("from", "trending")
+                                putString("wall", "popular")
+                                putInt("position", position - countOfNulls)
+                                Log.e(TAG, "navigateToDestination: inside bundle")
 
-                            requireParentFragment().findNavController()
-                                .navigate(R.id.wallpaperViewFragment, this)
+                                requireParentFragment().findNavController()
+                                    .navigate(R.id.wallpaperViewFragment, this)
+                            }
+                        }
+                    } else {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            Bundle().apply {
+                                putString("from", "trending")
+                                putString("wall", "popular")
+                                putInt("position", position - countOfNulls)
+                                Log.e(TAG, "navigateToDestination: inside bundle")
+
+                                requireParentFragment().findNavController()
+                                    .navigate(R.id.wallpaperViewFragment, this)
+                            }
                         }
                     }
+
                 }
             })
 

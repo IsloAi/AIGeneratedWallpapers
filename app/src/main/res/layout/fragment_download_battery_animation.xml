@@ -10,7 +10,11 @@
         android:id="@+id/backImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolBar" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolBar"
@@ -58,12 +62,11 @@
         android:id="@+id/loadingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_2sdp"
         android:fontFamily="@font/poppins_medium"
         android:text="Downloading..."
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@id/buttonApplyWallpaper"
+        app:layout_constraintBottom_toTopOf="@+id/NativeAD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress" />
@@ -102,5 +105,14 @@
         app:layout_constraintEnd_toEndOf="@id/progress"
         app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintTop_toTopOf="@id/progress" />
+
+    <FrameLayout
+        android:id="@+id/NativeAD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/backImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loadingTxt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

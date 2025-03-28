@@ -136,7 +136,7 @@ class FavouriteFragment : Fragment() {
 
         binding.StaticWallpaper.setOnClickListener {
             selector(binding.StaticWallpaper, binding.live)
-            loadStaticFavourite()
+            //loadStaticFavourite()
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.liveRecyclerview.visibility = GONE
             binding.emptySupport.visibility = GONE
@@ -147,7 +147,7 @@ class FavouriteFragment : Fragment() {
         binding.live.setOnClickListener {
             selector(binding.live, binding.StaticWallpaper)
             MySharePreference.setFavouriteSaveState(requireContext(), 3)
-            initObservers()
+            //initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
             binding.selfCreationRecyclerView.visibility = GONE
             binding.progressBar.visibility = INVISIBLE
@@ -165,7 +165,7 @@ class FavouriteFragment : Fragment() {
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }*/
 
-        loadStaticFavourite()
+
     }
 
     private fun onCreateViewCalling() {
@@ -183,6 +183,7 @@ class FavouriteFragment : Fragment() {
         }
     }
 
+    //this function gets Live fav wallpapers from the Room DB
     fun initObservers() {
         var favourites: List<FavouriteLiveModel>
         lifecycleScope.launch(Dispatchers.IO) {
@@ -195,6 +196,15 @@ class FavouriteFragment : Fragment() {
             }
         }
     }
+
+    //this function gets static fav wallpapers from the Room DB
+    private fun loadStaticFavourite() {
+        binding.emptySupport.visibility = GONE
+        Handler().postDelayed({
+            updateUIWithFetchedData(wallpapers)
+        }, 500)
+
+    }//End of function
 
     private fun updateUIWithFetchedDataLive(list: List<FavouriteLiveModel>) {
         if (list.isEmpty()) {
@@ -270,14 +280,7 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    //this function gets static fav wallpapers from the Room DB
-    private fun loadStaticFavourite() {
-        binding.emptySupport.visibility = GONE
-        Handler().postDelayed({
-            updateUIWithFetchedData(wallpapers)
-        }, 500)
 
-    }//End of function
 
     override fun onResume() {
         super.onResume()
@@ -287,6 +290,8 @@ class FavouriteFragment : Fragment() {
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
+        loadStaticFavourite()
+        initObservers()
     }
 
 }

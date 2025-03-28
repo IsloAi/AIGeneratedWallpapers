@@ -151,9 +151,7 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
                                     setDownloadAbleWallpaperAndNavigate(model, false)
                                 }
 
-                                override fun onAdClicked(p0: MaxAd) {
-                                    TODO("Not yet implemented")
-                                }
+                                override fun onAdClicked(p0: MaxAd) {}
 
                                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
                                     Toast.makeText(
@@ -172,15 +170,18 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
                                 }
                             }, object : MaxAD {
                                 override fun adNotReady(type: String) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Ad not available",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    setDownloadAbleWallpaperAndNavigate(model, true)
+                                    if (MaxInterstitialAds.willIntAdShow) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Ad not available",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        setDownloadAbleWallpaperAndNavigate(model, true)
+                                    } else {
+                                        setDownloadAbleWallpaperAndNavigate(model, true)
+                                    }
                                 }
                             })
-
                     }
                 }
             }

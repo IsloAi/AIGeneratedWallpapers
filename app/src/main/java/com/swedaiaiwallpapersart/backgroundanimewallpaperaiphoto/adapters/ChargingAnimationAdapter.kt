@@ -24,16 +24,17 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
 
 
-class ChargingAnimationAdapter  (
+class ChargingAnimationAdapter(
     var arrayList: ArrayList<ChargingAnimModel?>,
     var positionCallback: downloadCallback,
     private val myActivity: MainActivity
-):
+) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastClickTime = 0L
@@ -45,27 +46,41 @@ class ChargingAnimationAdapter  (
 
     var row = 0
 
-
-    private val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-
-    val firstline = firstAdLineThreshold *3
-    private val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-    val lineC = lineCount*3
-    private val statusAd =  AdConfig.adStatusViewListWallSRC
     private var coroutineScope: CoroutineScope? = null
 
     fun setCoroutineScope(scope: CoroutineScope) {
         coroutineScope = scope
     }
-    inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(modela: ArrayList<ChargingAnimModel?>, holder: RecyclerView.ViewHolder, position: Int) {
+
+    inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(
+            modela: ArrayList<ChargingAnimModel?>,
+            holder: RecyclerView.ViewHolder,
+            position: Int
+        ) {
             val model = modela[position]
             setAllData(
-                model!!,adapterPosition,binding.loading,binding.wallpaper,binding.errorImage,binding.iap,binding.animationView)
+                model!!,
+                adapterPosition,
+                binding.loading,
+                binding.wallpaper,
+                binding.errorImage,
+                binding.iap,
+                binding.animationView
+            )
         }
     }
-    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: RecyclerView.ViewHolder){
+
+    inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(holder: RecyclerView.ViewHolder) {
+            val native = NativeAdManager(
+                context!!,
+                AdConfig.admobAndroidNative,
+                R.layout.native_layout_small
+            )
+            native.loadNativeAd(binding.NativeAd)
         }
     }
 
@@ -85,6 +100,7 @@ class ChargingAnimationAdapter  (
     }
 
     override fun getItemCount() = arrayList.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         context = parent.context
@@ -93,14 +109,17 @@ class ChargingAnimationAdapter  (
                 val binding = ListItemLiveWallpaperBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
+
             VIEW_TYPE_NATIVE_AD -> {
-                val binding = StaggeredNativeLayoutBinding.inflate(inflater,parent,false)
+                val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
 
             }
+
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
+
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = arrayList[position]
@@ -108,12 +127,13 @@ class ChargingAnimationAdapter  (
             VIEW_TYPE_CONTAINER1 -> {
                 try {
                     val viewHolderContainer1 = holder as ViewHolderContainer1
-                    viewHolderContainer1.bind(arrayList,viewHolderContainer1,position)
-                }catch (e: NullPointerException){
+                    viewHolderContainer1.bind(arrayList, viewHolderContainer1, position)
+                } catch (e: NullPointerException) {
                     e.printStackTrace()
                 }
 
             }
+
             VIEW_TYPE_NATIVE_AD -> {
 
                 val viewHolderContainer3 = holder as ViewHolderContainer3
@@ -121,29 +141,25 @@ class ChargingAnimationAdapter  (
             }
         }
     }
-    override fun getItemViewType(position: Int): Int {
-        if (AdConfig.ISPAIDUSER){
-            return VIEW_TYPE_CONTAINER1
-        }else {
-            row = position / 2
-            Log.e("TAG", "getItemViewType: "+row )
-            val adPosition = firstAdLineThreshold + (lineCount * (row - firstAdLineThreshold) / lineCount)
-//        (position + 1) % (firstline + 1) == 0
-            return if ((position + 1) == (firstline + 1)){
-                Log.e("TAG", "getItemViewType: "+row )
-                lastAdShownPosition = row
-                VIEW_TYPE_NATIVE_AD
-            }else if (position + 1 > firstline +1 && ((position +1) - (firstline+1)) % (lineC+1) == 0){
-                VIEW_TYPE_NATIVE_AD
-            }  else {
-                VIEW_TYPE_CONTAINER1
-            }
-        }
 
+    override fun getItemViewType(position: Int): Int {
+        return if (arrayList[position] == null) {
+            VIEW_TYPE_NATIVE_AD
+        } else {
+            VIEW_TYPE_CONTAINER1
+        }
     }
+
     @SuppressLint("SetTextI18n")
-    private fun setAllData(model: ChargingAnimModel, position:Int, animationView: LottieAnimationView, wallpaperMainImage: ImageView, error_img: ImageView, iap: ImageView,imageanimationView: LottieAnimationView
-    ){
+    private fun setAllData(
+        model: ChargingAnimModel,
+        position: Int,
+        animationView: LottieAnimationView,
+        wallpaperMainImage: ImageView,
+        error_img: ImageView,
+        iap: ImageView,
+        imageanimationView: LottieAnimationView
+    ) {
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
@@ -160,34 +176,35 @@ class ChargingAnimationAdapter  (
 //            imageanimationView.visibility = View.VISIBLE
 //            imageanimationView.setAnimationFromUrl(model.hd_animation)
 //            imageanimationView.playAnimation()
-            Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/animation/" +model.thumnail).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
-                .listener(object: RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        Log.d("onLoadFailed", "onLoadFailed: ")
-                        animationView.setAnimation(R.raw.no_data_image_found)
-                        animationView.visibility = View.VISIBLE
-                        error_img.visibility = View.VISIBLE
-                        return false
-                    }
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/animation/" + model.thumnail)
+            .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    Log.d("onLoadFailed", "onLoadFailed: ")
+                    animationView.setAnimation(R.raw.no_data_image_found)
+                    animationView.visibility = View.VISIBLE
+                    error_img.visibility = View.VISIBLE
+                    return false
+                }
 
-                    override fun onResourceReady(
-                        resource: Drawable,
-                        model: Any,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        animationView.visibility = View.INVISIBLE
-                        error_img.visibility = View.GONE
-                        Log.d("******loaded", "onResourceReady: ")
-                        return false
-                    }
-                }).into(wallpaperMainImage)
+                override fun onResourceReady(
+                    resource: Drawable,
+                    model: Any,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource,
+                    isFirstResource: Boolean
+                ): Boolean {
+                    animationView.visibility = View.INVISIBLE
+                    error_img.visibility = View.GONE
+                    Log.d("******loaded", "onResourceReady: ")
+                    return false
+                }
+            }).into(wallpaperMainImage)
 
 
         wallpaperMainImage.setOnClickListener {
@@ -196,7 +213,7 @@ class ChargingAnimationAdapter  (
             if (currentTime - lastClickTime >= debounceThreshold) {
 
 
-                positionCallback.getPosition(position,model)
+                positionCallback.getPosition(position, model)
 
 //                    else {
 //                        if (whichClicked == 1) {
@@ -214,52 +231,9 @@ class ChargingAnimationAdapter  (
 
     }
 
-    /*fun loadad(holder: RecyclerView.ViewHolder, binding: StaggeredNativeLayoutBinding){
-        Log.e("TAG", "loadad: inside method")
-        coroutineScope?.launch(Dispatchers.Main) {
-            val adLayout = LayoutInflater.from(holder.itemView.context).inflate(
-                R.layout.native_dialog_layout,
-                null, false
-            ) as? IkmWidgetAdLayout
-            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-            Log.e("TAG", "loadad: inside main scope")
-
-            withContext(this.coroutineContext) {
-
-                binding.adsView.loadAd(R.layout.shimmer_loading_native, adLayout!!,"mainscr_live_tab_scroll",
-                    object : IKShowWidgetAdListener {
-                        override fun onAdShowFail(error: IKAdError) {
-                            if (statusAd == 0){
-                                binding.adsView.visibility = View.GONE
-                            }else{
-                                if (isNetworkAvailable()){
-                                    loadad(holder,binding)
-                                    binding.adsView.visibility = View.VISIBLE
-                                }else{
-                                    binding.adsView.visibility = View.GONE
-                                }
-                            }
-                            Log.e("TAG", "onAdsLoadFail: native failded " )
-                        }
-
-                        override fun onAdShowed() {
-                            binding.adsView.visibility = View.VISIBLE
-                        }
-                    }
-                )
-            }
-
-
-        }
-
-    }*/
-
     private fun isNetworkAvailable(): Boolean {
-        val connectivityManager = myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = connectivityManager.activeNetwork
             val capabilities = connectivityManager.getNetworkCapabilities(network)
@@ -271,37 +245,32 @@ class ChargingAnimationAdapter  (
         }
     }
 
-    fun updateMoreData(list:ArrayList<ChargingAnimModel?>){
+    fun updateMoreData(list: ArrayList<ChargingAnimModel?>) {
         val startPosition = arrayList.size
 
-        for(i in 0 until list.size){
-            if (arrayList.contains(list[i])){
+        for (i in 0 until list.size) {
+            if (arrayList.contains(list[i])) {
                 Log.e("********new Data", "updateMoreData: already in list")
-            }else{
+            } else {
                 arrayList.add(list[i])
             }
         }
         notifyItemRangeInserted(startPosition, list.size)
     }
 
-    fun getAllItems():ArrayList<ChargingAnimModel?>{
+    fun getAllItems(): ArrayList<ChargingAnimModel?> {
         return arrayList
     }
 
-    fun addNewData(){
-        arrayList.clear()
-        notifyDataSetChanged()
 
-    }
-
-    fun updateData(list:ArrayList<ChargingAnimModel?>){
+    fun updateData(list: ArrayList<ChargingAnimModel?>) {
         arrayList.clear()
         arrayList.addAll(list)
         notifyDataSetChanged()
     }
 
     interface downloadCallback {
-        fun getPosition(position:Int,model: ChargingAnimModel)
+        fun getPosition(position: Int, model: ChargingAnimModel)
     }
 
 }

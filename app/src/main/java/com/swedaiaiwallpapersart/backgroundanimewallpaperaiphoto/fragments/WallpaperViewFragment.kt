@@ -462,30 +462,63 @@ class WallpaperViewFragment : Fragment() {
                         }
                     }, object : MaxAD {
                         override fun adNotReady(type: String) {
-                            if (bitmap != null) {
-                                if (arrayList[position]?.unlockimges == true) {
-                                    val model = arrayList[position]
-                                    openPopupMenu(model!!)
-                                    Log.d(
-                                        "SET-WALL",
-                                        "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
-                                    )
-
-                                } else {
-                                    if (AdConfig.ISPAIDUSER) {
-                                        val model = arrayList[position]
-                                        openPopupMenu(model!!)
-                                    } else {
-                                        unlockDialog()
-                                    }
-                                }
-                            } else {
+                            if (MaxInterstitialAds.willIntAdShow) {
                                 Toast.makeText(
                                     requireContext(),
-                                    getString(R.string.your_image_not_fetched_properly),
+                                    "Ad not available",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                if (bitmap != null) {
+                                    if (arrayList[position]?.unlockimges == true) {
+                                        val model = arrayList[position]
+                                        openPopupMenu(model!!)
+                                        Log.d(
+                                            "SET-WALL",
+                                            "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                                        )
+
+                                    } else {
+                                        if (AdConfig.ISPAIDUSER) {
+                                            val model = arrayList[position]
+                                            openPopupMenu(model!!)
+                                        } else {
+                                            unlockDialog()
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        getString(R.string.your_image_not_fetched_properly),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } else {
+                                if (bitmap != null) {
+                                    if (arrayList[position]?.unlockimges == true) {
+                                        val model = arrayList[position]
+                                        openPopupMenu(model!!)
+                                        Log.d(
+                                            "SET-WALL",
+                                            "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                                        )
+
+                                    } else {
+                                        if (AdConfig.ISPAIDUSER) {
+                                            val model = arrayList[position]
+                                            openPopupMenu(model!!)
+                                        } else {
+                                            unlockDialog()
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        getString(R.string.your_image_not_fetched_properly),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
+
                         }
                     })
                 }
@@ -577,30 +610,60 @@ class WallpaperViewFragment : Fragment() {
                 }
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
-                    if (bitmap != null) {
-                        if (arrayList[position]?.unlockimges == true) {
-                            val model = arrayList[position]
-                            openPopupMenu(model!!)
-                            Log.d(
-                                "SET-WALL",
-                                "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
-                            )
-
-                        } else {
-                            if (AdConfig.ISPAIDUSER) {
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()
+                        if (bitmap != null) {
+                            if (arrayList[position]?.unlockimges == true) {
                                 val model = arrayList[position]
                                 openPopupMenu(model!!)
+                                Log.d(
+                                    "SET-WALL",
+                                    "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                                )
+
                             } else {
-                                unlockDialog()
+                                if (AdConfig.ISPAIDUSER) {
+                                    val model = arrayList[position]
+                                    openPopupMenu(model!!)
+                                } else {
+                                    unlockDialog()
+                                }
                             }
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.your_image_not_fetched_properly),
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } else {
-                        Toast.makeText(
-                            requireContext(),
-                            getString(R.string.your_image_not_fetched_properly),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        if (bitmap != null) {
+                            if (arrayList[position]?.unlockimges == true) {
+                                val model = arrayList[position]
+                                openPopupMenu(model!!)
+                                Log.d(
+                                    "SET-WALL",
+                                    "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                                )
+
+                            } else {
+                                if (AdConfig.ISPAIDUSER) {
+                                    val model = arrayList[position]
+                                    openPopupMenu(model!!)
+                                } else {
+                                    unlockDialog()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                getString(R.string.your_image_not_fetched_properly),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
+
                 }
             })
         }

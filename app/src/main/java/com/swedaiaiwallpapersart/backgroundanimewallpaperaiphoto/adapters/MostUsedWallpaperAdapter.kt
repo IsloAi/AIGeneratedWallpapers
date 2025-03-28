@@ -48,15 +48,6 @@ class MostUsedWallpaperAdapter(
 
     var row = 0
 
-
-    private val firstAdLineThreshold =
-        if (AdConfig.firstAdLineMostUsed != 0) AdConfig.firstAdLineMostUsed else 4
-
-    val firstline = firstAdLineThreshold * 3
-    private val lineCount = if (AdConfig.lineCountMostUsed != 0) AdConfig.lineCountMostUsed else 5
-    val lineC = lineCount * 3
-    private val statusAd = AdConfig.adStatusMostUsed
-
     private var coroutineScope: CoroutineScope? = null
 
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
@@ -248,8 +239,6 @@ class MostUsedWallpaperAdapter(
     }
 
     fun updateMoreData(list: ArrayList<CatResponse?>) {
-
-
         val startPosition = arrayList.size
 
         for (i in 0 until list.size) {

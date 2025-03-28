@@ -209,14 +209,31 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                         }
                     }, object : MaxAD {
                         override fun adNotReady(type: String) {
-                            Bundle().apply {
-                                putBoolean("adShowed", adShowd)
-                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                                findNavController().navigate(
-                                    R.id.downloadLiveWallpaperFragment,
-                                    this
-                                )
+                            if (MaxInterstitialAds.willIntAdShow) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Ad not available",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Bundle().apply {
+                                    putBoolean("adShowed", adShowd)
+                                    DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                                    DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                    findNavController().navigate(
+                                        R.id.downloadLiveWallpaperFragment,
+                                        this
+                                    )
+                                }
+                            } else {
+                                Bundle().apply {
+                                    putBoolean("adShowed", adShowd)
+                                    DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                                    DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                    findNavController().navigate(
+                                        R.id.downloadLiveWallpaperFragment,
+                                        this
+                                    )
+                                }
                             }
                         }
                     })
@@ -259,15 +276,25 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
-                    Bundle().apply {
-                        putBoolean("adShowed", adShowd)
-                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                        findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        Toast.makeText(requireContext(), "Ad Not Available", Toast.LENGTH_SHORT)
+                            .show()
+                        Bundle().apply {
+                            putBoolean("adShowed", adShowd)
+                            DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                            DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                            findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                        }
+                    } else {
+                        Bundle().apply {
+                            putBoolean("adShowed", adShowd)
+                            DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                            DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                            findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                        }
                     }
                 }
             })
-
         }
     }
 
