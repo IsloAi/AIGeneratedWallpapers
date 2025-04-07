@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -247,7 +246,7 @@ class CategoryFragment : Fragment(), AdEventListener {
                 override fun onAdClicked(p0: MaxAd) {}
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     val bundle = Bundle().apply {
                         putString("name", name)
                         putString("from", "category")
@@ -258,7 +257,7 @@ class CategoryFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     val bundle = Bundle().apply {
                         putString("name", name)
                         putString("from", "category")
@@ -271,8 +270,8 @@ class CategoryFragment : Fragment(), AdEventListener {
             object : MaxAD {
                 override fun adNotReady(type: String) {
                     if (MaxInterstitialAds.willIntAdShow) {
-                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()
+                        /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()*/
                         val bundle = Bundle().apply {
                             putString("name", name)
                             putString("from", "category")

@@ -77,11 +77,6 @@ class ListViewFragment : Fragment(), AdEventListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-    }
-
     override fun onStart() {
         super.onStart()
         (myActivity.application as MyApp).registerAdEventListener(this)
@@ -114,7 +109,11 @@ class ListViewFragment : Fragment(), AdEventListener {
             }
         }
 
-        binding.catTitle.text = name
+        if (name == "4K" && from == "category") {
+            binding.catTitle.text = "AI Wallpapers"
+        } else {
+            binding.catTitle.text = name
+        }
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
 
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
@@ -146,21 +145,7 @@ class ListViewFragment : Fragment(), AdEventListener {
             }
         }, myActivity, from)
 
-
         adapter!!.setCoroutineScope(fragmentScope)
-
-        /*IKSdkController.loadNativeDisplayAd("categoryscr_scroll_view", object :
-            IKLoadDisplayAdViewListener {
-            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                if (isAdded && view!= null){
-                    adapter?.nativeAdView = adObject
-                    binding.recyclerviewAll.adapter = adapter
-                }
-            }
-
-            override fun onAdLoadFail(error: IKAdError) {}
-        })*/
-
 
         binding.recyclerviewAll.adapter = adapter
 
@@ -224,7 +209,6 @@ class ListViewFragment : Fragment(), AdEventListener {
 
 
         }
-
 
     }
 
@@ -380,22 +364,16 @@ class ListViewFragment : Fragment(), AdEventListener {
                                 if (!tempList.contains(model)) {
                                     tempList.add(model)
                                 }
+                                Log.d("ViewCategory", "loadData:item = $item \n ")
                             }
 
-                            val list = if (AdConfig.ISPAIDUSER) {
-                                ArrayList(tempList.shuffled())
-                            } else {
-                                addNullValueInsideArray(tempList.shuffled())
-                            }
+                            val list = addNullValueInsideArray(tempList.shuffled())
 
                             cachedCatResponses = list
-
-                            val initialItems = getItems(0, 30)
-
-                            Log.e(TAG, "initMostDownloadedData: $initialItems")
                             withContext(Dispatchers.Main) {
-                                adapter?.updateMoreData(initialItems)
-                                startIndex += 30
+                                //adapter?.updateMoreData(initialItems)
+                                adapter?.updateData(list)
+                                //startIndex += 30
                                 dataset = true
                             }
                         }
@@ -423,21 +401,18 @@ class ListViewFragment : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
+
         createBannerAd()
         if (wallFromList) {
             if (isAdded) {
                 congratulationsDialog()
             }
         }
-
-
         if (name == "Trending") {
             initTrendingData()
         } else {
             loadData()
         }
-
-
         if (dataset) {
 
             Log.e(TAG, "onResume: Data set $dataset")

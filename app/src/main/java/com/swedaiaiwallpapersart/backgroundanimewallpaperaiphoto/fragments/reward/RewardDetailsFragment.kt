@@ -133,8 +133,8 @@ class RewardDetailsFragment : Fragment() {
                     }
                 }, object : MaxAD {
                     override fun adNotReady(type: String) {
-                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()
+                        /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()*/
                     }
                 })
             }

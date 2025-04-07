@@ -79,7 +79,6 @@ class MostUsedWallpaperAdapter(
         }
     }
 
-
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
@@ -243,12 +242,17 @@ class MostUsedWallpaperAdapter(
 
         for (i in 0 until list.size) {
             if (arrayList.contains(list[i])) {
-                Log.e("********new Data", "updateMoreData: already in list")
             } else {
                 arrayList.add(list[i])
             }
         }
         notifyItemRangeInserted(startPosition, list.size)
+    }
+
+    fun updateData(list: ArrayList<CatResponse?>) {
+        arrayList.clear()
+        arrayList.addAll(list)
+        notifyDataSetChanged()
     }
 
     fun getAllItems(): ArrayList<CatResponse?> {

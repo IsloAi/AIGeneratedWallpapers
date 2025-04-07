@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -235,7 +234,7 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 override fun onAdClicked(p0: MaxAd) {}
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     Bundle().apply {
                         Log.e(TAG, "navigateToDestination: inside bundle")
                         putString("from", "trending")
@@ -246,7 +245,7 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     Bundle().apply {
                         Log.e(TAG, "navigateToDestination: inside bundle")
                         putString("from", "trending")
@@ -259,8 +258,8 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
             object : MaxAD {
                 override fun adNotReady(type: String) {
                     if (MaxInterstitialAds.willIntAdShow) {
-                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()
+                        /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()*/
                         Bundle().apply {
                             Log.e(TAG, "navigateToDestination: inside bundle")
                             putString("from", "trending")

@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -46,6 +45,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
     private val binding get() = _binding!!
     private val myViewModel: LiveWallpaperViewModel by activityViewModels()
     private val statusAd = AdConfig.adStatusViewListWallSRC
+    private var liveList = ArrayList<LiveWallpaperModel>()
 
     val sharedViewModel: SharedViewModel by activityViewModels()
 
@@ -77,6 +77,13 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         updateUIWithFetchedData()
         adapter!!.setCoroutineScope(fragmentScope)
+        binding.refreshLive.setOnRefreshListener {
+            if (liveList.isNotEmpty()) {
+                val listWithNulls = addNullValueInsideArray(liveList.shuffled())
+                listWithNulls.let { adapter?.updateData(it) }
+                binding.refreshLive.isRefreshing = false
+            }
+        }
     }
 
     override fun onStart() {
@@ -89,8 +96,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         myViewModel.liveWallsFromDB.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Success -> {
-
-                    val list = result.data?.shuffled()
+                    val list = result.data
+                    liveList = list as ArrayList<LiveWallpaperModel>
                     Log.d("LIVE", "loadData: ${list?.size} ")
                     val listNullable = list?.let { addNullValueInsideArray(it) }
                     listNullable?.let { adapter?.updateData(it) }
@@ -113,7 +120,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
 
                 else -> {}
             }
-
         }
     }
 
@@ -148,7 +154,6 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         binding.liveReccyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
                 // Set the boolean to true when the RecyclerView is scrolled
                 if (dy != 0 || dx != 0) {
                     checkInter = false
@@ -210,11 +215,11 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     }, object : MaxAD {
                         override fun adNotReady(type: String) {
                             if (MaxInterstitialAds.willIntAdShow) {
-                                Toast.makeText(
+                                /*Toast.makeText(
                                     requireContext(),
                                     "Ad not available",
                                     Toast.LENGTH_SHORT
-                                ).show()
+                                ).show()*/
                                 Bundle().apply {
                                     putBoolean("adShowed", adShowd)
                                     DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
@@ -257,7 +262,7 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
@@ -277,8 +282,8 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
                     if (MaxInterstitialAds.willIntAdShow) {
-                        Toast.makeText(requireContext(), "Ad Not Available", Toast.LENGTH_SHORT)
-                            .show()
+                        /*Toast.makeText(requireContext(), "Ad Not Available", Toast.LENGTH_SHORT)
+                            .show()*/
                         Bundle().apply {
                             putBoolean("adShowed", adShowd)
                             DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true

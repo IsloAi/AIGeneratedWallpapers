@@ -90,7 +90,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     var datasetTrending = false
     var externalOpen = false
     var oldPosition = 0
-    val TAG = "POPULARTAB"
+    val TAG = "PopularTab"
     var isNavigationInProgress = false
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
@@ -137,39 +137,23 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     private fun setEvents() {
         binding.refresh.setOnRefreshListener {
-
             lifecycleScope.launch {
                 val newData = cachedMostDownloaded.filterNotNull()
                 val nullAdd = addNullValueInsideArray(newData)
                 cachedMostDownloaded.clear()
                 cachedMostDownloaded = nullAdd
-                val initialItems = getItems(0, 30)
-                startIndex = 0
 
-                withContext(Dispatchers.Main) {
-                    mostUsedWallpaperAdapter?.addNewData()
-                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
-                    mostUsedWallpaperAdapter?.updateMoreData(initialItems)
-                    startIndex += 30
-
-
-
-                    binding.refresh.isRefreshing = false
-                }
-
+                mostUsedWallpaperAdapter?.updateData(cachedMostDownloaded.shuffled() as ArrayList<CatResponse?>)
+                binding.refresh.isRefreshing = false
             }
-
-
         }
 
         binding.more.setOnClickListener {
             setFragment("Trending")
         }
-
     }
 
     private fun initMostUsedRV() {
-
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewMostUsed.layoutManager = layoutManager
         binding.recyclerviewMostUsed.addItemDecoration(RvItemDecore(3, 5, false, 10000))
@@ -210,7 +194,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
         binding.recyclerviewMostUsed.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                Constants.checkInter = false
+                /*Constants.checkInter = false
                 checkAppOpen = false
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
@@ -230,22 +214,18 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                         Log.e(TAG, "onScrolled: inside 4 coondition")
                     }
 
-                }
-
-
+                }*/
             }
         })
     }
 
     private fun initMostDownloadedData() {
-
         viewModel.allCreations.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
                 }
 
                 is Response.Success -> {
-
                     if (!result.data.isNullOrEmpty()) {
                         val list = arrayListOf<CatResponse>()
                         result.data.forEach { item ->
@@ -269,34 +249,24 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
                         }
 
-
                         if (view != null) {
                             lifecycleScope.launch {
                                 if (!dataset) {
                                     Log.e(TAG, "initMostDownloadedData: DataSet= $dataset")
-
                                     val newList = addNullValueInsideArray(list)
-
                                     cachedMostDownloaded = newList
-
-                                    val initialItems = getItems(0, 30)
-
                                     Log.e(
                                         TAG,
                                         "initMostDownloadedData:initialItems= $cachedMostDownloaded"
                                     )
-
                                     lifecycleScope.launch(Dispatchers.Main) {
                                         mostUsedWallpaperAdapter?.updateMoreData(
                                             cachedMostDownloaded
                                         )
-                                        startIndex += 30
                                     }
-
                                     dataset = true
                                 }
                             }
-
                         }
                     }
                 }
@@ -313,21 +283,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 }
             }
         }
-
-
-//        appDatabase.wallpapersDao()?.getAllWallpapersLive()?.observe(viewLifecycleOwner) {
-//            if (it.isNotEmpty()) {
-//                it?.let { data ->
-//                    cachedMostDownloaded = arrayListOf()
-//                    data.forEachIndexed { _, genericResponseModel ->
-//                        cachedMostDownloaded.add(genericResponseModel)
-//
-//                    }
-//                }
-//            }
-//        }
-
-
     }
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
@@ -372,55 +327,41 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     override fun onResume() {
         super.onResume()
-
+        //load the data first time
         if (wallFromPopular) {
             if (isAdded) {
                 congratulationsDialog()
             }
         }
-
         initMostDownloadedData()
-
         initTrendingData()
-
+        //when user come back show this data
         if (datasetTrending) {
-            if (cachedCatResponses?.isEmpty() == true) {
-                Log.e(TAG, "onResume: " + cachedCatResponses.size)
-
-
-            }
-            adapter?.updateMoreData(cachedCatResponses)
-
+            adapter?.updateMoreData(cachedCatResponses.shuffled() as ArrayList<CatResponse?>)
         }
-
         if (dataset) {
-
-            Log.e(TAG, "onResume: Data set $dataset")
-            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
-
+            Log.d("PopularTab", "onResume: Data set $dataset")
             if (addedItems?.isEmpty() == true) {
-                Log.e(TAG, "onResume: " + cachedMostDownloaded.size)
+                Log.d(
+                    "PopularTab",
+                    "onResume:cachedMostDownloaded Size " + cachedMostDownloaded.size
+                )
             }
             mostUsedWallpaperAdapter?.updateMoreData(addedItems!!)
-
             binding.recyclerviewMostUsed.layoutManager?.scrollToPosition(oldPosition)
-
         }
-
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Popular Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
-
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
             if (!isNavigated && hasToNavigate) {
                 navigateToDestination(addedItems!!, oldPosition)
             }
         }
-
     }
 
     private fun congratulationsDialog() {
@@ -469,9 +410,9 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     }
 
     private fun populateOnbaordingItems() {
-        val welcomeItems: MutableList<Int> = ArrayList<Int>()
-        welcomeItems.add(1)
-        welcomeItems.add(2)
+        val welcomeItems: MutableList<Int> = ArrayList()
+        welcomeItems.add(0)
+        //welcomeItems.add(2)
         welcomeItems.add(3)
 
         welcomeAdapter =
@@ -482,11 +423,11 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                             (requireParentFragment() as HomeTabsFragment).navigateTOTabs("Category")
                         }
 
-                        1 -> {
+                        /*1 -> {
                             (requireParentFragment() as HomeTabsFragment).navigateTOTabs("Anime")
-                        }
+                        }*/
 
-                        2 -> {
+                        1 -> {
                             catListViewmodel.getAllCreations("4K")
                             setFragment("4K")
                         }
@@ -521,12 +462,9 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
                 is Response.Success -> {
                     if (view != null) {
-
                         lifecycleScope.launch(Dispatchers.IO) {
                             if (!datasetTrending) {
-
                                 val list = result.data?.take(100)
-
                                 list?.forEach { item ->
                                     val model = CatResponse(
                                         item.id,
@@ -546,15 +484,10 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                                         cachedCatResponses.add(model)
                                     }
                                 }
-                                Log.e(TAG, "initMostDownloadedData: " + list)
-
-                                Log.e(TAG, "initTrendingData: " + cachedCatResponses)
-
-
+                                Log.d("PopularTab", "initTrendingData: $cachedCatResponses")
                                 withContext(Dispatchers.Main) {
-                                    adapter?.updateMoreData(cachedCatResponses)
+                                    adapter?.updateMoreData(cachedCatResponses.shuffled() as ArrayList<CatResponse?>)
                                 }
-
                                 datasetTrending = true
                             }
                         }
@@ -563,8 +496,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
                 is Response.Error -> {
                     Log.e("TAG", "error: ${result.message}")
-                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
-                        .show()
                 }
 
                 else -> {
@@ -575,9 +506,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     }
 
     private fun updateUIWithFetchedData() {
-
         val list = ArrayList<CatResponse?>()
-
         adapter =
             ApicategoriesListHorizontalAdapter(list, object :
                 PositionCallback {
@@ -598,7 +527,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                     //
                 }
             }, myActivity)
-
         binding.recyclerviewTrending.adapter = adapter
         binding.recyclerviewTrending.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -695,12 +623,12 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                     }, object : MaxAD {
                         override fun adNotReady(type: String) {
                             if (MaxInterstitialAds.willIntAdShow) {
-                                Toast.makeText(
+                                /*Toast.makeText(
                                     requireContext(),
                                     "Ad not available",
                                     Toast.LENGTH_SHORT
                                 )
-                                    .show()
+                                    .show()*/
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     Bundle().apply {
                                         putString("from", "trending")
@@ -750,7 +678,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 override fun onAdClicked(p0: MaxAd) {}
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     lifecycleScope.launch(Dispatchers.Main) {
                         Bundle().apply {
                             putString("from", "trending")
@@ -765,7 +693,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     lifecycleScope.launch(Dispatchers.Main) {
                         Bundle().apply {
                             putString("from", "trending")
@@ -781,8 +709,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
                     if (MaxInterstitialAds.willIntAdShow) {
-                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()
+                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT) .show()
                         lifecycleScope.launch(Dispatchers.Main) {
                             Bundle().apply {
                                 putString("from", "trending")
@@ -846,6 +773,5 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     override fun onShowAdFail() {
 
     }
-
 
 }

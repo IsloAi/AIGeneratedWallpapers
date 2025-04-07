@@ -3,9 +3,6 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -208,75 +205,6 @@ class ApiCategoriesListAdapter(
                 lastClickTime = currentTime
             }
         }
-    }
-
-    /*fun loadad(binding: StaggeredNativeLayoutBinding) {
-        coroutineScope?.launch(Dispatchers.Main) {
-            adLayout?.titleView = adLayout?.findViewById(R.id.custom_headline)
-            adLayout?.bodyView = adLayout?.findViewById(R.id.custom_body)
-            adLayout?.callToActionView = adLayout?.findViewById(R.id.custom_call_to_action)
-            adLayout?.iconView = adLayout?.findViewById(R.id.custom_app_icon)
-            adLayout?.mediaView = adLayout?.findViewById(R.id.custom_media)
-
-            if (nativeAdView == null) {
-                withContext(Dispatchers.IO) {  // Load ad on a background thread
-                    IKSdkController.loadNativeDisplayAd(
-                        tracking,
-                        object : IKLoadDisplayAdViewListener {
-                            override fun onAdLoaded(adObject: IkmDisplayWidgetAdView?) {
-                                nativeAdView = adObject
-                            }
-
-                            override fun onAdLoadFail(error: IKAdError) {
-                                Log.e("LIVE_WALL_SCREEN_ADAPTER", "onAdFailedToLoad: $error")
-                            }
-                        })
-                }
-            }
-
-            nativeAdView?.let {
-                binding.adsView.showWithDisplayAdView(R.layout.shimmer_loading_native,
-                    adLayout!!,
-                    tracking,
-                    it,
-                    object : IKShowWidgetAdListener {
-                        override fun onAdShowFail(error: IKAdError) {
-                            Log.e("TAG", "onAdsLoadFail: native failed")
-                            binding.adsView.visibility =
-                                if (statusAd == 0 || !isNetworkAvailable()) {
-                                    View.GONE
-                                } else {
-                                    View.VISIBLE
-                                }
-                        }
-
-                        override fun onAdShowed() {
-                            binding.adsView.visibility = View.VISIBLE
-                            Log.e("TAG", "onAdsLoaded: native loaded")
-                        }
-                    })
-            }
-        }
-
-    }*/
-
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork
-            val capabilities = connectivityManager.getNetworkCapabilities(network)
-            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
-                NetworkCapabilities.TRANSPORT_CELLULAR
-            ))
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo
-            networkInfo != null && networkInfo.isConnected
-        }
-    }
-
-    fun getFirstImageUrl(): String {
-        return arrayList[0]?.hd_image_url!!
     }
 
     fun updateMoreData(list: ArrayList<CatResponse?>) {

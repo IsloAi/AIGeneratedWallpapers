@@ -18,27 +18,35 @@ interface WallpaperRepositry {
 //
 //    fun getAllWallpapers(apiKey:String,page:String,record:String):Flow<Response<ArrayList<SingleAllResponse>>>
 
-    fun getUpdatedWallpapers(page:String,record:String,lastid:String):Flow<Response<ArrayList<SingleAllResponse>>>
-    fun getRewardWallpaper():Flow<Response<ArrayList<RewardedAllResponse>>>
+    fun getUpdatedWallpapers(
+        page: String,
+        record: String,
+        lastid: String
+    ): Flow<Response<ArrayList<SingleAllResponse>>>
 
-    fun getAllLikes():Flow<Response<ArrayList<LikesResponse>>>
-    fun getFavourites(deviceId: String):Flow<Response<ArrayList<LikedResponse>>>
+    fun getRewardWallpaper(): Flow<Response<ArrayList<RewardedAllResponse>>>
 
-    fun getMostDownloaded(page:String,record:String):Flow<Response<ArrayList<MostDownloadedResponse>>>
+    fun getAllLikes(): Flow<Response<ArrayList<LikesResponse>>>
 
+    fun getFavourites(deviceId: String): Flow<Response<ArrayList<LikedResponse>>>
 
+    fun getMostDownloaded(
+        page: String,
+        record: String
+    ): Flow<Response<ArrayList<MostDownloadedResponse>>>
 
-    fun getLiveWallpapers(page:String,record:String,deviceId: String):Flow<Response<ArrayList<LiveWallpaperModel>>>
+    fun getLiveWallpapers(
+        page: String,
+        record: String,
+        deviceId: String
+    ): Flow<Response<ArrayList<LiveWallpaperModel>>>
 
+    fun getChargingAnimation(): Flow<Response<ArrayList<ChargingAnimModel>>>
 
-    fun getChargingAnimation():Flow<Response<ArrayList<ChargingAnimModel>>>
+    fun getDoubleWallpapers(): Flow<Response<ArrayList<DoubleWallModel>>>
 
+    fun getStaticWallpaperUpdates(): Flow<Response<ArrayList<SingleAllResponse>>>
 
-    fun getDoubleWallpapers():Flow<Response<ArrayList<DoubleWallModel>>>
-
-    fun getStaticWallpaperUpdates():Flow<Response<ArrayList<SingleAllResponse>>>
-
-    fun getDeletedImages():Flow<Response<ArrayList<DeletedImagesResponse>>>
-
+    fun getDeletedImages(): Flow<Response<ArrayList<DeletedImagesResponse>>>
 
 }

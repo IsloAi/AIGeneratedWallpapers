@@ -108,25 +108,17 @@ class HomeFragment : Fragment(), AdEventListener {
 
     private fun setEvents() {
         binding.swipeLayout.setOnRefreshListener {
-
             val newData = cachedCatResponses.filterNotNull().shuffled()
             lifecycleScope.launch(Dispatchers.IO) {
-                val nullAdd = if (AdConfig.ISPAIDUSER) {
-                    newData as ArrayList<CatResponse?>
-                } else {
-                    addNullValueInsideArray(newData.shuffled())
-                }
-
+                val nullAdd = addNullValueInsideArray(newData.shuffled())
                 withContext(Dispatchers.Main) {
                     cachedCatResponses.clear()
                     cachedCatResponses = nullAdd
                     adapter.updateData(nullAdd)
-
+                    binding.recyclerviewAll.scrollToPosition(0) // <-- this is what you need
                     binding.swipeLayout.isRefreshing = false
                 }
             }
-
-
         }
     }
 
@@ -367,7 +359,7 @@ class HomeFragment : Fragment(), AdEventListener {
             override fun onAdClicked(p0: MaxAd) {}
 
             override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
                 Bundle().apply {
                     Log.e(TAG, "navigateToDestination: inside bundle")
                     putString("from", "trending")
@@ -379,7 +371,7 @@ class HomeFragment : Fragment(), AdEventListener {
             }
 
             override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
                 Bundle().apply {
                     Log.e(TAG, "navigateToDestination: inside bundle")
                     putString("from", "trending")
@@ -392,7 +384,7 @@ class HomeFragment : Fragment(), AdEventListener {
         }, object : MaxAD {
             override fun adNotReady(type: String) {
                 if (MaxInterstitialAds.willIntAdShow) {
-                    Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
                     Bundle().apply {
                         Log.e(TAG, "navigateToDestination: inside bundle")
                         putString("from", "trending")

@@ -1,10 +1,10 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id("com.google.dagger.hilt.android")
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
-    id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs'
 }
 
@@ -61,10 +61,6 @@ android {
     defaultConfig {
         multiDexEnabled true
     }
-    // Allow references to generated code
-    kapt {
-        correctErrorTypes = true
-    }
 }
 dependencies {
 
@@ -95,11 +91,13 @@ dependencies {
     //Retrofit2
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3'
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.12.0"))
 
     // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:okhttp") {
+        exclude group: "com.squareup.okio", module: "okio"
+    }
     //coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1"
@@ -116,7 +114,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.5'
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.5")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.5")
-    implementation 'androidx.multidex:multidex:2.0.1'
 
     // navigation
     implementation "androidx.navigation:navigation-fragment-ktx:2.8.0"
@@ -157,21 +154,23 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.51.1"
     kapt "com.google.dagger:hilt-android-compiler:2.51.1"
 
-    implementation("androidx.startup:startup-runtime:1.2.0")
-
     //in app update
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
 
     //rating bar
     implementation 'com.github.ome450901:SimpleRatingBar:1.5.1'
-
+    //exoplayer
     implementation("androidx.media3:media3-exoplayer:1.4.1")
     implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
     implementation("androidx.media3:media3-ui:1.4.1")
 
-    implementation("com.applovin:applovin-sdk:13.1.0")
     implementation("com.google.android.gms:play-services-ads:23.0.0")
-
+    //Applovin
+    implementation("com.applovin:applovin-sdk:13.2.0")
+    implementation("com.applovin.mediation:google-adapter:24.1.0.0")
+    implementation("com.applovin.mediation:vungle-adapter:7.4.3.1")
+    implementation("com.applovin.mediation:mintegral-adapter:16.9.61.0")
+    implementation("com.applovin.mediation:bytedance-adapter:6.5.0.8.1")
 
 }

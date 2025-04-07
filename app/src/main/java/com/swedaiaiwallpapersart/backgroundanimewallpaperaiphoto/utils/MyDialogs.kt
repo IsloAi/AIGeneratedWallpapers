@@ -24,7 +24,7 @@ class MyDialogs {
         val btnYes = bottomSheetDialog.findViewById<Button>(R.id.btnYes)
         val btn = bottomSheetDialog.findViewById<FrameLayout>(R.id.nativeADExit)
         val nativead =
-            NativeAdManager(context, AdConfig.admobAndroidNative, R.layout.new_native_language)
+            NativeAdManager(context, AdConfig.admobAndroidNative, R.layout.native_layout_small)
         if (btn != null) {
             nativead.loadNativeAd(btn)
         }

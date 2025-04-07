@@ -24,7 +24,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.RvItemDecore
@@ -37,12 +36,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class AnimeWallpaperFragment : Fragment() , AdEventListener {
+class AnimeWallpaperFragment : Fragment(), AdEventListener {
 
-    private var _binding:FragmentAnimeWallpaperBinding ?= null
+    private var _binding: FragmentAnimeWallpaperBinding? = null
     private val binding get() = _binding!!
-    private lateinit var myActivity : MainActivity
-    var adapter:ApiCategoriesListAdapter ?= null
+    private lateinit var myActivity: MainActivity
+    var adapter: ApiCategoriesListAdapter? = null
     val sharedViewModel: SharedViewModel by activityViewModels()
     private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
     private var addedItems: ArrayList<CatResponse?>? = ArrayList()
@@ -60,10 +59,9 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
     val TAG = "ANIME"
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAnimeWallpaperBinding.inflate(inflater,container,false)
+        _binding = FragmentAnimeWallpaperBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -74,21 +72,20 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
     }
 
-    private fun onCreateViewCalling(){
+    private fun onCreateViewCalling() {
 
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
 
-        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3,5,false,10000))
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
         val list = ArrayList<CatResponse?>()
-        adapter = ApiCategoriesListAdapter(list, object :
-            PositionCallback {
+        adapter = ApiCategoriesListAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
 
-                if (!isNavigationInProgress){
+                if (!isNavigationInProgress) {
 
                     hasToNavigateAnime = true
 
@@ -104,7 +101,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
                     oldPosition = position
 
-                    if (AdConfig.ISPAIDUSER){
+                    if (AdConfig.ISPAIDUSER) {
                         navigateToDestination(allItems!!, position)
                     }
                 }
@@ -112,7 +109,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
             override fun getFavorites(position: Int) {
             }
-        },myActivity,"category")
+        }, myActivity, "category")
 
         adapter!!.setCoroutineScope(fragmentScope)
 
@@ -121,8 +118,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
         binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = recyclerView.layoutManager as GridLayoutManager
+                super.onScrolled(recyclerView, dx, dy)/*val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
 
                 val totalItemCount = adapter!!.itemCount
@@ -138,37 +134,24 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
                         Log.e(TAG, "onScrolled: inside 4 coondition")
                     }
 
-                }
-
-
+                }*/
             }
         })
 
         binding.swipeLayout.setOnRefreshListener {
             lifecycleScope.launch(Dispatchers.IO) {
                 val newData = cachedCatResponses.filterNotNull().shuffled()
-                val nullAdd = if (AdConfig.ISPAIDUSER){
-                    newData as ArrayList<CatResponse?>
-                }else{
-                    addNullValueInsideArray(newData.shuffled())
-                }
+                val nullAdd = addNullValueInsideArray(newData.shuffled())
                 cachedCatResponses.clear()
                 cachedCatResponses = nullAdd
-                val initialItems = getItems(0, 30)
-                startIndex = 0
-                withContext(Dispatchers.Main){
-                    adapter?.addNewData()
-                    Log.e(TAG, "initMostDownloadedData: " + initialItems)
-                    adapter?.updateMoreData(initialItems)
-                    startIndex += 30
-
-
+                withContext(Dispatchers.Main) {
+                    adapter?.updateMoreData(cachedCatResponses)
+                    //startIndex += 30
 
                     binding.swipeLayout.isRefreshing = false
                 }
 
             }
-
 
 
         }
@@ -183,52 +166,48 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
     private fun loadData() {
         Log.d(TAG, "onCreateCustom:  home on create")
 
+        myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
+            when (result) {
 
-        myViewModel.catWallpapers.observe(viewLifecycleOwner){result ->
-            when(result){
-
-                is Response.Loading ->{
+                is Response.Loading -> {
 
                 }
 
-                is Response.Success ->{
+                is Response.Success -> {
                     if (!dataset) {
-
                         lifecycleScope.launch(Dispatchers.IO) {
                             var tempList = ArrayList<CatResponse>()
-
-                            result.data?.forEach {item ->
-                                val model = CatResponse(item.id,item.image_name,item.cat_name,item.hd_image_url,item.compressed_image_url,null,item.likes,item.liked,item.unlocked,item.size,item.Tags,item.capacity)
-                                if (!tempList.contains(model)){
+                            result.data?.forEach { item ->
+                                val model = CatResponse(
+                                    item.id,
+                                    item.image_name,
+                                    item.cat_name,
+                                    item.hd_image_url,
+                                    item.compressed_image_url,
+                                    null,
+                                    item.likes,
+                                    item.liked,
+                                    item.unlocked,
+                                    item.size,
+                                    item.Tags,
+                                    item.capacity
+                                )
+                                if (!tempList.contains(model)) {
                                     tempList.add(model)
                                 }
                             }
-
-                            val list = if (AdConfig.ISPAIDUSER){
-                                tempList.shuffled() as ArrayList<CatResponse?>
-                            }else{
-                                addNullValueInsideArray(tempList.shuffled())
-                            }
-
+                            val list = addNullValueInsideArray(tempList.shuffled())
                             cachedCatResponses = list
-
-                            val initialItems = getItems(0, 30)
-
-                            Log.e(TAG, "initMostDownloadedData: " + initialItems)
-                            withContext(Dispatchers.Main){
-                                adapter?.updateMoreData(initialItems)
-                                startIndex += 30
+                            Log.e(TAG, "initMostDownloadedData: $cachedCatResponses")
+                            withContext(Dispatchers.Main) {
+                                adapter?.updateMoreData(cachedCatResponses)
                                 dataset = true
                             }
-
-
                         }
-
-
                     }
                 }
 
-                is Response.Error ->{
+                is Response.Error -> {
 
                 }
 
@@ -244,8 +223,7 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
             return arrayListOf()
         } else {
             val subList = cachedCatResponses.subList(
-                startIndex1,
-                endIndex.coerceAtMost(cachedCatResponses.size)
+                startIndex1, endIndex.coerceAtMost(cachedCatResponses.size)
             )
             return ArrayList(subList)
         }
@@ -254,21 +232,21 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
     override fun onResume() {
         super.onResume()
         myViewModel.getAllCreations("Anime")
-        if (wallFromAnime){
-            if (isAdded){
+        if (wallFromAnime) {
+            if (isAdded) {
                 congratulationsDialog()
             }
         }
 
         loadData()
 
-        if (dataset){
+        if (dataset) {
 
             Log.e(TAG, "onResume: Data set $dataset")
             Log.e(TAG, "onResume: Data set ${addedItems?.size}")
 
-            if (addedItems?.isEmpty() == true){
-                Log.e(TAG, "onResume: empty added items"+cachedCatResponses.size )
+            if (addedItems?.isEmpty() == true) {
+                Log.e(TAG, "onResume: empty added items" + cachedCatResponses.size)
 
 
             }
@@ -280,41 +258,42 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
 
         lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
-            if (!WallpaperViewFragment.isNavigated && hasToNavigateAnime){
-                navigateToDestination(addedItems!!,oldPosition)
+            if (!WallpaperViewFragment.isNavigated && hasToNavigateAnime) {
+                navigateToDestination(addedItems!!, oldPosition)
             }
         }
 
     }
+
     override fun onPause() {
         super.onPause()
         val allItems = adapter?.getAllItems()
-//            if (addedItems?.isNotEmpty() == true){
-//                addedItems?.clear()
-//            }
-        Log.e(TAG, "onPause: "+allItems?.size )
-        if (allItems?.isNotEmpty() == true){
+        Log.e(TAG, "onPause: " + allItems?.size)
+        if (allItems?.isNotEmpty() == true) {
             addedItems = allItems
         }
 
-        Log.e(TAG, "onPause: "+addedItems?.size )
+        Log.e(TAG, "onPause: " + addedItems?.size)
 
 
     }
-    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?>{
-        return withContext(Dispatchers.IO){
-            val firstAdLineThreshold = if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+
+    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+        return withContext(Dispatchers.IO) {
+            val firstAdLineThreshold =
+                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
             val firstLine = firstAdLineThreshold * 3
 
-            val lineCount = if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+            val lineCount =
+                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
             val newData = arrayListOf<CatResponse?>()
 
-            for (i in data.indices){
-                if (i > firstLine && (i - firstLine) % (lineC + 1)  == 0) {
+            for (i in data.indices) {
+                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
                     totalADs++
-                }else if (i == firstLine){
+                } else if (i == firstLine) {
                     newData.add(null)
                     totalADs++
                 }
@@ -324,39 +303,38 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
             newData
         }
     }
+
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position:Int) {
+
+    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
 
         if (position >= arrayList.size) {
             Log.e(TAG, "navigateToDestination: Position $position out of bounds ${arrayList.size} ")
 
             addedItems?.clear()
-            addedItems = getItems(0,30)
+            addedItems = getItems(0, 30)
             adapter?.updateData(addedItems!!)
             isNavigationInProgress = false
             return
         }
-
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
         sharedViewModel.clearData()
 
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         Bundle().apply {
-            putString("from","category")
-            putString("wall","anime")
-            putInt("position",position - countOfNulls)
-            findNavController().navigate(R.id.wallpaperViewFragment,this)
+            putString("from", "category")
+            putString("wall", "anime")
+            putInt("position", position - countOfNulls)
+            findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
-
-
-
         isNavigationInProgress = false
 
     }
-    companion object{
+
+    companion object {
         var hasToNavigateAnime = false
-        var wallFromAnime =  false
+        var wallFromAnime = false
     }
 
     override fun onDestroyView() {
@@ -364,10 +342,10 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
         _binding = null
     }
 
-
     private fun congratulationsDialog() {
         val dialog = Dialog(requireContext())
-        val bindingDialog = DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
+        val bindingDialog =
+            DialogCongratulationsBinding.inflate(LayoutInflater.from(requireContext()))
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(bindingDialog.root)
         val width = WindowManager.LayoutParams.MATCH_PARENT
@@ -383,10 +361,9 @@ class AnimeWallpaperFragment : Fragment() , AdEventListener {
         dialog.show()
     }
 
-
     override fun onAdDismiss() {
         checkAppOpen = true
-        Log.e(TAG, "app open dismissed: ", )
+        Log.e(TAG, "app open dismissed: ")
     }
 
     override fun onAdLoading() {

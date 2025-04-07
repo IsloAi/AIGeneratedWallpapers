@@ -555,7 +555,7 @@ class WallpaperViewFragment : Fragment() {
                 override fun onAdClicked(p0: MaxAd) {}
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                     if (bitmap != null) {
                         if (arrayList[position]?.unlockimges == true) {
                             val model = arrayList[position]
@@ -611,8 +611,8 @@ class WallpaperViewFragment : Fragment() {
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
                     if (MaxInterstitialAds.willIntAdShow) {
-                        Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()
+                        /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                            .show()*/
                         if (bitmap != null) {
                             if (arrayList[position]?.unlockimges == true) {
                                 val model = arrayList[position]
@@ -1002,11 +1002,11 @@ class WallpaperViewFragment : Fragment() {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad Not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad Not available", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "Ad Not available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad Not available", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onAdClicked(p0: MaxAd) {
@@ -1024,7 +1024,7 @@ class WallpaperViewFragment : Fragment() {
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
                     MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
-                    Toast.makeText(requireContext(), "Ad not Available", Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(requireContext(), "Ad not Available", Toast.LENGTH_SHORT).show()
                 }
             })
         }

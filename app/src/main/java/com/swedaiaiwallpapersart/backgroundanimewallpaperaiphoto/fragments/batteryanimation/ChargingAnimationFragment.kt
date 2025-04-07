@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -191,7 +190,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 override fun onAdDisplayed(p0: MaxAd) {}
 
                 override fun onAdHidden(p0: MaxAd) {
-                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    //Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         findNavController().navigate(R.id.downloadBatteryAnimation, this)
@@ -201,7 +200,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 override fun onAdClicked(p0: MaxAd) {}
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    //Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         findNavController().navigate(R.id.downloadBatteryAnimation, this)
@@ -209,7 +208,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    //Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         findNavController().navigate(R.id.downloadBatteryAnimation, this)
@@ -218,8 +217,8 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
                     if (MaxInterstitialAds.willIntAdShow) {
-                        Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
-                            .show()
+                        /*Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                            .show()*/
                         Bundle().apply {
                             putBoolean("adShowed", adShowd)
                             findNavController().navigate(R.id.downloadBatteryAnimation, this)
