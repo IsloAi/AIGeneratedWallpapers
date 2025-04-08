@@ -16,7 +16,7 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 164
+        versionCode 165
         versionName "2.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,7 +27,7 @@ android {
         create("release") {
             keyAlias = "swedai"
             keyPassword = "swedai"
-            storeFile = file("D:\\AIGeneratedWallpapers\\SwedAi.jks")
+            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers\\SwedAi.jks")
             storePassword = "swedai"
         }
     }
@@ -172,5 +172,7 @@ dependencies {
     implementation("com.applovin.mediation:vungle-adapter:7.4.3.1")
     implementation("com.applovin.mediation:mintegral-adapter:16.9.61.0")
     implementation("com.applovin.mediation:bytedance-adapter:6.5.0.8.1")
+    implementation("com.applovin.mediation:facebook-adapter:6.19.0.2")
+
 
 }

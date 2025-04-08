@@ -32,8 +32,8 @@ class MyCatNameViewModel : ViewModel() {
                     if (response.isSuccessful) {
                         val catNameResponses: ArrayList<CatNameResponse>? = response.body()
                         if (catNameResponses != null) {
-                            Log.e("TAG", "onResponse: $catNameResponses")
-                            _wallpaperData.value = catNameResponses
+                            Log.e("Category", "onResponse: $catNameResponses")
+                            _wallpaperData.value = catNameResponses!!
                         }
                     } else {
                         // Handle error case
@@ -56,7 +56,6 @@ class MyCatNameViewModel : ViewModel() {
                     viewModelScope.launch {
                         val gson = Gson()
                         //val categoryList: List<CatNameResponse> = gson.fromJson(categoriesJson, object : TypeToken<List<CatNameResponse>>() {}.type)
-
                         //_wallpaperData.value = categoryList
                     }
                 }

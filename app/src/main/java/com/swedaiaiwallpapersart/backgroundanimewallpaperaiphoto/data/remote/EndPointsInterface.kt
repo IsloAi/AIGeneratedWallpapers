@@ -70,7 +70,6 @@ interface EndPointsInterface {
     @POST("post_feedback.php")
     suspend fun postData(@Body data: FeedbackModel)
 
-
     @GET("getanimation.php")
     suspend fun getChargingAnimations(
     ): retrofit2.Response<ResponseModelChargingAnimation>

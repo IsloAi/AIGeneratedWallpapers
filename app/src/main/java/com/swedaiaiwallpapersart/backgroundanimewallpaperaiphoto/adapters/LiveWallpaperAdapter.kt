@@ -13,6 +13,10 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
+import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -23,6 +27,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveWallpaperModel
@@ -71,9 +76,35 @@ class LiveWallpaperAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            val nativeAd =
+            /*val nativeAd =
                 NativeAdManager(context, AdConfig.admobAndroidNative, R.layout.native_layout_small)
-            nativeAd.loadNativeAd(binding.NativeAd)
+            nativeAd.loadNativeAd(binding.NativeAd)*/
+            MaxNativeAd.createNativeAdLoader(
+                context,
+                AdConfig.applovinAndroidNativeManual,
+                object : MaxNativeAdListener() {
+                    override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
+                        binding.NativeAd.removeAllViews()
+                        adView?.let {
+                            binding.NativeAd.addView(it)
+                        }
+                    }
+
+                    override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
+                        // Handle failure (optional retry logic)
+                    }
+
+                    override fun onNativeAdClicked(ad: MaxAd) {
+                        // Handle click
+                    }
+
+                    override fun onNativeAdExpired(ad: MaxAd) {
+                        // Ad expired - reload if needed
+                    }
+                }
+            )
+
+            MaxNativeAd.loadNativeAd(R.layout.max_native_small, context)
         }
     }
 

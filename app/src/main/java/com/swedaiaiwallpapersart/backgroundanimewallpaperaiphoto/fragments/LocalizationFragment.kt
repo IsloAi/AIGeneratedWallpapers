@@ -16,11 +16,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
+import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLocalizationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LocalizationAdapter
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment.Companion.exit
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.models.DummyModelLanguages
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -66,12 +70,38 @@ class LocalizationFragment : Fragment() {
             Log.e(TAG, "getLanguageList: " + getDefaultLocaleInfo())
         }
 
-        val nativeAd = NativeAdManager(
+        /*val nativeAd = NativeAdManager(
             requireContext(),
             AdConfig.admobAndroidNative,
-            R.layout.new_native_language
+            R.layout.admob_native_medium
         )
-        nativeAd.loadNativeAd(binding.NativeAd)
+        nativeAd.loadNativeAd(binding.NativeAd)*/
+        MaxNativeAd.createNativeAdLoader(
+            requireContext(),
+            AdConfig.applovinAndroidNativeManual,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
+                    binding.NativeAd.removeAllViews()
+                    adView?.let {
+                        binding.NativeAd.addView(it)
+                    }
+                }
+
+                override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
+                    // Handle failure (optional retry logic)
+                }
+
+                override fun onNativeAdClicked(ad: MaxAd) {
+                    // Handle click
+                }
+
+                override fun onNativeAdExpired(ad: MaxAd) {
+                    // Ad expired - reload if needed
+                }
+            }
+        )
+
+        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())
 
         setGradienttext()
 

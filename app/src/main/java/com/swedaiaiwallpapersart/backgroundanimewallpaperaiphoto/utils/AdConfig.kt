@@ -108,6 +108,9 @@ object AdConfig {
     var applovinAndroidBanner: String = "28a977ac3117328e"
     var applovinAndroidInterstitial: String = "2118cd1883ce90b3"
     var applovinAndroidReward: String = "2ffa4cee789785d6"
+    var applovinAndroidNativeSmall: String = "b439d281186ccf15"
+    var applovinAndroidNativeMedium: String = "3d1478d6bf7dc5f4"
+    var applovinAndroidNativeManual: String = "cfdfc558a6a4f862"
     var admobAndroidAppOpen: String = "ca-app-pub-3940256099942544/9257395921"
     var admobAndroidNative: String = "ca-app-pub-3940256099942544/2247696110"
 

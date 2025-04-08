@@ -139,11 +139,11 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
         binding.refresh.setOnRefreshListener {
             lifecycleScope.launch {
                 val newData = cachedMostDownloaded.filterNotNull()
-                val nullAdd = addNullValueInsideArray(newData)
+                val nullAdd = addNullValueInsideArray(newData.shuffled())
                 cachedMostDownloaded.clear()
                 cachedMostDownloaded = nullAdd
 
-                mostUsedWallpaperAdapter?.updateData(cachedMostDownloaded.shuffled() as ArrayList<CatResponse?>)
+                mostUsedWallpaperAdapter?.updateData(cachedMostDownloaded)
                 binding.refresh.isRefreshing = false
             }
         }

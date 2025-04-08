@@ -40,7 +40,11 @@ class FavouriteStaticAdapter(
 
     inner class ViewHolder(val binding: WallpaperRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CatResponse) {
+        fun bind(item: CatResponse)
+        {
+            val layoutParams = binding.wallpaper.layoutParams as ViewGroup.MarginLayoutParams
+            layoutParams.setMargins(0, 0, 0, 0)
+            binding.wallpaper.layoutParams = layoutParams
             // Bind the item data to your views here
             setAllData(adapterPosition, item, binding)
             // Set any additional properties or click listeners as needed
@@ -117,6 +121,7 @@ class FavouriteStaticAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(list[position])
+
     }
 
     override fun getItemCount(): Int {

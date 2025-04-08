@@ -393,10 +393,8 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             val info = WallpaperManager.getInstance(context.applicationContext).wallpaperInfo
 
             if (info == null || info.packageName != context.packageName) {
-
                 // Show ProgressBar
                 binding.progressBar.visibility = View.VISIBLE
-
                 viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     // Rename the file in the background
                     filepath.renameTo(newFile)
@@ -405,7 +403,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     // Set wallpaper in background
                     LiveWallpaperService.setToWallPaper(context, true)
                     checkWallpaper = true
-
                     // Post download info
                     try {
                         val requestBody = mapOf("imageid" to livewallpaper?.id)
@@ -415,7 +412,6 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                     } catch (e: UnknownHostException) {
                         e.printStackTrace()
                     }
-
                     // Hide ProgressBar on the main thread
                     withContext(Dispatchers.Main) {
                         binding.progressBar.visibility = View.GONE

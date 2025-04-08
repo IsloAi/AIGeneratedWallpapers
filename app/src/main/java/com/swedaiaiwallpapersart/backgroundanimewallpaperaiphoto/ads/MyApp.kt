@@ -86,12 +86,14 @@ class MyApp : Application() {
     private fun parseAdConfig(jsonString: String) {
         try {
             val jsonObject = JSONObject(jsonString)
-
             // Extract values from JSON
             val applovinSdkKey = jsonObject.optString("applovinSdkKey", "")
             val applovinBannerId = jsonObject.optString("applovinAndroidBanner", "")
             val applovinInterstitialId = jsonObject.optString("applovinAndroidInterstitial", "")
             val applovinRewardedId = jsonObject.optString("applovinAndroidRewarded", "")
+            val applovinNativeSmall = jsonObject.optString("applovinAndroidNativeSmall", "")
+            val applovinNativeMedium = jsonObject.optString("applovinAndroidNativeMedium", "")
+            val applovinNativeManual = jsonObject.optString("applovinAndroidNativeManual", "")
             val admobAppOpen = jsonObject.optString("admobAndroidAppOpen", "")
             val admobNative = jsonObject.optString("admobAndroidNative", "")
 
@@ -108,6 +110,9 @@ class MyApp : Application() {
                 AdConfig.applovinAndroidBanner = applovinBannerId
                 AdConfig.applovinAndroidInterstitial = applovinInterstitialId
                 AdConfig.applovinAndroidReward = applovinRewardedId
+                AdConfig.applovinAndroidNativeSmall = applovinNativeSmall
+                AdConfig.applovinAndroidNativeMedium = applovinNativeMedium
+                AdConfig.applovinAndroidNativeManual = applovinNativeManual
                 AdConfig.admobAndroidAppOpen = admobAppOpen
                 AdConfig.admobAndroidNative = admobNative
             }

@@ -53,6 +53,7 @@ class FavouriteFragment : Fragment() {
     private val binding get() = _binding!!
     private val favouriteViewModel: MyFavouriteViewModel by activityViewModels()
     private lateinit var wallpapers: MutableList<CatResponse>
+    private lateinit var favouritesLive: List<FavouriteLiveModel>
     private var cachedCatResponses: ArrayList<CatResponse>? = ArrayList()
     private lateinit var myActivity: MainActivity
     private lateinit var roomViewModel: RoomViewModel
@@ -136,35 +137,26 @@ class FavouriteFragment : Fragment() {
 
         binding.StaticWallpaper.setOnClickListener {
             selector(binding.StaticWallpaper, binding.live)
-            //loadStaticFavourite()
             binding.selfCreationRecyclerView.visibility = VISIBLE
             binding.liveRecyclerview.visibility = GONE
-            binding.emptySupport.visibility = GONE
             MySharePreference.setFavouriteSaveState(requireContext(), 2)
             binding.progressBar.visibility = INVISIBLE
-
+            updateUIWithFetchedData(wallpapers)
         }
+
         binding.live.setOnClickListener {
             selector(binding.live, binding.StaticWallpaper)
             MySharePreference.setFavouriteSaveState(requireContext(), 3)
-            //initObservers()
             binding.liveRecyclerview.visibility = VISIBLE
             binding.selfCreationRecyclerView.visibility = GONE
             binding.progressBar.visibility = INVISIBLE
+            updateUIWithFetchedDataLive(favouritesLive)
         }
-        binding.addToFav.setOnClickListener {
 
+        binding.addToFav.setOnClickListener {
             sharedViewModel.selectTab(1)
             findNavController().popBackStack(R.id.homeTabsFragment, false)
-
-
         }
-
-        /*binding.addToFavAI.setOnClickListener {
-            sharedViewModel.selectTab(5)
-            findNavController().popBackStack(R.id.homeTabsFragment, false)
-        }*/
-
 
     }
 
@@ -183,30 +175,23 @@ class FavouriteFragment : Fragment() {
         }
     }
 
+
     //this function gets Live fav wallpapers from the Room DB
     fun initObservers() {
-        var favourites: List<FavouriteLiveModel>
+
         lifecycleScope.launch(Dispatchers.IO) {
-            favourites = ArrayList()
-            favourites = appDatabase.liveWallpaperDao().getAllFavouriteWallpapers()
+            favouritesLive = ArrayList()
+            favouritesLive = appDatabase.liveWallpaperDao().getAllFavouriteWallpapers()
 
             withContext(Dispatchers.Main) {
-                Log.d("LIVEADAPTER", "LIVE: favorites: $favourites")
-                updateUIWithFetchedDataLive(favourites)
+                Log.d("LIVEADAPTER", "LIVE: favorites: $favouritesLive")
+                updateUIWithFetchedDataLive(favouritesLive)
             }
         }
     }
 
-    //this function gets static fav wallpapers from the Room DB
-    private fun loadStaticFavourite() {
-        binding.emptySupport.visibility = GONE
-        Handler().postDelayed({
-            updateUIWithFetchedData(wallpapers)
-        }, 500)
-
-    }//End of function
-
     private fun updateUIWithFetchedDataLive(list: List<FavouriteLiveModel>) {
+        Log.d("LIVEADAPTER", "updateUIWithFetchedDataLive:list Size: ${list.size} ")
         if (list.isEmpty()) {
             binding.emptySupport.visibility = VISIBLE
             binding.noFavImg.visibility = VISIBLE
@@ -233,16 +218,24 @@ class FavouriteFragment : Fragment() {
         }
     }
 
-    private fun selector(selector: TextView, unSelector: TextView) {
-        selector.setBackgroundResource(R.drawable.text_selector)
-        unSelector.setBackgroundResource(0)
-        selector.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-        unSelector.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
-    }
+    //this function gets static fav wallpapers from the Room DB
+    private fun loadStaticFavourite() {
+        binding.emptySupport.visibility = GONE
+        Handler().postDelayed({
+            updateUIWithFetchedData(wallpapers)
+        }, 500)
+
+    }//End of function
 
     private fun updateUIWithFetchedData(catResponses: List<CatResponse>) {
-        //val nonNullCatResponses = catResponses.filterNotNull()
+        if (catResponses.isNullOrEmpty()) {
+            binding.emptySupport.visibility = VISIBLE
+            binding.noFavImg.visibility = VISIBLE
+        } else {
+            binding.emptySupport.visibility = GONE
+            binding.noFavImg.visibility = GONE
+        }
         val adapter = FavouriteStaticAdapter(catResponses,
             myActivity,
             "favorites",
@@ -253,14 +246,21 @@ class FavouriteFragment : Fragment() {
                     }
                 }
 
-                override fun getFavorites(position: Int) {
-
-                }
+                override fun getFavorites(position: Int) {}
             })
 
         binding.selfCreationRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
         binding.selfCreationRecyclerView.adapter = adapter
         binding.selfCreationRecyclerView.addItemDecoration(RvItemDecore(2, 20, false, 10000))
+    }
+
+
+    private fun selector(selector: TextView, unSelector: TextView) {
+        selector.setBackgroundResource(R.drawable.text_selector)
+        unSelector.setBackgroundResource(0)
+        selector.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        unSelector.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+
     }
 
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
@@ -279,8 +279,6 @@ class FavouriteFragment : Fragment() {
             findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
     }
-
-
 
     override fun onResume() {
         super.onResume()

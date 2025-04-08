@@ -342,7 +342,6 @@ class ListViewFragment : Fragment(), AdEventListener {
             when (result) {
                 is Response.Success -> {
                     if (!dataset) {
-
                         lifecycleScope.launch(Dispatchers.IO) {
                             var tempList = ArrayList<CatResponse>()
 
@@ -383,7 +382,6 @@ class ListViewFragment : Fragment(), AdEventListener {
                 is Response.Error -> {}
                 else -> {}
             }
-
         }
     }
 

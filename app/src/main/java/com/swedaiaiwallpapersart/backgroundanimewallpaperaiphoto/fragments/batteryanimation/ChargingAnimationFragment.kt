@@ -169,28 +169,11 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         sharedViewModel.setchargingAnimation(listOf(model))
         if (isAdded) {
             MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
-                override fun onAdLoaded(p0: MaxAd) {
-                    MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
-                        override fun onAdLoaded(p0: MaxAd) {}
-
-                        override fun onAdDisplayed(p0: MaxAd) {}
-
-                        override fun onAdHidden(p0: MaxAd) {}
-
-                        override fun onAdClicked(p0: MaxAd) {}
-
-                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                    }, object : MaxAD {
-                        override fun adNotReady(type: String) {}
-                    })
-                }
+                override fun onAdLoaded(p0: MaxAd) {}
 
                 override fun onAdDisplayed(p0: MaxAd) {}
 
                 override fun onAdHidden(p0: MaxAd) {
-                    //Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         findNavController().navigate(R.id.downloadBatteryAnimation, this)
