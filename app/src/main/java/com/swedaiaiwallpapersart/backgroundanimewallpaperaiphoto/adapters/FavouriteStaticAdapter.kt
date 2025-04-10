@@ -28,11 +28,10 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 that makes coding harder to begin.*/
 
 class FavouriteStaticAdapter(
-    val list: List<CatResponse>,
+    private var list: MutableList<CatResponse>,
     private val myActivity: MainActivity,
     private val from: String, var positionCallback: PositionCallback
 ) : RecyclerView.Adapter<FavouriteStaticAdapter.ViewHolder>() {
-
 
     private val context: Context? get() = myActivity.applicationContext
     private var lastClickTime = 0L
@@ -40,8 +39,7 @@ class FavouriteStaticAdapter(
 
     inner class ViewHolder(val binding: WallpaperRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: CatResponse)
-        {
+        fun bind(item: CatResponse) {
             val layoutParams = binding.wallpaper.layoutParams as ViewGroup.MarginLayoutParams
             layoutParams.setMargins(0, 0, 0, 0)
             binding.wallpaper.layoutParams = layoutParams
@@ -143,5 +141,12 @@ class FavouriteStaticAdapter(
         } else {
             Log.e("ADAPTER", "RecyclerView is not using GridLayoutManager.")
         }
+    }
+
+    fun updateData(newList: List<CatResponse>) {
+        Log.d("FAVORITES", "updateData: newList size = ${newList.size}")
+        list = newList.toMutableList()
+        notifyDataSetChanged()
+        Log.d("FAVORITES", "updateData: list size = ${list.size}")
     }
 }

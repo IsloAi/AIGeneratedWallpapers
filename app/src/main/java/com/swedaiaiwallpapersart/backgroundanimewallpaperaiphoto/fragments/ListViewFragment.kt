@@ -338,7 +338,7 @@ class ListViewFragment : Fragment(), AdEventListener {
     }
 
     private fun loadData() {
-        myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
+        /*myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Success -> {
                     if (!dataset) {
@@ -381,6 +381,24 @@ class ListViewFragment : Fragment(), AdEventListener {
 
                 is Response.Error -> {}
                 else -> {}
+            }
+        }*/
+        myViewModel.fetchWallpapers(requireContext(), name)
+
+        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
+            if (catResponses != null) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val list = addNullValueInsideArray(catResponses.shuffled())
+                    cachedCatResponses = list
+                    withContext(Dispatchers.Main) {
+                        //adapter?.updateMoreData(initialItems)
+                        adapter?.updateData(list)
+                        //startIndex += 30
+                        dataset = true
+                    }
+                }
+            } else {
+                Log.d("responseOk", "No wallpapers found or error occurred")
             }
         }
     }

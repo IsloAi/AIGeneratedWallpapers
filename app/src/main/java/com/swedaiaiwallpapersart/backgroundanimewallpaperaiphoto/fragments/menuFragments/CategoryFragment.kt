@@ -121,7 +121,6 @@ class CategoryFragment : Fragment(), AdEventListener {
         val categoryList: ArrayList<CatNameResponse> =
             gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
 
-
         adapter = LiveCategoriesHorizontalAdapter(categoryList, object : StringCallback {
             override fun getStringCall(string: String) {
                 if (string == "Roro'Noa Zoro") {

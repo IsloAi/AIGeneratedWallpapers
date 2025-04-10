@@ -70,6 +70,10 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
+        val from = arguments?.getString("from")
+        val name = arguments?.getString("wall")
+
+        binding.catTitle.text = name
         myActivity = activity as MainActivity
         binding.liveReccyclerview.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.liveReccyclerview.addItemDecoration(RvItemDecore(3, 5, false, 10000))

@@ -329,6 +329,7 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
             MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
                 override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                     setWallpaper()
+                    MaxRewardAds.loadRewardAds(requireContext(),AdConfig.applovinAndroidReward)
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
@@ -367,7 +368,12 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
                 }
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
-                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Ad is not ready yet please try later",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    MaxRewardAds.loadRewardAds(requireContext(),AdConfig.applovinAndroidReward)
                 }
             })
             dialog.dismiss()

@@ -95,49 +95,50 @@ class PreviewChargingAnimationFragment : Fragment() {
     private fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
             Log.e("TAG", "setEvents: clicked")
-            /*if (isDrawOverlaysPermissionGranted(requireContext())) {*/
-            if (isAdded) {
-                val intent = Intent(requireContext(), ChargingAnimationService::class.java)
-                MySharePreference.setAnimationPath(requireContext(), BlurView.filePathBattery)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    Log.e("TAG", "setEvents: service start Q")
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                        var dialog: Dialog = AlertDialog.Builder(requireContext())
-                            .setTitle("Foreground Service Required")
-                            .setMessage("To continue playing the animation, the app needs to run in the foreground. This means that the app will continue to run even when you close it.")
-                            .setPositiveButton(
-                                "Allow"
-                            ) { dialog, which -> // Start the foreground service
-                                requireContext().startForegroundService(intent)
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Charging animation Applied Successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            .setNegativeButton(
-                                "Cancel"
-                            ) { dialog, which -> dialog.dismiss() }
-                            .show()
+            if (isDrawOverlaysPermissionGranted(requireContext())) {
+                if (isAdded) {
+                    val intent = Intent(requireContext(), ChargingAnimationService::class.java)
+                    MySharePreference.setAnimationPath(requireContext(), BlurView.filePathBattery)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        Log.e("TAG", "setEvents: service start Q")
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                            var dialog: Dialog = AlertDialog.Builder(requireContext())
+                                .setTitle("Foreground Service Required")
+                                .setMessage("To continue playing the animation, the app needs to run in the foreground. This means that the app will continue to run even when you close it.")
+                                .setPositiveButton(
+                                    "Allow"
+                                ) { dialog, which -> // Start the foreground service
+                                    requireContext().startForegroundService(intent)
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Charging animation Applied Successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                                .setNegativeButton(
+                                    "Cancel"
+                                ) { dialog, which -> dialog.dismiss() }
+                                .show()
 
+
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Charging animation Applied Successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            requireContext().startForegroundService(intent)
+                        }
 
                     } else {
+                        Log.e("TAG", "setEvents: service start else")
+                        requireContext().startService(intent)
                         Toast.makeText(
                             requireContext(),
                             "Charging animation Applied Successfully",
                             Toast.LENGTH_SHORT
                         ).show()
-                        requireContext().startForegroundService(intent)
                     }
-
-                } else {
-                    Log.e("TAG", "setEvents: service start else")
-                    requireContext().startService(intent)
-                    Toast.makeText(
-                        requireContext(),
-                        "Charging animation Applied Successfully",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
@@ -165,8 +166,6 @@ class PreviewChargingAnimationFragment : Fragment() {
             binding.liveWallpaper.setAnimationFromUrl(AdConfig.BASE_URL_DATA + "/animation/" + livewallpaper?.hd_animation)
             binding.liveWallpaper.playAnimation()
         }
-
-
     }
 
     override fun onDestroyView() {

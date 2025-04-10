@@ -228,6 +228,7 @@ class LocalizationFragment : Fragment() {
         val onBoard = MySharePreference.getOnboarding(requireContext())
 
         binding.applyLanguage.setOnClickListener {
+            val lan = MySharePreference.getLanguage(requireContext())
             if (selectedItem != null) {
                 MySharePreference.setLanguage(requireContext(), selectedItem!!.lan_code)
                 MySharePreference.setLanguagePosition(requireContext(), selected)
@@ -262,18 +263,16 @@ class LocalizationFragment : Fragment() {
                     }
                 }
             } else {
-                MySharePreference.setLanguage(requireContext(), "en")
+                MySharePreference.setLanguage(requireContext(), lan!!)
                 MySharePreference.setLanguagePosition(requireContext(), 0)
-                val context = LocaleManager.setLocale(requireContext(), "en")
+                val context = LocaleManager.setLocale(requireContext(),lan)
                 val resources = context.resources
-                val newLocale = Locale("en")
+                val newLocale = Locale(lan)
                 val resources1 = getResources()
                 val configuration = resources1.configuration
                 configuration.setLocale(newLocale)
-                configuration.setLayoutDirection(Locale("en"));
-
+                configuration.setLayoutDirection(Locale(lan));
                 requireActivity().window.decorView.layoutDirection = View.LAYOUT_DIRECTION_LTR
-
                 resources1.updateConfiguration(configuration, resources.displayMetrics)
 
                 if (exit) {

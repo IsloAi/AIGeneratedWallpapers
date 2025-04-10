@@ -47,9 +47,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
         populateLiveCat()
         val categoryList: ArrayList<CatNameResponse?> =
             gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
-
         Log.d("LiveWallpaperCategory", "onViewCreated: categoryList: $categoryList")
-
         binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
         val adapter = ApiCategoriesNameAdapter(categoryList, object : StringCallback {
@@ -63,7 +61,12 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
                 }
 
                 if (isAdded) {
-                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                    Bundle().apply {
+                        putString("from", "LiveCategory")
+                        putString("wall", string)
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment, this)
+                    }
+
                 }
             }
         }, myActivity, "live")
@@ -85,6 +88,44 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
 
     private fun populateLiveCat() {
         categoriesJson = """
+[
+  {
+    "cat_name": "Faces",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721ed0151a46_smilies.jpg"
+  },
+  {
+    "cat_name": "Heteroclite",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0d10d47d_hetroclite 2.jpg"
+  },
+  {
+    "cat_name": "Love",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721cfdcd8c61_Love.jpg"
+  },
+  {
+    "cat_name": "Space",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d0ea7123b_space.jpg"
+  },
+
+  {
+    "cat_name": "Nature",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721d07753306_nature.jpg"
+  },
+  {
+    "cat_name": "Tech",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/6721c8c43449f_tech 2.jpg"
+  },
+  {
+    "cat_name": "Robotic",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/67206957122f7_robotic 2.jpg"
+  },
+
+  {
+    "cat_name": "Cars",
+    "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/672067d7adc91_cars.jpg"
+  }
+]
+"""
+        /*"""
 [
     {
         "cat_name": "Heteroclite",
@@ -115,7 +156,7 @@ class LiveWallpaperCategoriesFragment : Fragment(), AdEventListener {
         "img_url": "https://4kwallpaper-zone.b-cdn.net/livecategoryimages/65f14b5595fdc_Car-1.jpg"
     }
 ]
-"""
+"""*/
     }
 
     override fun onDestroyView() {

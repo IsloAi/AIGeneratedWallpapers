@@ -16,7 +16,7 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 165
+        versionCode 166
         versionName "2.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -27,7 +27,7 @@ android {
         create("release") {
             keyAlias = "swedai"
             keyPassword = "swedai"
-            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers\\SwedAi.jks")
+            storeFile = file("D:\\AIGeneratedWallpapers\\SwedAi.jks")
             storePassword = "swedai"
         }
     }

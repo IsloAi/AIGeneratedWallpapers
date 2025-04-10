@@ -17,7 +17,7 @@
     <uses-permission
         android:name="android.permission.BATTERY_STATS"
         tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -81,6 +81,21 @@
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/livewallpaper" />
+        </service>
+
+        <service
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:ignore="ForegroundServicePermission">
+            <intent-filter>
+                <action android:name="android.intent.action.FOREGROUND_SERVICE" />
+            </intent-filter>
+
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="@string/fgs_description" />
         </service>
 
         <meta-data

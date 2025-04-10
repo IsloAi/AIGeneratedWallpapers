@@ -110,8 +110,8 @@
 
     <FrameLayout
         android:id="@+id/NativeAD"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_185sdp"
         app:layout_constraintBottom_toTopOf="@+id/buttonApplyWallpaper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

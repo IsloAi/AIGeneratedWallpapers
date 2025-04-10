@@ -194,6 +194,7 @@ class WallpaperViewFragment : Fragment() {
                 val pos = arguments?.getInt("position")
                 from = arguments?.getString("from")!!
                 wall = arguments?.getString("wall")!!
+                fav = arguments?.getBoolean("Fav")!!
 
 
 
@@ -945,29 +946,93 @@ class WallpaperViewFragment : Fragment() {
             bindingDialog.dividerStart.visibility = View.INVISIBLE
         }
         bindingDialog.watchAds.setOnClickListener {
-            dialog.dismiss()
-            if (bitmap != null) {
-                val postData = PostDataOnServer()
-                val model = arrayList[position]
-                arrayList[position]?.unlockimges = true
-                arrayList[position]?.gems = 0
-
-                model?.id?.let { it1 ->
-                    appDatabase.wallpapersDao().updateLocked(
-                        true, it1
-                    )
+            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    dialog.dismiss()
+                    if (bitmap != null) {
+                        val postData = PostDataOnServer()
+                        val model = arrayList[position]
+                        arrayList[position]?.unlockimges = true
+                        arrayList[position]?.gems = 0
+                        model?.id?.let { it1 ->
+                            appDatabase.wallpapersDao().updateLocked(
+                                true, it1
+                            )
+                        }
+                        adapter?.notifyItemChanged(position)
+                        viewPager2?.invalidate()
+                        binding.viewPager.setCurrentItem(position, true)
+                        openPopupMenu(model!!)
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.your_image_not_fetched_properly),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-                adapter?.notifyItemChanged(position)
-                viewPager2?.invalidate()
-                binding.viewPager.setCurrentItem(position, true)
-                openPopupMenu(model!!)
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.your_image_not_fetched_properly),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {}
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                        override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                            dialog.dismiss()
+                            if (bitmap != null) {
+                                val postData = PostDataOnServer()
+                                val model = arrayList[position]
+                                arrayList[position]?.unlockimges = true
+                                arrayList[position]?.gems = 0
+                                model?.id?.let { it1 ->
+                                    appDatabase.wallpapersDao().updateLocked(
+                                        true, it1
+                                    )
+                                }
+                                adapter?.notifyItemChanged(position)
+                                viewPager2?.invalidate()
+                                binding.viewPager.setCurrentItem(position, true)
+                                openPopupMenu(model!!)
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    getString(R.string.your_image_not_fetched_properly),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        override fun onAdLoaded(p0: MaxAd) {}
+                        override fun onAdDisplayed(p0: MaxAd) {}
+                        override fun onAdHidden(p0: MaxAd) {}
+                        override fun onAdClicked(p0: MaxAd) {}
+                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                    }, object : MaxAD {
+                        override fun adNotReady(type: String) {
+                            /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                                .show()*/
+                        }
+
+                    })
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                }
+            })
+
         }
 
         bindingDialog.upgradeButton.setOnClickListener {
@@ -1054,13 +1119,19 @@ class WallpaperViewFragment : Fragment() {
 
     private fun checkRedHeart(position: Int) {
         if (isAdded) {
-            Log.d(TAG, "checkRedHeart: " + arrayList[position]?.liked)
-            if (arrayList[position]?.liked == true) {
-                Log.d(TAG, "checkRedHeart: liked")
-                binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+            if (fav) {
+                arrayList.let {
+                    binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+                }
             } else {
-                Log.d(TAG, "checkRedHeart: like")
-                binding.favouriteButton.setImageResource(R.drawable.button_like)
+                Log.d(TAG, "checkRedHeart: " + arrayList[position]?.liked)
+                if (arrayList[position]?.liked == true) {
+                    Log.d(TAG, "checkRedHeart: liked")
+                    binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+                } else {
+                    Log.d(TAG, "checkRedHeart: like")
+                    binding.favouriteButton.setImageResource(R.drawable.button_like)
+                }
             }
         }
     }

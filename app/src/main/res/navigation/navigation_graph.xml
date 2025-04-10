@@ -222,7 +222,7 @@
         android:label="SettingFragment" />
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.FavouriteFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteFragment"
         android:label="FavouriteFragment">
         <action
             android:id="@+id/action_favouriteFragment_to_downloadLiveWallpaperFragment"
@@ -273,4 +273,14 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.reward.RewardDetailsFragment"
         android:label="fragment_reward_details"
         tools:layout="@layout/fragment_reward_details" />
+    <fragment
+        android:id="@+id/favouriteStaticFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteStaticFragment"
+        android:label="fragment_favourite_static"
+        tools:layout="@layout/fragment_favourite_static" />
+    <fragment
+        android:id="@+id/favouriteLiveFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteLiveFragment"
+        android:label="fragment_favourite_live"
+        tools:layout="@layout/fragment_favourite_live" />
 </navigation>

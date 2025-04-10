@@ -59,9 +59,7 @@ class FetchDataRepositoryImpl @Inject constructor(
 
     override fun fetechCategoryWallpapers(cat: String): Flow<Response<List<SingleDatabaseResponse>>> = channelFlow {
         try {
-
             trySend(Response.Loading)
-
             val creations= appDatabase.wallpapersDao().getCategoryWallpaper(cat)
             if (creations.isNotEmpty()){
                 trySend(Response.Success(creations))

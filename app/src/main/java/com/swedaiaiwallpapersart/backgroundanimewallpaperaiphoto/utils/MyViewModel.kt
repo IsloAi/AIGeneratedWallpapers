@@ -35,8 +35,6 @@ class MyViewModel @Inject constructor(private val getCategoryWallpapersUseCase: 
         val retrofit = RetrofitInstance.getInstance()
         val service = retrofit.create(ListResponseInterface::class.java).getList(catName,MySharePreference.getDeviceID(context)!!)
 
-
-
         service.enqueue(object : Callback<List<CatResponse>> {
             override fun onResponse(call: Call<List<CatResponse>>, response: Response<List<CatResponse>>) {
                 if (response.isSuccessful) {
