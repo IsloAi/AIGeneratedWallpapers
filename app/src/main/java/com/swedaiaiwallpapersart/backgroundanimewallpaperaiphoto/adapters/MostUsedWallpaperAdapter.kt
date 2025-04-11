@@ -48,7 +48,7 @@ class MostUsedWallpaperAdapter(
     private val VIEW_TYPE_NATIVE_AD = 1
     private var lastAdShownPosition = -1
 
-    val TAG = "MOSTUSEDADAPTER"
+    val TAG = "PopularAdapter"
 
     var row = 0
 
@@ -186,7 +186,7 @@ class MostUsedWallpaperAdapter(
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
-        Log.e("TAG", "*******MostUsed: " + model.compressed_image_url)
+        Log.e("PopularAdapter", "MostUsed: " + model.unlockimges)
 
         if (model.unlockimges == false) {
             if (AdConfig.ISPAIDUSER) {
@@ -194,12 +194,9 @@ class MostUsedWallpaperAdapter(
             } else {
                 iapItem.visibility = View.VISIBLE
             }
-
         } else {
             iapItem.visibility = View.GONE
         }
-
-
 
         Glide.with(context!!)
             .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")

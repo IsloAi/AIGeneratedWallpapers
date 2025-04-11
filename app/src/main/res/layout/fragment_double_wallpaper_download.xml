@@ -62,12 +62,11 @@
         android:id="@+id/loadingTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/_2sdp"
         android:fontFamily="@font/poppins_medium"
         android:text="Downloading..."
         android:textColor="@color/white"
         android:textSize="@dimen/_10sdp"
-        app:layout_constraintBottom_toTopOf="@id/buttonApplyWallpaper"
+        app:layout_constraintBottom_toTopOf="@+id/NativeAdDouble"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress" />
@@ -88,10 +87,10 @@
         android:textColor="@color/mywhite"
         android:textSize="15sp"
         android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/NativeAdDouble"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progress"
         app:layout_constraintWidth_percent="0.7" />
 
     <TextView
@@ -106,5 +105,14 @@
         app:layout_constraintEnd_toEndOf="@id/progress"
         app:layout_constraintStart_toStartOf="@id/progress"
         app:layout_constraintTop_toTopOf="@id/progress" />
+
+    <FrameLayout
+        android:id="@+id/NativeAdDouble"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_275sdp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonApplyWallpaper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loadingTxt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

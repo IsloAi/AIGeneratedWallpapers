@@ -23,7 +23,7 @@ object AdConfig {
 
     var showOnboarding = true
 
-    var inAppConfig = false
+    var inAppConfig = true
 
     var tabPositions = arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
 

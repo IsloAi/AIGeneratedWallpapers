@@ -44,8 +44,34 @@ class WelcomeFragment4 : Fragment() {
             R.layout.admob_native_medium
         )
         nativeAd.loadNativeAd(binding.NativeAdOB3)*/
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
+            requireContext(),
+            AdConfig.applovinAndroidNativeMedium,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
+                    binding.NativeAdOB3.removeAllViews()
+                    p0?.let {
+                        binding.NativeAdOB3.addView(it)
+                        binding.NativeAdOB3.visibility = View.VISIBLE
+                    }
+                }
 
-        MaxNativeAd.createNativeAdLoader(
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
+                }
+
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
+                }
+
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
+                }
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+        /*MaxNativeAd.createNativeAdLoader(
             requireContext(),
             AdConfig.applovinAndroidNativeManual,
             object : MaxNativeAdListener() {
@@ -70,7 +96,7 @@ class WelcomeFragment4 : Fragment() {
             }
         )
 
-        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())
+        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())*/
     }
 
     private fun setIndicator() {

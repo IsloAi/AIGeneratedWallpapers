@@ -69,14 +69,42 @@ class LocalizationFragment : Fragment() {
             delay(200)
             Log.e(TAG, "getLanguageList: " + getDefaultLocaleInfo())
         }
-
+        //Admob Native Ad
         /*val nativeAd = NativeAdManager(
             requireContext(),
             AdConfig.admobAndroidNative,
             R.layout.admob_native_medium
         )
         nativeAd.loadNativeAd(binding.NativeAd)*/
-        MaxNativeAd.createNativeAdLoader(
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
+            requireContext(),
+            AdConfig.applovinAndroidNativeMedium,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
+                    binding.NativeAd.removeAllViews()
+                    p0?.let {
+                        binding.NativeAd.addView(it)
+                        binding.NativeAd.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
+                }
+
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
+                }
+
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
+                }
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+        //Max Manual Native Ad
+        /*MaxNativeAd.createNativeAdLoader(
             requireContext(),
             AdConfig.applovinAndroidNativeManual,
             object : MaxNativeAdListener() {
@@ -101,10 +129,9 @@ class LocalizationFragment : Fragment() {
             }
         )
 
-        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())
+        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())*/
 
         setGradienttext()
-
         setEvents()
         initLanguages()
         backHandle()
@@ -265,7 +292,7 @@ class LocalizationFragment : Fragment() {
             } else {
                 MySharePreference.setLanguage(requireContext(), lan!!)
                 MySharePreference.setLanguagePosition(requireContext(), 0)
-                val context = LocaleManager.setLocale(requireContext(),lan)
+                val context = LocaleManager.setLocale(requireContext(), lan)
                 val resources = context.resources
                 val newLocale = Locale(lan)
                 val resources1 = getResources()

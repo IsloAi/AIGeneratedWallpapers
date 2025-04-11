@@ -73,28 +73,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/progress" />
 
-    <Button
-        android:id="@+id/buttonApplyWallpaper"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_35sdp"
-        android:background="@drawable/new_button_bg"
-        android:fontFamily="@font/raleway_medium"
-        android:minWidth="@dimen/_160sdp"
-        android:shadowColor="@color/black"
-        android:shadowDx="1.8"
-        android:shadowDy="1.8"
-        android:shadowRadius="0.1"
-        android:text="Preview Charging Animation"
-        android:textAllCaps="false"
-        android:textColor="@color/mywhite"
-        android:textSize="15sp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/NativeAD"
-        app:layout_constraintBottom_toBottomOf="@+id/backImage"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.7" />
-
     <TextView
         android:id="@+id/progressTxt"
         android:layout_width="wrap_content"
@@ -111,10 +89,34 @@
     <FrameLayout
         android:id="@+id/NativeAD"
         android:layout_width="0dp"
-        android:layout_height="@dimen/_185sdp"
+        android:layout_height="@dimen/_275sdp"
+        android:layout_marginHorizontal="@dimen/_10sdp"
+        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/buttonApplyWallpaper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loadingTxt" />
+
+    <Button
+        android:id="@+id/buttonApplyWallpaper"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_35sdp"
+        android:background="@drawable/new_button_bg"
+        android:fontFamily="@font/raleway_medium"
+        android:minWidth="@dimen/_160sdp"
+        android:shadowColor="@color/black"
+        android:shadowDx="1.8"
+        android:shadowDy="1.8"
+        android:shadowRadius="0.1"
+        android:text="Preview Charging Animation"
+        android:textAllCaps="false"
+        android:textColor="@color/mywhite"
+        android:textSize="15sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/backImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/NativeAD"
+        app:layout_constraintWidth_percent="0.7" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -29,7 +29,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.SlideItemContainerBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -121,6 +120,7 @@ class WallpaperApiSliderAdapter(
         fun bind(arrayList: ArrayList<CatResponse?>, position: Int) {
 
             val model = arrayList[position]
+            Log.d("WallpaperPreview", "bind:model= $model")
             dataSet(
                 model!!,
                 binding.imageSlide,
@@ -139,7 +139,6 @@ class WallpaperApiSliderAdapter(
             /*val native =
                 NativeAdManager(context!!, AdConfig.admobAndroidNative, R.layout.native_ad_slider)
             native.loadNativeAd(binding.sliderNative)*/
-
             MaxNativeAd.createNativeAdLoader(
                 context!!,
                 AdConfig.applovinAndroidNativeManual,
@@ -164,9 +163,7 @@ class WallpaperApiSliderAdapter(
                     }
                 }
             )
-
-            MaxNativeAd.loadNativeAd(R.layout.max_native_medium,context!!)
-
+            MaxNativeAd.loadNativeAd(R.layout.max_native_ad_slider, context!!)
         }
     }
 
@@ -192,11 +189,7 @@ class WallpaperApiSliderAdapter(
                 "modelTracingNow",
                 "dataSet: model else condition  ${model.unlockimges}  imageId  ${model.id}"
             )
-            //if(model.gems !=0 && model.unlockimges==false) {
-            // viewPagerImageClick.getImagePosition(adapterPosition, blurView)
-//            }else{
             fullViewImage.getFullImageUrl(model)
-//            }
         }
 
         var url: String? = ""

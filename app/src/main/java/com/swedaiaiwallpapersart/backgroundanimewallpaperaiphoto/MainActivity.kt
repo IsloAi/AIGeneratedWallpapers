@@ -13,6 +13,7 @@ import android.view.WindowInsets
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -21,6 +22,16 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
+import com.example.ohmywall.presentation.activities.billing.ProductModel
+import com.example.ohmywall.presentation.activities.billing.SkuDetailsStorage
+import com.example.ohmywall.presentation.activities.billing.Store
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.ConfigUpdate
 import com.google.firebase.remoteconfig.ConfigUpdateListener
@@ -34,6 +45,9 @@ import com.google.gson.JsonSyntaxException
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.InAppProducts
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.billingClient
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.purchasedProducts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ListResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationViewmodel
@@ -41,6 +55,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.LiveImagesResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BillingStore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyCatNameViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.MyHomeViewModel
@@ -85,6 +100,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
     private val navController get() = _navController!!
     private var deviceID: String? = null
 
+
     @SuppressLint("HardwareIds")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,7 +121,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        setUpBilling()
         initFirebaseRemoteConfig()
         handleBackPress()
         fetchData(deviceID.toString())
@@ -146,6 +162,184 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             }
         }
     }
+
+    private fun setUpBilling() {
+        billingClient =
+            BillingClient.newBuilder(this@MainActivity).setListener { billingResult, purchases ->
+                // Handle purchase updates
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
+                    for (purchase in purchases) {
+                        handlePurchase(purchase)
+                    }
+                }
+            }.enablePendingPurchases() // Required for acknowledging purchases
+                .build()
+
+        billingClient.startConnection(object : BillingClientStateListener {
+            @RequiresApi(Build.VERSION_CODES.S)
+            override fun onBillingSetupFinished(billingResult: BillingResult) {
+                if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    // Billing client is ready
+                    queryProducts()
+                    queryPurchases()
+                }
+            }
+
+            override fun onBillingServiceDisconnected() {
+                // Retry connection
+                setUpBilling()
+            }
+        })
+    }
+
+    private fun queryPurchases() {
+        // Query INAPP purchases (one-time purchases)
+        billingClient.queryPurchasesAsync(BillingClient.SkuType.INAPP) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                processExistingPurchases(purchases)
+            }
+        }
+
+        // Query SUBS purchases (subscriptions)
+        billingClient.queryPurchasesAsync(BillingClient.SkuType.SUBS) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                processExistingPurchases(purchases)
+            }
+        }
+    }
+
+    private fun processExistingPurchases(purchases: List<Purchase>) {
+        for (purchase in purchases) {
+            Log.d("Billing", "Existing purchase found: ${purchase.products}")
+
+            if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+                if (!purchase.isAcknowledged) {
+                    acknowledgePurchase(purchase) // Ensure it's acknowledged
+                }
+                // ✅ Save the purchase state in SharedPreferences or a database
+                for (productId in purchase.products) {
+                    Log.d("Billing", "processExistingPurchases: productId: $productId")
+                    purchasedProducts.add(productId)
+                }
+                if (purchasedProducts.isNotEmpty()) {
+                    AdConfig.ISPAIDUSER = true
+                    AdConfig.inAppConfig = false
+                }
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun queryProducts() {
+        val productList = BillingStore.SUBSCRIPTION_IDS + BillingStore.PRODUCT_IDS
+        //subscriptions
+        val subscriptionParams = SkuDetailsParams.newBuilder().setSkusList(productList)
+            .setType(BillingClient.SkuType.SUBS).build()
+
+        billingClient.querySkuDetailsAsync(subscriptionParams) { billingResult, skuDetailsList ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
+                for (skuDetails in skuDetailsList) {
+                    InAppProducts.add(
+                        ProductModel(
+                            skuDetails.sku,
+                            skuDetails.title,
+                            skuDetails.price,
+                            "SUBS",
+                            getDuration(skuDetails)
+                        )
+                    )
+                    //binding.priceWeekly.text = skuDetails.price
+                    SkuDetailsStorage.skuDetailsMap[skuDetails.sku] = skuDetails // Save SKU Details
+                    Log.d(
+                        "Billing", "Subs List: $skuDetails"
+                    )
+                }
+            }
+        }
+        //product ids
+        val productParams = SkuDetailsParams.newBuilder().setSkusList(productList)
+            .setType(BillingClient.SkuType.INAPP).build()
+
+        billingClient.querySkuDetailsAsync(productParams) { billingResult, skuDetailsList ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && skuDetailsList != null) {
+                for (skuDetails in skuDetailsList) {
+                    InAppProducts.add(
+                        ProductModel(
+                            skuDetails.sku,
+                            skuDetails.title,
+                            skuDetails.price,
+                            "INAPP",
+                            getDuration(skuDetails)
+                        )
+                    )
+                    //binding.pricelifeTime.text = skuDetails.price
+                    SkuDetailsStorage.skuDetailsMap[skuDetails.sku] = skuDetails // Save SKU Details
+
+                    // Store skuDetails for later use
+                    Log.d(
+                        "Billing", "InApp List: $skuDetails"
+                    )
+                }
+            }
+        }
+
+    }
+
+    private fun handlePurchase(purchase: Purchase) {
+        if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+            // Unlock content or features
+            if (!purchase.isAcknowledged) {
+                acknowledgePurchase(purchase)
+            } else {
+                Log.d("Billing", "handlePurchase: Purchase already acknowledged: $purchase.")
+            }
+        }
+    }
+
+    private fun acknowledgePurchase(purchase: Purchase) {
+        val purchasedProduct = purchase.products.firstOrNull()
+        Log.d("Billing", "acknowledgePurchase: ProductPurchased: $purchasedProduct")
+        val params =
+            AcknowledgePurchaseParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build()
+
+        billingClient.acknowledgePurchase(params) { billingResult ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                Log.d("Billing", "acknowledgePurchase: Purchase acknowledged: ${purchase.products}")
+                //purchasedProducts.add(purchase.products.toString())
+                //billingViewModel.purchaseAcknowledged.postValue(true)
+                /*lifecycleScope.launch {
+                    mainViewModel.postPurchase(
+                        purchase.products.toString(),
+                        purchase.purchaseToken,
+                        getDeviceId(this@MainActivity)
+                    )
+                }*/
+                //getResponse()
+                Log.d(
+                    "APIResponse",
+                    "acknowledgePurchase: Purchase acknowledged\ntoken:${purchase.purchaseToken}\nid:${purchase.products}"
+                )
+
+            } else {
+                Log.e("Billing", "Error acknowledging purchase: ${billingResult.debugMessage}")
+            }
+        }
+    }
+
+    fun getDuration(iapItem: SkuDetails): String {
+        val isRenewable = Store.SUBSCRIPTION_IDS.any { it == iapItem.sku }
+
+        return if (isRenewable) {
+            if (iapItem.sku.contains("weekly", ignoreCase = true)) {
+                "Weekly"
+            } else {
+                "Yearly"
+            }
+        } else {
+            "Lifetime"
+        }
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -388,6 +582,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             override fun handleOnBackPressed() {
                 Log.e(TAG, "handleOnBackPressed: ")
                 navController.popBackStack()
+
             }
         })
     }

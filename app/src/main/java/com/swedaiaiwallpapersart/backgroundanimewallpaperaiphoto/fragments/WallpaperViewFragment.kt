@@ -679,6 +679,7 @@ class WallpaperViewFragment : Fragment() {
                     )
                 }
                 binding.favouriteButton.setImageResource(R.drawable.button_like)
+                findNavController().popBackStack()
             } else {
                 arrayList[position]?.liked = true
                 arrayList[position]?.id?.let { it1 ->
@@ -771,7 +772,7 @@ class WallpaperViewFragment : Fragment() {
             Constants.checkInter = false
             Constants.checkAppOpen = false
         }
-        binding.downloadWallpaper.setOnClickListener {
+        /*binding.downloadWallpaper.setOnClickListener {
             Log.e("TAG", "functionality: inside click")
 
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
@@ -790,6 +791,43 @@ class WallpaperViewFragment : Fragment() {
                 }
             } else {
                 getUserIdDialog()
+            }
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
+        }*/
+        binding.downloadWallpaper.setOnClickListener {
+            Log.e("TAG", "functionality: inside click")
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                if (ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_DENIED
+                ) {
+                    Log.e("TAG", "functionality: inside click permission")
+                    ActivityCompat.requestPermissions(
+                        myActivity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        STORAGE_PERMISSION_CODE
+                    )
+                } else {
+                    Log.e("TAG", "functionality: inside click dialog")
+                    if (AdConfig.ISPAIDUSER) {
+                        mSaveMediaToStorage(bitmap)
+                        val model = arrayList[position]
+                        model?.let { it1 -> setDownloaded(it1) }
+                    } else {
+
+                        getUserIdDialog()
+                    }
+                }
+            } else {
+                if (AdConfig.ISPAIDUSER) {
+                    mSaveMediaToStorage(bitmap)
+                    val model = arrayList[position]
+                    model?.let { it1 -> setDownloaded(it1) }
+                } else {
+                    getUserIdDialog()
+                }
             }
             Constants.checkInter = false
             Constants.checkAppOpen = false
@@ -820,7 +858,6 @@ class WallpaperViewFragment : Fragment() {
             binding.buttonApplyWallpaper.visibility = View.VISIBLE
         }
 
-
         viewPager2?.clipToPadding = false
         viewPager2?.clipChildren = false
         viewPager2?.offscreenPageLimit = 3
@@ -838,17 +875,6 @@ class WallpaperViewFragment : Fragment() {
                 Log.d("SET-WALL", "onPageSelected:POS $positi")
 
                 if (positi >= 0 && positi < arrayList.size) {
-                    /*getLargImage =
-                        AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + arrayList[positi]?.hd_image_url!!
-                    getSmallImage =
-                        AdConfig.BASE_URL_DATA + "/staticwallpaper/compress/" + arrayList[positi]?.compressed_image_url!!
-
-                    Log.d("SET-WALL", "onPageSelected: large $getLargImage")
-                    Log.d("SET-WALL", "onPageSelected: small $getSmallImage")
-
-
-                    getBitmapFromGlide(getLargImage)*/
-
                     if (arrayList[positi]?.hd_image_url != null) {
                         if (from == "Vip") {
                             if (arrayList[positi] != null) {
@@ -870,47 +896,12 @@ class WallpaperViewFragment : Fragment() {
                             }
                         }
                         position = positi
-
-                        /*if (arrayList[position]?.gems == 0 || arrayList[position]?.unlockimges == true) {
-
-                            binding.unlockWallpaper.visibility = View.GONE
-                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                        } else {
-                            binding.unlockWallpaper.visibility = View.GONE
-                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                        }*/
-
-
                     } else {
                         position = positi
                     }
-
-                    /*if (arrayList[positi]?.hd_image_url == null) {
-                        binding.unlockWallpaper.visibility = View.GONE
-                        binding.buttonApplyWallpaper.visibility = View.GONE
-                        binding.bottomMenu.visibility = View.GONE
-
-                        binding.adsView.visibility = View.GONE
-                    } else {
-                        binding.bottomMenu.visibility = View.VISIBLE
-                        if (AdConfig.ISPAIDUSER) {
-                            binding.adsView.visibility = View.GONE
-                        } else {
-                            binding.adsView.visibility = View.VISIBLE
-                        }
-
-                        if (arrayList[position]?.gems == 0 || arrayList[position]?.unlockimges == true) {
-                            binding.unlockWallpaper.visibility = View.GONE
-                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                        } else {
-                            binding.unlockWallpaper.visibility = View.GONE
-                            binding.buttonApplyWallpaper.visibility = View.VISIBLE
-                        }
-                    }*/
-
                     checkRedHeart(position)
                 }
-                if (arrayList[position] == null) {
+                if (arrayList[positi] == null) {
                     binding.BannerAD.visibility = View.GONE
                     binding.downloadWallpaper.visibility = View.GONE
                     binding.buttonApplyWallpaper.visibility = View.GONE

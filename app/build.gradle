@@ -27,7 +27,7 @@ android {
         create("release") {
             keyAlias = "swedai"
             keyPassword = "swedai"
-            storeFile = file("D:\\AIGeneratedWallpapers\\SwedAi.jks")
+            storeFile = file("C:\\Users\\PAWA THE GREAT\\Documents\\AIGeneratedWallpapers\\SwedAi.jks")
             storePassword = "swedai"
         }
     }
@@ -165,7 +165,10 @@ dependencies {
     implementation("androidx.media3:media3-exoplayer-dash:1.4.1")
     implementation("androidx.media3:media3-ui:1.4.1")
 
-    implementation("com.google.android.gms:play-services-ads:23.0.0")
+    implementation("com.google.android.gms:play-services-ads:24.2.0")
+
+    //billing
+    implementation("com.android.billingclient:billing-ktx:7.1.1")
     //Applovin
     implementation("com.applovin:applovin-sdk:13.2.0")
     implementation("com.applovin.mediation:google-adapter:24.1.0.0")
@@ -173,6 +176,5 @@ dependencies {
     implementation("com.applovin.mediation:mintegral-adapter:16.9.61.0")
     implementation("com.applovin.mediation:bytedance-adapter:6.5.0.8.1")
     implementation("com.applovin.mediation:facebook-adapter:6.19.0.2")
-
 
 }

@@ -121,7 +121,7 @@
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/iap_YearlyCard"
+            android:id="@+id/iap_WeeklyCard"
             android:layout_width="0dp"
             android:layout_height="@dimen/_50sdp"
             android:layout_marginTop="@dimen/_15sdp"
@@ -139,7 +139,7 @@
                 android:layout_marginStart="@dimen/_15sdp"
                 android:fontFamily="@font/poppins_semibold"
                 android:includeFontPadding="false"
-                android:text="Yearly"
+                android:text="Weekly"
                 android:textColor="@color/white"
                 android:textSize="@dimen/_15sdp"
                 app:layout_constraintBottom_toTopOf="@id/auto_renew"
@@ -160,7 +160,7 @@
 
 
             <TextView
-                android:id="@+id/priceYearly"
+                android:id="@+id/priceWeekly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_15sdp"
@@ -184,7 +184,7 @@
             android:backgroundTint="#2B2B2B"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/iap_YearlyCard"
+            app:layout_constraintTop_toBottomOf="@id/iap_WeeklyCard"
             app:layout_constraintWidth_percent="0.9">
 
             <TextView
@@ -227,15 +227,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
+        <!--<LinearLayout
             android:id="@+id/weeklyTag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_10sdp"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iap_lifeCard">
@@ -266,7 +266,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/_12sdp" />
 
-        </LinearLayout>
+        </LinearLayout>-->
 
         <TextView
             android:id="@+id/upgradeButton"
@@ -280,15 +280,17 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="@dimen/_14sdp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@id/endGuideline"
             app:layout_constraintStart_toStartOf="@id/startGuideline"
-            app:layout_constraintTop_toBottomOf="@id/weeklyTag"
+            app:layout_constraintTop_toBottomOf="@id/iap_lifeCard"
             app:layout_constraintWidth_percent="0.9" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/sales_card"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/upgradeButton"
             app:layout_constraintEnd_toEndOf="@id/upgradeButton"
             app:layout_constraintTop_toTopOf="@id/upgradeButton" />

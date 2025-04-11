@@ -17,7 +17,6 @@ import com.bumptech.glide.Glide
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWelcome2Binding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
 class welcomeFragment2 : Fragment() {
@@ -46,7 +45,34 @@ class welcomeFragment2 : Fragment() {
             R.layout.admob_native_medium
         )
         nativeAd.loadNativeAd(binding.NativeAdOB2)*/
-        MaxNativeAd.createNativeAdLoader(
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
+            requireContext(),
+            AdConfig.applovinAndroidNativeMedium,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
+                    binding.NativeAdOB2.removeAllViews()
+                    p0?.let {
+                        binding.NativeAdOB2.addView(it)
+                        binding.NativeAdOB2.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
+                }
+
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
+                }
+
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
+                }
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+        /*MaxNativeAd.createNativeAdLoader(
             requireContext(),
             AdConfig.applovinAndroidNativeManual,
             object : MaxNativeAdListener() {
@@ -71,7 +97,7 @@ class welcomeFragment2 : Fragment() {
             }
         )
 
-        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())
+        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())*/
     }
 
     override fun onDestroyView() {

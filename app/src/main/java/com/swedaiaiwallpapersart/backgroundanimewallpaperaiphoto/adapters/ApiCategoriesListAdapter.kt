@@ -180,12 +180,12 @@ class ApiCategoriesListAdapter(
         val animationView = binding.loading
         val wallpaperMainImage = binding.wallpaper
         val errorImg = binding.errorImage
-        val iapItem = binding.iapInd
+        //val iapItem = binding.iapInd
 
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
-        if (model.unlockimges == false) {
+        /*if (model.unlockimges == false) {
             if (AdConfig.ISPAIDUSER) {
                 iapItem.visibility = View.GONE
             } else {
@@ -193,7 +193,7 @@ class ApiCategoriesListAdapter(
             }
         } else {
             iapItem.visibility = View.GONE
-        }
+        }*/
 
         val url = if (from == "Vip") {
             AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url + "?class=custom"

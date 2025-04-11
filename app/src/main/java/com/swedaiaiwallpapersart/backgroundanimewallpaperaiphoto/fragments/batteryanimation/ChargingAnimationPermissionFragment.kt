@@ -18,12 +18,11 @@ import androidx.navigation.fragment.findNavController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationPermissionBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.viewmodels.SharedViewModel
 
 class ChargingAnimationPermissionFragment : Fragment() {
 
-    private var _binding:FragmentChargingAnimationPermissionBinding ?= null
+    private var _binding: FragmentChargingAnimationPermissionBinding? = null
     private val binding get() = _binding!!
 
     val sharedViewModel: SharedViewModel by activityViewModels()
@@ -35,7 +34,7 @@ class ChargingAnimationPermissionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentChargingAnimationPermissionBinding.inflate(inflater,container,false)
+        _binding = FragmentChargingAnimationPermissionBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
     }
@@ -72,10 +71,9 @@ class ChargingAnimationPermissionFragment : Fragment() {
             })
     }
 
-
     private fun setEvents() {
         binding.mySwitch.setOnCheckedChangeListener { _, b ->
-            if (b){
+            if (b) {
                 requestDrawOverlaysPermission(requireActivity())
             }
         }
@@ -96,8 +94,12 @@ class ChargingAnimationPermissionFragment : Fragment() {
             if (isDrawOverlaysPermissionGranted(requireContext())) {
                 findNavController().popBackStack()
             } else {
-                binding.mySwitch.isChecked =  false
-                Toast.makeText(requireContext(),"Please grant permission to continue", Toast.LENGTH_SHORT).show()
+                binding.mySwitch.isChecked = false
+                Toast.makeText(
+                    requireContext(),
+                    "Please grant permission to continue",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }

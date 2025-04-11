@@ -67,6 +67,7 @@
         android:id="@+id/NativeAd"
         android:layout_width="0dp"
         android:layout_height="@dimen/_275sdp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/rv_languages"
         app:layout_constraintStart_toStartOf="@+id/rv_languages" />

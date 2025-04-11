@@ -1,5 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils
 
+import com.example.ohmywall.presentation.activities.billing.ProductModel
+
 class Constants {
     companion object{
         const val PREFIX = "https://swedai.page.link"

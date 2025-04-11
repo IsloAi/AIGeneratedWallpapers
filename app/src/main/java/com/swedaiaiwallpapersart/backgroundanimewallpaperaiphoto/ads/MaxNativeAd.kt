@@ -21,6 +21,7 @@ object MaxNativeAd {
     private var nativeAdLoader: MaxNativeAdLoader? = null
     private var loadedNativeAd: MaxAd? = null
 
+    //For Manual Ads
     fun createNativeAdLoader(context: Context, nativeValue: String, listener: MaxNativeAdListener) {
         nativeAdLoader = MaxNativeAdLoader(nativeValue, context).apply {
             setNativeAdListener(listener)
@@ -49,5 +50,26 @@ object MaxNativeAd {
             .setCallToActionButtonId(R.id.Max_custom_call_to_actionNew)
             .build()
         return MaxNativeAdView(binder, context)
+    }
+
+    //For Template Ads
+    // For TEMPLATE native ads (small/medium)
+    fun createTemplateNativeAdLoader(
+        context: Context,
+        adUnitId: String,
+        listener: MaxNativeAdListener
+    ) {
+        nativeAdLoader = MaxNativeAdLoader(adUnitId, context).apply {
+            setNativeAdListener(listener)
+        }
+    }
+
+    // Load TEMPLATE native ad (small/medium)
+    fun loadTemplateNativeAd(templateType: String, context: Context) {
+        val nativeAdView = MaxNativeAdView(
+            templateType,
+            context
+        ) // Use MaxNativeAdView.SMALL_TEMPLATE or MEDIUM_TEMPLATE
+        nativeAdLoader?.loadAd(nativeAdView)
     }
 }

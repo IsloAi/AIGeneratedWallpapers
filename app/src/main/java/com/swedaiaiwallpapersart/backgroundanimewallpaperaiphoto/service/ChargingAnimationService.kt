@@ -1,6 +1,5 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -16,18 +15,19 @@ import androidx.core.app.NotificationCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 
-
 class ChargingAnimationService : Service() {
     private var notification: Notification? = null
     private var animationView: LottieAnimationView? = null
     private val CHANNEL_ID = "charging_animation_channel"
     private var broadcastReceiver: BroadcastReceiver? = null
 
-    @SuppressLint("ForegroundServiceType")
+
     override fun onCreate() {
         super.onCreate()
 
         createNotificationChannel()
+
+
         notification = createNotification()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {

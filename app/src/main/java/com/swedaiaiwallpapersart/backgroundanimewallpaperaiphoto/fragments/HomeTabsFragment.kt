@@ -145,7 +145,7 @@ class HomeTabsFragment : Fragment() {
         if (AdConfig.iapScreenType == 0) {
             binding.goPremium.visibility = View.GONE
         } else {
-            binding.goPremium.visibility = View.GONE
+            binding.goPremium.visibility = View.VISIBLE
         }
 
         if (AdConfig.tabPositions[0].isEmpty()) {

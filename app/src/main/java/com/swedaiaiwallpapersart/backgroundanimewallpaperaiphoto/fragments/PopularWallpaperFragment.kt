@@ -59,14 +59,11 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     private var _binding: FragmentPopularWallpaperBinding? = null
     private val binding get() = _binding!!
-
     private lateinit var welcomeAdapter: PopularSliderAdapter
 
     @Inject
     lateinit var appDatabase: AppDatabase
-
     var startIndex = 0
-
     val catListViewmodel: MyViewModel by activityViewModels()
 
     companion object {

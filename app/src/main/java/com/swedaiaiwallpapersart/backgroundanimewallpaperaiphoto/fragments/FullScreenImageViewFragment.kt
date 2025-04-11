@@ -36,6 +36,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.MaxReward
+import com.applovin.mediation.MaxRewardedAdListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -49,6 +53,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFullScreenImageViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.PostData
@@ -219,23 +225,48 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         bindingDialog.watchAds.setOnClickListener {
             dialog.dismiss()
-            if (bitmap != null) {
-                responseData?.unlockimges = true
+            MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    if (bitmap != null) {
+                        responseData?.unlockimges = true
 
-                responseData?.id?.let { it1 ->
-                    appDatabase.wallpapersDao().updateLocked(
-                        true,
-                        it1
-                    )
+                        responseData?.id?.let { it1 ->
+                            appDatabase.wallpapersDao().updateLocked(
+                                true,
+                                it1
+                            )
+                        }
+                        openPopupMenu(responseData!!)
+
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-                openPopupMenu(responseData!!)
 
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
-                ).show()
-            }
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {}
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdLoaded(p0: MaxAd) {}
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Ad not ready yet please try later",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
         }
         bindingDialog.upgradeButton.setOnClickListener {
             findNavController().navigate(R.id.IAPFragment)
@@ -261,7 +292,33 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         getReward?.setOnClickListener {
             dialog.dismiss()
-            mSaveMediaToStorage(bitmap)
+            MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
+            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onAdLoaded(p0: MaxAd) {}
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {}
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    mSaveMediaToStorage(bitmap)
+                }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Ad not ready yet please try later",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+
         }
 
         dismiss?.setOnClickListener {

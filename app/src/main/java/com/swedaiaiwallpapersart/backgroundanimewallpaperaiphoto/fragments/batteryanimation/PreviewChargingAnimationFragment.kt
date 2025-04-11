@@ -140,6 +140,8 @@ class PreviewChargingAnimationFragment : Fragment() {
                         ).show()
                     }
                 }
+            } else {
+                findNavController().navigate(R.id.chargingAnimationPermissionFragment)
             }
         }
 

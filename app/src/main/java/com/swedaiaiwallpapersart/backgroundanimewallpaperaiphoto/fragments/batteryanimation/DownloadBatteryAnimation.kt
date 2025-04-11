@@ -12,6 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.DownloadListener
 import com.applovin.mediation.MaxAd
 import com.applovin.mediation.MaxError
 import com.applovin.mediation.nativeAds.MaxNativeAdListener
@@ -25,7 +29,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
@@ -41,19 +44,14 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 class DownloadBatteryAnimation : Fragment(), AdEventListener {
+
     private var _binding: FragmentDownloadBatteryAnimationBinding? = null
     private val binding get() = _binding!!
-
     val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
-
     private var bitmap: Bitmap? = null
-
     private var animationJob: Job? = null
-
     val TAG = "DOWNLOAD_SCREEN"
-
     var adShowed: Boolean? = false
-
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
     private var job: Job? = null
@@ -61,7 +59,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         _binding = FragmentDownloadBatteryAnimationBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -69,41 +67,35 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         adShowed = arguments?.getBoolean("adShowed")
-
-        /*val native = NativeAdManager(
+        loadAd()
+        AndroidNetworking.initialize(requireContext())
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
             requireContext(),
-            AdConfig.admobAndroidNative,
-            R.layout.admob_native_medium
-        )
-        native.loadNativeAd(binding.NativeAD)*/
-        MaxNativeAd.createNativeAdLoader(
-            requireContext(),
-            AdConfig.applovinAndroidNativeManual,
+            AdConfig.applovinAndroidNativeMedium,
             object : MaxNativeAdListener() {
-                override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
                     binding.NativeAD.removeAllViews()
-                    adView?.let {
+                    p0?.let {
                         binding.NativeAD.addView(it)
                     }
                 }
 
-                override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
-                    // Handle failure (optional retry logic)
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
                 }
 
-                override fun onNativeAdClicked(ad: MaxAd) {
-                    // Handle click
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
                 }
 
-                override fun onNativeAdExpired(ad: MaxAd) {
-                    // Ad expired - reload if needed
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
                 }
-            }
-        )
-
-        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
         setEvents()
         initObservers()
     }
@@ -111,6 +103,10 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
     override fun onStart() {
         super.onStart()
         (requireActivity().application as MyApp).registerAdEventListener(this)
+
+    }
+
+    fun loadAd() {
 
     }
 
@@ -128,6 +124,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
     private fun navigateToNext() {
         if (isAdded) {
             findNavController().navigate(R.id.previewChargingAnimationFragment)
+
         }
     }
 
@@ -137,6 +134,7 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         val video = File(file, "video.mp4")
         sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
+
                 startProgressCoroutine()
                 Log.e("TAG", "initObservers: $wallpaper")
 
@@ -145,8 +143,10 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
                         AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].hd_animation,
                         video
                     )
+
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].thumnail)
+
 
             }
         }
@@ -194,10 +194,13 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
+
                     if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
+
+
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -206,7 +209,6 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
     }
 
     private fun downloadVideo(url: String, destinationFile: File) {
-
 //        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".json"
@@ -219,7 +221,26 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         Log.e("TAG", "downloadVideo: " + BlurView.fileName)
 
         animateLoadingText()
-        lifecycleScope.launch(Dispatchers.IO) {}
+        lifecycleScope.launch(Dispatchers.IO) {
+            AndroidNetworking.download(url, file.path, fileName)
+                .setTag("downloadTest")
+                .setPriority(Priority.HIGH)
+                .doNotCacheResponse()
+                .build()
+                .setDownloadProgressListener { bytesDownloaded, totalBytes ->
+                    Log.e("TAG", "downloadVideo: $bytesDownloaded")
+                    Log.e("TAG", "downloadVideo total bytes: $totalBytes")
+                }
+                .startDownload(object : DownloadListener {
+                    override fun onDownloadComplete() {
+                    }
+
+                    override fun onError(error: ANError?) {
+                        Log.e(TAG, "onError: ")
+                        // handle error
+                    }
+                })
+        }
     }
 
     private fun animateLoadingText() {
@@ -270,4 +291,5 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
     override fun onShowAdFail() {
 
     }
+
 }

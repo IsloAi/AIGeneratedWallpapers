@@ -12,12 +12,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
+import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperDownloadBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -65,6 +70,34 @@ class DoubleWallpaperDownloadFragment : Fragment(), AdEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
+            requireContext(),
+            AdConfig.applovinAndroidNativeMedium,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
+                    binding.NativeAdDouble.removeAllViews()
+                    p0?.let {
+                        binding.NativeAdDouble.addView(it)
+                        binding.NativeAdDouble.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
+                }
+
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
+                }
+
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
+                }
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
 
         setEvents()
         initObservers()

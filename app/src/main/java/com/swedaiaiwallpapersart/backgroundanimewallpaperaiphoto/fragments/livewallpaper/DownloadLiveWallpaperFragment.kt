@@ -30,7 +30,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
@@ -84,7 +83,34 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
             R.layout.admob_native_medium
         )
         nativeAd.loadNativeAd(binding.NativeAd)*/
-        MaxNativeAd.createNativeAdLoader(
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
+            requireContext(),
+            AdConfig.applovinAndroidNativeMedium,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
+                    binding.NativeAd.removeAllViews()
+                    p0?.let {
+                        binding.NativeAd.addView(it)
+
+                    }
+                }
+
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
+                }
+
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
+                }
+
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
+                }
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+        /*MaxNativeAd.createNativeAdLoader(
             requireContext(),
             AdConfig.applovinAndroidNativeManual,
             object : MaxNativeAdListener() {
@@ -109,7 +135,7 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
             }
         )
 
-        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())
+        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())*/
     }
 
     override fun onStart() {
