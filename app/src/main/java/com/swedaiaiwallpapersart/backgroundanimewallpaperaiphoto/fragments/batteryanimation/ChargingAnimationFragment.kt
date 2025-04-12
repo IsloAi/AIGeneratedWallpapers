@@ -24,6 +24,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
@@ -84,10 +85,14 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                     Log.e(TAG, "ChargingAnimation: " + result.data)
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data
-                        val data = list?.let { addNullValueInsideArray(it.shuffled()) }
+                        val data = if (AdConfig.ISPAIDUSER) {
+                            list
+                        } else {
+                            list?.let { addNullValueInsideArray(it.shuffled()) }
+                        }
 
                         withContext(Dispatchers.Main) {
-                            data?.let { adapter?.updateData(it) }
+                            data?.let { adapter?.updateData(it as ArrayList<ChargingAnimModel?>) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
                     }
@@ -199,8 +204,7 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
                 }
             }, object : MaxAD {
                 override fun adNotReady(type: String) {
-                    if (MaxInterstitialAds.willIntAdShow) {
-                        /*Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
+                    if (MaxInterstitialAds.willIntAdShow) {/*Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
                             .show()*/
                         Bundle().apply {
                             putBoolean("adShowed", adShowd)

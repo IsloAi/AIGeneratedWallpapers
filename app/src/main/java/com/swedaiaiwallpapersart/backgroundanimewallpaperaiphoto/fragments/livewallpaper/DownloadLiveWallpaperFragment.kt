@@ -84,32 +84,37 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         )
         nativeAd.loadNativeAd(binding.NativeAd)*/
         //Max Medium Native Ad
-        MaxNativeAd.createTemplateNativeAdLoader(
-            requireContext(),
-            AdConfig.applovinAndroidNativeMedium,
-            object : MaxNativeAdListener() {
-                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
-                    super.onNativeAdLoaded(p0, p1)
-                    binding.NativeAd.removeAllViews()
-                    p0?.let {
-                        binding.NativeAd.addView(it)
+        if (AdConfig.ISPAIDUSER) {
 
+        } else {
+            MaxNativeAd.createTemplateNativeAdLoader(
+                requireContext(),
+                AdConfig.applovinAndroidNativeMedium,
+                object : MaxNativeAdListener() {
+                    override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                        super.onNativeAdLoaded(p0, p1)
+                        binding.NativeAd.removeAllViews()
+                        p0?.let {
+                            binding.NativeAd.addView(it)
+
+                        }
                     }
-                }
 
-                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                    super.onNativeAdLoadFailed(p0, p1)
-                }
+                    override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                        super.onNativeAdLoadFailed(p0, p1)
+                    }
 
-                override fun onNativeAdClicked(p0: MaxAd) {
-                    super.onNativeAdClicked(p0)
-                }
+                    override fun onNativeAdClicked(p0: MaxAd) {
+                        super.onNativeAdClicked(p0)
+                    }
 
-                override fun onNativeAdExpired(p0: MaxAd) {
-                    super.onNativeAdExpired(p0)
-                }
-            })
-        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+                    override fun onNativeAdExpired(p0: MaxAd) {
+                        super.onNativeAdExpired(p0)
+                    }
+                })
+            MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+        }
+
         /*MaxNativeAd.createNativeAdLoader(
             requireContext(),
             AdConfig.applovinAndroidNativeManual,

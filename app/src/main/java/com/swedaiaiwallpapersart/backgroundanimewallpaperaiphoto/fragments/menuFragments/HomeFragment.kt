@@ -110,11 +110,15 @@ class HomeFragment : Fragment(), AdEventListener {
         binding.swipeLayout.setOnRefreshListener {
             val newData = cachedCatResponses.filterNotNull().shuffled()
             lifecycleScope.launch(Dispatchers.IO) {
-                val nullAdd = addNullValueInsideArray(newData.shuffled())
+                val nullAdd = if (AdConfig.ISPAIDUSER) {
+                    newData
+                } else {
+                    addNullValueInsideArray(newData.shuffled())
+                }
                 withContext(Dispatchers.Main) {
                     cachedCatResponses.clear()
-                    cachedCatResponses = nullAdd
-                    adapter.updateData(nullAdd)
+                    cachedCatResponses = nullAdd as ArrayList<CatResponse?>
+                    adapter.updateData(nullAdd as ArrayList<CatResponse?>)
                     binding.recyclerviewAll.scrollToPosition(0) // <-- this is what you need
                     binding.swipeLayout.isRefreshing = false
                 }
@@ -124,18 +128,11 @@ class HomeFragment : Fragment(), AdEventListener {
 
     private fun onCreatingCalling() {
         Log.d("TraceLogingHomaeHHH", "onCreatingCalling   ")
-//        checkDailyReward()
-
         navController = findNavController()
-
         val layoutManager = GridLayoutManager(requireContext(), 3)
         binding.recyclerviewAll.layoutManager = layoutManager
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
-
-
         setAdapter()
-
-
         binding.recyclerviewAll.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -178,9 +175,7 @@ class HomeFragment : Fragment(), AdEventListener {
 
                         lifecycleScope.launch(Dispatchers.IO) {
                             if (!dataset) {
-
                                 val tempList = ArrayList<CatResponse>()
-
                                 result.data?.forEach { item ->
                                     val model = CatResponse(
                                         item.id,
@@ -200,20 +195,16 @@ class HomeFragment : Fragment(), AdEventListener {
                                         tempList.add(model)
                                     }
                                 }
-
                                 val list = if (AdConfig.ISPAIDUSER) {
                                     tempList.shuffled() as ArrayList<CatResponse?>
                                 } else {
                                     addNullValueInsideArray(tempList.shuffled())
                                 }
-
                                 cachedCatResponses = list
-
                                 withContext(Dispatchers.Main) {
                                     adapter.updateData(cachedCatResponses)
                                     startIndex += 30
                                 }
-
                                 dataset = true
                             }
                         }
@@ -322,68 +313,53 @@ class HomeFragment : Fragment(), AdEventListener {
 
         sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
 
-        MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
-            override fun onAdLoaded(p0: MaxAd) {
-                MaxInterstitialAds.showInterstitial(requireActivity(),
-                    object : MaxAdListener {
-                        override fun onAdLoaded(p0: MaxAd) {}
-
-                        override fun onAdDisplayed(p0: MaxAd) {}
-
-                        override fun onAdHidden(p0: MaxAd) {}
-
-                        override fun onAdClicked(p0: MaxAd) {}
-
-                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                    },
-                    object : MaxAD {
-                        override fun adNotReady(type: String) {}
-                    })
+        if (AdConfig.ISPAIDUSER) {
+            Bundle().apply {
+                Log.e(TAG, "navigateToDestination: inside bundle")
+                putString("from", "trending")
+                putString("wall", "home")
+                putInt("position", position - countOfNulls)
+                findNavController().navigate(R.id.wallpaperViewFragment, this)
+                navigationInProgress = false
             }
+        } else {
+            MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+                    MaxInterstitialAds.showInterstitial(requireActivity(),
+                        object : MaxAdListener {
+                            override fun onAdLoaded(p0: MaxAd) {}
 
-            override fun onAdDisplayed(p0: MaxAd) {}
+                            override fun onAdDisplayed(p0: MaxAd) {}
 
-            override fun onAdHidden(p0: MaxAd) {
-                Bundle().apply {
-                    Log.e(TAG, "navigateToDestination: inside bundle")
-                    putString("from", "trending")
-                    putString("wall", "home")
-                    putInt("position", position - countOfNulls)
-                    findNavController().navigate(R.id.wallpaperViewFragment, this)
-                    navigationInProgress = false
+                            override fun onAdHidden(p0: MaxAd) {}
+
+                            override fun onAdClicked(p0: MaxAd) {}
+
+                            override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                        },
+                        object : MaxAD {
+                            override fun adNotReady(type: String) {}
+                        })
                 }
-            }
 
-            override fun onAdClicked(p0: MaxAd) {}
+                override fun onAdDisplayed(p0: MaxAd) {}
 
-            override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
-                Bundle().apply {
-                    Log.e(TAG, "navigateToDestination: inside bundle")
-                    putString("from", "trending")
-                    putString("wall", "home")
-                    putInt("position", position - countOfNulls)
-                    findNavController().navigate(R.id.wallpaperViewFragment, this)
-                    navigationInProgress = false
+                override fun onAdHidden(p0: MaxAd) {
+                    Bundle().apply {
+                        Log.e(TAG, "navigateToDestination: inside bundle")
+                        putString("from", "trending")
+                        putString("wall", "home")
+                        putInt("position", position - countOfNulls)
+                        findNavController().navigate(R.id.wallpaperViewFragment, this)
+                        navigationInProgress = false
+                    }
                 }
-            }
 
-            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
-                Bundle().apply {
-                    Log.e(TAG, "navigateToDestination: inside bundle")
-                    putString("from", "trending")
-                    putString("wall", "home")
-                    putInt("position", position - countOfNulls)
-                    findNavController().navigate(R.id.wallpaperViewFragment, this)
-                    navigationInProgress = false
-                }
-            }
-        }, object : MaxAD {
-            override fun adNotReady(type: String) {
-                if (MaxInterstitialAds.willIntAdShow) {
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
                     //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
                     Bundle().apply {
                         Log.e(TAG, "navigateToDestination: inside bundle")
@@ -393,7 +369,10 @@ class HomeFragment : Fragment(), AdEventListener {
                         findNavController().navigate(R.id.wallpaperViewFragment, this)
                         navigationInProgress = false
                     }
-                } else {
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                    //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
                     Bundle().apply {
                         Log.e(TAG, "navigateToDestination: inside bundle")
                         putString("from", "trending")
@@ -403,9 +382,33 @@ class HomeFragment : Fragment(), AdEventListener {
                         navigationInProgress = false
                     }
                 }
+            }, object : MaxAD {
+                override fun adNotReady(type: String) {
+                    if (MaxInterstitialAds.willIntAdShow) {
+                        //Toast.makeText(requireContext(), "AD not available", Toast.LENGTH_SHORT).show()
+                        Bundle().apply {
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+                            putString("from", "trending")
+                            putString("wall", "home")
+                            putInt("position", position - countOfNulls)
+                            findNavController().navigate(R.id.wallpaperViewFragment, this)
+                            navigationInProgress = false
+                        }
+                    } else {
+                        Bundle().apply {
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+                            putString("from", "trending")
+                            putString("wall", "home")
+                            putInt("position", position - countOfNulls)
+                            findNavController().navigate(R.id.wallpaperViewFragment, this)
+                            navigationInProgress = false
+                        }
+                    }
 
-            }
-        })
+                }
+            })
+        }
+
 
         isNavigationInProgress = false
 

@@ -62,6 +62,32 @@ class FavouriteFragment : Fragment() {
 
     }
 
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded) {
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Favorites Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+    }
+
+    fun replaceFragmentInFrame(fragment: Fragment, containerId: Int) {
+        childFragmentManager.beginTransaction()
+            .replace(containerId, fragment)
+            .addToBackStack(null) // optional: add to backstack if you want to go back
+            .commit()
+    }
+
+    /*fun replaceFragment(fragment: Fragment, activity: FragmentActivity) {
+        val fragmentManager = activity.supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.FavFrame, fragment)
+        fragmentTransaction.addToBackStack(null)
+        fragmentTransaction.commit()
+    } //End of replaceFRAG*/
+
     /*private fun onCreateViewCalling() {
 
         val roomDatabase = AppDatabase.getInstance(requireContext())
@@ -148,31 +174,5 @@ class FavouriteFragment : Fragment() {
             findNavController().navigate(R.id.wallpaperViewFragment, this)
         }
     }*/
-
-    override fun onResume() {
-        super.onResume()
-        if (isAdded) {
-            val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Favorites Screen")
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
-    }
-
-    fun replaceFragmentInFrame(fragment: Fragment, containerId: Int) {
-        childFragmentManager.beginTransaction()
-            .replace(containerId, fragment)
-            .addToBackStack(null) // optional: add to backstack if you want to go back
-            .commit()
-    }
-
-    /*fun replaceFragment(fragment: Fragment, activity: FragmentActivity) {
-        val fragmentManager = activity.supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
-        fragmentTransaction.replace(R.id.FavFrame, fragment)
-        fragmentTransaction.addToBackStack(null)
-        fragmentTransaction.commit()
-    } //End of replaceFRAG*/
-
 
 }

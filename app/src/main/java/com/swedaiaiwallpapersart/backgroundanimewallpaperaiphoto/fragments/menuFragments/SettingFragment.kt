@@ -75,6 +75,7 @@ class SettingFragment : Fragment() {
             .asGif()
             .load(R.raw.gems_animaion)
             .into(binding.animationDdd)
+
         binding.rateUsButton.setOnClickListener { feedback() }
         binding.customerSupportButton.setOnClickListener { findNavController().navigate(R.id.feedbackFragment) }
         binding.shareAppButton.setOnClickListener {
@@ -140,7 +141,6 @@ class SettingFragment : Fragment() {
             findNavController().navigate(R.id.favouriteFragment)
         }
     }
-
 
     fun isServiceRunning(context: Context, serviceClass: Class<ChargingAnimationService>): Boolean {
         val serviceManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager

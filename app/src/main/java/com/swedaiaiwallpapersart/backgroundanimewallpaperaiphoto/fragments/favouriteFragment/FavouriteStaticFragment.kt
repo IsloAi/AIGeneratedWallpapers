@@ -106,7 +106,7 @@ class FavouriteStaticFragment : Fragment() {
                         // Now update the wallpapers list
                         wallpapers.clear()
                         wallpapers.addAll(newWallpapers)
-                        Log.d("TAG", "LD: All wallpapers = $wallpapers")
+                        Log.d("TAG", "LD: All wallpapers = ${wallpapers.toList()}")
                         withContext(Dispatchers.Main) {
                             if (wallpapers.isNotEmpty()) {
                                 binding.lottieAnimationStatic.visibility = View.GONE
@@ -115,7 +115,59 @@ class FavouriteStaticFragment : Fragment() {
                                 binding.lottieAnimationStatic.visibility = View.GONE
                                 binding.emptySupportStatic.visibility = View.VISIBLE
                             }
-                            adapter.updateData(wallpapers)
+                            adapter.updateData(wallpapers.toList())
+                        }
+                    }
+
+                    is Response.Error -> {
+                        Log.d("TAG", "Fav Frag Error: ${response.message}")
+                    }
+
+                    Response.Loading -> {}
+
+                }//End of when
+            }//End of viewmodel scope
+        }//End of LifeScope*/
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Observe the data from the ViewModel
+        lifecycleScope.launch(Dispatchers.IO) {
+            favouriteViewModel.favourites.collect { response ->
+                when (response) {
+                    is Response.Processing<*> -> {
+                        // Show loading state (e.g., a progress bar)
+                    }
+
+                    is Response.Success<*> -> {
+                        val data = response.data as? ArrayList<String> ?: ArrayList()
+                        Log.d("TAG", "loadDataFromRoomDB: Data = $data")
+                        // Create a new list to hold wallpapers
+                        val newWallpapers = mutableListOf<CatResponse>()
+                        data.forEach { id ->
+                            val wallpaper =
+                                appDatabase.wallpapersDao().getFavouritesByWallpaperId(id)
+                            if (wallpaper != null) {
+                                newWallpapers.add(wallpaper) // Add to the new list
+                                Log.d("TAG", "LD: Wallpaper in Room = $wallpaper")
+                            } else {
+                                Log.d("TAG", "LD: No wallpaper found for ID $id")
+                            }
+                        }
+                        // Now update the wallpapers list
+                        wallpapers.clear()
+                        wallpapers.addAll(newWallpapers)
+                        Log.d("TAG", "LD: All wallpapers = ${wallpapers.toList()}")
+                        withContext(Dispatchers.Main) {
+                            if (wallpapers.isNotEmpty()) {
+                                binding.lottieAnimationStatic.visibility = View.GONE
+                                binding.emptySupportStatic.visibility = View.GONE
+                            } else {
+                                binding.lottieAnimationStatic.visibility = View.GONE
+                                binding.emptySupportStatic.visibility = View.VISIBLE
+                            }
+                            adapter.updateData(wallpapers.toList())
                         }
                     }
 

@@ -224,6 +224,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 if (purchasedProducts.isNotEmpty()) {
                     AdConfig.ISPAIDUSER = true
                     AdConfig.inAppConfig = false
+                    AdConfig.iapScreenType = 0
                 }
             }
         }
@@ -305,21 +306,14 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
         billingClient.acknowledgePurchase(params) { billingResult ->
             if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 Log.d("Billing", "acknowledgePurchase: Purchase acknowledged: ${purchase.products}")
-                //purchasedProducts.add(purchase.products.toString())
-                //billingViewModel.purchaseAcknowledged.postValue(true)
-                /*lifecycleScope.launch {
-                    mainViewModel.postPurchase(
-                        purchase.products.toString(),
-                        purchase.purchaseToken,
-                        getDeviceId(this@MainActivity)
-                    )
-                }*/
-                //getResponse()
+                purchasedProducts.add(purchase.products.toString())
+                AdConfig.ISPAIDUSER = true
+                AdConfig.inAppConfig = false
+                AdConfig.iapScreenType = 0
                 Log.d(
                     "APIResponse",
                     "acknowledgePurchase: Purchase acknowledged\ntoken:${purchase.purchaseToken}\nid:${purchase.products}"
                 )
-
             } else {
                 Log.e("Billing", "Error acknowledging purchase: ${billingResult.debugMessage}")
             }
@@ -339,7 +333,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
             "Lifetime"
         }
     }
-
 
     override fun onDestroy() {
         super.onDestroy()

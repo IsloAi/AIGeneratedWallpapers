@@ -70,32 +70,36 @@ class DownloadBatteryAnimation : Fragment(), AdEventListener {
         adShowed = arguments?.getBoolean("adShowed")
         loadAd()
         AndroidNetworking.initialize(requireContext())
-        //Max Medium Native Ad
-        MaxNativeAd.createTemplateNativeAdLoader(
-            requireContext(),
-            AdConfig.applovinAndroidNativeMedium,
-            object : MaxNativeAdListener() {
-                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
-                    super.onNativeAdLoaded(p0, p1)
-                    binding.NativeAD.removeAllViews()
-                    p0?.let {
-                        binding.NativeAD.addView(it)
+        if (AdConfig.ISPAIDUSER) {
+
+        } else {
+            //Max Medium Native Ad
+            MaxNativeAd.createTemplateNativeAdLoader(
+                requireContext(),
+                AdConfig.applovinAndroidNativeMedium,
+                object : MaxNativeAdListener() {
+                    override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                        super.onNativeAdLoaded(p0, p1)
+                        binding.NativeAD.removeAllViews()
+                        p0?.let {
+                            binding.NativeAD.addView(it)
+                        }
                     }
-                }
 
-                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                    super.onNativeAdLoadFailed(p0, p1)
-                }
+                    override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                        super.onNativeAdLoadFailed(p0, p1)
+                    }
 
-                override fun onNativeAdClicked(p0: MaxAd) {
-                    super.onNativeAdClicked(p0)
-                }
+                    override fun onNativeAdClicked(p0: MaxAd) {
+                        super.onNativeAdClicked(p0)
+                    }
 
-                override fun onNativeAdExpired(p0: MaxAd) {
-                    super.onNativeAdExpired(p0)
-                }
-            })
-        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+                    override fun onNativeAdExpired(p0: MaxAd) {
+                        super.onNativeAdExpired(p0)
+                    }
+                })
+            MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+        }
         setEvents()
         initObservers()
     }

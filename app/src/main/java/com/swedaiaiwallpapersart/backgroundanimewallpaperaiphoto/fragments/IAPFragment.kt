@@ -1,11 +1,15 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,6 +22,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentIAPBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.InAppProducts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.billingClient
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.InternetState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -99,66 +104,38 @@ class IAPFragment : Fragment() {
             startPay(billingHelper,"unlock_all_premium_wallpaper_weekly_1","sub")*/
         }
 
+        binding.termConditions.setOnClickListener {
+            openLink("https://bluellapps.com/terms/")
+        }
+        binding.privacy.setOnClickListener {
+            openLink("https://bluellapps.com/privacy-policy/")
+        }
+
     }
 
-    /*private fun startPay(billingHelper: IKBillingController,id:String,type:String) {
+    private fun openLink(url: String) {
+        try {
+            if (InternetState.checkForInternet(requireContext())) {
+                val myWebLink = Intent(Intent.ACTION_VIEW)
+                myWebLink.data = Uri.parse(url)
+                startActivity(myWebLink)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.no_internet), Toast.LENGTH_SHORT
+                ).show()
+            }
 
-        if (type == "sub"){
-            billingHelper.subscribe(requireActivity(),id, object :
-                IKBillingPurchaseListener {
-
-                override fun onBillingFail(productId: String, error: IKBillingError) {
-                    Log.e("TAG", "onBillingFail: $productId")
-                    if (isAdded){
-                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onBillingSuccess(productId: String) {
-                    Log.e("TAG", "onBillingSuccess: $productId")
-                    AdConfig.ISPAIDUSER = true
-                    if (isAdded){
-                        findNavController().popBackStack()
-                    }
-                }
-
-                override fun onProductAlreadyPurchased(productId: String) {
-                    Log.e("TAG", "onProductAlreadyPurchased: ", )
-                    if (isAdded){
-                        Toast.makeText(requireContext(), "Already Purchased", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            })
-
-        }else{
-            billingHelper.purchase(requireActivity(),id, object :
-                IKBillingPurchaseListener {
-                override fun onBillingFail(productId: String, error: IKBillingError) {
-                    Log.e("TAG", "onBillingFail: ", )
-                    if (isAdded){
-                        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onBillingSuccess(productId: String) {
-                    AdConfig.ISPAIDUSER = true
-                    if (isAdded){
-                        findNavController().popBackStack()
-                    }
-                    Log.e("TAG", "onBillingSuccess: $productId" )
-                }
-
-                override fun onProductAlreadyPurchased(productId: String) {
-                    Log.e("TAG", "onProductAlreadyPurchased: ", )
-                    if (isAdded){
-                        Toast.makeText(requireContext(), "Already Purchased", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-            })
+        } catch (e: ActivityNotFoundException) {
+            val developerId = "6602716762126600526"
+            val intent = Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/apps/developer?id=$developerId")
+            )
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
         }
-    }*/
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -172,6 +149,5 @@ class IAPFragment : Fragment() {
             println("Error launching billing flow: ${billingResult.debugMessage}")
         }
     }
-
 
 }

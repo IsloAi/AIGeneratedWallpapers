@@ -25,6 +25,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxIntersti
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.Response
@@ -50,7 +51,7 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
     private lateinit var myActivity: MainActivity
     var adapter: DoubleWallpaperAdapter? = null
 
-    val TAG = "DoubleWallpaper"
+    val TAG = "Double"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -88,15 +89,18 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
         doubleWallpaperViewmodel.doubleWallList.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Success -> {
-
-                    Log.e(TAG, "ChargingAnimation: " + result.data)
+                    Log.e(TAG, "loadData: " + result.data)
                     lifecycleScope.launch(Dispatchers.IO) {
                         val list = result.data
-
-                        val data = list?.let { addNullValueInsideArray(it) }
+                        Log.d("Double", "loadData:list:$list ")
+                        val data = if (AdConfig.ISPAIDUSER) {
+                            list
+                        } else {
+                            list?.let { addNullValueInsideArray(it) }
+                        }
 
                         withContext(Dispatchers.Main) {
-                            data?.let { adapter?.updateData(it) }
+                            data?.let { adapter?.updateData(it as ArrayList<DoubleWallModel?>) }
                             adapter!!.setCoroutineScope(fragmentScope)
                         }
                     }
@@ -193,73 +197,46 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
         val countOfNulls = arrayList.subList(0, position).count { it == null }
         val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
         sharedViewModel.setDoubleWalls(arrayList.filterNotNull())
-        MaxInterstitialAds.showInterstitial(requireActivity(),
-            object : MaxAdListener {
-                override fun onAdLoaded(p0: MaxAd) {
-                    MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
-                        override fun onAdLoaded(p0: MaxAd) {}
+        if (AdConfig.ISPAIDUSER) {
+            Bundle().apply {
+                Log.e(TAG, "navigateToDestination: inside bundle")
+                putString("from", "trending")
+                putString("wall", "home")
+                putInt("position", position - countOfNulls)
+                findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
+            }
+        } else {
+            MaxInterstitialAds.showInterstitial(requireActivity(),
+                object : MaxAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {
+                        MaxInterstitialAds.showInterstitial(
+                            requireActivity(),
+                            object : MaxAdListener {
+                                override fun onAdLoaded(p0: MaxAd) {}
 
-                        override fun onAdDisplayed(p0: MaxAd) {
-                        }
+                                override fun onAdDisplayed(p0: MaxAd) {
+                                }
 
-                        override fun onAdHidden(p0: MaxAd) {
-                        }
+                                override fun onAdHidden(p0: MaxAd) {
+                                }
 
-                        override fun onAdClicked(p0: MaxAd) {
-                        }
+                                override fun onAdClicked(p0: MaxAd) {
+                                }
 
-                        override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                        }
+                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                                }
 
-                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                        }
-                    }, object : MaxAD {
-                        override fun adNotReady(type: String) {}
-                    })
-                }
-
-                override fun onAdDisplayed(p0: MaxAd) {}
-
-                override fun onAdHidden(p0: MaxAd) {
-                    Bundle().apply {
-                        Log.e(TAG, "navigateToDestination: inside bundle")
-                        putString("from", "trending")
-                        putString("wall", "home")
-                        putInt("position", position - countOfNulls)
-                        findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
+                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                                }
+                            },
+                            object : MaxAD {
+                                override fun adNotReady(type: String) {}
+                            })
                     }
-                    MaxInterstitialAds.loadInterstitialAd(requireContext())
-                }
 
-                override fun onAdClicked(p0: MaxAd) {}
+                    override fun onAdDisplayed(p0: MaxAd) {}
 
-                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                    Bundle().apply {
-                        Log.e(TAG, "navigateToDestination: inside bundle")
-                        putString("from", "trending")
-                        putString("wall", "home")
-                        putInt("position", position - countOfNulls)
-                        findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
-                    }
-                }
-
-                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                    Bundle().apply {
-                        Log.e(TAG, "navigateToDestination: inside bundle")
-                        putString("from", "trending")
-                        putString("wall", "home")
-                        putInt("position", position - countOfNulls)
-                        findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
-                    }
-                }
-            },
-            object : MaxAD {
-                override fun adNotReady(type: String) {
-                    if (MaxInterstitialAds.willIntAdShow) {
-                        /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()*/
+                    override fun onAdHidden(p0: MaxAd) {
                         Bundle().apply {
                             Log.e(TAG, "navigateToDestination: inside bundle")
                             putString("from", "trending")
@@ -267,7 +244,13 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                             putInt("position", position - countOfNulls)
                             findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
                         }
-                    } else {
+                        MaxInterstitialAds.loadInterstitialAd(requireContext())
+                    }
+
+                    override fun onAdClicked(p0: MaxAd) {}
+
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
                         Bundle().apply {
                             Log.e(TAG, "navigateToDestination: inside bundle")
                             putString("from", "trending")
@@ -277,8 +260,49 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                         }
                     }
 
-                }
-            })
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                        Bundle().apply {
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+                            putString("from", "trending")
+                            putString("wall", "home")
+                            putInt("position", position - countOfNulls)
+                            findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
+                        }
+                    }
+                },
+                object : MaxAD {
+                    override fun adNotReady(type: String) {
+                        if (MaxInterstitialAds.willIntAdShow) {
+                            /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
+                                .show()*/
+                            Bundle().apply {
+                                Log.e(TAG, "navigateToDestination: inside bundle")
+                                putString("from", "trending")
+                                putString("wall", "home")
+                                putInt("position", position - countOfNulls)
+                                findNavController().navigate(
+                                    R.id.doubleWallpaperSliderFragment,
+                                    this
+                                )
+                            }
+                        } else {
+                            Bundle().apply {
+                                Log.e(TAG, "navigateToDestination: inside bundle")
+                                putString("from", "trending")
+                                putString("wall", "home")
+                                putInt("position", position - countOfNulls)
+                                findNavController().navigate(
+                                    R.id.doubleWallpaperSliderFragment,
+                                    this
+                                )
+                            }
+                        }
+
+                    }
+                })
+        }
+
 
     }
 

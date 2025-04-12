@@ -27,7 +27,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.NativeAdManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -185,15 +184,15 @@ class ApiCategoriesListAdapter(
         animationView.visibility = VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
-        /*if (model.unlockimges == false) {
+        if (model.unlockimges == false) {
             if (AdConfig.ISPAIDUSER) {
-                iapItem.visibility = View.GONE
+                binding.iapInd.visibility = View.GONE
             } else {
-                iapItem.visibility = View.VISIBLE
+                binding.iapInd.visibility = View.VISIBLE
             }
         } else {
-            iapItem.visibility = View.GONE
-        }*/
+            binding.iapInd.visibility = View.GONE
+        }
 
         val url = if (from == "Vip") {
             AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url + "?class=custom"

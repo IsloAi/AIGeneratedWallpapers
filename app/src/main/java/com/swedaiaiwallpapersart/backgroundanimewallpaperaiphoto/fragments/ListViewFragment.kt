@@ -125,14 +125,12 @@ class ListViewFragment : Fragment(), AdEventListener {
                 if (!isNavigationInProgress) {
 
                     hasToNavigateList = true
-
                     isNavigationInProgress = true
                     externalOpen = true
                     val allItems = adapter?.getAllItems()
                     if (addedItems?.isNotEmpty() == true) {
                         addedItems?.clear()
                     }
-
                     addedItems = allItems
                     oldPosition = position
 
@@ -459,30 +457,22 @@ class ListViewFragment : Fragment(), AdEventListener {
 
     suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
         return withContext(Dispatchers.IO) {
-            val firstAdLineThreshold =
-                if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
-            val firstLine = firstAdLineThreshold * 3
-            val lineCount =
-                if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
-            val lineC = lineCount * 3
             val newData = arrayListOf<CatResponse?>()
             for (i in data.indices) {
-                if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
+                newData.add(data[i]) // Add the current item
+                // After every 15 items, add a null value (excluding the last item)
+                if ((i + 1) % 15 == 0) {
                     newData.add(null)
-                    totalADs++
-                } else if (i == firstLine) {
-                    newData.add(null)
-                    totalADs++
                 }
-                newData.add(data[i])
             }
             newData
         }
     }
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
+
     private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
-        if (position >= arrayList.size) {
+        /*if (position >= arrayList.size) {
             Log.e(TAG, "navigateToDestination: Position $position out of bounds ${arrayList.size} ")
 
             addedItems?.clear()
@@ -490,7 +480,7 @@ class ListViewFragment : Fragment(), AdEventListener {
             adapter?.updateData(addedItems!!)
             isNavigationInProgress = false
             return
-        }
+        }*/
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
         sharedViewModel.clearData()

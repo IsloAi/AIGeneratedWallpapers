@@ -147,13 +147,11 @@ class HomeTabsFragment : Fragment() {
         } else {
             binding.goPremium.visibility = View.VISIBLE
         }
-
         if (AdConfig.tabPositions[0].isEmpty()) {
             Log.e("TAG", "onViewCreated: " + AdConfig.tabPositions)
             AdConfig.tabPositions =
                 arrayOf("Live", "Popular", "Double", "Category", "Anime", "Car", "Charging")
         }
-
         if (AdConfig.BASE_URL_DATA == "") {
             AdConfig.BASE_URL_DATA = "https://4k-pullzone.b-cdn.net"
         }
@@ -162,7 +160,11 @@ class HomeTabsFragment : Fragment() {
         setViewPager()
         setEvents()
         showRewardWallpaperScreen()
-        createBannerAd()
+        if (AdConfig.ISPAIDUSER) {
+
+        } else {
+            createBannerAd()
+        }
     }
 
     private fun createBannerAd() {
