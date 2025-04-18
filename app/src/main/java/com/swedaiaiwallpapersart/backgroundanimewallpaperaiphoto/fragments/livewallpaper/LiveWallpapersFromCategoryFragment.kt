@@ -145,46 +145,21 @@ class LiveWallpapersFromCategoryFragment : Fragment(), AdEventListener {
                 } else {
                     if (isAdded) {
                         Constants.checkInter = false
-                        MaxInterstitialAds.showInterstitial(requireActivity(),
+                        MaxInterstitialAds.showInterstitialAd(requireActivity(),
                             object : MaxAdListener {
                                 override fun onAdLoaded(p0: MaxAd) {}
 
                                 override fun onAdDisplayed(p0: MaxAd) {}
 
                                 override fun onAdHidden(p0: MaxAd) {
-                                    setDownloadAbleWallpaperAndNavigate(model, false)
+                                    setDownloadAbleWallpaperAndNavigate(model, true)
                                 }
 
                                 override fun onAdClicked(p0: MaxAd) {}
 
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Ad not available",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Ad not available",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }, object : MaxAD {
-                                override fun adNotReady(type: String) {
-                                    if (MaxInterstitialAds.willIntAdShow) {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Ad not available",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                        setDownloadAbleWallpaperAndNavigate(model, true)
-                                    } else {
-                                        setDownloadAbleWallpaperAndNavigate(model, true)
-                                    }
-                                }
+                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
                             })
                     }
                 }

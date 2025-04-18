@@ -11,57 +11,70 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
 object MaxInterstitialAds {
 
-    private var interstitialAd: MaxInterstitialAd? = null
-    var clickCounter = 0  // Counter to track clicks
-    private var adShowThreshold = 3  // Show ad after 3 clicks
-    var willIntAdShow: Boolean = false
+    private const val maxPoolSize: Int = 5
 
-    fun loadInterstitialAd(context: Context) {
-        interstitialAd = MaxInterstitialAd(AdConfig.applovinAndroidInterstitial, context)
-        interstitialAd?.setListener(object : MaxAdListener {
-            override fun onAdLoaded(ad: MaxAd) {
-                Log.d("AppLovin", "Interstitial Loaded")
-            }
+    // List to store preloaded interstitial ads
+    private val interstitialAdsList = mutableListOf<MaxInterstitialAd>()
+    private var isAdLoading = false
 
-            override fun onAdDisplayed(ad: MaxAd) {}
+    fun preloadInterstitials(context: Context) {
+        // Only preload if the pool size is less than the max pool size and no ad is being loaded
+        if (interstitialAdsList.size < maxPoolSize && !isAdLoading) {
+            isAdLoading = true  // Mark ad loading in progress
 
-            override fun onAdHidden(ad: MaxAd) {
-                clickCounter = 0  // Reset counter after showing ad
-                interstitialAd?.loadAd()  // Load the next ad
-            }
+            // Create new ad object
+            val ad = MaxInterstitialAd(AdConfig.applovinAndroidInterstitial, context)
 
-            override fun onAdClicked(ad: MaxAd) {}
+            // Set up listener
+            ad.setListener(object : MaxAdListener {
+                override fun onAdLoaded(loadedAd: MaxAd) {
+                    // Add the ad to the list once it's loaded
+                    interstitialAdsList.add(ad)
+                    Log.d("AppLovin", "Ad preloaded. Pool size: ${interstitialAdsList.size}")
+                    isAdLoading = false  // Reset loading state
+                    preloadInterstitials(context)  // Preload a new ad
+                }
 
-            override fun onAdLoadFailed(adUnitId: String, error: MaxError) {
-                Log.e("AppLovin", "Interstitial Load Failed: ${error.message}")
-            }
+                override fun onAdDisplayed(p0: MaxAd) {
+                }
 
-            override fun onAdDisplayFailed(ad: MaxAd, error: MaxError) {}
-        })
-        interstitialAd?.loadAd()
+                override fun onAdHidden(ad: MaxAd) {
+                    // When the ad is done, remove it and preload a new one
+                    interstitialAdsList.remove(ad as MaxInterstitialAd)
+                    preloadInterstitials(context)  // Preload a new ad
+                }
+
+                override fun onAdClicked(p0: MaxAd) {
+                }
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
+                    Log.e("AppLovin", "Failed to load ad. Error code: ${p1.code}")
+                    isAdLoading = false  // Reset loading state even in case of failure
+                }
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+                }
+            })
+
+            // Load the ad
+            ad.loadAd()
+        }
     }
 
-    fun showInterstitial(context: Activity, listener: MaxAdListener, listener2: MaxAD) {
-        clickCounter++  // Increment click count
-        Log.d("AppLovin", "Click Count: $clickCounter")
-
-        if (clickCounter < adShowThreshold) {
-            willIntAdShow = false
-            Log.d("AppLovin", "Threshold not reached, skipping ad")
-            listener2.adNotReady("Ad Not Ready")
-            return
-        }
-
-        willIntAdShow = true
-        Log.d("AppLovin", "Threshold reached, showing ad")
-
-        if (interstitialAd?.isReady == true) {
-            interstitialAd?.setListener(listener)
-            interstitialAd?.showAd(context)
+    // Function to show an ad from the pool
+    fun showInterstitialAd(context: Activity, listener: MaxAdListener) {
+        // Show the first available ad from the pool
+        if (interstitialAdsList.isNotEmpty()) {
+            val adToShow = interstitialAdsList.removeAt(0)  // Remove the first ad
+            if (adToShow.isReady) {
+                adToShow.setListener(listener)
+                preloadInterstitials(context)
+                adToShow.showAd(context)
+            } else {
+                Log.e("AppLovin", "Ad is not ready to be shown.")
+            }
         } else {
-            Log.d("AppLovin", "Interstitial Ad Not Ready Yet")
-            listener2.adNotReady("Ad Not Ready")
-            clickCounter = 0  // Reset counter if ad not ready
+            Log.e("AppLovin", "No ads available in the pool.")
         }
     }
 

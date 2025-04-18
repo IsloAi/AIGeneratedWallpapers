@@ -69,7 +69,7 @@ class SplashOnFragment : Fragment() {
         lan = MySharePreference.getLanguage(requireContext()).toString()
 
         //createBannerAd()
-        MaxInterstitialAds.loadInterstitialAd(requireContext())
+        //MaxInterstitialAds.loadInterstitialAd(requireContext())
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             val duration = 2000
             val interval = 20

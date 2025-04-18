@@ -49,7 +49,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
@@ -326,54 +325,33 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
         }
 
         bindingDialog.watchAds.setOnClickListener {
-            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
-                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
-                    setWallpaper()
-                    MaxRewardAds.loadRewardAds(requireContext(),AdConfig.applovinAndroidReward)
+            MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
+
                 }
 
-                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+                override fun onAdDisplayed(p0: MaxAd) {
+
+                }
+
+                override fun onAdHidden(p0: MaxAd) {
+
+                }
+
+                override fun onAdClicked(p0: MaxAd) {
+
                 }
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
+
                 }
 
-                override fun onAdClicked(p0: MaxAd) {}
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
 
-                override fun onAdHidden(p0: MaxAd) {}
-
-                override fun onAdDisplayed(p0: MaxAd) {}
-
-                override fun onAdLoaded(p0: MaxAd) {
-                    MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
-                        override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
-                            setWallpaper()
-                        }
-
-                        override fun onAdLoaded(p0: MaxAd) {}
-                        override fun onAdDisplayed(p0: MaxAd) {}
-                        override fun onAdHidden(p0: MaxAd) {}
-                        override fun onAdClicked(p0: MaxAd) {}
-                        override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                    }, object : MaxAD {
-                        override fun adNotReady(type: String) {
-                            /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                                .show()*/
-                        }
-
-                    })
                 }
-            }, object : MaxAD {
-                override fun adNotReady(type: String) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Ad is not ready yet please try later",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    MaxRewardAds.loadRewardAds(requireContext(),AdConfig.applovinAndroidReward)
+
+                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
+                    setWallpaper()
                 }
             })
             dialog.dismiss()
@@ -544,91 +522,33 @@ class LiveWallpaperPreviewFragment : Fragment(), AdEventListener {
 
         getReward.setOnClickListener {
             Log.d("LivePreview", "getUserIdDialog: Clicking")
-            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+            MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
                 override fun onAdLoaded(p0: MaxAd) {
-                    Log.d("LivePreview", "onAdDisplayed: ")
-                    /*MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
-                        override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
-                            copyFiles(source, destination)
-                            dialog.dismiss()
-                        }
 
-                        override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                            Toast.makeText(
-                                requireContext(),
-                                "AD not available Try again later",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                            Toast.makeText(
-                                requireContext(),
-                                "AD not available Try again later",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-
-                        override fun onAdClicked(p0: MaxAd) {
-
-                        }
-
-                        override fun onAdHidden(p0: MaxAd) {
-
-                        }
-
-                        override fun onAdLoaded(p0: MaxAd) {
-
-                        }
-
-                        override fun onAdDisplayed(p0: MaxAd) {
-
-                        }
-                    })*/
                 }
 
                 override fun onAdDisplayed(p0: MaxAd) {
-                    Log.d("LivePreview", "onAdDisplayed: ")
+
                 }
 
                 override fun onAdHidden(p0: MaxAd) {
-                    Log.d("LivePreview", "onAdHidden: ")
+
                 }
 
                 override fun onAdClicked(p0: MaxAd) {
-                    Log.d("LivePreview", "onAdClicked: ")
+
                 }
 
                 override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    Log.d("LivePreview", "onAdLoadFailed: ")
-                    Toast.makeText(
-                        requireContext(),
-                        "AD not available Try again later",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
                 }
 
                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    Log.d("LivePreview", "onAdDisplayFailed: ")
-                    Toast.makeText(
-                        requireContext(),
-                        "AD not available Try again later",
-                        Toast.LENGTH_SHORT
-                    ).show()
+
                 }
 
                 override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
-                    Log.d("LivePreview", "onUserRewarded: ")
                     copyFiles(source, destination)
-                    dialog.dismiss()
-                }
-            }, object : MaxAD {
-                override fun adNotReady(type: String) {
-                    Toast.makeText(
-                        requireContext(),
-                        "AD not available Try again later",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             })
         }

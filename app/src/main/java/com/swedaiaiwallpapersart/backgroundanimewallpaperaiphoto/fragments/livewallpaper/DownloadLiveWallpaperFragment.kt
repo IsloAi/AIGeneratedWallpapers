@@ -87,32 +87,17 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
         if (AdConfig.ISPAIDUSER) {
 
         } else {
-            MaxNativeAd.createTemplateNativeAdLoader(
-                requireContext(),
-                AdConfig.applovinAndroidNativeMedium,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
-                        super.onNativeAdLoaded(p0, p1)
-                        binding.NativeAd.removeAllViews()
-                        p0?.let {
-                            binding.NativeAd.addView(it)
-
-                        }
-                    }
-
-                    override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                        super.onNativeAdLoadFailed(p0, p1)
-                    }
-
-                    override fun onNativeAdClicked(p0: MaxAd) {
-                        super.onNativeAdClicked(p0)
-                    }
-
-                    override fun onNativeAdExpired(p0: MaxAd) {
-                        super.onNativeAdExpired(p0)
-                    }
-                })
-            MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
+            if (AdConfig.globalTemplateNativeAdView != null) {
+                // Detach globalNativeAdView from its previous parent if it has one
+                AdConfig.globalTemplateNativeAdView?.parent?.let { parent ->
+                    (parent as ViewGroup).removeView(AdConfig.globalTemplateNativeAdView)
+                }
+                binding.NativeAd.removeAllViews()
+                binding.NativeAd.addView(AdConfig.globalTemplateNativeAdView)
+            } else {
+                // maybe show a placeholder or hide the view
+                binding.NativeAd.visibility = View.GONE
+            }
         }
 
         /*MaxNativeAd.createNativeAdLoader(

@@ -31,7 +31,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.Apicat
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.MostUsedWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.PopularSliderAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.WallpaperViewFragment.Companion.isNavigated
@@ -92,10 +91,10 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     var isNavigationInProgress = false
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentPopularWallpaperBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -109,13 +108,12 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
         myActivity = activity as MainActivity
 
         populateOnbaordingItems()
         binding.sliderPager.adapter = welcomeAdapter
-
         setIndicator()
         setCurrentIndicator(0)
         binding.sliderPager.registerOnPageChangeCallback(object :
@@ -125,7 +123,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 setCurrentIndicator(position)
             }
         })
-
         updateUIWithFetchedData()
         setEvents()
         initMostUsedRV()
@@ -238,7 +235,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                                 null,
                                 item.likes,
                                 item.liked,
-                                item.unlocked,
+                                false, // locked by default
                                 item.size,
                                 item.Tags,
                                 item.capacity
@@ -246,8 +243,10 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                             if (!list.contains(model)) {
                                 list.add(model)
                             }
-
                         }
+                        // Unlock 20% randomly
+                        val unlockCount = (list.size * 0.2).toInt()
+                        list.shuffled().take(unlockCount).forEach { it.unlockimges = true }
 
                         if (view != null) {
                             lifecycleScope.launch {
@@ -456,9 +455,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
         viewModel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Response.Loading -> {
-
-                }
+                is Response.Loading -> {}
 
                 is Response.Success -> {
                     if (view != null) {
@@ -587,7 +584,6 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
             sharedViewModel.clearData()
             sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
-            MaxInterstitialAds.loadInterstitialAd(requireContext())
             if (AdConfig.ISPAIDUSER) {
                 lifecycleScope.launch(Dispatchers.Main) {
                     Bundle().apply {
@@ -601,72 +597,8 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                     }
                 }
             } else {
-                MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {
-                        MaxInterstitialAds.showInterstitial(
-                            requireActivity(),
-                            object : MaxAdListener {
-                                override fun onAdLoaded(p0: MaxAd) {}
-
-                                override fun onAdDisplayed(p0: MaxAd) {}
-
-                                override fun onAdHidden(p0: MaxAd) {
-                                    lifecycleScope.launch(Dispatchers.Main) {
-                                        Bundle().apply {
-                                            putString("from", "trending")
-                                            putString("wall", "popular")
-                                            putInt("position", position - countOfNulls)
-                                            Log.e(TAG, "navigateToDestination: inside bundle")
-
-                                            requireParentFragment().findNavController()
-                                                .navigate(R.id.wallpaperViewFragment, this)
-                                        }
-                                    }
-                                    MaxInterstitialAds.loadInterstitialAd(requireContext())
-                                }
-
-                                override fun onAdClicked(p0: MaxAd) {}
-
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                            },
-                            object : MaxAD {
-                                override fun adNotReady(type: String) {
-                                    if (MaxInterstitialAds.willIntAdShow) {/*Toast.makeText(
-                                    requireContext(),
-                                    "Ad not available",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()*/
-                                        lifecycleScope.launch(Dispatchers.Main) {
-                                            Bundle().apply {
-                                                putString("from", "trending")
-                                                putString("wall", "popular")
-                                                putInt("position", position - countOfNulls)
-                                                Log.e(TAG, "navigateToDestination: inside bundle")
-
-                                                requireParentFragment().findNavController()
-                                                    .navigate(R.id.wallpaperViewFragment, this)
-                                            }
-                                        }
-                                    } else {
-                                        lifecycleScope.launch(Dispatchers.Main) {
-                                            Bundle().apply {
-                                                putString("from", "trending")
-                                                putString("wall", "popular")
-                                                putInt("position", position - countOfNulls)
-                                                Log.e(TAG, "navigateToDestination: inside bundle")
-
-                                                requireParentFragment().findNavController()
-                                                    .navigate(R.id.wallpaperViewFragment, this)
-                                            }
-                                        }
-                                    }
-
-                                }
-                            })
-                    }
+                MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {}
 
                     override fun onAdDisplayed(p0: MaxAd) {}
 
@@ -682,70 +614,13 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                                     .navigate(R.id.wallpaperViewFragment, this)
                             }
                         }
-                        MaxInterstitialAds.loadInterstitialAd(requireContext())
                     }
 
                     override fun onAdClicked(p0: MaxAd) {}
 
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            Bundle().apply {
-                                putString("from", "trending")
-                                putString("wall", "popular")
-                                putInt("position", position - countOfNulls)
-                                Log.e(TAG, "navigateToDestination: inside bundle")
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                                requireParentFragment().findNavController()
-                                    .navigate(R.id.wallpaperViewFragment, this)
-                            }
-                        }
-                    }
-
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            Bundle().apply {
-                                putString("from", "trending")
-                                putString("wall", "popular")
-                                putInt("position", position - countOfNulls)
-                                Log.e(TAG, "navigateToDestination: inside bundle")
-
-                                requireParentFragment().findNavController()
-                                    .navigate(R.id.wallpaperViewFragment, this)
-                            }
-                        }
-                    }
-                }, object : MaxAD {
-                    override fun adNotReady(type: String) {
-                        if (MaxInterstitialAds.willIntAdShow) {
-                            //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT) .show()
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                Bundle().apply {
-                                    putString("from", "trending")
-                                    putString("wall", "popular")
-                                    putInt("position", position - countOfNulls)
-                                    Log.e(TAG, "navigateToDestination: inside bundle")
-
-                                    requireParentFragment().findNavController()
-                                        .navigate(R.id.wallpaperViewFragment, this)
-                                }
-                            }
-                        } else {
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                Bundle().apply {
-                                    putString("from", "trending")
-                                    putString("wall", "popular")
-                                    putInt("position", position - countOfNulls)
-                                    Log.e(TAG, "navigateToDestination: inside bundle")
-
-                                    requireParentFragment().findNavController()
-                                        .navigate(R.id.wallpaperViewFragment, this)
-                                }
-                            }
-                        }
-
-                    }
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
                 })
             }
 

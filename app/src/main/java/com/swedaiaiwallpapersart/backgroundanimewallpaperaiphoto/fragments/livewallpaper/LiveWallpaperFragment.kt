@@ -23,7 +23,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.downloadCallback
@@ -150,12 +149,10 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
         adapter = LiveWallpaperAdapter(list, object :
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
-
                 val newPosition = position + 1
 
                 sharedViewModel.setAdPosition(newPosition)
                 setDownloadAbleWallpaperAndNavigate(model, false)
-
             }
         }, myActivity)
 
@@ -185,95 +182,10 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                     findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
                 }
             } else {
-                MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {
-                        MaxInterstitialAds.showInterstitial(
-                            requireActivity(),
-                            object : MaxAdListener {
-                                override fun onAdLoaded(p0: MaxAd) {}
+                MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {}
 
-                                override fun onAdDisplayed(p0: MaxAd) {}
-
-                                override fun onAdHidden(p0: MaxAd) {
-                                    Bundle().apply {
-                                        putBoolean("adShowed", adShowd)
-                                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers =
-                                            true
-                                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                                        findNavController().navigate(
-                                            R.id.downloadLiveWallpaperFragment,
-                                            this
-                                        )
-                                    }
-                                }
-
-                                override fun onAdClicked(p0: MaxAd) {}
-
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                                    Bundle().apply {
-                                        putBoolean("adShowed", adShowd)
-                                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers =
-                                            true
-                                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                                        findNavController().navigate(
-                                            R.id.downloadLiveWallpaperFragment,
-                                            this
-                                        )
-                                    }
-                                }
-
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                                    Bundle().apply {
-                                        putBoolean("adShowed", adShowd)
-                                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers =
-                                            true
-                                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                                        findNavController().navigate(
-                                            R.id.downloadLiveWallpaperFragment,
-                                            this
-                                        )
-                                    }
-                                }
-                            },
-                            object : MaxAD {
-                                override fun adNotReady(type: String) {
-                                    if (MaxInterstitialAds.willIntAdShow) {
-                                        /*Toast.makeText(
-                                            requireContext(),
-                                            "Ad not available",
-                                            Toast.LENGTH_SHORT
-                                        ).show()*/
-                                        Bundle().apply {
-                                            putBoolean("adShowed", adShowd)
-                                            DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers =
-                                                true
-                                            DownloadLiveWallpaperFragment.shouldObserveFavorites =
-                                                false
-                                            findNavController().navigate(
-                                                R.id.downloadLiveWallpaperFragment,
-                                                this
-                                            )
-                                        }
-                                    } else {
-                                        Bundle().apply {
-                                            putBoolean("adShowed", adShowd)
-                                            DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers =
-                                                true
-                                            DownloadLiveWallpaperFragment.shouldObserveFavorites =
-                                                false
-                                            findNavController().navigate(
-                                                R.id.downloadLiveWallpaperFragment,
-                                                this
-                                            )
-                                        }
-                                    }
-                                }
-                            })
-                    }
-
-                    override fun onAdDisplayed(p0: MaxAd) {
-
-                    }
+                    override fun onAdDisplayed(p0: MaxAd) {}
 
                     override fun onAdHidden(p0: MaxAd) {
                         Bundle().apply {
@@ -284,54 +196,11 @@ class LiveWallpaperFragment : Fragment(), AdEventListener {
                         }
                     }
 
-                    override fun onAdClicked(p0: MaxAd) {
+                    override fun onAdClicked(p0: MaxAd) {}
 
-                    }
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        Bundle().apply {
-                            putBoolean("adShowed", adShowd)
-                            DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                            DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                            findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
-                        }
-                    }
-
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                        Bundle().apply {
-                            putBoolean("adShowed", adShowd)
-                            DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                            DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                            findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
-                        }
-                    }
-                }, object : MaxAD {
-                    override fun adNotReady(type: String) {
-                        if (MaxInterstitialAds.willIntAdShow) {
-                            /*Toast.makeText(requireContext(), "Ad Not Available", Toast.LENGTH_SHORT)
-                                .show()*/
-                            Bundle().apply {
-                                putBoolean("adShowed", adShowd)
-                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                                findNavController().navigate(
-                                    R.id.downloadLiveWallpaperFragment,
-                                    this
-                                )
-                            }
-                        } else {
-                            Bundle().apply {
-                                putBoolean("adShowed", adShowd)
-                                DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                                DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                                findNavController().navigate(
-                                    R.id.downloadLiveWallpaperFragment,
-                                    this
-                                )
-                            }
-                        }
-                    }
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
                 })
             }
         }

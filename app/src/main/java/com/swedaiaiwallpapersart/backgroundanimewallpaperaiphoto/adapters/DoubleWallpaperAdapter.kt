@@ -13,21 +13,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.applovin.mediation.MaxAd
-import com.applovin.mediation.MaxError
-import com.applovin.mediation.nativeAds.MaxNativeAdListener
-import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemDoubleWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.DownloadCallbackDouble
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
@@ -80,39 +74,17 @@ class DoubleWallpaperAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
-            /*val nativeAd =
-                NativeAdManager(
-                    context!!,
-                    AdConfig.admobAndroidNative,
-                    R.layout.native_layout_small
-                )
-            nativeAd.loadNativeAd(binding.NativeAd)*/
-            MaxNativeAd.createNativeAdLoader(
-                context!!,
-                AdConfig.applovinAndroidNativeManual,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
-                        binding.NativeAd.removeAllViews()
-                        adView?.let {
-                            binding.NativeAd.addView(it)
-                        }
-                    }
-
-                    override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
-                        // Handle failure (optional retry logic)
-                    }
-
-                    override fun onNativeAdClicked(ad: MaxAd) {
-                        // Handle click
-                    }
-
-                    override fun onNativeAdExpired(ad: MaxAd) {
-                        // Ad expired - reload if needed
-                    }
+            if (AdConfig.globalNativeAdView != null) {
+                // Detach globalNativeAdView from its previous parent if it has one
+                AdConfig.globalNativeAdView?.parent?.let { parent ->
+                    (parent as ViewGroup).removeView(AdConfig.globalNativeAdView)
                 }
-            )
-
-            MaxNativeAd.loadNativeAd(R.layout.max_native_small, context!!)
+                binding.NativeAd.removeAllViews()
+                binding.NativeAd.addView(AdConfig.globalNativeAdView)
+            } else {
+                // maybe show a placeholder or hide the view
+                binding.NativeAd.visibility = View.GONE
+            }
         }
     }
 

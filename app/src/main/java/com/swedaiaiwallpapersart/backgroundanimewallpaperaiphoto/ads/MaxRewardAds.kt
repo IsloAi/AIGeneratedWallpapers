@@ -8,45 +8,72 @@ import com.applovin.mediation.MaxError
 import com.applovin.mediation.MaxReward
 import com.applovin.mediation.MaxRewardedAdListener
 import com.applovin.mediation.ads.MaxRewardedAd
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
+
 
 object MaxRewardAds {
-    private var rewardedAd: MaxRewardedAd? = null
 
-    fun loadRewardAds(context: Context, adId: String) {
-        rewardedAd = MaxRewardedAd.getInstance(adId, context)
-        rewardedAd?.setListener(object : MaxRewardedAdListener {
+    private const val MAX_REWARDED_ADS = 5
+    private const val MIN_REWARDED_THRESHOLD = 3
+    private val rewardedAdPool = mutableListOf<MaxRewardedAd>()
+    private val loadedAds = mutableListOf<MaxAd>()
+    private var isLoading = false
+
+    fun preloadRewardedAds(context: Context) {
+        if (isLoading || rewardedAdPool.size >= MAX_REWARDED_ADS) return
+        isLoading = true
+
+        val rewardedAd = MaxRewardedAd.getInstance(AdConfig.applovinAndroidReward, context)
+        rewardedAd.setListener(object : MaxRewardedAdListener {
             override fun onAdLoaded(ad: MaxAd) {
-                Log.d("AppLovin", "Rewarded Ad Loaded")
+                rewardedAdPool.add(rewardedAd)
+                loadedAds.add(ad)
+                isLoading = false
+                Log.d("AppLovin", "Rewarded Ad Preloaded. Pool size: ${rewardedAdPool.size}")
+                preloadRewardedAds(context) // Load next if needed
             }
-
-            override fun onAdDisplayed(ad: MaxAd) {}
-
-            override fun onAdHidden(ad: MaxAd) {
-                // Load next rewarded ad after closing
-                rewardedAd?.loadAd()
-            }
-
-            override fun onAdClicked(ad: MaxAd) {}
 
             override fun onAdLoadFailed(adUnitId: String, error: MaxError) {
+                isLoading = false
                 Log.e("AppLovin", "Rewarded Ad Load Failed: ${error.message}")
             }
 
             override fun onAdDisplayFailed(ad: MaxAd, error: MaxError) {}
+            override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {}
 
-            override fun onUserRewarded(ad: MaxAd, reward: MaxReward) {
-                rewardedAd?.loadAd()
+            override fun onAdDisplayed(ad: MaxAd) {}
+            override fun onAdHidden(ad: MaxAd) {
+                loadedAds.remove(ad)
+                preloadRewardedAds(context)
             }
+
+            override fun onAdClicked(ad: MaxAd) {}
         })
-        rewardedAd?.loadAd()
+
+        rewardedAd.loadAd()
     }
 
-    fun showRewardAd(context: Activity, listener: MaxRewardedAdListener, listener2: MaxAD) {
-        if (rewardedAd?.isReady == true) {
-            rewardedAd?.setListener(listener)
-            rewardedAd?.showAd(context)
+    fun showRewardedAd(activity: Activity, listener: MaxRewardedAdListener): Boolean {
+        val ad = rewardedAdPool.firstOrNull()
+        return if (ad?.isReady == true) {
+            ad.setListener(listener)
+            ad.showAd(activity)
+            rewardedAdPool.remove(ad)
+            true
         } else {
-            listener2.adNotReady("Rewarded")
+            Log.d("AppLovin", "No Rewarded Ad Available")
+            false
         }
+    }
+
+    fun checkAndPreload(context: Context) {
+        if (rewardedAdPool.size < MIN_REWARDED_THRESHOLD) {
+            preloadRewardedAds(context)
+        }
+    }
+
+    fun clearAds() {
+        rewardedAdPool.clear()
+        loadedAds.clear()
     }
 }

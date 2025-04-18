@@ -10,6 +10,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -135,35 +136,17 @@ class WallpaperApiSliderAdapter(
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
-
-            /*val native =
-                NativeAdManager(context!!, AdConfig.admobAndroidNative, R.layout.native_ad_slider)
-            native.loadNativeAd(binding.sliderNative)*/
-            MaxNativeAd.createNativeAdLoader(
-                context!!,
-                AdConfig.applovinAndroidNativeManual,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
-                        binding.sliderNative.removeAllViews()
-                        adView?.let {
-                            binding.sliderNative.addView(it)
-                        }
-                    }
-
-                    override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
-                        // Handle failure (optional retry logic)
-                    }
-
-                    override fun onNativeAdClicked(ad: MaxAd) {
-                        // Handle click
-                    }
-
-                    override fun onNativeAdExpired(ad: MaxAd) {
-                        // Ad expired - reload if needed
-                    }
+            if (AdConfig.globalBigNativeAdView != null) {
+                // Detach globalNativeAdView from its previous parent if it has one
+                AdConfig.globalBigNativeAdView?.parent?.let { parent ->
+                    (parent as ViewGroup).removeView(AdConfig.globalBigNativeAdView)
                 }
-            )
-            MaxNativeAd.loadNativeAd(R.layout.max_native_ad_slider, context!!)
+                binding.sliderNative.removeAllViews()
+                binding.sliderNative.addView(AdConfig.globalBigNativeAdView)
+            } else {
+                // maybe show a placeholder or hide the view
+                binding.sliderNative.visibility = View.GONE
+            }
         }
     }
 

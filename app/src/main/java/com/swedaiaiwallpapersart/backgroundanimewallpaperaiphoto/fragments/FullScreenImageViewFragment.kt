@@ -53,7 +53,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFullScreenImageViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.models.CatResponse
@@ -225,8 +224,19 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         bindingDialog.watchAds.setOnClickListener {
             dialog.dismiss()
-            MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
-            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+            MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
+                override fun onAdLoaded(p0: MaxAd) {}
+
+                override fun onAdDisplayed(p0: MaxAd) {}
+
+                override fun onAdHidden(p0: MaxAd) {}
+
+                override fun onAdClicked(p0: MaxAd) {}
+
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+
                 override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                     if (bitmap != null) {
                         responseData?.unlockimges = true
@@ -245,26 +255,6 @@ class FullScreenImageViewFragment : DialogFragment() {
                             getString(R.string.your_image_not_fetched_properly), Toast.LENGTH_SHORT
                         ).show()
                     }
-                }
-
-                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-
-                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                override fun onAdClicked(p0: MaxAd) {}
-
-                override fun onAdHidden(p0: MaxAd) {}
-
-                override fun onAdDisplayed(p0: MaxAd) {}
-
-                override fun onAdLoaded(p0: MaxAd) {}
-            }, object : MaxAD {
-                override fun adNotReady(type: String) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Ad not ready yet please try later",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             })
         }
@@ -292,8 +282,7 @@ class FullScreenImageViewFragment : DialogFragment() {
 
         getReward?.setOnClickListener {
             dialog.dismiss()
-            MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
-            MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
+            MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
                 override fun onAdLoaded(p0: MaxAd) {}
 
                 override fun onAdDisplayed(p0: MaxAd) {}
@@ -309,16 +298,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                 override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                     mSaveMediaToStorage(bitmap)
                 }
-            }, object : MaxAD {
-                override fun adNotReady(type: String) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Ad not ready yet please try later",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
             })
-
         }
 
         dismiss?.setOnClickListener {

@@ -76,38 +76,17 @@ class ApiCategoriesListAdapter(
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() {
-            /*val nativeAdView = NativeAdManager(
-                context!!,
-                AdConfig.admobAndroidNative,
-                R.layout.native_layout_small
-            )
-            nativeAdView.loadNativeAd(binding.NativeAd)*/
-            MaxNativeAd.createNativeAdLoader(
-                context!!,
-                AdConfig.applovinAndroidNativeManual,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
-                        binding.NativeAd.removeAllViews()
-                        adView?.let {
-                            binding.NativeAd.addView(it)
-                        }
-                    }
-
-                    override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
-                        // Handle failure (optional retry logic)
-                    }
-
-                    override fun onNativeAdClicked(ad: MaxAd) {
-                        // Handle click
-                    }
-
-                    override fun onNativeAdExpired(ad: MaxAd) {
-                        // Ad expired - reload if needed
-                    }
+            if (AdConfig.globalNativeAdView != null) {
+                // Detach globalNativeAdView from its previous parent if it has one
+                AdConfig.globalNativeAdView?.parent?.let { parent ->
+                    (parent as ViewGroup).removeView(AdConfig.globalNativeAdView)
                 }
-            )
-
-            MaxNativeAd.loadNativeAd(R.layout.max_native_small, context!!)
+                binding.NativeAd.removeAllViews()
+                binding.NativeAd.addView(AdConfig.globalNativeAdView)
+            } else {
+                // maybe show a placeholder or hide the view
+                binding.NativeAd.visibility = View.GONE
+            }
         }
     }
 

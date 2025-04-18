@@ -24,7 +24,6 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ApiCategoriesNameAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.LiveCategoriesHorizontalAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.StringCallback
@@ -211,95 +210,27 @@ class CategoryFragment : Fragment(), AdEventListener {
                 findNavController().navigate(R.id.listViewFragment, bundle)
             }
         } else {
-            MaxInterstitialAds.showInterstitial(requireActivity(),
-                object : MaxAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {
-                        MaxInterstitialAds.showInterstitial(
-                            requireActivity(),
-                            object : MaxAdListener {
-                                override fun onAdLoaded(p0: MaxAd) {}
+            MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {}
 
-                                override fun onAdDisplayed(p0: MaxAd) {}
+                override fun onAdDisplayed(p0: MaxAd) {}
 
-                                override fun onAdHidden(p0: MaxAd) {
-                                    val bundle = Bundle().apply {
-                                        putString("name", name)
-                                        putString("from", "category")
-                                    }
-                                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                                        findNavController().navigate(R.id.listViewFragment, bundle)
-                                    }
-                                }
-
-                                override fun onAdClicked(p0: MaxAd) {}
-
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                            },
-                            object : MaxAD {
-                                override fun adNotReady(type: String) {}
-                            })
+                override fun onAdHidden(p0: MaxAd) {
+                    val bundle = Bundle().apply {
+                        putString("name", name)
+                        putString("from", "category")
                     }
-
-                    override fun onAdDisplayed(p0: MaxAd) {}
-
-                    override fun onAdHidden(p0: MaxAd) {
-                        val bundle = Bundle().apply {
-                            putString("name", name)
-                            putString("from", "category")
-                        }
-                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                            findNavController().navigate(R.id.listViewFragment, bundle)
-                        }
+                    if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                        findNavController().navigate(R.id.listViewFragment, bundle)
                     }
+                }
 
-                    override fun onAdClicked(p0: MaxAd) {}
+                override fun onAdClicked(p0: MaxAd) {}
 
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        val bundle = Bundle().apply {
-                            putString("name", name)
-                            putString("from", "category")
-                        }
-                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                            findNavController().navigate(R.id.listViewFragment, bundle)
-                        }
-                    }
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        val bundle = Bundle().apply {
-                            putString("name", name)
-                            putString("from", "category")
-                        }
-                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                            findNavController().navigate(R.id.listViewFragment, bundle)
-                        }
-                    }
-                },
-                object : MaxAD {
-                    override fun adNotReady(type: String) {
-                        if (MaxInterstitialAds.willIntAdShow) {
-                            val bundle = Bundle().apply {
-                                putString("name", name)
-                                putString("from", "category")
-                            }
-                            if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                                findNavController().navigate(R.id.listViewFragment, bundle)
-                            }
-                        } else {
-                            val bundle = Bundle().apply {
-                                putString("name", name)
-                                putString("from", "category")
-                            }
-                            if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                                findNavController().navigate(R.id.listViewFragment, bundle)
-                            }
-                        }
-
-                    }
-                })
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+            })
         }
     }
 

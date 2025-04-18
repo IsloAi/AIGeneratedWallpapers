@@ -173,7 +173,8 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         sharedViewModel.clearChargeAnimation()
         sharedViewModel.setchargingAnimation(listOf(model))
         if (isAdded) {
-            MaxInterstitialAds.showInterstitial(requireActivity(), object : MaxAdListener {
+
+            MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
                 override fun onAdLoaded(p0: MaxAd) {}
 
                 override fun onAdDisplayed(p0: MaxAd) {}
@@ -187,36 +188,9 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
 
                 override fun onAdClicked(p0: MaxAd) {}
 
-                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                    //Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
-                    Bundle().apply {
-                        putBoolean("adShowed", adShowd)
-                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
-                    }
-                }
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                    //Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
-                    Bundle().apply {
-                        putBoolean("adShowed", adShowd)
-                        findNavController().navigate(R.id.downloadBatteryAnimation, this)
-                    }
-                }
-            }, object : MaxAD {
-                override fun adNotReady(type: String) {
-                    if (MaxInterstitialAds.willIntAdShow) {/*Toast.makeText(requireContext(), "AD not Available", Toast.LENGTH_SHORT)
-                            .show()*/
-                        Bundle().apply {
-                            putBoolean("adShowed", adShowd)
-                            findNavController().navigate(R.id.downloadBatteryAnimation, this)
-                        }
-                    } else {
-                        Bundle().apply {
-                            putBoolean("adShowed", adShowd)
-                            findNavController().navigate(R.id.downloadBatteryAnimation, this)
-                        }
-                    }
-                }
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
             })
         }
     }

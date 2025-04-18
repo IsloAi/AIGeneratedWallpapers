@@ -2,10 +2,14 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.app.Application
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import android.webkit.WebView
 import com.applovin.sdk.AppLovinMediationProvider
 import com.applovin.sdk.AppLovinSdk
 import com.applovin.sdk.AppLovinSdkInitializationConfiguration
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
@@ -30,10 +34,23 @@ class MyApp : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(applicationContext)
-        innitRemoteConfig()/* MobileAds.initialize(
-             this
-         ) { }*/
+        innitRemoteConfig()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val processName = getProcessName()
+            if (processName != applicationContext.packageName) {
+                WebView.setDataDirectorySuffix(processName)
+                Log.d("WebViewFix", "Set data dir suffix: $processName")
+            } else {
+                Log.d("WebViewFix", "Main process, no suffix needed")
+            }
+        }
+        // ✅ Configure test device for AdMob (used via AppLovin mediation)
+        val testDeviceIds = listOf("570CE0CD7B1047286A1E326FC0467F70")
+        val config = RequestConfiguration.Builder()
+            .setTestDeviceIds(testDeviceIds)
+            .build()
 
+        MobileAds.setRequestConfiguration(config)
     }
 
     private fun innitRemoteConfig() {
@@ -134,11 +151,14 @@ class MyApp : Application() {
 
         AppLovinSdk.getInstance(this).initialize(sdk) { sdkConfig ->
             // Start loading ads
-            MaxInterstitialAds.loadInterstitialAd(this@MyApp)
-            MaxRewardAds.loadRewardAds(this@MyApp, AdConfig.applovinAndroidReward)
-
+            MaxInterstitialAds.preloadInterstitials(this@MyApp)
+            AdConfig.loadAndCacheNativeAd(this@MyApp)
+            AdConfig.loadAndCacheBigNativeAd(this@MyApp)
+            AdConfig.loadTemplateNativeAd(this@MyApp)
+            MaxRewardAds.preloadRewardedAds(this@MyApp)
+            //MaxRewardAds.loadRewardAds(this@MyApp, AdConfig.applovinAndroidReward)
         }
-        //AppLovinSdk.getInstance(this).showMediationDebugger()
+        AppLovinSdk.getInstance(this).showMediationDebugger()
 
     }
 

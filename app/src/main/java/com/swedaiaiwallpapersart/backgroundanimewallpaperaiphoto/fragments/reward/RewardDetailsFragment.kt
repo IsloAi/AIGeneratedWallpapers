@@ -58,83 +58,21 @@ class RewardDetailsFragment : Fragment() {
             if (isAdded) {
                 MySharePreference.setVIPGiftBool(requireActivity(), true)
                 MySharePreference.setVIPGiftDate(requireActivity())
-                MaxRewardAds.showRewardAd(requireActivity(), object : MaxRewardedAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {
-                        Log.d("Reward", "onAdLoaded: Loaded ")
-                        MaxRewardAds.showRewardAd(
-                            requireActivity(),
-                            object : MaxRewardedAdListener {
-                                override fun onAdLoaded(p0: MaxAd) {
-                                }
+                MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {}
 
-                                override fun onAdDisplayed(p0: MaxAd) {
-                                }
+                    override fun onAdDisplayed(p0: MaxAd) {}
 
-                                override fun onAdHidden(p0: MaxAd) {
-                                    showCustomAlertDialog()
-                                    MaxRewardAds.loadRewardAds(
-                                        requireActivity(),
-                                        AdConfig.applovinAndroidReward
-                                    )
-                                }
-
-                                override fun onAdClicked(p0: MaxAd) {}
-
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Ad is not available",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    MaxRewardAds.loadRewardAds(
-                                        requireActivity(),
-                                        AdConfig.applovinAndroidReward
-                                    )
-                                }
-
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                                }
-
-                                override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
-                                    showCustomAlertDialog()
-                                }
-                            }, object : MaxAD {
-                                override fun adNotReady(type: String) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Ad not available",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            })
-                    }
-
-                    override fun onAdDisplayed(p0: MaxAd) {
-                    }
-
-                    override fun onAdHidden(p0: MaxAd) {
-                        MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
-                    }
+                    override fun onAdHidden(p0: MaxAd) {}
 
                     override fun onAdClicked(p0: MaxAd) {}
 
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                        Toast.makeText(requireContext(), "Ad is not available", Toast.LENGTH_SHORT)
-                            .show()
-                        MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
-                    }
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                        MaxRewardAds.loadRewardAds(requireContext(), AdConfig.applovinAndroidReward)
-                    }
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
 
                     override fun onUserRewarded(p0: MaxAd, p1: MaxReward) {
                         showCustomAlertDialog()
-                    }
-                }, object : MaxAD {
-                    override fun adNotReady(type: String) {
-                        /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                            .show()*/
                     }
                 })
             }

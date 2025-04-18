@@ -591,7 +591,7 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             appDatabase.liveWallpaperDao().insert(model)
                         }
 
-                        val percent = (result.data?.size?.times(0.3))?.toInt()
+                        val percent = (result.data?.size?.times(0.6))?.toInt()
                         val topDownloadedWallpapers = percent?.let {
                             appDatabase.liveWallpaperDao().getTopDownloadedWallpapers(
                                 it
@@ -637,7 +637,6 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                             appDatabase.wallpapersDao().updateLocked(false, item.image_id.toInt())
                         }
                         if (item == result.data.last()) {
-
                         }
                     }
                 }

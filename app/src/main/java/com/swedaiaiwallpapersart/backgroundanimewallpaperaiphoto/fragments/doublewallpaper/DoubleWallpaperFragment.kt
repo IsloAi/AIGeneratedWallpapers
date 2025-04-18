@@ -20,7 +20,6 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.DoubleWallModel
@@ -206,101 +205,41 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
             }
         } else {
-            MaxInterstitialAds.showInterstitial(requireActivity(),
-                object : MaxAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {
-                        MaxInterstitialAds.showInterstitial(
-                            requireActivity(),
-                            object : MaxAdListener {
-                                override fun onAdLoaded(p0: MaxAd) {}
 
-                                override fun onAdDisplayed(p0: MaxAd) {
-                                }
+            MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
+                override fun onAdLoaded(p0: MaxAd) {
 
-                                override fun onAdHidden(p0: MaxAd) {
-                                }
+                }
 
-                                override fun onAdClicked(p0: MaxAd) {
-                                }
+                override fun onAdDisplayed(p0: MaxAd) {
 
-                                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                                }
+                }
 
-                                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                                }
-                            },
-                            object : MaxAD {
-                                override fun adNotReady(type: String) {}
-                            })
+                override fun onAdHidden(p0: MaxAd) {
+                    Bundle().apply {
+                        Log.e(TAG, "navigateToDestination: inside bundle")
+                        putString("from", "trending")
+                        putString("wall", "home")
+                        putInt("position", position - countOfNulls)
+                        findNavController().navigate(
+                            R.id.doubleWallpaperSliderFragment,
+                            this
+                        )
                     }
+                }
 
-                    override fun onAdDisplayed(p0: MaxAd) {}
+                override fun onAdClicked(p0: MaxAd) {
 
-                    override fun onAdHidden(p0: MaxAd) {
-                        Bundle().apply {
-                            Log.e(TAG, "navigateToDestination: inside bundle")
-                            putString("from", "trending")
-                            putString("wall", "home")
-                            putInt("position", position - countOfNulls)
-                            findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
-                        }
-                        MaxInterstitialAds.loadInterstitialAd(requireContext())
-                    }
+                }
 
-                    override fun onAdClicked(p0: MaxAd) {}
+                override fun onAdLoadFailed(p0: String, p1: MaxError) {
 
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        Bundle().apply {
-                            Log.e(TAG, "navigateToDestination: inside bundle")
-                            putString("from", "trending")
-                            putString("wall", "home")
-                            putInt("position", position - countOfNulls)
-                            findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
-                        }
-                    }
+                }
 
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-                        //Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT).show()
-                        Bundle().apply {
-                            Log.e(TAG, "navigateToDestination: inside bundle")
-                            putString("from", "trending")
-                            putString("wall", "home")
-                            putInt("position", position - countOfNulls)
-                            findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
-                        }
-                    }
-                },
-                object : MaxAD {
-                    override fun adNotReady(type: String) {
-                        if (MaxInterstitialAds.willIntAdShow) {
-                            /*Toast.makeText(requireContext(), "Ad not available", Toast.LENGTH_SHORT)
-                                .show()*/
-                            Bundle().apply {
-                                Log.e(TAG, "navigateToDestination: inside bundle")
-                                putString("from", "trending")
-                                putString("wall", "home")
-                                putInt("position", position - countOfNulls)
-                                findNavController().navigate(
-                                    R.id.doubleWallpaperSliderFragment,
-                                    this
-                                )
-                            }
-                        } else {
-                            Bundle().apply {
-                                Log.e(TAG, "navigateToDestination: inside bundle")
-                                putString("from", "trending")
-                                putString("wall", "home")
-                                putInt("position", position - countOfNulls)
-                                findNavController().navigate(
-                                    R.id.doubleWallpaperSliderFragment,
-                                    this
-                                )
-                            }
-                        }
+                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
 
-                    }
-                })
+                }
+            })
         }
 
 

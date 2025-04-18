@@ -36,25 +36,6 @@
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="ONE_DAY" />
-              <option name="versions">
-                <list>
-                  <VersionSetting>
-                    <option name="buildVersion" value="166" />
-                    <option name="displayName" value="2.0.2 (166)" />
-                    <option name="displayVersion" value="2.0.2" />
-                  </VersionSetting>
-                  <VersionSetting>
-                    <option name="buildVersion" value="165" />
-                    <option name="displayName" value="2.0.2 (165)" />
-                    <option name="displayVersion" value="2.0.2" />
-                  </VersionSetting>
-                  <VersionSetting>
-                    <option name="buildVersion" value="162" />
-                    <option name="displayName" value="2.0.1 (162)" />
-                    <option name="displayVersion" value="2.0.1" />
-                  </VersionSetting>
-                </list>
-              </option>
               <option name="visibilityType" value="ALL" />
             </InsightsFilterSettings>
           </value>

@@ -2,15 +2,12 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.view.ViewGroup
 import com.applovin.mediation.MaxAd
-import com.applovin.mediation.MaxError
 import com.applovin.mediation.nativeAds.MaxNativeAdListener
 import com.applovin.mediation.nativeAds.MaxNativeAdLoader
 import com.applovin.mediation.nativeAds.MaxNativeAdView
 import com.applovin.mediation.nativeAds.MaxNativeAdViewBinder
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
 //Created on  by U5M4N-K071N
 /*It's the fear of the bug unseen 

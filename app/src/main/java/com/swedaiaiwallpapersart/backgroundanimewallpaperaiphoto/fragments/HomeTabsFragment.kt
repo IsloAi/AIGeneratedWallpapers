@@ -128,9 +128,7 @@ class HomeTabsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeTabsBinding.inflate(inflater, container, false)
-
         return binding.root
-
     }
 
     @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
