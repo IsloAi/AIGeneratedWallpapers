@@ -219,10 +219,8 @@ class ListViewFragment : Fragment(), AdEventListener {
 
                 is Response.Success -> {
                     if (!dataset) {
-
                         lifecycleScope.launch(Dispatchers.IO) {
                             var tempList = ArrayList<CatResponse>()
-
                             result.data?.forEach { item ->
                                 val model = CatResponse(
                                     item.id,
@@ -233,7 +231,7 @@ class ListViewFragment : Fragment(), AdEventListener {
                                     null,
                                     item.likes,
                                     item.liked,
-                                    item.unlocked,
+                                    false,
                                     item.size,
                                     item.Tags,
                                     item.capacity
@@ -242,41 +240,29 @@ class ListViewFragment : Fragment(), AdEventListener {
                                     tempList.add(model)
                                 }
                             }
-
+                            // Unlock 20% randomly
+                            val unlockCount = (tempList.size * 0.2).toInt()
+                            tempList.shuffled().take(unlockCount).forEach { it.unlockimges = true }
 
                             val list = if (AdConfig.ISPAIDUSER) {
                                 tempList.shuffled() as ArrayList<CatResponse?>
                             } else {
                                 addNullValueInsideArray(tempList.shuffled())
                             }
-
                             cachedCatResponses = list
-
-                            val initialItems = getItems(0, 30)
-
-                            Log.e(TAG, "initMostDownloadedData: $initialItems")
                             withContext(Dispatchers.Main) {
-                                adapter?.updateMoreData(initialItems)
-                                startIndex += 30
+                                adapter?.updateData(cachedCatResponses)
                                 dataset = true
                             }
-
-
                         }
-
-
                     }
                 }
-
                 is Response.Error -> {
                     Log.e("TAG", "error: ${result.message}")
                     Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT).show()
                 }
-
-                else -> {
-                }
+                else -> {}
             }
-
         }
     }
 
@@ -336,51 +322,6 @@ class ListViewFragment : Fragment(), AdEventListener {
     }
 
     private fun loadData() {
-        /*myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Response.Success -> {
-                    if (!dataset) {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            var tempList = ArrayList<CatResponse>()
-
-                            result.data?.forEach { item ->
-                                val model = CatResponse(
-                                    item.id,
-                                    item.image_name,
-                                    item.cat_name,
-                                    item.hd_image_url,
-                                    item.compressed_image_url,
-                                    null,
-                                    item.likes,
-                                    item.liked,
-                                    item.unlocked,
-                                    item.size,
-                                    item.Tags,
-                                    item.capacity
-                                )
-                                if (!tempList.contains(model)) {
-                                    tempList.add(model)
-                                }
-                                Log.d("ViewCategory", "loadData:item = $item \n ")
-                            }
-
-                            val list = addNullValueInsideArray(tempList.shuffled())
-
-                            cachedCatResponses = list
-                            withContext(Dispatchers.Main) {
-                                //adapter?.updateMoreData(initialItems)
-                                adapter?.updateData(list)
-                                //startIndex += 30
-                                dataset = true
-                            }
-                        }
-                    }
-                }
-
-                is Response.Error -> {}
-                else -> {}
-            }
-        }*/
         myViewModel.fetchWallpapers(requireContext(), name)
 
         myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->

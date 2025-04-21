@@ -73,6 +73,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databindi
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentWallpaperViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.WallpaperApiSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.remote.EndPointsInterface
@@ -402,44 +403,75 @@ class WallpaperViewFragment : Fragment() {
                     ).show()
                 }
             } else {
-                MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {}
 
-                    override fun onAdDisplayed(p0: MaxAd) {}
+                if (AdClickCounter.shouldShowAd()) {
+                    MaxInterstitialAds.showInterstitialAd(
+                        requireActivity(),
+                        object : MaxAdListener {
+                            override fun onAdLoaded(p0: MaxAd) {}
 
-                    override fun onAdHidden(p0: MaxAd) {
-                        if (bitmap != null) {
-                            if (arrayList[position]?.unlockimges == true) {
-                                val model = arrayList[position]
-                                openPopupMenu(model!!)
-                                Log.d(
-                                    "SET-WALL",
-                                    "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
-                                )
+                            override fun onAdDisplayed(p0: MaxAd) {}
 
-                            } else {
-                                if (AdConfig.ISPAIDUSER) {
-                                    val model = arrayList[position]
-                                    openPopupMenu(model!!)
+                            override fun onAdHidden(p0: MaxAd) {
+                                if (bitmap != null) {
+                                    if (arrayList[position]?.unlockimges == true) {
+                                        val model = arrayList[position]
+                                        openPopupMenu(model!!)
+                                        Log.d(
+                                            "SET-WALL",
+                                            "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                                        )
+
+                                    } else {
+                                        if (AdConfig.ISPAIDUSER) {
+                                            val model = arrayList[position]
+                                            openPopupMenu(model!!)
+                                        } else {
+                                            unlockDialog()
+                                        }
+                                    }
                                 } else {
-                                    unlockDialog()
+                                    Toast.makeText(
+                                        requireContext(),
+                                        getString(R.string.your_image_not_fetched_properly),
+                                        Toast.LENGTH_SHORT
+                                    ).show()
                                 }
                             }
+
+                            override fun onAdClicked(p0: MaxAd) {}
+
+                            override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                        })
+                } else {
+                    AdClickCounter.increment()
+                    if (bitmap != null) {
+                        if (arrayList[position]?.unlockimges == true) {
+                            val model = arrayList[position]
+                            openPopupMenu(model!!)
+                            Log.d(
+                                "SET-WALL",
+                                "Applying wallpaper at position: $position, ID: ${arrayList[position]?.id}"
+                            )
+
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                getString(R.string.your_image_not_fetched_properly),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            if (AdConfig.ISPAIDUSER) {
+                                val model = arrayList[position]
+                                openPopupMenu(model!!)
+                            } else {
+                                unlockDialog()
+                            }
                         }
+                    } else {
+                        Toast.makeText(
+                            requireContext(),
+                            getString(R.string.your_image_not_fetched_properly),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-
-                    override fun onAdClicked(p0: MaxAd) {}
-
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                })
+                }
             }
 
         }
@@ -570,7 +602,6 @@ class WallpaperViewFragment : Fragment() {
                         val model = arrayList[position]
                         model?.let { it1 -> setDownloaded(it1) }
                     } else {
-
                         getUserIdDialog()
                     }
                 }

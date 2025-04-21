@@ -3,6 +3,8 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
 import android.widget.TextView
@@ -27,32 +29,17 @@ class MyDialogs {
         val btnNo = bottomSheetDialog.findViewById<Button>(R.id.btnNo)
         val btnYes = bottomSheetDialog.findViewById<Button>(R.id.btnYes)
         val btn = bottomSheetDialog.findViewById<FrameLayout>(R.id.nativeADExit)
-        MaxNativeAd.createNativeAdLoader(
-            context!!,
-            AdConfig.applovinAndroidNativeManual,
-            object : MaxNativeAdListener() {
-                override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
-                    btn?.removeAllViews()
-                    adView?.let {
-                        btn?.addView(it)
-                    }
-                }
-
-                override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
-                    // Handle failure (optional retry logic)
-                }
-
-                override fun onNativeAdClicked(ad: MaxAd) {
-                    // Handle click
-                }
-
-                override fun onNativeAdExpired(ad: MaxAd) {
-                    // Ad expired - reload if needed
-                }
+        if (AdConfig.globalNativeAdView != null) {
+            // Detach globalNativeAdView from its previous parent if it has one
+            AdConfig.globalNativeAdView?.parent?.let { parent ->
+                (parent as ViewGroup).removeView(AdConfig.globalNativeAdView)
             }
-        )
-
-        MaxNativeAd.loadNativeAd(R.layout.max_native_small, context!!)
+            btn?.removeAllViews()
+            btn?.addView(AdConfig.globalNativeAdView)
+        } else {
+            // maybe show a placeholder or hide the view
+            btn?.visibility = View.GONE
+        }
 
         title!!.text = context.getString(R.string.are_you_sure_you_want_to_exit)
         btnYes!!.setOnClickListener {

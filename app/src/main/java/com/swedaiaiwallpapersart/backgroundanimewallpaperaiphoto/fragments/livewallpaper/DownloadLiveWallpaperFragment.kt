@@ -149,7 +149,6 @@ class DownloadLiveWallpaperFragment : Fragment(), AdEventListener {
     private fun navigateToPreview() {
         if (isAdded) {
             findNavController().navigate(R.id.liveWallpaperPreviewFragment)
-
         }
     }
 

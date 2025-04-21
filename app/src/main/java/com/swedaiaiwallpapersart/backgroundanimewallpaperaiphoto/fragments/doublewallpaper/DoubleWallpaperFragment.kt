@@ -19,6 +19,7 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
@@ -205,44 +206,50 @@ class DoubleWallpaperFragment : Fragment(), AdEventListener {
                 findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
             }
         } else {
+            if (AdClickCounter.shouldShowAd()) {
+                MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {}
 
-            MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
-                override fun onAdLoaded(p0: MaxAd) {
+                    override fun onAdDisplayed(p0: MaxAd) {
 
-                }
-
-                override fun onAdDisplayed(p0: MaxAd) {
-
-                }
-
-                override fun onAdHidden(p0: MaxAd) {
-                    Bundle().apply {
-                        Log.e(TAG, "navigateToDestination: inside bundle")
-                        putString("from", "trending")
-                        putString("wall", "home")
-                        putInt("position", position - countOfNulls)
-                        findNavController().navigate(
-                            R.id.doubleWallpaperSliderFragment,
-                            this
-                        )
                     }
+
+                    override fun onAdHidden(p0: MaxAd) {
+                        Bundle().apply {
+                            Log.e(TAG, "navigateToDestination: inside bundle")
+                            putString("from", "trending")
+                            putString("wall", "home")
+                            putInt("position", position - countOfNulls)
+                            findNavController().navigate(
+                                R.id.doubleWallpaperSliderFragment,
+                                this
+                            )
+                        }
+                    }
+
+                    override fun onAdClicked(p0: MaxAd) {
+
+                    }
+
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
+
+                    }
+
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
+
+                    }
+                })
+            } else {
+                AdClickCounter.increment()
+                Bundle().apply {
+                    Log.e(TAG, "navigateToDestination: inside bundle")
+                    putString("from", "trending")
+                    putString("wall", "home")
+                    putInt("position", position - countOfNulls)
+                    findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
                 }
-
-                override fun onAdClicked(p0: MaxAd) {
-
-                }
-
-                override fun onAdLoadFailed(p0: String, p1: MaxError) {
-
-                }
-
-                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-
-                }
-            })
+            }
         }
-
-
     }
 
     override fun onDestroyView() {

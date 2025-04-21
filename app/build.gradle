@@ -16,8 +16,8 @@ android {
         applicationId "com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto"
         minSdk 24
         targetSdk 34
-        versionCode 166
-        versionName "2.0.2"
+        versionCode 167
+        versionName "2.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         archivesBaseName = "Ai Wallpapers -" + versionName + " build " + versionCode
@@ -135,9 +135,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics-ktx:22.1.2'
 
     //In-App Review
-    implementation("com.google.android.play:review:2.0.1")
+    implementation("com.google.android.play:review:2.0.2")
     // For Kotlin users also import the Kotlin extensions library for Play In-App Review:
-    implementation("com.google.android.play:review-ktx:2.0.1")
+    implementation("com.google.android.play:review-ktx:2.0.2")
     implementation 'org.bouncycastle:bcprov-jdk15on:1.68'
 
     // swape layout

@@ -44,6 +44,7 @@ import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.InAppProducts
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.billingClient
@@ -161,7 +162,10 @@ class MainActivity : AppCompatActivity(), ConnectivityListener {
                 }
             }
         }
+
+        AdClickCounter.reset()
     }
+
 
     private fun setUpBilling() {
         billingClient =

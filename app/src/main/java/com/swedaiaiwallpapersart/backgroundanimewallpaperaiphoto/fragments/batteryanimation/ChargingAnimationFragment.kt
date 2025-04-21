@@ -19,8 +19,8 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.ChargingAnimationAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdEventListener
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxAD
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.model.response.ChargingAnimModel
@@ -173,25 +173,44 @@ class ChargingAnimationFragment : Fragment(), AdEventListener {
         sharedViewModel.clearChargeAnimation()
         sharedViewModel.setchargingAnimation(listOf(model))
         if (isAdded) {
+            if (AdConfig.ISPAIDUSER) {
+                Bundle().apply {
+                    putBoolean("adShowed", adShowd)
+                    findNavController().navigate(R.id.downloadBatteryAnimation, this)
+                }
+            } else {
+                if (AdClickCounter.shouldShowAd()) {
+                    MaxInterstitialAds.showInterstitialAd(
+                        requireActivity(),
+                        object : MaxAdListener {
+                            override fun onAdLoaded(p0: MaxAd) {}
 
-            MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
-                override fun onAdLoaded(p0: MaxAd) {}
+                            override fun onAdDisplayed(p0: MaxAd) {}
 
-                override fun onAdDisplayed(p0: MaxAd) {}
+                            override fun onAdHidden(p0: MaxAd) {
+                                Bundle().apply {
+                                    putBoolean("adShowed", adShowd)
+                                    findNavController().navigate(
+                                        R.id.downloadBatteryAnimation,
+                                        this
+                                    )
+                                }
+                            }
 
-                override fun onAdHidden(p0: MaxAd) {
+                            override fun onAdClicked(p0: MaxAd) {}
+
+                            override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                            override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                        })
+                } else {
+                    AdClickCounter.increment()
                     Bundle().apply {
                         putBoolean("adShowed", adShowd)
                         findNavController().navigate(R.id.downloadBatteryAnimation, this)
                     }
                 }
-
-                override fun onAdClicked(p0: MaxAd) {}
-
-                override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-            })
+            }
         }
     }
 
