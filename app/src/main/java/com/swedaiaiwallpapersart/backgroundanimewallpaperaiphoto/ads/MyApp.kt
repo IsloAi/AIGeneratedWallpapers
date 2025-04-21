@@ -158,7 +158,7 @@ class MyApp : Application() {
             MaxRewardAds.preloadRewardedAds(this@MyApp)
             //MaxRewardAds.loadRewardAds(this@MyApp, AdConfig.applovinAndroidReward)
         }
-        AppLovinSdk.getInstance(this).showMediationDebugger()
+        //AppLovinSdk.getInstance(this).showMediationDebugger()
 
     }
 
