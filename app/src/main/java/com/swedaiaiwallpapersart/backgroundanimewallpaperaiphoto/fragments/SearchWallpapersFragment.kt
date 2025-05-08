@@ -80,7 +80,7 @@ class SearchWallpapersFragment : Fragment() {
 
         initCatgories()
         initDataObserver()
-        initSearchData()
+        //initSearchData()
         initSearchRv()
         setEvents()
 
@@ -252,7 +252,7 @@ class SearchWallpapersFragment : Fragment() {
         }
     }
 
-    private fun initSearchData() {
+    /*private fun initSearchData() {
         myViewModel.allCreations.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
@@ -295,7 +295,7 @@ class SearchWallpapersFragment : Fragment() {
         }
 
 
-    }
+    }*/
 
     private fun editTextLayoutsFocus() {
         binding.searchEdt.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
@@ -329,7 +329,7 @@ class SearchWallpapersFragment : Fragment() {
     }
 
     fun initDataObserver() {
-        myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
+        /*myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
             Log.e("TAG", "onCustomCreateView: no data exists")
             if (wallpapersList?.size!! > 0) {
                 Log.e("TAG", "onCustomCreateView: data exists")
@@ -340,7 +340,7 @@ class SearchWallpapersFragment : Fragment() {
                 }
                 adapter?.updateData(newData = list)
             }
-        }
+        }*/
 
 
     }

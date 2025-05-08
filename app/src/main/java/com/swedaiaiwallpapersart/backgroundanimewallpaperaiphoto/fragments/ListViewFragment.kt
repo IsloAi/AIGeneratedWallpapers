@@ -213,13 +213,10 @@ class ListViewFragment : Fragment(), AdEventListener {
     private fun initTrendingData() {
         mostDownloadedViewmodel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
-                is Response.Loading -> {
-
-                }
-
+                is Response.Loading -> {}
                 is Response.Success -> {
                     if (!dataset) {
-                        lifecycleScope.launch(Dispatchers.IO) {
+                        /*lifecycleScope.launch(Dispatchers.IO) {
                             var tempList = ArrayList<CatResponse>()
                             result.data?.forEach { item ->
                                 val model = CatResponse(
@@ -254,7 +251,9 @@ class ListViewFragment : Fragment(), AdEventListener {
                                 adapter?.updateData(cachedCatResponses)
                                 dataset = true
                             }
-                        }
+                        }*/
+                        Toast.makeText(requireContext(), "Get the Data here", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
                 is Response.Error -> {

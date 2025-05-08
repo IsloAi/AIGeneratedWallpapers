@@ -13,6 +13,7 @@ import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.FirebaseApp
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import com.google.firebase.remoteconfig.get
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.interfaces.ConnectivityListener
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 import dagger.hilt.android.HiltAndroidApp
@@ -67,10 +68,36 @@ class MyApp : Application() {
                 val jsonString = remoteConfig.getString("ads") // Get the JSON as a string
                 val jsonStringAppInfo =
                     remoteConfig.getString("app_info") // Get the JSON as a string
-                Log.d("RemoteConfig", "Fetched JSON: $jsonString, AppInfo = $jsonStringAppInfo")
+                val positionTabs = remoteConfig["tablist_156"].asString()
+                val languagesOrder = remoteConfig["languages"].asString()
+                val baseUrls = remoteConfig["dataUrl"].asString()
+                val appFree = remoteConfig["wholeAppFree"].asBoolean()
+
+                //START PUTTING THE DATA INTO THE VARIABLES
+
                 // Parse JSON to extract values
                 parseAdConfig(jsonString)
                 parseAppInfo(jsonStringAppInfo)
+                //URLS
+                AdConfig.BASE_URL_DATA = baseUrls
+                AdConfig.inAppConfig = appFree
+                //TAB NAMES
+                val tabNamesArray: Array<String> =
+                    positionTabs.replace("{", "")
+                        .replace("}", "")
+                        .replace("\"", "")
+                        .split(", ")
+                        .toTypedArray()
+                AdConfig.tabPositions = tabNamesArray
+                //LANGUAGES
+                try {
+                    val languagesOrderArray =
+                        languagesOrder.split(",").map { it.trim().removeSurrounding("\"") }
+
+                    AdConfig.languagesOrder = languagesOrderArray
+                } catch (e: StringIndexOutOfBoundsException) {
+                    e.printStackTrace()
+                }
             } else {
                 Log.e("RemoteConfig", "Failed to fetch Remote Config")
             }

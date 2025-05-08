@@ -10,11 +10,9 @@ import com.applovin.mediation.MaxRewardedAdListener
 import com.applovin.mediation.ads.MaxRewardedAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.AdConfig
 
-
 object MaxRewardAds {
 
-    private const val MAX_REWARDED_ADS = 5
-    private const val MIN_REWARDED_THRESHOLD = 3
+    private const val MAX_REWARDED_ADS = 2
     private val rewardedAdPool = mutableListOf<MaxRewardedAd>()
     private val loadedAds = mutableListOf<MaxAd>()
     private var isLoading = false
@@ -66,14 +64,4 @@ object MaxRewardAds {
         }
     }
 
-    fun checkAndPreload(context: Context) {
-        if (rewardedAdPool.size < MIN_REWARDED_THRESHOLD) {
-            preloadRewardedAds(context)
-        }
-    }
-
-    fun clearAds() {
-        rewardedAdPool.clear()
-        loadedAds.clear()
-    }
 }

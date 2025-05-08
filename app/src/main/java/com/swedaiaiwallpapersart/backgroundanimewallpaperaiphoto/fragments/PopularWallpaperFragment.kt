@@ -218,7 +218,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     }
 
     private fun initMostDownloadedData() {
-        viewModel.allCreations.observe(viewLifecycleOwner) { result ->
+        /*viewModel.allCreations.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Loading -> {
                 }
@@ -283,7 +283,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
 
                 else -> {}
             }
-        }
+        }*/
     }
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
@@ -450,7 +450,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
     }
 
     private fun initTrendingData() {
-        viewModel.getAllTrendingWallpapers()
+        /*viewModel.getAllTrendingWallpapers()
 
         viewModel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
@@ -498,7 +498,7 @@ class PopularWallpaperFragment() : Fragment(), AdEventListener {
                 }
             }
 
-        }
+        }*/
     }
 
     private fun updateUIWithFetchedData() {

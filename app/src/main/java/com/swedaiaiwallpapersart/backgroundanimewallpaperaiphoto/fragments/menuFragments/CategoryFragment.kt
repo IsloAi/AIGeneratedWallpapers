@@ -95,7 +95,7 @@ class CategoryFragment : Fragment(), AdEventListener {
 
         binding.recyclerviewAll.adapter = adapter
 
-        myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
+        /*myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
             Log.e("TAG", "onCustomCreateView: no data exists")
             if (wallpapersList?.size!! > 0) {
                 Log.e("TAG", "onCustomCreateView: data exists")
@@ -108,7 +108,7 @@ class CategoryFragment : Fragment(), AdEventListener {
                     }
                 }
             }
-        }
+        }*/
 
         binding.more.setOnClickListener {
             findNavController().navigate(R.id.liveWallpaperCategoriesFragment)

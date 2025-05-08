@@ -40,16 +40,13 @@ class FetchDataRepositoryImpl @Inject constructor(
 
     override fun fetechTrendingWallpapers(): Flow<Response<List<SingleDatabaseResponse>>> = channelFlow {
         try {
-
             trySend(Response.Loading)
-
             val creations= appDatabase.wallpapersDao().getTrendingWallpapers()
             if (creations.isNotEmpty()){
                 trySend(Response.Success(creations))
             }else{
                 trySend(Response.Error("No Data found"))
             }
-
         }
         catch (e:Exception){
             trySend(Response.Error("Unexpected error ${e.message}"))
