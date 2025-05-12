@@ -3,13 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/splashOnFragment">
+    app:startDestination="@id/splashFragment">
+
+
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.SplashOnFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash"></fragment>
-    <fragment
+        tools:layout="@layout/newsplash_fragment" />
+
+
+    <!--<fragment
         android:id="@+id/mainFragment"
         android:name="com.example.hdwallpaper.Fragments.MainFragment"
         android:label="fragment_main"
@@ -134,7 +138,7 @@
         tools:layout="@layout/fragment_view_all_creations" />
     <fragment
         android:id="@+id/splashOnFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SplashOnFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.SplashOnFragment"
         android:label="fragment_splash_on"
         tools:layout="@layout/fragment_splash_on">
         <action
@@ -282,5 +286,5 @@
         android:id="@+id/favouriteLiveFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteLiveFragment"
         android:label="fragment_favourite_live"
-        tools:layout="@layout/fragment_favourite_live" />
+        tools:layout="@layout/fragment_favourite_live" />-->
 </navigation>

@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MyApp"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -47,7 +47,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MainActivity"
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
