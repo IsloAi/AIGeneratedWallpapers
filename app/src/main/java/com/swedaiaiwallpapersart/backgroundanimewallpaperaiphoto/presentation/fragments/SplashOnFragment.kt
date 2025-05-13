@@ -1,16 +1,22 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments
 
+import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.applovin.mediation.ads.MaxAdView
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NewsplashFragmentBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -20,10 +26,15 @@ import kotlinx.coroutines.withContext
 
 class SplashOnFragment : Fragment() {
 
+    companion object {
+        var exit = true
+    }
+
+    private var _binding: NewsplashFragmentBinding? = null
+
     var moveNext = false
     private var hasNavigated = false
     private lateinit var firebaseAnalytics: FirebaseAnalytics
-    private var _binding: NewsplashFragmentBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var myActivity: MainActivity
@@ -48,7 +59,7 @@ class SplashOnFragment : Fragment() {
 
         myActivity = activity as MainActivity
 
-        //lan = MySharePreference.getLanguage(requireContext()).toString()
+        lan = MySharePreference.getLanguage(requireContext()).toString()
 
         //createBannerAd()
         //MaxInterstitialAds.loadInterstitialAd(requireContext())
@@ -63,30 +74,9 @@ class SplashOnFragment : Fragment() {
                 }
                 delay(interval.toLong())
             }
-            //navigateToNextScreen()
+            navigateToNextScreen()
         }
         animateLoadingText()
-    }
-
-    /*private fun createBannerAd() {
-        adView = MaxAdView(AdConfig.applovinAndroidBanner, requireContext())
-
-        // Stretch to the width of the screen for banners to be fully functional
-        val width = ViewGroup.LayoutParams.MATCH_PARENT
-
-        // Banner height on phones and tablets is 50 and 90, respectively
-        val heightPx = resources.getDimensionPixelSize(R.dimen.banner_height)
-
-        adView.layoutParams = FrameLayout.LayoutParams(width, heightPx)
-
-        // Set background color for banners to be fully functional
-        adView.setBackgroundColor(resources.getColor(R.color.new_main_background))
-
-        val rootView = binding.BannerMaxAdView
-        rootView.addView(adView)
-
-        // Load the ad
-        adView?.loadAd()
     }
 
     private fun navigateToNextScreen() {
@@ -103,7 +93,7 @@ class SplashOnFragment : Fragment() {
                 }, 4000)
             }
         }
-    }*/
+    }
 
     private fun animateLoadingText() {
         animationJob = viewLifecycleOwner.lifecycleScope.launch {
@@ -124,7 +114,7 @@ class SplashOnFragment : Fragment() {
         textView.text = "Loading$dots"
     }
 
-    /*override fun onResume() {
+    override fun onResume() {
         super.onResume()
 
         Log.e("SPLASH", "onResume: ")
@@ -138,14 +128,13 @@ class SplashOnFragment : Fragment() {
                 binding.videoView.start()
             }
         }
-        val lan = MySharePreference.getLanguage(requireContext())
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Splash Screen")
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
-    }*/
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

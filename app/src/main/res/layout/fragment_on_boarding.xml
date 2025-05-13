@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.OnBoardingFragment">
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.welcome.OnBoardingFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/topguideline"

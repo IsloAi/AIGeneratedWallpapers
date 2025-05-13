@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.endpoints.APIEndpoints
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository.WallpaperAPIRepositoryImplementation
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MyApp
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import dagger.Module
@@ -70,10 +71,10 @@ object HiltModule {
         return WallpaperAPIRepositoryImplementation(webApiInterface)
     }
 
-    /*@Provides
+    @Provides
     fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase(context)
-    }*/
+    }
 
     /*@Provides
     fun provideFetchDataRepository(

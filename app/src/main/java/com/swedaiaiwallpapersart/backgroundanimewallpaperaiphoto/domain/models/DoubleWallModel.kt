@@ -1,6 +1,11 @@
-package com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "Double_Wallpaper")
 data class DoubleWallModel(
+    @PrimaryKey(autoGenerate = false)
     val id: Int,
     val hd_url1: String,
     val compress_url1: String,

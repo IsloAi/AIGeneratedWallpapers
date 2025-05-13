@@ -1,11 +1,11 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository
 
 import android.util.Log
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.ChargingAnimModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.DoubleWallModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.endpoints.APIEndpoints
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.staticApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.ChargingAnimationResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.DoubleApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.LiveApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.StaticApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -17,12 +17,12 @@ class WallpaperAPIRepositoryImplementation @Inject constructor(
     private val endpoints: APIEndpoints
 ) : WallpaperAPIRepository {
 
-    override suspend fun getAllWallpapers(): Flow<Response<staticApiResponse>> =
+    override suspend fun getAllWallpapers(): Flow<Response<StaticApiResponse>> =
         channelFlow {
             try {
                 val resp = endpoints.getAllStaticWallpapers()
                 if (resp.isSuccessful) {
-                    Log.d("TAG", "GetAllStaticWallpapers: ${resp.body()}")
+                    //Log.d("TAG", "GetAllStaticWallpapers: ${resp.body()}")
                     send(resp)
                 }
             } catch (e: Exception) {
@@ -30,12 +30,13 @@ class WallpaperAPIRepositoryImplementation @Inject constructor(
             }
         }
 
-    override suspend fun getLiveWallpaper(): Flow<Response<ArrayList<LiveWallpaperModel>>> =
+    override suspend fun getLiveWallpaper(): Flow<Response<LiveApiResponse>> =
         channelFlow {
             try {
                 val resp = endpoints.getLiveWallpapers()
                 if (resp.isSuccessful) {
                     Log.d("TAG", "getLiveWallpaper: ${resp.body()}")
+                    send(resp)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -44,12 +45,13 @@ class WallpaperAPIRepositoryImplementation @Inject constructor(
             }
         }
 
-    override fun getChargingAnimation(): Flow<Response<ArrayList<ChargingAnimModel>>> =
+    override fun getChargingAnimation(): Flow<Response<ChargingAnimationResponse>> =
         channelFlow {
             try {
                 val resp = endpoints.getChargingAnimations()
                 if (resp.isSuccessful) {
-                    Log.d("TAG", "getChargingAnimation: ${resp.body()}")
+                    //Log.d("TAG", "getChargingAnimation: ${resp.body()}")
+                    send(resp)
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -58,11 +60,12 @@ class WallpaperAPIRepositoryImplementation @Inject constructor(
             }
         }
 
-    override fun getDoubleWallpapers(): Flow<Response<ArrayList<DoubleWallModel>>> = channelFlow {
+    override fun getDoubleWallpapers(): Flow<Response<DoubleApiResponse>> = channelFlow {
         try {
             val resp = endpoints.getDoubleWallpapers()
             if (resp.isSuccessful) {
-                Log.d("TAG", "getDoubleWallpapers: ${resp.body()}")
+                //Log.d("TAG", "getDoubleWallpapers: ${resp.body()}")
+                send(resp)
             }
         } catch (e: Exception) {
             e.printStackTrace()

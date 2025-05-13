@@ -11,6 +11,36 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.SplashOnFragment"
         android:label="fragment_splash"
         tools:layout="@layout/newsplash_fragment" />
+    <fragment
+        android:id="@+id/localizationFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.LocalizationFragment"
+        android:label="fragment_localization"
+        tools:layout="@layout/fragment_localization" />
+    <fragment
+        android:id="@+id/onBoardingFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.welcome.OnBoardingFragment"
+        android:label="fragment_on_boarding"
+        tools:layout="@layout/fragment_on_boarding">
+        <action
+            android:id="@+id/action_onBoardingFragment_to_homeTabsFragment"
+            app:destination="@id/homeTabsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/homeTabsFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.HomeTabsFragment"
+        android:label="fragment_home_tabs"
+        tools:layout="@layout/fragment_home_tabs">
+        <!--<action
+            android:id="@+id/action_homeTabsFragment_to_wallpaperViewFragment"
+            app:destination="@id/wallpaperViewFragment" />
+        <action
+            android:id="@+id/action_homeTabsFragment_to_listViewFragment"
+            app:destination="@id/listViewFragment" />-->
+    </fragment>
 
 
     <!--<fragment
@@ -157,45 +187,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
     </fragment>
-    <fragment
-        android:id="@+id/localizationFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.LocalizationFragment"
-        android:label="fragment_localization"
-        tools:layout="@layout/fragment_localization" />
-    <fragment
-        android:id="@+id/onBoardingFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.OnBoardingFragment"
-        android:label="fragment_on_boarding"
-        tools:layout="@layout/fragment_on_boarding">
-        <action
-            android:id="@+id/action_onBoardingFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
 
-            />
-        <action
-            android:id="@+id/action_onBoardingFragment_to_homeTabsFragment"
-            app:destination="@id/homeTabsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
-    </fragment>
-    <fragment
-        android:id="@+id/homeTabsFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.HomeTabsFragment"
-        android:label="fragment_home_tabs"
-        tools:layout="@layout/fragment_home_tabs">
-        <action
-            android:id="@+id/action_homeTabsFragment_to_wallpaperViewFragment"
-            app:destination="@id/wallpaperViewFragment" />
-        <action
-            android:id="@+id/action_homeTabsFragment_to_listViewFragment"
-            app:destination="@id/listViewFragment" />
-    </fragment>
     <fragment
         android:id="@+id/downloadLiveWallpaperFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment"

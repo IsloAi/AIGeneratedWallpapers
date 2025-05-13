@@ -1,4 +1,4 @@
-package com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

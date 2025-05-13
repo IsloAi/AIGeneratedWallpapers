@@ -27,8 +27,6 @@ class MainActivity : AppCompatActivity() {
     //VIEW MODELS VARIABLES
     private val staticWallpapersViewmodel: FetchAllWallpapersViewModel by viewModels()
 
-    //    @Inject
-//    lateinit var appDatabase: AppDatabase
     private var _navController: NavController? = null
     private val navController get() = _navController!!
     private var deviceID: String? = null

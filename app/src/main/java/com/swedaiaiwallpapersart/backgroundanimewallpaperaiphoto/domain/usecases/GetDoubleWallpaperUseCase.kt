@@ -1,6 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases
 
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.DoubleWallModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.DoubleApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -11,7 +11,7 @@ import javax.inject.Inject
 that makes coding harder to begin.*/
 
 class GetDoubleWallpaperUseCase @Inject constructor(private val repository: WallpaperAPIRepository) {
-    operator fun invoke(): Flow<Response<ArrayList<DoubleWallModel>>> {
+    operator fun invoke(): Flow<Response<DoubleApiResponse>> {
         return repository.getDoubleWallpapers()
     }
 }

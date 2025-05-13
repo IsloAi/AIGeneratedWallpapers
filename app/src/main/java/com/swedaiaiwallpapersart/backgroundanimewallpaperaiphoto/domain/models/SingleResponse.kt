@@ -1,4 +1,4 @@
-package com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models
 
 data class SingleResponse(
     val id: Int,

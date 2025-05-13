@@ -1,10 +1,9 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.endpoints
 
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.ChargingAnimModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.DoubleWallModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.LiveWallpaperModel
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.SingleResponse
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.staticApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.ChargingAnimationResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.DoubleApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.LiveApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.StaticApiResponse
 import retrofit2.Response
 import retrofit2.http.GET
 
@@ -12,19 +11,19 @@ interface APIEndpoints {
 
     //FOR FETCHING ALL THE STATIC WALLPAPERS
     @GET("all.php?record=4000")
-    suspend fun getAllStaticWallpapers(): Response<staticApiResponse>
+    suspend fun getAllStaticWallpapers(): Response<StaticApiResponse>
 
     //FOR FETCHING ALL THE LIVE WALLPAPERS
     @GET("getLiveWallpaper.php")
-    suspend fun getLiveWallpapers(): Response<LiveWallpaperModel>
+    suspend fun getLiveWallpapers(): Response<LiveApiResponse>
 
     //FOR FETCHING ALL THE CHARGING ANIMATIONS
     @GET("getanimation.php")
-    suspend fun getChargingAnimations(): Response<ChargingAnimModel>
+    suspend fun getChargingAnimations(): Response<ChargingAnimationResponse>
 
     //FOR FETCHING ALL THE DOUBLE WALLPAPERS
     @GET("getdoublewallpaper.php")
-    suspend fun getDoubleWallpapers(): Response<DoubleWallModel>
+    suspend fun getDoubleWallpapers(): Response<DoubleApiResponse>
 
 
 }

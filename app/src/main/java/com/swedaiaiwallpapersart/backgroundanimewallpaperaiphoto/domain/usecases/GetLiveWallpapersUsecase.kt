@@ -1,6 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.usecases
 
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.domain.models.LiveWallpaperModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.LiveApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
@@ -11,7 +11,7 @@ import javax.inject.Inject
 that makes coding harder to begin.*/
 
 class GetLiveWallpapersUseCase @Inject constructor(private val repository: WallpaperAPIRepository) {
-    suspend operator fun invoke(): Flow<Response<ArrayList<LiveWallpaperModel>>> {
+    suspend operator fun invoke(): Flow<Response<LiveApiResponse>> {
         return repository.getLiveWallpaper()
     }
 }
