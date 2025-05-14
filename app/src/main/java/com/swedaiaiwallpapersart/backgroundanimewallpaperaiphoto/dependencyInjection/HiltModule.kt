@@ -3,10 +3,12 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.dependencyInje
 import android.content.Context
 import androidx.work.WorkManager
 import com.google.gson.GsonBuilder
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.endpoints.APIEndpoints
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository.WallpaperAPIRepositoryImplementation
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.LiveWallpaperDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.WallpapersDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import dagger.Module
@@ -74,6 +76,16 @@ object HiltModule {
     @Provides
     fun providesAppDatabase(@ApplicationContext context: Context): AppDatabase {
         return AppDatabase(context)
+    }
+
+    @Provides
+    fun provideWallpapersDao(database: AppDatabase): WallpapersDao {
+        return database.wallpapersDao()
+    }
+
+    @Provides
+    fun provideLiveWallpapersDao(database: AppDatabase): LiveWallpaperDao {
+        return database.liveWallpaperDao()
     }
 
     /*@Provides

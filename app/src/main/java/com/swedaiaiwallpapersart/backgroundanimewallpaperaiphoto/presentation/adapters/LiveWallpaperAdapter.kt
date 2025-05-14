@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,57 +20,56 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.PositionCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.downloadCallback
 import kotlinx.coroutines.CoroutineScope
 
-class MostUsedWallpaperAdapter(
-    var arrayList: ArrayList<SingleDatabaseResponse?>,
-    var positionCallback: PositionCallback,
+class LiveWallpaperAdapter(
+    private var arrayList: ArrayList<LiveWallpaperModel?>,
+    private val positionCallback: downloadCallback,
     private val myActivity: MainActivity
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private lateinit var context: Context
     private var lastClickTime = 0L
-    private val debounceThreshold = 2000L
-    var context: Context? = null
+    private val debounceThreshold = 2000L // 2 seconds
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    private var lastAdShownPosition = -1
 
-    //val TAG = "PopularAdapter"
-
-    var row = 0
-
+    private val firstAdLineThreshold =
+        if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
+    private val firstline = firstAdLineThreshold * 3
+    private val lineCount =
+        if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
+    private val lineC = lineCount * 3
+    private val statusAd = AdConfig.adStatusViewListWallSRC
     private var coroutineScope: CoroutineScope? = null
 
-    inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
+    fun setCoroutineScope(scope: CoroutineScope) {
+        coroutineScope = scope
+    }
+
+    inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(
-            modela: ArrayList<SingleDatabaseResponse?>,
-            holder: RecyclerView.ViewHolder,
-            position: Int
-        ) {
-            val model = modela[position]
-            //Log.e(TAG, "bind: content place")
+        fun bind(model: LiveWallpaperModel) {
             setAllData(
-                model!!,
+                model,
                 adapterPosition,
                 binding.loading,
                 binding.wallpaper,
                 binding.errorImage,
-                binding.iapInd
+                binding.iap
             )
         }
     }
 
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: RecyclerView.ViewHolder) {
+        fun bind() {
             if (AdConfig.globalNativeAdView != null) {
                 // Detach globalNativeAdView from its previous parent if it has one
                 AdConfig.globalNativeAdView?.parent?.let { parent ->
@@ -88,107 +86,91 @@ class MostUsedWallpaperAdapter(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
+        context = recyclerView.context
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (getItemViewType(position) == VIEW_TYPE_NATIVE_AD) {
-                    layoutManager.spanCount // Make the ad span the full width
+                    layoutManager.spanCount
                 } else {
-                    1 // Regular item occupies 1 span
+                    1
                 }
             }
         }
     }
 
-    override fun getItemCount() = arrayList.size
+    override fun getItemCount(): Int {
+        //Log.d("LiveWallpaper", "getItemCount: ${arrayList.size} ")
+        return arrayList.size
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        context = parent.context
         return when (viewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                val binding = WallpaperRowBinding.inflate(inflater, parent, false)
+                val binding = ListItemLiveWallpaperBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
 
             VIEW_TYPE_NATIVE_AD -> {
                 val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
-
             }
 
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
 
-    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = arrayList[position]
         when (holder.itemViewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                try {
-                    val viewHolderContainer1 = holder as ViewHolderContainer1
-                    viewHolderContainer1.bind(arrayList, viewHolderContainer1, position)
-                } catch (e: NullPointerException) {
-                    e.printStackTrace()
-                }
-
+                val viewHolderContainer1 = holder as ViewHolderContainer1
+                model?.let { viewHolderContainer1.bind(it) }
             }
 
             VIEW_TYPE_NATIVE_AD -> {
-
                 val viewHolderContainer3 = holder as ViewHolderContainer3
-                viewHolderContainer3.bind(viewHolderContainer3)
+                viewHolderContainer3.bind()
             }
         }
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (arrayList[position] == null) {
-            VIEW_TYPE_NATIVE_AD
+            VIEW_TYPE_NATIVE_AD // Define a constant for null items
         } else {
-            VIEW_TYPE_CONTAINER1
+            VIEW_TYPE_CONTAINER1 // Define a constant for normal items
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun setAllData(
-        model: SingleDatabaseResponse,
+        model: LiveWallpaperModel,
         position: Int,
         animationView: LottieAnimationView,
         wallpaperMainImage: ImageView,
-        error_img: ImageView,
-        iapItem: ImageView
+        errorImg: ImageView,
+        iap: ImageView
     ) {
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
-        //Log.e("PopularAdapter", "MostUsed: " + model.unlocked)
+        iap.visibility = if (!model.unlocked && !AdConfig.ISPAIDUSER) View.VISIBLE else View.GONE
 
-        if (model.unlocked == false) {
-            if (AdConfig.ISPAIDUSER) {
-                iapItem.visibility = View.GONE
-            } else {
-                iapItem.visibility = View.VISIBLE
-            }
-        } else {
-            iapItem.visibility = View.GONE
-        }
-
-        Glide.with(context!!)
-            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")
+        Glide.with(context).load("${AdConfig.BASE_URL_DATA}/livewallpaper/${model.thumnail_url}")
             .diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
+
                 override fun onLoadFailed(
                     e: GlideException?,
                     model: Any?,
                     target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    Log.d("onLoadFailed", "onLoadFailed: ")
                     animationView.setAnimation(R.raw.no_data_image_found)
                     animationView.visibility = View.VISIBLE
-                    error_img.visibility = View.VISIBLE
+                    errorImg.visibility = View.VISIBLE
                     return false
                 }
 
@@ -200,29 +182,64 @@ class MostUsedWallpaperAdapter(
                     isFirstResource: Boolean
                 ): Boolean {
                     animationView.visibility = View.INVISIBLE
-                    error_img.visibility = View.GONE
-                    Log.d("onLoadFailed", "onResourceReady: ")
+                    errorImg.visibility = View.GONE
                     return false
                 }
             }).into(wallpaperMainImage)
+
+
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
-
             if (currentTime - lastClickTime >= debounceThreshold) {
-                positionCallback.getPosition(position)
+                positionCallback.getPosition(position, model)
                 lastClickTime = currentTime
             }
         }
     }
 
-    fun setCoroutineScope(scope: CoroutineScope) {
-        coroutineScope = scope
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || capabilities.hasTransport(
+                NetworkCapabilities.TRANSPORT_CELLULAR
+            ))
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
+        }
     }
 
-    fun updateData(list: ArrayList<SingleDatabaseResponse?>) {
-        arrayList.clear()
-        arrayList.addAll(list)
-        notifyDataSetChanged()
+    fun updateMoreData(list: ArrayList<LiveWallpaperModel?>) {
+        try {
+            val startPosition = arrayList.size
+            arrayList.addAll(list.filter { !arrayList.contains(it) })
+            notifyItemRangeInserted(startPosition, list.size)
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
     }
 
+    fun getAllItems(): ArrayList<LiveWallpaperModel?> = arrayList
+
+    fun addNewData() {
+        try {
+            arrayList.clear()
+            notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
+    }
+
+    fun updateData(list: ArrayList<LiveWallpaperModel?>) {
+        try {
+            arrayList.clear()
+            arrayList.addAll(list)
+            notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            e.printStackTrace()
+        }
+    }
 }
