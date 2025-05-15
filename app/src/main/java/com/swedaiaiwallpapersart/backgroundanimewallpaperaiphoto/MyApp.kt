@@ -11,6 +11,7 @@ import com.applovin.sdk.AppLovinSdkInitializationConfiguration
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
 import com.google.firebase.FirebaseApp
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.get
@@ -27,6 +28,8 @@ class MyApp : Application() {
         super.onCreate()
 
         FirebaseApp.initializeApp(applicationContext)
+        FirebaseCrashlytics.getInstance().isCrashlyticsCollectionEnabled = true
+        FirebaseCrashlytics.getInstance().log("Crashlytics initialized in MyApp")
         innitRemoteConfig()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val processName = getProcessName()
@@ -64,6 +67,7 @@ class MyApp : Application() {
                 val languagesOrder = remoteConfig["languages"].asString()
                 val baseUrls = remoteConfig["dataUrl"].asString()
                 val appFree = remoteConfig["wholeAppFree"].asBoolean()
+
 
                 //START PUTTING THE DATA INTO THE VARIABLES
 

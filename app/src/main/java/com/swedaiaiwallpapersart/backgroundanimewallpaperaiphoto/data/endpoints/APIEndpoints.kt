@@ -4,6 +4,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.DoubleApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.LiveApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.StaticApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
 import retrofit2.Response
 import retrofit2.http.GET
 
@@ -24,6 +25,10 @@ interface APIEndpoints {
     //FOR FETCHING ALL THE DOUBLE WALLPAPERS
     @GET("getdoublewallpaper.php")
     suspend fun getDoubleWallpapers(): Response<DoubleApiResponse>
+
+    //FOR FETCHING ALL THE STATIC CATEGORIES
+    @GET("getcategory.php")
+    suspend fun getCategories(): Response<List<CategoryApiModel>>
 
 
 }

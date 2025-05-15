@@ -1,7 +1,10 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository
 
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.ChargingAnimationDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.DoubleWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.LiveWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.WallpapersDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.GetWallpaperFromRoomRepository
@@ -13,7 +16,9 @@ that makes coding harder to begin.*/
 
 class GetWallsFromRoomRepoImplementation @Inject constructor(
     val dao: WallpapersDao,
-    private val liveDao: LiveWallpaperDao
+    private val liveDao: LiveWallpaperDao,
+    private val doubleDao: DoubleWallpaperDao,
+    private val chargingDao: ChargingAnimationDao
 
 ) : GetWallpaperFromRoomRepository {
 
@@ -31,6 +36,10 @@ class GetWallsFromRoomRepoImplementation @Inject constructor(
 
     override suspend fun getAllLiveWallpapersFromRoom(): List<LiveWallpaperModel> {
         return liveDao.getAllWallpapers()
+    }
+
+    override suspend fun getAllDoubleWallpapersFromRoom(): List<DoubleWallModel> {
+        return doubleDao.getAllDoubleWallpapers()
     }
 
 }

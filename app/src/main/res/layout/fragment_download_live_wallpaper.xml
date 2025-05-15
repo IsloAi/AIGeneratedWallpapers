@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#7a382c"
-    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper.DownloadLiveWallpaperFragment">
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.liveWallpaper.DownloadLiveWallpaperFragment">
 
     <ImageView
         android:id="@+id/backImage"

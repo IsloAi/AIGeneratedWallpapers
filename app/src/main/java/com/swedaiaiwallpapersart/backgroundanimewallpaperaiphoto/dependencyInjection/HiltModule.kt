@@ -7,6 +7,8 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.MyApp
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.endpoints.APIEndpoints
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository.WallpaperAPIRepositoryImplementation
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.AppDatabase
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.ChargingAnimationDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.DoubleWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.LiveWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.WallpapersDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
@@ -86,6 +88,16 @@ object HiltModule {
     @Provides
     fun provideLiveWallpapersDao(database: AppDatabase): LiveWallpaperDao {
         return database.liveWallpaperDao()
+    }
+
+    @Provides
+    fun provideDoubleWallpapersDao(database: AppDatabase): DoubleWallpaperDao {
+        return database.doubleWallpaperDao()
+    }
+
+    @Provides
+    fun provideChargingAnimationDao(database: AppDatabase): ChargingAnimationDao {
+        return database.chargingAnimDao()
     }
 
     /*@Provides

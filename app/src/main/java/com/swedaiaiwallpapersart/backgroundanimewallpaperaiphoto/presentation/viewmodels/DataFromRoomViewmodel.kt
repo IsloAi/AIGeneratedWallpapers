@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.v
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository.GetWallsFromRoomRepoImplementation
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,9 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
     private val _liveWallpapers = MutableStateFlow<List<LiveWallpaperModel>>(emptyList())
     val liveWallpapers: StateFlow<List<LiveWallpaperModel>> = _liveWallpapers
 
+    private val _doubleWallpapers = MutableStateFlow<List<DoubleWallModel>>(emptyList())
+    val doubleWallpapers: StateFlow<List<DoubleWallModel>> = _doubleWallpapers
+
     fun fetchAllStaticWallpapers() {
         viewModelScope.launch {
             _wallpapers.value = repo.getAllWallpapersFromRoom()
@@ -55,6 +59,12 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
             _liveWallpapers.value = repo.getAllLiveWallpapersFromRoom()
         }
 
+    }
+
+    fun fetchAllDoubleWallpapers() {
+        viewModelScope.launch {
+            _doubleWallpapers.value = repo.getAllDoubleWallpapersFromRoom()
+        }
     }
 
 }

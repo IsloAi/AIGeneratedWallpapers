@@ -2,6 +2,8 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.a
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
@@ -13,10 +15,14 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.LocaleManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.FetchAllWallpapersViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -38,7 +44,7 @@ class MainActivity : AppCompatActivity() {
         deviceID = Settings.Secure.getString(this.contentResolver, Settings.Secure.ANDROID_ID)
         Log.d("TAG", "onCreate:deviceID - $deviceID")
 
-        /* val lan = MySharePreference.getLanguage(this)
+        val lan = MySharePreference.getLanguage(this)
          val context = LocaleManager.setLocale(this, lan!!)
          val resources = context.resources
          val newLocale = Locale(lan)
@@ -46,7 +52,7 @@ class MainActivity : AppCompatActivity() {
          val configuration = resources1.configuration
          configuration.setLocale(newLocale)
          configuration.setLayoutDirection(Locale(lan))
-         resources1.updateConfiguration(configuration, resources.displayMetrics)*/
+        resources1.updateConfiguration(configuration, resources.displayMetrics)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -84,6 +90,11 @@ class MainActivity : AppCompatActivity() {
 
         staticWallpapersViewmodel
         //AdClickCounter.reset()
+
+        /*Handler(Looper.getMainLooper()).postDelayed({
+            FirebaseCrashlytics.getInstance().log("Crash from MAIN PROCESS ✅")
+            throw RuntimeException("Main process crash test")
+        }, 2000)*/
     }
 
     /*private fun setUpBilling() {

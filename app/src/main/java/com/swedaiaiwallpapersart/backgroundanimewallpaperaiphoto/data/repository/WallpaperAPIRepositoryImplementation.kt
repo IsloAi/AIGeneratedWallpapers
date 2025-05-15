@@ -6,6 +6,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.DoubleApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.LiveApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.StaticApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository.WallpaperAPIRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -71,6 +72,23 @@ class WallpaperAPIRepositoryImplementation @Inject constructor(
             e.printStackTrace()
         } catch (e: UnknownHostException) {
             e.printStackTrace()
+        }
+    }
+
+    override fun getCategories(): Flow<Response<List<CategoryApiModel>>> = channelFlow {
+        try {
+            val resp = endpoints.getCategories()
+            if (resp.isSuccessful) {
+                Log.d("Repo", "✅ getCategories success: ${resp.body()}")
+                send(resp)
+            } else {
+                Log.e("Repo", "❌ getCategories failed: ${resp.errorBody()?.string()}")
+                send(resp) // Still send to emit the error response
+            }
+        } catch (e: Exception) {
+            Log.e("Repo", "❌ Exception in getCategories: ${e.message}", e)
+            // Optional: you can emit a dummy error response
+            // send(Response.error(...)) if you want to show something upstream
         }
     }
 

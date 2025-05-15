@@ -63,7 +63,7 @@ class LiveWallpaperFragment : Fragment() {
     }
 
     private fun loadData() {
-        lifecycleScope.launchWhenStarted {
+        lifecycleScope.launch {
             myViewModel.fetchAllLiveWallpapers()
             myViewModel.liveWallpapers.collect { wallpapers ->
                 // Update your UI with wallpapers

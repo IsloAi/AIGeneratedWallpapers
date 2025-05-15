@@ -1,5 +1,6 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.repository
 
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 
@@ -16,5 +17,8 @@ interface GetWallpaperFromRoomRepository {
 
     //FETCHING LIVE WALLPAPERS
     suspend fun getAllLiveWallpapersFromRoom(): List<LiveWallpaperModel>
+
+    //FETCHING Double WALLPAPERS
+    suspend fun getAllDoubleWallpapersFromRoom(): List<DoubleWallModel>
 
 }

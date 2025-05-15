@@ -1,6 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils
 
 import com.applovin.mediation.nativeAds.MaxNativeAdView
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
 
 object AdConfig {
     var firstAdLineTrending = 0
@@ -96,6 +97,7 @@ object AdConfig {
         "Dutch",
         "Indonesian"
     )
+    var categories: List<CategoryApiModel> = emptyList()
 
     var languageLogicShowNative = 1
     var avoidPolicyOpenAdInter = 0

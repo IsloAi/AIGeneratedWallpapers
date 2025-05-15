@@ -4,6 +4,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiRespo
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.DoubleApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.LiveApiResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.apiResponse.StaticApiResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
 import kotlinx.coroutines.flow.Flow
 import retrofit2.Response
 
@@ -20,6 +21,9 @@ interface WallpaperAPIRepository {
 
     //FETCHING DOUBLE WALLPAPERS
     fun getDoubleWallpapers(): Flow<Response<DoubleApiResponse>>
+
+    //FETCHING CATEGORIES
+    fun getCategories(): Flow<Response<List<CategoryApiModel>>>
 
 
 }

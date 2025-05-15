@@ -1,32 +1,43 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.ApiCategoriesNameAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.LiveCategoriesHorizontalAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.StringCallback
 
 class CategoryFragment : Fragment() {
     private var _binding: FragmentCategoryBinding? = null
     private val binding get() = _binding!!
 
-    /*private lateinit var myActivity: MainActivity
-
-    val catlist = ArrayList<CatNameResponse?>()
-
+    private lateinit var myActivity: MainActivity
     private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private var adapter: LiveCategoriesHorizontalAdapter? = null
+    private var catList = ArrayList<CategoryApiModel?>()
+    /*
 
     val catListViewmodel: MyViewModel by activityViewModels()
-
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
-
-    private var adapter: LiveCategoriesHorizontalAdapter? = null
-
     var isNavigationInProgress = false
-
     val TAG = "CATEGORIES"*/
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -36,72 +47,38 @@ class CategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
-        onCustomCreateView()*/
+        firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
+        onCustomCreateView()
     }
 
-    /*
+    private fun onCustomCreateView() {
+        myActivity = activity as MainActivity
+        binding.progressBar.visibility = VISIBLE
+        binding.progressBar.setAnimation(R.raw.main_loading_animation)
 
-        override fun onStart() {
-            super.onStart()
-            (myActivity.application as MyApp).registerAdEventListener(this)
-        }
+        updateUIWithFetchedData()
+        catList = AdConfig.categories as ArrayList<CategoryApiModel?>
+        binding.progressBar.visibility = View.GONE
+        binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
+        val adapter = ApiCategoriesNameAdapter(catList, object : StringCallback {
+            override fun getStringCall(string: String) {
+                setFragment(string)
+            }
+        }, myActivity, "")
 
-        @SuppressLint("SuspiciousIndentation")
-        private fun onCustomCreateView() {
-            myActivity = activity as MainActivity
-            binding.progressBar.visibility = VISIBLE
-            binding.progressBar.setAnimation(R.raw.main_loading_animation)
-
-            updateUIWithFetchedData()
-            binding.progressBar.visibility = View.GONE
-            binding.recyclerviewAll.layoutManager = GridLayoutManager(requireContext(), 3)
-            binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
-            val adapter = ApiCategoriesNameAdapter(catlist, object : StringCallback {
-                override fun getStringCall(string: String) {
-                    catListViewmodel.getAllCreations(string)
-                    setFragment(string)
-                }
-            }, myActivity, "")
-
-            binding.recyclerviewAll.adapter = adapter
-
-            */
-    /*myActivity.myCatNameViewModel.wallpaper.observe(viewLifecycleOwner) { wallpapersList ->
-                Log.e("TAG", "onCustomCreateView: no data exists")
-                if (wallpapersList?.size!! > 0) {
-                    Log.e("TAG", "onCustomCreateView: data exists")
-
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        Log.e("TAG", "onCustomCreateView: $wallpapersList")
-                        val list = wallpapersList.shuffled()
-                        withContext(Dispatchers.Main) {
-                            adapter.updateData(newData = list)
-                        }
-                    }
-                }
-            }*//*
-
-
+        binding.recyclerviewAll.adapter = adapter
         binding.more.setOnClickListener {
             findNavController().navigate(R.id.liveWallpaperCategoriesFragment)
         }
-
     }
 
     private fun updateUIWithFetchedData() {
         val gson = Gson()
-        val categoryList: ArrayList<CatNameResponse> =
-            gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CatNameResponse>>() {}.type)
-
+        val categoryList: ArrayList<CategoryApiModel> =
+            gson.fromJson(categoriesJson, object : TypeToken<ArrayList<CategoryApiModel>>() {}.type)
         adapter = LiveCategoriesHorizontalAdapter(categoryList, object : StringCallback {
             override fun getStringCall(string: String) {
-                if (string == "Roro'Noa Zoro") {
-                    myViewModel.getMostUsed("Roro")
-                } else {
-                    myViewModel.getMostUsed(string)
-                }
-
                 if (AdConfig.ISPAIDUSER) {
                     findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                 } else {
@@ -120,7 +97,68 @@ class CategoryFragment : Fragment() {
         binding.recyclerviewTrending.adapter = adapter
     }
 
-    val categoriesJson = """
+    private fun setFragment(name: String) {
+        Log.d("Categories", "setFragment:string: $name ")
+        if (AdConfig.ISPAIDUSER) {
+            val bundle = Bundle().apply {
+                putString("name", name)
+                putString("from", "category")
+            }
+            if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                findNavController().navigate(R.id.listViewFragment, bundle)
+            }
+        } else {
+            /*if (AdClickCounter.shouldShowAd()) {
+                MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
+                    override fun onAdLoaded(p0: MaxAd) {}
+
+                    override fun onAdDisplayed(p0: MaxAd) {}
+
+                    override fun onAdHidden(p0: MaxAd) {
+                        val bundle = Bundle().apply {
+                            putString("name", name)
+                            putString("from", "category")
+                        }
+                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                            findNavController().navigate(R.id.listViewFragment, bundle)
+                        }
+                    }
+
+                    override fun onAdClicked(p0: MaxAd) {}
+
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
+
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
+                })
+            } else {
+                AdClickCounter.increment()
+                val bundle = Bundle().apply {
+                    putString("name", name)
+                    putString("from", "category")
+                }
+                if (findNavController().currentDestination?.id != R.id.listViewFragment) {
+                    findNavController().navigate(R.id.listViewFragment, bundle)
+                }
+            }*/
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (isAdded) {
+            val bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Categories Screen")
+            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private val categoriesJson = """
 [
   {
     "cat_name": "Faces",
@@ -158,82 +196,5 @@ class CategoryFragment : Fragment() {
   }
 ]
 """
-
-    fun sortWallpaperCategories(
-        categories: List<CatNameResponse>, order: List<String>
-    ): List<CatNameResponse> {
-        // Create a map to store the order of categories based on their names
-        Log.e("TAG", "sortWallpaperCategories: " + categories)
-        Log.e("TAG", "sortWallpaperCategories: " + order)
-        order.forEach {
-            Log.e("TAG", "sortWallpaperCategories: " + it)
-        }
-        val orderMap = order.withIndex().associate { it.value.trim() to it.index }
-        // Sort the categories based on the order specified in the map
-        return categories.sortedWith(compareBy { orderMap[it.cat_name] ?: Int.MAX_VALUE })
-    }
-
-    private fun setFragment(name: String) {
-        Log.d("Categories", "setFragment:string: $name ")
-        if (AdConfig.ISPAIDUSER) {
-            val bundle = Bundle().apply {
-                putString("name", name)
-                putString("from", "category")
-            }
-            if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                findNavController().navigate(R.id.listViewFragment, bundle)
-            }
-        } else {
-            if (AdClickCounter.shouldShowAd()) {
-                MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
-                    override fun onAdLoaded(p0: MaxAd) {}
-
-                    override fun onAdDisplayed(p0: MaxAd) {}
-
-                    override fun onAdHidden(p0: MaxAd) {
-                        val bundle = Bundle().apply {
-                            putString("name", name)
-                            putString("from", "category")
-                        }
-                        if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                            findNavController().navigate(R.id.listViewFragment, bundle)
-                        }
-                    }
-
-                    override fun onAdClicked(p0: MaxAd) {}
-
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
-
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
-                })
-            } else {
-                AdClickCounter.increment()
-                val bundle = Bundle().apply {
-                    putString("name", name)
-                    putString("from", "category")
-                }
-                if (findNavController().currentDestination?.id != R.id.listViewFragment) {
-                    findNavController().navigate(R.id.listViewFragment, bundle)
-                }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (isAdded) {
-            val bundle = Bundle()
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Categories Screen")
-            bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
-            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-*/
-
 }
 
