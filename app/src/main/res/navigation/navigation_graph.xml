@@ -107,6 +107,44 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.liveWallpaper.LiveWallpaperCategoriesFragment"
         android:label="fragment_live_wallpaper_categories"
         tools:layout="@layout/fragment_live_wallpaper_categories" />
+    <fragment
+        android:id="@+id/downloadBatteryAnimation"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.charginingAnimation.DownloadBatteryAnimation"
+        android:label="DownloadBatteryAnimation"
+        tools:layout="@layout/fragment_download_battery_animation" />
+    <fragment
+        android:id="@+id/chargingAnimationPermissionFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.charginingAnimation.ChargingAnimationPermissionFragment"
+        android:label="fragment_charging_animation_permission"
+        tools:layout="@layout/fragment_charging_animation_permission" />
+    <fragment
+        android:id="@+id/previewChargingAnimationFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.charginingAnimation.PreviewChargingAnimationFragment"
+        android:label="fragment_preview_charging_animation"
+        tools:layout="@layout/fragment_preview_charging_animation" />
+    <fragment
+        android:id="@+id/fullScreenImageViewFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.FullScreenImageViewFragment"
+        android:label="FullScreenImageViewFragment" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.SettingFragment"
+        android:label="SettingFragment" />
+    <fragment
+        android:id="@+id/searchWallpapersFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.SearchWallpapersFragment"
+        android:label="fragment_search_wallpapers"
+        tools:layout="@layout/fragment_search_wallpapers" />
+    <fragment
+        android:id="@+id/IAPFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.billing.IAPFragment"
+        android:label="fragment_i_a_p"
+        tools:layout="@layout/fragment_i_a_p" />
+    <fragment
+        android:id="@+id/feedbackFragment"
+        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.FeedbackFragment"
+        android:label="fragment_feedback"
+        tools:layout="@layout/fragment_feedback" />
 
     <!--<fragment
         android:id="@+id/mainFragment"
@@ -169,11 +207,7 @@
             android:id="@+id/action_premiumPlanFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/feedbackFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.FeedbackFragment"
-        android:label="fragment_feedback"
-        tools:layout="@layout/fragment_feedback" />
+
     <fragment
         android:id="@+id/myViewCreationFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.generateImages.fragmentsIG.MyCreationViewFragment"
@@ -237,19 +271,9 @@
 
 
 
-    <fragment
-        android:id="@+id/searchWallpapersFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.SearchWallpapersFragment"
-        android:label="fragment_search_wallpapers"
-        tools:layout="@layout/fragment_search_wallpapers" />
-    <fragment
-        android:id="@+id/fullScreenImageViewFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.FullScreenImageViewFragment"
-        android:label="FullScreenImageViewFragment" />
-    <fragment
-        android:id="@+id/settingFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.menuFragments.SettingFragment"
-        android:label="SettingFragment" />
+
+
+
     <fragment
         android:id="@+id/favouriteFragment"
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteFragment"
@@ -258,26 +282,10 @@
             android:id="@+id/action_favouriteFragment_to_downloadLiveWallpaperFragment"
             app:destination="@id/downloadLiveWallpaperFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/IAPFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.IAPFragment"
-        android:label="fragment_i_a_p"
-        tools:layout="@layout/fragment_i_a_p" />
-    <fragment
-        android:id="@+id/downloadBatteryAnimation"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.DownloadBatteryAnimation"
-        android:label="DownloadBatteryAnimation"
-        tools:layout="@layout/fragment_download_battery_animation" />
-    <fragment
-        android:id="@+id/chargingAnimationPermissionFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.ChargingAnimationPermissionFragment"
-        android:label="fragment_charging_animation_permission"
-        tools:layout="@layout/fragment_charging_animation_permission" />
-    <fragment
-        android:id="@+id/previewChargingAnimationFragment"
-        android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.PreviewChargingAnimationFragment"
-        android:label="fragment_preview_charging_animation"
-        tools:layout="@layout/fragment_preview_charging_animation" />
+
+
+
+
 
 
 
@@ -297,4 +305,5 @@
         android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteLiveFragment"
         android:label="fragment_favourite_live"
         tools:layout="@layout/fragment_favourite_live" />-->
+
 </navigation>

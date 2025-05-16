@@ -1,15 +1,46 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments
 
+import android.app.Dialog
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.applovin.mediation.ads.MaxAdView
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentListViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.ApiCategoriesListAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.PositionCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
     private val binding get() = _binding!!
@@ -19,12 +50,12 @@ class ListViewFragment : Fragment() {
     private var from = ""
     private lateinit var myActivity: MainActivity
     var isNavigationInProgress = false
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
-    /*private val viewModel: SaveStateViewModel by activityViewModels()
-    val sharedViewModel: SharedViewModel by activityViewModels()*/
-    //var adapter: ApiCategoriesListAdapter? = null
-    private var cachedCatResponses: ArrayList<CatResponse?> = ArrayList()
-    private var addedItems: ArrayList<CatResponse?>? = ArrayList()
+    /*private val viewModel: SaveStateViewModel by activityViewModels()*/
+    var adapter: ApiCategoriesListAdapter? = null
+    private var cachedCatResponses: ArrayList<SingleDatabaseResponse?> = ArrayList()
+    private var addedItems: ArrayList<SingleDatabaseResponse?>? = ArrayList()
     var dataset = false
     var oldPosition = 0
     var adcount = 0
@@ -34,17 +65,20 @@ class ListViewFragment : Fragment() {
     val TAG = "LISTVIEWCAT"
     private lateinit var adView: MaxAdView
 
-    /*private val mostDownloadedViewmodel: MostDownloadedViewmodel by activityViewModels()
+    private val viewmodel: DataFromRoomViewmodel by viewModels()
+
+    /*
     private val rewardedViewModel: RewardedViewModel by activityViewModels()*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentListViewBinding.inflate(inflater, container, false)
+        onCreateViewCalling()
         return binding.root
     }
 
-    /*private fun onCreateViewCalling() {
+    private fun onCreateViewCalling() {
         myActivity = activity as MainActivity
         binding.progressBar.visibility = View.GONE
         binding.progressBar.setAnimation(R.raw.main_loading_animation)
@@ -58,16 +92,12 @@ class ListViewFragment : Fragment() {
             }
 
             "Vip" -> {
-                //sharedViewModel.clearData()
+                sharedViewModel.clearData()
                 loadRewardedData()
             }
 
             else -> {
-                *//*viewModel.selectedTab.observe(viewLifecycleOwner) {
-                    name = name.ifEmpty {
-                        it.also { loadData() }
-                    }
-                }*//*
+                loadData(name)
             }
         }
 
@@ -80,7 +110,7 @@ class ListViewFragment : Fragment() {
 
         binding.recyclerviewAll.addItemDecoration(RvItemDecore(3, 5, false, 10000))
 
-        val list = ArrayList<CatResponse?>()
+        val list = ArrayList<SingleDatabaseResponse?>()
         adapter = ApiCategoriesListAdapter(list, object : PositionCallback {
             override fun getPosition(position: Int) {
 
@@ -116,7 +146,6 @@ class ListViewFragment : Fragment() {
                 checkAppOpen = false
                 val layoutManager = recyclerView.layoutManager as GridLayoutManager
                 val lastVisibleItemPosition = layoutManager.findLastVisibleItemPosition()
-
                 val totalItemCount = adapter!!.itemCount
                 if (lastVisibleItemPosition + 10 >= totalItemCount) {
                     // End of list reached
@@ -128,10 +157,7 @@ class ListViewFragment : Fragment() {
                     } else {
                         Log.e(TAG, "onScrolled: inside 4 coondition")
                     }
-
                 }
-
-
             }
         })
 
@@ -149,9 +175,8 @@ class ListViewFragment : Fragment() {
                 } else {
                     addNullValueInsideArray(newData.shuffled())
                 }
-
                 cachedCatResponses.clear()
-                cachedCatResponses = nullAdd
+                cachedCatResponses = nullAdd as ArrayList<SingleDatabaseResponse?>
                 val initialItems = getItems(0, 30)
                 startIndex = 0
                 withContext(Dispatchers.Main) {
@@ -159,78 +184,57 @@ class ListViewFragment : Fragment() {
                     Log.e(TAG, "initMostDownloadedData: " + initialItems)
                     adapter?.updateMoreData(initialItems)
                     startIndex += 30
-
-
-
                     binding.swipeLayout.isRefreshing = false
                 }
-
             }
-
-
         }
-
     }
 
     private fun initTrendingData() {
-        mostDownloadedViewmodel.trendingWallpapers.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Response.Loading -> {}
-                is Response.Success -> {
-                    if (!dataset) {
-                        *//*lifecycleScope.launch(Dispatchers.IO) {
-                            var tempList = ArrayList<CatResponse>()
-                            result.data?.forEach { item ->
-                                val model = CatResponse(
-                                    item.id,
-                                    item.image_name,
-                                    item.cat_name,
-                                    item.hd_image_url,
-                                    item.compressed_image_url,
-                                    null,
-                                    item.likes,
-                                    item.liked,
-                                    false,
-                                    item.size,
-                                    item.Tags,
-                                    item.capacity
-                                )
-                                if (!tempList.contains(model)) {
-                                    tempList.add(model)
-                                }
-                            }
-                            // Unlock 20% randomly
-                            val unlockCount = (tempList.size * 0.2).toInt()
-                            tempList.shuffled().take(unlockCount).forEach { it.unlockimges = true }
-
-                            val list = if (AdConfig.ISPAIDUSER) {
-                                tempList.shuffled() as ArrayList<CatResponse?>
-                            } else {
-                                addNullValueInsideArray(tempList.shuffled())
-                            }
-                            cachedCatResponses = list
-                            withContext(Dispatchers.Main) {
-                                adapter?.updateData(cachedCatResponses)
-                                dataset = true
-                            }
-                        }*//*
-                        Toast.makeText(requireContext(), "Get the Data here", Toast.LENGTH_SHORT)
-                            .show()
+        lifecycleScope.launch {
+            viewmodel.fetchTrendingWallpapers()
+            viewmodel.trendingWallpapers.collect { wallpapers ->
+                if (!dataset) {
+                    val list1 = arrayListOf<SingleDatabaseResponse>()
+                    wallpapers.forEach { item ->
+                        val single = SingleDatabaseResponse(
+                            item.id,
+                            item.cat_name,
+                            item.image_name,
+                            item.hd_image_url,
+                            item.compressed_image_url,
+                            item.likes,
+                            item.liked,
+                            item.size,
+                            item.Tags,
+                            item.capacity,
+                            false, // locked by default
+                        )
+                        if (!list1.contains(single)) {
+                            list1.add(single)
+                        }
+                    }
+                    // Unlock 20% randomly
+                    val unlockCount = (list1.size * 0.2).toInt()
+                    list1.shuffled().take(unlockCount).forEach { it.unlocked = true }
+                    val list = if (AdConfig.ISPAIDUSER) {
+                        list1.shuffled() as ArrayList<CatResponse?>
+                    } else {
+                        addNullValueInsideArray(list1.shuffled())
+                    }
+                    cachedCatResponses = list as ArrayList<SingleDatabaseResponse?>
+                    withContext(Dispatchers.Main) {
+                        adapter?.updateData(cachedCatResponses)
+                        dataset = true
                     }
                 }
-                is Response.Error -> {
-                    Log.e("TAG", "error: ${result.message}")
-                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT).show()
-                }
-                else -> {}
             }
         }
     }
 
     private fun loadRewardedData() {
-
         lifecycleScope.launch {
-            rewardedViewModel.allWallpapers.observe(viewLifecycleOwner) { result ->
+            /*rewardedViewModel.allWallpapers.observe(viewLifecycleOwner) { result ->
                 when (result) {
                     is Response.Error -> {
 
@@ -268,7 +272,7 @@ class ListViewFragment : Fragment() {
 
                     else -> {}
                 }
-            }
+            }*/
         }
         sharedViewModel.catResponseList.observe(viewLifecycleOwner) { catResponses ->
 
@@ -282,28 +286,11 @@ class ListViewFragment : Fragment() {
         }
     }
 
-    private fun loadData() {
-        myViewModel.fetchWallpapers(requireContext(), name)
+    private fun loadData(name: String) {
 
-        myViewModel.getWallpapers().observe(viewLifecycleOwner) { catResponses ->
-            if (catResponses != null) {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    val list = addNullValueInsideArray(catResponses.shuffled())
-                    cachedCatResponses = list
-                    withContext(Dispatchers.Main) {
-                        //adapter?.updateMoreData(initialItems)
-                        adapter?.updateData(list)
-                        //startIndex += 30
-                        dataset = true
-                    }
-                }
-            } else {
-                Log.d("responseOk", "No wallpapers found or error occurred")
-            }
-        }
     }
 
-    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
+    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<SingleDatabaseResponse?> {
         val endIndex = startIndex1 + chunkSize
         if (startIndex1 >= cachedCatResponses.size) {
             return arrayListOf()
@@ -327,12 +314,10 @@ class ListViewFragment : Fragment() {
         if (name == "Trending") {
             initTrendingData()
         } else {
-            loadData()
+            loadData(name)
         }
         if (dataset) {
-
             Log.e(TAG, "onResume: Data set $dataset")
-            Log.e(TAG, "onResume: Data set ${addedItems?.size}")
 
             if (addedItems?.isEmpty() == true) {
                 Log.e(TAG, "onResume: " + cachedCatResponses.size)
@@ -357,9 +342,9 @@ class ListViewFragment : Fragment() {
         }
     }
 
-    suspend fun addNullValueInsideArray(data: List<CatResponse?>): ArrayList<CatResponse?> {
+    private suspend fun addNullValueInsideArray(data: List<SingleDatabaseResponse?>): ArrayList<SingleDatabaseResponse?> {
         return withContext(Dispatchers.IO) {
-            val newData = arrayListOf<CatResponse?>()
+            val newData = arrayListOf<SingleDatabaseResponse?>()
             for (i in data.indices) {
                 newData.add(data[i]) // Add the current item
                 // After every 15 items, add a null value (excluding the last item)
@@ -373,8 +358,11 @@ class ListViewFragment : Fragment() {
 
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
-    private fun navigateToDestination(arrayList: ArrayList<CatResponse?>, position: Int) {
-        *//*if (position >= arrayList.size) {
+    private fun navigateToDestination(
+        arrayList: ArrayList<SingleDatabaseResponse?>,
+        position: Int
+    ) {
+        if (position >= arrayList.size) {
             Log.e(TAG, "navigateToDestination: Position $position out of bounds ${arrayList.size} ")
 
             addedItems?.clear()
@@ -382,7 +370,7 @@ class ListViewFragment : Fragment() {
             adapter?.updateData(addedItems!!)
             isNavigationInProgress = false
             return
-        }*//*
+        }
         val countOfNulls = arrayList.subList(0, position).count { it == null }
 
         sharedViewModel.clearData()
@@ -448,7 +436,4 @@ class ListViewFragment : Fragment() {
         fragmentScope.cancel()
     }
 
-    override fun onAdDismiss() {
-        checkAppOpen = true
-    }*/
 }

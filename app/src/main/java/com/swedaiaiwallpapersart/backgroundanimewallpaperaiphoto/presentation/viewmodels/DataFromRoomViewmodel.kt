@@ -3,6 +3,7 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.v
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.repository.GetWallsFromRoomRepoImplementation
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
@@ -35,6 +36,12 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
     private val _doubleWallpapers = MutableStateFlow<List<DoubleWallModel>>(emptyList())
     val doubleWallpapers: StateFlow<List<DoubleWallModel>> = _doubleWallpapers
 
+    private val _carWallpapers = MutableStateFlow<List<SingleDatabaseResponse>>(emptyList())
+    val carWallpapers: StateFlow<List<SingleDatabaseResponse>> = _carWallpapers
+
+    private val _chargingAnimations = MutableStateFlow<List<ChargingAnimModel>>(emptyList())
+    val chargingAnimations: StateFlow<List<ChargingAnimModel>> = _chargingAnimations
+
     fun fetchAllStaticWallpapers() {
         viewModelScope.launch {
             _wallpapers.value = repo.getAllWallpapersFromRoom()
@@ -64,6 +71,18 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
     fun fetchAllDoubleWallpapers() {
         viewModelScope.launch {
             _doubleWallpapers.value = repo.getAllDoubleWallpapersFromRoom()
+        }
+    }
+
+    fun fetchCarWallpapers() {
+        viewModelScope.launch {
+            _carWallpapers.value = repo.getCarWallpapersFromRoom()
+        }
+    }
+
+    fun fetchChargingAnimations() {
+        viewModelScope.launch {
+            _chargingAnimations.value = repo.getBatteryWallpapersFromRoom()
         }
     }
 

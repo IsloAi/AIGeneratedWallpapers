@@ -1,4 +1,4 @@
-package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.doubleWallpaper
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.charginingAnimation
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -9,25 +9,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.applovin.mediation.MaxAd
-import com.applovin.mediation.MaxError
-import com.applovin.mediation.nativeAds.MaxNativeAdListener
-import com.applovin.mediation.nativeAds.MaxNativeAdView
+import com.androidnetworking.AndroidNetworking
+import com.androidnetworking.common.Priority
+import com.androidnetworking.error.ANError
+import com.androidnetworking.interfaces.DownloadListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperDownloadBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDownloadBatteryAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DoubleSharedViewmodel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -36,22 +34,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class DoubleWallpaperDownloadFragment : Fragment() {
+class DownloadBatteryAnimation : Fragment() {
 
-    private var _binding: FragmentDoubleWallpaperDownloadBinding? = null
+    private var _binding: FragmentDownloadBatteryAnimationBinding? = null
     private val binding get() = _binding!!
 
-    val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
-
-    //val doubleWallpaperViewmodel: DoubeWallpaperViewModel by activityViewModels()
-
-    var wallModel: DoubleWallModel? = null
+    //val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
     private var bitmap: Bitmap? = null
-
     private var animationJob: Job? = null
-
-    val TAG = "DOWNLOAD_SCREEN_DOUBLE"
-
+    val TAG = "DOWNLOAD_SCREEN"
+    var adShowed: Boolean? = false
     private val totalTimeInMillis: Long = 15000 // 15 seconds in milliseconds
     private val intervalInMillis: Long = 100 // Update interval in milliseconds
     private var job: Job? = null
@@ -60,72 +52,54 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentDoubleWallpaperDownloadBinding.inflate(inflater, container, false)
+        _binding = FragmentDownloadBatteryAnimationBinding.inflate(inflater, container, false)
+        // Inflate the layout for this fragment
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adShowed = arguments?.getBoolean("adShowed")
+        loadAd()
+        AndroidNetworking.initialize(requireContext())
+        if (AdConfig.ISPAIDUSER) {
 
-        //Max Medium Native Ad
-        MaxNativeAd.createTemplateNativeAdLoader(
-            requireContext(),
-            AdConfig.applovinAndroidNativeMedium,
-            object : MaxNativeAdListener() {
-                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
-                    super.onNativeAdLoaded(p0, p1)
-                    binding.NativeAdDouble.removeAllViews()
-                    p0?.let {
-                        binding.NativeAdDouble.addView(it)
-                        binding.NativeAdDouble.visibility = View.VISIBLE
-                    }
+        } else {
+            //Max Medium Native Ad
+            if (AdConfig.globalTemplateNativeAdView != null) {
+                // Detach globalNativeAdView from its previous parent if it has one
+                AdConfig.globalTemplateNativeAdView?.parent?.let { parent ->
+                    (parent as ViewGroup).removeView(AdConfig.globalTemplateNativeAdView)
                 }
-
-                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                    super.onNativeAdLoadFailed(p0, p1)
-                }
-
-                override fun onNativeAdClicked(p0: MaxAd) {
-                    super.onNativeAdClicked(p0)
-                }
-
-                override fun onNativeAdExpired(p0: MaxAd) {
-                    super.onNativeAdExpired(p0)
-                }
-            })
-        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, requireContext())
-
+                binding.NativeAD.removeAllViews()
+                binding.NativeAD.addView(AdConfig.globalTemplateNativeAdView)
+            } else {
+                // maybe show a placeholder or hide the view
+                binding.NativeAD.visibility = View.GONE
+            }
+        }
         setEvents()
         initObservers()
     }
 
+    fun loadAd() {
+
+    }
+
     fun setEvents() {
         binding.buttonApplyWallpaper.setOnClickListener {
-            wallModel?.downloaded = true
-            setDownloadedAndPopBack()
+            navigateToNext()
         }
-
         binding.toolbar.setOnClickListener {
             findNavController().popBackStack()
             Constants.checkInter = false
-            Constants.checkAppOpen = false
+            checkAppOpen = false
         }
     }
 
-    private fun setDownloadedAndPopBack() {
+    private fun navigateToNext() {
         if (isAdded) {
-            wallModel?.let { it1 ->
-                sharedViewModel.updateDoubleWallById(
-                    wallModel?.id!!,
-                    it1
-                )
-
-                /*doubleWallpaperViewmodel.updateValueById(
-                    wallModel?.id!!,
-                    it1
-                )*/
-            }
-            findNavController().popBackStack()
+            findNavController().navigate(R.id.previewChargingAnimationFragment)
 
         }
     }
@@ -134,26 +108,24 @@ class DoubleWallpaperDownloadFragment : Fragment() {
 
         val file = requireContext().filesDir
         val video = File(file, "video.mp4")
-        sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        /*sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
-
-                wallModel = wallpaper[0]
 
                 startProgressCoroutine()
                 Log.e("TAG", "initObservers: $wallpaper")
 
                 if (BlurView.filePathBattery == "") {
                     downloadVideo(
-                        AdConfig.BASE_URL_DATA + "/doublewallpaper/" + wallpaper[0]?.hd_url1,
+                        AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].hd_animation,
                         video
                     )
 
                 }
-                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/doublewallpaper/" + wallpaper[0]?.hd_url2)
+                getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].thumnail)
 
 
             }
-        }
+        }*/
     }
 
     private fun startProgressCoroutine() {
@@ -192,7 +164,6 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         }
     }
 
-
     private fun getBitmapFromGlide(url: String) {
         Glide.with(requireContext()).asBitmap().load(url)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -213,9 +184,7 @@ class DoubleWallpaperDownloadFragment : Fragment() {
             })
     }
 
-
     private fun downloadVideo(url: String, destinationFile: File) {
-
 //        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".json"
@@ -228,6 +197,26 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         Log.e("TAG", "downloadVideo: " + BlurView.fileName)
 
         animateLoadingText()
+        lifecycleScope.launch(Dispatchers.IO) {
+            AndroidNetworking.download(url, file.path, fileName)
+                .setTag("downloadTest")
+                .setPriority(Priority.HIGH)
+                .doNotCacheResponse()
+                .build()
+                .setDownloadProgressListener { bytesDownloaded, totalBytes ->
+                    Log.e("TAG", "downloadVideo: $bytesDownloaded")
+                    Log.e("TAG", "downloadVideo total bytes: $totalBytes")
+                }
+                .startDownload(object : DownloadListener {
+                    override fun onDownloadComplete() {
+                    }
+
+                    override fun onError(error: ANError?) {
+                        Log.e(TAG, "onError: ")
+                        // handle error
+                    }
+                })
+        }
     }
 
     private fun animateLoadingText() {
@@ -249,7 +238,6 @@ class DoubleWallpaperDownloadFragment : Fragment() {
         textView.text = "Downloading$dots"
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         if (animationJob?.isActive == true) {
@@ -258,4 +246,5 @@ class DoubleWallpaperDownloadFragment : Fragment() {
 
         _binding = null
     }
+
 }

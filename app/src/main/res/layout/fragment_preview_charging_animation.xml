@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/new_main_background"
-    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.batteryanimation.PreviewChargingAnimationFragment">
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.charginingAnimation.PreviewChargingAnimationFragment">
 
     <TextView
         android:id="@+id/time"

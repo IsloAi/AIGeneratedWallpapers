@@ -7,21 +7,31 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.LiveWallpaperAdapter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +48,7 @@ class LiveWallpaperFragment : Fragment() {
     var adapter: LiveWallpaperAdapter? = null
     private var liveList = ArrayList<LiveWallpaperModel>()
     private val statusAd = AdConfig.adStatusViewListWallSRC
-
+    val sharedViewModel: SharedViewModel by activityViewModels()
     private val myViewModel: DataFromRoomViewmodel by viewModels()
 
     val TAG = "LIVE_WALL_SCREEN"
@@ -91,12 +101,12 @@ class LiveWallpaperFragment : Fragment() {
 
                 if (view != null) {
                     lifecycleScope.launch {
+                        liveList = list
                         val listNullable = if (AdConfig.ISPAIDUSER) {
                             list
                         } else {
                             addNullValueInsideArray(list)
                         }
-
                         listNullable.let { adapter?.updateData(it as ArrayList<LiveWallpaperModel?>) }
                         adapter!!.setCoroutineScope(fragmentScope)
                     }
@@ -124,8 +134,7 @@ class LiveWallpaperFragment : Fragment() {
             downloadCallback {
             override fun getPosition(position: Int, model: LiveWallpaperModel) {
                 val newPosition = position + 1
-
-                // sharedViewModel.setAdPosition(newPosition)
+                sharedViewModel.setAdPosition(newPosition)
                 setDownloadAbleWallpaperAndNavigate(model, false)
             }
         }, myActivity)
@@ -163,20 +172,19 @@ class LiveWallpaperFragment : Fragment() {
     }
 
     private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel, adShowd: Boolean) {
-        /*BlurView.filePath = ""
+        BlurView.filePath = ""
         sharedViewModel.clearLiveWallpaper()
-        sharedViewModel.setLiveWallpaper(listOf(model))*/
+        sharedViewModel.setLiveWallpaper(listOf(model))
         if (isAdded) {
-            /*
-                if (AdConfig.ISPAIDUSER) {
-                    Bundle().apply {
-                        putBoolean("adShowed", adShowd)
-                        DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
-                        DownloadLiveWallpaperFragment.shouldObserveFavorites = false
-                        findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
-                    }
-                } else {
-                    *//*if (AdClickCounter.shouldShowAd()) {
+            if (AdConfig.ISPAIDUSER) {
+                Bundle().apply {
+                    putBoolean("adShowed", adShowd)
+                    DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
+                    DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                    findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
+                }
+            } else {
+                if (AdClickCounter.shouldShowAd()) {
                     MaxInterstitialAds.showInterstitialAd(
                         requireActivity(),
                         object : MaxAdListener {
@@ -210,9 +218,8 @@ class LiveWallpaperFragment : Fragment() {
                         DownloadLiveWallpaperFragment.shouldObserveFavorites = false
                         findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
                     }
-                }*//*
+                }
             }
-        */
         }
     }
 

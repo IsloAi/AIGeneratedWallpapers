@@ -21,50 +21,52 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ListItemLiveWallpaperBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.StaggeredNativeLayoutBinding
-import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.WallpaperRowBinding
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.PositionCallback
 import kotlinx.coroutines.CoroutineScope
 
-class MostUsedWallpaperAdapter(
-    var arrayList: ArrayList<SingleDatabaseResponse?>,
-    private var positionCallback: PositionCallback,
+
+class ChargingAnimationAdapter(
+    var arrayList: ArrayList<ChargingAnimModel?>,
+    var positionCallback: downloadCallback,
     private val myActivity: MainActivity
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastClickTime = 0L
-    private val debounceThreshold = 2000L
+    private val debounceThreshold = 2000L // 1 second
     var context: Context? = null
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
     private var lastAdShownPosition = -1
 
-    //val TAG = "PopularAdapter"
-
     var row = 0
 
     private var coroutineScope: CoroutineScope? = null
 
-    inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
+    fun setCoroutineScope(scope: CoroutineScope) {
+        coroutineScope = scope
+    }
+
+    inner class ViewHolderContainer1(private val binding: ListItemLiveWallpaperBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(
-            modela: ArrayList<SingleDatabaseResponse?>,
+            modela: ArrayList<ChargingAnimModel?>,
             holder: RecyclerView.ViewHolder,
             position: Int
         ) {
             val model = modela[position]
-            //Log.e(TAG, "bind: content place")
             setAllData(
                 model!!,
                 adapterPosition,
                 binding.loading,
                 binding.wallpaper,
                 binding.errorImage,
-                binding.iapInd
+                binding.iap,
+                binding.animationView
             )
         }
     }
@@ -86,7 +88,7 @@ class MostUsedWallpaperAdapter(
         }
     }
 
-    /*override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -98,7 +100,7 @@ class MostUsedWallpaperAdapter(
                 }
             }
         }
-    }*/
+    }
 
     override fun getItemCount() = arrayList.size
 
@@ -107,7 +109,7 @@ class MostUsedWallpaperAdapter(
         context = parent.context
         return when (viewType) {
             VIEW_TYPE_CONTAINER1 -> {
-                val binding = WallpaperRowBinding.inflate(inflater, parent, false)
+                val binding = ListItemLiveWallpaperBinding.inflate(inflater, parent, false)
                 ViewHolderContainer1(binding)
             }
 
@@ -136,7 +138,6 @@ class MostUsedWallpaperAdapter(
             }
 
             VIEW_TYPE_NATIVE_AD -> {
-
                 val viewHolderContainer3 = holder as ViewHolderContainer3
                 viewHolderContainer3.bind(viewHolderContainer3)
             }
@@ -153,31 +154,35 @@ class MostUsedWallpaperAdapter(
 
     @SuppressLint("SetTextI18n")
     private fun setAllData(
-        model: SingleDatabaseResponse,
+        model: ChargingAnimModel,
         position: Int,
         animationView: LottieAnimationView,
         wallpaperMainImage: ImageView,
         error_img: ImageView,
-        iapItem: ImageView
+        iap: ImageView,
+        imageanimationView: LottieAnimationView
     ) {
         animationView.visibility = View.VISIBLE
         animationView.setAnimation(R.raw.loading_upload_image)
 
-        //Log.e("PopularAdapter", "MostUsed: " + model.unlocked)
-
-        if (model.unlocked == false) {
-            if (AdConfig.ISPAIDUSER) {
-                iapItem.visibility = View.GONE
-            } else {
-                iapItem.visibility = View.VISIBLE
+        /*if (!model.unlocked){
+            if (AdConfig.ISPAIDUSER){
+                iap.visibility = View.GONE
+            }else{
+                iap.visibility = View.VISIBLE
             }
-        } else {
-            iapItem.visibility = View.GONE
-        }
 
-        Glide.with(context!!)
-            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")
-            .diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
+        }else{
+            iap.visibility = View.GONE
+        }
+            imageanimationView.visibility = View.VISIBLE
+            imageanimationView.setAnimationFromUrl(model.hd_animation)
+            imageanimationView.playAnimation()*/
+
+        Log.d("ChargingAnimationAdapter", "setAllData: ${model.thumnail}")
+
+        Glide.with(context!!).load(AdConfig.BASE_URL_DATA + "/animation/" + model.thumnail)
+            .diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -201,28 +206,75 @@ class MostUsedWallpaperAdapter(
                 ): Boolean {
                     animationView.visibility = View.INVISIBLE
                     error_img.visibility = View.GONE
-                    Log.d("onLoadFailed", "onResourceReady: ")
+                    Log.d("******loaded", "onResourceReady: ")
                     return false
                 }
             }).into(wallpaperMainImage)
+
+
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
 
             if (currentTime - lastClickTime >= debounceThreshold) {
-                positionCallback.getPosition(position)
+
+
+                positionCallback.getPosition(position, model)
+
+//                    else {
+//                        if (whichClicked == 1) {
+//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView, myViewModel!!,myActivity)
+//                        } else {
+//                            myDialogs.getWallpaperPopup(context!!, model, navController, actionId, gemsTextUpdate, lockButton, diamondIcon, gemsView,myActivity)
+//                        }
+//                    }
+
                 lastClickTime = currentTime
             }
+
+
+        }
+
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            myActivity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork
+            val capabilities = connectivityManager.getNetworkCapabilities(network)
+            capabilities != null && (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) ||
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            networkInfo != null && networkInfo.isConnected
         }
     }
 
-    fun setCoroutineScope(scope: CoroutineScope) {
-        coroutineScope = scope
+    fun updateMoreData(list: ArrayList<ChargingAnimModel?>) {
+        val startPosition = arrayList.size
+
+        for (i in 0 until list.size) {
+            if (arrayList.contains(list[i])) {
+                Log.e("********new Data", "updateMoreData: already in list")
+            } else {
+                arrayList.add(list[i])
+            }
+        }
+        notifyItemRangeInserted(startPosition, list.size)
     }
 
-    fun updateData(list: ArrayList<SingleDatabaseResponse?>) {
+    fun getAllItems(): ArrayList<ChargingAnimModel?> {
+        return arrayList
+    }
+
+    fun updateData(list: ArrayList<ChargingAnimModel?>) {
         arrayList.clear()
         arrayList.addAll(list)
         notifyDataSetChanged()
+    }
+
+    interface downloadCallback {
+        fun getPosition(position: Int, model: ChargingAnimModel)
     }
 
 }

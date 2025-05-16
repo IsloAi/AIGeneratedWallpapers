@@ -24,13 +24,14 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.NativeSliderLayoutBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.SlideItemContainerBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import kotlinx.coroutines.CoroutineScope
 
 class WallpaperApiSliderAdapter(
-    private val arrayList: ArrayList<CatResponse?>,
+    private val arrayList: ArrayList<SingleDatabaseResponse?>,
     private val fullViewImage: FullViewImage,
     private val mActivity: MainActivity,
     private val from: String,
@@ -112,7 +113,7 @@ class WallpaperApiSliderAdapter(
 
     inner class ViewHolderContainer1(val binding: SlideItemContainerBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(arrayList: ArrayList<CatResponse?>, position: Int) {
+        fun bind(arrayList: ArrayList<SingleDatabaseResponse?>, position: Int) {
 
             val model = arrayList[position]
             Log.d("WallpaperPreview", "bind:model= $model")
@@ -146,12 +147,14 @@ class WallpaperApiSliderAdapter(
 
     @SuppressLint("SuspiciousIndentation")
     private fun dataSet(
-        model: CatResponse, imageSlide: AppCompatImageView, progressBar: LottieAnimationView,
+        model: SingleDatabaseResponse,
+        imageSlide: AppCompatImageView,
+        progressBar: LottieAnimationView,
         blurView: ConstraintLayout, adapterPosition: Int, noData: ImageView
     ) {
         progressBar.visibility = VISIBLE
         progressBar.setAnimation(R.raw.main_loading_animation)
-        if (model.unlockimges == true) {
+        if (model.unlocked == true) {
             blurView.visibility = INVISIBLE
         } else {
             if (AdConfig.ISPAIDUSER) {
@@ -164,7 +167,7 @@ class WallpaperApiSliderAdapter(
         imageSlide.setOnClickListener {
             Log.d(
                 "modelTracingNow",
-                "dataSet: model else condition  ${model.unlockimges}  imageId  ${model.id}"
+                "dataSet: model else condition  ${model.unlocked}  imageId  ${model.id}"
             )
             fullViewImage.getFullImageUrl(model)
         }

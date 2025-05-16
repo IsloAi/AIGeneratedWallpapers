@@ -41,7 +41,7 @@
         >
 
         <activity
-            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.BatteryAnimationActivity"
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.BatteryAnimationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />
 
@@ -83,7 +83,7 @@
         </service>
 
         <service
-            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.ChargingAnimationService"
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.service.ChargingAnimationService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="specialUse"
@@ -102,7 +102,7 @@
             android:value="@string/default_notification_channel_id" />
 
         <receiver
-            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.service.BroadcastReceiver"
+            android:name="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.service.BroadcastReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

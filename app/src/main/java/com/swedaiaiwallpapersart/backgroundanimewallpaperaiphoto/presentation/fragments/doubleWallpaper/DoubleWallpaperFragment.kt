@@ -6,15 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentDoubleWallpaperBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.adapters.DoubleWallpaperAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
@@ -23,6 +29,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.DownloadCallbackDouble
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DoubleSharedViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,11 +67,8 @@ class DoubleWallpaperFragment : Fragment() {
         adapter = DoubleWallpaperAdapter(list, object :
             DownloadCallbackDouble {
             override fun getPosition(position: Int, model: DoubleWallModel) {
-
                 val newPosition = position + 1
-
                 val allItems = adapter?.getAllItems()
-
                 if (isAdded) {
                     navigateToDestination(allItems!!, position)
                 }
@@ -148,8 +152,8 @@ class DoubleWallpaperFragment : Fragment() {
 
     private fun navigateToDestination(arrayList: ArrayList<DoubleWallModel?>, position: Int) {
         val countOfNulls = arrayList.subList(0, position).count { it == null }
-        /*val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
-        sharedViewModel.setDoubleWalls(arrayList.filterNotNull())*/
+        val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
+        sharedViewModel.setDoubleWalls(arrayList.filterNotNull())
         if (AdConfig.ISPAIDUSER) {
             Bundle().apply {
                 Log.e("DoubleWall", "navigateToDestination: inside bundle")
@@ -159,7 +163,7 @@ class DoubleWallpaperFragment : Fragment() {
                 findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
             }
         } else {
-            /*if (AdClickCounter.shouldShowAd()) {
+            if (AdClickCounter.shouldShowAd()) {
                 MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
                     override fun onAdLoaded(p0: MaxAd) {}
 
@@ -178,17 +182,11 @@ class DoubleWallpaperFragment : Fragment() {
                         }
                     }
 
-                    override fun onAdClicked(p0: MaxAd) {
+                    override fun onAdClicked(p0: MaxAd) {}
 
-                    }
+                    override fun onAdLoadFailed(p0: String, p1: MaxError) {}
 
-                    override fun onAdLoadFailed(p0: String, p1: MaxError) {
-
-                    }
-
-                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {
-
-                    }
+                    override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
                 })
             } else {
                 AdClickCounter.increment()
@@ -199,7 +197,7 @@ class DoubleWallpaperFragment : Fragment() {
                     putInt("position", position - countOfNulls)
                     findNavController().navigate(R.id.doubleWallpaperSliderFragment, this)
                 }
-            }*/
+            }
         }
     }
 

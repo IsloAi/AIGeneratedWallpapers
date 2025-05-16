@@ -1,6 +1,13 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils
 
+import android.content.Context
+import android.util.Log
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.nativeAds.MaxNativeAdListener
 import com.applovin.mediation.nativeAds.MaxNativeAdView
+import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxNativeAd
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
 
 object AdConfig {
@@ -126,65 +133,65 @@ object AdConfig {
     var globalTemplateNativeAdView: MaxNativeAdView? = null
 
 
-    /*    fun loadAndCacheNativeAd(context: Context) {
-            MaxNativeAd.createNativeAdLoader(
-                context,
-                applovinAndroidNativeManual,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(view: MaxNativeAdView?, p1: MaxAd) {
-                        globalNativeAdView = view
-                        // You can also cache ad if needed
-                    }
+    fun loadAndCacheNativeAd(context: Context) {
+        MaxNativeAd.createNativeAdLoader(
+            context,
+            applovinAndroidNativeManual,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(view: MaxNativeAdView?, p1: MaxAd) {
+                    globalNativeAdView = view
+                    // You can also cache ad if needed
+                }
 
-                    override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                        Log.e("Ad", "Failed to load native ad: ${p1.message}")
-                    }
-                })
-            MaxNativeAd.loadNativeAd(R.layout.max_native_small, context)
-        }
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    Log.e("Ad", "Failed to load native ad: ${p1.message}")
+                }
+            })
+        MaxNativeAd.loadNativeAd(R.layout.max_native_small, context)
+    }
 
-        fun loadAndCacheBigNativeAd(context: Context) {
-            MaxNativeAd.createNativeAdLoader(
-                context,
-                applovinAndroidNativeManual,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(view: MaxNativeAdView?, p1: MaxAd) {
-                        globalBigNativeAdView = view
-                        // You can also cache ad if needed
-                    }
+    fun loadAndCacheBigNativeAd(context: Context) {
+        MaxNativeAd.createNativeAdLoader(
+            context,
+            applovinAndroidNativeManual,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(view: MaxNativeAdView?, p1: MaxAd) {
+                    globalBigNativeAdView = view
+                    // You can also cache ad if needed
+                }
 
-                    override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                        Log.e("Ad", "Failed to load native ad: ${p1.message}")
-                    }
-                })
-            MaxNativeAd.loadNativeAd(R.layout.max_native_ad_slider, context)
-        }
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    Log.e("Ad", "Failed to load native ad: ${p1.message}")
+                }
+            })
+        MaxNativeAd.loadNativeAd(R.layout.max_native_ad_slider, context)
+    }
 
-        fun loadTemplateNativeAd(context: Context) {
-            //Max Medium Native Ad
-            MaxNativeAd.createTemplateNativeAdLoader(
-                context,
-                applovinAndroidNativeMedium,
-                object : MaxNativeAdListener() {
-                    override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
-                        super.onNativeAdLoaded(p0, p1)
-                        globalTemplateNativeAdView = p0
-                    }
+    fun loadTemplateNativeAd(context: Context) {
+        //Max Medium Native Ad
+        MaxNativeAd.createTemplateNativeAdLoader(
+            context,
+            applovinAndroidNativeMedium,
+            object : MaxNativeAdListener() {
+                override fun onNativeAdLoaded(p0: MaxNativeAdView?, p1: MaxAd) {
+                    super.onNativeAdLoaded(p0, p1)
+                    globalTemplateNativeAdView = p0
+                }
 
-                    override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
-                        super.onNativeAdLoadFailed(p0, p1)
-                    }
+                override fun onNativeAdLoadFailed(p0: String, p1: MaxError) {
+                    super.onNativeAdLoadFailed(p0, p1)
+                }
 
-                    override fun onNativeAdClicked(p0: MaxAd) {
-                        super.onNativeAdClicked(p0)
-                    }
+                override fun onNativeAdClicked(p0: MaxAd) {
+                    super.onNativeAdClicked(p0)
+                }
 
-                    override fun onNativeAdExpired(p0: MaxAd) {
-                        super.onNativeAdExpired(p0)
-                    }
-                })
-            MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, context)
-        }*/
+                override fun onNativeAdExpired(p0: MaxAd) {
+                    super.onNativeAdExpired(p0)
+                }
+            })
+        MaxNativeAd.loadTemplateNativeAd(MaxNativeAdView.MEDIUM_TEMPLATE_1, context)
+    }
 
 }
 

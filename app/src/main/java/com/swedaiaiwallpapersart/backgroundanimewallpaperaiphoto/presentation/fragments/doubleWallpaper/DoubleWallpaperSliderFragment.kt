@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -31,10 +32,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.endpoints.
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.DoubleWallpaperSliderAdapter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.WallpaperViewFragment
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MyWallpaperManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DoubleSharedViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
@@ -69,7 +72,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
     private var from = ""
     private var wall = ""
 
-    //val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
+    val sharedViewModel: DoubleSharedViewmodel by activityViewModels()
 
     @Inject
     lateinit var endPointsInterface: APIEndpoints
@@ -88,9 +91,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDoubleWallpaperSliderBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 
@@ -103,9 +105,9 @@ class DoubleWallpaperSliderFragment : Fragment() {
         getWallpapers()
     }
 
-    fun getWallpapers() {
+    private fun getWallpapers() {
         var arrayListJson: ArrayList<DoubleWallModel> = ArrayList()
-        /*sharedViewModel.doubleWallResponseList.observe(viewLifecycleOwner) { catResponses ->
+        sharedViewModel.doubleWallResponseList.observe(viewLifecycleOwner) { catResponses ->
             if (catResponses.isNotEmpty()) {
                 arrayListJson.clear()
 
@@ -171,7 +173,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
 
                 functionality()
             }
-        }*/
+        }
     }
 
     private fun getBitmapFromGlide(url: String) {
@@ -221,8 +223,8 @@ class DoubleWallpaperSliderFragment : Fragment() {
         binding.buttonApplyWallpaper.setOnClickListener {
             if (bitmap != null) {
                 if (binding.buttonApplyWallpaper.text == "Download") {
-//                    sharedViewModel.clearChargeAnimation()
-//                    sharedViewModel.setchargingAnimation(listOf(arrayList[position]))
+                    sharedViewModel.clearChargeAnimation()
+                    sharedViewModel.setchargingAnimation(listOf(arrayList[position]))
                     findNavController().navigate(R.id.doubleWallpaperDownloadFragment)
                 } else {
                     if (homeScreenBitmap != null && lockScreenBitmap != null) {
@@ -284,7 +286,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
         }
     }
 
-    fun imageDetailsSheet() {
+    private fun imageDetailsSheet() {
         val bottomSheetDialog = BottomSheetDialog(requireContext())
         val binding = BottomSheetInfoBinding.inflate(layoutInflater)
         bottomSheetDialog.setContentView(binding.root)
@@ -389,9 +391,7 @@ class DoubleWallpaperSliderFragment : Fragment() {
                         lockScreenBitmap = resource
                     }
 
-                    override fun onLoadCleared(placeholder: Drawable?) {
-                        // Not used
-                    }
+                    override fun onLoadCleared(placeholder: Drawable?) {}
                 })
 
             Glide.with(requireContext()).asBitmap()

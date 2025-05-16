@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.androidnetworking.AndroidNetworking
@@ -27,6 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkInter
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -41,7 +43,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
     private val binding get() = _binding!!
 
-    //val sharedViewModel: SharedViewModel by activityViewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     private var bitmap: Bitmap? = null
 
@@ -138,7 +140,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
     }
 
     private fun initObservers() {
-        /*if (shouldObserveLiveWallpapers) {
+        if (shouldObserveLiveWallpapers) {
             sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
                 if (wallpaper.isNotEmpty()) {
 
@@ -158,7 +160,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
         }
 
         if (shouldObserveFavorites) {
-            sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
                 if (wallpaper.isNotEmpty()) {
 
                     Log.e("Favourite", "initObservers: $wallpaper")
@@ -173,9 +175,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
                     }
                     getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
                 }
-            }
-        }*/
-
+            }*/
+        }
         /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
@@ -191,7 +192,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
             }
-        }
+        }*/
+
         sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
@@ -207,7 +209,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
             }
-        }*/
+        }
     }
 
     private fun getBitmapFromGlide(url: String) {

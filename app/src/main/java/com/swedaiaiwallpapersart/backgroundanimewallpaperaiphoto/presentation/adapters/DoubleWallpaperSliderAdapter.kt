@@ -117,6 +117,17 @@ class DoubleWallpaperSliderAdapter(
     inner class ViewHolderContainer3(private val binding: NativeSliderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(holder: RecyclerView.ViewHolder) {
+            if (AdConfig.globalNativeAdView != null) {
+                // Detach globalNativeAdView from its previous parent if it has one
+                AdConfig.globalNativeAdView?.parent?.let { parent ->
+                    (parent as ViewGroup).removeView(AdConfig.globalNativeAdView)
+                }
+                binding.sliderNative.removeAllViews()
+                binding.sliderNative.addView(AdConfig.globalNativeAdView)
+            } else {
+                // maybe show a placeholder or hide the view
+                binding.sliderNative.visibility = View.GONE
+            }
             /*val native =
                 NativeAdManager(
                     context!!,

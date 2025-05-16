@@ -1,7 +1,7 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils
 
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 
 interface FullViewImage {
-    fun getFullImageUrl(image: CatResponse)
+    fun getFullImageUrl(image: SingleDatabaseResponse)
 }

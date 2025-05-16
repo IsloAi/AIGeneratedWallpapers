@@ -21,12 +21,15 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.applovin.mediation.ads.MaxAdView
 import com.google.android.material.tabs.TabLayout
@@ -53,6 +56,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -67,7 +71,7 @@ class HomeTabsFragment : Fragment() {
      private var existDialog = MyDialogs()*/
     private lateinit var myActivity: MainActivity
 
-    //val sharedViewModel: SharedViewModel by activityViewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
     private var isBottomSheetVisible = false
 
     @Inject
@@ -396,7 +400,7 @@ class HomeTabsFragment : Fragment() {
         dialog.show()
     }
 
-    fun launchUpdateFlow() {
+    private fun launchUpdateFlow() {
         if (isAdded) {
             val appUpdateManager = AppUpdateManagerFactory.create(requireContext())
             val appUpdateInfoTask = appUpdateManager.appUpdateInfo
@@ -417,7 +421,6 @@ class HomeTabsFragment : Fragment() {
                         Toast.makeText(context, "Something wrong went wrong!", Toast.LENGTH_SHORT)
                             .show()
                     }
-
                 }
             }
         }
@@ -458,7 +461,7 @@ class HomeTabsFragment : Fragment() {
                 putString("from", "Vip")
             }
             findNavController().navigate(R.id.listViewFragment, bundle)
-        }
+        }*/
 
         binding.settings.setOnClickListener {
             Constants.checkInter = false
@@ -474,9 +477,9 @@ class HomeTabsFragment : Fragment() {
 
         binding.goPremium.setOnClickListener {
             findNavController().navigate(R.id.IAPFragment)
-        }*/
+        }
 
-        //backHandle()
+        backHandle()
     }
 
     override fun onDestroyView() {
@@ -484,7 +487,7 @@ class HomeTabsFragment : Fragment() {
         _binding = null
     }
 
-    /*private fun backHandle() {
+    private fun backHandle() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
@@ -493,14 +496,14 @@ class HomeTabsFragment : Fragment() {
                     } else {
                         if (isAdded) {
                             exit = true
-                            existDialog.exitPopup(
+                            /*existDialog.exitPopup(
                                 requireContext(), requireActivity(), myActivity
-                            )
+                            )*/
                         }
                     }
                 }
             })
-    }*/
+    }
 
     private fun thankyouDialog() {
         val dialog = Dialog(requireContext())
@@ -786,21 +789,5 @@ class HomeTabsFragment : Fragment() {
     private fun isDrawOverlaysPermissionGranted(context: Context): Boolean {
         return Settings.canDrawOverlays(context)
     }
-
-    /*    private fun showRewardWallpaperScreen() {
-            // Use a flag to avoid multiple calls if needed
-            if (!Constants.hasShownRewardScreen) {
-                lifecycleScope.launch {
-                    delay(200)
-                    if (AdConfig.Reward_Screen) {
-                        if (!MySharePreference.getVIPGiftBool(requireActivity())) {
-                            if (findNavController().currentDestination?.id == R.id.homeTabsFragment) {
-                                findNavController().navigate(R.id.rewardDetailsFragment)
-                            }
-                        }
-                    }
-                }
-            }
-        }*/
 
 }

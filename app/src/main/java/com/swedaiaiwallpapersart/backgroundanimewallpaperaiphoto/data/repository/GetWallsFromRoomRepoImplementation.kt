@@ -4,6 +4,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.DoubleWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.LiveWallpaperDao
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.dao.WallpapersDao
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.DoubleWallModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
@@ -40,6 +41,18 @@ class GetWallsFromRoomRepoImplementation @Inject constructor(
 
     override suspend fun getAllDoubleWallpapersFromRoom(): List<DoubleWallModel> {
         return doubleDao.getAllDoubleWallpapers()
+    }
+
+    override suspend fun getCategoryWallpaperFromRoom(cat: String): List<SingleDatabaseResponse> {
+        return dao.getCategoryWallpaper(cat)
+    }
+
+    override suspend fun getCarWallpapersFromRoom(): List<SingleDatabaseResponse> {
+        return dao.getCarWallpapers()
+    }
+
+    override suspend fun getBatteryWallpapersFromRoom(): List<ChargingAnimModel> {
+        return chargingDao.getAllAnimations()
     }
 
 }

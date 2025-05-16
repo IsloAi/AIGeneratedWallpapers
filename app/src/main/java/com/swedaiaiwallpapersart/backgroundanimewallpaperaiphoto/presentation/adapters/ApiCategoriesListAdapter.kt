@@ -3,17 +3,15 @@ package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.a
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -29,49 +27,50 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.PositionCallback
 import kotlinx.coroutines.CoroutineScope
 
-class MostUsedWallpaperAdapter(
+class ApiCategoriesListAdapter(
     var arrayList: ArrayList<SingleDatabaseResponse?>,
-    private var positionCallback: PositionCallback,
-    private val myActivity: MainActivity
-) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var positionCallback: PositionCallback,
+    private val myActivity: MainActivity,
+    private val from: String
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var lastClickTime = 0L
-    private val debounceThreshold = 2000L
-    var context: Context? = null
+    private val debounceThreshold = 2000L // 1 second
+    private val context: Context? get() = myActivity.applicationContext
     private val VIEW_TYPE_CONTAINER1 = 0
     private val VIEW_TYPE_NATIVE_AD = 1
-    private var lastAdShownPosition = -1
-
-    //val TAG = "PopularAdapter"
 
     var row = 0
 
+    private val tracking = when (from) {
+        "trending" -> "mainscr_trending_tab_scroll_view"
+        "category" -> "categoryscr_scroll_view"
+        "search" -> "searchscr_scroll_view"
+        "Vip" -> "rewardscr"
+        else -> "mainscr_sub_cate_tab_click_item"
+    }
+    private val firstAdLineThreshold = AdConfig.firstAdLineViewListWallSRC.takeIf { it != 0 } ?: 4
+    private val firstline = firstAdLineThreshold * 3
+    private val lineCount = AdConfig.lineCountViewListWallSRC.takeIf { it != 0 } ?: 5
+    private val lineC = lineCount * 3
+    private val statusAd = AdConfig.adStatusViewListWallSRC
+
     private var coroutineScope: CoroutineScope? = null
+
+    fun setCoroutineScope(scope: CoroutineScope) {
+        coroutineScope = scope
+    }
 
     inner class ViewHolderContainer1(private val binding: WallpaperRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(
-            modela: ArrayList<SingleDatabaseResponse?>,
-            holder: RecyclerView.ViewHolder,
-            position: Int
-        ) {
-            val model = modela[position]
-            //Log.e(TAG, "bind: content place")
-            setAllData(
-                model!!,
-                adapterPosition,
-                binding.loading,
-                binding.wallpaper,
-                binding.errorImage,
-                binding.iapInd
-            )
+        fun bind(model: SingleDatabaseResponse) {
+            setAllData(adapterPosition, model, binding)
         }
     }
 
     inner class ViewHolderContainer3(private val binding: StaggeredNativeLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(holder: RecyclerView.ViewHolder) {
+        fun bind() {
             if (AdConfig.globalNativeAdView != null) {
                 // Detach globalNativeAdView from its previous parent if it has one
                 AdConfig.globalNativeAdView?.parent?.let { parent ->
@@ -86,7 +85,7 @@ class MostUsedWallpaperAdapter(
         }
     }
 
-    /*override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         super.onAttachedToRecyclerView(recyclerView)
         val layoutManager = recyclerView.layoutManager as GridLayoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -98,13 +97,12 @@ class MostUsedWallpaperAdapter(
                 }
             }
         }
-    }*/
+    }
 
     override fun getItemCount() = arrayList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        context = parent.context
         return when (viewType) {
             VIEW_TYPE_CONTAINER1 -> {
                 val binding = WallpaperRowBinding.inflate(inflater, parent, false)
@@ -114,7 +112,6 @@ class MostUsedWallpaperAdapter(
             VIEW_TYPE_NATIVE_AD -> {
                 val binding = StaggeredNativeLayoutBinding.inflate(inflater, parent, false)
                 ViewHolderContainer3(binding)
-
             }
 
             else -> throw IllegalArgumentException("Unknown view type: $viewType")
@@ -123,23 +120,21 @@ class MostUsedWallpaperAdapter(
 
     @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val model = arrayList[position]
-        when (holder.itemViewType) {
-            VIEW_TYPE_CONTAINER1 -> {
-                try {
+        try {
+            if (position >= arrayList.size) return
+            when (holder.itemViewType) {
+                VIEW_TYPE_CONTAINER1 -> {
                     val viewHolderContainer1 = holder as ViewHolderContainer1
-                    viewHolderContainer1.bind(arrayList, viewHolderContainer1, position)
-                } catch (e: NullPointerException) {
-                    e.printStackTrace()
+                    arrayList[position]?.let { viewHolderContainer1.bind(it) }
                 }
 
+                VIEW_TYPE_NATIVE_AD -> {
+                    val viewHolderContainer3 = holder as ViewHolderContainer3
+                    viewHolderContainer3.bind()
+                }
             }
-
-            VIEW_TYPE_NATIVE_AD -> {
-
-                val viewHolderContainer3 = holder as ViewHolderContainer3
-                viewHolderContainer3.bind(viewHolderContainer3)
-            }
+        } catch (e: Exception) {
+            Log.d("usmanTAG", "onBindViewHolder: error ${e.localizedMessage}")
         }
     }
 
@@ -153,31 +148,32 @@ class MostUsedWallpaperAdapter(
 
     @SuppressLint("SetTextI18n")
     private fun setAllData(
-        model: SingleDatabaseResponse,
-        position: Int,
-        animationView: LottieAnimationView,
-        wallpaperMainImage: ImageView,
-        error_img: ImageView,
-        iapItem: ImageView
+        adapterPosition: Int, model: SingleDatabaseResponse, binding: WallpaperRowBinding
     ) {
-        animationView.visibility = View.VISIBLE
-        animationView.setAnimation(R.raw.loading_upload_image)
+        val animationView = binding.loading
+        val wallpaperMainImage = binding.wallpaper
+        val errorImg = binding.errorImage
+        //val iapItem = binding.iapInd
 
-        //Log.e("PopularAdapter", "MostUsed: " + model.unlocked)
+        animationView.visibility = VISIBLE
+        animationView.setAnimation(R.raw.loading_upload_image)
 
         if (model.unlocked == false) {
             if (AdConfig.ISPAIDUSER) {
-                iapItem.visibility = View.GONE
+                binding.iapInd.visibility = View.GONE
             } else {
-                iapItem.visibility = View.VISIBLE
+                binding.iapInd.visibility = View.VISIBLE
             }
         } else {
-            iapItem.visibility = View.GONE
+            binding.iapInd.visibility = View.GONE
         }
 
-        Glide.with(context!!)
-            .load(AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom")
-            .diskCacheStrategy(DiskCacheStrategy.DATA).thumbnail(0.1f)
+        val url = if (from == "Vip") {
+            AdConfig.BASE_URL_DATA + "/rewardwallpaper/hd/" + model.hd_image_url + "?class=custom"
+        } else {
+            AdConfig.BASE_URL_DATA + "/staticwallpaper/hd/" + model.hd_image_url + "?class=custom"
+        }
+        Glide.with(context!!).load(url).diskCacheStrategy(DiskCacheStrategy.ALL).thumbnail(0.1f)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
                     e: GlideException?,
@@ -185,10 +181,10 @@ class MostUsedWallpaperAdapter(
                     target: Target<Drawable>,
                     isFirstResource: Boolean
                 ): Boolean {
-                    Log.d("onLoadFailed", "onLoadFailed: ")
+                    Log.d("onLoadFailed", "Failed to load: ${e?.message}")
                     animationView.setAnimation(R.raw.no_data_image_found)
                     animationView.visibility = View.VISIBLE
-                    error_img.visibility = View.VISIBLE
+                    errorImg.visibility = View.VISIBLE
                     return false
                 }
 
@@ -199,30 +195,78 @@ class MostUsedWallpaperAdapter(
                     dataSource: DataSource,
                     isFirstResource: Boolean
                 ): Boolean {
-                    animationView.visibility = View.INVISIBLE
-                    error_img.visibility = View.GONE
+                    animationView.visibility = INVISIBLE
+                    errorImg.visibility = View.GONE
                     Log.d("onLoadFailed", "onResourceReady: ")
                     return false
                 }
             }).into(wallpaperMainImage)
+
         wallpaperMainImage.setOnClickListener {
             val currentTime = System.currentTimeMillis()
-
             if (currentTime - lastClickTime >= debounceThreshold) {
-                positionCallback.getPosition(position)
+                positionCallback.getPosition(adapterPosition)
                 lastClickTime = currentTime
             }
         }
     }
 
-    fun setCoroutineScope(scope: CoroutineScope) {
-        coroutineScope = scope
+    fun updateMoreData(list: ArrayList<SingleDatabaseResponse?>) {
+        val startPosition = arrayList.size
+        val currentItems = arrayList.toHashSet()
+        val newItems = ArrayList<SingleDatabaseResponse?>()
+
+        for (item in list) {
+            if (!currentItems.contains(item)) {
+                newItems.add(item)
+                currentItems.add(item) // Track new items to avoid duplicates within the new list
+            }
+        }
+
+        if (newItems.isNotEmpty()) {
+            try {
+                arrayList.addAll(newItems.distinct())
+                notifyItemRangeInserted(startPosition, newItems.size)
+            } catch (e: IndexOutOfBoundsException) {
+                e.printStackTrace()
+            }
+        } else {
+            Log.e("********new Data", "updateMoreData: no new items to add")
+        }
     }
 
     fun updateData(list: ArrayList<SingleDatabaseResponse?>) {
+        val diffCallback = CatResponseDiffCallback(arrayList, list)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         arrayList.clear()
         arrayList.addAll(list)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
+    class CatResponseDiffCallback(
+        private val oldList: List<SingleDatabaseResponse?>,
+        private val newList: List<SingleDatabaseResponse?>
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize() = oldList.size
+        override fun getNewListSize() = newList.size
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition]?.id == newList[newItemPosition]?.id  // Adjust comparison based on your data
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition] == newList[newItemPosition]
+    }
+
+    fun getAllItems(): ArrayList<SingleDatabaseResponse?> {
+        return arrayList
+    }
+
+    fun addNewData() {
+        try {
+            arrayList.clear()
+            notifyDataSetChanged()
+        } catch (e: IndexOutOfBoundsException) {
+            Log.d("usmanTAG", "addNewData: error ${e.localizedMessage} ")
+        }
+    }
 }

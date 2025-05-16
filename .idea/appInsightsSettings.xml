@@ -24,18 +24,13 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto" />
-                  <option name="mobileSdkAppId" value="1:1028766169961:android:2acaec3f884a4a7aea5bf8" />
-                  <option name="projectId" value="k-wallpapers-a6d06" />
-                  <option name="projectNumber" value="1028766169961" />
+                  <option name="mobileSdkAppId" value="1:134197072577:android:5e772ab57c3857d2bd7a40" />
+                  <option name="projectId" value="k-wallpaper-204-usman" />
+                  <option name="projectNumber" value="134197072577" />
                 </ConnectionSetting>
               </option>
-              <option name="failureTypes">
-                <list>
-                  <option value="FATAL" />
-                </list>
-              </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
-              <option name="timeIntervalDays" value="ONE_DAY" />
+              <option name="timeIntervalDays" value="THIRTY_DAYS" />
               <option name="visibilityType" value="ALL" />
             </InsightsFilterSettings>
           </value>

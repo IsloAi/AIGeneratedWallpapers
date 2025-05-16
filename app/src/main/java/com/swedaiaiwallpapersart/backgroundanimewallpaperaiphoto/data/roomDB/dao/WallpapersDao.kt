@@ -21,6 +21,12 @@ interface WallpapersDao {
     @Query("SELECT * FROM `Static Wallpapers` limit 500")
     fun getPopularWallpaper(): List<SingleDatabaseResponse>
 
+    @Query("SELECT * FROM `Static Wallpapers` WHERE cat_name=:cat")
+    fun getCategoryWallpaper(cat: String): List<SingleDatabaseResponse>
+
+    @Query("SELECT * FROM `Static Wallpapers` WHERE cat_name=\"Car\" ")
+    suspend fun getCarWallpapers(): List<SingleDatabaseResponse>
+
     /*@Query("SELECT * FROM allWallpapers")
     fun getAllWallpapersLive(): LiveData<List<SingleDatabaseResponse>>
 

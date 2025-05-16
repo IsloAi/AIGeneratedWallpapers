@@ -9,11 +9,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentCategoryBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CategoryApiModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.ApiCategoriesNameAdapter
@@ -31,9 +36,8 @@ class CategoryFragment : Fragment() {
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var adapter: LiveCategoriesHorizontalAdapter? = null
     private var catList = ArrayList<CategoryApiModel?>()
-    /*
 
-    val catListViewmodel: MyViewModel by activityViewModels()
+    /*val catListViewmodel: MyViewModel by activityViewModels()
     private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
     var isNavigationInProgress = false
     val TAG = "CATEGORIES"*/
@@ -82,15 +86,11 @@ class CategoryFragment : Fragment() {
                 if (AdConfig.ISPAIDUSER) {
                     findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                 } else {
-
                     if (isAdded) {
                         Constants.checkInter = false
                         findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
-
                 }
-
-
             }
         }, myActivity)
 
@@ -108,7 +108,7 @@ class CategoryFragment : Fragment() {
                 findNavController().navigate(R.id.listViewFragment, bundle)
             }
         } else {
-            /*if (AdClickCounter.shouldShowAd()) {
+            if (AdClickCounter.shouldShowAd()) {
                 MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
                     override fun onAdLoaded(p0: MaxAd) {}
 
@@ -139,7 +139,7 @@ class CategoryFragment : Fragment() {
                 if (findNavController().currentDestination?.id != R.id.listViewFragment) {
                     findNavController().navigate(R.id.listViewFragment, bundle)
                 }
-            }*/
+            }
         }
     }
 

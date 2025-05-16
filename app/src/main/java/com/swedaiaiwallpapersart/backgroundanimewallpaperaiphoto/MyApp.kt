@@ -15,6 +15,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import com.google.firebase.remoteconfig.get
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import dagger.hilt.android.HiltAndroidApp
 import org.json.JSONException
@@ -174,14 +176,14 @@ class MyApp : Application() {
 
         AppLovinSdk.getInstance(this).initialize(sdk) { sdkConfig ->
             // Start loading ads
-            /*MaxInterstitialAds.preloadInterstitials(this@MyApp)
+            MaxInterstitialAds.preloadInterstitials(this@MyApp)
             AdConfig.loadAndCacheNativeAd(this@MyApp)
             AdConfig.loadAndCacheBigNativeAd(this@MyApp)
             AdConfig.loadTemplateNativeAd(this@MyApp)
-            MaxRewardAds.preloadRewardedAds(this@MyApp)*/
-            //MaxRewardAds.loadRewardAds(this@MyApp, AdConfig.applovinAndroidReward)
+            MaxRewardAds.preloadRewardedAds(this@MyApp)
+
         }
-        //AppLovinSdk.getInstance(this).showMediationDebugger()
+        AppLovinSdk.getInstance(this).showMediationDebugger()
 
     }
 
