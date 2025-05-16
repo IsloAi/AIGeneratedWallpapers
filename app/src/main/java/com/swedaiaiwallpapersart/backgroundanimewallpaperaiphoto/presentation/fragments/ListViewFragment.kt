@@ -45,7 +45,7 @@ class ListViewFragment : Fragment() {
     private var _binding: FragmentListViewBinding? = null
     private val binding get() = _binding!!
 
-    //val myViewModel: MyViewModel by activityViewModels()
+    val myViewModel: DataFromRoomViewmodel by viewModels()
     private var name = ""
     private var from = ""
     private lateinit var myActivity: MainActivity
@@ -287,7 +287,12 @@ class ListViewFragment : Fragment() {
     }
 
     private fun loadData(name: String) {
-
+        lifecycleScope.launch {
+            myViewModel.fetchCategoryWallpapers(name)
+            myViewModel.categoryWallpapers.collect { wallpapers ->
+                Log.d(TAG, "loadData: Category wallpapers: $wallpapers")
+            }
+        }
     }
 
     fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<SingleDatabaseResponse?> {

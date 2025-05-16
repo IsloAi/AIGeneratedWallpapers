@@ -39,6 +39,9 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
     private val _carWallpapers = MutableStateFlow<List<SingleDatabaseResponse>>(emptyList())
     val carWallpapers: StateFlow<List<SingleDatabaseResponse>> = _carWallpapers
 
+    private val _categoryWallpapers = MutableStateFlow<List<SingleDatabaseResponse>>(emptyList())
+    val categoryWallpapers: StateFlow<List<SingleDatabaseResponse>> = _categoryWallpapers
+
     private val _chargingAnimations = MutableStateFlow<List<ChargingAnimModel>>(emptyList())
     val chargingAnimations: StateFlow<List<ChargingAnimModel>> = _chargingAnimations
 
@@ -77,6 +80,12 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
     fun fetchCarWallpapers() {
         viewModelScope.launch {
             _carWallpapers.value = repo.getCarWallpapersFromRoom()
+        }
+    }
+
+    fun fetchCategoryWallpapers(cat: String) {
+        viewModelScope.launch {
+            _categoryWallpapers.value = repo.getCategoryWallpaperFromRoom(cat)
         }
     }
 
