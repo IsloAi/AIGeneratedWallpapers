@@ -1,4 +1,4 @@
-package com.example.ohmywall.presentation.activities.billing
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.billing
 
 //Created on 28/2/25 by U5M4N-K071N
 /*It's the fear of the bug unseen 

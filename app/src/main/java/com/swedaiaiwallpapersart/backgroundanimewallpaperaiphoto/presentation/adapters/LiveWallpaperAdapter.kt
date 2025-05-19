@@ -212,7 +212,7 @@ class LiveWallpaperAdapter(
         }
     }
 
-    fun updateMoreData(list: ArrayList<LiveWallpaperModel?>) {
+    fun updateMoreData(list: List<LiveWallpaperModel>) {
         try {
             val startPosition = arrayList.size
             arrayList.addAll(list.filter { !arrayList.contains(it) })

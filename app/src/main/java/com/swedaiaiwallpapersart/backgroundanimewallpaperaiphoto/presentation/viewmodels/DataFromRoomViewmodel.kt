@@ -45,6 +45,15 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
     private val _chargingAnimations = MutableStateFlow<List<ChargingAnimModel>>(emptyList())
     val chargingAnimations: StateFlow<List<ChargingAnimModel>> = _chargingAnimations
 
+    private val _liveCatWallpapers = MutableStateFlow<List<LiveWallpaperModel>>(emptyList())
+    val liveCategoryWallpapers: StateFlow<List<LiveWallpaperModel>> = _liveCatWallpapers
+
+    private val _liveFavWallpapers = MutableStateFlow<List<LiveWallpaperModel>>(emptyList())
+    val liveFavouriteWallpapers: StateFlow<List<LiveWallpaperModel>> = _liveFavWallpapers
+
+    private val _staticFavWallpapers = MutableStateFlow<List<SingleDatabaseResponse>>(emptyList())
+    val staticFavouriteWallpapers: StateFlow<List<SingleDatabaseResponse>> = _staticFavWallpapers
+
     fun fetchAllStaticWallpapers() {
         viewModelScope.launch {
             _wallpapers.value = repo.getAllWallpapersFromRoom()
@@ -93,6 +102,37 @@ class DataFromRoomViewmodel @Inject constructor(private val repo: GetWallsFromRo
         viewModelScope.launch {
             _chargingAnimations.value = repo.getBatteryWallpapersFromRoom()
         }
+    }
+
+    fun fetchLiveCategoryWallpapers(cat: String) {
+        viewModelScope.launch {
+            _liveCatWallpapers.value = repo.getLiveCategoryWallpaperFromRoom(cat)
+        }
+    }
+
+    fun updateLiveFavourite(liked: Boolean, Id: Int) {
+        viewModelScope.launch {
+            repo.updateLiveFavourite(liked, Id)
+        }
+    }
+
+    fun getLiveFavourites() {
+        viewModelScope.launch {
+            _liveFavWallpapers.value = repo.getLiveFavourites()
+        }
+    }
+
+    fun updateStaticFavourite(liked: Boolean, Id: Int) {
+        viewModelScope.launch {
+            repo.updateStaticFavourite(liked, Id)
+        }
+    }
+
+    fun getStaticFavourites() {
+        viewModelScope.launch {
+            _staticFavWallpapers.value = repo.getStaticFavourites()
+        }
+
     }
 
 }

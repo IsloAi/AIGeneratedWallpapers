@@ -118,7 +118,7 @@ class DoubleWallpaperFragment : Fragment() {
                 val data = if (AdConfig.ISPAIDUSER) {
                     list
                 } else {
-                    list?.let { addNullValueInsideArray(it) }
+                    addNullValueInsideArray(list)
                 }
 
                 withContext(Dispatchers.Main) {

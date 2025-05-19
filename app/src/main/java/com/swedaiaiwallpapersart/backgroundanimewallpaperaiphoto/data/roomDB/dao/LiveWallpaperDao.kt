@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LiveWallpaperDao {
@@ -15,6 +14,15 @@ interface LiveWallpaperDao {
 
     @Query("SELECT * FROM liveWallpaper")
     fun getAllWallpapers(): List<LiveWallpaperModel>
+
+    @Query("SELECT * FROM liveWallpaper WHERE catname =:cat ")
+    fun getLiveCategoryWallpaper(cat: String): List<LiveWallpaperModel>
+
+    @Query("UPDATE liveWallpaper SET liked=:liked WHERE id=:Id")
+    fun updateLiveFavourite(liked: Boolean, Id: Int)
+
+    @Query("SELECT * FROM liveWallpaper where liked=1")
+    suspend fun getLiveFavourites(): List<LiveWallpaperModel>
 
     /*@Query("SELECT * FROM liveWallpaper WHERE catname =:cat ")
     fun getCatgoriesWallpapers(cat: String): List<LiveWallpaperModel>

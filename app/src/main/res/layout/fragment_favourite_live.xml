@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.favouriteFragment.FavouriteLiveFragment">
+    tools:context="com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.favouriteFragment.FavouriteLiveFragment">
 
     <TextView
         android:id="@+id/textView2"

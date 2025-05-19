@@ -9,16 +9,22 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogCongratulationsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentHomeBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.ApiCategoriesListAdapter
@@ -27,6 +33,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +58,8 @@ class HomeFragment : Fragment() {
     var oldPosition = 0
     val TAG = "HOMEFRAG"
     var dataset = false
-    val myViewModel: DataFromRoomViewmodel by viewModels()
+    private val myViewModel: DataFromRoomViewmodel by viewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     companion object {
         var hasToNavigateHome = false
@@ -137,7 +145,7 @@ class HomeFragment : Fragment() {
                         addedItems = allItems
                         oldPosition = position
                         if (isAdded) {
-                            navigateToDestination(allItems, position)
+                            navigateToDestination(cachedCatResponses, position)
                         }
                     }
                 }
@@ -175,24 +183,23 @@ class HomeFragment : Fragment() {
         arrayList: ArrayList<SingleDatabaseResponse?>,
         position: Int
     ) {
-        Log.e(TAG, "navigateToDestination: inside")
         /*viewModel.setCatList(arrayList.filterNotNull() as ArrayList<CatResponse>)
         viewModel.setData(false)*/
         val countOfNulls = arrayList.subList(0, position).count { it == null }
-        //val sharedViewModel: SharedViewModel by activityViewModels()
-        //sharedViewModel.clearData()
-        //sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
+        sharedViewModel.clearData()
+        Log.e(TAG, "navigateToDestination: arrayList: ${arrayList.filterNotNull()}")
+        sharedViewModel.setData(arrayList.filterNotNull(), position - countOfNulls)
         if (AdConfig.ISPAIDUSER) {
             Bundle().apply {
                 Log.e(TAG, "navigateToDestination: inside bundle")
-                putString("from", "trending")
+                putString("from", "Car")
                 putString("wall", "home")
                 putInt("position", position - countOfNulls)
                 findNavController().navigate(R.id.wallpaperViewFragment, this)
                 navigationInProgress = false
             }
         } else {
-            /*if (AdClickCounter.shouldShowAd()) {
+            if (AdClickCounter.shouldShowAd()) {
                 MaxInterstitialAds.showInterstitialAd(requireActivity(), object : MaxAdListener {
                     override fun onAdLoaded(p0: MaxAd) {
 
@@ -227,10 +234,9 @@ class HomeFragment : Fragment() {
                     navigationInProgress = false
                 }
                 AdClickCounter.increment()
-            }*/
+            }
         }
         isNavigationInProgress = false
-
     }
 
     override fun onResume() {
@@ -269,65 +275,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun loadData() {
-        /*myViewModel.getAllCreations("Car")
-        myViewModel.catWallpapers.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Response.Loading -> {}
-
-                is Response.Success -> {
-                    if (view != null) {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            if (!dataset) {
-                                val tempList = ArrayList<CatResponse>()
-                                result.data?.forEach { item ->
-                                    val model = CatResponse(
-                                        item.id,
-                                        item.image_name,
-                                        item.cat_name,
-                                        item.hd_image_url,
-                                        item.compressed_image_url,
-                                        null,
-                                        item.likes,
-                                        item.liked,
-                                        false,
-                                        item.size,
-                                        item.Tags,
-                                        item.capacity
-                                    )
-                                    if (!tempList.contains(model)) {
-                                        tempList.add(model)
-                                    }
-                                }
-                                //Unlock 20% randomly
-                                val unlockCount = (tempList.size * 0.2).toInt()
-                                tempList.shuffled().take(unlockCount)
-                                    .forEach { it.unlockimges = true }
-
-                                val list = if (AdConfig.ISPAIDUSER) {
-                                    tempList.shuffled() as ArrayList<CatResponse?>
-                                } else {
-                                    addNullValueInsideArray(tempList.shuffled())
-                                }
-                                cachedCatResponses = list
-                                withContext(Dispatchers.Main) {
-                                    adapter.updateData(cachedCatResponses)
-                                    //startIndex += 30
-                                }
-                                dataset = true
-                            }
-                        }
-                    }
-                }
-
-                is Response.Error -> {
-                    Log.e("TAG", "error: ${result.message}")
-                    Toast.makeText(requireContext(), "${result.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                else -> {}
-            }
-        }*/
         lifecycleScope.launch {
             myViewModel.fetchCarWallpapers()
             myViewModel.carWallpapers.collect { response ->
@@ -361,42 +308,4 @@ class HomeFragment : Fragment() {
 
         dialog.show()
     }
-
-
-    /*
-    fun getItems(startIndex1: Int, chunkSize: Int): ArrayList<CatResponse?> {
-        val endIndex = startIndex1 + chunkSize
-        if (startIndex1 >= cachedCatResponses.size) {
-            return arrayListOf()
-        } else {
-            isLoadingMore = false
-            val subList = cachedCatResponses.subList(
-                startIndex1,
-                endIndex.coerceAtMost(cachedCatResponses.size)
-            )
-            return ArrayList(subList)
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e(TAG, "onPause: ")
-
-        if (!externalOpen) {
-            val allItems = adapter.getAllItems()
-            if (addedItems?.isNotEmpty() == true) {
-                addedItems?.clear()
-            }
-
-            addedItems?.addAll(allItems)
-        }
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        isFirstLoad = true
-        _binding = null
-    }
-*/
 }

@@ -31,4 +31,19 @@ interface GetWallpaperFromRoomRepository {
     //FETCHING BATTERY WALLPAPERS
     suspend fun getBatteryWallpapersFromRoom(): List<ChargingAnimModel>
 
+    //FETCHING LIVE CATEGORY WALLPAPERS
+    suspend fun getLiveCategoryWallpaperFromRoom(cat: String): List<LiveWallpaperModel>
+
+    //UPDATING FAVOURITE Live WALLPAPERS
+    suspend fun updateLiveFavourite(liked: Boolean, Id: Int)
+
+    //FETCHING FAVOURITE Live WALLPAPERS
+    suspend fun getLiveFavourites(): List<LiveWallpaperModel>
+
+    //UPDATING FAVOURITE STATIC WALLPAPERS
+    suspend fun updateStaticFavourite(liked: Boolean, Id: Int)
+
+    //FETCHING FAVOURITE STATIC WALLPAPERS
+    suspend fun getStaticFavourites(): List<SingleDatabaseResponse>
+
 }

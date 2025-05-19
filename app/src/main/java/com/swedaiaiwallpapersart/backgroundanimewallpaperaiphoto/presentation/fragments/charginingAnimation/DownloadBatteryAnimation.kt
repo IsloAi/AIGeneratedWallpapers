@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.androidnetworking.AndroidNetworking
@@ -26,6 +27,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.BatteryAnimationViewmodel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -39,7 +41,7 @@ class DownloadBatteryAnimation : Fragment() {
     private var _binding: FragmentDownloadBatteryAnimationBinding? = null
     private val binding get() = _binding!!
 
-    //val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
+    val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
     private var bitmap: Bitmap? = null
     private var animationJob: Job? = null
     val TAG = "DOWNLOAD_SCREEN"
@@ -51,7 +53,7 @@ class DownloadBatteryAnimation : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDownloadBatteryAnimationBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
         return binding.root
@@ -100,7 +102,6 @@ class DownloadBatteryAnimation : Fragment() {
     private fun navigateToNext() {
         if (isAdded) {
             findNavController().navigate(R.id.previewChargingAnimationFragment)
-
         }
     }
 
@@ -108,24 +109,19 @@ class DownloadBatteryAnimation : Fragment() {
 
         val file = requireContext().filesDir
         val video = File(file, "video.mp4")
-        /*sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
-
                 startProgressCoroutine()
                 Log.e("TAG", "initObservers: $wallpaper")
-
                 if (BlurView.filePathBattery == "") {
                     downloadVideo(
                         AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].hd_animation,
                         video
                     )
-
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/animation/" + wallpaper[0].thumnail)
-
-
             }
-        }*/
+        }
     }
 
     private fun startProgressCoroutine() {
@@ -170,22 +166,17 @@ class DownloadBatteryAnimation : Fragment() {
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     bitmap = resource
-
                     if (isAdded) {
                         val blurImage: Bitmap = BlurView.blurImage(requireContext(), bitmap!!)!!
                         binding.backImage.setImageBitmap(blurImage)
                     }
-
-
                 }
 
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
+                override fun onLoadCleared(placeholder: Drawable?) {}
             })
     }
 
     private fun downloadVideo(url: String, destinationFile: File) {
-//        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val file = requireContext().filesDir
         val fileName = System.currentTimeMillis().toString() + ".json"
 
@@ -208,8 +199,7 @@ class DownloadBatteryAnimation : Fragment() {
                     Log.e("TAG", "downloadVideo total bytes: $totalBytes")
                 }
                 .startDownload(object : DownloadListener {
-                    override fun onDownloadComplete() {
-                    }
+                    override fun onDownloadComplete() {}
 
                     override fun onError(error: ANError?) {
                         Log.e(TAG, "onError: ")

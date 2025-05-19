@@ -55,4 +55,25 @@ class GetWallsFromRoomRepoImplementation @Inject constructor(
         return chargingDao.getAllAnimations()
     }
 
+    override suspend fun getLiveCategoryWallpaperFromRoom(cat: String): List<LiveWallpaperModel> {
+        return liveDao.getLiveCategoryWallpaper(cat)
+    }
+
+    override suspend fun updateLiveFavourite(liked: Boolean, Id: Int) {
+        return liveDao.updateLiveFavourite(liked, Id)
+    }
+
+    override suspend fun getLiveFavourites(): List<LiveWallpaperModel> {
+        return liveDao.getLiveFavourites()
+    }
+
+    override suspend fun updateStaticFavourite(liked: Boolean, Id: Int) {
+        return dao.updateStaticFavourite(liked, Id)
+    }
+
+    override suspend fun getStaticFavourites(): List<SingleDatabaseResponse> {
+        return dao.getStaticFavourites()
+    }
+
+
 }

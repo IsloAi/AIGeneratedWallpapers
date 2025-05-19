@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 
 @Dao
@@ -26,6 +27,13 @@ interface WallpapersDao {
 
     @Query("SELECT * FROM `Static Wallpapers` WHERE cat_name=\"Car\" ")
     suspend fun getCarWallpapers(): List<SingleDatabaseResponse>
+
+    @Query("UPDATE `Static Wallpapers` SET liked=:liked WHERE id=:Id")
+    fun updateStaticFavourite(liked: Boolean, Id: Int)
+
+    @Query("SELECT * FROM `Static Wallpapers` where liked=1")
+    suspend fun getStaticFavourites(): List<SingleDatabaseResponse>
+
 
     /*@Query("SELECT * FROM allWallpapers")
     fun getAllWallpapersLive(): LiveData<List<SingleDatabaseResponse>>

@@ -24,18 +24,13 @@ class ChargingAnimationService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-
         createNotificationChannel()
-
-
         notification = createNotification()
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startForeground(1, notification!!, ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE)
         } else {
             startForeground(1, notification)
         }
-
         registerReceiver()
     }
 
@@ -51,9 +46,7 @@ class ChargingAnimationService : Service() {
 
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
         Log.e("TAG", "onStartCommand: started")
-
         return START_STICKY;
     }
 

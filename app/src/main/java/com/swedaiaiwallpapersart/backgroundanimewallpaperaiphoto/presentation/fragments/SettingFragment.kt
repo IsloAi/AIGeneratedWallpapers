@@ -52,11 +52,6 @@ class SettingFragment : Fragment() {
 
     @SuppressLint("SuspiciousIndentation")
     private fun myCreated() {
-        /*binding.premiumCardButton.setOnClickListener {
-            requireParentFragment().findNavController()
-                .navigate(R.id.action_mainFragment_to_premiumPlanFragment)
-        }*/
-
         binding.gemsText.text = MySharePreference.getGemsValue(requireContext()).toString()
 
         val isServiceRunning =
@@ -136,11 +131,14 @@ class SettingFragment : Fragment() {
         }
 
         binding.favorites.setOnClickListener {
-            //findNavController().navigate(R.id.favouriteFragment)
+            findNavController().navigate(R.id.favouriteFragment)
         }
     }
 
-    fun isServiceRunning(context: Context, serviceClass: Class<ChargingAnimationService>): Boolean {
+    private fun isServiceRunning(
+        context: Context,
+        serviceClass: Class<ChargingAnimationService>
+    ): Boolean {
         val serviceManager = context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
         val runningServices = serviceManager.getRunningServices(Integer.MAX_VALUE)
 
@@ -183,8 +181,7 @@ class SettingFragment : Fragment() {
         }
     }
 
-
-    fun shareApp(context: Context) {
+    private fun shareApp(context: Context) {
         val appPackageName = context.packageName
         val appName = context.getString(R.string.app_name)
 

@@ -67,8 +67,7 @@ class ListViewFragment : Fragment() {
 
     private val viewmodel: DataFromRoomViewmodel by viewModels()
 
-    /*
-    private val rewardedViewModel: RewardedViewModel by activityViewModels()*/
+    /*private val rewardedViewModel: RewardedViewModel by activityViewModels()*/
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -291,6 +290,46 @@ class ListViewFragment : Fragment() {
             myViewModel.fetchCategoryWallpapers(name)
             myViewModel.categoryWallpapers.collect { wallpapers ->
                 Log.d(TAG, "loadData: Category wallpapers: $wallpapers")
+                val list = arrayListOf<SingleDatabaseResponse>()
+                wallpapers.forEach { item ->
+                    val single = SingleDatabaseResponse(
+                        item.id,
+                        item.cat_name,
+                        item.image_name,
+                        item.hd_image_url,
+                        item.compressed_image_url,
+                        item.likes,
+                        item.liked,
+                        item.size,
+                        item.Tags,
+                        item.capacity,
+                        false, // locked by default
+                    )
+                    if (!list.contains(single)) {
+                        list.add(single)
+                    }
+                }
+                // Unlock 20% randomly
+                val unlockCount = (list.size * 0.2).toInt()
+                list.shuffled().take(unlockCount).forEach { it.unlocked = true }
+                if (view != null) {
+                    lifecycleScope.launch {
+                        if (view != null) {
+                            lifecycleScope.launch {
+                                val nullList = if (AdConfig.ISPAIDUSER) {
+                                    list.shuffled() as ArrayList<CatResponse?>
+                                } else {
+                                    addNullValueInsideArray(list.shuffled())
+                                }
+                                cachedCatResponses = list as ArrayList<SingleDatabaseResponse?>
+                                withContext(Dispatchers.Main) {
+                                    adapter?.updateData(cachedCatResponses)
+                                    dataset = true
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -309,8 +348,10 @@ class ListViewFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
-        createBannerAd()
+        if (AdConfig.ISPAIDUSER) {
+        } else {
+            createBannerAd()
+        }
         if (wallFromList) {
             if (isAdded) {
                 congratulationsDialog()

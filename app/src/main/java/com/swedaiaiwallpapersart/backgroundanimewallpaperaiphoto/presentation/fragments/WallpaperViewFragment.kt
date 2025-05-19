@@ -82,6 +82,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.FullViewImage
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MyWallpaperManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -121,23 +122,24 @@ class WallpaperViewFragment : Fragment() {
     private var navController: NavController? = null
 
     //val myDialogs = MyDialogs()
-    var adcount = 0
-    var totalADs = 0
+    private var adcount = 0
+    private var totalADs = 0
 
     //private val googleLogin = GoogleLogin()
     private lateinit var myActivity: MainActivity
     private var from = ""
     private var fav = false
     private var wall = ""
-    var showInter = true
+    private var showInter = true
     val sharedViewModel: SharedViewModel by activityViewModels()
+    val viewModel: DataFromRoomViewmodel by activityViewModels()
 
     //@Inject
     //lateinit var endPointsInterface: EndPointsInterface
     var firstTime = true
     var oldPosition = 0
     private lateinit var adView: MaxAdView
-    val TAG = "SLIDERFRAGMENT"
+    val TAG = "SLIDER_FRAGMENT"
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -163,13 +165,17 @@ class WallpaperViewFragment : Fragment() {
         var arrayListJson: ArrayList<SingleDatabaseResponse> = ArrayList()
         sharedViewModel.catResponseList.observe(viewLifecycleOwner) { catResponses ->
             if (catResponses.isNotEmpty()) {
+                Log.d(TAG, "onCreateView: catResponses: $catResponses")
+
                 arrayListJson.clear()
 
                 arrayListJson = catResponses as ArrayList<SingleDatabaseResponse>
+                Log.d(TAG, "onCreateView: arrayListJson: $arrayListJson")
                 val pos = arguments?.getInt("position")
                 from = arguments?.getString("from")!!
                 wall = arguments?.getString("wall")!!
                 fav = arguments?.getBoolean("Fav")!!
+                Log.d(TAG, "onCreateView: pos: $pos\nfrom:$from\nwall:$wall\nfav:$fav")
 
 
 
@@ -447,23 +453,52 @@ class WallpaperViewFragment : Fragment() {
 
         }
         binding.favouriteButton.setOnClickListener {
-            binding.favouriteButton.isEnabled = false
+            val currentItem = arrayList[position] ?: return@setOnClickListener
+            val isCurrentlyLiked = currentItem.liked ?: false
+            val newLikedState = !isCurrentlyLiked
+
+            // Update model
+            currentItem.liked = newLikedState
+
+            // Update in Room via ViewModel
+            currentItem.id?.let { id ->
+                viewModel.updateStaticFavourite(newLikedState, id)
+            }
+
+            // Update UI
+            binding.favouriteButton.setImageResource(
+                if (newLikedState) R.drawable.button_like_selected else R.drawable.button_like
+            )
+
+            // Refresh adapter/viewpager if necessary
+            adapter?.notifyItemChanged(position)
+            binding.viewPager.setCurrentItem(position, true)
+
+            // Update shared ViewModel (strip out ads)
+            val countOfNulls = arrayList.subList(0, position).count { it == null }
+            sharedViewModel.updateCatResponseAtIndex(currentItem, position - countOfNulls)
+
+            // Auto go back if unfavouriting from Favourites screen
+            if (!newLikedState && fav) {
+                findNavController().popBackStack()
+            }
+
+            // Disable repeat interstitial/app-open ad firing
+            Constants.checkInter = false
+            Constants.checkAppOpen = false
+
+            /*binding.favouriteButton.isEnabled = false
             if (arrayList[position]?.liked == true) {
                 arrayList[position]?.liked = false
                 arrayList[position]?.id?.let { it1 ->
-                    /*appDatabase.wallpapersDao().updateLiked(
-                        false, it1
-                    )*/
+                    viewModel.updateStaticFavourite(false, it1)
                 }
                 binding.favouriteButton.setImageResource(R.drawable.button_like)
             } else {
                 arrayList[position]?.liked = true
                 arrayList[position]?.id?.let { it1 ->
-                    /*appDatabase.wallpapersDao().updateLiked(
-                        true, it1
-                    )*/
+                    viewModel.updateStaticFavourite(true, it1)
                 }
-
                 binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
             }
             adapter?.notifyItemChanged(position)
@@ -483,11 +518,11 @@ class WallpaperViewFragment : Fragment() {
             }
             //addFavourite(requireContext(), position, binding.favouriteButton)
             Constants.checkInter = false
-            Constants.checkAppOpen = false
+            Constants.checkAppOpen = false*/
             // ✅ Go back if unfavourited and coming from Favourites
-            if (!arrayList[position]?.liked!! && fav) {
+            /*if (!arrayList[position]?.liked!! && fav) {
                 findNavController().popBackStack()
-            }
+            }*/
         }
         binding.shareAPp.setOnClickListener {
             val appPackageName = requireContext().packageName
@@ -971,8 +1006,7 @@ class WallpaperViewFragment : Fragment() {
                             isNavigated = false
                             hasToNavigate = false
                             hasToNavigateHome = false
-                            /*hasToNavigateAnime = false
-                            hasToNavigateList = false*/
+
                             if (from == "trending") {
                                 if (isAdded) {
                                     findNavController().popBackStack(

@@ -1,12 +1,16 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.liveWallpaper
 
+import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.app.WallpaperManager
+import android.content.ComponentName
 import android.content.Context
+import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,9 +19,15 @@ import android.view.Window
 import android.view.WindowManager
 import android.webkit.MimeTypeMap
 import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -29,23 +39,33 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.navigation.fragment.findNavController
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxError
+import com.applovin.mediation.MaxReward
+import com.applovin.mediation.MaxRewardedAdListener
 import com.applovin.mediation.ads.MaxAdView
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpaperPreviewBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.service.LiveWallpaperService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkInter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -54,14 +74,15 @@ class LiveWallpaperPreviewFragment : Fragment() {
     private var _binding: FragmentLiveWallpaperPreviewBinding? = null
     private val binding get() = _binding!!
 
-    //val sharedViewModel: SharedViewModel by activityViewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
     private var livewallpaper: LiveWallpaperModel? = null
 
-    //private var favLivewallpaper: FavouriteLiveModel? = null
+    private var favLivewallpaper: LiveWallpaperModel? = null
     private var adPosition = 0
     private lateinit var myActivity: MainActivity
-    var liveComingFrom: String = ""
+    private var liveComingFrom: String = ""
     private lateinit var adView: MaxAdView
+    private val viewmodel: DataFromRoomViewmodel by viewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
@@ -100,14 +121,12 @@ class LiveWallpaperPreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         myActivity = activity as MainActivity
-
         initObservers()
-
         setEvents()
     }
 
     private fun initObservers() {
-        /*sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
                 Log.e("Favourite", "initObservers: $wallpaper")
@@ -138,7 +157,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
         sharedViewModel.liveAdPosition.observe(viewLifecycleOwner) {
             adPosition = it
-        }*/
+        }
     }
 
     private fun backHandle() {
@@ -166,56 +185,54 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 setWallpaper()
             }
         }
-
         binding.toolbar.setOnClickListener {
             checkInter = false
             checkAppOpen = false
             findNavController().popBackStack(R.id.homeTabsFragment, false)
         }
-
         if (livewallpaper?.liked == true) {
             binding.setLiked.setImageResource(R.drawable.button_like)
         } else {
             binding.setLiked.setImageResource(R.drawable.button_like_selected)
         }
-
         binding.setLiked.setOnClickListener {
-            /* liveComingFrom = MySharePreference.getLiveFrom(requireContext())
-             Log.d("Favourite", "setEvents:liveComingFrom: $liveComingFrom")
-             if (liveComingFrom == "Favourite") {
-                 binding.setLiked.isEnabled = false
-                 binding.setLiked.setImageResource(R.drawable.button_like)
-                 Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
-                     .show()
-                 Log.d("Favourite", "setEvents: Id ${favLivewallpaper?.id}")
-                 lifecycleScope.launch {
-                     appDatabase.liveWallpaperDao()
-                         .deleteLiveFavourite(favLivewallpaper?.id.toString())
-                 }
-                 MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
-             } else {
-                 binding.setLiked.isEnabled = false
-                 if (livewallpaper?.liked == true) {
-                     livewallpaper?.liked = false
-                     binding.setLiked.setImageResource(R.drawable.button_like)
-                     Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
-                         .show()
-                 } else {
-                     livewallpaper?.liked = true
-                     binding.setLiked.setImageResource(R.drawable.button_like_selected)
-                     Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
-                         .show()
-                     Log.d("Favourite", "setEvents: Id ${livewallpaper?.id}")
-                     addFavourite(requireContext(), binding.setLiked)
-                 }
-                 checkInter = false
-                 checkAppOpen = false
+            liveComingFrom = MySharePreference.getLiveFrom(requireContext())
+            Log.d("Favourite", "setEvents:liveComingFrom: $liveComingFrom")
+            if (liveComingFrom == "Favourite") {
+                binding.setLiked.isEnabled = false
+                binding.setLiked.setImageResource(R.drawable.button_like)
+                Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                    .show()
+                Log.d("Favourite", "setEvents: Id ${favLivewallpaper?.id}")
+                lifecycleScope.launch {
+                    viewmodel.updateLiveFavourite(false, Integer.parseInt(favLivewallpaper?.id!!))
+                }
+                MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
+            } else {
+                binding.setLiked.isEnabled = false
+                if (livewallpaper?.liked == true) {
+                    livewallpaper?.liked = false
+                    binding.setLiked.setImageResource(R.drawable.button_like)
+                    Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    livewallpaper?.liked = true
+                    binding.setLiked.setImageResource(R.drawable.button_like_selected)
+                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.d("Favourite", "setEvents: Id ${livewallpaper?.id}")
+                    lifecycleScope.launch {
+                        viewmodel.updateLiveFavourite(true, Integer.parseInt(livewallpaper?.id!!))
+                    }
+                    //addFavourite(requireContext(), binding.setLiked)
+                }
+                checkInter = false
+                checkAppOpen = false
 
-             }*/
+            }
         }
-
         binding.downloadWallpaper.setOnClickListener {
-            /*val source = File(BlurView.filePath)
+            val source = File(BlurView.filePath)
             val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
             val destination = File(file, BlurView.fileName)
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
@@ -235,7 +252,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                             lifecycleScope.launch {
                                 val requestBody = mapOf("imageid" to livewallpaper?.id)
 
-                                webApiInterface.postDownloadedLive(requestBody)
+                                //webApiInterface.postDownloadedLive(requestBody)
                             }
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -252,8 +269,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                     try {
                         lifecycleScope.launch {
                             val requestBody = mapOf("imageid" to livewallpaper?.id)
-
-                            webApiInterface.postDownloadedLive(requestBody)
+                            //webApiInterface.postDownloadedLive(requestBody)
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -265,7 +281,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 }
             }
             checkInter = false
-            checkAppOpen = false*/
+            checkAppOpen = false
         }
     }
 
@@ -288,7 +304,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
             bindingDialog.dividerStart.visibility = View.INVISIBLE
         }
 
-        /*bindingDialog.watchAds.setOnClickListener {
+        bindingDialog.watchAds.setOnClickListener {
             MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
                 override fun onAdLoaded(p0: MaxAd) {
 
@@ -323,7 +339,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
         bindingDialog.upgradeButton.setOnClickListener {
             dialog.dismiss()
             findNavController().navigate(R.id.IAPFragment)
-        }*/
+        }
         bindingDialog.cancelDialog.setOnClickListener {
             dialog.dismiss()
         }
@@ -469,7 +485,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
         return MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
     }
 
-    /*private fun getUserIdDialog() {
+    private fun getUserIdDialog() {
         val source = File(BlurView.filePath)
         val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
         val destination = File(file, BlurView.fileName)
@@ -520,7 +536,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
             dialog.dismiss()
         }
         dialog.show()
-    }*/
+    }
 
     private fun copyFiles(source: File, destination: File) {
         try {
@@ -536,51 +552,6 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
     }
 
-    /*private fun addFavourite(
-        context: Context, favouriteButton: ImageView
-    ) {
-        *val retrofit = RetrofitInstance.getInstance()
-        val apiService = retrofit.create(LikeLiveWallpaper::class.java)
-        val postData = FavoruiteLiveWallpaperBody(
-            MySharePreference.getDeviceID(context)!!,
-            livewallpaper?.id.toString()
-        )
-        val call = apiService.postLike(postData)
-        call.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                if (response.isSuccessful) {
-                    favouriteButton.isEnabled = true
-                } else {
-                    favouriteButton.isEnabled = true
-                    Toast.makeText(context, "onResponse error", Toast.LENGTH_SHORT).show()
-                    favouriteButton.setImageResource(R.drawable.button_like)
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Toast.makeText(context, "onFailure error", Toast.LENGTH_SHORT).show()
-                favouriteButton.isEnabled = true
-            }
-        })
-        Log.d("LivePreview", "addFavourite: Id ${livewallpaper?.id}")
-        lifecycleScope.launch(Dispatchers.IO) {
-            appDatabase.liveWallpaperDao().insertLiveFavourite(
-                FavouriteLiveModel(
-                    livewallpaper?.id.toString(),
-                    livewallpaper?.livewallpaper_url!!,
-                    livewallpaper?.thumnail_url!!,
-                    livewallpaper?.videoSize!!,
-                    livewallpaper?.liked!!,
-                    livewallpaper?.downloads!!,
-                    livewallpaper?.catname,
-                    livewallpaper?.likes!!,
-                    livewallpaper?.unlocked!!
-                )
-            )
-        }
-    }*/
-
     @UnstableApi
     override fun onResume() {
         super.onResume()
@@ -589,12 +560,12 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
         if (checkWallpaper) {
             lifecycleScope.launch {
-                //checkWallpaperActive()
+                checkWallpaperActive()
             }
         }
     }
 
-    /*private fun checkWallpaperActive() {
+    private fun checkWallpaperActive() {
         if (isAdded) {
             val wallpaperComponent =
                 ComponentName(requireContext(), LiveWallpaperService::class.java)
@@ -626,7 +597,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 }
             }
         }
-    }*/
+    }
 
     @UnstableApi
     private fun setWallpaperOnView() {

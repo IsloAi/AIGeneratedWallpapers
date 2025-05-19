@@ -1,13 +1,14 @@
 package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
 import android.util.Log
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
@@ -15,12 +16,26 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.android.billingclient.api.AcknowledgePurchaseParams
+import com.android.billingclient.api.BillingClient
+import com.android.billingclient.api.BillingClientStateListener
+import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.Purchase
+import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.SkuDetailsParams
+import com.example.ohmywall.presentation.activities.billing.ProductModel
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.ActivityMainBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.InAppProducts
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.billingClient
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.BillingConstant.purchasedProducts
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.billing.SkuDetailsStorage
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.LocaleManager
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.FetchAllWallpapersViewModel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.utils.BillingStore
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
@@ -45,21 +60,21 @@ class MainActivity : AppCompatActivity() {
         Log.d("TAG", "onCreate:deviceID - $deviceID")
 
         val lan = MySharePreference.getLanguage(this)
-         val context = LocaleManager.setLocale(this, lan!!)
-         val resources = context.resources
-         val newLocale = Locale(lan)
-         val resources1 = getResources()
-         val configuration = resources1.configuration
-         configuration.setLocale(newLocale)
-         configuration.setLayoutDirection(Locale(lan))
+        val context = LocaleManager.setLocale(this, lan!!)
+        val resources = context.resources
+        val newLocale = Locale(lan)
+        val resources1 = getResources()
+        val configuration = resources1.configuration
+        configuration.setLocale(newLocale)
+        configuration.setLayoutDirection(Locale(lan))
         resources1.updateConfiguration(configuration, resources.displayMetrics)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //setUpBilling()
+        setUpBilling()
 
         if (deviceID != null) {
-            //MySharePreference.setDeviceID(this, deviceID.toString())
+            MySharePreference.setDeviceID(this, deviceID.toString())
         }
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
@@ -67,7 +82,7 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                /*R.id.liveWallpaperPreviewFragment -> {
+                R.id.liveWallpaperPreviewFragment -> {
                     enableEdgeToEdge()
                     val windowInsetsController =
                         WindowCompat.getInsetsController(window, window.decorView)
@@ -75,7 +90,7 @@ class MainActivity : AppCompatActivity() {
                         WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
                     windowInsetsController.hide(WindowInsetsCompat.Type.navigationBars())
-                }*/
+                }
 
                 else -> {
                     //disableEdgeToEdge(window)
@@ -89,15 +104,21 @@ class MainActivity : AppCompatActivity() {
         }
 
         staticWallpapersViewmodel
-        //AdClickCounter.reset()
-
-        /*Handler(Looper.getMainLooper()).postDelayed({
-            FirebaseCrashlytics.getInstance().log("Crash from MAIN PROCESS ✅")
-            throw RuntimeException("Main process crash test")
-        }, 2000)*/
+        AdClickCounter.reset()
+        handleBackPress()
     }
 
-    /*private fun setUpBilling() {
+    private fun handleBackPress() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.e("TAG", "handleOnBackPressed: ")
+                navController.popBackStack()
+
+            }
+        })
+    }
+
+    private fun setUpBilling() {
         billingClient =
             BillingClient.newBuilder(this@MainActivity).setListener { billingResult, purchases ->
                 // Handle purchase updates
@@ -255,7 +276,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getDuration(iapItem: SkuDetails): String {
-        val isRenewable = Store.SUBSCRIPTION_IDS.any { it == iapItem.sku }
+        val isRenewable = BillingStore.SUBSCRIPTION_IDS.any { it == iapItem.sku }
 
         return if (isRenewable) {
             if (iapItem.sku.contains("weekly", ignoreCase = true)) {
@@ -267,12 +288,5 @@ class MainActivity : AppCompatActivity() {
             "Lifetime"
         }
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (::job.isInitialized) {
-            job.cancel()
-        }
-    }*/
 
 }

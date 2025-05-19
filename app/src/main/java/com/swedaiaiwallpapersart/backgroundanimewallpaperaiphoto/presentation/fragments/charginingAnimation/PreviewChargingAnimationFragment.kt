@@ -14,17 +14,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentPreviewChargingAnimationBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.service.ChargingAnimationService
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.service.ChargingAnimationService
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.BatteryAnimationViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -33,7 +35,7 @@ class PreviewChargingAnimationFragment : Fragment() {
     private var _binding: FragmentPreviewChargingAnimationBinding? = null
     private val binding get() = _binding!!
 
-    //val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
+    val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
 
     private var livewallpaper: ChargingAnimModel? = null
     var adPosition = 0
@@ -49,9 +51,9 @@ class PreviewChargingAnimationFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentPreviewChargingAnimationBinding.inflate(inflater, container, false)
+    ): View {
         // Inflate the layout for this fragment
+        _binding = FragmentPreviewChargingAnimationBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -66,16 +68,13 @@ class PreviewChargingAnimationFragment : Fragment() {
     }
 
     private fun initObservers() {
-        /*sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        sharedViewModel.chargingAnimationResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
-
                 Log.e("TAG", "initObservers: $wallpaper")
-
                 livewallpaper = wallpaper[0]
-
                 setWallpaperOnView()
             }
-        }*/
+        }
     }
 
     private fun backHandle() {

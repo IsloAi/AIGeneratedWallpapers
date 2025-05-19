@@ -1,4 +1,4 @@
-package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.fragments.livewallpaper
+package com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fragments.liveWallpaper
 
 import android.os.Bundle
 import android.util.Log
@@ -6,6 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.analytics.FirebaseAnalytics
@@ -20,10 +23,13 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.downloadCallback
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
@@ -31,8 +37,9 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
 
     private var _binding: FragmentLiveWallpapersFromCategoryBinding? = null
     private val binding get() = _binding!!
-    //private val myViewModel: GetLiveWallpaperByCategoryViewmodel by activityViewModels()
-    //val sharedViewModel: SharedViewModel by activityViewModels()
+    private var name = ""
+    private val myViewModel: DataFromRoomViewmodel by viewModels()
+    val sharedViewModel: SharedViewModel by activityViewModels()
 
     private lateinit var myActivity: MainActivity
     var adapter: LiveWallpaperAdapter? = null
@@ -45,8 +52,8 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLiveWallpapersFromCategoryBinding.inflate(inflater, container, false)
         // Inflate the layout for this fragment
+        _binding = FragmentLiveWallpapersFromCategoryBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -56,7 +63,8 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(requireContext())
 
         val from = arguments?.getString("from")
-        val name = arguments?.getString("wall")
+        name = arguments?.getString("wall").toString()
+        Log.d(TAG, "onViewCreated: name: $name")
 
         binding.catTitle.text = name
         myActivity = activity as MainActivity
@@ -70,10 +78,26 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
             Constants.checkInter = false
             checkAppOpen = false
         }
-
     }
 
-    fun initObservers() {
+    private fun initObservers() {
+        lifecycleScope.launch {
+            myViewModel.fetchLiveCategoryWallpapers(name)
+            myViewModel.liveCategoryWallpapers.collect { result ->
+                val list = result.shuffled()
+                Log.d(TAG, "initObservers: list : $list")
+                val listNullable = if (!AdConfig.ISPAIDUSER) {
+                    addNullValueInsideArray(list)
+                } else {
+                    list as ArrayList<LiveWallpaperModel?>
+                }
+
+                withContext(Dispatchers.Main) {
+                    adapter?.updateData(listNullable)
+                    adapter!!.setCoroutineScope(fragmentScope)
+                }
+            }
+        }
         /*myViewModel.liveWallpapers.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is Response.Error -> {
@@ -157,11 +181,10 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
     private fun showInterAd(model: LiveWallpaperModel) {
     }
 
-
     private fun setDownloadAbleWallpaperAndNavigate(model: LiveWallpaperModel, adShowd: Boolean) {
         BlurView.filePath = ""
-        /*sharedViewModel.clearLiveWallpaper()
-        sharedViewModel.setLiveWallpaper(listOf(model))*/
+        sharedViewModel.clearLiveWallpaper()
+        sharedViewModel.setLiveWallpaper(listOf(model))
         if (isAdded) {
             Bundle().apply {
                 putBoolean("adShowed", adShowd)

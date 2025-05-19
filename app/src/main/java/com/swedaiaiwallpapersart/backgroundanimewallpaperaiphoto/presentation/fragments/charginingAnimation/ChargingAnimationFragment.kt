@@ -6,14 +6,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentChargingAnimationBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.AdClickCounter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.ChargingAnimModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.ChargingAnimationAdapter
@@ -22,7 +28,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.BatteryAnimationViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +49,7 @@ class ChargingAnimationFragment : Fragment() {
     val TAG = "ChargingAnimation"
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
     private val chargingAnimationViewmodel: DataFromRoomViewmodel by viewModels()
-
+    val sharedViewModel: BatteryAnimationViewmodel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -163,8 +171,8 @@ class ChargingAnimationFragment : Fragment() {
 
     private fun setPathAndNavigate(model: ChargingAnimModel, adShowd: Boolean) {
         BlurView.filePathBattery = ""
-//        sharedViewModel.clearChargeAnimation()
-//        sharedViewModel.setchargingAnimation(listOf(model))
+        sharedViewModel.clearChargeAnimation()
+        sharedViewModel.setchargingAnimation(listOf(model))
         if (isAdded) {
             if (AdConfig.ISPAIDUSER) {
                 Bundle().apply {
@@ -172,7 +180,7 @@ class ChargingAnimationFragment : Fragment() {
                     findNavController().navigate(R.id.downloadBatteryAnimation, this)
                 }
             } else {
-                /*if (AdClickCounter.shouldShowAd()) {
+                if (AdClickCounter.shouldShowAd()) {
                     MaxInterstitialAds.showInterstitialAd(
                         requireActivity(),
                         object : MaxAdListener {
@@ -202,7 +210,7 @@ class ChargingAnimationFragment : Fragment() {
                         putBoolean("adShowed", adShowd)
                         findNavController().navigate(R.id.downloadBatteryAnimation, this)
                     }
-                }*/
+                }
             }
         }
     }

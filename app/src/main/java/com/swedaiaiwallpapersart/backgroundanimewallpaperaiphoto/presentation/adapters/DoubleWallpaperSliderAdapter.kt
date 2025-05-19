@@ -128,13 +128,6 @@ class DoubleWallpaperSliderAdapter(
                 // maybe show a placeholder or hide the view
                 binding.sliderNative.visibility = View.GONE
             }
-            /*val native =
-                NativeAdManager(
-                    context!!,
-                    AdConfig.admobAndroidNative,
-                    R.layout.native_ad_slider
-                )
-            native.loadNativeAd(binding.sliderNative)*/
         }
     }
 
