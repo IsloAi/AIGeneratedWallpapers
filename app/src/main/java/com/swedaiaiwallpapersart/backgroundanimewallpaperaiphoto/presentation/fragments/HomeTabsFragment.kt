@@ -28,6 +28,7 @@ import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
@@ -56,6 +57,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.fr
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -66,8 +68,9 @@ import javax.inject.Inject
 class HomeTabsFragment : Fragment() {
     private var _binding: FragmentHomeTabsBinding? = null
     private val binding get() = _binding!!
+    private val viewModel: SaveStateViewModel by viewModels()
 
-    /* private val viewModel: SaveStateViewModel by viewModels()
+    /*
      private var existDialog = MyDialogs()*/
     private lateinit var myActivity: MainActivity
 
@@ -609,7 +612,7 @@ class HomeTabsFragment : Fragment() {
                         Constants.checkAppOpen = false
                     }
                 }
-                //viewModel.setData(true)
+                viewModel.setData(true)
                 updateTabAppearance(tab!!, true)
             }
 
@@ -639,8 +642,8 @@ class HomeTabsFragment : Fragment() {
         binding.tabLayout.setupWithViewPager(binding.viewPager)
 
         initTabs()
-//        binding.viewPager.setCurrentItem(viewModel.getTab(), false)
-//        updateTabAppearance(binding.tabLayout.getTabAt(viewModel.getTab())!!, true)
+        binding.viewPager.setCurrentItem(viewModel.getTab(), false)
+        updateTabAppearance(binding.tabLayout.getTabAt(viewModel.getTab())!!, true)
 
         binding.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(
@@ -650,7 +653,7 @@ class HomeTabsFragment : Fragment() {
 
             override fun onPageSelected(position: Int) {
                 if (isAdded) {
-                    //viewModel.setTab(position)
+                    viewModel.setTab(position)
                 }
             }
 
@@ -691,12 +694,12 @@ class HomeTabsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        /*sharedViewModel.selectTab.observe(viewLifecycleOwner) {
+        sharedViewModel.selectTab.observe(viewLifecycleOwner) {
             if (it != null && it != 0) {
                 navigateToTrending(it)
                 sharedViewModel.selectTab(0)
             }
-        }*/
+        }
 
         if (shouldShowReviewDialog(requireContext())) {
             if (MySharePreference.getartGeneratedFirst(requireContext()) || MySharePreference.getfirstWallpaperSet(

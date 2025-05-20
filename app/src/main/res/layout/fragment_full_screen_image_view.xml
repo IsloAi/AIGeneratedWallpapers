@@ -39,7 +39,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/_60sdp"
         android:layout_marginBottom="@dimen/_15sdp"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -65,7 +65,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!--<androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/unlock_wallpaper"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/_35sdp"
@@ -105,7 +105,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>-->
 
         <ImageView
             android:id="@+id/favouriteButton"

@@ -60,7 +60,9 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -142,7 +144,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 }
             }
         }
-        sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
                 Log.e("Favourite", "initObservers: $wallpaper")
                 favLivewallpaper = wallpaper[0]
@@ -154,7 +156,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
                     Log.e("Favourite", "initObservers: unliked" + favLivewallpaper?.liked)
                 }
             }
-        }
+        }*/
         sharedViewModel.liveAdPosition.observe(viewLifecycleOwner) {
             adPosition = it
         }
@@ -195,7 +197,38 @@ class LiveWallpaperPreviewFragment : Fragment() {
         } else {
             binding.setLiked.setImageResource(R.drawable.button_like_selected)
         }
+
         binding.setLiked.setOnClickListener {
+            // Ensure the wallpaper object is not null
+            val wallpaper = livewallpaper
+            if (wallpaper?.id.isNullOrEmpty()) return@setOnClickListener
+
+            val wallpaperId = wallpaper!!.id!!.toIntOrNull() ?: return@setOnClickListener
+
+            // Toggle liked state
+            val isLiked = wallpaper.liked == true
+            wallpaper.liked = !isLiked
+
+            // Update UI immediately
+            binding.setLiked.setImageResource(
+                if (!isLiked) R.drawable.button_like_selected else R.drawable.button_like
+            )
+
+            // Update DB accordingly
+            lifecycleScope.launch {
+                if (!isLiked) {
+                    viewmodel.updateLiveFavourite(true, wallpaperId)
+                } else {
+                    viewmodel.updateLiveFavourite(false, wallpaperId)
+                }
+            }
+
+            // Prevent rapid double clicks
+            binding.setLiked.isEnabled = false
+            binding.setLiked.postDelayed({ binding.setLiked.isEnabled = true }, 300)
+        }
+
+        /*binding.setLiked.setOnClickListener {
             liveComingFrom = MySharePreference.getLiveFrom(requireContext())
             Log.d("Favourite", "setEvents:liveComingFrom: $liveComingFrom")
             if (liveComingFrom == "Favourite") {
@@ -230,7 +263,9 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 checkAppOpen = false
 
             }
-        }
+        }*/
+
+
         binding.downloadWallpaper.setOnClickListener {
             val source = File(BlurView.filePath)
             val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
@@ -351,7 +386,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
         if (isAdded) {
             val context = requireContext()
             val file = context.filesDir
-            //val filepath = File(file, BlurView.fileName)
+            val filepath = File(file, BlurView.fileName)
             val newFile = File(file, "video.mp4")
 
             val info = WallpaperManager.getInstance(context.applicationContext).wallpaperInfo
@@ -359,7 +394,7 @@ class LiveWallpaperPreviewFragment : Fragment() {
             if (info == null || info.packageName != context.packageName) {
                 // Show ProgressBar
                 binding.progressBar.visibility = View.VISIBLE
-                /*viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
                     // Rename the file in the background
                     filepath.renameTo(newFile)
                     BlurView.filePath = newFile.path
@@ -367,20 +402,11 @@ class LiveWallpaperPreviewFragment : Fragment() {
                     // Set wallpaper in background
                     LiveWallpaperService.setToWallPaper(context, true)
                     checkWallpaper = true
-                    // Post download info
-                    try {
-                        val requestBody = mapOf("imageid" to livewallpaper?.id)
-                        webApiInterface.postDownloadedLive(requestBody)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } catch (e: UnknownHostException) {
-                        e.printStackTrace()
-                    }
                     // Hide ProgressBar on the main thread
                     withContext(Dispatchers.Main) {
                         binding.progressBar.visibility = View.GONE
                     }
-                }*/
+                }
             } else {
                 showSimpleDialog(
                     context,

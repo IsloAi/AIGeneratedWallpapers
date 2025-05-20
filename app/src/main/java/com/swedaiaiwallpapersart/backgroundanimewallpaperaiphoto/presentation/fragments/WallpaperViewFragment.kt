@@ -219,7 +219,6 @@ class WallpaperViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         backHandle()
         if (AdConfig.ISPAIDUSER) {
-
         } else {
             createBannerAd()
         }
@@ -450,7 +449,6 @@ class WallpaperViewFragment : Fragment() {
                     }
                 }
             }
-
         }
         binding.favouriteButton.setOnClickListener {
             val currentItem = arrayList[position] ?: return@setOnClickListener
@@ -831,7 +829,7 @@ class WallpaperViewFragment : Fragment() {
         }
         bindingDialog.upgradeButton.setOnClickListener {
             dialog.dismiss()
-            //findNavController().navigate(R.id.IAPFragment)
+            findNavController().navigate(R.id.IAPFragment)
         }
         bindingDialog.cancelDialog.setOnClickListener {
             dialog.dismiss()

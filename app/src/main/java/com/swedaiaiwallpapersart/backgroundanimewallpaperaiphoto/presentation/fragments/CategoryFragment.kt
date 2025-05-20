@@ -84,11 +84,25 @@ class CategoryFragment : Fragment() {
         adapter = LiveCategoriesHorizontalAdapter(categoryList, object : StringCallback {
             override fun getStringCall(string: String) {
                 if (AdConfig.ISPAIDUSER) {
-                    findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                    Bundle().apply {
+                        putString("from", "LiveCategory")
+                        putString("wall", string)
+                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment, this)
+                    }
+                    //findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                 } else {
                     if (isAdded) {
                         Constants.checkInter = false
-                        findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
+                        Bundle().apply {
+                            putString("from", "LiveCategory")
+                            putString("wall", string)
+                            findNavController().navigate(
+                                R.id.liveWallpapersFromCategoryFragment,
+                                this
+                            )
+                        }
+
+                        //findNavController().navigate(R.id.liveWallpapersFromCategoryFragment)
                     }
                 }
             }

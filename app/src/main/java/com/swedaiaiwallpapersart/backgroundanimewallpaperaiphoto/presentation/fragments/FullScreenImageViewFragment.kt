@@ -34,6 +34,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.applovin.mediation.MaxAd
@@ -53,11 +54,11 @@ import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.DialogUnlockOrWatchAdsBinding
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentFullScreenImageViewBinding
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxRewardAds
-import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.data.roomDB.AppDatabase
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.AdConfig
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MyWallpaperManager
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +68,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.util.concurrent.Executors
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FullScreenImageViewFragment : DialogFragment() {
@@ -84,8 +84,8 @@ class FullScreenImageViewFragment : DialogFragment() {
     private lateinit var myActivity: MainActivity
     private var fromStr: String = ""
 
-    @Inject
-    lateinit var appDatabase: AppDatabase
+//    @Inject
+//    lateinit var appDatabase: AppDatabase
 
     private lateinit var myWallpaperManager: MyWallpaperManager
 
@@ -103,6 +103,7 @@ class FullScreenImageViewFragment : DialogFragment() {
         sharedViewModel.selectedCat.observe(viewLifecycleOwner) { catResponse ->
             catResponse?.let { response ->
                 responseData = response
+                Log.d("FullScreen", "initDataObservers--Response: $responseData  ")
                 sharedViewModel.wallpaperFromType.observe(viewLifecycleOwner) { from ->
                     fromStr = from
                     val url = if (from == "Vip") {
@@ -116,6 +117,7 @@ class FullScreenImageViewFragment : DialogFragment() {
                     if (isAdded) {
                         setImageToView()
                     }
+                    setEvents()
                 }
             }
         }
@@ -125,20 +127,35 @@ class FullScreenImageViewFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         //binding.fullViewImage.isEnabled = false
         myActivity = activity as MainActivity
-        initDataObservers()
         myWallpaperManager = MyWallpaperManager(requireContext(), requireActivity())
 
         binding.closeButton.setOnClickListener {
             findNavController().popBackStack()
         }
-        setEvents()
+
     }
 
     fun setEvents() {
+        Log.d(
+            "FullScreen",
+            "setEvents--Response: $responseData\nresponse like: ${responseData?.liked}"
+        )
+        if (responseData?.liked == true) {
+            binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+            Log.d("FullScreen", "setEvents -- Inside true")
+        } else {
+            binding.favouriteButton.setImageResource(R.drawable.button_like)
+        }
         binding.favouriteButton.setOnClickListener {
+            val viewmodel: DataFromRoomViewmodel by viewModels()
             binding.favouriteButton.isEnabled = false
-            // Send request to the server without changing UI immediately
-            addFavourite(requireContext(), binding.favouriteButton)
+            if (responseData?.liked == true) {
+                viewmodel.updateStaticFavourite(false, responseData?.id!!.toInt())
+                binding.favouriteButton.setImageResource(R.drawable.button_like)
+            } else if (responseData?.liked == false) {
+                viewmodel.updateStaticFavourite(true, responseData?.id!!.toInt())
+                binding.favouriteButton.setImageResource(R.drawable.button_like_selected)
+            }
         }
 
         binding.downloadWallpaper.setOnClickListener {
@@ -190,6 +207,11 @@ class FullScreenImageViewFragment : DialogFragment() {
                 ).show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initDataObservers()
     }
 
     private fun unlockDialog() {

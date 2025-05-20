@@ -132,7 +132,7 @@ class ChargingAnimationFragment : Fragment() {
                     }
                     withContext(Dispatchers.Main) {
                         adapter!!.setCoroutineScope(fragmentScope)
-                        data.let { adapter?.updateData(it as ArrayList<ChargingAnimModel?>) }
+                        data.let { adapter?.updateData(ArrayList(it)) }
                     }
                 }
             }

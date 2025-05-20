@@ -98,41 +98,6 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
                 }
             }
         }
-        /*myViewModel.liveWallpapers.observe(viewLifecycleOwner) { result ->
-            when (result) {
-                is Response.Error -> {
-                    Log.e(TAG, "loadData: Loading")
-                }
-
-                Response.Loading -> {
-                    Log.e(TAG, "loadData: response error")
-
-                }
-
-                is Response.Processing -> {
-                    Log.e(TAG, "loadData: processing")
-                }
-
-                is Response.Success -> {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        Log.e(TAG, "initObservers: " + result.data)
-
-                        val list = result.data?.shuffled()
-                        val listNullable = if (!AdConfig.ISPAIDUSER) {
-                            list?.let { addNullValueInsideArray(it) }
-                        } else {
-                            list as ArrayList<LiveWallpaperModel?>
-                        }
-
-                        withContext(Dispatchers.Main) {
-                            listNullable?.let { adapter?.updateMoreData(it) }
-                            adapter!!.setCoroutineScope(fragmentScope)
-                        }
-                    }
-                }
-            }
-
-        }*/
     }
 
     private fun updateUIWithFetchedData() {
@@ -197,7 +162,6 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
     private val fragmentScope: CoroutineScope by lazy { MainScope() }
 
     private suspend fun addNullValueInsideArray(data: List<LiveWallpaperModel?>): ArrayList<LiveWallpaperModel?> {
-
         return withContext(Dispatchers.IO) {
             val firstAdLineThreshold =
                 if (AdConfig.firstAdLineViewListWallSRC != 0) AdConfig.firstAdLineViewListWallSRC else 4
@@ -207,39 +171,25 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
                 if (AdConfig.lineCountViewListWallSRC != 0) AdConfig.lineCountViewListWallSRC else 5
             val lineC = lineCount * 3
             val newData = arrayListOf<LiveWallpaperModel?>()
-
             for (i in data.indices) {
                 if (i > firstLine && (i - firstLine) % (lineC + 1) == 0) {
                     newData.add(null)
-
-
-
                     Log.e("******NULL", "addNullValueInsideArray: null " + i)
-
                 } else if (i == firstLine) {
                     newData.add(null)
                     Log.e("******NULL", "addNullValueInsideArray: null first " + i)
                 }
                 Log.e("******NULL", "addNullValueInsideArray: not null " + i)
                 newData.add(data[i])
-
             }
             Log.e("******NULL", "addNullValueInsideArray:size " + newData.size)
-
-
-
-
             newData
         }
-
-
     }
 
     override fun onResume() {
         super.onResume()
-
         initObservers()
-
         if (isAdded) {
             val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.SCREEN_NAME, "Live WallPapers Screen")
