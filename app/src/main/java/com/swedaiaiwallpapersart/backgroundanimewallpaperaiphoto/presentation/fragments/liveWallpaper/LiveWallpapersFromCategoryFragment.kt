@@ -11,9 +11,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.applovin.mediation.MaxAd
+import com.applovin.mediation.MaxAdListener
+import com.applovin.mediation.MaxError
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.R
 import com.swedai.ai.wallpapers.art.background.anime_wallpaper.aiphoto.databinding.FragmentLiveWallpapersFromCategoryBinding
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.ads.MaxInterstitialAds
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.LiveWallpaperModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.activity.MainActivity
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.adapters.LiveWallpaperAdapter
@@ -132,12 +136,12 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
 
                 Log.e(TAG, "getPosition: $position")
 
-                //sharedViewModel.setAdPosition(newPosition)
+                sharedViewModel.setAdPosition(newPosition)
                 Log.e(TAG, "getPosition:$position odd ")
                 if (AdConfig.ISPAIDUSER) {
                     setDownloadAbleWallpaperAndNavigate(model, true)
                 } else {
-                    /*if (isAdded) {
+                    if (isAdded) {
                         Constants.checkInter = false
                         MaxInterstitialAds.showInterstitialAd(requireActivity(),
                             object : MaxAdListener {
@@ -155,7 +159,7 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
 
                                 override fun onAdDisplayFailed(p0: MaxAd, p1: MaxError) {}
                             })
-                    }*/
+                    }
                 }
             }
         }, myActivity)

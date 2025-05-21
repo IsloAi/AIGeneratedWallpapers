@@ -323,12 +323,12 @@ class DoubleWallpaperSliderFragment : Fragment() {
         adapter!!.setCoroutineScope(fragmentScope)
 
         viewPager2?.adapter = adapter
-        Log.e(TAG, "setViewPager: " + position)
+        Log.e(TAG, "setViewPager:" + position)
         viewPager2?.setCurrentItem(position, false)
 
         viewPager2?.clipToPadding = false
         viewPager2?.clipChildren = false
-        viewPager2?.offscreenPageLimit = 3
+        viewPager2?.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 
 
 

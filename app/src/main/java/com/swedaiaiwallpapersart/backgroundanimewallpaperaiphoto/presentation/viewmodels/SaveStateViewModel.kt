@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.CatResponse
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.domain.models.SingleDatabaseResponse
 
 
 class SaveStateViewModel : ViewModel() {
@@ -11,17 +12,17 @@ class SaveStateViewModel : ViewModel() {
 
 
     private var currentTab: Int = 0
-    private val catList: ArrayList<CatResponse> = ArrayList()
+    private val catList: ArrayList<SingleDatabaseResponse> = ArrayList()
 
     private val _selectedTab = MutableLiveData<String>()
     val selectedTab: LiveData<String> = _selectedTab
 
-    fun setCatList(list: ArrayList<CatResponse>) {
+    fun setCatList(list: ArrayList<SingleDatabaseResponse>) {
         catList.clear()
         catList.addAll(list)
     }
 
-    fun getCatList(): ArrayList<CatResponse> {
+    fun getCatList(): ArrayList<SingleDatabaseResponse> {
         return catList
     }
 

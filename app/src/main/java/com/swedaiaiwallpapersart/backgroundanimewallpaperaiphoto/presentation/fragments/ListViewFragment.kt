@@ -371,12 +371,12 @@ class ListViewFragment : Fragment() {
             adapter?.updateMoreData(addedItems!!)
             binding.recyclerviewAll.layoutManager?.scrollToPosition(oldPosition)
         }
-        lifecycleScope.launch(Dispatchers.Main) {
+        /*lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
             if (!WallpaperViewFragment.isNavigated && hasToNavigateList) {
                 navigateToDestination(addedItems!!, oldPosition)
             }
-        }
+        }*/
 
     }
 

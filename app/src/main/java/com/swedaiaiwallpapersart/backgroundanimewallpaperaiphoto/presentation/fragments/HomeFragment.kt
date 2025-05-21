@@ -33,12 +33,12 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.PositionCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SaveStateViewModel
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.SharedViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -60,6 +60,7 @@ class HomeFragment : Fragment() {
     var dataset = false
     private val myViewModel: DataFromRoomViewmodel by viewModels()
     val sharedViewModel: SharedViewModel by activityViewModels()
+    private val viewModel: SaveStateViewModel by viewModels()
 
     companion object {
         var hasToNavigateHome = false
@@ -67,7 +68,6 @@ class HomeFragment : Fragment() {
     }
 
     /*
-    private val viewModel: SaveStateViewModel by viewModels()
     private var isFirstLoad = true
     var isLoadingMore = false
     var startIndex = 0
@@ -183,8 +183,8 @@ class HomeFragment : Fragment() {
         arrayList: ArrayList<SingleDatabaseResponse?>,
         position: Int
     ) {
-        /*viewModel.setCatList(arrayList.filterNotNull() as ArrayList<CatResponse>)
-        viewModel.setData(false)*/
+        viewModel.setCatList(arrayList.filterNotNull() as ArrayList<SingleDatabaseResponse>)
+        viewModel.setData(false)
         val countOfNulls = arrayList.subList(0, position).count { it == null }
         sharedViewModel.clearData()
         Log.e(TAG, "navigateToDestination: arrayList: ${arrayList.filterNotNull()}")
@@ -263,14 +263,14 @@ class HomeFragment : Fragment() {
             bundle.putString(FirebaseAnalytics.Param.SCREEN_CLASS, javaClass.simpleName)
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SCREEN_VIEW, bundle)
         }
-        lifecycleScope.launch(Dispatchers.Main) {
+        /*lifecycleScope.launch(Dispatchers.Main) {
             delay(1500)
             if (!WallpaperViewFragment.isNavigated && hasToNavigateHome) {
                 if (isAdded) {
                     navigateToDestination(addedItems!!, oldPosition)
                 }
             }
-        }
+        }*/
 
     }
 

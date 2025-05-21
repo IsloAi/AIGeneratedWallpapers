@@ -254,9 +254,7 @@ class WallpaperViewFragment : Fragment() {
                     isNavigated = false
                     hasToNavigate = false
                     hasToNavigateHome = false
-                    /*hasToNavigateAnime = false
-                    hasToNavigateList = false*/
-                    navController?.navigateUp()
+                    navController?.popBackStack()
                 }
             })
 
@@ -267,8 +265,6 @@ class WallpaperViewFragment : Fragment() {
                 firstTime = true
                 isNavigated = false
                 hasToNavigate = false
-                /*hasToNavigateList = false
-                hasToNavigateAnime = false*/
                 hasToNavigateHome = false
                 navController?.popBackStack()
             }
@@ -344,8 +340,6 @@ class WallpaperViewFragment : Fragment() {
             isNavigated = false
             hasToNavigate = false
             hasToNavigateHome = false
-            /*hasToNavigateAnime = false
-            hasToNavigateList = false*/
             navController?.popBackStack()
             Constants.checkInter = false
             Constants.checkAppOpen = false
@@ -560,8 +554,7 @@ class WallpaperViewFragment : Fragment() {
                     arrayList[position]?.unlocked = true
                     //arrayList[position]?.gems = 0
 
-                    val model1 = arrayList[position]
-                    /*postData.unLocking(
+                    val model1 = arrayList[position]/*postData.unLocking(
                         MySharePreference.getDeviceID(requireContext())!!,
                         model1!!,
                         requireContext(),
@@ -589,8 +582,7 @@ class WallpaperViewFragment : Fragment() {
             Log.e("TAG", "functionality: inside click")
             if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
                 if (ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_DENIED
                 ) {
                     Log.e("TAG", "functionality: inside click permission")
@@ -602,11 +594,15 @@ class WallpaperViewFragment : Fragment() {
                 } else {
                     Log.e("TAG", "functionality: inside click dialog")
                     if (AdConfig.ISPAIDUSER) {
+                        Log.e("TAG", "functionality: inside if ISPAIDUSER")
+
                         mSaveMediaToStorage(bitmap)
                         val model = arrayList[position]
                         model?.let { it1 -> setDownloaded(it1) }
                     } else {
                         getUserIdDialog()
+                        Log.e("TAG", "functionality: inside else getUserDialog")
+
                     }
                 }
             } else {
@@ -649,7 +645,7 @@ class WallpaperViewFragment : Fragment() {
 
         viewPager2?.clipToPadding = false
         viewPager2?.clipChildren = false
-        viewPager2?.offscreenPageLimit = 3
+        viewPager2?.offscreenPageLimit = ViewPager2.OFFSCREEN_PAGE_LIMIT_DEFAULT
 
         viewPager2?.getChildAt(0)!!.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         val transformer = CompositePageTransformer()
@@ -850,7 +846,6 @@ class WallpaperViewFragment : Fragment() {
         val getReward = dialog?.findViewById<LinearLayout>(R.id.buttonGetReward)
         val dismiss = dialog?.findViewById<TextView>(R.id.noThanks)
         getReward?.setOnClickListener {
-            dialog?.dismiss()
             MaxRewardAds.showRewardedAd(requireActivity(), object : MaxRewardedAdListener {
                 override fun onAdLoaded(p0: MaxAd) {}
 
@@ -870,16 +865,16 @@ class WallpaperViewFragment : Fragment() {
                     model?.let { it1 -> setDownloaded(it1) }
                 }
             })
-
-            dismiss?.setOnClickListener {
-                dialog?.dismiss()
-            }
-            dialog?.show()
+            dialog?.dismiss()
         }
+        dismiss?.setOnClickListener {
+            dialog?.dismiss()
+        }
+        dialog?.show()
+
     }
 
-    private fun setDownloaded(model: SingleDatabaseResponse) {
-        /*lifecycleScope.launch(Dispatchers.IO) {
+    private fun setDownloaded(model: SingleDatabaseResponse) {/*lifecycleScope.launch(Dispatchers.IO) {
             val retrofit = RetrofitInstance.getInstance()
             val apiService = retrofit.create(SetMostDownloaded::class.java)
             val call = apiService.setDownloaded(model.id.toString())
@@ -1008,8 +1003,7 @@ class WallpaperViewFragment : Fragment() {
                             if (from == "trending") {
                                 if (isAdded) {
                                     findNavController().popBackStack(
-                                        R.id.homeTabsFragment,
-                                        false
+                                        R.id.homeTabsFragment, false
                                     )
                                 } else {
                                     Log.d(TAG, "showRateApp: Broke")
@@ -1018,8 +1012,7 @@ class WallpaperViewFragment : Fragment() {
                             } else {
                                 if (isAdded) {
                                     findNavController().popBackStack(
-                                        R.id.listViewFragment,
-                                        false
+                                        R.id.listViewFragment, false
                                     )
                                 } else {
                                     Log.d(TAG, "showRateApp: Broke")
@@ -1283,8 +1276,7 @@ class WallpaperViewFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     MySharePreference.setReviewedSuccess(requireContext(), true)
 
-                    try {
-                        /*endPointsInterface.postData(
+                    try {/*endPointsInterface.postData(
                             FeedbackModel(
                                 "From Review",
                                 "In app review",
