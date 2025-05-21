@@ -70,7 +70,31 @@ class SettingFragment : Fragment() {
             .into(binding.animationDdd)
 
         binding.rateUsButton.setOnClickListener { feedback() }
-        binding.customerSupportButton.setOnClickListener { findNavController().navigate(R.id.feedbackFragment) }
+        binding.customerSupportButton.setOnClickListener {
+            val packageInfo =
+                requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
+            val VName = packageInfo.versionName
+
+            val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:") // This ensures only email apps handle the intent
+                putExtra(
+                    Intent.EXTRA_EMAIL, arrayOf("support@bluellapps.com")
+                ) // Replace with your support email
+                putExtra(
+                    Intent.EXTRA_SUBJECT, "ohmywall (V-$VName /Android) Feedback "
+                ) // Optional: Add a default subject
+                putExtra(
+                    Intent.EXTRA_TEXT,
+                    "WRITE YOUR FEEDBACK HERE"
+                )
+            }
+
+            try {
+                startActivity(emailIntent)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(requireContext(), "No email app found.", Toast.LENGTH_SHORT).show()
+            }
+        }
         binding.shareAppButton.setOnClickListener {
             shareApp(requireContext())
         }
@@ -105,10 +129,7 @@ class SettingFragment : Fragment() {
                     ).show()
                 }
             }
-
-
         }
-
         binding.privacyPolicyButton.setOnClickListener { openLink("https://bluellapps.com/privacy-policy/") }
         binding.moreAppButton.setOnClickListener {
             if (isAdded) {

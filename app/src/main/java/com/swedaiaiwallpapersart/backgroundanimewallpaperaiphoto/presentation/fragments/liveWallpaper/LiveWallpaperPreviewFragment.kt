@@ -125,9 +125,11 @@ class LiveWallpaperPreviewFragment : Fragment() {
         myActivity = activity as MainActivity
         initObservers()
         setEvents()
+        liveComingFrom = MySharePreference.getLiveFrom(requireContext())
     }
 
     private fun initObservers() {
+
         sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
@@ -144,7 +146,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                 }
             }
         }
-        /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+
+        sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
                 Log.e("Favourite", "initObservers: $wallpaper")
                 favLivewallpaper = wallpaper[0]
@@ -156,7 +159,8 @@ class LiveWallpaperPreviewFragment : Fragment() {
                     Log.e("Favourite", "initObservers: unliked" + favLivewallpaper?.liked)
                 }
             }
-        }*/
+        }
+
         sharedViewModel.liveAdPosition.observe(viewLifecycleOwner) {
             adPosition = it
         }
@@ -166,7 +170,11 @@ class LiveWallpaperPreviewFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().popBackStack(R.id.homeTabsFragment, false)
+                    if (liveComingFrom == "Favourite") {
+                        findNavController().popBackStack(R.id.favouriteFragment, false)
+                    } else {
+                        findNavController().popBackStack(R.id.homeTabsFragment, false)
+                    }
                 }
             })
     }
@@ -199,35 +207,85 @@ class LiveWallpaperPreviewFragment : Fragment() {
         }
 
         binding.setLiked.setOnClickListener {
-            // Ensure the wallpaper object is not null
-            val wallpaper = livewallpaper
-            if (wallpaper?.id.isNullOrEmpty()) return@setOnClickListener
-
-            val wallpaperId = wallpaper!!.id!!.toIntOrNull() ?: return@setOnClickListener
-
-            // Toggle liked state
-            val isLiked = wallpaper.liked == true
-            wallpaper.liked = !isLiked
-
-            // Update UI immediately
-            binding.setLiked.setImageResource(
-                if (!isLiked) R.drawable.button_like_selected else R.drawable.button_like
-            )
-
-            // Update DB accordingly
-            lifecycleScope.launch {
-                if (!isLiked) {
-                    viewmodel.updateLiveFavourite(true, wallpaperId)
-                } else {
-                    viewmodel.updateLiveFavourite(false, wallpaperId)
+            liveComingFrom = MySharePreference.getLiveFrom(requireContext())
+            Log.d("Favourite", "setEvents:liveComingFrom: $liveComingFrom")
+            if (liveComingFrom == "Favourite") {
+                binding.setLiked.isEnabled = false
+                binding.setLiked.setImageResource(R.drawable.button_like)
+                Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                    .show()
+                Log.d("Favourite", "setEvents: Id ${favLivewallpaper?.id}")
+                lifecycleScope.launch {
+                    viewmodel.updateLiveFavourite(false, Integer.parseInt(favLivewallpaper?.id!!))
                 }
-            }
+                MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
+                findNavController().popBackStack(R.id.favouriteFragment, false)
+            } else {
+                binding.setLiked.isEnabled = false
+                if (livewallpaper?.liked == true) {
+                    livewallpaper?.liked = false
+                    binding.setLiked.setImageResource(R.drawable.button_like)
+                    Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
+                    livewallpaper?.liked = true
+                    binding.setLiked.setImageResource(R.drawable.button_like_selected)
+                    Toast.makeText(requireContext(), "Added to favorites", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.d("Favourite", "setEvents: Id ${livewallpaper?.id}")
+                    //addFavourite(requireContext(), binding.setLiked)
+                    viewmodel.updateLiveFavourite(true, Integer.parseInt(livewallpaper?.id!!))
+                }
+                checkInter = false
+                checkAppOpen = false
 
-            // Prevent rapid double clicks
-            binding.setLiked.isEnabled = false
-            binding.setLiked.postDelayed({ binding.setLiked.isEnabled = true }, 300)
+            }
         }
 
+        /*binding.setLiked.setOnClickListener {
+            if (liveComingFrom == "Favourite") {
+                binding.setLiked.isEnabled = false
+                binding.setLiked.setImageResource(R.drawable.button_like)
+                Toast.makeText(requireContext(), "Removed from favorites", Toast.LENGTH_SHORT)
+                    .show()
+                Log.d(
+                    "Favourite",
+                    "setEvents: favLivewallpaper Id ${favLivewallpaper?.id}\nLiveWallpaperId: ${livewallpaper?.id}"
+                )
+                lifecycleScope.launch {
+                    viewmodel.updateLiveFavourite(false, Integer.parseInt(favLivewallpaper?.id!!))
+                }
+                MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
+            } else {
+                // Ensure the wallpaper object is not null
+                val wallpaper = livewallpaper
+                if (wallpaper?.id.isNullOrEmpty()) return@setOnClickListener
+
+                val wallpaperId = wallpaper!!.id.toIntOrNull() ?: return@setOnClickListener
+
+                // Toggle liked state
+                val isLiked = wallpaper.liked == true
+                wallpaper.liked = !isLiked
+
+                // Update UI immediately
+                binding.setLiked.setImageResource(
+                    if (!isLiked) R.drawable.button_like_selected else R.drawable.button_like
+                )
+
+                // Update DB accordingly
+                lifecycleScope.launch {
+                    if (!isLiked) {
+                        viewmodel.updateLiveFavourite(true, wallpaperId)
+                    } else {
+                        viewmodel.updateLiveFavourite(false, wallpaperId)
+                    }
+                }
+
+                // Prevent rapid double clicks
+                binding.setLiked.isEnabled = false
+                binding.setLiked.postDelayed({ binding.setLiked.isEnabled = true }, 300)
+            }
+        }*/
         /*binding.setLiked.setOnClickListener {
             liveComingFrom = MySharePreference.getLiveFrom(requireContext())
             Log.d("Favourite", "setEvents:liveComingFrom: $liveComingFrom")
@@ -264,8 +322,6 @@ class LiveWallpaperPreviewFragment : Fragment() {
 
             }
         }*/
-
-
         binding.downloadWallpaper.setOnClickListener {
             val source = File(BlurView.filePath)
             val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)

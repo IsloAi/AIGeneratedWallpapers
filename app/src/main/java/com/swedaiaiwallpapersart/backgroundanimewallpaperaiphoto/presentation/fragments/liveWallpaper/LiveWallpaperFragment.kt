@@ -28,6 +28,7 @@ import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.ut
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.BlurView
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkAppOpen
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.Constants.Companion.checkInter
+import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.MySharePreference
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.RvItemDecore
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.utils.downloadCallback
 import com.swedaiaiwallpapersart.backgroundanimewallpaperaiphoto.presentation.viewmodels.DataFromRoomViewmodel
@@ -181,6 +182,7 @@ class LiveWallpaperFragment : Fragment() {
                     putBoolean("adShowed", adShowd)
                     DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
                     DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                    MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
                     findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
                 }
             } else {
@@ -197,6 +199,11 @@ class LiveWallpaperFragment : Fragment() {
                                     putBoolean("adShowed", adShowd)
                                     DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
                                     DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                                    MySharePreference.setLiveComingFrom(
+                                        requireContext(),
+                                        "FragmentLive"
+                                    )
+
                                     findNavController().navigate(
                                         R.id.downloadLiveWallpaperFragment,
                                         this
@@ -216,6 +223,8 @@ class LiveWallpaperFragment : Fragment() {
                         putBoolean("adShowed", adShowd)
                         DownloadLiveWallpaperFragment.shouldObserveLiveWallpapers = true
                         DownloadLiveWallpaperFragment.shouldObserveFavorites = false
+                        MySharePreference.setLiveComingFrom(requireContext(), "FragmentLive")
+
                         findNavController().navigate(R.id.downloadLiveWallpaperFragment, this)
                     }
                 }

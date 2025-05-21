@@ -280,8 +280,31 @@ class HomeFragment : Fragment() {
             myViewModel.carWallpapers.collect { response ->
                 if (response != null) {
                     cachedCatResponses = ArrayList(response)
-                    Log.e("TAG", "loadData: ${response.size}")
-                    adapter.updateData(ArrayList(response))
+                    val list = arrayListOf<SingleDatabaseResponse>()
+                    response.forEach { item ->
+                        val single = SingleDatabaseResponse(
+                            item.id,
+                            item.cat_name,
+                            item.image_name,
+                            item.hd_image_url,
+                            item.compressed_image_url,
+                            item.likes,
+                            item.liked,
+                            item.size,
+                            item.Tags,
+                            item.capacity,
+                            false, // locked by default
+                        )
+                        if (!list.contains(single)) {
+                            list.add(single)
+                        }
+                    }
+                    // Unlock 20% randomly
+                    val unlockCount = (list.size * 0.2).toInt()
+                    list.shuffled().take(unlockCount).forEach { it.unlocked = true }
+
+                    Log.e("TAG", "loadData: ${list.size}")
+                    adapter.updateData(ArrayList(list))
                 }
             }
         }

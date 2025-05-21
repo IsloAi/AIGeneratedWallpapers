@@ -40,22 +40,16 @@ import java.io.File
 class DownloadLiveWallpaperFragment : Fragment() {
 
     private var _binding: FragmentDownloadLiveWallpaperBinding? = null
-
     private val binding get() = _binding!!
-
     val sharedViewModel: SharedViewModel by activityViewModels()
-
     private var bitmap: Bitmap? = null
-
     private var animationJob: Job? = null
-
     val TAG = "DOWNLOAD_SCREEN"
-
     var showAd: Boolean? = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentDownloadLiveWallpaperBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -69,16 +63,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
 
         setEvents()
         initObservers()
-
-        /*val nativeAd = NativeAdManager(
-            requireContext(),
-            AdConfig.admobAndroidNative,
-            R.layout.admob_native_medium
-        )
-        nativeAd.loadNativeAd(binding.NativeAd)*/
         //Max Medium Native Ad
         if (AdConfig.ISPAIDUSER) {
-
         } else {
             if (AdConfig.globalTemplateNativeAdView != null) {
                 // Detach globalNativeAdView from its previous parent if it has one
@@ -92,33 +78,6 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 binding.NativeAd.visibility = View.GONE
             }
         }
-
-        /*MaxNativeAd.createNativeAdLoader(
-            requireContext(),
-            AdConfig.applovinAndroidNativeManual,
-            object : MaxNativeAdListener() {
-                override fun onNativeAdLoaded(adView: MaxNativeAdView?, ad: MaxAd) {
-                    binding.NativeAd.removeAllViews()
-                    adView?.let {
-                        binding.NativeAd.addView(it)
-                    }
-                }
-
-                override fun onNativeAdLoadFailed(adUnitId: String, error: MaxError) {
-                    // Handle failure (optional retry logic)
-                }
-
-                override fun onNativeAdClicked(ad: MaxAd) {
-                    // Handle click
-                }
-
-                override fun onNativeAdExpired(ad: MaxAd) {
-                    // Ad expired - reload if needed
-                }
-            }
-        )
-
-        MaxNativeAd.loadNativeAd(R.layout.max_native_medium, requireContext())*/
     }
 
     fun setEvents() {
@@ -158,9 +117,8 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 }
             }
         }
-
         if (shouldObserveFavorites) {
-            /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+            sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
                 if (wallpaper.isNotEmpty()) {
 
                     Log.e("Favourite", "initObservers: $wallpaper")
@@ -175,9 +133,9 @@ class DownloadLiveWallpaperFragment : Fragment() {
                     }
                     getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
                 }
-            }*/
+            }
         }
-        /*sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
+        sharedViewModel.favLiveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 
                 Log.e("TAG", "initObservers: $wallpaper")
@@ -192,8 +150,7 @@ class DownloadLiveWallpaperFragment : Fragment() {
                 }
                 getBitmapFromGlide(AdConfig.BASE_URL_DATA + "/livewallpaper/" + wallpaper[0].thumnail_url)
             }
-        }*/
-
+        }
         sharedViewModel.liveWallpaperResponseList.observe(viewLifecycleOwner) { wallpaper ->
             if (wallpaper.isNotEmpty()) {
 

@@ -84,7 +84,27 @@ class LiveWallpapersFromCategoryFragment : Fragment() {
         lifecycleScope.launch {
             myViewModel.fetchLiveCategoryWallpapers(name)
             myViewModel.liveCategoryWallpapers.collect { result ->
-                val list = result.shuffled()
+                val list = arrayListOf<LiveWallpaperModel>()
+                result.forEach { item ->
+                    val single = LiveWallpaperModel(
+                        item.id,
+                        item.livewallpaper_url,
+                        item.thumnail_url,
+                        item.videoSize,
+                        item.liked,
+                        item.downloads,
+                        item.catname,
+                        item.likes,
+                        false
+                    )
+                    if (!list.contains(single)) {
+                        list.add(single)
+                    }
+                }
+                // Unlock 20% randomly
+                val unlockCount = (list.size * 0.2).toInt()
+                list.shuffled().take(unlockCount).forEach { it.unlocked = true }
+
                 Log.d(TAG, "initObservers: list : $list")
                 val listNullable = if (!AdConfig.ISPAIDUSER) {
                     addNullValueInsideArray(list)
